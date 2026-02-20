@@ -204,7 +204,7 @@ describe("FSEntry", () => {
       const data = { key: "value", num: 42 };
       const fs = mockFS({ "data.json": JSON.stringify(data) });
       const entry = new FSEntry("data.json", fs);
-      deepEqual(entry.readJsonSync(), data);
+      deepEqual(entry.readJSONSync(), data);
     });
   });
 
@@ -213,7 +213,7 @@ describe("FSEntry", () => {
       const data = { key: "value", num: 42 };
       const fs = mockFS({ "data.json": JSON.stringify(data) });
       const entry = new FSEntry("data.json", fs);
-      deepEqual(await entry.readJson(), data);
+      deepEqual(await entry.readJSON(), data);
     });
   });
 
@@ -223,7 +223,7 @@ describe("FSEntry", () => {
       const fs = mockFS(vol);
       const entry = new FSEntry("data.json", fs);
       const data = { key: "new value" };
-      entry.writeJsonSync(data);
+      entry.writeJSONSync(data);
       equal(readText("data.json", fs), JSON.stringify(data, null, 2) + "\n");
     });
   });
@@ -234,7 +234,7 @@ describe("FSEntry", () => {
       const fs = mockFS(vol);
       const entry = new FSEntry("data.json", fs);
       const data = { key: "async value" };
-      await entry.writeJson(data);
+      await entry.writeJSON(data);
       equal(readText("data.json", fs), JSON.stringify(data, null, 2) + "\n");
     });
   });
@@ -246,16 +246,16 @@ describe("FSEntry", () => {
       const entry = new FSEntry("test.txt", fs);
       entry.content = "modified";
       entry.writeContentsSync();
-      equal(readText("test.txt", fs), "modified");
+      equal(readText("test.txt", fs), "modified\n");
     });
 
     it("does not write when content is not dirty", () => {
-      const vol: Record<string, string> = { "test.txt": "original" };
+      const vol: Record<string, string> = { "test.txt": "original\n" };
       const fs = mockFS(vol);
       const entry = new FSEntry("test.txt", fs);
       void entry.content;
       entry.writeContentsSync();
-      equal(readText("test.txt", fs), "original");
+      equal(readText("test.txt", fs), "original\n");
     });
 
     it("writes when force option is set", () => {
@@ -264,16 +264,16 @@ describe("FSEntry", () => {
       const entry = new FSEntry("test.txt", fs);
       void entry.content;
       entry.writeContentsSync({ force: true });
-      equal(readText("test.txt", fs), "original");
+      equal(readText("test.txt", fs), "original\n");
     });
 
-    it("appends newline with newline option", () => {
+    it("does not append newline with option", () => {
       const vol: Record<string, string> = { "test.txt": "original" };
       const fs = mockFS(vol);
       const entry = new FSEntry("test.txt", fs);
       entry.content = "no newline";
-      entry.writeContentsSync({ newline: true });
-      equal(readText("test.txt", fs), "no newline\n");
+      entry.writeContentsSync({ suppressNewline: true });
+      equal(readText("test.txt", fs), "no newline");
     });
 
     it("does not double-append newline", () => {
@@ -281,7 +281,7 @@ describe("FSEntry", () => {
       const fs = mockFS(vol);
       const entry = new FSEntry("test.txt", fs);
       entry.content = "has newline\n";
-      entry.writeContentsSync({ newline: true });
+      entry.writeContentsSync({ suppressNewline: false });
       equal(readText("test.txt", fs), "has newline\n");
     });
   });
@@ -293,7 +293,7 @@ describe("FSEntry", () => {
       const entry = new FSEntry("test.txt", fs);
       entry.content = "async modified";
       await entry.writeContents();
-      equal(readText("test.txt", fs), "async modified");
+      equal(readText("test.txt", fs), "async modified\n");
     });
 
     it("does not write when content is not dirty", async () => {

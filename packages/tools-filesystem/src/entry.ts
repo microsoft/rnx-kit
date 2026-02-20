@@ -13,8 +13,8 @@ export type WriteOptions = {
   /** whether to force writing the file even if the content is not marked as dirty (defaults to false) */
   force?: boolean;
 
-  /** whether to end with a newline (defaults to false) */
-  newline?: boolean;
+  /** whether to suppress automatic newline behavior (defaults to false) */
+  suppressNewline?: boolean;
 };
 
 /**
@@ -150,7 +150,7 @@ export class FSEntry {
    * Ensure contents are loaded and parse as JSON
    * @returns parsed JSON content, optionally cast to type T
    */
-  readJsonSync<T = ReturnType<typeof JSON.parse>>(): T {
+  readJSONSync<T = ReturnType<typeof JSON.parse>>(): T {
     return parseJSON<T>(this.content);
   }
 
@@ -158,7 +158,7 @@ export class FSEntry {
    * Asynchronously ensure contents are loaded and parse as JSON
    * @returns parsed JSON content, optionally cast to type T
    */
-  async readJson<T = ReturnType<typeof JSON.parse>>(): Promise<T> {
+  async readJSON<T = ReturnType<typeof JSON.parse>>(): Promise<T> {
     return parseJSON<T>(await this.getContent());
   }
 
@@ -167,7 +167,7 @@ export class FSEntry {
    * JSON string, writing to disk synchronously, and marking the content as not dirty after writing.
    * @param data the data to serialize to JSON and write to the file
    */
-  writeJsonSync(data: unknown): void {
+  writeJSONSync(data: unknown): void {
     this.content = serializeJSON(data);
     this.writeContentsSync();
   }
@@ -178,7 +178,7 @@ export class FSEntry {
    * @param data the data to serialize to JSON and write to the file
    * @returns a promise that resolves when the write operation is complete
    */
-  async writeJson(data: unknown): Promise<void> {
+  async writeJSON(data: unknown): Promise<void> {
     this.content = serializeJSON(data);
     return this.writeContents();
   }
@@ -221,11 +221,11 @@ export class FSEntry {
    * @returns the content to write, or undefined if no write is needed
    */
   private getContentToWrite(options?: WriteOptions): string | undefined {
-    const { force, newline } = options ?? {};
+    const { force, suppressNewline } = options ?? {};
     if (this._content == null || (!force && !this._needsWrite)) {
       return undefined;
     }
-    return newline && !this._content.endsWith("\n")
+    return !suppressNewline && !this._content.endsWith("\n")
       ? this._content + "\n"
       : this._content;
   }
