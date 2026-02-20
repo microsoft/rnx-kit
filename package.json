@@ -298,6 +298,12 @@
         ]
       },
       "packages/tsconfig": {},
+      "packages/types-metro-serializer-esbuild": {
+        "entry": [
+          "*.js",
+          "src/*.ts"
+        ]
+      },
       "scripts": {
         "entry": [
           "*.{cjs,js}",
