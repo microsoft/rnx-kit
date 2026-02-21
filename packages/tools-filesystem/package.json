@@ -8,11 +8,13 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "sideEffects": false,
   "files": [
-    "lib/**/*.d.ts",
-    "lib/**/*.js",
+    "lib",
     "src"
   ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
@@ -20,9 +22,9 @@
       "default": "./lib/index.js"
     },
     "./mocks": {
-      "types": "./lib/mocks.d.ts",
-      "typescript": "./src/mocks.ts",
-      "default": "./lib/mocks.js"
+      "types": "./lib/mockfs/index.d.ts",
+      "typescript": "./src/mockfs/index.ts",
+      "default": "./lib/mockfs/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -42,7 +44,16 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^24.0.0"
+    "@types/node": "^24.0.0",
+    "memfs": "^4.56.10"
+  },
+  "peerDependencies": {
+    "memfs": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "memfs": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=18.12"

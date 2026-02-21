@@ -1,7 +1,7 @@
 import { info } from "@rnx-kit/console";
 import type { BundleArgs as MetroBundleArgs } from "@rnx-kit/metro-service";
 import { bundle } from "@rnx-kit/metro-service";
-import { ensureDir } from "@rnx-kit/tools-filesystem";
+import { ensureDirSync } from "@rnx-kit/tools-filesystem";
 import type { ConfigT } from "metro-config";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
@@ -51,12 +51,12 @@ export async function metroBundle(
   };
 
   // ensure all output directories exist
-  ensureDir(path.dirname(metroBundleArgs.bundleOutput), fs);
+  ensureDirSync(path.dirname(metroBundleArgs.bundleOutput), fs);
   if (metroBundleArgs.sourcemapOutput) {
-    ensureDir(path.dirname(metroBundleArgs.sourcemapOutput), fs);
+    ensureDirSync(path.dirname(metroBundleArgs.sourcemapOutput), fs);
   }
   if (metroBundleArgs.assetsDest) {
-    ensureDir(metroBundleArgs.assetsDest, fs);
+    ensureDirSync(metroBundleArgs.assetsDest, fs);
   }
 
   // create the bundle

@@ -71,6 +71,7 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "dependencies": {
+    "@rnx-kit/tools-filesystem": "^0.1.2",
     "@rnx-kit/tools-node": "^3.0.4",
     "@rnx-kit/types-bundle-config": "^1.0.0"
   },
@@ -79,9 +80,9 @@
     "@react-native-community/cli-types": "^20.0.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tools-filesystem": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
+    "memfs": "^4.56.10",
     "metro": "^0.83.3",
     "metro-config": "^0.83.3",
     "metro-core": "^0.83.3",
