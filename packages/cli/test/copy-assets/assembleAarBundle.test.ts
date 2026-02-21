@@ -1,8 +1,18 @@
 import { readTextFileSync as readText } from "@rnx-kit/tools-filesystem";
 import { getMockFSFiles, mockFS } from "@rnx-kit/tools-filesystem/mocks";
 import * as child_process from "node:child_process";
+import { platform } from "node:os";
 import * as path from "node:path";
 import { assembleAarBundle } from "../../src/copy-assets.ts";
+
+const toPosix =
+  platform() === "win32"
+    ? (input: string) => {
+        const posixPath = input.replaceAll(path.win32.sep, path.posix.sep);
+        // This regex replaces the drive letter and colon at the start of the string
+        return posixPath.replace(/^[a-zA-Z]:/, "");
+      }
+    : (input: string) => input;
 
 jest.mock("node:child_process");
 jest.unmock("@rnx-kit/console");
@@ -151,11 +161,11 @@ describe("copy-assets/assembleAarBundle()", () => {
       })
     );
     expect(Object.entries(files)).toEqual([
-      [gradleWrapper, ""],
-      [authBuildGradle, path.basename(authBuildGradle)],
-      [authBuildArtifact, path.basename(authBuildArtifact)],
-      [authManifest, dummyManifest],
-      [rnManifest, dummyManifest],
+      [toPosix(gradleWrapper), ""],
+      [toPosix(authBuildGradle), path.basename(authBuildGradle)],
+      [toPosix(authBuildArtifact), path.basename(authBuildArtifact)],
+      [toPosix(authManifest), dummyManifest],
+      [toPosix(rnManifest), dummyManifest],
       [
         expect.stringMatching(
           /[/\\]node_modules[/\\].rnx-gradle-build[/\\]rnx-kit_react-native-auth[/\\]build.gradle$/
@@ -218,12 +228,12 @@ describe("copy-assets/assembleAarBundle()", () => {
       })
     );
     expect(Object.entries(files)).toEqual([
-      [gradleWrapper, ""],
-      [authBuildGradle, path.basename(authBuildGradle)],
-      [authBuildArtifact, path.basename(authBuildArtifact)],
-      [authSettingsGradle, path.basename(authSettingsGradle)],
-      [authManifest, dummyManifest],
-      [rnManifest, dummyManifest],
+      [toPosix(gradleWrapper), ""],
+      [toPosix(authBuildGradle), path.basename(authBuildGradle)],
+      [toPosix(authBuildArtifact), path.basename(authBuildArtifact)],
+      [toPosix(authSettingsGradle), path.basename(authSettingsGradle)],
+      [toPosix(authManifest), dummyManifest],
+      [toPosix(rnManifest), dummyManifest],
       [
         expect.stringMatching(
           /dist[/\\]aar[/\\]rnx-kit_react-native-auth-0.0.0-dev.aar$/
