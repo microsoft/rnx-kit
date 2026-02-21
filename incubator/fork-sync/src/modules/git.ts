@@ -335,6 +335,32 @@ export class GitRepo {
       ignoreExitCode: true,
     });
   }
+
+  // ---------------------------------------------------------------------------
+  // Sparse checkout
+  // ---------------------------------------------------------------------------
+
+  /** Initialize sparse checkout in cone mode. */
+  async sparseCheckoutInit(): Promise<void> {
+    await spawn("git", ["sparse-checkout", "init", "--cone"], {
+      cwd: this.dir,
+    });
+  }
+
+  /** Set sparse checkout patterns. Accepts one or more directory paths. */
+  async sparseCheckoutSet(...dirs: string[]): Promise<void> {
+    await spawn("git", ["sparse-checkout", "set", ...dirs], {
+      cwd: this.dir,
+    });
+  }
+
+  /** Disable sparse checkout (re-enable full working tree). */
+  async sparseCheckoutDisable(): Promise<void> {
+    await spawn("git", ["sparse-checkout", "disable"], {
+      cwd: this.dir,
+      fallback: "",
+    });
+  }
 }
 
 // =============================================================================
@@ -425,23 +451,37 @@ export async function validateCloneOrigin(
 /**
  * List files in a git directory, excluding patterns from an exclude file.
  *
+ * Uses `--exclude-per-directory=.syncignore` so that patterns in the file are
+ * interpreted relative to the directory containing it (like `.gitignore`).
+ * The `.syncignore` file must be present in the repo for exclusions to apply.
+ *
  * @param repo - Git repository to list files from
- * @param excludeFile - Optional path to a file containing exclusion patterns
+ * @param excludeFile - Path to a .syncignore file; used as existence check only
+ * @param pathspec - Optional pathspec to scope listing to a subfolder
  * @returns Array of relative file paths
  */
 export async function listFilesWithExclusions(
   repo: GitRepo,
-  excludeFile?: string
+  excludeFile?: string,
+  pathspec?: string
 ): Promise<string[]> {
-  const allFiles = await repo.lsFiles();
+  const pathspecArgs = pathspec ? ["--", pathspec] : [];
+  const allFiles = await repo.lsFiles(pathspecArgs);
 
   if (!excludeFile || !(await exists(excludeFile))) {
     return allFiles;
   }
 
-  // -i: show ignored, -c -o: check both tracked and untracked, --exclude-from: use patterns
+  // -i: show ignored, -c -o: check both tracked and untracked
+  // --exclude-per-directory: patterns anchored to the directory containing the file
   const ignoredSet = new Set(
-    await repo.lsFiles(["-i", "-c", "-o", `--exclude-from=${excludeFile}`])
+    await repo.lsFiles([
+      "-i",
+      "-c",
+      "-o",
+      "--exclude-per-directory=.syncignore",
+      ...pathspecArgs,
+    ])
   );
 
   return allFiles.filter((f) => !ignoredSet.has(f));
@@ -453,9 +493,10 @@ export async function listFilesWithExclusions(
 export async function getAllowedRelativePaths(
   repo: GitRepo,
   excludeFile?: string,
-  prefixToStrip?: string
+  prefixToStrip?: string,
+  pathspec?: string
 ): Promise<string[]> {
-  const files = await listFilesWithExclusions(repo, excludeFile);
+  const files = await listFilesWithExclusions(repo, excludeFile, pathspec);
   const result: string[] = [];
 
   for (const file of files) {
