@@ -344,9 +344,7 @@ class SyncSession {
     this.syncIgnorePath = path.join(this.localPath, SYNC_IGNORE_FILE);
     this.depPathPrefix = normalizePath(path.relative(repoRoot, this.localPath));
     this.syncRepo = new GitRepo(this.syncPath);
-    this.subDirPrefix = config.subDir
-      ? normalizePath(config.subDir)
-      : "";
+    this.subDirPrefix = config.subDir ? normalizePath(config.subDir) : "";
     this.syncSubPath = config.subDir
       ? path.join(this.syncPath, config.subDir)
       : this.syncPath;
@@ -1599,7 +1597,9 @@ async function loadSyncConfig(
     baseCommit: configFile.commit,
     tag: configFile.tag,
     lastSync: configFile.lastSync,
-    subDir: configFile.subDir ? normalizePath(configFile.subDir).replace(/\/+$/, "") : "",
+    subDir: configFile.subDir
+      ? normalizePath(configFile.subDir).replace(/\/+$/, "")
+      : "",
   };
 }
 

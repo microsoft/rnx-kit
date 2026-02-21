@@ -185,11 +185,7 @@ describe("getAllowedRelativePaths", () => {
       "other/c.txt": "c",
     });
 
-    const paths = await getAllowedRelativePaths(
-      repo,
-      undefined,
-      "sub"
-    );
+    const paths = await getAllowedRelativePaths(repo, undefined, "sub");
     assert.deepStrictEqual(paths.sort(), ["a.txt", "deep/b.txt"]);
   });
 
@@ -201,12 +197,7 @@ describe("getAllowedRelativePaths", () => {
       "other/c.txt": "c",
     });
 
-    const paths = await getAllowedRelativePaths(
-      repo,
-      undefined,
-      "sub",
-      "sub"
-    );
+    const paths = await getAllowedRelativePaths(repo, undefined, "sub", "sub");
     assert.deepStrictEqual(paths.sort(), ["a.txt", "deep/b.txt"]);
   });
 
