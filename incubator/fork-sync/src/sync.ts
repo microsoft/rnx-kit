@@ -244,6 +244,7 @@ interface SyncConfigFile {
   repo: string; // Full HTTPS URL, e.g., "https://github.com/nodejs/node"
   branch: string; // Target branch name
   commit: string; // Last synced upstream commit hash (empty string for first sync)
+  subDir?: string; // Subfolder within upstream repo (empty/absent = whole repo)
   tag: string; // Tag name if synced to a tag (empty string otherwise)
   lastSync: string; // ISO timestamp of last sync (empty string if never synced)
 }
@@ -268,6 +269,7 @@ interface SyncConfig {
   baseCommit: string;
   tag: string;
   lastSync: string;
+  subDir: string; // Normalized subfolder path, empty string = whole repo
 }
 
 /**
@@ -314,6 +316,8 @@ class SyncSession {
   readonly localPath: string;
   readonly syncIgnorePath: string;
   readonly depPathPrefix: string;
+  readonly subDirPrefix: string;
+  readonly syncSubPath: string;
 
   // === Git repo wrapper for the sync directory ===
   readonly syncRepo: GitRepo;
@@ -340,6 +344,23 @@ class SyncSession {
     this.syncIgnorePath = path.join(this.localPath, SYNC_IGNORE_FILE);
     this.depPathPrefix = normalizePath(path.relative(repoRoot, this.localPath));
     this.syncRepo = new GitRepo(this.syncPath);
+    this.subDirPrefix = config.subDir ? normalizePath(config.subDir) : "";
+    this.syncSubPath = config.subDir
+      ? path.join(this.syncPath, config.subDir)
+      : this.syncPath;
+  }
+
+  /**
+   * Copy .syncignore into the sync repo so --exclude-per-directory can find it.
+   * For subDir: copies to syncPath/subDir/.syncignore
+   * For whole-repo: copies to syncPath/.syncignore
+   * No-op if .syncignore does not exist locally.
+   */
+  private async copySyncIgnoreToSyncRepo(): Promise<void> {
+    if (!(await exists(this.syncIgnorePath))) return;
+    const destPath = path.join(this.syncSubPath, SYNC_IGNORE_FILE);
+    await ensureDir(path.dirname(destPath));
+    await fs.copyFile(this.syncIgnorePath, destPath);
   }
 
   /**
@@ -729,6 +750,14 @@ ${style.line()}
 
       job.step("Fetching latest from upstream...");
       await this.syncRepo.fetch();
+
+      // Configure sparse checkout for subDir (if applicable)
+      if (this.subDirPrefix) {
+        job.step("Configuring sparse checkout...");
+        await this.syncRepo.sparseCheckoutInit();
+        await this.syncRepo.sparseCheckoutSet(this.subDirPrefix);
+      }
+
       job.done(() => `${label()} fetched latest from ${this.config.repo}`);
     } else {
       // Ensure URL ends with .git for cloning
@@ -745,6 +774,14 @@ ${style.line()}
       })) {
         cloneStep.update(chunk.text.trim());
       }
+
+      // Configure sparse checkout for subDir (if applicable)
+      if (this.subDirPrefix) {
+        job.step("Configuring sparse checkout...");
+        await this.syncRepo.sparseCheckoutInit();
+        await this.syncRepo.sparseCheckoutSet(this.subDirPrefix);
+      }
+
       job.done(() => `${label()} cloned ${this.config.repo}`);
     }
   }
@@ -867,13 +904,16 @@ ${style.line()}
     job.step(`Creating branch ${this.workBranch}...`);
     await this.syncRepo.checkoutNewBranch(this.workBranch);
 
+    // Copy .syncignore so exclusion patterns work inside the sync repo
+    await this.copySyncIgnoreToSyncRepo();
+
     job.step("Computing file differences...");
     const { localHashes, syncHashes } = await this.getFileHashMaps();
     const filesToCopy = await this.computeChangedPaths(
       localHashes,
       syncHashes,
       this.localPath,
-      this.syncPath
+      this.syncSubPath
     );
 
     let copied = 0;
@@ -888,7 +928,7 @@ ${style.line()}
     for await (const file of copyFilesInParallel(
       filesToCopy,
       this.localPath,
-      this.syncPath
+      this.syncSubPath
     )) {
       copied++;
       lastCopied = file;
@@ -996,13 +1036,16 @@ ${style.line()}
     const label = () => style.label("Apply changes:");
     using job = jobs.addJob("apply-changes", () => `${label()} applying...`);
 
+    // Ensure .syncignore is in the sync repo (needed for --continue mode)
+    await this.copySyncIgnoreToSyncRepo();
+
     // Copy merged files to local path (hash-based delta)
     job.step("Computing file hashes...");
     const { localHashes, syncHashes } = await this.getFileHashMaps();
     const filesToCopy = await this.computeChangedPaths(
       syncHashes,
       localHashes,
-      this.syncPath,
+      this.syncSubPath,
       this.localPath
     );
 
@@ -1017,7 +1060,7 @@ ${style.line()}
     );
     for await (const file of copyFilesInParallel(
       filesToCopy,
-      this.syncPath,
+      this.syncSubPath,
       this.localPath
     )) {
       copied++;
@@ -1027,11 +1070,17 @@ ${style.line()}
 
     // Delete files removed upstream
     const allowedSync = new Set(
-      await getAllowedRelativePaths(this.syncRepo, this.syncIgnorePath)
+      await getAllowedRelativePaths(
+        this.syncRepo,
+        this.syncIgnorePath,
+        this.subDirPrefix,
+        this.subDirPrefix
+      )
     );
     const localFiles = await getAllowedRelativePaths(
       this.mainRepo,
       this.syncIgnorePath,
+      this.depPathPrefix,
       this.depPathPrefix
     );
     const filesToDelete = localFiles.filter((file) => !allowedSync.has(file));
@@ -1070,6 +1119,7 @@ ${style.line()}
       repo: this.config.repo,
       branch: this.args.branch ?? this.config.branch,
       commit: this.targetCommit,
+      ...(this.config.subDir ? { subDir: this.config.subDir } : {}),
       tag: this.targetTag ?? "",
       lastSync: new Date().toISOString(),
     });
@@ -1309,11 +1359,17 @@ ${style.line()}
       await getAllowedRelativePaths(
         this.mainRepo,
         this.syncIgnorePath,
+        this.depPathPrefix,
         this.depPathPrefix
       )
     );
     const allowedSync = new Set(
-      await getAllowedRelativePaths(this.syncRepo, this.syncIgnorePath)
+      await getAllowedRelativePaths(
+        this.syncRepo,
+        this.syncIgnorePath,
+        this.subDirPrefix,
+        this.subDirPrefix
+      )
     );
     return {
       localHashes: await getGitTreeHashes(
@@ -1322,7 +1378,12 @@ ${style.line()}
         this.depPathPrefix,
         this.depPathPrefix
       ),
-      syncHashes: await getGitTreeHashes(this.syncRepo, allowedSync),
+      syncHashes: await getGitTreeHashes(
+        this.syncRepo,
+        allowedSync,
+        this.subDirPrefix,
+        this.subDirPrefix
+      ),
     };
   }
 
@@ -1511,6 +1572,15 @@ async function loadSyncConfig(
     );
   }
 
+  if (configFile.subDir) {
+    const normalized = normalizePath(configFile.subDir);
+    if (normalized.startsWith("/") || normalized.includes("..")) {
+      return fatal(
+        `Invalid 'subDir' in ${configPath}: must be a relative path within the upstream repo (got "${configFile.subDir}").`
+      );
+    }
+  }
+
   // Return combined config
   return {
     // From manifest
@@ -1527,6 +1597,9 @@ async function loadSyncConfig(
     baseCommit: configFile.commit,
     tag: configFile.tag,
     lastSync: configFile.lastSync,
+    subDir: configFile.subDir
+      ? normalizePath(configFile.subDir).replace(/\/+$/, "")
+      : "",
   };
 }
 
