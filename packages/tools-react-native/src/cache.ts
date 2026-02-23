@@ -1,4 +1,5 @@
 import type { Config } from "@react-native-community/cli-types";
+import { ensureDirSync } from "@rnx-kit/tools-filesystem";
 import { findUp } from "@rnx-kit/tools-node/path";
 import * as crypto from "node:crypto";
 import * as nodefs from "node:fs";
@@ -7,10 +8,6 @@ import { REACT_NATIVE_CONFIG_FILES } from "./context.ts";
 
 const HASH_ALGO = "sha256";
 const UTF8 = { encoding: "utf-8" as const };
-
-function ensureDir(p: string, /** @internal */ fs = nodefs): void {
-  fs.mkdirSync(p, { recursive: true, mode: 0o755 });
-}
 
 function makeCachePath(projectRoot: string, filename: string): string {
   return path.join(projectRoot, "node_modules", ".cache", "rnx-kit", filename);
@@ -99,7 +96,7 @@ export function saveConfigToCache(
   const data = JSON.stringify(config);
 
   const configPath = configCachePath(projectRoot);
-  ensureDir(path.dirname(configPath), fs);
+  ensureDirSync(path.dirname(configPath), fs);
 
   fs.writeFileSync(configPath, data, UTF8);
   fs.writeFileSync(cacheStatePath(projectRoot), state, UTF8);

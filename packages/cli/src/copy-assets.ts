@@ -1,6 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { error, info, warn } from "@rnx-kit/console";
-import { ensureDir } from "@rnx-kit/tools-filesystem";
+import { ensureDirSync } from "@rnx-kit/tools-filesystem";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import {
   findPackageDependencyDir,
@@ -230,7 +230,7 @@ export async function assembleAarBundle(
   };
 
   const outputDir = path.join(context.options.assetsDest, "aar");
-  ensureDir(outputDir);
+  ensureDirSync(outputDir, fs);
 
   const dest = path.join(outputDir, `${targetName}-${version}.aar`);
 
@@ -330,7 +330,7 @@ export async function assembleAarBundle(
       "",
     ].join("\n");
 
-    ensureDir(buildDir);
+    ensureDirSync(buildDir, fs);
     fs.writeFileSync(path.join(buildDir, "build.gradle"), buildGradle);
     fs.writeFileSync(
       path.join(buildDir, "gradle.properties"),
@@ -356,7 +356,7 @@ function copyFiles(
     return [];
   }
 
-  ensureDir(destination, fs);
+  ensureDirSync(destination, fs);
   return files.map((file) => {
     return cp_r(file, `${destination}/${path.basename(file)}`, fs);
   });

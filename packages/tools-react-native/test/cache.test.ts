@@ -1,4 +1,5 @@
 import type { Config } from "@react-native-community/cli-types";
+import { readTextFileSync as readText } from "@rnx-kit/tools-filesystem";
 import { mockFS } from "@rnx-kit/tools-filesystem/mocks";
 import { deepEqual, equal, ok } from "node:assert/strict";
 import * as path from "node:path";
@@ -48,14 +49,11 @@ describe("loadConfigFromCache()", () => {
 
 describe("saveConfigToCache()", () => {
   it("writes the config and its state to disk", () => {
-    const mkdirOptions = JSON.stringify({ recursive: true, mode: 0o755 });
-    const vol = {};
-    const fsMock = mockFS(vol);
+    const fs = mockFS();
 
-    saveConfigToCache(".", stateHash, config, fsMock);
+    saveConfigToCache(".", stateHash, config, fs);
 
-    equal(vol[path.dirname(cacheFile)], mkdirOptions);
-    equal(vol[stateFile], stateHash);
-    equal(vol[cacheFile], JSON.stringify(config));
+    equal(readText(stateFile, fs), stateHash);
+    equal(readText(cacheFile, fs), JSON.stringify(config));
   });
 });

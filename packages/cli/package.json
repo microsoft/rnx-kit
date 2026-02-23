@@ -88,6 +88,7 @@
     "@types/node": "^24.0.0",
     "@types/qrcode": "^1.4.2",
     "markdown-table": "^3.0.0",
+    "memfs": "^4.56.10",
     "metro": "^0.83.3",
     "metro-babel-transformer": "^0.83.1",
     "metro-config": "^0.83.3",
