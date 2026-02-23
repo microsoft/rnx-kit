@@ -15010,14 +15010,14 @@ __metadata:
   linkType: hard
 
 "react-native-test-app@npm:^5.0.5":
-  version: 5.0.12
-  resolution: "react-native-test-app@npm:5.0.12"
+  version: 5.0.14
+  resolution: "react-native-test-app@npm:5.0.14"
   dependencies:
     "@rnx-kit/react-native-host": "npm:^0.5.15"
     "@rnx-kit/tools-react-native": "npm:^2.1.0"
     ajv: "npm:^8.0.0"
     cliui: "npm:^8.0.0"
-    fast-xml-parser: "npm:^4.0.0"
+    fast-xml-parser: "npm:^5.3.4"
     prompts: "npm:^2.4.0"
     semver: "npm:^7.3.5"
     uuid: "npm:^11.0.0"
@@ -15025,7 +15025,7 @@ __metadata:
     "@callstack/react-native-visionos": 0.76 - 0.79
     "@expo/config-plugins": ">=5.0"
     react: 18.2 - 19.2
-    react-native: 0.76 - 0.83 || >=0.83.0-0 <0.84.0
+    react-native: 0.76 - 0.84 || >=0.84.0-0 <0.85.0
     react-native-macos: ^0.0.0-0 || 0.76 - 0.81
     react-native-windows: ^0.0.0-0 || 0.76 - 0.81
   peerDependenciesMeta:
@@ -15042,7 +15042,7 @@ __metadata:
     init: scripts/init.mjs
     init-test-app: scripts/init.mjs
     install-windows-test-app: windows/app.mjs
-  checksum: 10c0/98f23594477ef7605b10d952dfebc9ec34c7d38cbba938876cb27923a1ea7eab4e99bab7053eec97a52cf5e72742f5fb615511b1c38abc7388f987188dbbb722
+  checksum: 10c0/82890ee6d1a9e8324929eef56a349e5f793ee196f8fd09c972243a1234b4264baa1ed051cd4cee7337eaa71688556f3e7cc4521dc9d700748c86187ec9d22af9
   languageName: node
   linkType: hard
 
