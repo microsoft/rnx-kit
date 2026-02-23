@@ -1,5 +1,11 @@
 # @rnx-kit/tools-filesystem
 
+## 0.2.0
+
+### Minor Changes
+
+- 5149e36: Add more comprehensive filesystem helpers to tools-filesystem
+
 ## 0.1.2
 
 ### Patch Changes
