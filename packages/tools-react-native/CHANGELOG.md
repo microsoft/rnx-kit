@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.3.4
+
+### Patch Changes
+
+- 5149e36: Add more comprehensive filesystem helpers to tools-filesystem
+- Updated dependencies [5149e36]
+  - @rnx-kit/tools-filesystem@0.2.0
+
 ## 2.3.3
 
 ### Patch Changes
