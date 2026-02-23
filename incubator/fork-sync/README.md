@@ -44,11 +44,17 @@ fork-sync --dep <name> --status
 # Continue after manual conflict resolution
 fork-sync --dep <name> --continue
 
+# Abort an in-progress sync
+fork-sync --dep <name> --abort
+
 # Run AI merge on all conflicted files (default)
 fork-sync --dep <name> --mergetool ai
 
 # Use git's built-in mergetool instead
 fork-sync --dep <name> --mergetool git
+
+# Clean cached upstream clone
+fork-sync --dep <name> --clean --no-sync
 ```
 
 ### ai-merge
@@ -78,64 +84,141 @@ or hits a `.git` boundary.
   },
   "dependencies": [
     {
-      "name": "nodejs",
-      "localPath": "deps/nodejs"
+      "name": "hermes",
+      "localPath": "."
+    },
+    {
+      "name": "icu-small",
+      "localPath": "external/icu-small"
     }
   ]
 }
 ```
 
-| Field                      | Description                                                                    |
-| -------------------------- | ------------------------------------------------------------------------------ |
-| `version`                  | Must be `1`                                                                    |
-| `aiMerge.provider`         | AI provider: `"claude"` or `"copilot"`                                         |
-| `aiMerge.model`            | Model name (optional, provider-specific)                                       |
-| `aiMerge.minConfidence`    | Minimum confidence to apply a hunk: `"HIGH"`, `"MEDIUM"` (default), or `"LOW"` |
-| `dependencies[].name`      | Unique name for the dependency (used in `--dep` flag)                          |
-| `dependencies[].localPath` | Path to the vendored copy, relative to the manifest                            |
+| Field                      | Description                                                                        |
+| -------------------------- | ---------------------------------------------------------------------------------- |
+| `version`                  | Must be `1`                                                                        |
+| `aiMerge.provider`         | AI provider: `"claude"` or `"copilot"`                                             |
+| `aiMerge.model`            | Model name (optional, provider-specific)                                           |
+| `aiMerge.minConfidence`    | Minimum confidence to apply a hunk: `"HIGH"`, `"MEDIUM"` (default), or `"LOW"`     |
+| `dependencies[].name`      | Unique name for the dependency (used in `--dep` flag)                              |
+| `dependencies[].localPath` | Path to the vendored copy, relative to the manifest. Use `"."` for full-repo forks |
 
 ### sync-config.json
 
 Each dependency needs a `sync-config.json` in its local directory (e.g.,
-`deps/nodejs/sync-config.json`). This file tells `fork-sync` where to fetch
-upstream code from and tracks the last synced commit. It is auto-updated after
-each successful sync.
+`external/icu-small/sync-config.json`). This file tells `fork-sync` where to
+fetch upstream code from and tracks the last synced commit. It is auto-updated
+after each successful sync.
 
 ```json
 {
   "repo": "https://github.com/nodejs/node",
-  "branch": "v24.x",
+  "branch": "main",
   "commit": "abc1234def5678...",
+  "subDir": "deps/icu-small",
   "tag": "",
   "lastSync": "2025-06-15T10:30:00.000Z"
 }
 ```
 
-| Field      | Description                                                    |
-| ---------- | -------------------------------------------------------------- |
-| `repo`     | Full HTTPS URL of the upstream repository                      |
-| `branch`   | Upstream branch to track                                       |
-| `commit`   | Last synced upstream commit hash (empty string for first sync) |
-| `tag`      | Tag name if synced to a tag (empty string otherwise)           |
-| `lastSync` | ISO timestamp of last sync (empty string if never synced)      |
+| Field      | Description                                                                |
+| ---------- | -------------------------------------------------------------------------- |
+| `repo`     | Full HTTPS URL of the upstream repository                                  |
+| `branch`   | Upstream branch to track                                                   |
+| `commit`   | Last synced upstream commit hash (empty string for first sync)             |
+| `subDir`   | Subfolder within the upstream repo to sync (optional, omit for whole repo) |
+| `tag`      | Tag name if synced to a tag (empty string otherwise)                       |
+| `lastSync` | ISO timestamp of last sync (empty string if never synced)                  |
+
+#### Subfolder sync with `subDir`
+
+When a dependency lives inside a larger upstream repository, set `subDir` to
+sync only that subfolder. For example, to vendor `deps/icu-small/` from the
+Node.js repository into `external/icu-small/`:
+
+```json
+{
+  "repo": "https://github.com/nodejs/node",
+  "branch": "main",
+  "commit": "1bd7f62d139...",
+  "subDir": "deps/icu-small"
+}
+```
+
+When `subDir` is set:
+
+- **Sparse checkout** is configured automatically so only the subfolder is
+  materialized on disk, avoiding the cost of checking out the entire upstream
+  repo.
+- **Path mapping** strips the `subDir` prefix from upstream paths and the
+  `localPath` prefix from local paths, producing a common relative path for file
+  comparison and copying.
+- **Git merge** operates on the full commit graph and works correctly — only the
+  subfolder has local modifications, so conflicts only arise there.
+
+When `subDir` is omitted or empty, the entire upstream repo is synced (default
+behavior).
 
 ### .syncignore
 
 Place a `.syncignore` file in the dependency's local directory (e.g.,
-`deps/nodejs/.syncignore`) to exclude files and folders from sync. Uses standard
-`.gitignore` syntax.
+`external/icu-small/.syncignore`) to exclude files and folders from sync. Uses
+standard `.gitignore` syntax.
 
 ```gitignore
-# Exclude CI/CD configs we don't need
-.github/
-.devcontainer/
+# Exclude local-only build files
+/CMakeLists.txt
+/hermes_icu_glue.cpp
 
-# Exclude docs
-docs/
-*.md
+# Exclude local-only metadata
+/sync-config.json
+/.syncignore
 ```
 
 Excluded files are not copied from upstream and are not deleted locally.
+
+#### Anchored vs unanchored patterns
+
+Patterns follow `.gitignore` rules. A leading `/` anchors the pattern to the
+directory where the `.syncignore` file is located:
+
+| Pattern           | Matches                       | Does not match       |
+| ----------------- | ----------------------------- | -------------------- |
+| `/CMakeLists.txt` | `CMakeLists.txt` at the root  | `sub/CMakeLists.txt` |
+| `CMakeLists.txt`  | `CMakeLists.txt` at any depth | —                    |
+| `/test/`          | `test/` directory at the root | `sub/test/`          |
+
+#### Selective inclusion with negation (`!`)
+
+To exclude most content and re-include specific parts, use negation patterns.
+**Important:** gitignore cannot re-include children of an excluded parent
+directory. Exclude the _children_, not the parent:
+
+```gitignore
+# WRONG — negation won't work because parent is excluded:
+/test/
+!/test/intl402/
+
+# CORRECT — exclude children individually, then negate one:
+/test/*/
+!/test/intl402/
+```
+
+This is useful for large repos where you only need a subset. For example, to
+sync only `test/intl402/` and `harness/` from a test suite:
+
+```gitignore
+# Exclude repo infrastructure
+/.github/
+/docs/
+/tools/
+/package.json
+
+# Exclude all test suites, re-include only intl402
+/test/*/
+!/test/intl402/
+```
 
 ### sync-instructions.md
 
