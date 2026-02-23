@@ -356,10 +356,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/tsconfig@npm:^2.1.0":
-  version: 2.1.1
-  resolution: "@rnx-kit/tsconfig@npm:2.1.1"
-  checksum: 10c0/53aed185abd644250d95c732e44ecb66bcdf3005cc6eb854ba217346fa29cf0ea892bbd391e15050a5b553fe7dc983130add30c9aa30b1f66a0ca498d3409d94
+"@rnx-kit/tsconfig@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@rnx-kit/tsconfig@npm:3.0.0"
+  checksum: 10c0/87725a8b4bff64e998f1babfde4982aab3ec22538d0bde67f4980c019199741a91e796ba047d8cfafb538af3c6c07c1ae07239c9b3d73fe7ba30ab36cfbfe984
   languageName: node
   linkType: hard
 
@@ -3027,7 +3027,7 @@ __metadata:
     "@eslint/js": "npm:^10.0.0"
     "@octokit/core": "npm:^7.0.0"
     "@octokit/plugin-rest-endpoint-methods": "npm:^17.0.0"
-    "@rnx-kit/tsconfig": "npm:^2.1.0"
+    "@rnx-kit/tsconfig": "npm:^3.0.0"
     "@types/node": "npm:^24.0.0"
     azure-devops-node-api: "npm:^15.0.0"
     eslint: "npm:^10.0.0"
