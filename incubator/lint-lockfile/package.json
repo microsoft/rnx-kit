@@ -8,20 +8,17 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
-  "files": [
-    "lib/**/*.js",
-    "src/**/*.ts"
-  ],
-  "main": "src/index.ts",
-  "bin": "lib/cli.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/lint-lockfile"
   },
-  "engines": {
-    "node": ">=18.12"
-  },
+  "bin": "lib/cli.js",
+  "files": [
+    "lib/**/*.js",
+    "src/**/*.ts"
+  ],
+  "main": "src/index.ts",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -39,6 +36,9 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/js-yaml": "^4.0.5"
+  },
+  "engines": {
+    "node": ">=18.12"
   },
   "experimental": true
 }

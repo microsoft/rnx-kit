@@ -253,9 +253,7 @@ documentation for your package manager below:
 
 <!-- References -->
 
-[`@rnx-kit/metro-config`]:
-  https://github.com/microsoft/rnx-kit/blob/main/packages/metro-config/README.md#ensuring-a-single-instance-of-a-package
+[`@rnx-kit/metro-config`]: https://github.com/microsoft/rnx-kit/blob/main/packages/metro-config/README.md#ensuring-a-single-instance-of-a-package
 [`resolver.blockList`]: https://metrobundler.dev/docs/configuration/#blocklist
-[`resolver.extraNodeModules`]:
-  https://metrobundler.dev/docs/configuration/#extranodemodules
+[`resolver.extraNodeModules`]: https://metrobundler.dev/docs/configuration/#extranodemodules
 [`yarn-deduplicate`]: https://github.com/scinos/yarn-deduplicate

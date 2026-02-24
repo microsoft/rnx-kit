@@ -8,17 +8,17 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-resolver-symlinks"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/metro-resolver-symlinks"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -31,14 +31,6 @@
     "@rnx-kit/tools-react-native": "^2.3.2",
     "enhanced-resolve": "^5.8.3"
   },
-  "peerDependencies": {
-    "oxc-resolver": "^11.0.0"
-  },
-  "peerDependenciesMeta": {
-    "oxc-resolver": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
@@ -47,6 +39,14 @@
     "@types/node": "^24.0.0",
     "metro-resolver": "^0.83.3",
     "oxc-resolver": "^11.0.0"
+  },
+  "peerDependencies": {
+    "oxc-resolver": "^11.0.0"
+  },
+  "peerDependenciesMeta": {
+    "oxc-resolver": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=16.17"

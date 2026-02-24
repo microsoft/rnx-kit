@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-plugin-typescript"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"
@@ -21,11 +26,6 @@
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/metro-plugin-typescript"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
@@ -50,10 +50,10 @@
     "@types/node": "^24.0.0",
     "metro": "^0.83.3"
   },
-  "engines": {
-    "node": ">=16.17"
-  },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"
+  },
+  "engines": {
+    "node": ">=16.17"
   }
 }

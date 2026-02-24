@@ -12,8 +12,6 @@ import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import { test } from "node:test";
-import { exec } from "../src/modules/proc.ts";
-
 import {
   DEFAULT_ALLOWED_TOOLS,
   DEFAULT_TIMEOUT,
@@ -22,8 +20,8 @@ import {
   MAX_TIMEOUT,
   parseStreamEvent,
 } from "../src/modules/claude.ts";
-
 import type { ClaudeStreamEvent } from "../src/modules/claude.ts";
+import { exec } from "../src/modules/proc.ts";
 
 // =============================================================================
 // Helper: Check if Claude is installed

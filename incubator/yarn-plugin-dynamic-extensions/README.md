@@ -84,5 +84,4 @@ explicitly as you normally would. For example, `yarn why`:
 
 <!-- References -->
 
-[`packageExtensions`]:
-  https://yarnpkg.com/configuration/yarnrc#packageExtensions
+[`packageExtensions`]: https://yarnpkg.com/configuration/yarnrc#packageExtensions

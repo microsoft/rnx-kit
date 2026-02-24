@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/@react-native-webapis/web-storage"
+  },
   "files": [
     "RNWWebStorage.podspec",
     "android/build.gradle",
@@ -22,17 +27,21 @@
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/@react-native-webapis/web-storage"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
     "lint": "rnx-kit-scripts lint",
     "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "react": "19.2.0",
+    "react-native": "^0.83.0"
   },
   "peerDependencies": {
     "@callstack/react-native-visionos": ">=0.74",
@@ -51,15 +60,6 @@
     "react-native-windows": {
       "optional": true
     }
-  },
-  "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0",
-    "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
-    "react": "19.2.0",
-    "react-native": "^0.83.0"
   },
   "engines": {
     "node": ">=16.17"

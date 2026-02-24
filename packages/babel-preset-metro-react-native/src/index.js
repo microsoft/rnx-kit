@@ -1,7 +1,7 @@
-/* jshint esversion: 8, node: true */
 // @ts-check
 "use strict";
-const path = require("path");
+
+const path = require("node:path");
 
 /**
  * @typedef {import("@babel/core").ConfigAPI} ConfigAPI

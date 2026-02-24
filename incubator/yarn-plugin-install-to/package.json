@@ -8,21 +8,17 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/yarn-plugin-install-to"
+  },
   "files": [
     "dist/**/*.cjs",
     "dist/**/*.cjs.map",
     "src"
   ],
   "main": "./dist/yarn-plugin-install-to.cjs",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/yarn-plugin-install-to"
-  },
-  "engines": {
-    "node": ">=18.12",
-    "yarn": ">=4.0"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "bundle": "rnx-kit-scripts bundle --platform yarn --minify --sourceMap",
@@ -40,6 +36,10 @@
     "@yarnpkg/cli": "^4.6.0",
     "@yarnpkg/core": "^4.2.0",
     "clipanion": "^4.0.0-rc.4"
+  },
+  "engines": {
+    "node": ">=18.12",
+    "yarn": ">=4.0"
   },
   "experimental": true
 }

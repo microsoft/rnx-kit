@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-service"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"
@@ -22,11 +27,6 @@
     },
     "./package.json": "./package.json"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/metro-service"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -38,6 +38,19 @@
     "@rnx-kit/tools-node": "^3.0.3",
     "@rnx-kit/tools-react-native": "^2.3.2",
     "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "@react-native-community/cli-types": "^20.0.0",
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0",
+    "@types/node-fetch": "^2.6.5",
+    "metro": "^0.83.3",
+    "metro-config": "^0.83.3",
+    "metro-core": "^0.83.3",
+    "metro-resolver": "^0.83.3",
+    "metro-runtime": "^0.83.3"
   },
   "peerDependencies": {
     "@office-iss/react-native-win32": "*",
@@ -54,19 +67,6 @@
     "metro-react-native-babel-transformer": {
       "optional": true
     }
-  },
-  "devDependencies": {
-    "@react-native-community/cli-types": "^20.0.0",
-    "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
-    "@types/node": "^24.0.0",
-    "@types/node-fetch": "^2.6.5",
-    "metro": "^0.83.3",
-    "metro-config": "^0.83.3",
-    "metro-core": "^0.83.3",
-    "metro-resolver": "^0.83.3",
-    "metro-runtime": "^0.83.3"
   },
   "engines": {
     "node": ">=16.17"

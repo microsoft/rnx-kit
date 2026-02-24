@@ -1,7 +1,6 @@
 {
   "name": "@rnx-kit/rn-changelog-generator",
   "version": "0.5.0",
-  "experimental": true,
   "description": "EXPERIMENTAL - USE WITH CAUTION - Generate a markdown-formatted list of changes between two version of react-native",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/rn-changelog-generator#readme",
   "license": "MIT",
@@ -9,18 +8,18 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/rn-changelog-generator"
+  },
+  "bin": "lib/index.js",
   "files": [
     "lib/**/*.d.ts",
     "lib/index.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "bin": "lib/index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/rn-changelog-generator"
-  },
   "scripts": {
     "prepare": "echo '⚠️ rn-changelog-generator is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
     "build": "rnx-kit-scripts build",
@@ -42,10 +41,11 @@
     "p-limit": "^3.1.0",
     "yargs": "^16.0.0"
   },
+  "jest": {
+    "preset": "@rnx-kit/jest-preset/private"
+  },
   "engines": {
     "node": ">=16.17"
   },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
-  }
+  "experimental": true
 }

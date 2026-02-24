@@ -7,7 +7,7 @@
     "clear": "docusaurus clear",
     "deploy": "docusaurus deploy",
     "docusaurus": "docusaurus",
-    "format": "prettier --write --log-level error $(git ls-files '*.[jt]s' '*.md' '*.mdx' '*.tsx')",
+    "format": "oxfmt $(git ls-files '*.[jt]s' '*.md' '*.mdx' '*.tsx')",
     "serve": "docusaurus serve",
     "start": "docusaurus start",
     "swizzle": "docusaurus swizzle",
@@ -28,8 +28,7 @@
   "devDependencies": {
     "@tsconfig/docusaurus": "^2.0.1",
     "@types/react": "~19.2.0",
-    "prettier": "catalog:",
-    "prettier-plugin-organize-imports": "^4.0.0",
+    "oxfmt": "catalog:",
     "typescript": "catalog:"
   },
   "engines": {
@@ -53,6 +52,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "prettier": "../.github/prettierrc.json"
+  }
 }

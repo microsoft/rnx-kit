@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-node"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js",
@@ -43,11 +48,6 @@
       "default": "./lib/path.js"
     },
     "./package.json": "./package.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/tools-node"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",

@@ -4,7 +4,6 @@
 describe("@rnx-kit/babel-preset-metro-react-native", () => {
   const babel = require("@babel/core");
   const path = require("node:path");
-  const prettier = require("prettier");
   const preset = require("../src/index");
 
   const thisBabelPreset = path.dirname(__dirname);
@@ -23,10 +22,11 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
    * @returns {Promise<string | null>}
    */
   async function transform(filename, opts) {
+    const oxfmt = await import("oxfmt");
     const output = babel.transformFileSync(filename, opts);
     return output?.code
       ? // Format the code to make the snapshot more legible.
-        await prettier.format(output.code, { parser: "babel" })
+        (await oxfmt.format(filename, output.code)).code
       : null;
   }
 

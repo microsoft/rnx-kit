@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-plugin-cyclic-dependencies-detector"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"
@@ -21,11 +26,6 @@
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/metro-plugin-cyclic-dependencies-detector"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",

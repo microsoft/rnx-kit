@@ -1,8 +1,8 @@
 import type { NativeSyntheticEvent } from "react-native";
 import { NativeModules } from "react-native";
-import { getHermesVersion } from "./hermes";
 // @ts-expect-error no types for "react-native/Libraries/Core/ReactNativeVersion"
 import { version as coreVersion } from "react-native/Libraries/Core/ReactNativeVersion";
+import { getHermesVersion } from "./hermes";
 
 declare global {
   export const RN$Bridgeless: boolean;

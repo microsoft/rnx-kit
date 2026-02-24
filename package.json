@@ -8,7 +8,6 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit"
@@ -42,8 +41,6 @@
     "eslint": "catalog:",
     "knip": "^5.30.2",
     "nx": "patch:nx@npm%3A20.3.3#~/.yarn/patches/nx-npm-20.3.3-84b801f64d.patch",
-    "prettier": "catalog:",
-    "prettier-plugin-organize-imports": "^4.0.0",
     "suggestion-bot": "^4.0.0",
     "typescript": "catalog:"
   },
@@ -103,8 +100,7 @@
       "@types/*",
       "eslint",
       "jest",
-      "prettier",
-      "prettier-plugin-organize-imports"
+      "oxfmt"
     ],
     "metro": false,
     "workspaces": {
@@ -165,7 +161,6 @@
       "incubator/react-native-test-app-msal": {},
       "incubator/tools-typescript": {
         "entry": [
-          "src/index.ts",
           "test/**/*.test.ts"
         ]
       },
@@ -209,8 +204,7 @@
         ],
         "ignoreDependencies": [
           "@babel/core",
-          "@babel/preset-env",
-          "tsx"
+          "@babel/preset-env"
         ]
       },
       "packages/eslint-config": {
@@ -285,9 +279,6 @@
           "src/**/*.{ts,tsx}",
           "test/**/*.{js,mjs,ts,tsx}"
         ],
-        "ignoreBinaries": [
-          "rnx"
-        ],
         "ignoreDependencies": [
           "@babel/preset-env",
           "@react-native-community/cli",
@@ -312,7 +303,6 @@
       }
     }
   },
-  "prettier": "./.github/prettierrc.json",
   "rnx-kit": {
     "lint": {
       "lockfile": {

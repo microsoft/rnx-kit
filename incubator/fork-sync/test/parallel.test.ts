@@ -9,7 +9,6 @@
 
 import assert from "node:assert";
 import { test } from "node:test";
-
 import * as parallel from "../src/modules/parallel.ts";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

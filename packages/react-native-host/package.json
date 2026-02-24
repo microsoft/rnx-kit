@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/react-native-host"
+  },
   "files": [
     "ReactNativeHost.podspec",
     "android/build.gradle",
@@ -16,21 +21,16 @@
     "cocoa",
     "react-native.config.js"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/react-native-host"
-  },
   "scripts": {
     "format": "rnx-kit-scripts format",
     "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
     "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
   },
-  "peerDependencies": {
-    "react-native": ">=0.66"
-  },
   "devDependencies": {
     "@rnx-kit/scripts": "*"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.66"
   },
   "engines": {
     "node": ">=16.17"

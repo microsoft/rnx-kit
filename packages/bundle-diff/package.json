@@ -8,20 +8,20 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/bundle-diff"
+  },
+  "bin": {
+    "rnx-bundle-diff": "lib/cli.js"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "bin": {
-    "rnx-bundle-diff": "lib/cli.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/bundle-diff"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",

@@ -23,15 +23,15 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
-  "files": [
-    "src"
-  ],
-  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/react-native-lazy-index"
   },
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -41,15 +41,15 @@
   "dependencies": {
     "babel-plugin-codegen": "^4.1.5"
   },
-  "peerDependencies": {
-    "react-native": ">=0.59"
-  },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.59"
   },
   "engines": {
     "node": ">=16.17"

@@ -9,7 +9,6 @@
 
 import assert from "node:assert";
 import { test } from "node:test";
-
 import type { ProgressLine, ProgressState } from "../src/modules/tty-ui.ts";
 import * as ui from "../src/modules/tty-ui.ts";
 

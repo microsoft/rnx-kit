@@ -4,32 +4,29 @@
   "description": "EXPERIMENTAL - USE WITH CAUTION - reporter",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/reporter#readme",
   "license": "MIT",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "type": "module",
-  "sideEffects": false,
   "author": {
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
-  },
-  "files": [
-    "lib/**/*.d.ts",
-    "lib/**/*.js"
-  ],
-  "exports": {
-    ".": {
-      "import": "./lib/index.js",
-      "types": "./lib/index.d.ts",
-      "default": "./lib/index.js"
-    }
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/reporter"
   },
-  "engines": {
-    "node": ">=18.12"
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "default": "./lib/index.js"
+    }
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
@@ -41,6 +38,9 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
+  },
+  "engines": {
+    "node": ">=18.12"
   },
   "experimental": true
 }

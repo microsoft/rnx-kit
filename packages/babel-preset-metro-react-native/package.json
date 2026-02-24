@@ -8,15 +8,15 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
-  "files": [
-    "src"
-  ],
-  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/babel-preset-metro-react-native"
   },
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -26,17 +26,6 @@
   "dependencies": {
     "@rnx-kit/console": "^2.0.0",
     "babel-plugin-const-enum": "^1.0.0"
-  },
-  "peerDependencies": {
-    "@babel/core": "^7.20.0",
-    "@babel/plugin-transform-typescript": "^7.20.0",
-    "@babel/runtime": "^7.20.0",
-    "@react-native/babel-preset": "*"
-  },
-  "peerDependenciesMeta": {
-    "@babel/plugin-transform-typescript": {
-      "optional": true
-    }
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -50,13 +39,24 @@
     "@types/babel__core": "^7.0.0",
     "@types/node": "^24.0.0"
   },
-  "engines": {
-    "node": ">=16.17"
+  "peerDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/plugin-transform-typescript": "^7.20.0",
+    "@babel/runtime": "^7.20.0",
+    "@react-native/babel-preset": "*"
+  },
+  "peerDependenciesMeta": {
+    "@babel/plugin-transform-typescript": {
+      "optional": true
+    }
   },
   "jest": {
     "roots": [
       "test"
     ],
     "testRegex": "/test/.*\\.test\\.js$"
+  },
+  "engines": {
+    "node": ">=16.17"
   }
 }

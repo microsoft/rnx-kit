@@ -8,15 +8,15 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
-  "files": [
-    "src"
-  ],
-  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/babel-plugin-import-path-remapper"
   },
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",

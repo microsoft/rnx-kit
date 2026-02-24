@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/types-metro-serializer-esbuild"
+  },
   "files": [
     "src"
   ],
@@ -17,14 +22,6 @@
       "types": "./src/index.ts"
     },
     "./package.json": "./package.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/types-metro-serializer-esbuild"
-  },
-  "engines": {
-    "node": ">=18.12"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
@@ -36,5 +33,8 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "esbuild": "^0.27.1"
+  },
+  "engines": {
+    "node": ">=18.12"
   }
 }

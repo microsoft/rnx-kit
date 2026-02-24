@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/tools-typescript"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js",
@@ -22,14 +27,6 @@
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/tools-typescript"
-  },
-  "engines": {
-    "node": ">=16.17"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
@@ -59,6 +56,9 @@
   },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"
+  },
+  "engines": {
+    "node": ">=16.17"
   },
   "experimental": true
 }

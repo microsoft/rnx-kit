@@ -8,6 +8,14 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/cli"
+  },
+  "bin": {
+    "rnx-cli": "bin/rnx-cli.cjs"
+  },
   "files": [
     "bin/rnx-cli.mjs",
     "lib/**/*.d.ts",
@@ -15,9 +23,6 @@
     "react-native.config.js"
   ],
   "main": "lib/index.js",
-  "bin": {
-    "rnx-cli": "bin/rnx-cli.cjs"
-  },
   "types": "lib/index.d.ts",
   "exports": {
     ".": {
@@ -27,11 +32,6 @@
     "./react-native.config": "./react-native.config.js",
     "./react-native.config.js": "./react-native.config.js",
     "./package.json": "./package.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/cli"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
@@ -63,18 +63,6 @@
     "ora": "^5.4.1",
     "qrcode": "^1.5.0"
   },
-  "peerDependencies": {
-    "jest": ">=26.0",
-    "react-native": ">=0.64"
-  },
-  "peerDependenciesMeta": {
-    "jest": {
-      "optional": true
-    },
-    "react-native": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
@@ -96,10 +84,22 @@
     "react-native": "^0.83.0",
     "type-fest": "^4.0.0"
   },
-  "engines": {
-    "node": ">=22.11"
+  "peerDependencies": {
+    "jest": ">=26.0",
+    "react-native": ">=0.64"
+  },
+  "peerDependenciesMeta": {
+    "jest": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    }
   },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"
+  },
+  "engines": {
+    "node": ">=22.11"
   }
 }
