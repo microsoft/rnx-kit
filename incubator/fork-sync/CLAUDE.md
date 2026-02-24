@@ -24,7 +24,7 @@ yarn build        # Compile TypeScript to lib/
 yarn test         # Run all tests (fast: skips slow integration tests)
 yarn test:all     # Run all tests including slow integration tests
 yarn lint         # Check linting (ESLint)
-yarn format       # Check formatting (Prettier)
+yarn format       # Check formatting (oxfmt)
 yarn fix          # Fix everything: typecheck + format + lint:fix
 ```
 
@@ -269,7 +269,7 @@ This package is part of the rnx-kit monorepo. It uses:
 
 - **Build**: `rnx-kit-scripts build` (runs `tsc --outDir lib`)
 - **Lint**: `rnx-kit-scripts lint` (ESLint with `@rnx-kit/eslint-config`)
-- **Format**: `rnx-kit-scripts format` (Prettier with monorepo config)
+- **Format**: `rnx-kit-scripts format` (oxfmt with monorepo config)
 - **Test**: `rnx-kit-scripts test` (Node.js test runner, globs
   `test/**/*.test.ts`)
 - **tsconfig**: extends `@rnx-kit/tsconfig/tsconfig.esm.node.json`
