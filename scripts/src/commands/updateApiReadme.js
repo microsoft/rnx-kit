@@ -3,7 +3,6 @@
 import { Command } from "clipanion";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import ts from "typescript";
 
 /**
  * @import { JSONOutput } from "typedoc";
@@ -71,6 +70,7 @@ function isCommented(source, identifier, comment) {
  * @param {typeof import("typedoc")} typedoc
  */
 async function parse(typedoc) {
+  const ts = await import("typescript");
   const app = await typedoc.Application.bootstrap(
     {
       compilerOptions: {
