@@ -1,10 +1,10 @@
 {
+  "extends": "nx/presets/npm.json",
   "defaultBase": "main",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "sharedGlobals": [
       "{workspaceRoot}/.github/workflows/pr.yml",
-      "{workspaceRoot}/nx.json",
       "{workspaceRoot}/packages/eslint-config/*",
       "{workspaceRoot}/packages/eslint-plugin/*",
       "{workspaceRoot}/packages/jest-preset/*",
@@ -36,11 +36,6 @@
     "test": {
       "dependsOn": ["build"],
       "cache": true
-    }
-  },
-  "pluginsConfig": {
-    "@nx/js": {
-      "analyzeSourceFiles": false
     }
   }
 }
