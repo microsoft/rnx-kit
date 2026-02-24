@@ -21,7 +21,7 @@ export class FormatCommand extends Command {
       fileURLToPath(oxfmt),
       "**/*.{js,json,jsx,md,mjs,mts,ts,tsx,yml}",
       "!{CODE_OF_CONDUCT,SECURITY}.md",
-      "!**/{__fixtures__,lib}/**",
+      "!**/{#archived,__fixtures__,lib}/**",
       "!**/CHANGELOG.*",
     ];
     await import(oxfmt);

@@ -13,7 +13,6 @@ Main differences from a package in the main folder - logistically:
   - has script method
     `"prepare": "echo '⚠️ <name> is EXPERIMENTAL - USE WITH CAUTION ⚠️'",`
 - README.md
-
   - starts with:
 
     ```

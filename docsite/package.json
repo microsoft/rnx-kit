@@ -1,7 +1,7 @@
 {
-  "private": true,
   "name": "@rnx-kit/docsite",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "build": "docusaurus build",
     "clear": "docusaurus clear",
@@ -31,10 +31,6 @@
     "oxfmt": "catalog:",
     "typescript": "catalog:"
   },
-  "engines": {
-    "node": ">=18.12"
-  },
-  "packageManager": "yarn@4.10.3",
   "resolutions": {
     "@docsearch/react": "link:../incubator/ignore",
     "@pnpm/network.ca-file/graceful-fs": "^4.2.10",
@@ -52,5 +48,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "packageManager": "yarn@4.10.3"
 }

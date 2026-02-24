@@ -436,28 +436,20 @@ This input will help us continue refining `rnx-kit` to best meet our goals.
 <!-- References -->
 
 [`@react-native-community/cli`]: https://github.com/react-native-community/cli
-[`@rnx-kit/align-deps`]:
-  https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme
-[`@rnx-kit/build`]:
-  https://github.com/microsoft/rnx-kit/tree/main/incubator/build#readme
-[`npm create vite@latest`]:
-  https://vitejs.dev/guide/#scaffolding-your-first-vite-project
+[`@rnx-kit/align-deps`]: https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme
+[`@rnx-kit/build`]: https://github.com/microsoft/rnx-kit/tree/main/incubator/build#readme
+[`npm create vite@latest`]: https://vitejs.dev/guide/#scaffolding-your-first-vite-project
 [`react-native-test-app`]: https://github.com/microsoft/react-native-test-app
-[Bundle Working Group]:
-  https://github.com/microsoft/rnx-kit/discussions/categories/bundle-working-group
+[Bundle Working Group]: https://github.com/microsoft/rnx-kit/discussions/categories/bundle-working-group
 [Chrome DevTools]: https://developer.chrome.com/docs/devtools/
-[Debugging Working Group]:
-  https://github.com/react-native-community/developer-experience-wg/discussions/categories/debugging
+[Debugging Working Group]: https://github.com/react-native-community/developer-experience-wg/discussions/categories/debugging
 [GitHub Codespaces]: https://github.com/features/codespaces
 [Metro]: https://facebook.github.io/metro/
-[Metro Office Hours]:
-  https://github.com/react-native-community/developer-experience-wg/discussions/categories/metro
-[React DOM For Native RFC]:
-  https://github.com/react-native-community/discussions-and-proposals/pull/496
+[Metro Office Hours]: https://github.com/react-native-community/developer-experience-wg/discussions/categories/metro
+[React DOM For Native RFC]: https://github.com/react-native-community/discussions-and-proposals/pull/496
 [React Native Directory]: https://reactnative.directory/
 [React Native WebAPIs]: https://github.com/microsoft/rnx-kit/pull/2504
 [Tophat]: https://shopify.engineering/shopify-tophat-mobile-developer-testing
 [list of tools]: https://microsoft.github.io/rnx-kit/docs/tools/overview
 [standard APIs]: https://developer.mozilla.org/en-US/docs/Web/API
-[write a plugin]:
-  https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme
+[write a plugin]: https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme

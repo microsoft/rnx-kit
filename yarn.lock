@@ -15856,6 +15856,7 @@ __metadata:
     eslint: "catalog:"
     knip: "npm:^5.30.2"
     nx: "patch:nx@npm%3A20.3.3#~/.yarn/patches/nx-npm-20.3.3-84b801f64d.patch"
+    oxfmt: "npm:^0.35.0"
     suggestion-bot: "npm:^4.0.0"
     typescript: "catalog:"
   languageName: unknown

@@ -1,45 +1,45 @@
 "chore":
   - changed-files:
-    - any-glob-to-any-file:
-      - .github/**/*
-      - .gitignore
-      - .npmrc
-      - .yarnrc
-      - package.json
-      - scripts/**/*
+      - any-glob-to-any-file:
+          - .github/**/*
+          - .gitignore
+          - .npmrc
+          - .yarnrc
+          - package.json
+          - scripts/**/*
 "feature: align-deps":
   - changed-files:
-    - any-glob-to-any-file:
-      - packages/align-deps/**/*
+      - any-glob-to-any-file:
+          - packages/align-deps/**/*
 "feature: cli":
   - changed-files:
-    - any-glob-to-any-file:
-      - packages/cli/**/*
-      - packages/config/**/*
+      - any-glob-to-any-file:
+          - packages/cli/**/*
+          - packages/config/**/*
 "feature: eslint":
   - changed-files:
-    - any-glob-to-any-file:
-      - packages/eslint-*/**/*
+      - any-glob-to-any-file:
+          - packages/eslint-*/**/*
 "feature: jest":
   - changed-files:
-    - any-glob-to-any-file:
-      - packages/jest-*/**/*
+      - any-glob-to-any-file:
+          - packages/jest-*/**/*
 "feature: metro":
   - changed-files:
-    - any-glob-to-any-file:
-      - packages/babel-plugin-import-path-remapper/**/*
-      - packages/babel-preset-metro-react-native/**/*
-      - packages/metro-*/**/*
-      - packages/typescript-service/**/*
+      - any-glob-to-any-file:
+          - packages/babel-plugin-import-path-remapper/**/*
+          - packages/babel-preset-metro-react-native/**/*
+          - packages/metro-*/**/*
+          - packages/typescript-service/**/*
 "feature: sdk":
   - changed-files:
-    - any-glob-to-any-file:
-      - packages/react-native-*/**/*
+      - any-glob-to-any-file:
+          - packages/react-native-*/**/*
 "feature: third party notices":
   - changed-files:
-    - any-glob-to-any-file:
-      - packages/third-party-notices/**/*
+      - any-glob-to-any-file:
+          - packages/third-party-notices/**/*
 "feature: webapis":
   - changed-files:
-    - any-glob-to-any-file:
-      - "incubator/@react-native-webapis/**/*"
+      - any-glob-to-any-file:
+          - "incubator/@react-native-webapis/**/*"
