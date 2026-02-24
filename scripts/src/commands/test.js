@@ -1,36 +1,35 @@
 // @ts-check
 import { Command, Option } from "clipanion";
 import * as fs from "node:fs";
+import * as path from "node:path";
+import { pathToFileURL } from "node:url";
 import { execute, runScript } from "../process.js";
 
 /**
  * @param {string} cwd
- * @returns {string}
+ * @returns {Promise<Record<string, unknown>>}
  */
-function readManifest(cwd = process.cwd()) {
-  const options = /** @type {const} */ ({ encoding: "utf-8" });
-  const manifest = fs.readFileSync(cwd + "/package.json", options);
-  return manifest;
+async function importManifest(cwd) {
+  const url = pathToFileURL(path.join(cwd, "package.json"));
+  const manifest = await import(url.href, { with: { type: "json" } });
+  return manifest.default ?? manifest;
 }
 
 /**
- * @param {string} manifest
+ * @param {Record<string, unknown>} manifest
  * @param {string} cwd
  * @returns {boolean}
  */
 function useJest(manifest, cwd) {
-  return manifest.includes('"jest"') || fs.existsSync(cwd + "/jest.config.js");
+  return Boolean(manifest.jest) || fs.existsSync(cwd + "/jest.config.js");
 }
 
 /**
- * @param {string} manifest
+ * @param {Record<string, unknown>} manifest
  * @returns {boolean}
  */
 function useTsx(manifest) {
-  // Always use `tsx` with Node versions <22 otherwise it'll throw
-  // `ERR_UNKNOWN_FILE_EXTENSION` when encountering `.ts` files.
-  const version = Number(process.version.slice(1).split(".")[0]);
-  return version < 22 || manifest.includes('"type": "commonjs"');
+  return manifest.type === "commonjs";
 }
 
 export class TestCommand extends Command {
@@ -48,7 +47,7 @@ export class TestCommand extends Command {
 
   async execute() {
     const cwd = process.cwd();
-    const manifest = readManifest(cwd);
+    const manifest = await importManifest(cwd);
 
     if (useJest(manifest, cwd)) {
       return await runScript("jest", "--passWithNoTests", ...this.args);
