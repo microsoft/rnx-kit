@@ -1,9 +1,7 @@
 // @ts-check
 
-import { getDynamicLibs } from "@yarnpkg/cli";
 import { Command, Option } from "clipanion";
 import * as fs from "node:fs";
-import { getRootEnginesField } from "../rootWorkspace.js";
 
 /**
  * @typedef {import("esbuild").BuildOptions} BuildOptions
@@ -51,10 +49,18 @@ export class BundleCommand extends Command {
   });
 
   async execute() {
-    const { name, outfile } = await bundle({
-      minify: this.minify,
-      platform: this.platform,
-      sourceMap: this.sourceMap,
+    const manifestFile = fs.readFileSync("package.json", { encoding: "utf-8" });
+    const manifest = JSON.parse(manifestFile);
+    const { name, main: outfile } = manifest;
+
+    const esbuild = await import("esbuild");
+    await esbuild.build({
+      ...(await platformOptions(this.platform, manifest)),
+      bundle: true,
+      outfile,
+      entryPoints: ["src/index.ts"],
+      minify: Boolean(this.minify),
+      sourcemap: Boolean(this.sourceMap),
     });
 
     // report success with file size of the output file
@@ -65,13 +71,15 @@ export class BundleCommand extends Command {
   }
 }
 
-const defaultTarget = "es2021";
+const DEFAULT_TARGET_ENV = "es2021";
 
 /**
  * @param {Manifest} manifest
- * @returns {string}
+ * @returns {Promise<string>}
  */
-function getNodeTarget(manifest) {
+async function getNodeTarget(manifest) {
+  const { getRootEnginesField } = await import("../rootWorkspace.js");
+
   const enginesNode = manifest.engines?.node ?? getRootEnginesField().node;
   const match = enginesNode?.match(/(\d+)\.(\d+)/);
   if (!match) {
@@ -99,14 +107,14 @@ function presetBase(manifest) {
 
 /**
  * @param {Manifest} manifest
- * @returns {Partial<BuildOptions>}
+ * @returns {Promise<Partial<BuildOptions>>}
  */
-function nodePreset(manifest) {
+async function nodePreset(manifest) {
   return {
     ...presetBase(manifest),
     banner: { js: "#!/usr/bin/env node" },
     platform: "node",
-    target: getNodeTarget(manifest),
+    target: await getNodeTarget(manifest),
   };
 }
 
@@ -118,7 +126,7 @@ function browserPreset(manifest) {
   return {
     ...presetBase(manifest),
     platform: "browser",
-    target: defaultTarget,
+    target: DEFAULT_TARGET_ENV,
   };
 }
 
@@ -130,15 +138,16 @@ function neutralPreset(manifest) {
   return {
     ...presetBase(manifest),
     platform: "neutral",
-    target: defaultTarget,
+    target: DEFAULT_TARGET_ENV,
   };
 }
 
 /**
  * @param {Manifest} manifest
- * @returns {Partial<BuildOptions>}
+ * @returns {Promise<Partial<BuildOptions>>}
  */
-function yarnPreset(manifest) {
+async function yarnPreset(manifest) {
+  const { getDynamicLibs } = await import("@yarnpkg/cli");
   const { name, peerDependenciesMeta } = manifest;
   return {
     banner: {
@@ -161,7 +170,7 @@ function yarnPreset(manifest) {
       ...getDynamicLibs().keys(),
     ],
     platform: "node",
-    target: getNodeTarget(manifest),
+    target: await getNodeTarget(manifest),
     supported: {
       /*
       Yarn plugin-runtime did not support builtin modules prefixed with "node:".
@@ -174,45 +183,21 @@ function yarnPreset(manifest) {
   };
 }
 
-/** @type {Record<string, OptionPreset>} */
-const presets = {
-  node: nodePreset,
-  browser: browserPreset,
-  neutral: neutralPreset,
-  yarn: yarnPreset,
-};
-
 /**
  * @param {unknown} platform
  * @param {Manifest} manifest
- * @returns {Partial<BuildOptions>}
+ * @returns {Promise<Partial<BuildOptions>>}
  */
-function platformOptions(platform, manifest) {
+async function platformOptions(platform, manifest) {
   const platformKey = typeof platform === "string" ? platform : "node";
-  const preset = presets[platformKey] || presets.node;
-  return preset(manifest);
-}
-
-/**
- * @param {Record<string, unknown> | undefined} options
- * @returns {Promise<{ name: string; outfile: string; }>}
- */
-export async function bundle(options) {
-  const { minify, platform, sourceMap } = options || {};
-
-  const manifestFile = fs.readFileSync("package.json", { encoding: "utf-8" });
-  const manifest = JSON.parse(manifestFile);
-  const { name, main: outfile } = manifest;
-
-  const esbuild = await import("esbuild");
-  await esbuild.build({
-    ...platformOptions(platform, manifest),
-    bundle: true,
-    outfile,
-    entryPoints: ["src/index.ts"],
-    minify: Boolean(minify),
-    sourcemap: Boolean(sourceMap),
-  });
-
-  return { name, outfile };
+  switch (platformKey) {
+    case "browser":
+      return browserPreset(manifest);
+    case "neutral":
+      return neutralPreset(manifest);
+    case "yarn":
+      return await yarnPreset(manifest);
+    default:
+      return await nodePreset(manifest);
+  }
 }
