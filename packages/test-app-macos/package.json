@@ -2,20 +2,20 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/rnx-kit/main/packages/config/schema.json",
   "name": "@rnx-kit/test-app-macos",
   "version": "0.0.0",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/test-app-macos#readme",
   "private": true,
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/test-app-macos#readme",
   "author": {
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
-  },
-  "bin": {
-    "rnx": "../cli/scripts/rnx.bin",
-    "rnx.reason": "Run `rnx-cli` without explicitly building it first"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/test-app-macos"
+  },
+  "bin": {
+    "rnx": "../cli/scripts/rnx.bin",
+    "rnx.reason": "Run `rnx-cli` without explicitly building it first"
   },
   "scripts": {
     "build": "rnx align-deps",

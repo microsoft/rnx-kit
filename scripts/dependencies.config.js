@@ -34,7 +34,7 @@ const COMMON_DEPENDENCIES = /** @type {const} */ ([
   ["@typescript/native-preview", needsTypeScript],
   ["eslint", lookForFile("eslint.config.js")],
   ["jest", needsJest],
-  ["prettier", always],
+  ["oxfmt", always],
   ["typescript", needsTypeScript],
 ]);
 

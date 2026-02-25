@@ -89,7 +89,7 @@ current working directory.
 
 ## Style Guide
 
-Most files are formatted with [Prettier][]. We also use [ESLint][] to lint all
+Most files are formatted with [oxfmt][]. We also use [ESLint][] to lint all
 JavaScript code.
 
 You can trigger formatting by running `yarn format`, and linting with
@@ -188,17 +188,13 @@ gate them behind a version check. For example, we only use
 
 [Changesets]: https://github.com/atlassian/changesets#readme
 [Dependency Dashboard]: https://github.com/microsoft/rnx-kit/issues/1680
-[Developer Mode]:
-  https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development
+[Developer Mode]: https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development
 [ESLint]: https://eslint.org
-[Prettier]: https://prettier.io
-[React Native for Windows documentation]:
-  https://microsoft.github.io/react-native-windows/docs/rnw-dependencies
+[oxfmt]: https://oxc.rs/docs/guide/usage/formatter.html
+[React Native for Windows documentation]: https://microsoft.github.io/react-native-windows/docs/rnw-dependencies
 [Renovate]: https://docs.renovatebot.com
 [`chalk`]: https://github.com/chalk/chalk#readme
-[code of conduct]:
-  https://github.com/microsoft/rnx-kit/blob/main/CODE_OF_CONDUCT.md
-[every Monday morning]:
-  https://github.com/microsoft/rnx-kit/blob/main/.github/renovate.json
+[code of conduct]: https://github.com/microsoft/rnx-kit/blob/main/CODE_OF_CONDUCT.md
+[every Monday morning]: https://github.com/microsoft/rnx-kit/blob/main/.github/renovate.json
 [open a new issue]: https://github.com/microsoft/rnx-kit/issues/new/choose
 [submit a pull request]: https://github.com/microsoft/rnx-kit/pulls

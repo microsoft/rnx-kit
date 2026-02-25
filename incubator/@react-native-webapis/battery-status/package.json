@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/@react-native-webapis/battery-status"
+  },
   "files": [
     "RNWBatteryStatus.podspec",
     "android/build.gradle",
@@ -21,21 +26,12 @@
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/@react-native-webapis/battery-status"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
     "lint": "rnx-kit-scripts lint",
     "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
-  },
-  "peerDependencies": {
-    "react": ">=18.2.0",
-    "react-native": ">=0.74.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -46,6 +42,10 @@
     "@types/node": "^24.0.0",
     "react": "19.2.0",
     "react-native": "^0.83.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-native": ">=0.74.0"
   },
   "engines": {
     "node": ">=16.17"

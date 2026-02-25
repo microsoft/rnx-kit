@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-react-native"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js",
@@ -57,11 +62,6 @@
       "default": "./lib/platform.js"
     },
     "./package.json": "./package.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/tools-react-native"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",

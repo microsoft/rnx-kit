@@ -13,6 +13,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tsconfig"
+  },
   "files": [
     "tsconfig.esm.json",
     "tsconfig.esm.node.json",
@@ -38,13 +43,8 @@
     },
     "./package.json": "./package.json"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/tsconfig"
-  },
   "scripts": {
-    "format": "prettier --write --log-level error package.json tsconfig.esm.json tsconfig.json"
+    "format": "oxfmt package.json tsconfig*.json"
   },
   "engines": {
     "node": ">=16.17"

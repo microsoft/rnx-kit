@@ -1,10 +1,7 @@
 {
   "extends": ["config:recommended", "schedule:earlyMondays"],
   "addLabels": ["dependencies"],
-  "ignorePaths": [
-    "**/#archived/**",
-    "**/__fixtures__/**"
-  ],
+  "ignorePaths": ["**/#archived/**", "**/__fixtures__/**"],
   "packageRules": [
     {
       "groupName": "@react-native-community/cli",
@@ -56,10 +53,7 @@
     },
     {
       "groupName": "react-native",
-      "matchPackageNames": [
-        "@react-native/**",
-        "react-native"
-      ],
+      "matchPackageNames": ["@react-native/**", "react-native"],
       "allowedVersions": "^0.83.0"
     },
     {
@@ -73,10 +67,7 @@
     },
     {
       "groupName": "react-native-windows",
-      "matchPackageNames": [
-        "@react-native-windows/**",
-        "react-native-windows"
-      ],
+      "matchPackageNames": ["@react-native-windows/**", "react-native-windows"],
       "allowedVersions": "^0.79.0"
     }
   ],

@@ -2,8 +2,8 @@
 
 This is for internal use only.
 
-`@rnx-kit/eslint-config` is a shareable ESLint config with recommended Prettier
-and TypeScript rules.
+`@rnx-kit/eslint-config` is a shareable ESLint config with recommended
+TypeScript rules.
 
 For more details on shareable configs, see
 https://eslint.org/docs/developer-guide/shareable-configs.

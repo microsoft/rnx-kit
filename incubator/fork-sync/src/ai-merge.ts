@@ -55,6 +55,10 @@ import { GitRepo } from "./modules/git.ts";
 import * as proc from "./modules/proc.ts";
 const { exec } = proc;
 
+// Import claude module
+import { invokeClaudeReadOnly } from "./modules/claude.ts";
+import { invokeCopilotReadOnly } from "./modules/copilot.ts";
+import * as JobProgress from "./modules/job-ui.ts";
 import {
   debug,
   error,
@@ -66,7 +70,6 @@ import {
   warn,
   type LogLevel,
 } from "./modules/log.ts";
-
 // Import merge-hunks module
 import {
   applyResolved,
@@ -76,11 +79,6 @@ import {
   parseConflictedFile,
   type MergeInfo,
 } from "./modules/merge-hunks.ts";
-
-// Import claude module
-import { invokeClaudeReadOnly } from "./modules/claude.ts";
-import { invokeCopilotReadOnly } from "./modules/copilot.ts";
-import * as JobProgress from "./modules/job-ui.ts";
 import * as parallel from "./modules/parallel.ts";
 import * as ui from "./modules/tty-ui.ts";
 const { print, style, colors } = ui;

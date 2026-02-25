@@ -15,9 +15,8 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { parseArgs } from "node:util";
-import { ExecError, spawn } from "../modules/proc.ts";
-
 import { parseConflictedFile } from "../modules/merge-hunks.ts";
+import { ExecError, spawn } from "../modules/proc.ts";
 
 // =============================================================================
 // Constants

@@ -8,16 +8,16 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
-  "files": [
-    "jest-preset.js",
-    "src"
-  ],
-  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/jest-preset"
   },
+  "files": [
+    "jest-preset.js",
+    "src"
+  ],
+  "main": "src/index.js",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -31,14 +31,6 @@
     "@rnx-kit/tools-react-native": "^2.3.2",
     "find-up": "^5.0.0"
   },
-  "peerDependencies": {
-    "react-native": "^0.0.0-0 || >=0.73"
-  },
-  "peerDependenciesMeta": {
-    "react-native": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@jest/types": "^29.2.1",
     "@react-native-community/cli-types": "^20.0.0",
@@ -49,10 +41,18 @@
     "react": "19.2.0",
     "react-native": "^0.83.0"
   },
-  "engines": {
-    "node": ">=16.17"
+  "peerDependencies": {
+    "react-native": "^0.0.0-0 || >=0.73"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    }
   },
   "jest": {
     "preset": "./private/jest-preset.js"
+  },
+  "engines": {
+    "node": ">=16.17"
   }
 }

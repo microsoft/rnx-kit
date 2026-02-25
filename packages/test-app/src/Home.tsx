@@ -1,7 +1,3 @@
-// Both `internal` imports are used to verify that `metro-resolver-symlinks`
-// resolves them correctly when `experimental_retryResolvingFromDisk` is
-// enabled.
-import { getHermesVersion } from "@/hermes";
 import {
   getReactNativeVersion,
   isBridgeless,
@@ -19,6 +15,10 @@ import {
 } from "react-native";
 // @ts-expect-error no type definitions available
 import { version as coreVersion } from "react-native/Libraries/Core/ReactNativeVersion";
+// Both `internal` imports are used to verify that `metro-resolver-symlinks`
+// resolves them correctly when `experimental_retryResolvingFromDisk` is
+// enabled.
+import { getHermesVersion } from "@/hermes";
 import { Feature } from "./Feature";
 import { Separator } from "./Separator";
 import { useStyles } from "./styles";

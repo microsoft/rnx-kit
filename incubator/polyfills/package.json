@@ -8,18 +8,18 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
-  "files": [
-    "lib/**/*.d.ts",
-    "lib/**/*.js"
-  ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "type": "commonjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/polyfills"
   },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -33,14 +33,6 @@
     "@rnx-kit/console": "^2.0.0",
     "@rnx-kit/tools-node": "^3.0.3"
   },
-  "peerDependencies": {
-    "@react-native/js-polyfills": "*"
-  },
-  "peerDependenciesMeta": {
-    "@react-native/js-polyfills": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
@@ -51,9 +43,18 @@
     "@types/node": "^22.0.0",
     "metro-config": "^0.83.1"
   },
+  "peerDependencies": {
+    "@react-native/js-polyfills": "*"
+  },
+  "peerDependenciesMeta": {
+    "@react-native/js-polyfills": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": ">=16.17"
   },
+  "experimental": true,
   "rnx-kit": {
     "alignDeps": {
       "requirements": {
@@ -68,6 +69,5 @@
         "metro-config"
       ]
     }
-  },
-  "experimental": true
+  }
 }

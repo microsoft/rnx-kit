@@ -9,6 +9,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/eslint-config"
+  },
   "files": [
     "index.js"
   ],
@@ -21,22 +26,17 @@
     },
     "./package.json": "./package.json"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/eslint-config"
-  },
   "scripts": {
-    "format": "prettier --write --log-level error README.md index.js package.json"
+    "format": "oxfmt README.md index.js package.json"
   },
   "dependencies": {
     "@microsoft/eslint-plugin-sdl": "^1.0.0",
     "@rnx-kit/eslint-plugin": "workspace:*"
   },
-  "peerDependencies": {
+  "devDependencies": {
     "eslint": "^9.0.0"
   },
-  "devDependencies": {
+  "peerDependencies": {
     "eslint": "^9.0.0"
   },
   "engines": {

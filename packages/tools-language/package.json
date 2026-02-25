@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-language"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js",
@@ -29,11 +34,6 @@
       "default": "./lib/properties.js"
     },
     "./package.json": "./package.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/tools-language"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",

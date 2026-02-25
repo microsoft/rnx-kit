@@ -15,6 +15,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/eslint-plugin"
+  },
   "files": [
     "src"
   ],
@@ -31,11 +36,6 @@
     },
     "./package.json": "./package.json"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/eslint-plugin"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -49,9 +49,6 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "typescript-eslint": "^8.0.0"
   },
-  "peerDependencies": {
-    "eslint": ">=8.57.0"
-  },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@microsoft/eslint-plugin-sdl": "^1.0.0",
@@ -63,10 +60,13 @@
     "@typescript-eslint/parser": "^8.0.0",
     "@typescript-eslint/types": "^8.0.0"
   },
-  "engines": {
-    "node": ">=16.17"
+  "peerDependencies": {
+    "eslint": ">=8.57.0"
   },
   "jest": {
     "preset": "../jest-preset/private/jest-preset.js"
+  },
+  "engines": {
+    "node": ">=16.17"
   }
 }

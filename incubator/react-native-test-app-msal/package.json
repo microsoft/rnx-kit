@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/react-native-test-app-msal"
+  },
   "files": [
     "ReactTestApp-MSAL.podspec",
     "android/build.gradle",
@@ -15,11 +20,6 @@
     "android/src",
     "ios"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/react-native-test-app-msal"
-  },
   "scripts": {
     "format:c": "clang-format -i $(git ls-files '*.h' '*.m')",
     "format:swift": "swiftformat ios",

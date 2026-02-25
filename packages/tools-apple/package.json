@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-apple"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js",
@@ -41,11 +46,6 @@
       "default": "./lib/xcode.js"
     },
     "./package.json": "./package.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/tools-apple"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",

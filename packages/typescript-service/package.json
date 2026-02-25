@@ -8,6 +8,11 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/typescript-service"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"
@@ -22,11 +27,6 @@
     },
     "./package.json": "./package.json"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/typescript-service"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -36,14 +36,14 @@
   "dependencies": {
     "@rnx-kit/tools-node": "^3.0.0"
   },
-  "peerDependencies": {
-    "typescript": ">=4.0"
-  },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0"
+  },
+  "peerDependencies": {
+    "typescript": ">=4.0"
   },
   "engines": {
     "node": ">=16.17"

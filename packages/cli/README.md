@@ -334,8 +334,6 @@ The following commands route to `@react-native-community/cli`:
 
 <!-- References -->
 
-[@rnx-kit/align-deps]:
-  https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme
+[@rnx-kit/align-deps]: https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme
 [Metro]: https://facebook.github.io/metro
-[configuration]:
-  https://github.com/microsoft/rnx-kit/tree/main/packages/config#readme
+[configuration]: https://github.com/microsoft/rnx-kit/tree/main/packages/config#readme

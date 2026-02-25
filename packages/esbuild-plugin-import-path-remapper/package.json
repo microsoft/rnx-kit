@@ -8,18 +8,18 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
-  "files": [
-    "lib/**/*.d.ts",
-    "lib/**/*.js"
-  ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "type": "commonjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/esbuild-plugin-import-path-remapper"
   },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",

@@ -8,15 +8,20 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-plugin-duplicates-checker"
+  },
+  "bin": {
+    "check-duplicates": "lib/index.js"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "bin": {
-    "check-duplicates": "lib/index.js"
-  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
@@ -24,11 +29,6 @@
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/metro-plugin-duplicates-checker"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",

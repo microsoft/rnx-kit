@@ -2,7 +2,15 @@
   "name": "@rnx-kit/fork-sync",
   "version": "0.3.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - Sync forked/vendored dependencies with upstream using AI-powered Git 3-way merge",
-  "experimental": true,
+  "keywords": [
+    "ai-merge",
+    "fork",
+    "git",
+    "merge",
+    "sync",
+    "upstream",
+    "vendored"
+  ],
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/fork-sync#readme",
   "license": "MIT",
   "author": {
@@ -14,7 +22,6 @@
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/fork-sync"
   },
-  "type": "module",
   "bin": {
     "ai-merge": "lib/ai-merge.js",
     "fork-sync": "lib/sync.js"
@@ -23,9 +30,7 @@
     "lib",
     "ai-merge-prompt.md"
   ],
-  "engines": {
-    "node": "^20.16.0 || >=22.4.0"
-  },
+  "type": "module",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "fix": "tsc --noEmit && rnx-kit-scripts format && rnx-kit-scripts lint --fix",
@@ -34,19 +39,14 @@
     "test": "tsc -p tsconfig.test.json && node --test lib-test/test/*.test.js",
     "test:all": "tsc -p tsconfig.test.json && node --env-file=.env.integration --test lib-test/test/*.test.js"
   },
-  "keywords": [
-    "git",
-    "merge",
-    "sync",
-    "fork",
-    "vendored",
-    "upstream",
-    "ai-merge"
-  ],
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0"
-  }
+  },
+  "engines": {
+    "node": "^20.16.0 || >=22.4.0"
+  },
+  "experimental": true
 }

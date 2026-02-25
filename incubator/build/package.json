@@ -8,6 +8,15 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/build"
+  },
+  "bin": {
+    "rnx-build": "lib/cli.js",
+    "rnx-build-apple": "scripts/build-apple.sh"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js",
@@ -55,15 +64,6 @@
       "require": "./scripts/build-apple.sh"
     },
     "./package.json": "./package.json"
-  },
-  "bin": {
-    "rnx-build": "lib/cli.js",
-    "rnx-build-apple": "scripts/build-apple.sh"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/build"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",

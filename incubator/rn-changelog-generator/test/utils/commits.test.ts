@@ -3,7 +3,6 @@ import { EventEmitter } from "events";
 import { promises as fs } from "fs";
 import https from "https";
 import path from "path";
-
 import { fetchCommit, fetchCommits } from "../../src/utils/commits";
 
 console.warn = () => {

@@ -8,11 +8,16 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
-  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-filesystem"
+  },
   "files": [
     "lib",
     "src"
   ],
+  "sideEffects": false,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
@@ -27,11 +32,6 @@
       "default": "./lib/mockfs/index.js"
     },
     "./package.json": "./package.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/tools-filesystem"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",

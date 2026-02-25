@@ -4,7 +4,6 @@ import { EventEmitter } from "events";
 import { promises as fs } from "fs";
 import https from "https";
 import path from "path";
-
 import type { Changes, PlatformChanges } from "../src/generator";
 import {
   CHANGES_TEMPLATE,
