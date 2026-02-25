@@ -19,10 +19,9 @@ export class FormatCommand extends Command {
     process.argv = [
       process.argv0,
       fileURLToPath(oxfmt),
-      "**/*.{js,json,jsx,md,mjs,mts,ts,tsx,yml}",
-      "!{CODE_OF_CONDUCT,SECURITY}.md",
-      "!**/{#archived,__fixtures__,lib}/**",
-      "!**/CHANGELOG.*",
+      "*.{js,json,jsx,md,mjs,mts,ts,tsx,yml}",
+      "!{#archived,__fixtures__,lib}",
+      "!{CHANGELOG,CODE_OF_CONDUCT,SECURITY}.md",
     ];
     await import(oxfmt);
     return 0;
