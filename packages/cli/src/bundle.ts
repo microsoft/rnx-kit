@@ -5,8 +5,8 @@ import { emitBytecode } from "./bundle/hermes.ts";
 import { getCliPlatformBundleConfigs } from "./bundle/kit-config.ts";
 import { metroBundle } from "./bundle/metro.ts";
 import {
-  applyBundleConfigOverrides,
-  overridableCommonBundleOptions,
+  BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES,
+  applyCommandLineOverrides,
 } from "./bundle/overrides.ts";
 import type {
   CLICommonBundleOptions,
@@ -53,13 +53,14 @@ export async function rnxBundle(
     cliOptions.platform
   );
 
-  applyBundleConfigOverrides(cliOptions, bundleConfigs, [
-    ...overridableCommonBundleOptions,
+  const overridableFlags = [
+    ...BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES,
     "hermes",
     "treeShake",
-  ]);
+  ] as const;
 
   for (const bundleConfig of bundleConfigs) {
+    applyCommandLineOverrides(bundleConfig, cliOptions, overridableFlags);
     applyTreeShakingOverrides(bundleConfig, cliOptions);
 
     const { dev, minify } = cliOptions;
