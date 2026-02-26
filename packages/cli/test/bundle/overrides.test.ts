@@ -2,10 +2,10 @@ import {
   applyBundleConfigOverrides,
   overridableCommonBundleOptions,
 } from "../../src/bundle/overrides.ts";
-import type { CliPlatformBundleConfig } from "../../src/bundle/types.ts";
+import type { CLIPlatformBundleConfig } from "../../src/bundle/types.ts";
 
 describe("bundle/overrides/applyBundleConfigOverrides()", () => {
-  const config: CliPlatformBundleConfig = {
+  const config: CLIPlatformBundleConfig = {
     entryFile: "src/index.js",
     bundleOutput: "main.jsbundle",
     sourcemapUseAbsolutePath: false,

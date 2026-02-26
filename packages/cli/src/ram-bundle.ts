@@ -10,14 +10,14 @@ import {
 } from "./bundle/overrides.ts";
 import type {
   CLICommonBundleOptions,
-  CliPlatformBundleConfig,
+  CLIPlatformBundleConfig,
 } from "./bundle/types.ts";
 
 type CLIRamBundleOptions = CLICommonBundleOptions & {
   indexedRamBundle?: boolean;
 };
 
-function disableTreeShaking(configs: CliPlatformBundleConfig[]): void {
+function disableTreeShaking(configs: CLIPlatformBundleConfig[]): void {
   const wasEnabled = configs.reduce((modified, config) => {
     if (config.treeShake) {
       config.treeShake = false;

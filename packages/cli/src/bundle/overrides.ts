@@ -1,9 +1,9 @@
 import { pickValues } from "@rnx-kit/tools-language/properties";
-import type { CliPlatformBundleConfig } from "./types.ts";
+import type { CLIPlatformBundleConfig } from "./types.ts";
 
 type BundleConfigOverrides = Partial<
   Pick<
-    CliPlatformBundleConfig,
+    CLIPlatformBundleConfig,
     | "entryFile"
     | "bundleOutput"
     | "bundleEncoding"
@@ -39,7 +39,7 @@ export const overridableCommonBundleOptions: readonly (keyof BundleConfigOverrid
  */
 export function applyBundleConfigOverrides(
   overrides: BundleConfigOverrides,
-  configs: CliPlatformBundleConfig[],
+  configs: CLIPlatformBundleConfig[],
   keys: (keyof BundleConfigOverrides)[]
 ): void {
   const overridesToApply = pickValues(overrides, keys);

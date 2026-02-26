@@ -8,12 +8,38 @@ import {
   applyBundleConfigOverrides,
   overridableCommonBundleOptions,
 } from "./bundle/overrides.ts";
-import type { CLICommonBundleOptions } from "./bundle/types.ts";
+import type {
+  CLICommonBundleOptions,
+  CLIPlatformBundleConfig,
+} from "./bundle/types.ts";
 import { asBoolean } from "./helpers/parsers.ts";
 
 type CLIBundleOptions = CLICommonBundleOptions & {
+  metafile?: boolean | string;
   treeShake?: boolean;
 };
+
+function applyTreeShakingOverrides(
+  bundleConfig: CLIPlatformBundleConfig,
+  { dev, metafile, minify }: CLIBundleOptions
+) {
+  if (!dev && bundleConfig.treeShake) {
+    const treeShake =
+      typeof bundleConfig.treeShake === "object" ? bundleConfig.treeShake : {};
+    if (metafile != null) {
+      treeShake.metafile =
+        typeof metafile === "string"
+          ? metafile
+          : `${bundleConfig.bundleOutput}.meta.json`;
+    }
+    if (minify != null) {
+      treeShake.minify = minify;
+    }
+    bundleConfig.treeShake = treeShake;
+  } else {
+    bundleConfig.treeShake = false;
+  }
+}
 
 export async function rnxBundle(
   _argv: string[],
@@ -34,12 +60,10 @@ export async function rnxBundle(
   ]);
 
   for (const bundleConfig of bundleConfigs) {
-    await metroBundle(
-      metroConfig,
-      bundleConfig,
-      cliOptions.dev,
-      cliOptions.minify
-    );
+    applyTreeShakingOverrides(bundleConfig, cliOptions);
+
+    const { dev, minify } = cliOptions;
+    await metroBundle(metroConfig, bundleConfig, dev, minify);
 
     const { bundleOutput, hermes, sourcemapOutput } = bundleConfig;
     if (hermes) {
@@ -59,6 +83,11 @@ export const rnxBundleCommand = {
   func: rnxBundle,
   options: [
     ...commonBundleCommandOptions,
+    {
+      name: "--metafile [boolean|string]",
+      description:
+        "If tree shaking enabled, also produce some metadata about the build in JSON format",
+    },
     {
       name: "--tree-shake [boolean]",
       description:
