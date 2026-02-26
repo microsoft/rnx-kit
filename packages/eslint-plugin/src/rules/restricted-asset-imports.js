@@ -2,7 +2,7 @@
 "use strict";
 
 /** @import { Rule } from "eslint"; */
-const { realname } = require("@rnx-kit/tools-filesystem/path");
+const { realname } = require("../helpers/path.js");
 const path = require("node:path");
 
 const SOURCE_FILES = [

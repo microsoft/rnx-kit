@@ -3,12 +3,11 @@ import * as path from "node:path";
 
 /**
  * Returns the name of a file as stored on disk.
+ * @param {string} p The path to the file.
+ * @param {string} relativeTo The file to resolve from.
+ * @returns {string | undefined}
  */
-export function realname(
-  p: string,
-  relativeTo: string,
-  /** @internal */ fs = nodefs
-): string | undefined {
+export function realname(p, relativeTo, /** @internal */ fs = nodefs) {
   const base = path.dirname(relativeTo);
   const fullPath = path.resolve(base, p);
   if (!fs.existsSync(fullPath)) {

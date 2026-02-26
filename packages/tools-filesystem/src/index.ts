@@ -26,4 +26,3 @@ export {
   writeTextFileSync,
 } from "./fileio.ts";
 export { parseJSON, serializeJSON, stripBOM } from "./json.ts";
-export { realname } from "./path.ts";
