@@ -31,6 +31,10 @@
           - packages/babel-preset-metro-react-native/**/*
           - packages/metro-*/**/*
           - packages/typescript-service/**/*
+"feature: oxlint":
+  - changed-files:
+      - any-glob-to-any-file:
+          - packages/oxlint-*/**/*
 "feature: sdk":
   - changed-files:
       - any-glob-to-any-file:

@@ -91,5 +91,5 @@ if (require.main === module) {
 }
 
 // `export default` required for plugin interface
-// eslint-disable-next-line no-restricted-exports
+// oxlint-disable-next-line no-default-export
 export default DuplicateDependencies;

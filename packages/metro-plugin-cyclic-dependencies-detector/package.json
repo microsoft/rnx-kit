@@ -39,7 +39,6 @@
     "@rnx-kit/types-plugin-cyclic-dependencies": "^1.0.0"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",

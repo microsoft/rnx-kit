@@ -32,7 +32,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// oxlint-disable
 // @ts-nocheck
 "use strict";
 

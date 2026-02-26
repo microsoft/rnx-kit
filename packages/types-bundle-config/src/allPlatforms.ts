@@ -3,7 +3,7 @@
  */
 
 // Possible values for AllPlatforms
-// eslint-disable-next-line @rnx-kit/type-definitions-only
+// oxlint-disable-next-line @rnx-kit/type-definitions-only
 export const ALL_PLATFORM_VALUES = [
   "android",
   "ios",

@@ -79,7 +79,7 @@ function filterRevertCommits(commits: Commit[]) {
     })
     .filter((item) => {
       const text = item.commit.message.split("\n")[0].toLowerCase();
-      // eslint-disable-next-line @rnx-kit/no-foreach-with-captured-variables
+      // oxlint-disable-next-line @rnx-kit/no-foreach-with-captured-variables
       revertCommits.forEach((revertCommit) => {
         if (levenshtein.get(text, revertCommit) < 0.5 * revertCommit.length) {
           revertCommits = revertCommits.filter(function (e) {
@@ -311,7 +311,7 @@ export function getChangelogDesc(
   const acc = deepmerge(CHANGES_TEMPLATE, {});
   const commitsWithoutExactChangelogTemplate: string[] = [];
 
-  // eslint-disable-next-line @rnx-kit/no-foreach-with-captured-variables
+  // oxlint-disable-next-line @rnx-kit/no-foreach-with-captured-variables
   commits.forEach((item) => {
     const {
       changeCategory,

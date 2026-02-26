@@ -24,7 +24,7 @@ describe("readConfigFile()", () => {
     const configFileName = path.join(fixturePath, "invalid-tsconfig.json");
     const config = readConfigFile(configFileName);
 
-    ok(config?.errors.length ?? 0 > 0);
+    ok((config?.errors.length ?? 0) > 0);
   });
 
   it("returns a valid config", () => {

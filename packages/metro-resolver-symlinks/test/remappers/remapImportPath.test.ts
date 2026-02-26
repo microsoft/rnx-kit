@@ -25,7 +25,7 @@ describe("remap-import-path", () => {
     expect(() => remapImportPath()).toThrow(
       "A test function is required for this plugin"
     );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     expect(() => remapImportPath({} as any)).toThrow(
       "Expected option `test` to be a function"
     );

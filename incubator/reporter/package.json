@@ -35,7 +35,6 @@
     "test": "rnx-kit-scripts test"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
   },

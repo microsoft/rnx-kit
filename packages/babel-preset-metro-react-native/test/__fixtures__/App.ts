@@ -1,7 +1,7 @@
 require("typescript/lib/remap-test/lib/lib");
 
 // @ts-expect-error Intentional use of non-erasable syntax
-// eslint-disable-next-line @rnx-kit/no-const-enum
+// oxlint-disable-next-line @rnx-kit/no-const-enum
 const enum Direction {
   Up,
   Down,

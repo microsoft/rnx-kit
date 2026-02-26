@@ -1,4 +1,4 @@
-import validateChangelog from "../../src/utils/validateChangelog";
+import { validateChangelog } from "../../src/utils/validateChangelog";
 
 const missing = `
 This is a changelog that is missing the formatted changelog.

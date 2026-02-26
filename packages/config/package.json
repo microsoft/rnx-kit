@@ -45,7 +45,6 @@
     "semver": "^7.0.0"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/lodash.merge": "^4.6.9",

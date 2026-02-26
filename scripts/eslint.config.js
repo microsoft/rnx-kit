@@ -1,4 +1,4 @@
 import config from "../packages/eslint-plugin/private/eslint.config.js";
 
-// eslint-disable-next-line no-restricted-exports
+// oxlint-disable-next-line no-default-export
 export default config;

@@ -40,5 +40,5 @@ const plugin: Plugin = {
   commands: [OutputWorkspaces],
 };
 
-// eslint-disable-next-line no-restricted-exports
+// oxlint-disable-next-line no-default-export
 export default plugin;

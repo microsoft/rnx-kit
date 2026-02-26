@@ -32,7 +32,6 @@
     "js-yaml": "^4.1.1"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/js-yaml": "^4.0.5"

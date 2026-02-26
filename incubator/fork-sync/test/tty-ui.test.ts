@@ -13,7 +13,7 @@ import type { ProgressLine, ProgressState } from "../src/modules/tty-ui.ts";
 import * as ui from "../src/modules/tty-ui.ts";
 
 // Helper to strip ANSI escape codes for test assertions
-// eslint-disable-next-line no-control-regex
+// oxlint-disable-next-line no-control-regex
 const stripAnsi = (s: string) => s.replace(/\x1b\[[0-9;]*m/g, "");
 
 // =============================================================================

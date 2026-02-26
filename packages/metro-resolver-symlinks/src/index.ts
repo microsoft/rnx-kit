@@ -2,5 +2,5 @@ import { makeResolver } from "./symlinkResolver.ts";
 
 module.exports = makeResolver;
 
-// eslint-disable-next-line no-restricted-exports
+// oxlint-disable-next-line no-default-export
 export default makeResolver;

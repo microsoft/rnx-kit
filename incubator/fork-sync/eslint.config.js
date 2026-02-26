@@ -1,6 +1,6 @@
 import config from "@rnx-kit/eslint-config";
 
-// eslint-disable-next-line no-restricted-exports
+// oxlint-disable-next-line no-default-export
 export default [
   ...config,
   {

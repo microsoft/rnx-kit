@@ -48,7 +48,7 @@ type AccountType = string;
 /**
  * Specification for the native auth module.
  */
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+// oxlint-disable-next-line typescript/consistent-type-definitions
 export interface Spec extends TurboModule {
   acquireTokenWithResource(
     resource: string,
