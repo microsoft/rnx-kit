@@ -1,0 +1,40 @@
+{
+  "private": true,
+  "name": "@rnx-kit/tools-json",
+  "version": "0.0.1",
+  "description": "tools-json",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-json#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-json"
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "knip": "^5.30.2"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*"
+  }
+}

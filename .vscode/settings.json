@@ -37,6 +37,8 @@
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
   "typescript.tsdk": "./node_modules/typescript/lib",
 
+  "typescript.experimental.useTsgo": true,
+
   "search.exclude": {
     "**/node_modules": true,
     "**/lib": true,

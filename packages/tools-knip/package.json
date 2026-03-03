@@ -1,0 +1,40 @@
+{
+  "name": "@rnx-kit/tools-knip",
+  "version": "0.0.1",
+  "private": true,
+  "description": "tools-knip",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-knip#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-knip"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "knip": "^5.30.2"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*"
+  },
+  "engines": {
+    "node": ">=18.12"
+  }
+}
