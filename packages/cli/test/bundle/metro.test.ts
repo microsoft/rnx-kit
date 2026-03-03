@@ -1,6 +1,6 @@
 import { mockFS } from "@rnx-kit/tools-filesystem/mocks";
 import { metroBundle } from "../../src/bundle/metro.ts";
-import type { CliPlatformBundleConfig } from "../../src/bundle/types.ts";
+import type { CLIPlatformBundleConfig } from "../../src/bundle/types.ts";
 
 describe("bundle/metro/metroBundle()", () => {
   const { getDefaultConfig } = require("metro-config");
@@ -11,7 +11,7 @@ describe("bundle/metro/metroBundle()", () => {
     bundle.mockReset();
   });
 
-  const bundleConfigNoPlugins: CliPlatformBundleConfig = {
+  const bundleConfigNoPlugins: CLIPlatformBundleConfig = {
     entryFile: "out/entry.js",
     bundleOutput: "src/main.jsbundle",
     treeShake: false,
@@ -23,7 +23,7 @@ describe("bundle/metro/metroBundle()", () => {
     assetsDest: "dist",
   };
 
-  const bundleConfig: CliPlatformBundleConfig = {
+  const bundleConfig: CLIPlatformBundleConfig = {
     ...bundleConfigNoPlugins,
     treeShake: true,
     plugins: [

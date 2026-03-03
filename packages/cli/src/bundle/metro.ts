@@ -6,7 +6,7 @@ import type { ConfigT } from "metro-config";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { customizeMetroConfig } from "../helpers/metro-config.ts";
-import type { CliPlatformBundleConfig } from "./types.ts";
+import type { CLIPlatformBundleConfig } from "./types.ts";
 
 /**
  * Run the Metro bundler.
@@ -22,25 +22,13 @@ import type { CliPlatformBundleConfig } from "./types.ts";
  */
 export async function metroBundle(
   metroConfig: ConfigT,
-  bundleConfig: CliPlatformBundleConfig,
+  bundleConfig: CLIPlatformBundleConfig,
   dev: boolean,
   minify?: boolean,
   output = bundle,
   fs = nodefs
 ): Promise<void> {
   info(`Bundling ${bundleConfig.platform}...`);
-
-  if (!dev && bundleConfig.treeShake) {
-    if (minify != null) {
-      if (typeof bundleConfig.treeShake === "object") {
-        bundleConfig.treeShake.minify = minify;
-      } else {
-        bundleConfig.treeShake = { minify };
-      }
-    }
-  } else {
-    bundleConfig.treeShake = false;
-  }
 
   customizeMetroConfig(metroConfig, bundleConfig);
 

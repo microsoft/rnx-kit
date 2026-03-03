@@ -1,24 +1,24 @@
-import { pickValues } from "@rnx-kit/tools-language/properties";
-import type { CliPlatformBundleConfig } from "./types.ts";
+import type { CLIPlatformBundleConfig } from "./types.ts";
 
-type BundleConfigOverrides = Partial<
+export type BundleConfigOverrides = Partial<
   Pick<
-    CliPlatformBundleConfig,
-    | "entryFile"
-    | "bundleOutput"
+    CLIPlatformBundleConfig,
+    | "assetsDest"
     | "bundleEncoding"
+    | "bundleOutput"
+    | "entryFile"
+    | "hermes"
+    | "indexedRamBundle"
     | "sourcemapOutput"
     | "sourcemapSourcesRoot"
     | "sourcemapUseAbsolutePath"
-    | "assetsDest"
     | "treeShake"
     | "unstableTransformProfile"
-    | "indexedRamBundle"
-    | "hermes"
   >
 >;
 
-export const overridableCommonBundleOptions: readonly (keyof BundleConfigOverrides)[] =
+// TODO: Add `hermes` and `treeShake` when we remove support for `ram-bundle`
+export const BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES: readonly (keyof BundleConfigOverrides)[] =
   [
     "assetsDest",
     "bundleEncoding",
@@ -31,21 +31,23 @@ export const overridableCommonBundleOptions: readonly (keyof BundleConfigOverrid
   ];
 
 /**
- * Apply overrides, if any, to each rnx-kit bundle configuration. Overrides are applied in-place.
+ * Apply overrides from the command line, if any, to the bundle configuration.
+ * Overrides are applied in-place.
  *
+ * @param config Platform-specific bundle configuration; this is modified if any overrides are applied.
  * @param overrides Optional overrides to apply
- * @param configs Array of platform-specific bundle configurations. This is modified if any overrides are applied.
- * @param keys Config keys to pick from {@link overrides}
+ * @param keys Config keys to pick from {@link overrides}; defaults to {@link BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES}
  */
-export function applyBundleConfigOverrides(
+export function applyCommandLineOverrides(
+  config: CLIPlatformBundleConfig,
   overrides: BundleConfigOverrides,
-  configs: CliPlatformBundleConfig[],
-  keys: (keyof BundleConfigOverrides)[]
-): void {
-  const overridesToApply = pickValues(overrides, keys);
-  if (overridesToApply) {
-    for (const config of configs) {
-      Object.assign(config, overridesToApply);
+  flags = BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES
+) {
+  for (const flag of flags) {
+    if (Object.hasOwn(overrides, flag)) {
+      const value = overrides[flag];
+      // @ts-expect-error TypeScript can't infer that `flag` is a key of `BundleConfigOverrides`, which is a subset of the keys of `CLIPlatformBundleConfig`
+      config[flag] = value;
     }
   }
 }

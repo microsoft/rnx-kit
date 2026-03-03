@@ -23,7 +23,7 @@ export type CLICommonBundleOptions = {
   config?: string;
 };
 
-export type CliPlatformBundleConfig = BundleParameters &
+export type CLIPlatformBundleConfig = BundleParameters &
   Required<
     Pick<
       BundleParameters,

@@ -1,11 +1,11 @@
 import {
-  applyBundleConfigOverrides,
-  overridableCommonBundleOptions,
+  BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES,
+  applyCommandLineOverrides,
 } from "../../src/bundle/overrides.ts";
-import type { CliPlatformBundleConfig } from "../../src/bundle/types.ts";
+import type { CLIPlatformBundleConfig } from "../../src/bundle/types.ts";
 
-describe("bundle/overrides/applyBundleConfigOverrides()", () => {
-  const config: CliPlatformBundleConfig = {
+describe("bundle/overrides/applyCommandLineOverrides()", () => {
+  const config: CLIPlatformBundleConfig = {
     entryFile: "src/index.js",
     bundleOutput: "main.jsbundle",
     sourcemapUseAbsolutePath: false,
@@ -21,11 +21,10 @@ describe("bundle/overrides/applyBundleConfigOverrides()", () => {
 
   test("has no effect when no overrides are given", () => {
     const copy = { ...config };
-    applyBundleConfigOverrides(
-      {},
-      [copy],
-      [...overridableCommonBundleOptions, "treeShake"]
-    );
+    applyCommandLineOverrides(copy, {}, [
+      ...BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES,
+      "treeShake",
+    ]);
     expect(copy).toEqual(config);
   });
 
@@ -36,11 +35,11 @@ describe("bundle/overrides/applyBundleConfigOverrides()", () => {
         expect(copy[name]).not.toEqual(value);
       }
     }
-    applyBundleConfigOverrides(
-      { [name]: value },
-      [copy],
-      [...overridableCommonBundleOptions, "treeShake", "indexedRamBundle"]
-    );
+    applyCommandLineOverrides(copy, { [name]: value }, [
+      ...BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES,
+      "treeShake",
+      "indexedRamBundle",
+    ]);
     expect(copy).toEqual({
       ...config,
       [name]: value,

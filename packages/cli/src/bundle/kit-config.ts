@@ -5,7 +5,7 @@ import {
 } from "@rnx-kit/config";
 import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
 import { getDefaultBundlerPlugins } from "./defaultPlugins.ts";
-import type { CliPlatformBundleConfig } from "./types.ts";
+import type { CLIPlatformBundleConfig } from "./types.ts";
 
 /**
  * Get the list of target platforms for bundling.
@@ -55,7 +55,7 @@ export function getCliPlatformBundleConfigs(
   id?: string,
   overridePlatform?: AllPlatforms,
   kitConfig = getKitConfig()
-): CliPlatformBundleConfig[] {
+): CLIPlatformBundleConfig[] {
   const maybeBundleConfig = kitConfig
     ? getBundleConfig(kitConfig, id)
     : undefined;
@@ -63,7 +63,7 @@ export function getCliPlatformBundleConfigs(
 
   const platforms = getTargetPlatforms(overridePlatform, bundleConfig.targets);
 
-  return platforms.map<CliPlatformBundleConfig>((platform) => {
+  return platforms.map<CLIPlatformBundleConfig>((platform) => {
     const platformBundleConfig = getPlatformBundleConfig(
       bundleConfig,
       platform

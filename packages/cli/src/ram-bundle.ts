@@ -5,27 +5,21 @@ import { commonBundleCommandOptions } from "./bundle/cliOptions.ts";
 import { getCliPlatformBundleConfigs } from "./bundle/kit-config.ts";
 import { metroBundle } from "./bundle/metro.ts";
 import {
-  applyBundleConfigOverrides,
-  overridableCommonBundleOptions,
+  BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES,
+  applyCommandLineOverrides,
 } from "./bundle/overrides.ts";
 import type {
   CLICommonBundleOptions,
-  CliPlatformBundleConfig,
+  CLIPlatformBundleConfig,
 } from "./bundle/types.ts";
 
 type CLIRamBundleOptions = CLICommonBundleOptions & {
   indexedRamBundle?: boolean;
 };
 
-function disableTreeShaking(configs: CliPlatformBundleConfig[]): void {
-  const wasEnabled = configs.reduce((modified, config) => {
-    if (config.treeShake) {
-      config.treeShake = false;
-      return true;
-    }
-    return modified;
-  }, false);
-  if (wasEnabled) {
+function disableTreeShaking(config: CLIPlatformBundleConfig): void {
+  if (config.treeShake) {
+    config.treeShake = false;
     info(
       "`treeShake` was disabled because it is not compatible with the RAM bundle format"
     );
@@ -44,21 +38,17 @@ export async function rnxRamBundle(
     cliOptions.platform
   );
 
-  applyBundleConfigOverrides(cliOptions, bundleConfigs, [
-    ...overridableCommonBundleOptions,
+  const overridableFlags = [
+    ...BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES,
     "indexedRamBundle",
-  ]);
-
-  disableTreeShaking(bundleConfigs);
+  ] as const;
 
   for (const bundleConfig of bundleConfigs) {
-    await metroBundle(
-      metroConfig,
-      bundleConfig,
-      cliOptions.dev,
-      cliOptions.minify,
-      ramBundle
-    );
+    applyCommandLineOverrides(bundleConfig, cliOptions, overridableFlags);
+    disableTreeShaking(bundleConfig);
+
+    const { dev, minify } = cliOptions;
+    await metroBundle(metroConfig, bundleConfig, dev, minify, ramBundle);
   }
 }
 
