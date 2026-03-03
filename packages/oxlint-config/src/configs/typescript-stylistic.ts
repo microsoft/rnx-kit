@@ -4,9 +4,6 @@ export default defineConfig({
   categories: {
     correctness: "error",
   },
-  // TODO: These rules should be declared under `overrides` and only apply
-  // to TypeScript files. However, it doesn't seem like they work properly with
-  // deeply nested configs at the moment.
   plugins: ["typescript"],
   rules: {
     "typescript/adjacent-overload-signatures": "error",
