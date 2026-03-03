@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/oxlint-config",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Shareable oxlint configs",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/oxlint-config#readme",
   "license": "MIT",
@@ -61,7 +61,7 @@
   "dependencies": {
     "@microsoft/eslint-plugin-sdl": "^1.0.0",
     "@react-native/eslint-plugin": "^0.84.0",
-    "@rnx-kit/eslint-plugin": "^0.9.6"
+    "@rnx-kit/eslint-plugin": "^0.9.7"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
