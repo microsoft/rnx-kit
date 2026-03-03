@@ -25,8 +25,7 @@ Several configurations are exported by this package. For instance, to use the
 configuration, you can re-export it in your config like so:
 
 ```ts
-import config from "@rnx-kit/oxlint-config";
-export default config;
+export { default } from "@rnx-kit/oxlint-config";
 ```
 
 Alternatively, if you want to add customizations:
