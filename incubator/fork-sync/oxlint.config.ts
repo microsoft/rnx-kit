@@ -8,4 +8,18 @@ export default defineConfig({
     "typescript/consistent-type-definitions": "off",
     "no-new-array": "off",
   },
+  overrides: [
+    {
+      files: ["eslint.config.js", "oxlint.config.ts"],
+      rules: {
+        "import/no-default-export": "off",
+      },
+    },
+    {
+      files: ["test/proc.test.ts", "test/tty-ui.test.ts"],
+      rules: {
+        "no-control-regex": "off",
+      },
+    },
+  ],
 });
