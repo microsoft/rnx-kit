@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 1.1.0
+
+### Minor Changes
+
+- 2425ce5: Added `--metafile` flag to the bundle command, to produce metadata about the build in JSON format
+
 ## 1.0.2
 
 ### Patch Changes
@@ -724,21 +730,25 @@
   ### `rnx-bundle` parameteters
 
   Add:
+
   - --bundle-output
   - --sourcemap-use-absolute-path
   - --unstable-transform-profile
 
   Remove:
+
   - --bundle-prefix
   - --dist-path
 
   Rename:
+
   - --entry-path -> --entry-file
   - --assets-path -> --assets-dest
 
   ### `rnx-start` parameters
 
   Rename:
+
   - --project-root -> --projectRoot
   - --watch-folders -> --watchFolders
   - --asset-plugins -> --assetPlugins
@@ -749,6 +759,7 @@
   The bundler and bundle-server no longer require rnx-kit configuration to run.
   This makes it possible to "upgrade" to @rnx-kit/cli by only changing the
   command name:
+
   - `react-native bundle` -> `react-native rnx-bundle`
   - `react-native start` -> `react-native rnx-start`
 
@@ -758,6 +769,7 @@
   CLI expresses our opinionated view of how config should be interpreted.
 
   The following defaults now apply when running `rnx-bundle` and `rnx-start`:
+
   - --entry-file / entryFile: "index.js"
   - --bundle-output / bundleOutput: "index.<`platform`>.bundle" (Windows,
     Android), or "index.<`platform`>.jsbundle" (iOS, MacOS)

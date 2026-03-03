@@ -5297,7 +5297,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/eslint-plugin@npm:^0.9.6, @rnx-kit/eslint-plugin@workspace:*, @rnx-kit/eslint-plugin@workspace:packages/eslint-plugin":
+"@rnx-kit/eslint-plugin@npm:^0.9.7, @rnx-kit/eslint-plugin@workspace:*, @rnx-kit/eslint-plugin@workspace:packages/eslint-plugin":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
@@ -5570,7 +5570,7 @@ __metadata:
   dependencies:
     "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
     "@react-native/eslint-plugin": "npm:^0.84.0"
-    "@rnx-kit/eslint-plugin": "npm:^0.9.6"
+    "@rnx-kit/eslint-plugin": "npm:^0.9.7"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     eslint: "npm:^9.0.0"
