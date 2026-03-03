@@ -34,7 +34,6 @@
     "@rnx-kit/tools-node": "^3.0.3"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",

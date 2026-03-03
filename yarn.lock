@@ -3546,6 +3546,139 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@oxlint/binding-android-arm-eabi@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-android-arm-eabi@npm:1.50.0"
+  conditions: os=android & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-android-arm64@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-android-arm64@npm:1.50.0"
+  conditions: os=android & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-darwin-arm64@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-darwin-arm64@npm:1.50.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-darwin-x64@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-darwin-x64@npm:1.50.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-freebsd-x64@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-freebsd-x64@npm:1.50.0"
+  conditions: os=freebsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-linux-arm-gnueabihf@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-linux-arm-gnueabihf@npm:1.50.0"
+  conditions: os=linux & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-linux-arm-musleabihf@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-linux-arm-musleabihf@npm:1.50.0"
+  conditions: os=linux & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-linux-arm64-gnu@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-linux-arm64-gnu@npm:1.50.0"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-linux-arm64-musl@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-linux-arm64-musl@npm:1.50.0"
+  conditions: os=linux & cpu=arm64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-linux-ppc64-gnu@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-linux-ppc64-gnu@npm:1.50.0"
+  conditions: os=linux & cpu=ppc64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-linux-riscv64-gnu@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-linux-riscv64-gnu@npm:1.50.0"
+  conditions: os=linux & cpu=riscv64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-linux-riscv64-musl@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-linux-riscv64-musl@npm:1.50.0"
+  conditions: os=linux & cpu=riscv64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-linux-s390x-gnu@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-linux-s390x-gnu@npm:1.50.0"
+  conditions: os=linux & cpu=s390x & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-linux-x64-gnu@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-linux-x64-gnu@npm:1.50.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-linux-x64-musl@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-linux-x64-musl@npm:1.50.0"
+  conditions: os=linux & cpu=x64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-openharmony-arm64@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-openharmony-arm64@npm:1.50.0"
+  conditions: os=openharmony & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-win32-arm64-msvc@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-win32-arm64-msvc@npm:1.50.0"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-win32-ia32-msvc@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-win32-ia32-msvc@npm:1.50.0"
+  conditions: os=win32 & cpu=ia32
+  languageName: node
+  linkType: hard
+
+"@oxlint/binding-win32-x64-msvc@npm:1.50.0":
+  version: 1.50.0
+  resolution: "@oxlint/binding-win32-x64-msvc@npm:1.50.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -4149,7 +4282,6 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
@@ -4167,7 +4299,6 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     react: "npm:19.2.0"
@@ -4714,10 +4845,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/eslint-plugin@npm:^0.76.0":
-  version: 0.76.6
-  resolution: "@react-native/eslint-plugin@npm:0.76.6"
-  checksum: 10c0/f60f354567db41cb4979210b53af73662cfaf790c6466f907817a4a497ddd258fcf5a8f8ca7aae888950dab2a1d0ceef5dfc4fe3ea0bfc82ff30c0683bfde307
+"@react-native/eslint-plugin@npm:^0.84.0":
+  version: 0.84.0
+  resolution: "@react-native/eslint-plugin@npm:0.84.0"
+  checksum: 10c0/cae751b5c458ae704769504c8aee2c728a0a4e49394e209f1f910093ee6b5e5c205020e603f37401dcd4a7d9974df14a41a9a78d40bcc1b81c1feff8d420f28b
   languageName: node
   linkType: hard
 
@@ -4922,7 +5053,6 @@ __metadata:
     "@react-native-community/cli-types": "npm:^20.0.0"
     "@rnx-kit/config": "npm:*"
     "@rnx-kit/console": "npm:*"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-language": "npm:*"
     "@rnx-kit/tools-node": "npm:*"
@@ -4954,7 +5084,6 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.0.0"
     "@babel/helper-plugin-utils": "npm:^7.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
@@ -4974,7 +5103,6 @@ __metadata:
     "@react-native/babel-preset": "npm:^0.83.0"
     "@rnx-kit/babel-plugin-import-path-remapper": "npm:*"
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/babel__core": "npm:^7.0.0"
@@ -4996,7 +5124,6 @@ __metadata:
   resolution: "@rnx-kit/build-plugin-firebase@workspace:incubator/build-plugin-firebase"
   dependencies:
     "@rnx-kit/build": "npm:*"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
   peerDependencies:
@@ -5013,7 +5140,6 @@ __metadata:
     "@octokit/plugin-rest-endpoint-methods": "npm:^17.0.0"
     "@octokit/request-error": "npm:^7.0.0"
     "@rnx-kit/config": "npm:^0.7.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-android": "npm:^0.2.0"
     "@rnx-kit/tools-apple": "npm:^0.2.0"
@@ -5040,7 +5166,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/bundle-diff@workspace:packages/bundle-diff"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
@@ -5060,7 +5185,6 @@ __metadata:
     "@rnx-kit/align-deps": "npm:^3.4.2"
     "@rnx-kit/config": "npm:^0.7.5"
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "npm:^2.0.3"
     "@rnx-kit/metro-plugin-duplicates-checker": "npm:^3.0.3"
@@ -5111,7 +5235,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/commitlint-lite@workspace:packages/commitlint-lite"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
@@ -5125,7 +5248,6 @@ __metadata:
   resolution: "@rnx-kit/config@workspace:packages/config"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.4"
     "@rnx-kit/tools-packages": "npm:^0.1.2"
@@ -5146,7 +5268,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/console@workspace:packages/console"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
@@ -5157,7 +5278,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/esbuild-plugin-import-path-remapper@workspace:packages/esbuild-plugin-import-path-remapper"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
@@ -5177,13 +5297,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/eslint-plugin@workspace:*, @rnx-kit/eslint-plugin@workspace:packages/eslint-plugin":
+"@rnx-kit/eslint-plugin@npm:^0.9.6, @rnx-kit/eslint-plugin@workspace:*, @rnx-kit/eslint-plugin@workspace:packages/eslint-plugin":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
     "@eslint/js": "npm:^9.0.0"
     "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
-    "@react-native/eslint-plugin": "npm:^0.76.0"
+    "@react-native/eslint-plugin": "npm:^0.84.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/eslint": "npm:^9.0.0"
@@ -5192,6 +5312,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^8.0.0"
     "@typescript-eslint/types": "npm:^8.0.0"
     enhanced-resolve: "npm:^5.8.3"
+    eslint: "npm:^9.0.0"
     eslint-plugin-react: "npm:^7.35.2"
     eslint-plugin-react-hooks: "npm:^5.2.0"
     typescript-eslint: "npm:^8.0.0"
@@ -5205,6 +5326,7 @@ __metadata:
   resolution: "@rnx-kit/fork-sync@workspace:incubator/fork-sync"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/oxlint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
@@ -5250,7 +5372,6 @@ __metadata:
   resolution: "@rnx-kit/lint-lockfile@workspace:incubator/lint-lockfile"
   dependencies:
     "@rnx-kit/config": "npm:^0.7.5"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-workspaces": "npm:^0.2.3"
     "@rnx-kit/tsconfig": "npm:*"
@@ -5268,7 +5389,6 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-react-native": "npm:^2.3.1"
@@ -5297,7 +5417,6 @@ __metadata:
   resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:packages/metro-plugin-cyclic-dependencies-detector"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/metro-serializer": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.4"
@@ -5313,7 +5432,6 @@ __metadata:
   resolution: "@rnx-kit/metro-plugin-duplicates-checker@workspace:packages/metro-plugin-duplicates-checker"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/metro-serializer": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.4"
@@ -5333,7 +5451,6 @@ __metadata:
   resolution: "@rnx-kit/metro-plugin-typescript@workspace:packages/metro-plugin-typescript"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.4"
@@ -5353,7 +5470,6 @@ __metadata:
   resolution: "@rnx-kit/metro-resolver-symlinks@workspace:packages/metro-resolver-symlinks"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.3"
@@ -5384,7 +5500,6 @@ __metadata:
     "@rnx-kit/babel-plugin-import-path-remapper": "npm:*"
     "@rnx-kit/babel-preset-metro-react-native": "npm:*"
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/metro-config": "npm:*"
     "@rnx-kit/metro-serializer": "npm:*"
     "@rnx-kit/metro-service": "npm:*"
@@ -5409,7 +5524,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-serializer@workspace:packages/metro-serializer"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-react-native": "npm:^2.3.0"
     "@rnx-kit/tsconfig": "npm:*"
@@ -5424,7 +5538,6 @@ __metadata:
   dependencies:
     "@react-native-community/cli-types": "npm:^20.0.0"
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.3"
     "@rnx-kit/tools-react-native": "npm:^2.3.2"
@@ -5451,6 +5564,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/oxlint-config@npm:*, @rnx-kit/oxlint-config@workspace:packages/oxlint-config":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/oxlint-config@workspace:packages/oxlint-config"
+  dependencies:
+    "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
+    "@react-native/eslint-plugin": "npm:^0.84.0"
+    "@rnx-kit/eslint-plugin": "npm:^0.9.6"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    eslint: "npm:^9.0.0"
+    oxlint: "npm:^1.50.0"
+  peerDependencies:
+    eslint: ^9.0.0
+    oxlint: ^1.50.0
+  peerDependenciesMeta:
+    eslint:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/polyfills@workspace:*, @rnx-kit/polyfills@workspace:incubator/polyfills":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/polyfills@workspace:incubator/polyfills"
@@ -5459,7 +5592,6 @@ __metadata:
     "@babel/helper-plugin-utils": "npm:^7.0.0"
     "@babel/template": "npm:^7.0.0"
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.3"
     "@rnx-kit/tsconfig": "npm:*"
@@ -5486,7 +5618,6 @@ __metadata:
     "@react-native-community/cli-platform-android": "npm:^20.0.0"
     "@react-native-community/cli-platform-ios": "npm:^20.0.0"
     "@react-native/metro-config": "npm:^0.83.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     react: "npm:19.2.0"
@@ -5512,7 +5643,6 @@ __metadata:
   resolution: "@rnx-kit/react-native-lazy-index@workspace:packages/react-native-lazy-index"
   dependencies:
     "@babel/core": "npm:^7.20.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
@@ -5538,7 +5668,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/reporter@workspace:incubator/reporter"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
   languageName: unknown
@@ -5576,7 +5705,6 @@ __metadata:
     "@yarnpkg/cli": "npm:^4.6.0"
     clipanion: "npm:^4.0.0-rc.4"
     esbuild: "npm:^0.27.1"
-    eslint: "catalog:"
     jest: "npm:^29.2.1"
     markdown-table: "npm:^3.0.0"
     oxfmt: "catalog:"
@@ -5593,7 +5721,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/template@workspace:packages/template"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
   languageName: unknown
@@ -5736,7 +5863,6 @@ __metadata:
   dependencies:
     "@react-native-community/cli-types": "npm:^20.0.0"
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/metro-serializer": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
@@ -5755,7 +5881,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-android@workspace:packages/tools-android"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-shell": "npm:^0.2.2"
     "@rnx-kit/tsconfig": "npm:*"
@@ -5767,7 +5892,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-apple@workspace:packages/tools-apple"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-shell": "npm:^0.2.2"
     "@rnx-kit/tsconfig": "npm:*"
@@ -5780,7 +5904,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-filesystem@workspace:packages/tools-filesystem"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
@@ -5797,7 +5920,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-language@workspace:packages/tools-language"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
@@ -5808,7 +5930,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-node@workspace:packages/tools-node"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-node": "npm:^1.0.0"
@@ -5820,7 +5941,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-packages@workspace:packages/tools-packages"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.4"
     "@rnx-kit/tools-workspaces": "npm:^0.2.1"
@@ -5836,7 +5956,6 @@ __metadata:
   dependencies:
     "@react-native-community/cli": "npm:^20.0.0"
     "@react-native-community/cli-types": "npm:^20.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-filesystem": "npm:^0.2.0"
     "@rnx-kit/tools-node": "npm:^3.0.4"
@@ -5856,7 +5975,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-shell@workspace:packages/tools-shell"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
@@ -5870,7 +5988,6 @@ __metadata:
   dependencies:
     "@rnx-kit/config": "npm:^0.7.5"
     "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.4"
@@ -5890,7 +6007,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-windows@workspace:packages/tools-windows"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-shell": "npm:^0.2.0"
     "@rnx-kit/tsconfig": "npm:*"
@@ -5903,7 +6019,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-workspaces@workspace:packages/tools-workspaces"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/micromatch": "npm:^4.0.0"
@@ -5926,7 +6041,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-bundle-config@workspace:packages/types-bundle-config"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/oxlint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-metro-serializer-esbuild": "npm:^1.0.0"
@@ -5946,7 +6061,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-kit-config@workspace:packages/types-kit-config"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/oxlint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^1.0.0"
@@ -5957,7 +6072,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-metro-serializer-esbuild@workspace:packages/types-metro-serializer-esbuild"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/oxlint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     esbuild: "npm:^0.27.1"
@@ -5968,7 +6083,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-node@workspace:packages/types-node"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/oxlint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-kit-config": "npm:^1.0.0"
@@ -5979,7 +6094,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-plugin-cyclic-dependencies@workspace:packages/types-plugin-cyclic-dependencies"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/oxlint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
   languageName: unknown
@@ -5989,7 +6104,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-plugin-duplicates-checker@workspace:packages/types-plugin-duplicates-checker"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/oxlint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
   languageName: unknown
@@ -5999,7 +6114,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-plugin-typescript@workspace:packages/types-plugin-typescript"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/oxlint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
   languageName: unknown
@@ -6009,7 +6124,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/typescript-service@workspace:packages/typescript-service"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
@@ -6023,7 +6137,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/yarn-plugin-dynamic-extensions@workspace:incubator/yarn-plugin-dynamic-extensions"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@yarnpkg/core": "npm:^4.0.0"
@@ -6035,7 +6148,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/yarn-plugin-external-workspaces@workspace:incubator/yarn-plugin-external-workspaces"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
@@ -6053,7 +6165,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/yarn-plugin-install-to@workspace:incubator/yarn-plugin-install-to"
   dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
@@ -14475,6 +14586,79 @@ __metadata:
   bin:
     oxfmt: bin/oxfmt
   checksum: 10c0/9be372a992e064df7be40dc22b0f7c794a11a580caeab77670fde0337a1f5483c58dfaaf7ab19d4fe9808a67375fc1db29ab19ad4652e9571df150ca33c0e495
+  languageName: node
+  linkType: hard
+
+"oxlint@npm:^1.50.0":
+  version: 1.50.0
+  resolution: "oxlint@npm:1.50.0"
+  dependencies:
+    "@oxlint/binding-android-arm-eabi": "npm:1.50.0"
+    "@oxlint/binding-android-arm64": "npm:1.50.0"
+    "@oxlint/binding-darwin-arm64": "npm:1.50.0"
+    "@oxlint/binding-darwin-x64": "npm:1.50.0"
+    "@oxlint/binding-freebsd-x64": "npm:1.50.0"
+    "@oxlint/binding-linux-arm-gnueabihf": "npm:1.50.0"
+    "@oxlint/binding-linux-arm-musleabihf": "npm:1.50.0"
+    "@oxlint/binding-linux-arm64-gnu": "npm:1.50.0"
+    "@oxlint/binding-linux-arm64-musl": "npm:1.50.0"
+    "@oxlint/binding-linux-ppc64-gnu": "npm:1.50.0"
+    "@oxlint/binding-linux-riscv64-gnu": "npm:1.50.0"
+    "@oxlint/binding-linux-riscv64-musl": "npm:1.50.0"
+    "@oxlint/binding-linux-s390x-gnu": "npm:1.50.0"
+    "@oxlint/binding-linux-x64-gnu": "npm:1.50.0"
+    "@oxlint/binding-linux-x64-musl": "npm:1.50.0"
+    "@oxlint/binding-openharmony-arm64": "npm:1.50.0"
+    "@oxlint/binding-win32-arm64-msvc": "npm:1.50.0"
+    "@oxlint/binding-win32-ia32-msvc": "npm:1.50.0"
+    "@oxlint/binding-win32-x64-msvc": "npm:1.50.0"
+  peerDependencies:
+    oxlint-tsgolint: ">=0.14.1"
+  dependenciesMeta:
+    "@oxlint/binding-android-arm-eabi":
+      optional: true
+    "@oxlint/binding-android-arm64":
+      optional: true
+    "@oxlint/binding-darwin-arm64":
+      optional: true
+    "@oxlint/binding-darwin-x64":
+      optional: true
+    "@oxlint/binding-freebsd-x64":
+      optional: true
+    "@oxlint/binding-linux-arm-gnueabihf":
+      optional: true
+    "@oxlint/binding-linux-arm-musleabihf":
+      optional: true
+    "@oxlint/binding-linux-arm64-gnu":
+      optional: true
+    "@oxlint/binding-linux-arm64-musl":
+      optional: true
+    "@oxlint/binding-linux-ppc64-gnu":
+      optional: true
+    "@oxlint/binding-linux-riscv64-gnu":
+      optional: true
+    "@oxlint/binding-linux-riscv64-musl":
+      optional: true
+    "@oxlint/binding-linux-s390x-gnu":
+      optional: true
+    "@oxlint/binding-linux-x64-gnu":
+      optional: true
+    "@oxlint/binding-linux-x64-musl":
+      optional: true
+    "@oxlint/binding-openharmony-arm64":
+      optional: true
+    "@oxlint/binding-win32-arm64-msvc":
+      optional: true
+    "@oxlint/binding-win32-ia32-msvc":
+      optional: true
+    "@oxlint/binding-win32-x64-msvc":
+      optional: true
+  peerDependenciesMeta:
+    oxlint-tsgolint:
+      optional: true
+  bin:
+    oxlint: bin/oxlint
+  checksum: 10c0/a898f02ac9b114f16f3f51f04de778f752db8c83afd5d2de02132ef80901794c64e208a87585ea2342f59cc39e4dcf6d2e25fb10e62b30c407b89fd7ef439b0b
   languageName: node
   linkType: hard
 

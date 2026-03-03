@@ -9,7 +9,7 @@ export type BatteryStatus = {
   level: number;
 };
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+// oxlint-disable-next-line typescript/consistent-type-definitions
 export interface Spec extends TurboModule {
   getStatus(): Promise<BatteryStatus>;
 }

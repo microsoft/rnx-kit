@@ -156,7 +156,7 @@ describe("output", () => {
 
     it("should handle invalid log level gracefully", () => {
       // Use an invalid log level and verify it defaults to first level
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       const output = createOutput("invalid" as any);
 
       // Should only have error function (first level)
@@ -405,7 +405,7 @@ describe("output", () => {
 
   describe("edge cases", () => {
     it("should handle undefined log level gracefully", () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       const output = createOutput(undefined as any);
 
       // Should default to default log level behavior
@@ -416,7 +416,7 @@ describe("output", () => {
     });
 
     it("should handle null output functions", () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       const output = createOutput("log", null as any, null as any);
 
       // Should fall back to console outputs

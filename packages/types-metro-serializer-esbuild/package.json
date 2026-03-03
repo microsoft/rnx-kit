@@ -29,7 +29,7 @@
     "lint": "rnx-kit-scripts lint"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/oxlint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "esbuild": "^0.27.1"

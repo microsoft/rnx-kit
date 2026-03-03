@@ -50,7 +50,6 @@
     "@react-native-community/cli-types": "^20.0.0",
     "@rnx-kit/config": "*",
     "@rnx-kit/console": "*",
-    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tools-language": "*",
     "@rnx-kit/tools-node": "*",

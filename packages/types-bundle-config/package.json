@@ -40,7 +40,7 @@
     "@rnx-kit/types-plugin-typescript": "^1.0.0"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/oxlint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "metro": "^0.83.3"

@@ -50,7 +50,6 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",

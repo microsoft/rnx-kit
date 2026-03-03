@@ -34,7 +34,6 @@
   },
   "devDependencies": {
     "@rnx-kit/build": "*",
-    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
   },

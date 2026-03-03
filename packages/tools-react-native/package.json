@@ -78,7 +78,6 @@
   "devDependencies": {
     "@react-native-community/cli": "^20.0.0",
     "@react-native-community/cli-types": "^20.0.0",
-    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",

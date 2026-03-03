@@ -1,8 +1,9 @@
 // @ts-check
 
 import { Command, Option } from "clipanion";
-import { spawnSync } from "node:child_process";
-import { runScript } from "../process.js";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { URL, fileURLToPath } from "node:url";
 
 export class LintCommand extends Command {
   /** @override */
@@ -11,25 +12,42 @@ export class LintCommand extends Command {
   /** @override */
   static usage = Command.Usage({
     description: "Lints the current package",
-    details: "This command lints the current package using ESLint.",
+    details: "This command lints the current package using oxlint.",
     examples: [["Lint the current package", "$0 lint"]],
   });
 
   args = Option.Proxy();
 
   async execute() {
-    const args = this.args.length > 0 ? this.args : [];
-    const files = listFiles("*.cjs", "*.js", "*.jsx", "*.mjs", "*.ts", "*.tsx");
-    return await runScript("eslint", "--no-warn-ignored", ...files, ...args);
-  }
-}
+    // oxlint currently only exports "." so we need to make some assumptions
+    // about where to find `cli.js`
+    const oxlint = new URL("./cli.js", import.meta.resolve("oxlint"));
 
-/**
- * @param {...string} patterns
- * @returns {string[]}
- */
-function listFiles(...patterns) {
-  const args = ["ls-files", ...patterns];
-  const { stdout } = spawnSync("git", args, { encoding: "utf-8" });
-  return stdout.trim().split("\n");
+    process.argv = [
+      process.argv0,
+      fileURLToPath(oxlint),
+      "-c",
+      this.configPath,
+      "--ignore-pattern=__fixtures__",
+      ...this.args,
+    ];
+    await import(oxlint.href);
+
+    if (process.exitCode == null) {
+      return 0;
+    }
+
+    return typeof process.exitCode === "number" ? process.exitCode : -1;
+  }
+
+  get configPath() {
+    const localConfig = path.join(process.cwd(), "oxlint.config.ts");
+    if (fs.existsSync(localConfig)) {
+      return localConfig;
+    }
+
+    return fileURLToPath(
+      import.meta.resolve("../../../packages/oxlint-config/private.ts")
+    );
+  }
 }

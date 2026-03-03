@@ -8,6 +8,7 @@
       "{workspaceRoot}/packages/eslint-config/*",
       "{workspaceRoot}/packages/eslint-plugin/*",
       "{workspaceRoot}/packages/jest-preset/*",
+      "{workspaceRoot}/packages/oxlint-config/*",
       "{workspaceRoot}/packages/tsconfig/*",
       "{workspaceRoot}/yarn.lock"
     ],

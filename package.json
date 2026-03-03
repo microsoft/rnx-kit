@@ -97,14 +97,15 @@
       "swiftlint"
     ],
     "ignoreDependencies": [
-      "@rnx-kit/jest-preset",
-      "@types/*",
-      "eslint",
-      "jest",
-      "oxfmt"
+      "@types/*"
     ],
     "metro": false,
     "workspaces": {
+      ".": {
+        "ignoreDependencies": [
+          "eslint"
+        ]
+      },
       "incubator/*": {
         "entry": [
           "src/index.{js,ts}"
@@ -153,6 +154,11 @@
         ]
       },
       "incubator/ignore": {},
+      "incubator/fork-sync": {
+        "entry": [
+          "oxlint.config.ts"
+        ]
+      },
       "incubator/lint-lockfile": {
         "entry": [
           "src/{cli,index}.ts",
@@ -160,9 +166,17 @@
         ]
       },
       "incubator/react-native-test-app-msal": {},
+      "incubator/rn-changelog-generator": {
+        "ignoreDependencies": [
+          "@rnx-kit/jest-preset"
+        ]
+      },
       "incubator/tools-typescript": {
         "entry": [
           "test/**/*.test.ts"
+        ],
+        "ignoreDependencies": [
+          "@rnx-kit/jest-preset"
         ]
       },
       "incubator/yarn-plugin-dynamic-extensions": {
@@ -181,7 +195,6 @@
       },
       "packages/babel-preset-metro-react-native": {
         "entry": [
-          "*.js",
           "test/**/*.test.js",
           "test/__fixtures__/**/*.ts"
         ],
@@ -205,7 +218,8 @@
         ],
         "ignoreDependencies": [
           "@babel/core",
-          "@babel/preset-env"
+          "@babel/preset-env",
+          "@rnx-kit/jest-preset"
         ]
       },
       "packages/eslint-config": {
@@ -239,6 +253,16 @@
           "test/**/*.{js,ts}"
         ]
       },
+      "packages/metro-plugin-typescript": {
+        "ignoreDependencies": [
+          "@rnx-kit/jest-preset"
+        ]
+      },
+      "packages/metro-resolver-symlinks": {
+        "ignoreDependencies": [
+          "@rnx-kit/jest-preset"
+        ]
+      },
       "packages/metro-serializer-esbuild": {
         "entry": [
           "metro.config.js",
@@ -247,6 +271,11 @@
         ],
         "ignoreDependencies": [
           "@babel/preset-env"
+        ]
+      },
+      "packages/oxlint-config": {
+        "entry": [
+          "src/**/*.ts"
         ]
       },
       "packages/react-native-auth": {
@@ -266,7 +295,6 @@
       },
       "packages/react-native-lazy-index": {
         "entry": [
-          "*.js",
           "test/**/*.test.ts",
           "test/__fixtures__/**/*.js"
         ],
@@ -277,8 +305,7 @@
       "packages/test-app*": {
         "entry": [
           "*.js",
-          "src/**/*.{ts,tsx}",
-          "test/**/*.{js,mjs,ts,tsx}"
+          "test/*.{js,mjs,ts,tsx}"
         ],
         "ignoreDependencies": [
           "@babel/preset-env",
@@ -289,10 +316,15 @@
           "@rnx-kit/*"
         ]
       },
+      "packages/tools-shell": {
+        "ignoreDependencies": [
+          "@rnx-kit/jest-preset"
+        ]
+      },
       "packages/tsconfig": {},
-      "packages/types-metro-serializer-esbuild": {
+      "packages/types-*": {
         "entry": [
-          "*.js",
+          "oxlint.config.ts",
           "src/*.ts"
         ]
       },
@@ -300,6 +332,9 @@
         "entry": [
           "*.{cjs,js}",
           "src/**/*.js"
+        ],
+        "ignoreDependencies": [
+          "jest"
         ]
       }
     }

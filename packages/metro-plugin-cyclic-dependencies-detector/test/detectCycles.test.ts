@@ -9,7 +9,7 @@ import {
   repoRoot,
 } from "./testData.ts";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
+// oxlint-disable-next-line no-empty-function
 function noop() {}
 
 function stripRepoRootFromPaths(

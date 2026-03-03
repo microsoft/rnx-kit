@@ -43,7 +43,6 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0"

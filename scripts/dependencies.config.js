@@ -24,7 +24,23 @@ function lookForFile(filename) {
  * @returns {boolean}
  */
 function needsJest(cwd, manifest) {
-  return "jest" in manifest || fs.existsSync(path.join(cwd, "jest.config.js"));
+  return (
+    Object.hasOwn(manifest, "jest") ||
+    fs.existsSync(path.join(cwd, "jest.config.js"))
+  );
+}
+
+/**
+ * @param {string} _cwd
+ * @param {Record<string, Record<string, string>>} manifest
+ * @returns {boolean}
+ */
+function needsLint(_cwd, manifest) {
+  return (
+    Object.hasOwn(manifest, "scripts") &&
+    Object.hasOwn(manifest["scripts"], "lint") &&
+    manifest["scripts"]["lint"].includes("rnx-kit-scripts lint")
+  );
 }
 
 const needsTypeScript = lookForFile("tsconfig.json");
@@ -32,13 +48,13 @@ const needsTypeScript = lookForFile("tsconfig.json");
 const COMMON_DEPENDENCIES = /** @type {const} */ ([
   ["@types/jest", needsJest],
   ["@typescript/native-preview", needsTypeScript],
-  ["eslint", lookForFile("eslint.config.js")],
+  ["oxlint", needsLint],
   ["jest", needsJest],
   ["oxfmt", always],
   ["typescript", needsTypeScript],
 ]);
 
-/* eslint-disable-next-line no-restricted-exports */
+/* oxlint-disable-next-line no-default-export */
 export default function ({ cwd, manifest }) {
   let extensions = undefined;
 

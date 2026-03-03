@@ -50,7 +50,6 @@
     "@react-native/metro-config": "^0.83.0",
     "@rnx-kit/babel-plugin-import-path-remapper": "*",
     "@rnx-kit/babel-preset-metro-react-native": "*",
-    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/metro-config": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/metro-service": "*",

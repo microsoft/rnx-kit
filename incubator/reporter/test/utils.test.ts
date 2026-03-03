@@ -8,7 +8,7 @@ import {
   serialize,
 } from "../src/utils.ts";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 type TestAny = any;
 
 describe("utils", () => {
@@ -96,7 +96,7 @@ describe("utils", () => {
   describe("resolveFunction", () => {
     it("should handle synchronous functions that succeed", () => {
       const syncFn = () => "sync result";
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       let finalResult: any;
 
       const result = resolveFunction(syncFn, (res): string => {
@@ -116,10 +116,10 @@ describe("utils", () => {
       const syncFn = (): never => {
         throw new Error("sync error");
       };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       let finalResult: any;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       const result = resolveFunction(syncFn, (res): any => {
         finalResult = res;
         if ("error" in res) {

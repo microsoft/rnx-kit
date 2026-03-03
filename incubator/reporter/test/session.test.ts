@@ -455,7 +455,7 @@ describe("session", () => {
       const session = createSession(options, undefined, mockCreateReporter);
 
       // Use the internal behavior - when finish is called without explicit result, it's undefined
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       const result = (session as any).finish();
 
       assert.strictEqual(result, undefined);

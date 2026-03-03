@@ -7,7 +7,7 @@ import { requireModuleFromMetro } from "../src/metro.ts";
 import { fixturePath } from "./fixtures.ts";
 
 describe("requireModuleFromMetro", () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   const context: any = {};
 
   function getMetroResolver(fromDir: string) {

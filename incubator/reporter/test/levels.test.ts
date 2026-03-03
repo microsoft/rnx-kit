@@ -51,7 +51,7 @@ describe("levels", () => {
 
       // Attempting to modify should not change the array
       assert.throws(() => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // oxlint-disable-next-line typescript/no-explicit-any
         (ALL_LOG_LEVELS as any).push("new-level");
       });
 
