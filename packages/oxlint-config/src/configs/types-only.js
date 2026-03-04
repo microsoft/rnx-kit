@@ -1,6 +1,6 @@
 import { defineConfig } from "oxlint";
-import strict from "./strict.ts";
-import stylistic from "./typescript-stylistic.ts";
+import strict from "./strict.js";
+import stylistic from "./typescript-stylistic.js";
 
 export default defineConfig({
   extends: [strict, stylistic],

@@ -54,7 +54,6 @@ const COMMON_DEPENDENCIES = /** @type {const} */ ([
   ["typescript", needsTypeScript],
 ]);
 
-/* oxlint-disable-next-line no-default-export */
 export default function ({ cwd, manifest }) {
   let extensions = undefined;
 

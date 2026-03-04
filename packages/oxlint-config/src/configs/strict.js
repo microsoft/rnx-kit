@@ -1,5 +1,5 @@
 import { defineConfig } from "oxlint";
-import recommended from "./recommended.ts";
+import recommended from "./recommended.js";
 
 export default defineConfig({
   extends: [recommended],
