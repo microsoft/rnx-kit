@@ -337,7 +337,7 @@ describe("AzureDevOpsClient", () => {
 
   it("supports unified diffs", async () => {
     /** @type {GitPullRequestCommentThread[]} */
-    let payloads = [];
+    const payloads = [];
     const mocks = mock({
       createThread: (/** @type {GitPullRequestCommentThread} */ review) => {
         payloads.push(review);
@@ -373,7 +373,7 @@ describe("AzureDevOpsClient", () => {
 
   it("ignores files not in latest iteration", async () => {
     /** @type {GitPullRequestCommentThread[]} */
-    let payloads = [];
+    const payloads = [];
     await makeReview(
       FIXTURE_UNIDIFF,
       mock({

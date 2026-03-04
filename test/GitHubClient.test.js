@@ -8,6 +8,7 @@
 
 import { deepEqual, equal, fail, match, rejects } from "node:assert/strict";
 import { after, beforeEach, describe, it } from "node:test";
+import { makeReview } from "../src/GitHubClient.js";
 import {
   FIXTURE_PIPED_GH_PAYLOAD,
   FIXTURE_PIPED_WINDOWS,
@@ -15,14 +16,18 @@ import {
   FIXTURE_UNIDIFF_GH_PAYLOAD,
   FIXTURE_UNIDIFF,
 } from "./__fixtures__.js";
-import { makeReview } from "../src/GitHubClient.js";
 
 /**
  * @typedef {import("@octokit/core").OctokitOptions} OctokitOptions
  */
 class Octokit {
   constructor(
-    /** @type {OctokitOptions} */ { auth, createReview, request, setAuth }
+    /** @type {OctokitOptions} */ {
+      auth,
+      createReview,
+      request,
+      setAuth,
+    }
   ) {
     this.rest = { pulls: { createReview } };
     this.request = request;

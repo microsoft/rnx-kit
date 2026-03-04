@@ -16,14 +16,18 @@
     "name": "Tommy Nguyen",
     "email": "4123478+tido64@users.noreply.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tido64/suggestion-bot.git"
+  },
+  "bin": "cli.js",
   "files": [
     "cli.js",
     "src/**/*.d.ts",
     "src/**/*.js"
   ],
-  "main": "src/index.js",
-  "bin": "cli.js",
   "type": "module",
+  "main": "src/index.js",
   "exports": {
     ".": {
       "default": "./src/index.js"
@@ -33,15 +37,11 @@
     },
     "./package.json": "./package.json"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tido64/suggestion-bot.git"
-  },
   "scripts": {
     "build": "yarn clean && yarn lint && tsc",
     "clean": "git clean -dfqx -- src/ test/",
-    "format": "prettier --write $(git ls-files '*.js' '*.json' '*.md' '*.yml' ':!:.yarn/**/*.cjs')",
-    "lint": "eslint $(git ls-files '*.js' ':!:*.config.js' ':!:.yarn/**/*.js')",
+    "format": "oxfmt $(git ls-files '*.js' '*.json' '*.md' '*.ts' '*.yml' ':!:.yarn/**/*.cjs')",
+    "lint": "oxlint $(git ls-files '*.js' ':!:*.config.js' ':!:.yarn/**/*.js')",
     "suggest": "suggestion-bot",
     "test": "node --test --experimental-test-coverage $(git ls-files 'test/*.test.js')"
   },
@@ -52,23 +52,24 @@
     "parse-diff": "^0.11.0"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.0",
+    "@rnx-kit/oxlint-config": "^1.0.2",
     "@rnx-kit/tsconfig": "^3.0.0",
     "@types/node": "^24.0.0",
-    "eslint": "^10.0.0",
-    "prettier": "^3.0.0",
+    "oxfmt": "^0.36.0",
+    "oxlint": "^1.51.0",
     "semantic-release": "^25.0.0",
     "typescript": "^5.0.0"
+  },
+  "resolutions": {
+    "@microsoft/eslint-plugin-sdl/eslint-plugin-n": "^17.10.3",
+    "@microsoft/eslint-plugin-sdl/eslint-plugin-react": "^7.37.3",
+    "@semantic-release/npm/npm": "link:."
+  },
+  "release": {
+    "extends": "./.github/semantic-release.json"
   },
   "engines": {
     "node": ">=20.9"
   },
-  "packageManager": "yarn@4.12.0",
-  "resolutions": {
-    "@semantic-release/npm/npm": "link:."
-  },
-  "prettier": "./.github/prettierrc.json",
-  "release": {
-    "extends": "./.github/semantic-release.json"
-  }
+  "packageManager": "yarn@4.12.0"
 }

@@ -43,7 +43,6 @@ function makeOctokit({ octokit = octokit_core, ...options }) {
  * @param {import("./makeComments.js").Comment} comment
  * @returns {Omit<import("./makeComments.js").Comment, "line_length">}
  */
-// eslint-disable-next-line no-unused-vars
 function trimComment({ line_length, ...rest }) {
   return rest;
 }
