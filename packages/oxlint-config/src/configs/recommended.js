@@ -18,7 +18,7 @@ export default defineConfig({
     },
     {
       name: "@rnx-kit",
-      specifier: import.meta.resolve("@rnx-kit/eslint-plugin"),
+      specifier: import.meta.resolve("@rnx-kit/eslint-plugin/rules"),
     },
   ],
   // https://oxc.rs/docs/guide/usage/linter/rules.html
