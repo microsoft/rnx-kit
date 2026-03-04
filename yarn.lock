@@ -5451,6 +5451,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/metro-transformer-esbuild@workspace:packages/metro-transformer-esbuild":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-transformer-esbuild@workspace:packages/metro-transformer-esbuild"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-transformer-esbuild": "npm:^0.0.1"
+    "@types/node": "npm:^24.0.0"
+    esbuild: "npm:^0.27.1"
+    hermes-parser: "npm:^0.25.1"
+    metro-config: "npm:^0.83.3"
+    metro-transform-worker: "npm:^0.83.1"
+  peerDependencies:
+    esbuild: ">=0.19.0"
+    hermes-parser: ">=0.19.0"
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/polyfills@workspace:*, @rnx-kit/polyfills@workspace:incubator/polyfills":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/polyfills@workspace:incubator/polyfills"
@@ -5998,6 +6017,16 @@ __metadata:
 "@rnx-kit/types-plugin-typescript@npm:^1.0.0, @rnx-kit/types-plugin-typescript@workspace:packages/types-plugin-typescript":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-plugin-typescript@workspace:packages/types-plugin-typescript"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/types-transformer-esbuild@npm:^0.0.1, @rnx-kit/types-transformer-esbuild@workspace:packages/types-transformer-esbuild":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/types-transformer-esbuild@workspace:packages/types-transformer-esbuild"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
@@ -10822,7 +10851,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hermes-parser@npm:0.25.1":
+"hermes-parser@npm:0.25.1, hermes-parser@npm:^0.25.1":
   version: 0.25.1
   resolution: "hermes-parser@npm:0.25.1"
   dependencies:
