@@ -31,6 +31,9 @@
     "./recommended": {
       "default": "./src/configs/recommended.js"
     },
+    "./rules": {
+      "default": "./src/rules.js"
+    },
     "./strict": {
       "default": "./src/configs/strict.js"
     },

@@ -23,14 +23,19 @@ export class LintCommand extends Command {
     // about where to find `cli.js`
     const oxlint = new URL("./cli.js", import.meta.resolve("oxlint"));
 
-    process.argv = [
+    const args = [
       process.argv0,
       fileURLToPath(oxlint),
       "-c",
       this.configPath,
       "--ignore-pattern=__fixtures__",
-      ...this.args,
     ];
+    if (process.platform === "win32") {
+      args.push("--threads=1");
+    }
+    args.push(...this.args);
+
+    process.argv = args;
     await import(oxlint.href);
 
     if (process.exitCode == null) {
