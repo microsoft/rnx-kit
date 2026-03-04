@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.9.8
+
+### Patch Changes
+
+- 5bc1f41: Export `./rules` to avoid dependency on `eslint`
+
 ## 0.9.7
 
 ### Patch Changes

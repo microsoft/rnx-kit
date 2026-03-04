@@ -1,5 +1,13 @@
 # @rnx-kit/oxlint-config
 
+## 1.0.2
+
+### Patch Changes
+
+- 5bc1f41: Export `./rules` to avoid dependency on `eslint`
+- Updated dependencies [5bc1f41]
+  - @rnx-kit/eslint-plugin@0.9.8
+
 ## 1.0.1
 
 ### Patch Changes
