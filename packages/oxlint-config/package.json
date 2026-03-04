@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/oxlint-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shareable oxlint configs",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/oxlint-config#readme",
   "license": "MIT",

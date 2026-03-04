@@ -1,5 +1,11 @@
 # @rnx-kit/oxlint-config
 
+## 1.0.1
+
+### Patch Changes
+
+- ca79215: Converted everything to JavaScript because Node does not support type stripping under `node_modules`
+
 ## 1.0.0
 
 ### Major Changes
