@@ -17,40 +17,40 @@
     "src"
   ],
   "type": "module",
-  "main": "src/configs/recommended.ts",
+  "main": "src/configs/recommended.js",
   "exports": {
     ".": {
-      "default": "./src/configs/recommended.ts"
+      "default": "./src/configs/recommended.js"
     },
     "./eslint-recommended": {
-      "default": "./src/configs/eslint-recommended.ts"
+      "default": "./src/configs/eslint-recommended.js"
     },
     "./private": {
       "default": "./private.ts"
     },
     "./recommended": {
-      "default": "./src/configs/recommended.ts"
+      "default": "./src/configs/recommended.js"
     },
     "./sdl-common": {
-      "default": "./src/configs/sdl-common.ts"
+      "default": "./src/configs/sdl-common.js"
     },
     "./sdl-node": {
-      "default": "./src/configs/sdl-node.ts"
+      "default": "./src/configs/sdl-node.js"
     },
     "./sdl-react": {
-      "default": "./src/configs/sdl-react.ts"
+      "default": "./src/configs/sdl-react.js"
     },
     "./strict": {
-      "default": "./src/configs/strict.ts"
+      "default": "./src/configs/strict.js"
     },
     "./types-only": {
-      "default": "./src/configs/types-only.ts"
+      "default": "./src/configs/types-only.js"
     },
     "./typescript-recommended": {
-      "default": "./src/configs/typescript-recommended.ts"
+      "default": "./src/configs/typescript-recommended.js"
     },
     "./typescript-stylistic": {
-      "default": "./src/configs/typescript-stylistic.ts"
+      "default": "./src/configs/typescript-stylistic.js"
     },
     "./package.json": "./package.json"
   },

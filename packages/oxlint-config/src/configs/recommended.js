@@ -1,6 +1,6 @@
 import { defineConfig } from "oxlint";
-import eslint from "./eslint-recommended.ts";
-import typescript from "./typescript-recommended.ts";
+import eslint from "./eslint-recommended.js";
+import typescript from "./typescript-recommended.js";
 
 export default defineConfig({
   extends: [eslint, typescript],

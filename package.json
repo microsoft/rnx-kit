@@ -43,13 +43,13 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.22.0",
-    "@types/jest": "^29.2.1",
     "@types/node": "^24.0.0",
     "@yarnpkg/types": "^4.0.0",
     "eslint": "catalog:",
     "knip": "^5.30.2",
     "nx": "patch:nx@npm%3A20.3.3#~/.yarn/patches/nx-npm-20.3.3-84b801f64d.patch",
-    "oxfmt": "^0.35.0",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
     "suggestion-bot": "^4.0.0",
     "typescript": "catalog:"
   },

@@ -39,7 +39,7 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
-    "lint": "rnx-kit-scripts lint",
+    "lint": "eslint",
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {

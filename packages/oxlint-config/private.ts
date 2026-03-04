@@ -1,9 +1,9 @@
 import { defineConfig } from "oxlint";
-import sdlCommon from "./src/configs/sdl-common.ts";
-import sdlNode from "./src/configs/sdl-node.ts";
-import sdlReact from "./src/configs/sdl-react.ts";
-import strict from "./src/configs/strict.ts";
-import stylistic from "./src/configs/typescript-stylistic.ts";
+import sdlCommon from "./src/configs/sdl-common.js";
+import sdlNode from "./src/configs/sdl-node.js";
+import sdlReact from "./src/configs/sdl-react.js";
+import strict from "./src/configs/strict.js";
+import stylistic from "./src/configs/typescript-stylistic.js";
 
 export default defineConfig({
   extends: [sdlCommon, sdlNode, sdlReact, strict, stylistic],
@@ -12,7 +12,7 @@ export default defineConfig({
   },
   overrides: [
     {
-      files: ["**/oxlint.config.ts"],
+      files: ["**/*.config.[jt]s"],
       rules: {
         "import/no-default-export": "off",
       },
