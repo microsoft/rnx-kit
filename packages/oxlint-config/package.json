@@ -59,7 +59,8 @@
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "format": "rnx-kit-scripts format"
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
     "@microsoft/eslint-plugin-sdl": "^1.0.0",
