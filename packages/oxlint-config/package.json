@@ -40,6 +40,9 @@
     "./sdl-react": {
       "default": "./src/configs/sdl-react.js"
     },
+    "./sdl-required": {
+      "default": "./src/configs/sdl-required.js"
+    },
     "./strict": {
       "default": "./src/configs/strict.js"
     },

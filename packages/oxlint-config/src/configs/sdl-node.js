@@ -1,12 +1,12 @@
 import { defineConfig } from "oxlint";
 
-// https://github.com/microsoft/eslint-plugin-sdl/blob/main/config/node.js
+// https://github.com/microsoft/eslint-plugin-sdl/blob/v1.1.0/config/node.js
 export default defineConfig({
   plugins: ["typescript"],
   jsPlugins: [
     {
       name: "@microsoft/sdl",
-      specifier: import.meta.resolve("@microsoft/eslint-plugin-sdl"),
+      specifier: import.meta.resolve("../rules/sdl.js"),
     },
   ],
   rules: {

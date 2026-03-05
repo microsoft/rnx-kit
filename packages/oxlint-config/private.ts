@@ -1,12 +1,10 @@
 import { defineConfig } from "oxlint";
-import sdlCommon from "./src/configs/sdl-common.js";
-import sdlNode from "./src/configs/sdl-node.js";
-import sdlReact from "./src/configs/sdl-react.js";
+import sdlRequired from "./src/configs/sdl-required.js";
 import strict from "./src/configs/strict.js";
 import stylistic from "./src/configs/typescript-stylistic.js";
 
 export default defineConfig({
-  extends: [sdlCommon, sdlNode, sdlReact, strict, stylistic],
+  extends: [sdlRequired, strict, stylistic],
   rules: {
     "@rnx-kit/no-foreach-with-captured-variables": "error",
   },
