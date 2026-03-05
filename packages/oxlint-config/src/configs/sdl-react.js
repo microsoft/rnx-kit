@@ -1,6 +1,6 @@
 import { defineConfig } from "oxlint";
 
-// https://github.com/microsoft/eslint-plugin-sdl/blob/main/config/react.js
+// https://github.com/microsoft/eslint-plugin-sdl/blob/v1.1.0/config/react.js
 export default defineConfig({
   plugins: ["react"],
   rules: {

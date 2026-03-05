@@ -1,11 +1,11 @@
 import { defineConfig } from "oxlint";
 
-// https://github.com/microsoft/eslint-plugin-sdl/blob/main/config/common.js
+// https://github.com/microsoft/eslint-plugin-sdl/blob/v1.1.0/config/common.js
 export default defineConfig({
   jsPlugins: [
     {
       name: "@microsoft/sdl",
-      specifier: import.meta.resolve("@microsoft/eslint-plugin-sdl"),
+      specifier: import.meta.resolve("../rules/sdl.js"),
     },
   ],
   rules: {
