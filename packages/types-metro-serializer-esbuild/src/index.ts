@@ -35,3 +35,22 @@ export type SerializerEsbuildOptions = BaseBuildOptions & {
   sourceMapPaths?: "absolute" | "relative";
   strictMode?: boolean;
 };
+
+/**
+ * Options used to configure both the serializer and transformer options, so that the two can work in tandem.
+ */
+export type SerializerEsbuildConfig = SerializerEsbuildOptions & {
+  /**
+   * Minification strategy to use for the transformer when minification is enabled.
+   * - `serializer`:    Minify in the serializer using esbuild. This is the default and recommended option, as it provides better
+   *                    minification results and faster build times.
+   * - `metro-default`: Minify in the transformer using Metro's default minifier (Terser). This is not recommended, as it can lead to worse
+   *                    minification results and slower build times, but is provided as an option for compatibility and comparison purposes.
+   */
+  minifyStrategy?: "serializer" | "metro-default";
+
+  /**
+   * Use experimental import support when running in production mode.
+   */
+  enableExperimentalImportSupport?: boolean;
+};
