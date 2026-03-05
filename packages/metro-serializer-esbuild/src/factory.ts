@@ -25,7 +25,7 @@ export function MetroEsbuildFactory(config: SerializerEsbuildConfig = {}) {
 }
 
 function getSerializerOptions(
-  config: SerializerEsbuildConfig,
+  config: SerializerEsbuildConfig
 ): SerializerEsbuildConfig {
   const { minifyStrategy = "serializer", ...buildOptions } = config;
   // if esbuild should not minify, then disable all minification options

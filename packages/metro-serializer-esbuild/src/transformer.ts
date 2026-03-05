@@ -3,7 +3,7 @@ import type { TransformerConfigT } from "metro-config";
 
 export function configureTransformer(
   config: SerializerEsbuildConfig = {},
-  userOptions?: Partial<TransformerConfigT>,
+  userOptions?: Partial<TransformerConfigT>
 ): Partial<TransformerConfigT> {
   const { minifyStrategy = "serializer" } = config;
   const env = process.env.BABEL_ENV || process.env.NODE_ENV;
