@@ -1,5 +1,11 @@
 # @rnx-kit/oxlint-config
 
+## 1.0.3
+
+### Patch Changes
+
+- 2937498: Export the SDL required config and remove its dependency on the `eslint` package
+
 ## 1.0.2
 
 ### Patch Changes
