@@ -4,7 +4,7 @@
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 
 `rnx-kit` is a collection of battle-tested tools created by Microsoft engineers
-to optimize the React Native developer experience. It helps filling gaps in the
+to optimize the React Native developer experience. It helps fill gaps in the
 React Native ecosystem and streamlines the developer workflow.
 
 These tools are actively used every day to ship React Native apps at scale
