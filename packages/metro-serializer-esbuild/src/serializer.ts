@@ -14,6 +14,7 @@ import {
   isImporting,
   outputOf,
 } from "./module.ts";
+import { getDefine } from "./options.ts";
 import { absolutizeSourceMap } from "./sourceMap.ts";
 import { inferBuildTarget } from "./targets.ts";
 import { assertVersion } from "./version.ts";
@@ -237,11 +238,7 @@ export function MetroSerializer(
     return esbuild
       .build({
         bundle: true,
-        define: {
-          __DEV__: JSON.stringify(Boolean(options.dev)),
-          __METRO_GLOBAL_PREFIX__: "''",
-          global: "global",
-        },
+        define: getDefine(options),
         drop: buildOptions?.drop,
         /**
          * We no longer use `inject` for polyfills and `runBeforeMainModule`

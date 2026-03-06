@@ -2,6 +2,7 @@ import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import type { SerializerEsbuildConfig } from "@rnx-kit/types-metro-serializer-esbuild";
 import type { TransformerConfigT } from "metro-config";
 import { MetroSerializer } from "./serializer";
+import { inferBuildTarget } from "./targets";
 import { configureTransformer } from "./transformer";
 
 /**
@@ -10,6 +11,9 @@ import { configureTransformer } from "./transformer";
  * @returns factory functions for creating the serializer and transformer
  */
 export function MetroEsbuildFactory(config: SerializerEsbuildConfig = {}) {
+  // set the target so we don't have to infer multiple times
+  config.target ??= inferBuildTarget();
+
   // serializer factory function
   const serializerOptions = getSerializerOptions(config);
   function makeSerializer(plugins: MetroPlugin[] = []) {
