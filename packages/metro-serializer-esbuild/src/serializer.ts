@@ -235,6 +235,7 @@ export function MetroSerializer(
       plugins.push(lodashTransformer());
     }
 
+    console.log("Building to target:", target);
     return esbuild
       .build({
         bundle: true,

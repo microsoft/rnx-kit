@@ -115,7 +115,8 @@ export async function transform({
     const esbuildResult = await esbuildTransform(src, {
       sourcefile: filename,
       loader,
-      target,
+      // don't downlevel here except for what is listed in the supported settings
+      target: "esnext",
       supported: getSupported(target),
       jsx,
       jsxFactory,
