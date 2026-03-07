@@ -19,10 +19,11 @@ export type EsbuildTransformerOptions = {
   target?: string | string[];
 
   /**
-   * JSX transform mode. Defaults to `"automatic"`.
-   * - `"automatic"` uses the React 17+ JSX transform
-   * - `"transform"` uses classic createElement calls
-   * - `"preserve"` leaves JSX as-is
+   * JSX transform mode. Defaults to `"automatic"` (esbuild handles JSX).
+   * - `"automatic"` uses the React 17+ JSX transform via esbuild
+   * - `"transform"` uses classic createElement calls via esbuild
+   * - `"preserve"` leaves JSX as-is, letting the upstream babel transformer
+   *   handle it via `@react-native/babel-preset`
    */
   jsx?: "transform" | "preserve" | "automatic";
 

@@ -1,4 +1,4 @@
-import type { EsbuildTransformerOptions } from "@rnx-kit/types-transformer-esbuild";
+import type { EsbuildTransformerOptions } from "@rnx-kit/types-metro-serializer-esbuild";
 import type { Loader, TransformOptions } from "esbuild";
 import { transform as esbuildTransform } from "esbuild";
 import { createRequire } from "node:module";
@@ -84,7 +84,7 @@ function getLoader(filename: string): Loader {
  * @see https://github.com/evanw/esbuild/releases/tag/v0.14.49
  */
 function hermesSupported(
-  target: string | string[]
+  target: string | string[],
 ): TransformOptions["supported"] {
   const targets = Array.isArray(target) ? target : [target];
   if (!targets.some((t) => t.startsWith("hermes"))) {
@@ -102,7 +102,7 @@ function hermesSupported(
 }
 
 function parseEsbuildTransformerOptions(
-  customTransformOptions?: Record<string, unknown>
+  customTransformOptions?: Record<string, unknown>,
 ): EsbuildTransformerOptions {
   const raw = customTransformOptions?.["esbuildTransformer"];
   if (typeof raw === "object" && raw !== null) {
@@ -127,7 +127,7 @@ export async function transform(args: BabelTransformerArgs) {
   const { filename, src, options } = args;
 
   const userOptions = parseEsbuildTransformerOptions(
-    options.customTransformOptions
+    options.customTransformOptions,
   );
 
   const loader = getLoader(filename);

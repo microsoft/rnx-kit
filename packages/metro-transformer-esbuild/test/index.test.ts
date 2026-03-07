@@ -1,7 +1,7 @@
 import { deepEqual, equal, match, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { makeEsbuildTransformerConfig } from "../src/index.ts";
 import { esbuildMinifier } from "../src/esbuildMinifier.ts";
+import { makeEsbuildTransformerConfig } from "../src/index.ts";
 
 describe("makeEsbuildTransformerConfig", () => {
   it("returns empty config when no options are provided", () => {
@@ -127,13 +127,13 @@ describe("esbuildTransformer", () => {
     equal(typeof transformer.getCacheKey, "function");
   });
 
-  it("getCacheKey returns a string containing esbuild-transformer", async () => {
+  it("getCacheKey includes esbuild version", async () => {
     const transformer = await import("../src/esbuildTransformer.ts");
     const key = transformer.getCacheKey();
-    match(key, /esbuild-transformer/);
+    match(key, /esbuild-transformer:/);
   });
 
-  it("transforms TypeScript to a Babel-compatible AST", async () => {
+  it("transforms TypeScript and delegates to upstream babel transformer", async () => {
     const transformer = await import("../src/esbuildTransformer.ts");
     const result = await transformer.transform({
       filename: "test.tsx",
@@ -165,6 +165,26 @@ describe("esbuildTransformer", () => {
         enableBabelRuntime: false,
         minify: false,
         platform: "android",
+        projectRoot: "/tmp",
+        publicPath: "/",
+        globalPrefix: "",
+      },
+      plugins: [],
+    });
+    ok(result.ast);
+    equal(result.ast.type, "File");
+  });
+
+  it("strips TypeScript types from source", async () => {
+    const transformer = await import("../src/esbuildTransformer.ts");
+    const result = await transformer.transform({
+      filename: "test.ts",
+      src: "interface Foo { bar: string }\nconst x: Foo = { bar: 'hello' };\nexport { x };",
+      options: {
+        dev: false,
+        enableBabelRuntime: false,
+        minify: false,
+        platform: "ios",
         projectRoot: "/tmp",
         publicPath: "/",
         globalPrefix: "",

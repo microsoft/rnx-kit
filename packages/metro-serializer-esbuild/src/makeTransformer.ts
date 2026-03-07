@@ -1,4 +1,4 @@
-import type { EsbuildTransformerConfig } from "@rnx-kit/types-transformer-esbuild";
+import type { EsbuildTransformerConfig } from "@rnx-kit/types-metro-serializer-esbuild";
 import type { TransformerConfigT } from "metro-config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -55,7 +55,8 @@ function resolveSibling(name: string): string {
  * ```
  */
 export function makeEsbuildTransformerConfig(
-  options: EsbuildTransformerConfig = {}
+  options: EsbuildTransformerConfig = {},
+  baseConfig?: Partial<TransformerConfigT>,
 ): Partial<TransformerConfigT> {
   const result: Record<string, unknown> = {};
 

@@ -143,6 +143,11 @@ function loadPreset(projectRoot = process.cwd()) {
  * @returns {MetroPresetOptions | undefined}
  */
 function overridesFor(transformProfile, env) {
+  // Use the `esbuild-transformer` profile if the esbuild transformer is active.
+  if (!transformProfile && process.env["RNX_METRO_TRANSFORMER_ESBUILD"]) {
+    transformProfile = "esbuild-transformer";
+  }
+
   // Use the `esbuild` transform profile if the serializer is being used.
   if (
     !transformProfile &&
@@ -153,6 +158,18 @@ function overridesFor(transformProfile, env) {
   }
 
   switch (transformProfile) {
+    case "esbuild-transformer":
+      // When esbuild handles TypeScript stripping and JSX as a first pass
+      // before delegating to the babel pipeline. Disables import/export
+      // transform (esbuild preserves ESM for tree-shaking), uses hermes-stable
+      // profile (esbuild already downleveled syntax), and skips babel's JSX
+      // transform (esbuild already handled it).
+      return {
+        disableImportExportTransform: true,
+        unstable_transformProfile: "hermes-stable",
+        useTransformReactJSXExperimental: true,
+      };
+
     case "esbuild":
       // For future reference: TypeScript plugins cannot be removed because
       // Babel cannot parse TypeScript syntax without them.
