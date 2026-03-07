@@ -7,6 +7,19 @@ import { createRequire } from "node:module";
 import * as path from "node:path";
 import { after, before, describe, it } from "node:test";
 import { URL, fileURLToPath } from "node:url";
+import {
+  DIRECT_PATH,
+  DIRECT_RESULT,
+  EXPORT_ALL_PATH,
+  EXPORT_ALL_RESULT,
+  NESTED_EXPORT_ALL_PATH,
+  NESTED_EXPORT_ALL_RESULT,
+} from "./const.ts";
+
+const transformConfig = path.join(
+  fileURLToPath(new URL("..", import.meta.url)),
+  "metro.transform.config.js"
+);
 
 async function buildBundle(
   args: BundleArgs,
@@ -37,7 +50,8 @@ describe("metro-serializer-esbuild", () => {
   async function bundle(
     entryFile: string,
     dev = false,
-    sourcemapOutput: string | undefined = undefined
+    sourcemapOutput: string | undefined = undefined,
+    transform = false
   ): Promise<string[]> {
     let result = "";
     await buildBundle(
@@ -46,6 +60,7 @@ describe("metro-serializer-esbuild", () => {
         bundleEncoding: "utf8",
         bundleOutput: ".test-output.jsbundle",
         dev,
+        config: transform ? transformConfig : undefined,
         platform: "ios",
         resetCache: true,
         resetGlobalCache: false,
@@ -78,185 +93,23 @@ describe("metro-serializer-esbuild", () => {
   }
 
   it("removes unused code", async () => {
-    const result = await bundle("test/__fixtures__/direct.ts");
-    deepEqual(result, [
-      "(() => {",
-      "  var __defProp = Object.defineProperty;",
-      "  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;",
-      "  var __getOwnPropNames = Object.getOwnPropertyNames;",
-      "  var __hasOwnProp = Object.prototype.hasOwnProperty;",
-      "  var __esm = (fn, res) => function __init() {",
-      "    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;",
-      "  };",
-      "  var __copyProps = (to, from, except, desc) => {",
-      '    if (from && typeof from === "object" || typeof from === "function")',
-      "      for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {",
-      "        key = keys[i];",
-      "        if (!__hasOwnProp.call(to, key) && key !== except)",
-      "          __defProp(to, key, { get: ((k) => from[k]).bind(null, key), enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });",
-      "      }",
-      "    return to;",
-      "  };",
-      '  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);',
-      "",
-      "  // test/__fixtures__/base.ts",
-      "  function app() {",
-      '    "this should _not_ be removed";',
-      "  }",
-      "  var init_base = __esm({",
-      '    "test/__fixtures__/base.ts"() {',
-      '      "use strict";',
-      "    }",
-      "  });",
-      "",
-      "  // test/__fixtures__/direct.ts",
-      "  var direct_exports = {};",
-      "  var init_direct = __esm({",
-      '    "test/__fixtures__/direct.ts"() {',
-      '      "use strict";',
-      "      init_base();",
-      "      app();",
-      "    }",
-      "  });",
-      "",
-      "  // virtual:metro:__rnx_prelude__",
-      '  global = typeof globalThis !== "undefined" ? globalThis : typeof global !== "undefined" ? global : typeof window !== "undefined" ? window : new Function("return this;")();',
-      "  init_direct();",
-      "})();",
-      "",
-    ]);
+    const result = await bundle(DIRECT_PATH);
+    deepEqual(result, DIRECT_RESULT);
+  });
+
+  it("removes unused code with transform", async () => {
+    const result = await bundle(DIRECT_PATH, false, undefined, true);
+    deepEqual(result, DIRECT_RESULT);
   });
 
   it("removes unused code (export *)", async () => {
-    const result = await bundle("test/__fixtures__/exportAll.ts");
-    deepEqual(result, [
-      "(() => {",
-      "  var __defProp = Object.defineProperty;",
-      "  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;",
-      "  var __getOwnPropNames = Object.getOwnPropertyNames;",
-      "  var __hasOwnProp = Object.prototype.hasOwnProperty;",
-      "  var __esm = (fn, res) => function __init() {",
-      "    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;",
-      "  };",
-      "  var __copyProps = (to, from, except, desc) => {",
-      '    if (from && typeof from === "object" || typeof from === "function")',
-      "      for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {",
-      "        key = keys[i];",
-      "        if (!__hasOwnProp.call(to, key) && key !== except)",
-      "          __defProp(to, key, { get: ((k) => from[k]).bind(null, key), enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });",
-      "      }",
-      "    return to;",
-      "  };",
-      '  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);',
-      "",
-      "  // test/__fixtures__/base.ts",
-      "  function app() {",
-      '    "this should _not_ be removed";',
-      "  }",
-      "  var init_base = __esm({",
-      '    "test/__fixtures__/base.ts"() {',
-      '      "use strict";',
-      "    }",
-      "  });",
-      "",
-      "  // test/__fixtures__/exportAllPublic.ts",
-      "  var init_exportAllPublic = __esm({",
-      '    "test/__fixtures__/exportAllPublic.ts"() {',
-      '      "use strict";',
-      "      init_base();",
-      "    }",
-      "  });",
-      "",
-      "  // test/__fixtures__/exportAll.ts",
-      "  var exportAll_exports = {};",
-      "  var init_exportAll = __esm({",
-      '    "test/__fixtures__/exportAll.ts"() {',
-      '      "use strict";',
-      "      init_exportAllPublic();",
-      "      app();",
-      "    }",
-      "  });",
-      "",
-      "  // virtual:metro:__rnx_prelude__",
-      '  global = typeof globalThis !== "undefined" ? globalThis : typeof global !== "undefined" ? global : typeof window !== "undefined" ? window : new Function("return this;")();',
-      "  init_exportAll();",
-      "})();",
-      "",
-    ]);
+    const result = await bundle(EXPORT_ALL_PATH);
+    deepEqual(result, EXPORT_ALL_RESULT);
   });
 
   it("removes unused code (nested export *)", async () => {
-    const result = await bundle("test/__fixtures__/nestedExportAll.ts");
-    deepEqual(result, [
-      "(() => {",
-      "  var __defProp = Object.defineProperty;",
-      "  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;",
-      "  var __getOwnPropNames = Object.getOwnPropertyNames;",
-      "  var __hasOwnProp = Object.prototype.hasOwnProperty;",
-      "  var __esm = (fn, res) => function __init() {",
-      "    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;",
-      "  };",
-      "  var __copyProps = (to, from, except, desc) => {",
-      '    if (from && typeof from === "object" || typeof from === "function")',
-      "      for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {",
-      "        key = keys[i];",
-      "        if (!__hasOwnProp.call(to, key) && key !== except)",
-      "          __defProp(to, key, { get: ((k) => from[k]).bind(null, key), enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });",
-      "      }",
-      "    return to;",
-      "  };",
-      '  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);',
-      "",
-      "  // test/__fixtures__/base.ts",
-      "  function app() {",
-      '    "this should _not_ be removed";',
-      "  }",
-      "  var init_base = __esm({",
-      '    "test/__fixtures__/base.ts"() {',
-      '      "use strict";',
-      "    }",
-      "  });",
-      "",
-      "  // test/__fixtures__/exportAllPublic.ts",
-      "  var init_exportAllPublic = __esm({",
-      '    "test/__fixtures__/exportAllPublic.ts"() {',
-      '      "use strict";',
-      "      init_base();",
-      "    }",
-      "  });",
-      "",
-      "  // test/__fixtures__/nestedExportAllInternal.ts",
-      "  var init_nestedExportAllInternal = __esm({",
-      '    "test/__fixtures__/nestedExportAllInternal.ts"() {',
-      '      "use strict";',
-      "      init_exportAllPublic();",
-      "    }",
-      "  });",
-      "",
-      "  // test/__fixtures__/nestedExportAllPublic.ts",
-      "  var init_nestedExportAllPublic = __esm({",
-      '    "test/__fixtures__/nestedExportAllPublic.ts"() {',
-      '      "use strict";',
-      "      init_nestedExportAllInternal();",
-      "    }",
-      "  });",
-      "",
-      "  // test/__fixtures__/nestedExportAll.ts",
-      "  var nestedExportAll_exports = {};",
-      "  var init_nestedExportAll = __esm({",
-      '    "test/__fixtures__/nestedExportAll.ts"() {',
-      '      "use strict";',
-      "      init_nestedExportAllPublic();",
-      "      app();",
-      "    }",
-      "  });",
-      "",
-      "  // virtual:metro:__rnx_prelude__",
-      '  global = typeof globalThis !== "undefined" ? globalThis : typeof global !== "undefined" ? global : typeof window !== "undefined" ? window : new Function("return this;")();',
-      "  init_nestedExportAll();",
-      "})();",
-      "",
-    ]);
+    const result = await bundle(NESTED_EXPORT_ALL_PATH);
+    deepEqual(result, NESTED_EXPORT_ALL_RESULT);
   });
 
   it("removes unused code (import *)", async () => {

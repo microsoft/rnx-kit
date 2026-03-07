@@ -41,3 +41,19 @@ export function getInlineSourceMappingURL(modules: readonly Module[]): string {
 export function generateSourceMappingURL(modules: readonly Module[]): string {
   return `//# sourceMappingURL=${getInlineSourceMappingURL(modules)}`;
 }
+
+export function patchSourceMapFilename<
+  T extends { sources?: string[] } | string,
+>(sourceMap: T, virtualName: string, correctName: string): T {
+  const asObj =
+    typeof sourceMap === "string" ? JSON.parse(sourceMap) : sourceMap;
+  const { sources } = asObj ?? {};
+  if (sources) {
+    for (let i = 0; i < sources.length; i++) {
+      if (sources[i] === virtualName) {
+        sources[i] = correctName;
+      }
+    }
+  }
+  return typeof sourceMap === "string" ? (JSON.stringify(asObj) as T) : asObj;
+}

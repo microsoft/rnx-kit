@@ -77,6 +77,26 @@ changes to `metro.config.js`:
 
 ```diff
  const { makeMetroConfig } = require("@rnx-kit/metro-config");
++const { MetroEsbuildFactory } = require("@rnx-kit/metro-serializer-esbuild");
++const { makeSerializer, makeTransformer } = MetroEsbuildFactory();
+
+ module.exports = makeMetroConfig({
+  serializer: {
++   customSerializer: makeSerializer()
+  },
++ transformer: makeTransformer({
+    // standard transformer options if needed, can be omitted
+    babelTransformerPath: require.resolve('react-native-svg-transformer')
++ })
+ });
+```
+
+> This will automatically configure the transformer options for development and production.
+
+Alternatively the legacy pattern can still be used as follows:
+
+```diff
+ const { makeMetroConfig } = require("@rnx-kit/metro-config");
 +const {
 +  MetroSerializer,
 +  esbuildTransformerConfig,
