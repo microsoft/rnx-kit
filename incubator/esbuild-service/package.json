@@ -1,0 +1,53 @@
+{
+  "name": "@rnx-kit/esbuild-service",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - esbuild-based bundler for React Native (Metro-independent)",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/esbuild-service#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/esbuild-service"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/tools-node": "^3.0.4",
+    "@rnx-kit/tools-react-native": "^2.3.3",
+    "@rnx-kit/types-bundle-config": "^1.0.0",
+    "esbuild": "^0.27.1"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0",
+    "react-native": "^0.83.0"
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "experimental": true
+}
