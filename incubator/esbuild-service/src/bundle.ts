@@ -1,6 +1,7 @@
 import * as esbuild from "esbuild";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { reactNativeAssets } from "./plugins/assets.ts";
 import { reactNativePolyfills } from "./plugins/polyfills.ts";
 import { reactNativeResolver } from "./plugins/resolver.ts";
 import { inferBuildTarget } from "./targets.ts";
@@ -9,7 +10,7 @@ import type { BundleServiceOptions } from "./types.ts";
 /**
  * Bundles a React Native application using esbuild, without requiring Metro.
  *
- * ## Metro → esbuild mapping
+ * ## Metro to esbuild mapping
  *
  * | Metro component          | esbuild replacement                              |
  * |--------------------------|--------------------------------------------------|
@@ -20,14 +21,15 @@ import type { BundleServiceOptions } from "./types.ts";
  * | Source maps              | esbuild native source-map generation             |
  * | Resolver                 | `reactNativeResolver` plugin (reimplemented)     |
  * | Pre-modules / polyfills  | `reactNativePolyfills` plugin (reimplemented)    |
+ * | Asset handling           | `reactNativeAssets` plugin (uses Metro's code)   |
  *
  * ## What cannot be replaced by esbuild
  *
- * - **Dev server with HMR** – esbuild has a basic `serve` mode but does not
+ * - **Dev server with HMR** - esbuild has a basic `serve` mode but does not
  *   implement React Native's fast-refresh / HMR protocol.
- * - **RAM bundles** – Metro's indexed RAM bundle format has no esbuild
+ * - **RAM bundles** - Metro's indexed RAM bundle format has no esbuild
  *   equivalent.
- * - **Lazy module loading** – Metro's built-in lazy-loading mechanism requires
+ * - **Lazy module loading** - Metro's built-in lazy-loading mechanism requires
  *   a reimplementation of the module loader runtime.
  *
  * @param options Bundle options.
@@ -41,6 +43,9 @@ export async function bundle(options: BundleServiceOptions): Promise<void> {
     minify = !dev,
     bundleOutput,
     sourcemapOutput,
+    assetsDest,
+    assetCatalogDest,
+    assetDataPlugins,
     target,
     plugins: extraPlugins = [],
     projectRoot = process.cwd(),
@@ -59,6 +64,13 @@ export async function bundle(options: BundleServiceOptions): Promise<void> {
   fs.mkdirSync(path.dirname(resolvedOutput), { recursive: true });
 
   const buildTarget = target ?? inferBuildTarget(projectRoot);
+
+  // Create the assets plugin so we can collect assets during the build.
+  const assetsPlugin = reactNativeAssets({
+    platform,
+    projectRoot,
+    assetDataPlugins,
+  });
 
   await esbuild.build({
     bundle: true,
@@ -82,6 +94,7 @@ export async function bundle(options: BundleServiceOptions): Promise<void> {
         dev,
       }),
       reactNativeResolver(platform),
+      assetsPlugin,
       ...extraPlugins,
     ],
     pure,
@@ -126,5 +139,18 @@ export async function bundle(options: BundleServiceOptions): Promise<void> {
     ) {
       fs.renameSync(defaultMapPath, resolvedSourcemap);
     }
+  }
+
+  // Copy assets to the destination directory, using the same logic as Metro.
+  if (assetsDest) {
+    const metroService = await import("@rnx-kit/metro-service/assets");
+    const collectedAssets = assetsPlugin.getCollectedAssets();
+    await metroService.saveAssets(
+      collectedAssets,
+      platform,
+      assetsDest,
+      assetCatalogDest,
+      metroService.getSaveAssetsPlugin(platform, projectRoot)
+    );
   }
 }

@@ -35,6 +35,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
+    "@rnx-kit/metro-service": "*",
     "@rnx-kit/tools-node": "^3.0.4",
     "@rnx-kit/tools-react-native": "^2.3.3",
     "@rnx-kit/types-bundle-config": "^1.0.0",
@@ -44,10 +45,19 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
+    "metro": "^0.83.3",
     "react-native": "^0.83.0"
   },
   "engines": {
     "node": ">=18.12"
   },
-  "experimental": true
+  "experimental": true,
+  "peerDependencies": {
+    "metro": ">=0.72.0"
+  },
+  "peerDependenciesMeta": {
+    "metro": {
+      "optional": true
+    }
+  }
 }

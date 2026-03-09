@@ -44,7 +44,7 @@ explains how much code must be reimplemented.
 | **Serializer** | ✅ Yes — natively | esbuild produces the final bundle; this is the role of `metro-serializer-esbuild`. |
 | **Resolver** (platform extensions, `react-native` field) | ⚠️ Plugin required | The `reactNativeResolver` plugin in this package reimplements Metro's platform-extension resolution (`.ios.js`, `.android.js`, `.native.js`) and the `react-native` → `module` → `browser` → `main` field priority from `package.json`. ~250 lines of code. |
 | **Pre-modules / polyfills** | ⚠️ Plugin required | The `reactNativePolyfills` plugin reimplements Metro's `preModules` mechanism by injecting a virtual entry-point that sets up `global`, `__DEV__`, and any user-provided polyfills. ~110 lines of code. |
-| **Asset handling** | ⚠️ Plugin required | Metro's asset system resolves image/font imports to an asset registry lookup. An esbuild plugin can replicate this, but it is not yet included in this package. |
+| **Asset handling** | ✅ Plugin included | The `reactNativeAssets` plugin transforms image/font imports into `registerAsset()` calls, reusing Metro's own `getAssetData()` implementation to discover scale variants, compute hashes, and read image dimensions. Asset files are copied to the output directory using `@rnx-kit/metro-service`. ~250 lines of code. |
 | **Dev server + HMR** | ❌ Cannot replace | Metro's development server implements React Native's fast-refresh / HMR protocol. esbuild has a basic HTTP server mode but no HMR support. |
 | **RAM bundles** | ❌ Cannot replace | Metro's indexed RAM bundle format has no esbuild equivalent. |
 | **Lazy module loading** | ❌ Cannot replace | Metro's async require / lazy-loading mechanism requires a custom module loader runtime that esbuild does not provide. |
@@ -78,6 +78,8 @@ await bundle({
   dev: false,
   bundleOutput: "dist/main.ios.jsbundle",
   sourcemapOutput: "dist/main.ios.jsbundle.map",
+  // Optional: copy assets to a destination directory
+  assetsDest: "dist/assets",
 });
 ```
 
@@ -97,6 +99,9 @@ Bundles a React Native application using esbuild, without Metro.
 | `minify` | `boolean` | `!dev` | Minify the output. |
 | `bundleOutput` | `string` | required | Path to write the bundle to. |
 | `sourcemapOutput` | `string` | — | Path to write the source map to. |
+| `assetsDest` | `string` | — | Directory to copy asset files to after bundling. |
+| `assetCatalogDest` | `string` | — | iOS asset catalog directory (`RNAssets.xcassets`). |
+| `assetDataPlugins` | `string[]` | `[]` | Metro asset data plugins to apply. |
 | `target` | `string \| string[]` | Auto-detected | esbuild target (e.g. `"hermes0.12"`). |
 | `plugins` | `Plugin[]` | `[]` | Extra esbuild plugins. |
 | `projectRoot` | `string` | `process.cwd()` | Project root directory. |
@@ -146,6 +151,39 @@ await esbuild.build({
 });
 ```
 
+### `reactNativeAssets(options)`
+
+An esbuild plugin that handles React Native asset imports (images, fonts, media
+files). It calls Metro's own `getAssetData()` to discover scale variants and
+collect metadata, then generates the same `registerAsset()` call that Metro's
+asset transformer produces.
+
+The plugin attaches a `getCollectedAssets()` method to retrieve all asset data
+gathered during the build, which can be passed to `@rnx-kit/metro-service`'s
+`saveAssets()` to copy files to disk.
+
+```typescript
+import { reactNativeAssets } from "@rnx-kit/esbuild-service";
+import * as esbuild from "esbuild";
+
+const assetsPlugin = reactNativeAssets({
+  platform: "ios",
+  projectRoot: process.cwd(),
+  // Optional: override the asset registry module path
+  // assetRegistryPath: "@react-native/assets-registry/registry",
+});
+
+await esbuild.build({
+  entryPoints: ["index.ts"],
+  bundle: true,
+  plugins: [assetsPlugin],
+  outfile: "dist/bundle.js",
+});
+
+// Retrieve collected AssetData[] to copy files to disk
+const assets = assetsPlugin.getCollectedAssets();
+```
+
 ### `inferBuildTarget(projectRoot?)`
 
 Infers the appropriate esbuild target string for the installed version of
@@ -162,8 +200,6 @@ const target = inferBuildTarget(); // e.g. "hermes0.12"
 - **Dev server / HMR** — use Metro for development; this package targets
   production bundling only.
 - **RAM bundles** — not supported. Use Metro if you need indexed RAM bundles.
-- **Asset handling** — image and font imports are not yet handled. Contributions
-  welcome.
 - **Flow types** — esbuild cannot strip Flow types natively. You'll need a Flow-
   stripping Babel transform or a third-party esbuild plugin if your code uses
   Flow.

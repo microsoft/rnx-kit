@@ -38,6 +38,24 @@ export type BundleServiceOptions = {
   sourcemapOutput?: string;
 
   /**
+   * Destination directory for asset files. When set, all assets referenced
+   * by the bundle are copied to this directory after bundling.
+   */
+  assetsDest?: string;
+
+  /**
+   * Destination directory for iOS asset catalogs (`RNAssets.xcassets`).
+   * Only relevant for iOS builds.
+   */
+  assetCatalogDest?: string;
+
+  /**
+   * Additional Metro asset data plugins to apply to every asset.
+   * Each entry is a module path whose default export transforms `AssetData`.
+   */
+  assetDataPlugins?: string[];
+
+  /**
    * The esbuild target environment. Defaults to the appropriate Hermes target
    * inferred from the installed version of `react-native`.
    */

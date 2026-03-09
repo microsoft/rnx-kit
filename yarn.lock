@@ -5303,6 +5303,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/esbuild-service@workspace:incubator/esbuild-service"
   dependencies:
+    "@rnx-kit/metro-service": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.4"
     "@rnx-kit/tools-react-native": "npm:^2.3.3"
@@ -5310,7 +5311,13 @@ __metadata:
     "@rnx-kit/types-bundle-config": "npm:^1.0.0"
     "@types/node": "npm:^24.0.0"
     esbuild: "npm:^0.27.1"
+    metro: "npm:^0.83.3"
     react-native: "npm:^0.83.0"
+  peerDependencies:
+    metro: ">=0.72.0"
+  peerDependenciesMeta:
+    metro:
+      optional: true
   languageName: unknown
   linkType: soft
 
