@@ -1,0 +1,36 @@
+{
+  "name": "@rnx-kit/metro-transformer-esbuild",
+  "version": "0.0.1",
+  "private": true,
+  "description": "metro-transformer-esbuild",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-transformer-esbuild#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-transformer-esbuild"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*"
+  },
+  "engines": {
+    "node": ">=18.12"
+  }
+}

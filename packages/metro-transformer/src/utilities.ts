@@ -2,7 +2,7 @@ import path from "node:path";
 
 export function nullthrows<T>(
   value: T | null | undefined,
-  message?: string,
+  message?: string
 ): T {
   if (value == null) {
     throw new Error(message ?? "Got unexpected null or undefined");
@@ -37,7 +37,7 @@ export function simpleObjectMerge(
  */
 export function getModuleRedirectPaths(
   baseModule: string,
-  additionalTransformers?: Record<string, string>,
+  additionalTransformers?: Record<string, string>
 ): string[] {
   const paths = [baseModule];
   const resolvedBase = require.resolve(baseModule);
