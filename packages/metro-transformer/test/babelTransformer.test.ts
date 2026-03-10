@@ -1,7 +1,5 @@
-import type {
-  BabelTransformerArgs,
-  CustomTransformerOptions,
-} from "@rnx-kit/types-metro-config";
+import type { CustomTransformerOptions } from "@rnx-kit/types-metro-config";
+import type { BabelTransformerArgs } from "../src/babelTransformer.ts";
 import { equal, match } from "node:assert/strict";
 import Module from "node:module";
 import path from "node:path";

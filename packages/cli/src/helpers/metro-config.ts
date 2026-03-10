@@ -4,6 +4,7 @@ import { DuplicateDependencies } from "@rnx-kit/metro-plugin-duplicates-checker"
 import { TypeScriptPlugin } from "@rnx-kit/metro-plugin-typescript";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { MetroSerializer } from "@rnx-kit/metro-serializer";
+import { MetroTransformer } from "@rnx-kit/metro-transformer";
 import {
   esbuildTransformerConfig,
   MetroSerializer as MetroSerializerEsbuild,

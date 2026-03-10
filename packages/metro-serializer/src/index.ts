@@ -2,41 +2,26 @@ import {
   getMetroVersion as getMetroVersionInternal,
   requireModuleFromMetro,
 } from "@rnx-kit/tools-react-native/metro";
+import type { Module, ReadOnlyGraph, SerializerOptions } from "metro";
 import type {
-  MixedOutput,
-  Module,
-  ReadOnlyGraph,
-  SerializerOptions,
-} from "metro";
-
-export type MetroPlugin<T = MixedOutput> = (
-  entryPoint: string,
-  preModules: readonly Module<T>[],
-  graph: ReadOnlyGraph<T>,
-  options: SerializerOptions<T>
-) => void;
-
-export type Bundle = {
-  modules: readonly [number, string][];
-  post: string;
-  pre: string;
-};
-
-export type CustomSerializerResult = string | { code: string; map: string };
-
-export type CustomSerializer = (
-  entryPoint: string,
-  preModules: readonly Module[],
-  graph: ReadOnlyGraph,
-  options: SerializerOptions
-) => Promise<CustomSerializerResult> | CustomSerializerResult;
+  Bundle,
+  CustomSerializer,
+  CustomSerializerResult,
+  SerializerPlugin,
+} from "@rnx-kit/types-metro-config";
+export type {
+  Bundle,
+  CustomSerializer,
+  CustomSerializerResult,
+  SerializerPlugin as MetroPlugin,
+} from "@rnx-kit/types-metro-config";
 
 export type TestMocks = {
   baseJSBundle?: (
     entryPoint: string,
     preModules: readonly Module[],
     graph: ReadOnlyGraph,
-    options: SerializerOptions
+    options: SerializerOptions,
   ) => Bundle;
   bundleToString?: (bundle: Bundle) => CustomSerializerResult;
 };
@@ -61,8 +46,8 @@ function getMetroVersion(): number {
  * @see https://github.com/facebook/metro/blob/af23a1b27bcaaff2e43cb795744b003e145e78dd/packages/metro/src/Server.js#L228
  */
 export function MetroSerializer(
-  plugins: MetroPlugin[],
-  __mocks: TestMocks = {}
+  plugins: SerializerPlugin[],
+  __mocks: TestMocks = {},
 ): CustomSerializer {
   const baseJSBundle =
     __mocks.baseJSBundle ??
@@ -77,7 +62,7 @@ export function MetroSerializer(
     entryPoint: string,
     preModules: readonly Module[],
     graph: ReadOnlyGraph,
-    options: SerializerOptions
+    options: SerializerOptions,
   ): string | Promise<string> => {
     for (const plugin of plugins) {
       plugin(entryPoint, preModules, graph, options);

@@ -13,25 +13,9 @@ import type {
   MetroBabelFileMetadata,
 } from "metro-babel-transformer";
 
-const {
-  getCacheKey: getPresetCacheKey,
-} = require("@react-native/babel-preset");
 const makeHMRConfig = require("@react-native/babel-preset/src/configs/hmr");
-const crypto = require("crypto");
 const fs = require("fs");
-const nullthrows = require("nullthrows");
 const path = require("path");
-
-const cacheKeyParts = [getPresetCacheKey(), fs.readFileSync(__filename)];
-
-// TS detection conditions copied from @react-native/babel-preset
-function isTypeScriptSource(fileName /*: string */) {
-  return !!fileName && fileName.endsWith(".ts");
-}
-
-function isTSXSource(fileName /*: string */) {
-  return !!fileName && fileName.endsWith(".tsx");
-}
 
 /**
  * Return a memoized function that checks for the existence of a
@@ -39,7 +23,7 @@ function isTSXSource(fileName /*: string */) {
  * default RN babelrc file and uses that.
  */
 const getBabelRC = (function () {
-  let babelRC /*: ?BabelCoreOptions */ = null;
+  let babelRC: BabelCoreOptions | null = null;
 
   /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
    * LTI update could not be added via codemod */
@@ -117,12 +101,12 @@ const getBabelRC = (function () {
  * Given a filename and options, build a Babel
  * config object with the appropriate plugins.
  */
-function buildBabelConfig(
-  filename /*: string */,
+export function buildBabelConfig(
+  filename: string /*: string */,
   /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
    * LTI update could not be added via codemod */
   options,
-  plugins /*:: ?: Plugins*/ = [],
+  plugins: Plugins = [],
 ) /*: BabelCoreOptions*/ {
   const babelRC = getBabelRC(options);
 

@@ -1,8 +1,5 @@
 import type { BabelFileResult } from "@babel/core";
-import type {
-  BabelTransformerArgs,
-  CustomTransformerOptions,
-} from "@rnx-kit/types-metro-config";
+import type { CustomTransformerOptions } from "@rnx-kit/types-metro-config";
 import micromatch from "micromatch";
 import crypto from "node:crypto";
 import fs from "node:fs";
@@ -13,6 +10,29 @@ type TransformerModule = {
     args: BabelTransformerArgs,
   ) => BabelFileResult | Promise<BabelFileResult>;
   getCacheKey?: () => string;
+};
+
+import type { BabelTransformerArgs as BaseTransformerArgs } from "metro-babel-transformer";
+
+/**
+ * Types for babel transformers that can be set as the babelTransformerPath in the Metro transformer config.
+ */
+
+/**
+ * Options passed in to the transform function of a babel transformer.
+ */
+export type WithCustomOptions<T extends object = object> = Omit<
+  T,
+  "customTransformOptions"
+> & {
+  customTransformOptions: CustomTransformerOptions;
+};
+
+/**
+ * Arguments passed in to the transform function of a babel transformer.
+ */
+export type BabelTransformerArgs = Omit<BaseTransformerArgs, "options"> & {
+  options: WithCustomOptions<BaseTransformerArgs["options"]>;
 };
 
 // start with a hash of this file's contents as the cache key

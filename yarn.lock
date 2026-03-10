@@ -5384,6 +5384,7 @@ __metadata:
     "@rnx-kit/metro-serializer": "npm:^2.0.0"
     "@rnx-kit/metro-serializer-esbuild": "npm:^0.3.1"
     "@rnx-kit/metro-service": "npm:^4.1.3"
+    "@rnx-kit/metro-transformer": "npm:^0.0.1"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/third-party-notices": "npm:^2.0.0"
     "@rnx-kit/tools-android": "npm:^0.2.2"
@@ -5395,6 +5396,7 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^1.0.0"
     "@rnx-kit/types-kit-config": "npm:^1.0.0"
+    "@rnx-kit/types-metro-config": "npm:^0.0.1"
     "@rnx-kit/types-node": "npm:^1.0.0"
     "@types/connect": "npm:^3.4.36"
     "@types/node": "npm:^24.0.0"
@@ -5719,6 +5721,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-react-native": "npm:^2.3.0"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-metro-config": "npm:^0.0.1"
     "@types/node": "npm:^24.0.0"
     metro: "npm:^0.83.3"
   languageName: unknown
@@ -5756,7 +5759,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-transformer@workspace:packages/metro-transformer":
+"@rnx-kit/metro-transformer@npm:^0.0.1, @rnx-kit/metro-transformer@workspace:packages/metro-transformer":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-transformer@workspace:packages/metro-transformer"
   dependencies:
@@ -6293,12 +6296,16 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/babel__core": "npm:^7.20.0"
+    metro: "npm:^0.83.3"
     metro-babel-transformer: "npm:0.83.3"
     metro-config: "npm:^0.83.3"
   peerDependencies:
+    metro: ">=0.83.0"
     metro-babel-transformer: ">=0.83.0"
     metro-config: ">=0.83.0"
   peerDependenciesMeta:
+    metro:
+      optional: true
     metro-babel-transformer:
       optional: true
     metro-config:
