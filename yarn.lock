@@ -5927,6 +5927,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/tools-knip@workspace:packages/tools-knip":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/tools-knip@workspace:packages/tools-knip"
+  dependencies:
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    knip: "npm:^5.30.2"
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/tools-language@npm:*, @rnx-kit/tools-language@npm:^3.0.1, @rnx-kit/tools-language@workspace:packages/tools-language":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-language@workspace:packages/tools-language"
