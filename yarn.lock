@@ -16224,6 +16224,7 @@ __metadata:
   dependencies:
     "@changesets/cli": "npm:^2.22.0"
     "@types/node": "npm:^24.0.0"
+    "@typescript/native-preview": "catalog:"
     "@yarnpkg/types": "npm:^4.0.0"
     eslint: "catalog:"
     knip: "npm:^5.30.2"

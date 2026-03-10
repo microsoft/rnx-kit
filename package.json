@@ -44,6 +44,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.22.0",
     "@types/node": "^24.0.0",
+    "@typescript/native-preview": "catalog:",
     "@yarnpkg/types": "^4.0.0",
     "eslint": "catalog:",
     "knip": "^5.30.2",
