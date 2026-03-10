@@ -141,6 +141,37 @@ export class GitRepo {
     return this.configGet("remote.origin.url");
   }
 
+  /** Get commit log between two refs. */
+  async log(opts: {
+    format: string;
+    range: string;
+    path?: string;
+  }): Promise<string> {
+    const args = ["log", `--format=${opts.format}`, opts.range];
+    if (opts.path) args.push("--", opts.path);
+    return spawn("git", args, { cwd: this.dir, fallback: "" });
+  }
+
+  /** Get current branch name. */
+  async currentBranch(): Promise<string> {
+    return spawn("git", ["rev-parse", "--abbrev-ref", "HEAD"], {
+      cwd: this.dir,
+    });
+  }
+
+  /** List remotes (`git remote -v`). */
+  async remoteList(): Promise<string> {
+    return spawn("git", ["remote", "-v"], { cwd: this.dir, fallback: "" });
+  }
+
+  /** Check if a ref exists on a remote. */
+  async lsRemote(remote: string, ref: string): Promise<string> {
+    return spawn("git", ["ls-remote", remote, ref], {
+      cwd: this.dir,
+      fallback: "",
+    });
+  }
+
   // ---------------------------------------------------------------------------
   // Diff & file listing
   // ---------------------------------------------------------------------------
@@ -248,6 +279,23 @@ export class GitRepo {
       fallback: "conflicts",
     });
     return result !== "conflicts";
+  }
+
+  /** Push a branch to remote. */
+  async push(
+    remote: string,
+    branch: string,
+    opts?: { force?: boolean }
+  ): Promise<void> {
+    const args = ["push"];
+    if (opts?.force) args.push("--force");
+    args.push(remote, branch);
+    await spawn("git", args, { cwd: this.dir });
+  }
+
+  /** Create and checkout a branch, resetting it if it already exists. */
+  async checkoutNewBranchForce(name: string): Promise<void> {
+    await spawn("git", ["checkout", "-B", name], { cwd: this.dir });
   }
 
   /** Reset to HEAD, discarding all changes. */
