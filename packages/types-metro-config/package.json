@@ -1,7 +1,6 @@
 {
   "name": "@rnx-kit/types-metro-config",
   "version": "0.0.1",
-  "private": true,
   "description": "Common types for rnx-kit metro plugins and configuration",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-metro-config#readme",
   "license": "MIT",
