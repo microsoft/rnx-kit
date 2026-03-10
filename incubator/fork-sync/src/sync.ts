@@ -78,8 +78,9 @@ import {
   type MergeResult,
   type MergeTool,
 } from "./modules/git.ts";
+import { findPR, createPR, updatePR } from "./modules/github.ts";
 import * as proc from "./modules/proc.ts";
-const { spawn } = proc;
+const { spawn, exec } = proc;
 
 import type { Job } from "./modules/job-ui.ts";
 import * as jobs from "./modules/job-ui.ts";
@@ -123,6 +124,9 @@ const SYNC_DIR = ".sync";
  * Stored at .sync/<dep>/.sync-checkpoint.json */
 const SYNC_CHECKPOINT_FILE = ".sync-checkpoint.json";
 
+/** PR notes filename, written alongside sync-config.json */
+const SYNC_PR_NOTES_FILE = "sync-pr-notes.md";
+
 /** AI merge script filename */
 const AI_MERGE_SCRIPT = import.meta.url.endsWith(".ts")
   ? "ai-merge.ts"
@@ -163,6 +167,15 @@ ${style.heading("Merge Control:")}
                               ${style.highlight("ai")} (default): batch AI merge (all files in parallel)
                               ${style.highlight("git")}: use ${style.highlight("git mergetool")} (sequential, per file)
 
+${style.heading("PR Creation:")}
+  ${style.command("--create-pr")}             Create/update a PR with sync changes
+  ${style.command("--dry-run")}               Do everything except push and PR create/update
+  ${style.command("--pr-base")} <branch>      PR base branch (default: current branch)
+  ${style.command("--pr-repo")} <owner/repo>  GitHub repo for gh CLI (default: auto-detect)
+
+${style.heading("Pipeline:")}
+  ${style.command("--pipeline")}              Implies ${style.command("--create-pr --yes --no-local-git-check")}
+
 ${style.heading("Logging:")}
   ${style.command("--log-dir")} <path>        Log file directory (default: ${style.highlight(".sync/.logs/")})
   ${style.command("--log-level")} <level>     Log level: ${style.highlight(VALID_LOG_LEVELS.join(", "))} (default: ${style.highlight("default")})
@@ -192,6 +205,11 @@ function parseCliArgs() {
       abort: { type: "boolean", default: false },
       status: { type: "boolean", default: false },
       mergetool: { type: "string" },
+      "create-pr": { type: "boolean", default: false },
+      "dry-run": { type: "boolean", default: false },
+      "pr-base": { type: "string" },
+      "pr-repo": { type: "string" },
+      pipeline: { type: "boolean", default: false },
       "log-dir": { type: "string" },
       "log-level": { type: "string", default: "default" },
       help: { type: "boolean", default: false, short: "h" },
@@ -206,6 +224,13 @@ function parseCliArgs() {
   if (values.help) {
     printHelp();
     process.exit(0);
+  }
+
+  // --pipeline implies --create-pr --yes --no-local-git-check
+  if (values.pipeline) {
+    values["create-pr"] = true;
+    values.yes = true;
+    values["local-git-check"] = false;
   }
 
   return values;
@@ -293,6 +318,13 @@ interface SyncCheckpoint {
   startedAt: string;
 }
 
+/** An upstream commit between base and target. */
+interface UpstreamCommit {
+  hash: string;
+  author: string;
+  subject: string;
+}
+
 type CliArgs = ReturnType<typeof parseCliArgs>;
 
 // =============================================================================
@@ -330,6 +362,8 @@ class SyncSession {
   syncCheckpoint?: SyncCheckpoint;
   mergeResult!: MergeResult;
   changeStats!: ChangeStats;
+  prNotes?: string;
+  prNotesPath?: string;
 
   constructor(config: SyncConfig, args: CliArgs, repoRoot: string) {
     this.config = config;
@@ -409,6 +443,10 @@ class SyncSession {
     await this.commitMergeIfNeeded();
     await this.applyChanges();
     this.printSummary();
+
+    if (this.args["create-pr"]) {
+      await this.createPullRequest();
+    }
   }
 
   // =============================================================================
@@ -588,6 +626,144 @@ ${footerMessage()}
 ${style.line()}
 `
     );
+  }
+
+  // ============================================================================
+  // PR creation (called from run() when --create-pr is set)
+  // ============================================================================
+
+  /**
+   * Create or update a pull request with the sync changes.
+   * Creates a branch, commits, pushes, and opens/updates a PR via gh CLI.
+   */
+  private async createPullRequest(): Promise<void> {
+    const label = () => style.label("PR:");
+    using job = jobs.addJob("create-pr", () => `${label()} creating PR...`);
+
+    const depName = this.config.name;
+    const shortCommit = this.targetCommit.slice(0, 8);
+    const refName = this.targetTag ?? this.args.branch ?? this.config.branch;
+    const prBranch = `fork-sync/${depName}`;
+    const prTitle = `fork-sync: sync ${depName} to ${shortCommit} (${refName})`;
+    const prBody = this.prNotes ?? "";
+    const isDryRun = this.args["dry-run"] ?? false;
+
+    // Check gh is available
+    job.step("Checking gh CLI...");
+    try {
+      await exec("gh --version");
+    } catch {
+      return fatal(
+        `GitHub CLI (gh) is required for --create-pr.\n` +
+          `Install from: https://cli.github.com/`
+      );
+    }
+
+    // Detect remote and GitHub repo
+    job.step("Detecting remote...");
+    const ghRepo = await this.detectGitHubRepo();
+
+    // Save current branch for restoration
+    const originalBranch = await this.mainRepo.currentBranch();
+
+    try {
+      // Create/reset the PR branch from current HEAD
+      job.step(`Creating branch ${prBranch}...`);
+      await this.mainRepo.checkoutNewBranchForce(prBranch);
+
+      // Stage all sync changes under localPath/
+      job.step("Staging changes...");
+      await this.mainRepo.stage(this.config.localPath + "/");
+
+      // Commit
+      job.step("Committing...");
+      await this.mainRepo.commit(prTitle);
+
+      if (isDryRun) {
+        info(
+          () =>
+            `${label()} Dry run: would push ${prBranch} and create/update PR`
+        );
+        job.done(() => `${label()} dry run complete`);
+        return;
+      }
+
+      // Force-push
+      job.step("Pushing...");
+      await this.mainRepo.push("origin", prBranch, { force: true });
+
+      // Find existing PR
+      job.step("Checking for existing PR...");
+      const existingPR = await findPR({
+        head: prBranch,
+        cwd: this.repoRoot,
+        repo: ghRepo,
+      });
+
+      if (existingPR) {
+        // Update existing PR
+        job.step(`Updating PR #${existingPR.number}...`);
+        await updatePR({
+          number: existingPR.number,
+          title: prTitle,
+          body: prBody,
+          cwd: this.repoRoot,
+          repo: ghRepo,
+        });
+        info(() => `${label()} Updated PR: ${existingPR.url}`);
+        job.done(() => `${label()} updated PR #${existingPR.number}`);
+      } else {
+        // Create new PR
+        const prBase = this.args["pr-base"] ?? originalBranch;
+        job.step("Creating PR...");
+        const newPR = await createPR({
+          head: prBranch,
+          base: prBase,
+          title: prTitle,
+          body: prBody,
+          cwd: this.repoRoot,
+          repo: ghRepo,
+        });
+        info(() => `${label()} Created PR: ${newPR.url}`);
+        job.done(() => `${label()} created PR #${newPR.number}`);
+      }
+    } finally {
+      // Restore original branch
+      try {
+        await this.mainRepo.checkout(originalBranch);
+      } catch {
+        warn(
+          () =>
+            `Failed to restore branch ${originalBranch}. You may need to checkout manually.`
+        );
+      }
+    }
+  }
+
+  /**
+   * Detect the GitHub repo identifier (owner/repo) for gh CLI.
+   * Uses --pr-repo if provided, otherwise extracts from origin remote URL.
+   */
+  private async detectGitHubRepo(): Promise<string | undefined> {
+    if (this.args["pr-repo"]) {
+      return this.args["pr-repo"];
+    }
+
+    // Try to extract from origin remote URL
+    const remoteOutput = await this.mainRepo.remoteList();
+    if (!remoteOutput) return undefined;
+
+    // Parse remote -v output: "origin\thttps://github.com/owner/repo.git (fetch)"
+    for (const line of remoteOutput.split("\n")) {
+      const match = line.match(
+        /^origin\t.*github\.com[:/]([^/]+\/[^/\s]+?)(?:\.git)?\s/
+      );
+      if (match) {
+        return match[1];
+      }
+    }
+
+    return undefined;
   }
 
   // ============================================================================
@@ -1125,11 +1301,121 @@ ${style.line()}
 
     this.changeStats = changes;
 
+    // Generate PR notes
+    job.step("Generating PR notes...");
+    const notes = await this.generatePRNotes();
+    const notesPath = path.join(this.localPath, SYNC_PR_NOTES_FILE);
+    await fs.writeFile(notesPath, notes, "utf-8");
+    this.prNotes = notes;
+    this.prNotesPath = notesPath;
+
     const totalChanges = changes.added + changes.modified + changes.deleted;
     job.done(
       () =>
         `${label()} ${totalChanges} change(s) (${changes.added} Added, ${changes.modified} Modified, ${changes.deleted} Deleted)`
     );
+  }
+
+  // =============================================================================
+  // PR notes generation
+  // =============================================================================
+
+  /**
+   * Get upstream commits between base and target.
+   * Parses `git log --format="%H%x09%an%x09%s"` output into structured data.
+   */
+  private async getUpstreamCommits(): Promise<UpstreamCommit[]> {
+    const range = `${this.config.baseCommit}..${this.targetCommit}`;
+    const output = await this.syncRepo.log({
+      format: "%H%x09%an%x09%s",
+      range,
+      path: this.config.subDir || undefined,
+    });
+
+    if (!output.trim()) return [];
+
+    return output
+      .trim()
+      .split("\n")
+      .map((line) => {
+        const [hash, author, subject] = line.split("\t", 3);
+        return {
+          hash: hash ?? "",
+          author: author ?? "",
+          subject: subject ?? "",
+        };
+      })
+      .filter((c) => c.hash);
+  }
+
+  /**
+   * Generate markdown PR notes summarizing the sync.
+   * Includes upstream commits, conflict resolution summary, and change stats.
+   */
+  private async generatePRNotes(): Promise<string> {
+    const commits = await this.getUpstreamCommits();
+    const shortBase = this.config.baseCommit.slice(0, 8);
+    const shortTarget = this.targetCommit.slice(0, 8);
+    const refName = this.targetTag ?? this.args.branch ?? this.config.branch;
+    const repoUrl = this.config.repo.replace(/\.git$/, "");
+
+    const lines: string[] = [];
+
+    // Header
+    lines.push(`## Upstream Sync: ${this.config.name}`);
+    lines.push("");
+    lines.push(
+      `Syncing [${this.config.name}](${repoUrl}) from \`${shortBase}\` to \`${shortTarget}\` (${this.targetTag ? "tag" : "branch"}: \`${refName}\`).`
+    );
+    lines.push("");
+
+    // Commit table
+    lines.push(`### Upstream Commits (${commits.length})`);
+    lines.push("");
+    if (commits.length > 0) {
+      lines.push("| Commit | Author | Description |");
+      lines.push("|--------|--------|-------------|");
+      for (const c of commits) {
+        lines.push(
+          `| \`${c.hash.slice(0, 8)}\` | ${c.author} | ${c.subject} |`
+        );
+      }
+    } else {
+      lines.push("No commits found in range.");
+    }
+    lines.push("");
+
+    // Conflict resolution summary
+    const { resolved, conflicts } = this.mergeResult;
+    if (resolved.length > 0 || conflicts.length > 0) {
+      lines.push("### Conflict Resolution");
+      lines.push("");
+      const total = resolved.length + conflicts.length;
+      lines.push(`- ${total} file(s) had merge conflicts`);
+      if (resolved.length > 0) {
+        lines.push(`- ${resolved.length} resolved`);
+      }
+      if (conflicts.length > 0) {
+        lines.push(`- ${conflicts.length} remaining (manual resolution)`);
+      }
+      lines.push("");
+    }
+
+    // Change stats
+    const { modified, added, deleted } = this.changeStats;
+    lines.push("### Files Changed");
+    lines.push("");
+    lines.push(`- ${modified} modified, ${added} added, ${deleted} deleted`);
+    lines.push("");
+
+    // Footer
+    lines.push("---");
+    lines.push(
+      "*Generated by [fork-sync](https://github.com/microsoft/rnx-kit/tree/main/incubator/fork-sync)*"
+    );
+    lines.push("");
+
+    return lines.join("\n");
   }
 
   // =============================================================================
