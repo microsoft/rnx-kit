@@ -1,5 +1,11 @@
 # @rnx-kit/fork-sync
 
+## 0.4.0
+
+### Minor Changes
+
+- 2f154be: add automatic PR notes generation
+
 ## 0.3.0
 
 ### Minor Changes
