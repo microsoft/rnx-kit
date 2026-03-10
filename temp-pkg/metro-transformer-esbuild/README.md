@@ -5,8 +5,6 @@
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/metro-transformer-esbuild)](https://www.npmjs.com/package/@rnx-kit/metro-transformer-esbuild)
 
-
-
 This is a sample folder to use as base for generating new packages for
 `rnx-kit`.
 
@@ -29,5 +27,3 @@ npm add --save-dev @rnx-kit/metro-transformer-esbuild
 ```
 
 ## Usage
-
-

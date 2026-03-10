@@ -106,7 +106,7 @@ export function buildBabelConfig(
   /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
    * LTI update could not be added via codemod */
   options,
-  plugins: Plugins = [],
+  plugins: Plugins = []
 ) /*: BabelCoreOptions*/ {
   const babelRC = getBabelRC(options);
 

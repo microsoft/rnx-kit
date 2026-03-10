@@ -8,6 +8,7 @@ export type {
   Bundle,
   CustomSerializer,
   CustomSerializerResult,
+  SerializerHookPlugin,
   SerializerPlugin,
 } from "./serializer";
 export type {

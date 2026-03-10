@@ -3,6 +3,7 @@ import type {
   Module,
   ReadOnlyGraph,
   SerializerOptions,
+  DeltaResult,
 } from "metro";
 
 // ---------------------------------------------------------------------------
@@ -17,8 +18,16 @@ export type SerializerPlugin<T = MixedOutput> = (
   entryPoint: string,
   preModules: readonly Module<T>[],
   graph: ReadOnlyGraph<T>,
-  options: SerializerOptions<T>,
+  options: SerializerOptions<T>
 ) => void;
+
+/**
+ * A serializer hook plugin. Called on every delta with the full module graph and the delta result.
+ */
+export type SerializerHookPlugin<T = MixedOutput> = (
+  graph: ReadOnlyGraph<T>,
+  delta: DeltaResult<T>
+) => unknown;
 
 /**
  * Intermediate bundle representation produced by Metro's baseJSBundle.
@@ -43,5 +52,5 @@ export type CustomSerializer = (
   entryPoint: string,
   preModules: readonly Module[],
   graph: ReadOnlyGraph,
-  options: SerializerOptions,
+  options: SerializerOptions
 ) => Promise<CustomSerializerResult> | CustomSerializerResult;

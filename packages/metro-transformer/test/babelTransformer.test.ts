@@ -1,23 +1,23 @@
+import type { BabelFileResult } from "@babel/core";
 import type { CustomTransformerOptions } from "@rnx-kit/types-metro-config";
-import type { BabelTransformerArgs } from "../src/babelTransformer.ts";
 import { equal, match } from "node:assert/strict";
 import Module from "node:module";
 import path from "node:path";
 import { after, before, describe, it } from "node:test";
+import type { BabelTransformerArgs } from "../src/babelTransformer.ts";
 import { getCacheKey, transform } from "../src/babelTransformer.ts";
-import type { BabelFileResult } from "@babel/core";
 
 const fixturesDir = path.join(__dirname, "__fixtures__");
 const upstreamTransformerPath = path.join(
   fixturesDir,
-  "upstreamTransformer.js",
+  "upstreamTransformer.js"
 );
 const svgTransformerPath = path.join(fixturesDir, "svgTransformer.js");
 
 /** Build a minimal BabelTransformerArgs — transform() only reads filename and customTransformerOptions. */
 function makeArgs(
   filename: string,
-  customTransformerOptions: CustomTransformerOptions,
+  customTransformerOptions: CustomTransformerOptions
 ): BabelTransformerArgs {
   return {
     filename,
@@ -57,7 +57,7 @@ type ResultWithTestData = BabelFileResult & {
 describe("transform", () => {
   it("delegates to upstreamTransformerPath when babelTransformers is not set", async () => {
     const result = (await transform(
-      makeArgs("index.js", { upstreamTransformerPath }),
+      makeArgs("index.js", { upstreamTransformerPath })
     )) as ResultWithTestData;
 
     equal(result.metadata.transformer, "upstream");
@@ -68,7 +68,7 @@ describe("transform", () => {
       makeArgs("index.js", {
         upstreamTransformerPath,
         babelTransformers: { "**/*.svg": svgTransformerPath },
-      }),
+      })
     )) as ResultWithTestData;
 
     equal(result.metadata.transformer, "upstream");
@@ -79,7 +79,7 @@ describe("transform", () => {
       makeArgs("/project/src/icon.svg", {
         upstreamTransformerPath,
         babelTransformers: { "**/*.svg": svgTransformerPath },
-      }),
+      })
     )) as ResultWithTestData;
 
     equal(result.metadata.transformer, "svg");
@@ -94,7 +94,7 @@ describe("transform", () => {
           "**/*.svg": svgTransformerPath,
           "**/*": upstreamTransformerPath,
         },
-      }),
+      })
     )) as ResultWithTestData;
 
     equal(result.metadata.transformer, "svg");
@@ -106,7 +106,7 @@ describe("transform", () => {
       makeArgs(filename, {
         upstreamTransformerPath,
         babelTransformers: { "**/*.svg": svgTransformerPath },
-      }),
+      })
     )) as ResultWithTestData;
 
     equal(result.metadata.filename, filename);
@@ -137,12 +137,12 @@ describe("alias interception", () => {
       makeArgs("index.js", {
         upstreamTransformerPath,
         upstreamTransformerAliases: ["some-fake-upstream-transformer"],
-      }),
+      })
     );
 
     equal(
       mod._resolveFilename("some-fake-upstream-transformer"),
-      resolvedUpstream,
+      resolvedUpstream
     );
   });
 

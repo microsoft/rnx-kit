@@ -39,10 +39,9 @@ module.exports = makeMetroConfig({
 
 ## Configuration
 
-`MetroTransformer(config, plugins?)` accepts an `ExtendedTransformerConfig`
-object (or an array of them) and an optional array of `TransformerPlugin`
-objects. It returns a `TransformerConfigT` suitable for Metro's `transformer`
-field.
+`MetroTransformer(config)` accepts an `ExtendedTransformerConfig` object (or
+an array of them) and returns a `TransformerConfigT` suitable for Metro's
+`transformer` field.
 
 ### `babelTransformers`
 
@@ -94,11 +93,12 @@ later values overwriting earlier ones.
 
 ## Plugin API
 
-Third-party packages can expose a `TransformerPlugin` to contribute
-transformer configuration without requiring users to manually merge settings.
+Third-party packages can expose a `TransformerPlugin` to contribute transformer
+configuration. Pass multiple configs as an array to `MetroTransformer` to merge
+plugin and user settings together.
 
 ```ts
-import type { TransformerPlugin } from "@rnx-kit/types-metro-transformer";
+import type { TransformerPlugin } from "@rnx-kit/types-metro-config";
 
 export const myPlugin: TransformerPlugin = {
   transformer: {
@@ -108,25 +108,26 @@ export const myPlugin: TransformerPlugin = {
   },
   // Set to true to apply this plugin's config after the user's config,
   // allowing it to take precedence.
-  applyAfterUser: false,
+  highPrecedence: false,
 };
 ```
 
-Plugins are passed as the second argument to `MetroTransformer`:
+Spread a plugin's `transformer` config into the array passed to
+`MetroTransformer`:
 
 ```js
 const { MetroTransformer } = require("@rnx-kit/metro-transformer");
 const { myPlugin } = require("my-metro-transformer-plugin");
 
 module.exports = makeMetroConfig({
-  transformer: MetroTransformer(
+  transformer: MetroTransformer([
+    myPlugin.transformer,
     {
-      // user config
+      // user config (applied after plugin config; user settings win by default)
     },
-    [myPlugin]
-  ),
+  ]),
 });
 ```
 
-By default, plugin configs are applied before the user config (user settings
-win). Set `applyAfterUser: true` on a plugin to invert this.
+By default, configs earlier in the array are overwritten by later entries.
+Use a plugin's `highPrecedence` flag to determine the intended order.

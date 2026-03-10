@@ -30,26 +30,21 @@
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint"
   },
+  "dependencies": {
+    "metro": "^0.83.3",
+    "metro-config": "^0.83.3"
+  },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
     "@rnx-kit/oxlint-config": "*",
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
-    "@types/babel__core": "^7.20.0",
-    "metro": "^0.83.3",
-    "metro-babel-transformer": "0.83.3",
-    "metro-config": "^0.83.3"
+    "@rnx-kit/tsconfig": "*"
   },
   "peerDependencies": {
     "metro": ">=0.83.0",
-    "metro-babel-transformer": ">=0.83.0",
     "metro-config": ">=0.83.0"
   },
   "peerDependenciesMeta": {
     "metro": {
-      "optional": true
-    },
-    "metro-babel-transformer": {
       "optional": true
     },
     "metro-config": {

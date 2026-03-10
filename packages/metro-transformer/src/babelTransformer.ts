@@ -7,7 +7,7 @@ import Module from "node:module";
 
 type TransformerModule = {
   transform: (
-    args: BabelTransformerArgs,
+    args: BabelTransformerArgs
   ) => BabelFileResult | Promise<BabelFileResult>;
   getCacheKey?: () => string;
 };
@@ -21,7 +21,7 @@ import type { BabelTransformerArgs as BaseTransformerArgs } from "metro-babel-tr
 /**
  * Options passed in to the transform function of a babel transformer.
  */
-export type WithCustomOptions<T extends object = object> = Omit<
+type WithCustomOptions<T extends object = object> = Omit<
   T,
   "customTransformOptions"
 > & {
@@ -31,7 +31,7 @@ export type WithCustomOptions<T extends object = object> = Omit<
 /**
  * Arguments passed in to the transform function of a babel transformer.
  */
-export type BabelTransformerArgs = Omit<BaseTransformerArgs, "options"> & {
+type BabelTransformerArgs = Omit<BaseTransformerArgs, "options"> & {
   options: WithCustomOptions<BaseTransformerArgs["options"]>;
 };
 
@@ -88,7 +88,7 @@ const installAliases = (() => {
 
 function findTransformerForFile(
   filename: string,
-  babelTransformers: Record<string, string>,
+  babelTransformers: Record<string, string>
 ): string | undefined {
   for (const [pattern, transformerPath] of Object.entries(babelTransformers)) {
     if (micromatch.isMatch(filename, pattern)) {
@@ -99,7 +99,7 @@ function findTransformerForFile(
 }
 
 export function transform(
-  args: BabelTransformerArgs,
+  args: BabelTransformerArgs
 ): BabelFileResult | Promise<BabelFileResult> {
   const { customTransformerOptions } = args.options
     .customTransformOptions as unknown as {

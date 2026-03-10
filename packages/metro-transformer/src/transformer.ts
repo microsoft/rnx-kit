@@ -2,7 +2,6 @@ import type {
   ExtendedTransformerConfig,
   TransformerConfigT,
   CustomTransformerOptions,
-  TransformerPlugin,
 } from "@rnx-kit/types-metro-config";
 import { getModuleRedirectPaths, simpleObjectMerge } from "./utilities";
 
@@ -10,30 +9,19 @@ type GetOptions = TransformerConfigT["getTransformOptions"];
 const defaultTransformer = "@react-native/metro-babel-transformer";
 
 export function MetroTransformer(
-  config: ExtendedTransformerConfig | ExtendedTransformerConfig[] = {},
-  plugins: TransformerPlugin[] = [],
+  config: ExtendedTransformerConfig | ExtendedTransformerConfig[] = {}
 ): Partial<TransformerConfigT> {
-  const beforeConfigs: ExtendedTransformerConfig[] = plugins
-    .filter((plugin) => plugin.transformer && !plugin.highPrecedence)
-    .map((plugin) => plugin.transformer!);
-  const userConfigs = Array.isArray(config) ? config : [config];
-  const afterConfigs = plugins
-    .filter((plugin) => plugin.transformer && plugin.highPrecedence)
-    .map((plugin) => plugin.transformer!);
-  return buildTransformerConfig(
-    ...beforeConfigs,
-    ...userConfigs,
-    ...afterConfigs,
-  );
+  return buildTransformerConfig(...(Array.isArray(config) ? config : [config]));
 }
 
-export function buildTransformerConfig(
+function buildTransformerConfig(
   ...configs: ExtendedTransformerConfig[]
 ): Partial<TransformerConfigT> {
   const result: Partial<TransformerConfigT> = {};
   const customOptions = {} as CustomTransformerOptions;
   const conditionalTransformers: Record<string, string> = {};
   const optionFunctions: GetOptions[] = [];
+
   let needsBabelTransformer = false;
   for (const config of configs) {
     const {
@@ -56,6 +44,7 @@ export function buildTransformerConfig(
     // merge the result of the options into the final transformer config
     Object.assign(result, additionalConfig);
   }
+
   // remember any conditional transformers if they were set
   if (Object.keys(conditionalTransformers).length > 0) {
     needsBabelTransformer = true;
@@ -66,7 +55,7 @@ export function buildTransformerConfig(
     // to that transformer
     customOptions.upstreamTransformerAliases = getModuleRedirectPaths(
       defaultTransformer,
-      customOptions.babelTransformers,
+      customOptions.babelTransformers
     );
     needsBabelTransformer = true;
   } else {
@@ -76,7 +65,7 @@ export function buildTransformerConfig(
   }
   result.getTransformOptions = createGetTransformOptions(
     optionFunctions,
-    customOptions,
+    customOptions
   );
   // if we are doing custom work that requires the custom babel transformer, make sure to set it as the transformer to use
   if (needsBabelTransformer) {
@@ -94,19 +83,19 @@ export function buildTransformerConfig(
  */
 function createGetTransformOptions(
   optionFunctions: GetOptions[],
-  customTransformerOptions: CustomTransformerOptions,
+  customTransformerOptions: CustomTransformerOptions
 ): GetOptions {
   return async (
     entryPoints: Parameters<GetOptions>[0],
     options: Parameters<GetOptions>[1],
-    getDependenciesOf: Parameters<GetOptions>[2],
+    getDependenciesOf: Parameters<GetOptions>[2]
   ) => {
     const results =
       optionFunctions.length > 0
         ? await Promise.all(
             optionFunctions.map((func) =>
-              func(entryPoints, options, getDependenciesOf),
-            ),
+              func(entryPoints, options, getDependenciesOf)
+            )
           )
         : [];
     return simpleObjectMerge(...results, { customTransformerOptions });

@@ -1,4 +1,1 @@
-export {
-  MetroTransformer,
-  buildTransformerConfig as mergeTransformerConfigs,
-} from "./transformer";
+export { MetroTransformer } from "./transformer";

@@ -27,26 +27,26 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@babel/core": "^7.20.0",
-    "@react-native/babel-preset": "^0.81.0",
     "@react-native/metro-babel-transformer": "^0.83.3",
     "@rnx-kit/types-metro-config": "^0.0.1",
-    "hermes-parser": "0.33.3",
-    "micromatch": "^4.0.8",
-    "nullthrows": "^1.1.1"
+    "micromatch": "^4.0.8"
   },
   "devDependencies": {
+    "@babel/core": "^7.20.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/babel__core": "7.20.0",
+    "@types/babel__core": "^7.20.0",
     "@types/micromatch": "^4.0.10",
     "metro-babel-transformer": "^0.83.3",
     "metro-config": "^0.83.3"
   },
   "peerDependencies": {
-    "@babel/core": "*",
-    "@react-native/babel-preset": "*",
-    "hermes-parser": ">=0.33.0"
+    "@react-native/metro-babel-transformer": "*"
+  },
+  "peerDependenciesMeta": {
+    "@react-native/metro-babel-transformer": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=18.12"

@@ -1,6 +1,6 @@
-import type { SerializerPlugin } from "./serializer";
-import type { TransformerPlugin } from "./transformer.ts";
 import type { MixedOutput } from "metro";
+import type { SerializerHookPlugin, SerializerPlugin } from "./serializer";
+import type { TransformerPlugin } from "./transformer.ts";
 
 export type PluginType = "serializer" | "serializerHook" | "transformer";
 export type PrintMessage = (message: string) => void;
@@ -13,7 +13,18 @@ export type SerializerPluginFactory<
   T = MixedOutput,
 > = {
   (options?: TOptions, print?: PrintMessage): SerializerPlugin<T>;
-  type?: "serializer" | "serializerHook";
+  type?: "serializer";
+};
+
+/**
+ * Serializer hook plugin factory type, should be the default export of the serializer hook plugin package
+ */
+export type SerializerHookPluginFactory<
+  TOptions extends object = Record<string, unknown>,
+  T = MixedOutput,
+> = {
+  (options?: TOptions, print?: PrintMessage): SerializerHookPlugin<T>;
+  type: "serializerHook";
 };
 
 /**

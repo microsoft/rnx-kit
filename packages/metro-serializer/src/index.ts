@@ -2,13 +2,13 @@ import {
   getMetroVersion as getMetroVersionInternal,
   requireModuleFromMetro,
 } from "@rnx-kit/tools-react-native/metro";
-import type { Module, ReadOnlyGraph, SerializerOptions } from "metro";
 import type {
   Bundle,
   CustomSerializer,
   CustomSerializerResult,
   SerializerPlugin,
 } from "@rnx-kit/types-metro-config";
+import type { Module, ReadOnlyGraph, SerializerOptions } from "metro";
 export type {
   Bundle,
   CustomSerializer,
@@ -21,7 +21,7 @@ export type TestMocks = {
     entryPoint: string,
     preModules: readonly Module[],
     graph: ReadOnlyGraph,
-    options: SerializerOptions,
+    options: SerializerOptions
   ) => Bundle;
   bundleToString?: (bundle: Bundle) => CustomSerializerResult;
 };
@@ -47,7 +47,7 @@ function getMetroVersion(): number {
  */
 export function MetroSerializer(
   plugins: SerializerPlugin[],
-  __mocks: TestMocks = {},
+  __mocks: TestMocks = {}
 ): CustomSerializer {
   const baseJSBundle =
     __mocks.baseJSBundle ??
@@ -62,7 +62,7 @@ export function MetroSerializer(
     entryPoint: string,
     preModules: readonly Module[],
     graph: ReadOnlyGraph,
-    options: SerializerOptions,
+    options: SerializerOptions
   ): string | Promise<string> => {
     for (const plugin of plugins) {
       plugin(entryPoint, preModules, graph, options);

@@ -4,6 +4,9 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
+/**
+ * Simple merge helper that recursively merges plain objects but does not attempt to merge arrays or other types.
+ */
 export function simpleObjectMerge(
   ...options: Record<string, unknown>[]
 ): Record<string, unknown> {
@@ -27,7 +30,7 @@ export function simpleObjectMerge(
  */
 export function getModuleRedirectPaths(
   baseModule: string,
-  additionalTransformers?: Record<string, string>,
+  additionalTransformers?: Record<string, string>
 ): string[] {
   const paths = [baseModule];
   const resolvedBase = require.resolve(baseModule);
