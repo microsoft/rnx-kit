@@ -5032,7 +5032,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/metro-babel-transformer@npm:^0.83.3":
+"@react-native/metro-babel-transformer@npm:^0.83.0":
   version: 0.83.4
   resolution: "@react-native/metro-babel-transformer@npm:0.83.4"
   dependencies:
@@ -5682,7 +5682,7 @@ __metadata:
   resolution: "@rnx-kit/metro-transformer@workspace:packages/metro-transformer"
   dependencies:
     "@babel/core": "npm:^7.20.0"
-    "@react-native/metro-babel-transformer": "npm:^0.83.3"
+    "@react-native/metro-babel-transformer": "npm:^0.83.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-metro-config": "npm:^0.0.1"

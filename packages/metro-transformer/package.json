@@ -27,7 +27,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@react-native/metro-babel-transformer": "^0.83.3",
+    "@react-native/metro-babel-transformer": "^0.83.0",
     "@rnx-kit/types-metro-config": "^0.0.1",
     "micromatch": "^4.0.8"
   },
