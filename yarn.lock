@@ -4608,7 +4608,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/babel-preset@npm:0.83.1, @react-native/babel-preset@npm:^0.83.0":
+"@react-native/babel-preset@npm:0.83.1":
   version: 0.83.1
   resolution: "@react-native/babel-preset@npm:0.83.1"
   dependencies:
@@ -4663,7 +4663,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/babel-preset@npm:0.83.4":
+"@react-native/babel-preset@npm:0.83.4, @react-native/babel-preset@npm:^0.83.0":
   version: 0.83.4
   resolution: "@react-native/babel-preset@npm:0.83.4"
   dependencies:
@@ -13172,7 +13172,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-babel-transformer@npm:0.83.3, metro-babel-transformer@npm:^0.83.1":
+"metro-babel-transformer@npm:0.83.3":
   version: 0.83.3
   resolution: "metro-babel-transformer@npm:0.83.3"
   dependencies:
@@ -13184,7 +13184,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-babel-transformer@npm:^0.83.3":
+"metro-babel-transformer@npm:^0.83.1, metro-babel-transformer@npm:^0.83.3":
   version: 0.83.5
   resolution: "metro-babel-transformer@npm:0.83.5"
   dependencies:
