@@ -1,12 +1,18 @@
 {
+  "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
   "editor.detectIndentation": false,
   "editor.trimAutoWhitespace": true,
   "editor.insertSpaces": true,
   "editor.tabSize": 2,
 
-  "eslint.enable": true,
-  "eslint.workingDirectories": [{ "mode": "auto" }], // infer working directory based on .eslintrc/package.json location
+  "prettier.enable": false,
+
+  "oxc.enable": true,
+  "oxc.enable.oxfmt": true,
+  "oxc.enable.oxlint": true,
+  "oxc.lint.run": "onType",
+  "oxc.typeAware": true,
 
   "files.trimTrailingWhitespace": true,
   "files.associations": {
@@ -28,14 +34,12 @@
     "**/lib-amd": true
   },
 
-  "javascript.preferences.quoteStyle": "single",
+  "js/ts.experimental.useTsgo": true,
+  "js/ts.preferences.quoteStyle": "single",
 
-  "json.format.enable": false,
-
-  "typescript.preferences.quoteStyle": "single",
-  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
-  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
-  "typescript.tsdk": "./node_modules/typescript/lib",
+  "js/ts.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+  "js/ts.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+  "js/ts.tsdk.path": "./node_modules/@typescript/native-preview/lib",
 
   "search.exclude": {
     "**/node_modules": true,
@@ -45,19 +49,19 @@
     "**/dist": true
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[handlebars]": {
     "editor.formatOnSave": false
