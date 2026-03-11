@@ -14,7 +14,7 @@ export type {
   CustomSerializer,
   CustomSerializerResult,
   SerializerPlugin as MetroPlugin,
-} from "@rnx-kit/types-metro-config";
+};
 
 export type TestMocks = {
   baseJSBundle?: (
