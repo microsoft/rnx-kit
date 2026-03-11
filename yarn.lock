@@ -6224,14 +6224,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/types-metro-serializer-esbuild@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@rnx-kit/types-metro-serializer-esbuild@npm:1.0.1"
-  checksum: 10c0/1907fb5e747d327be004b9479ca40cdd328c10a322b51cbb423df6e0d488a32cfea3bea2f52894f9c3a7f54ee810516362861166b3a513de7b123eeb49aca6bf
-  languageName: node
-  linkType: hard
-
-"@rnx-kit/types-metro-serializer-esbuild@workspace:packages/types-metro-serializer-esbuild":
+"@rnx-kit/types-metro-serializer-esbuild@npm:^1.0.0, @rnx-kit/types-metro-serializer-esbuild@workspace:packages/types-metro-serializer-esbuild":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-metro-serializer-esbuild@workspace:packages/types-metro-serializer-esbuild"
   dependencies:
