@@ -212,7 +212,7 @@ export function customizeMetroConfig(
   // case use the MetroTransformer to merge them and create a single transformer config for Metro to use.
   if (transformers.length > 1) {
     metroConfig.transformer = MetroTransformer(
-      transformers
+      ...transformers
     ) as WritableDeep<ConfigT>["transformer"];
   }
 

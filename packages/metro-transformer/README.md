@@ -4,9 +4,8 @@
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/metro-transformer)](https://www.npmjs.com/package/@rnx-kit/metro-transformer)
 
 `@rnx-kit/metro-transformer` is a pluggable Metro transformer that lets you
-route files to different Babel transformers based on glob patterns, override the
-upstream Babel transformer, and compose transformer configuration from multiple
-sources (including third-party plugins).
+route files to different Babel transformers based on glob patterns and merge transformer configuration
+from multiple sources.
 
 ## Installation
 
@@ -26,6 +25,11 @@ const { resolve } = require("node:path");
 
 module.exports = makeMetroConfig({
   transformer: MetroTransformer({
+    // any standard options can be used...
+    getTransformOptions: async () => ({
+      // options here
+    }),
+    // add in a specific file babel transformer
     babelTransformers: {
       // Route .svg files through react-native-svg-transformer
       "**/*.svg": resolve(
@@ -39,9 +43,8 @@ module.exports = makeMetroConfig({
 
 ## Configuration
 
-`MetroTransformer(config)` accepts an `ExtendedTransformerConfig` object (or
-an array of them) and returns a `TransformerConfigT` suitable for Metro's
-`transformer` field.
+`MetroTransformer(config)` accepts any number of `ExtendedTransformerConfig` objects
+and returns a `TransformerConfigT` suitable for Metro's `transformer` field.
 
 ### `babelTransformers`
 
@@ -61,23 +64,6 @@ MetroTransformer({
 });
 ```
 
-### `upstreamBabelOverridePath`
-
-`string` — Absolute path to a Babel transformer that should be used as the
-upstream fallback instead of the default
-`@react-native/metro-babel-transformer`. When set, any delegate transformer
-that internally requires `@react-native/metro-babel-transformer` will be
-redirected to this path automatically.
-
-```js
-MetroTransformer({
-  upstreamBabelOverridePath: require.resolve("my-custom-babel-transformer"),
-  babelTransformers: {
-    "**/*.svg": require.resolve("react-native-svg-transformer/transformer"),
-  },
-});
-```
-
 ### `customTransformerOptions`
 
 `Record<string, unknown>` — Arbitrary options merged into
@@ -90,44 +76,3 @@ Any other field accepted by Metro's `TransformerConfigT` (e.g.
 `getTransformOptions`, `babelTransformerPath`) can be included and will be
 merged into the final config. Multiple configs are merged left-to-right, with
 later values overwriting earlier ones.
-
-## Plugin API
-
-Third-party packages can expose a `TransformerPlugin` to contribute transformer
-configuration. Pass multiple configs as an array to `MetroTransformer` to merge
-plugin and user settings together.
-
-```ts
-import type { TransformerPlugin } from "@rnx-kit/types-metro-config";
-
-export const myPlugin: TransformerPlugin = {
-  transformer: {
-    babelTransformers: {
-      "**/*.svg": require.resolve("./svgTransformer"),
-    },
-  },
-  // Set to true to apply this plugin's config after the user's config,
-  // allowing it to take precedence.
-  highPrecedence: false,
-};
-```
-
-Spread a plugin's `transformer` config into the array passed to
-`MetroTransformer`:
-
-```js
-const { MetroTransformer } = require("@rnx-kit/metro-transformer");
-const { myPlugin } = require("my-metro-transformer-plugin");
-
-module.exports = makeMetroConfig({
-  transformer: MetroTransformer([
-    myPlugin.transformer,
-    {
-      // user config (applied after plugin config; user settings win by default)
-    },
-  ]),
-});
-```
-
-By default, configs earlier in the array are overwritten by later entries.
-Use a plugin's `highPrecedence` flag to determine the intended order.

@@ -3,18 +3,12 @@ import type {
   TransformerConfigT,
   CustomTransformerOptions,
 } from "@rnx-kit/types-metro-config";
-import { getModuleRedirectPaths, simpleObjectMerge } from "./utilities";
+import { resolveModulePath, simpleObjectMerge } from "./utilities";
 
 type GetOptions = TransformerConfigT["getTransformOptions"];
 const defaultTransformer = "@react-native/metro-babel-transformer";
 
 export function MetroTransformer(
-  config: ExtendedTransformerConfig | ExtendedTransformerConfig[] = {}
-): Partial<TransformerConfigT> {
-  return buildTransformerConfig(...(Array.isArray(config) ? config : [config]));
-}
-
-function buildTransformerConfig(
   ...configs: ExtendedTransformerConfig[]
 ): Partial<TransformerConfigT> {
   const result: Partial<TransformerConfigT> = {};
@@ -22,7 +16,6 @@ function buildTransformerConfig(
   const conditionalTransformers: Record<string, string> = {};
   const optionFunctions: GetOptions[] = [];
 
-  let needsBabelTransformer = false;
   for (const config of configs) {
     const {
       customTransformerOptions = {},
@@ -47,28 +40,21 @@ function buildTransformerConfig(
 
   // remember any conditional transformers if they were set
   if (Object.keys(conditionalTransformers).length > 0) {
-    needsBabelTransformer = true;
     customOptions.babelTransformers = conditionalTransformers;
   }
-  if (customOptions.upstreamTransformerPath) {
-    // if the user has specified an upstream transformer treat that as a request to override resolution
-    // to that transformer
-    customOptions.upstreamTransformerAliases = getModuleRedirectPaths(
-      defaultTransformer,
-      customOptions.babelTransformers
-    );
-    needsBabelTransformer = true;
-  } else {
-    // otherwise just mark the default as the upstream transformer
-    customOptions.upstreamTransformerPath =
-      result.babelTransformerPath ?? require.resolve(defaultTransformer);
-  }
+
+  // ensure the upstream transformer is available to the babel transformers
+  customOptions.upstreamTransformerPath ??=
+    result.babelTransformerPath ?? resolveModulePath(defaultTransformer);
+
+  // create the merged getTransformOptions function
   result.getTransformOptions = createGetTransformOptions(
     optionFunctions,
     customOptions
   );
+
   // if we are doing custom work that requires the custom babel transformer, make sure to set it as the transformer to use
-  if (needsBabelTransformer) {
+  if (customOptions.babelTransformers) {
     Object.assign(result, {
       babelTransformerPath: require.resolve("./babelTransformer"),
     });

@@ -275,6 +275,11 @@
           "@babel/preset-env"
         ]
       },
+      "packages/metro-transformer": {
+        "ignoreDependencies": [
+          "@react-native/metro-babel-transformer"
+        ]
+      },
       "packages/oxlint-config": {
         "entry": [
           "src/**/*.ts"

@@ -1,8 +1,7 @@
 {
   "extends": "@rnx-kit/tsconfig/tsconfig.node.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "types": ["node"]
+    "rootDir": "src"
   },
   "include": ["src"]
 }

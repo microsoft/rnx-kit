@@ -5688,6 +5688,7 @@ __metadata:
     "@rnx-kit/types-metro-config": "npm:^0.0.1"
     "@types/babel__core": "npm:^7.20.0"
     "@types/micromatch": "npm:^4.0.10"
+    metro: "npm:^0.83.3"
     metro-babel-transformer: "npm:^0.83.3"
     metro-config: "npm:^0.83.3"
     micromatch: "npm:^4.0.8"
@@ -6213,8 +6214,8 @@ __metadata:
     metro: "npm:^0.83.3"
     metro-config: "npm:^0.83.3"
   peerDependencies:
-    metro: ">=0.83.0"
-    metro-config: ">=0.83.0"
+    metro: "*"
+    metro-config: "*"
   peerDependenciesMeta:
     metro:
       optional: true
@@ -6229,6 +6230,17 @@ __metadata:
   checksum: 10c0/1907fb5e747d327be004b9479ca40cdd328c10a322b51cbb423df6e0d488a32cfea3bea2f52894f9c3a7f54ee810516362861166b3a513de7b123eeb49aca6bf
   languageName: node
   linkType: hard
+
+"@rnx-kit/types-metro-serializer-esbuild@workspace:packages/types-metro-serializer-esbuild":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/types-metro-serializer-esbuild@workspace:packages/types-metro-serializer-esbuild"
+  dependencies:
+    "@rnx-kit/oxlint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    esbuild: "npm:^0.27.1"
+  languageName: unknown
+  linkType: soft
 
 "@rnx-kit/types-node@npm:*, @rnx-kit/types-node@npm:^1.0.0, @rnx-kit/types-node@workspace:packages/types-node":
   version: 0.0.0-use.local

@@ -1,5 +1,3 @@
-import path from "node:path";
-
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
@@ -24,36 +22,12 @@ export function simpleObjectMerge(
 }
 
 /**
- * Given a base module and an array of transformer paths
- * @param baseModule the upstream babel transformer that we want to remap to a different resolution
- * @param additionalTransformers a record where the values point to additional transformers that will also need to have baseModule remapped
+ * Try to resolve the module path from here, falling back to resolving from the working directory if that fails.
  */
-export function getModuleRedirectPaths(
-  baseModule: string,
-  additionalTransformers?: Record<string, string>
-): string[] {
-  const paths = [baseModule];
-  const resolvedBase = require.resolve(baseModule);
-  if (resolvedBase !== baseModule) {
-    paths.push(resolvedBase);
+export function resolveModulePath(moduleName: string): string {
+  try {
+    return require.resolve(moduleName);
+  } catch (_) {
+    return require.resolve(moduleName, { paths: [process.cwd()] });
   }
-
-  if (additionalTransformers) {
-    const foundTransformers = new Set<string>();
-    for (const transformerPath of Object.values(additionalTransformers)) {
-      foundTransformers.add(transformerPath);
-    }
-    for (const transformerPath of foundTransformers) {
-      const resolvedTransformer = require.resolve(transformerPath);
-      // now require.resolve the baseModule from the directory of the transformer and add it to the paths if it's different than the resolved base
-      const resolvedFromTransformer = require.resolve(baseModule, {
-        paths: [path.dirname(resolvedTransformer)],
-      });
-      if (resolvedFromTransformer !== resolvedBase) {
-        paths.push(resolvedFromTransformer);
-      }
-    }
-  }
-
-  return paths;
 }

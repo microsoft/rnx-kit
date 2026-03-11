@@ -3,7 +3,6 @@ import type { CustomTransformerOptions } from "@rnx-kit/types-metro-config";
 import micromatch from "micromatch";
 import crypto from "node:crypto";
 import fs from "node:fs";
-import Module from "node:module";
 
 type TransformerModule = {
   transform: (
@@ -31,7 +30,7 @@ type WithCustomOptions<T extends object = object> = Omit<
 /**
  * Arguments passed in to the transform function of a babel transformer.
  */
-type BabelTransformerArgs = Omit<BaseTransformerArgs, "options"> & {
+export type BabelTransformerArgs = Omit<BaseTransformerArgs, "options"> & {
   options: WithCustomOptions<BaseTransformerArgs["options"]>;
 };
 
@@ -57,35 +56,6 @@ export const getCacheKey = (() => {
   };
 })();
 
-/**
- * Patches Module._resolveFilename so that any require() call for a path in `aliases` is transparently
- * redirected to `resolvedTargetPath`. This is how we make delegate transformers (e.g. react-native-svg-transformer)
- * route their own upstream require to the path the user specified rather than the
- * default @react-native/metro-babel-transformer.
- *
- * The patch is applied once per worker process; subsequent calls are no-ops.
- */
-const installAliases = (() => {
-  let aliasesInstalled = false;
-  return (aliases: string[], resolvedTargetPath: string): void => {
-    if (!aliasesInstalled) {
-      aliasesInstalled = true;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mod = Module as any;
-      const original: (...args: unknown[]) => string = mod._resolveFilename;
-      mod._resolveFilename = function (
-        request: string,
-        ...rest: unknown[]
-      ): string {
-        if (aliases.includes(request)) {
-          return resolvedTargetPath;
-        }
-        return original.call(mod, request, ...rest);
-      };
-    }
-  };
-})();
-
 function findTransformerForFile(
   filename: string,
   babelTransformers: Record<string, string>
@@ -106,16 +76,8 @@ export function transform(
     customTransformerOptions: CustomTransformerOptions;
   };
 
-  const {
-    upstreamTransformerPath,
-    upstreamTransformerAliases,
-    babelTransformers,
-  } = customTransformerOptions;
-
-  if (upstreamTransformerAliases?.length) {
-    const resolvedUpstream = require.resolve(upstreamTransformerPath);
-    installAliases(upstreamTransformerAliases, resolvedUpstream);
-  }
+  const { upstreamTransformerPath, babelTransformers } =
+    customTransformerOptions;
 
   let transformerPath = upstreamTransformerPath;
   if (babelTransformers) {

@@ -1,9 +1,8 @@
 import type { BabelFileResult } from "@babel/core";
 import type { CustomTransformerOptions } from "@rnx-kit/types-metro-config";
 import { equal, match } from "node:assert/strict";
-import Module from "node:module";
 import path from "node:path";
-import { after, before, describe, it } from "node:test";
+import { describe, it } from "node:test";
 import type { BabelTransformerArgs } from "../src/babelTransformer.ts";
 import { getCacheKey, transform } from "../src/babelTransformer.ts";
 
@@ -110,45 +109,5 @@ describe("transform", () => {
     )) as ResultWithTestData;
 
     equal(result.metadata.filename, filename);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// transform — upstreamTransformerAliases
-// ---------------------------------------------------------------------------
-
-describe("alias interception", () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mod = Module as any;
-  let savedResolveFilename: (...args: unknown[]) => string;
-
-  before(() => {
-    savedResolveFilename = mod._resolveFilename;
-  });
-
-  after(() => {
-    mod._resolveFilename = savedResolveFilename;
-  });
-
-  it("patches Module._resolveFilename to redirect aliased requests to the upstream path", async () => {
-    const resolvedUpstream = require.resolve(upstreamTransformerPath);
-
-    await transform(
-      makeArgs("index.js", {
-        upstreamTransformerPath,
-        upstreamTransformerAliases: ["some-fake-upstream-transformer"],
-      })
-    );
-
-    equal(
-      mod._resolveFilename("some-fake-upstream-transformer"),
-      resolvedUpstream
-    );
-  });
-
-  it("does not affect resolution of non-aliased requests", () => {
-    const resolvedMicromatch = require.resolve("micromatch");
-    // pass the current module as parent so resolution has a context
-    equal(mod._resolveFilename("micromatch", module), resolvedMicromatch);
   });
 });

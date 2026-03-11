@@ -27,16 +27,17 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@react-native/metro-babel-transformer": "^0.83.0",
     "@rnx-kit/types-metro-config": "^0.0.1",
     "micromatch": "^4.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@react-native/metro-babel-transformer": "^0.83.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.20.0",
     "@types/micromatch": "^4.0.10",
+    "metro": "^0.83.3",
     "metro-babel-transformer": "^0.83.3",
     "metro-config": "^0.83.3"
   },
