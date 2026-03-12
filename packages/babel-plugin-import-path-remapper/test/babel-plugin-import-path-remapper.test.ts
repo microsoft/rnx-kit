@@ -161,4 +161,32 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
       `import(/* webpackChunkName: "example" */"@rnx-kit/example/__mocks__/lib/index");`
     );
   });
+
+  it("remaps barrel import for package with exports field", () => {
+    process.chdir("test/__fixtures__/with-exports");
+    equal(
+      transform(`import { A } from "@rnx-kit/example";`),
+      `import { A } from "@rnx-kit/example/src/index.ts";`
+    );
+  });
+
+  it("remaps barrel require for package with exports field", () => {
+    process.chdir("test/__fixtures__/with-exports");
+    equal(
+      transform(`require("@rnx-kit/example");`),
+      `require("@rnx-kit/example/src/index.ts");`
+    );
+  });
+
+  it("uses custom remap for package with exports field", () => {
+    process.chdir("test/__fixtures__/with-exports");
+    equal(
+      transform(`import { A } from "@rnx-kit/example";`, {
+        test: isRNXKit,
+        remap: (moduleName: string, path: string) =>
+          `${moduleName}/__mocks__/${path}`,
+      }),
+      `import { A } from "@rnx-kit/example/__mocks__/lib/index.js";`
+    );
+  });
 });
