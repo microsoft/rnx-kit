@@ -16,13 +16,6 @@ export type ExtendedTransformerConfig = Partial<TransformerConfigT> & {
   babelTransformers?: Record<string, string>;
 
   /**
-   * Many babel transformers, like the svg transformer, will do some work then send the result to either
-   * @react-native/metro-babel-transformer. Setting this will attempt to force the transformer to use the specified
-   * path instead.
-   */
-  upstreamBabelOverridePath?: string;
-
-  /**
    * A convenience helper to add custom options to the babel transformers. These will be aggregated and set
    * in the getTransformerOptions return value to be passed to the babel transformers.
    */
@@ -63,10 +56,4 @@ export type TransformerPlugin = {
    * transformer configuration settings to merge in with user settings and other plugin settings.
    */
   transformer?: ExtendedTransformerConfig;
-
-  /**
-   * By default, user settings will overwrite plugin settings. When this is set plugins will be applied
-   * after the user settings, allowing them to take precedence.
-   */
-  highPrecedence?: boolean;
 };

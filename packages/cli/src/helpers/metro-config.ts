@@ -15,7 +15,11 @@ import type {
   SerializerPlugin,
   ExtendedTransformerConfig,
 } from "@rnx-kit/types-metro-config";
-import type { ConfigT, SerializerConfigT } from "metro-config";
+import type {
+  ConfigT,
+  SerializerConfigT,
+  TransformerConfigT,
+} from "metro-config";
 import type { WritableDeep } from "type-fest";
 import { getDefaultBundlerPlugins } from "../bundle/defaultPlugins.ts";
 
@@ -112,9 +116,9 @@ export function customizeMetroConfig(
 
   const metroPlugins: SerializerPlugin[] = [];
   const serializerHooks: Record<string, SerializerHookPlugin> = {};
-  const transformers: ExtendedTransformerConfig[] = [
-    metroConfig.transformer || {},
-  ];
+  const transformers: ExtendedTransformerConfig[] = metroConfig.transformer
+    ? [metroConfig.transformer]
+    : [];
 
   const legacyWarning = readLegacyOptions(extraParams);
   if (legacyWarning) {
@@ -162,11 +166,7 @@ export function customizeMetroConfig(
           {
             const transformerPlugin: TransformerPlugin = plugin(options, print);
             if (transformerPlugin.transformer) {
-              if (transformerPlugin.highPrecedence) {
-                transformers.push(transformerPlugin.transformer);
-              } else {
-                transformers.unshift(transformerPlugin.transformer);
-              }
+              transformers.unshift(transformerPlugin.transformer);
             }
           }
           break;
@@ -189,6 +189,7 @@ export function customizeMetroConfig(
         ? extraParams.treeShake
         : undefined
     );
+    // otherwise, add it to the list to be merged by the MetroTransformer
     transformers.push(esbuildTransformerConfig);
   } else if (metroPlugins.length > 0) {
     // MetroSerializer acts as a CustomSerializer, and it works with both
@@ -208,13 +209,12 @@ export function customizeMetroConfig(
     // We don't want this set if unused
     delete metroConfig.serializer.customSerializer;
   }
-  // if we have more than one transformer, we have either added them via transformer plugins or via the esbuild serializer. In either
-  // case use the MetroTransformer to merge them and create a single transformer config for Metro to use.
-  if (transformers.length > 1) {
-    metroConfig.transformer = MetroTransformer(
-      ...transformers
-    ) as WritableDeep<ConfigT>["transformer"];
-  }
+  // Use the MetroTransformer to resolve the final transformer, if there are no valid transformers it will return an empty
+  // config. If there is one and it is already valid it will return it as is, if there are multiple or if they use extended
+  // options it will merge and transform them.
+  metroConfig.transformer = MetroTransformer(
+    ...transformers
+  ) as WritableDeep<TransformerConfigT>;
 
   const hooks = Object.values(serializerHooks);
   switch (hooks.length) {

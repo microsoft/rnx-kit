@@ -41,14 +41,6 @@
     "metro-babel-transformer": "^0.83.3",
     "metro-config": "^0.83.3"
   },
-  "peerDependencies": {
-    "@react-native/metro-babel-transformer": "*"
-  },
-  "peerDependenciesMeta": {
-    "@react-native/metro-babel-transformer": {
-      "optional": true
-    }
-  },
   "engines": {
     "node": ">=18.12"
   }

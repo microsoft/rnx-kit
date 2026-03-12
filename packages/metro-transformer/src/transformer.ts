@@ -3,14 +3,26 @@ import type {
   TransformerConfigT,
   CustomTransformerOptions,
 } from "@rnx-kit/types-metro-config";
-import { resolveModulePath, simpleObjectMerge } from "./utilities";
+import {
+  simpleObjectMerge,
+  isBaseConfig,
+  getDefaultTransformerPath,
+} from "./utilities";
 
 type GetOptions = TransformerConfigT["getTransformOptions"];
-const defaultTransformer = "@react-native/metro-babel-transformer";
 
 export function MetroTransformer(
   ...configs: ExtendedTransformerConfig[]
 ): Partial<TransformerConfigT> {
+  // remove any empty configs to avoid unnecessary merging and processing
+  configs = configs.filter((config) => Object.keys(config).length > 0);
+  if (configs.length === 0) {
+    return {};
+  } else if (configs.length === 1 && isBaseConfig(configs[0])) {
+    // if we only have one config and it is a base config, we can return it as is without merging or other processing
+    return configs[0] as Partial<TransformerConfigT>;
+  }
+
   const result: Partial<TransformerConfigT> = {};
   const customOptions = {} as CustomTransformerOptions;
   const conditionalTransformers: Record<string, string> = {};
@@ -20,7 +32,6 @@ export function MetroTransformer(
     const {
       customTransformerOptions = {},
       babelTransformers = {},
-      upstreamBabelOverridePath,
       getTransformOptions,
       ...additionalConfig
     } = config;
@@ -28,9 +39,6 @@ export function MetroTransformer(
     Object.assign(conditionalTransformers, babelTransformers);
     Object.assign(customOptions, customTransformerOptions);
 
-    if (upstreamBabelOverridePath) {
-      customOptions.upstreamTransformerPath = upstreamBabelOverridePath;
-    }
     if (getTransformOptions) {
       optionFunctions.push(getTransformOptions);
     }
@@ -45,7 +53,7 @@ export function MetroTransformer(
 
   // ensure the upstream transformer is available to the babel transformers
   customOptions.upstreamTransformerPath ??=
-    result.babelTransformerPath ?? resolveModulePath(defaultTransformer);
+    result.babelTransformerPath ?? getDefaultTransformerPath();
 
   // create the merged getTransformOptions function
   result.getTransformOptions = createGetTransformOptions(

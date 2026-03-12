@@ -78,8 +78,6 @@ transformers at transform time:
 A plugin object that contributes transformer configuration:
 
 - **`transformer`** — `ExtendedTransformerConfig` — config settings to merge
-- **`highPrecedence`** — `boolean` — when `true`, the plugin's settings are
-  applied after user settings and take precedence (default: user settings win)
 
 ### Plugin factory types
 

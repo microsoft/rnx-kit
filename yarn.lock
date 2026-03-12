@@ -5692,11 +5692,6 @@ __metadata:
     metro-babel-transformer: "npm:^0.83.3"
     metro-config: "npm:^0.83.3"
     micromatch: "npm:^4.0.8"
-  peerDependencies:
-    "@react-native/metro-babel-transformer": "*"
-  peerDependenciesMeta:
-    "@react-native/metro-babel-transformer":
-      optional: true
   languageName: unknown
   linkType: soft
 
