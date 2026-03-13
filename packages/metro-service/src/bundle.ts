@@ -68,21 +68,15 @@ export async function bundle(
 
   const { buildBundle } = await import("./bundle/bundle-0.71.js");
   const sourceMap = args.sourcemapOutput != null;
-  return await buildBundle(
-    args,
-    config,
-    output,
-    {
-      dev: args.dev,
-      entryFile: args.entryFile,
-      // @ts-expect-error `inlineSourceMap` was introduced in 0.82
-      inlineSourceMap: sourceMap && !sourceMapUrl,
-      minify: args.minify != null ? args.minify : !args.dev,
-      platform: args.platform,
-      sourceMapUrl: !sourceMap ? undefined : sourceMapUrl,
-      createModuleIdFactory: config.serializer.createModuleIdFactory,
-      unstable_transformProfile: args.unstableTransformProfile,
-    },
-    runMetro
-  );
+  return await buildBundle(runMetro, args, config, output, {
+    dev: args.dev,
+    entryFile: args.entryFile,
+    // @ts-expect-error `inlineSourceMap` was introduced in 0.82
+    inlineSourceMap: sourceMap && !sourceMapUrl,
+    minify: args.minify != null ? args.minify : !args.dev,
+    platform: args.platform,
+    sourceMapUrl: !sourceMap ? undefined : sourceMapUrl,
+    createModuleIdFactory: config.serializer.createModuleIdFactory,
+    unstable_transformProfile: args.unstableTransformProfile,
+  });
 }
