@@ -1,14 +1,17 @@
 // Source: https://github.com/facebook/react-native/blob/0.80-stable/packages/community-cli-plugin/src/commands/bundle/buildBundle.js#L64
 
 import { bold, error, info } from "@rnx-kit/console";
-import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
+import {
+  findMetroPath,
+  requireModuleFromMetro,
+} from "@rnx-kit/tools-react-native/metro";
 import type { ConfigT } from "metro-config";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { ensureBabelConfig } from "./babel.ts";
 import type { BundleArgs } from "./types.ts";
 
-export function bundle(
+export async function bundle(
   args: BundleArgs,
   config: ConfigT,
   output = requireModuleFromMetro(
@@ -50,25 +53,34 @@ export function bundle(
   const mkdirOptions = { recursive: true, mode: 0o755 } as const;
   fs.mkdirSync(path.dirname(args.bundleOutput), mkdirOptions);
 
-  // `runMetro` was introduced in 0.71:
-  // https://github.com/facebook/metro/commit/a0f99e136fbd2e02ab070437cee9f6e9baa36d16
-  const { runMetro } = requireModuleFromMetro("metro", config.projectRoot);
-  if (!runMetro) {
-    return import("./bundle/bundle-0.66.js").then(({ buildBundle }) =>
-      buildBundle(args, config, output, {
-        entryFile: args.entryFile,
-        sourceMapUrl,
-        dev: args.dev,
-        minify: args.minify != null ? args.minify : !args.dev,
-        platform: args.platform,
-        unstable_transformProfile: args.unstableTransformProfile,
-      })
-    );
+  const metroPath = findMetroPath(config.projectRoot);
+  if (!metroPath) {
+    throw new Error("Cannot find module 'metro'");
   }
 
-  return import("./bundle/bundle-0.71.js").then(({ buildBundle }) => {
-    const sourceMap = args.sourcemapOutput != null;
-    return buildBundle(args, config, output, {
+  // `runMetro` was introduced in 0.71:
+  // https://github.com/facebook/metro/commit/a0f99e136fbd2e02ab070437cee9f6e9baa36d16
+  const options = { paths: [config.projectRoot] };
+  const { runMetro } = await import(require.resolve(metroPath, options));
+  if (!runMetro) {
+    const { buildBundle } = await import("./bundle/bundle-0.66.js");
+    return await buildBundle(args, config, output, {
+      entryFile: args.entryFile,
+      sourceMapUrl,
+      dev: args.dev,
+      minify: args.minify != null ? args.minify : !args.dev,
+      platform: args.platform,
+      unstable_transformProfile: args.unstableTransformProfile,
+    });
+  }
+
+  const { buildBundle } = await import("./bundle/bundle-0.71.js");
+  const sourceMap = args.sourcemapOutput != null;
+  return await buildBundle(
+    args,
+    config,
+    output,
+    {
       dev: args.dev,
       entryFile: args.entryFile,
       // @ts-expect-error `inlineSourceMap` was introduced in 0.82
@@ -78,6 +90,7 @@ export function bundle(
       sourceMapUrl: !sourceMap ? undefined : sourceMapUrl,
       createModuleIdFactory: config.serializer.createModuleIdFactory,
       unstable_transformProfile: args.unstableTransformProfile,
-    });
-  });
+    },
+    runMetro
+  );
 }

@@ -40,9 +40,9 @@ export async function buildBundle(
   args: BundleArgs,
   config: ConfigT,
   output: MetroBundle,
-  requestOptions: RequestOptions
+  requestOptions: RequestOptions,
+  runMetro: (typeof import("metro"))["runMetro"]
 ): Promise<void> {
-  const { runMetro } = requireModuleFromMetro("metro", config.projectRoot);
   const metroServer = await runMetro(config, { watch: false });
 
   try {
