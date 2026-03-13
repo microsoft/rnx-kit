@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-service
 
+## 4.1.5
+
+### Patch Changes
+
+- ca3e5dc: Fixed Metro not being imported correctly
+- Updated dependencies [ca3e5dc]
+  - @rnx-kit/tools-react-native@2.3.5
+
 ## 4.1.4
 
 ### Patch Changes
