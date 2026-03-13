@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.3.5
+
+### Patch Changes
+
+- ca3e5dc: Importing `metro` using `requireModuleFromMetro` is deprecated because a different module is returned with `require()` vs `import()`
+
 ## 2.3.4
 
 ### Patch Changes
