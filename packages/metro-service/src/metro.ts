@@ -7,3 +7,13 @@ export function requireMetroPath(projectRoot: string): string {
   }
   return p;
 }
+
+export function importMetroForProject(
+  projectRoot: string
+): Promise<typeof import("metro")> {
+  // Note that we need to `import()` because a different module is returned with
+  // `require()`.
+  const options = { paths: [projectRoot] };
+  const metroPath = require.resolve(requireMetroPath(projectRoot), options);
+  return import(`file://${metroPath.replaceAll("\\", "/")}`);
+}

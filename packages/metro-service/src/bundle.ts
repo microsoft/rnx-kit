@@ -1,14 +1,12 @@
 // Source: https://github.com/facebook/react-native/blob/0.80-stable/packages/community-cli-plugin/src/commands/bundle/buildBundle.js#L64
 
 import { bold, error, info } from "@rnx-kit/console";
-import {
-  findMetroPath,
-  requireModuleFromMetro,
-} from "@rnx-kit/tools-react-native/metro";
+import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { ConfigT } from "metro-config";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { ensureBabelConfig } from "./babel.ts";
+import { importMetroForProject } from "./metro.ts";
 import type { BundleArgs } from "./types.ts";
 
 export async function bundle(
@@ -53,18 +51,9 @@ export async function bundle(
   const mkdirOptions = { recursive: true, mode: 0o755 } as const;
   fs.mkdirSync(path.dirname(args.bundleOutput), mkdirOptions);
 
-  const metroPath = findMetroPath(config.projectRoot);
-  if (!metroPath) {
-    throw new Error("Cannot find module 'metro'");
-  }
-
   // `runMetro` was introduced in 0.71:
   // https://github.com/facebook/metro/commit/a0f99e136fbd2e02ab070437cee9f6e9baa36d16
-  // Note that we need to `import()` because a different module is returned with
-  // `require()`.
-  const options = { paths: [config.projectRoot] };
-  const metroUrl = `file://${require.resolve(metroPath, options).replaceAll("\\", "/")}`;
-  const { runMetro } = await import(metroUrl);
+  const { runMetro } = await importMetroForProject(config.projectRoot);
   if (!runMetro) {
     const { buildBundle } = await import("./bundle/bundle-0.66.js");
     return await buildBundle(args, config, output, {
