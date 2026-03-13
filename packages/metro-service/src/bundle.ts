@@ -61,7 +61,8 @@ export async function bundle(
   // `runMetro` was introduced in 0.71:
   // https://github.com/facebook/metro/commit/a0f99e136fbd2e02ab070437cee9f6e9baa36d16
   const options = { paths: [config.projectRoot] };
-  const { runMetro } = await import(require.resolve(metroPath, options));
+  const metroUrl = `file://${require.resolve(metroPath, options).replaceAll("\\", "/")}`;
+  const { runMetro } = await import(metroUrl);
   if (!runMetro) {
     const { buildBundle } = await import("./bundle/bundle-0.66.js");
     return await buildBundle(args, config, output, {
