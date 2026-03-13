@@ -112,6 +112,9 @@ export function getMetroVersion(
   return version;
 }
 
+/**
+ * @deprecated Importing "metro" is no longer supported because a different module is returned with `require()` vs `import()`
+ */
 export function requireModuleFromMetro(
   moduleName: "metro",
   fromDir?: string

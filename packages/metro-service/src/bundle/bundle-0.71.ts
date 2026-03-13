@@ -37,12 +37,12 @@ function getAssets(
 
 // Source: https://github.com/facebook/metro/blob/v0.82.4/packages/metro/src/index.flow.js#L386
 export async function buildBundle(
+  runMetro: (typeof import("metro"))["runMetro"],
   args: BundleArgs,
   config: ConfigT,
   output: MetroBundle,
   requestOptions: RequestOptions
 ): Promise<void> {
-  const { runMetro } = requireModuleFromMetro("metro", config.projectRoot);
   const metroServer = await runMetro(config, { watch: false });
 
   try {
