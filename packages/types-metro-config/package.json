@@ -1,0 +1,54 @@
+{
+  "name": "@rnx-kit/types-metro-config",
+  "version": "0.0.1",
+  "description": "Common types for rnx-kit metro plugins and configuration",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-metro-config#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/types-metro-config"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
+  },
+  "devDependencies": {
+    "@rnx-kit/oxlint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "metro": "^0.83.3",
+    "metro-config": "^0.83.3"
+  },
+  "peerDependencies": {
+    "metro": "*",
+    "metro-config": "*"
+  },
+  "peerDependenciesMeta": {
+    "metro": {
+      "optional": true
+    },
+    "metro-config": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18.12"
+  }
+}

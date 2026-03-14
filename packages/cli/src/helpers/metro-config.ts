@@ -2,14 +2,24 @@ import { warn } from "@rnx-kit/console";
 import { CyclicDependencies } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import { DuplicateDependencies } from "@rnx-kit/metro-plugin-duplicates-checker";
 import { TypeScriptPlugin } from "@rnx-kit/metro-plugin-typescript";
-import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { MetroSerializer } from "@rnx-kit/metro-serializer";
 import {
   esbuildTransformerConfig,
   MetroSerializer as MetroSerializerEsbuild,
 } from "@rnx-kit/metro-serializer-esbuild";
+import { MetroTransformer } from "@rnx-kit/metro-transformer";
 import type { BundleParameters } from "@rnx-kit/types-bundle-config";
-import type { ConfigT, SerializerConfigT } from "metro-config";
+import type {
+  TransformerPlugin,
+  SerializerHookPlugin,
+  SerializerPlugin,
+  ExtendedTransformerConfig,
+} from "@rnx-kit/types-metro-config";
+import type {
+  ConfigT,
+  SerializerConfigT,
+  TransformerConfigT,
+} from "metro-config";
 import type { WritableDeep } from "type-fest";
 import { getDefaultBundlerPlugins } from "../bundle/defaultPlugins.ts";
 
@@ -104,11 +114,11 @@ export function customizeMetroConfig(
   // with readonly props to a type where the props are writeable.
   const metroConfig = metroConfigReadonly as WritableDeep<ConfigT>;
 
-  const metroPlugins: MetroPlugin[] = [];
-  const serializerHooks: Record<
-    string,
-    SerializerConfigT["experimentalSerializerHook"]
-  > = {};
+  const metroPlugins: SerializerPlugin[] = [];
+  const serializerHooks: Record<string, SerializerHookPlugin> = {};
+  const transformers: ExtendedTransformerConfig[] = metroConfig.transformer
+    ? [metroConfig.transformer]
+    : [];
 
   const legacyWarning = readLegacyOptions(extraParams);
   if (legacyWarning) {
@@ -152,6 +162,15 @@ export function customizeMetroConfig(
           serializerHooks[module] = plugin(options, print);
           break;
 
+        case "transformer":
+          {
+            const transformerPlugin: TransformerPlugin = plugin(options, print);
+            if (transformerPlugin.transformer) {
+              transformers.unshift(transformerPlugin.transformer);
+            }
+          }
+          break;
+
         default:
           throw new Error(`${module}: unknown plugin type: ${plugin.type}`);
       }
@@ -170,7 +189,8 @@ export function customizeMetroConfig(
         ? extraParams.treeShake
         : undefined
     );
-    Object.assign(metroConfig.transformer, esbuildTransformerConfig);
+    // otherwise, add it to the list to be merged by the MetroTransformer
+    transformers.push(esbuildTransformerConfig);
   } else if (metroPlugins.length > 0) {
     // MetroSerializer acts as a CustomSerializer, and it works with both
     // older and newer versions of Metro. Older versions expect a return
@@ -189,6 +209,12 @@ export function customizeMetroConfig(
     // We don't want this set if unused
     delete metroConfig.serializer.customSerializer;
   }
+  // Use the MetroTransformer to resolve the final transformer, if there are no valid transformers it will return an empty
+  // config. If there is one and it is already valid it will return it as is, if there are multiple or if they use extended
+  // options it will merge and transform them.
+  metroConfig.transformer = MetroTransformer(
+    ...transformers
+  ) as WritableDeep<TransformerConfigT>;
 
   const hooks = Object.values(serializerHooks);
   switch (hooks.length) {

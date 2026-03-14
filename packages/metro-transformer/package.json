@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/metro-serializer",
-  "version": "2.0.3",
-  "description": "Metro's default JavaScript bundle serializer but with plugin support",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer#readme",
+  "name": "@rnx-kit/metro-transformer",
+  "version": "0.0.1",
+  "description": "metro-transformer",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-transformer#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -11,22 +11,15 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/metro-serializer"
+    "directory": "packages/metro-transformer"
   },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
+  "type": "commonjs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./lib/index.d.ts",
-      "typescript": "./src/index.ts",
-      "default": "./lib/index.js"
-    },
-    "./package.json": "./package.json"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -34,16 +27,21 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-react-native": "^2.3.0",
-    "@rnx-kit/types-metro-config": "^0.0.1"
+    "@rnx-kit/types-metro-config": "^0.0.1",
+    "micromatch": "^4.0.8"
   },
   "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@react-native/metro-babel-transformer": "^0.83.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^24.0.0",
-    "metro": "^0.83.3"
+    "@types/babel__core": "^7.20.0",
+    "@types/micromatch": "^4.0.10",
+    "metro": "^0.83.3",
+    "metro-babel-transformer": "^0.83.3",
+    "metro-config": "^0.83.3"
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=18.12"
   }
 }

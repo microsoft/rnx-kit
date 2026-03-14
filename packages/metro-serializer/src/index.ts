@@ -3,33 +3,18 @@ import {
   requireModuleFromMetro,
 } from "@rnx-kit/tools-react-native/metro";
 import type {
-  MixedOutput,
-  Module,
-  ReadOnlyGraph,
-  SerializerOptions,
-} from "metro";
-
-export type MetroPlugin<T = MixedOutput> = (
-  entryPoint: string,
-  preModules: readonly Module<T>[],
-  graph: ReadOnlyGraph<T>,
-  options: SerializerOptions<T>
-) => void;
-
-export type Bundle = {
-  modules: readonly [number, string][];
-  post: string;
-  pre: string;
+  Bundle,
+  CustomSerializer,
+  CustomSerializerResult,
+  SerializerPlugin,
+} from "@rnx-kit/types-metro-config";
+import type { Module, ReadOnlyGraph, SerializerOptions } from "metro";
+export type {
+  Bundle,
+  CustomSerializer,
+  CustomSerializerResult,
+  SerializerPlugin as MetroPlugin,
 };
-
-export type CustomSerializerResult = string | { code: string; map: string };
-
-export type CustomSerializer = (
-  entryPoint: string,
-  preModules: readonly Module[],
-  graph: ReadOnlyGraph,
-  options: SerializerOptions
-) => Promise<CustomSerializerResult> | CustomSerializerResult;
 
 export type TestMocks = {
   baseJSBundle?: (
@@ -61,7 +46,7 @@ function getMetroVersion(): number {
  * @see https://github.com/facebook/metro/blob/af23a1b27bcaaff2e43cb795744b003e145e78dd/packages/metro/src/Server.js#L228
  */
 export function MetroSerializer(
-  plugins: MetroPlugin[],
+  plugins: SerializerPlugin[],
   __mocks: TestMocks = {}
 ): CustomSerializer {
   const baseJSBundle =
