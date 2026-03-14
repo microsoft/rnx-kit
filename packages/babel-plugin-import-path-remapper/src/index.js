@@ -45,25 +45,32 @@ function findMainSourceFile(sourcePath, requester, customRemap) {
     resolveOptions
   );
 
-  const { main, exports } = readPackage(manifestPath);
-  if (exports) {
-    // Skip packages that declare entry points
-    return;
+  const { main, exports: pkgExports } = readPackage(manifestPath);
+
+  // Determine the main entry point from `main` or `exports["."]`
+  let mainEntry = typeof main === "string" ? main : undefined;
+  if (!mainEntry && pkgExports) {
+    const root = pkgExports["."];
+    if (typeof root === "string") {
+      mainEntry = root;
+    } else if (root && typeof root === "object") {
+      mainEntry = root.default || root.require || root.import;
+    }
   }
 
   if (customRemap) {
     return customRemap(
       sourcePath,
-      typeof main === "string" ? main : undefined,
+      typeof mainEntry === "string" ? mainEntry : undefined,
       requester
     );
   }
 
-  if (typeof main !== "string") {
+  if (typeof mainEntry !== "string") {
     return;
   }
 
-  const remappedPath = `${sourcePath}/${main.replace(
+  const remappedPath = `${sourcePath}/${mainEntry.replace(
     /^(?:\.\/)?lib\/(.*)\.js/,
     "src/$1.ts"
   )}`;
