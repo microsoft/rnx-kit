@@ -6953,66 +6953,66 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260305.1":
-  version: 7.0.0-dev.20260305.1
-  resolution: "@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260305.1"
+"@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260316.1":
+  version: 7.0.0-dev.20260316.1
+  resolution: "@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260316.1"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260305.1":
-  version: 7.0.0-dev.20260305.1
-  resolution: "@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260305.1"
+"@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260316.1":
+  version: 7.0.0-dev.20260316.1
+  resolution: "@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260316.1"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260305.1":
-  version: 7.0.0-dev.20260305.1
-  resolution: "@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260305.1"
+"@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260316.1":
+  version: 7.0.0-dev.20260316.1
+  resolution: "@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260316.1"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260305.1":
-  version: 7.0.0-dev.20260305.1
-  resolution: "@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260305.1"
+"@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260316.1":
+  version: 7.0.0-dev.20260316.1
+  resolution: "@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260316.1"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260305.1":
-  version: 7.0.0-dev.20260305.1
-  resolution: "@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260305.1"
+"@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260316.1":
+  version: 7.0.0-dev.20260316.1
+  resolution: "@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260316.1"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260305.1":
-  version: 7.0.0-dev.20260305.1
-  resolution: "@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260305.1"
+"@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260316.1":
+  version: 7.0.0-dev.20260316.1
+  resolution: "@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260316.1"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260305.1":
-  version: 7.0.0-dev.20260305.1
-  resolution: "@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260305.1"
+"@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260316.1":
+  version: 7.0.0-dev.20260316.1
+  resolution: "@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260316.1"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
 "@typescript/native-preview@npm:^7.0.0-0":
-  version: 7.0.0-dev.20260305.1
-  resolution: "@typescript/native-preview@npm:7.0.0-dev.20260305.1"
+  version: 7.0.0-dev.20260316.1
+  resolution: "@typescript/native-preview@npm:7.0.0-dev.20260316.1"
   dependencies:
-    "@typescript/native-preview-darwin-arm64": "npm:7.0.0-dev.20260305.1"
-    "@typescript/native-preview-darwin-x64": "npm:7.0.0-dev.20260305.1"
-    "@typescript/native-preview-linux-arm": "npm:7.0.0-dev.20260305.1"
-    "@typescript/native-preview-linux-arm64": "npm:7.0.0-dev.20260305.1"
-    "@typescript/native-preview-linux-x64": "npm:7.0.0-dev.20260305.1"
-    "@typescript/native-preview-win32-arm64": "npm:7.0.0-dev.20260305.1"
-    "@typescript/native-preview-win32-x64": "npm:7.0.0-dev.20260305.1"
+    "@typescript/native-preview-darwin-arm64": "npm:7.0.0-dev.20260316.1"
+    "@typescript/native-preview-darwin-x64": "npm:7.0.0-dev.20260316.1"
+    "@typescript/native-preview-linux-arm": "npm:7.0.0-dev.20260316.1"
+    "@typescript/native-preview-linux-arm64": "npm:7.0.0-dev.20260316.1"
+    "@typescript/native-preview-linux-x64": "npm:7.0.0-dev.20260316.1"
+    "@typescript/native-preview-win32-arm64": "npm:7.0.0-dev.20260316.1"
+    "@typescript/native-preview-win32-x64": "npm:7.0.0-dev.20260316.1"
   dependenciesMeta:
     "@typescript/native-preview-darwin-arm64":
       optional: true
@@ -7030,7 +7030,7 @@ __metadata:
       optional: true
   bin:
     tsgo: bin/tsgo.js
-  checksum: 10c0/79193c0d40cbf41b89c4f17c5d10fa5f534024a9d43bd7b9d1c569064b1ac85c8ac14429fb6334097d6d8b9e8404f331208f76c093d425a9c907366563af2342
+  checksum: 10c0/7d880d350e2b66c4cc9496e458d25519e4165e0531c81f44c08081bb2f7bc617c9d28816920750a999d0228a0253a27a4f8de8a24779501589f6beaf78d3aaf0
   languageName: node
   linkType: hard
 
