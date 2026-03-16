@@ -555,8 +555,8 @@ __metadata:
   linkType: hard
 
 "@rnx-kit/oxlint-config@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@rnx-kit/oxlint-config@npm:1.0.2"
+  version: 1.0.3
+  resolution: "@rnx-kit/oxlint-config@npm:1.0.3"
   dependencies:
     "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
     "@react-native/eslint-plugin": "npm:^0.84.0"
@@ -567,7 +567,7 @@ __metadata:
   peerDependenciesMeta:
     eslint:
       optional: true
-  checksum: 10c0/63670268f6c008b95c265e2d2403357e33d52fb0dd3a3c70b7ae1a7d92720492bedfa2f99867d77054ced20eaa3ffc451da3533da2d9d403d39f52439e59ba7f
+  checksum: 10c0/f1b0e813219d57321d67412dba9b800ab2496df1221852c1ce87a50e51f4c71c0f1bb5a9c6c668acd86f3af8e4e7c4fc81996a939ea2396301ba551d676c3e98
   languageName: node
   linkType: hard
 
