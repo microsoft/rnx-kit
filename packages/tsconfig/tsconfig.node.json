@@ -3,6 +3,7 @@
   "compilerOptions": {
     "module": "node18",
     "moduleResolution": "node16",
+    "types": ["node"],
     "erasableSyntaxOnly": true,
     "rewriteRelativeImportExtensions": true
   }
