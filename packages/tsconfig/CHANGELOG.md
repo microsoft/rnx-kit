@@ -1,5 +1,11 @@
 # @rnx-kit/tsconfig
 
+## 3.0.1
+
+### Patch Changes
+
+- 69f30e0: Include types for Node by default
+
 ## 3.0.0
 
 ### Major Changes
