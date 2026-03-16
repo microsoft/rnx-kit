@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up toolchain
         uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.0.9
         with:
@@ -48,7 +48,7 @@ jobs:
         shell: bash
         working-directory: ${{ github.event.inputs.projectRoot }}/android
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: android-artifact
           path: ${{ github.event.inputs.projectRoot }}/android/app/build/outputs/apk/debug/app-debug.apk
@@ -66,7 +66,7 @@ jobs:
       XCARCHIVE_FILE: app.xcarchive
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up toolchain
         uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.0.9
         with:
@@ -108,7 +108,7 @@ jobs:
           fi
         working-directory: ${{ github.event.inputs.projectRoot }}/ios
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ios-artifact
           path: ${{ github.event.inputs.projectRoot }}/ios/${{ steps.prepare-build-artifact.outputs.filename }}
@@ -121,7 +121,7 @@ jobs:
     runs-on: macos-14
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up toolchain
         uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.0.9
         with:
@@ -143,7 +143,7 @@ jobs:
           /bin/bash $(node --print 'require.resolve("@rnx-kit/build/scripts/build-apple")') archive macos-artifact.tar "${app}"
         working-directory: ${{ github.event.inputs.projectRoot }}/macos
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: macos-artifact
           path: ${{ github.event.inputs.projectRoot }}/macos/macos-artifact.tar
@@ -156,7 +156,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up toolchain
         uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.0.9
         with:
@@ -186,7 +186,7 @@ jobs:
         shell: bash
         working-directory: ${{ github.event.inputs.projectRoot }}/windows
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: windows-artifact
           path: ${{ github.event.inputs.projectRoot }}/windows/AppPackages/${{ steps.prepare-build-artifact.outputs.app-name }}
@@ -200,7 +200,7 @@ jobs:
     if: ${{ github.event.inputs.distribution != 'local' && !cancelled() && !failure() }} # `success()` excludes skipped jobs
     steps:
       - name: Download build artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: ${{ github.event.inputs.platform }}-artifact
       - name: Display structure of build artifact
