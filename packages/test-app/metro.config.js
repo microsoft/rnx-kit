@@ -37,5 +37,8 @@ module.exports = makeMetroConfig({
     blacklistRE: blockList,
     blockList,
   },
+  transformer: {
+    babelTransformerPath: require.resolve("@rnx-kit/metro-transformer-oxc"),
+  },
   watchFolders: [],
 });

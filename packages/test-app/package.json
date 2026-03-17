@@ -64,6 +64,7 @@
     "@rnx-kit/metro-resolver-symlinks": "workspace:*",
     "@rnx-kit/metro-serializer": "workspace:*",
     "@rnx-kit/metro-serializer-esbuild": "workspace:*",
+    "@rnx-kit/metro-transformer-oxc": "workspace:*",
     "@rnx-kit/polyfills": "workspace:*",
     "@rnx-kit/react-native-auth": "workspace:*",
     "@rnx-kit/react-native-host": "workspace:*",
