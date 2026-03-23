@@ -55,7 +55,7 @@
     "@rnx-kit/oxlint-config": "^1.0.2",
     "@rnx-kit/tsconfig": "^3.0.0",
     "@types/node": "^24.0.0",
-    "oxfmt": "^0.36.0",
+    "oxfmt": "^0.40.0",
     "oxlint": "^1.51.0",
     "semantic-release": "^25.0.0",
     "typescript": "^5.0.0"
