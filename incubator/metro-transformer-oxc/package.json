@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-transformer-oxc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "EXPERIMENTAL - USE WITH CAUTION - metro-transformer-oxc",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/metro-transformer-oxc#readme",
   "license": "MIT",
