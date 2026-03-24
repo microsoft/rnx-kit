@@ -1,6 +1,9 @@
-import { deepEqual } from "node:assert/strict";
+import { parseSync as babelParse } from "@babel/core";
+import { deepEqual, equal } from "node:assert/strict";
+import path from "node:path";
 import { describe, it } from "node:test";
-import { getLineNumber, getNewlines } from "../src/estree.ts";
+import { parseSync as oxcParse } from "oxc-parser";
+import { getLineNumber, getNewlines, toBabelAST } from "../src/estree.ts";
 
 const TEXT = `
 Line 1
@@ -27,5 +30,25 @@ describe("getLineNumber()", () => {
     deepEqual(getLineNumber(21, newlines), [4, 15]);
     deepEqual(getLineNumber(22, newlines), [5, 22]);
     deepEqual(getLineNumber(100, newlines), [5, 22]);
+  });
+});
+
+describe("toBabelAST()", () => {
+  const SOURCE = `// @ts-check
+process.exitCode = 0;
+// trailing comment
+`;
+
+  it("ensures start/end values match Babel's AST", () => {
+    const { program } = oxcParse(path.basename(import.meta.url), SOURCE);
+
+    equal(program.start, SOURCE.indexOf("process"));
+    equal(program.end, SOURCE.length);
+
+    const { program: oxcBabelProgram } = toBabelAST(program, SOURCE);
+    const babelProgram = babelParse(SOURCE);
+
+    equal(oxcBabelProgram.start, babelProgram?.start);
+    equal(oxcBabelProgram.end, babelProgram?.end);
   });
 });

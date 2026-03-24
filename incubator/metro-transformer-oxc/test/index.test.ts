@@ -14,7 +14,6 @@ describe("metro-transformer-oxc", () => {
   });
 
   after(() => {
-    // @ts-expect-error Restore previous state
     global.__filename = undefined;
     global.require = globalRequire;
   });
