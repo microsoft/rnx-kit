@@ -69,6 +69,12 @@ export function addSourceLocation(node: Node, newlines: number[]): Node {
 }
 
 export function toBabelAST(program: Program, source: string): ParseResult {
+  // `oxc-parser` skips leading and trailing comments whereas Babel assumes a
+  // program always starts at line 1. We need to set start/end to values Babel
+  // expects.
+  program.start = 0;
+  program.end = source.length;
+
   // TODO: We have to mutate the AST to include source location
   // https://github.com/oxc-project/oxc/issues/10307
   const visitor: VisitorObject = {};
