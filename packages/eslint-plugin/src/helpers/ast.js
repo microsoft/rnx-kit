@@ -40,6 +40,14 @@ export function isMemberExpression(node) {
 
 /**
  * @param {TSESTree.Node} node
+ * @returns {node is TSESTree.RestElement}
+ */
+export function isRestElement(node) {
+  return node.type === "RestElement";
+}
+
+/**
+ * @param {TSESTree.Node} node
  * @param {string} objectName
  * @param {string} propertyName
  * @returns {boolean}
