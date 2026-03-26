@@ -67,6 +67,7 @@ function filterRevertCommits(commits: Commit[]) {
   console.group();
   let revertCommits: string[] = [];
   const pattern = /\b(revert d\d{8}: |revert\b|back out ".*")/i;
+  // oxlint-disable-next-line @rnx-kit/no-unnecessary-arrays
   const filteredCommits = commits
     .filter((item) => {
       const text = item.commit.message.split("\n")[0].toLowerCase();
