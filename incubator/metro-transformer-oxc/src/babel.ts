@@ -4,9 +4,11 @@
  * with only typing fixes to make TypeScript happy.
  */
 import type { PluginItem, TransformOptions } from "@babel/core";
-import type { BabelTransformerOptions } from "metro-babel-transformer";
+import type { BabelTransformerArgs } from "metro-babel-transformer";
 import * as fs from "node:fs";
 import * as path from "node:path";
+
+type BabelTransformerOptions = BabelTransformerArgs["options"];
 
 /**
  * Return a memoized function that checks for the existence of a

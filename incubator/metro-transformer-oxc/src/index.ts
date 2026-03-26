@@ -4,20 +4,18 @@
  * and modified to use `oxc-parser` where appropriate.
  */
 import { transformFromAstSync } from "@babel/core";
-import type { BabelTransformer } from "metro-babel-transformer";
+import type { BabelTransformerArgs } from "metro-babel-transformer";
 // @ts-expect-error Node 20.12+ supports require(esm)
 import { parseSync } from "oxc-parser";
 import { buildBabelConfig } from "./babel.ts";
 import { isFlowError, toBabelAST } from "./estree.ts";
 import { findReactNativeTransformer } from "./metro.ts";
 
-type Transform = BabelTransformer["transform"];
-
 function isTypeScript(fn: string): boolean {
   return Boolean(fn) && (fn.endsWith(".ts") || fn.endsWith(".tsx"));
 }
 
-export const transform: Transform = (args) => {
+export const transform = (args: BabelTransformerArgs) => {
   const { filename, options, src, plugins } = args;
 
   /**
@@ -46,7 +44,6 @@ export const transform: Transform = (args) => {
   const babelConfig = {
     // ES modules require sourceType='module' but OSS may not always want that
     sourceType: "unambiguous",
-    // @ts-expect-error `plugins` is not properly typed by Metro
     ...buildBabelConfig(filename, options, plugins),
     caller: {
       // Varies Babel's config cache - presets will be re-initialized
