@@ -40,14 +40,6 @@ export function isMemberExpression(node) {
 
 /**
  * @param {TSESTree.Node} node
- * @returns {node is TSESTree.RestElement}
- */
-export function isRestElement(node) {
-  return node.type === "RestElement";
-}
-
-/**
- * @param {TSESTree.Node} node
  * @param {string} objectName
  * @param {string} propertyName
  * @returns {boolean}
@@ -81,8 +73,17 @@ export function isArrayType(node) {
         isSpecificMemberAccess(node.callee, "Array", "fromAsync")
       );
 
-    case "Identifier":
+    case "Identifier": {
+      const parent = node.parent;
+      switch (parent.type) {
+        case "AssignmentPattern":
+          return isArrayType(parent.right);
+        case "RestElement":
+          return true;
+      }
+
       return node.typeAnnotation?.typeAnnotation?.type === "TSArrayType";
+    }
   }
 
   return false;

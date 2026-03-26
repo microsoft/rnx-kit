@@ -9,22 +9,9 @@ const {
   isArrayType,
   isCallExpression,
   isMemberExpression,
-  isRestElement,
 } = require("../helpers/ast.js");
 
 const ARRAY_METHODS = ["filter", "flatMap", "map", "reduce", "reduceRight"];
-
-/**
- * @param {TSESTree.Identifier} node
- * @returns {boolean}
- */
-function isAssignedArrayType(node) {
-  const parent = node.parent;
-  return (
-    (parent.type === "AssignmentPattern" && isArrayType(parent.right)) ||
-    isRestElement(parent)
-  );
-}
 
 /**
  * @param {Rule.RuleContext} context
@@ -42,9 +29,7 @@ function isArrayVariable(context, node) {
   switch (defn?.type) {
     case "Parameter": {
       const id = /** @type {TSESTree.Identifier} */ (defn.name);
-      return (
-        isArrayType(id) || isAssignedArrayType(id) || isRestElement(id.parent)
-      );
+      return isArrayType(id);
     }
 
     case "Variable": {
@@ -55,6 +40,7 @@ function isArrayVariable(context, node) {
           isArrayType(/** @type {TSESTree.Expression | null} */ (decl.init))
         );
       }
+      break;
     }
   }
 
