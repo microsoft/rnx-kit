@@ -8,7 +8,7 @@ import { loadPartialConfig } from "@babel/core";
 import type { BabelTransformerArgs } from "metro-babel-transformer";
 import fs from "node:fs";
 import path from "node:path";
-import type { TransformerPluginOptions } from "./types";
+import type { FilePluginOptions, TransformerArgs } from "./types";
 import { lazyInit, requireFromCwd } from "./utils";
 
 type BabelTransformerOptions = BabelTransformerArgs["options"];
@@ -32,7 +32,10 @@ const getHmrConfig = lazyInit(() =>
  * @param projectRoot effectively process.cwd, the directory where bundle is being executed
  * @returns a path to a babel config file if found, otherwise undefined
  */
-function findBabelConfigFile(projectRoot: string): string | undefined {
+/**
+ * @internal
+ */
+export function findBabelConfigFile(projectRoot: string): string | undefined {
   // same order as @react-native/metro-babel-transformer
   const testFiles = [".babelrc", ".babelrc.js", "babel.config.js"];
   for (const file of testFiles) {
@@ -44,19 +47,10 @@ function findBabelConfigFile(projectRoot: string): string | undefined {
   return undefined;
 }
 
-const getTransformCaller = (() => {
-  let caller: TransformCaller | undefined = undefined;
-  return (platform?: string | null): TransformCaller => {
-    if (!caller) {
-      caller = { name: "metro", bundler: "metro", platform } as TransformCaller;
-    }
-    return caller;
-  };
-})();
-
 /**
  * Given the options for this transformer, load the base babel config that is not file specific and cache
  * the results.
+ * @internal
  */
 export const getPartialBabelConfig = (() => {
   let partialConfig: TransformOptions | undefined = undefined;
@@ -115,7 +109,10 @@ export const getPartialBabelConfig = (() => {
   };
 })();
 
-function resolvePluginName(plugin: PluginItem): string | undefined {
+/**
+ * @internal
+ */
+export function resolvePluginName(plugin: PluginItem): string | undefined {
   if (typeof plugin === "string") {
     return plugin;
   } else if (Array.isArray(plugin)) {
@@ -128,15 +125,19 @@ function resolvePluginName(plugin: PluginItem): string | undefined {
   return undefined;
 }
 
-function addPluginToConfig(
-  { handleJsx }: TransformerPluginOptions,
+/**
+ * @internal
+ */
+export function addPluginToConfig(
+  { handleJsx, loader }: FilePluginOptions,
   plugin: PluginItem
 ) {
   const pluginName = resolvePluginName(plugin);
+  const isEsbuildHandlingJsx = handleJsx && loader != null;
   if (
     pluginName &&
     (blockedPlugins.has(pluginName) ||
-      (handleJsx && jsxPlugins.has(pluginName)))
+      (isEsbuildHandlingJsx && jsxPlugins.has(pluginName)))
   ) {
     return false;
   }
@@ -151,12 +152,12 @@ function addPluginToConfig(
  * @param mixinPlugins
  * @returns
  */
-export function getBabelConfig(
-  pluginOptions: TransformerPluginOptions,
-  filename: string,
-  options: BabelTransformerOptions,
-  mixinPlugins?: TransformOptions["plugins"]
-): TransformOptions {
+export function getBabelConfig({
+  pluginOptions,
+  filename,
+  options,
+  plugins: mixinPlugins,
+}: TransformerArgs): TransformOptions {
   // load the partial config
   const partialConfig = getPartialBabelConfig(options);
 
@@ -189,7 +190,11 @@ export function getBabelConfig(
     ...partialConfig,
     ...hmrConfig,
     filename,
-    caller: getTransformCaller(options.platform),
+    caller: {
+      name: "metro",
+      bundler: "metro",
+      platform: options.platform,
+    } as TransformCaller,
     ast: true,
     cloneInputAst: false,
     plugins,

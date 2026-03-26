@@ -1,49 +1,46 @@
 import esbuild from "esbuild";
-import type { Loader, TransformOptions } from "esbuild";
+import type { TransformOptions } from "esbuild";
 import type {
   FilePluginOptions,
   TransformerArgs,
   TransformerPluginOptions,
 } from "./types";
 
-function isTypescriptFile(filename: string): boolean {
+/**
+ * @internal
+ */
+export function isTypescriptFile(filename: string): boolean {
   // is the file extension .ts, .mts, .cts, .tsx, .mtsx, or .ctsx?
   return /\.([cm]?ts)x?$/i.test(filename);
 }
 
-function isJavaScriptFile(filename: string): boolean {
+/**
+ * @internal
+ */
+export function isJavaScriptFile(filename: string): boolean {
   // is the file extension .js, .mjs, or .cjs?
   return /\.([cm]?js)x?$/i.test(filename);
 }
 
 /**
- * Get the esbuild loader to use for a given file based on the extension.
- * @param filename filename to get the loader for
- * @returns the esbuild loader to use for the file, or undefined if the file type is not supported
+ * @internal
  */
-export function getLoader(
-  filename: string,
-  pluginOptions: TransformerPluginOptions
-): Loader | undefined {
-  filename = filename.toLowerCase();
-  if (isTypescriptFile(filename)) {
-    return filename.endsWith("x") ? "tsx" : "ts";
-  } else if (isJavaScriptFile(filename) && pluginOptions.handleJs) {
-    return filename.endsWith("x") ? "jsx" : "js";
-  }
-  return undefined;
-}
-
-function getTarget(options: TransformerArgs["options"]): string {
+export function getTarget(options: TransformerArgs["options"]): string {
   const profile = options.unstable_transformProfile;
   if (profile === "hermes-canary" || profile === "hermes-stable") {
-    return "hermes";
+    // esbuild requires a versioned hermes target; use 0.12 as a conservative
+    // baseline since the supported feature map (see getSupported) is what
+    // actually controls which syntax is down-leveled.
+    return "hermes0.12";
   }
   return "es2022";
 }
 
-function getSupported(target: string): TransformOptions["supported"] {
-  if (target === "hermes") {
+/**
+ * @internal
+ */
+export function getSupported(target: string): TransformOptions["supported"] {
+  if (target.startsWith("hermes")) {
     return {
       "const-and-let": true,
       arrow: true,
@@ -77,8 +74,6 @@ export function updateOptions(
     result.isJsx = filename.endsWith("x");
     if (options.handleJs) {
       result.loader = result.isJsx ? "jsx" : "js";
-    } else if (options.handleJsx) {
-      result.handleJsx = false;
     }
   }
   return result;

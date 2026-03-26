@@ -5,7 +5,16 @@ import type { TransformerPluginOptions } from "./types";
 /**
  * Files in this package to include in the hash for the cache key.
  */
-const packageFiles = ["babelTransformer", "options", "transformSvg", "types"];
+const packageFiles = [
+  "babelConfig",
+  "babelTransformer",
+  "index",
+  "transformFinal",
+  "transformSrcEsbuild",
+  "transformSrcSvg",
+  "types",
+  "utils",
+];
 
 /**
  * Implementation of getCacheKey for the transformer

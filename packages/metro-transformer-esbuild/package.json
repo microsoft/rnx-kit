@@ -2,7 +2,7 @@
   "name": "@rnx-kit/metro-transformer-esbuild",
   "version": "0.0.1",
   "description": "transformer which transforms typescript files with esbuild",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-transformer-router#readme",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-transformer-esbuild#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/metro-transformer-router"
+    "directory": "packages/metro-transformer-esbuild"
   },
   "files": [
     "lib/**/*.d.ts",
@@ -27,21 +27,20 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-react-native": "^2.3.5",
     "esbuild": "^0.27.1",
     "hermes-parser": "^0.34.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.0",
+    "@babel/generator": "^7.22.0",
     "@react-native/babel-preset": "^0.83.0",
-    "@react-native/metro-babel-transformer": "^0.83.3",
+    "@react-native/metro-babel-transformer": "^0.83.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@svgr/core": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",
     "@svgr/plugin-svgo": "^8.1.0",
     "@types/babel__core": "^7.20.0",
-    "@types/micromatch": "^4.0.10",
     "metro-babel-transformer": "^0.83.3",
     "metro-config": "^0.83.3"
   },

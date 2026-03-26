@@ -33,7 +33,7 @@ function getUpstreamTransformer(
   { upstreamDelegates }: TransformerPluginOptions
 ): UpstreamTransformer {
   if (upstreamDelegates) {
-    const ext = path.extname(filename).toLocaleLowerCase();
+    const ext = path.extname(filename).toLowerCase();
     for (const delegatePath of Object.keys(upstreamDelegates)) {
       const patterns = toArray(upstreamDelegates[delegatePath]);
       for (const pattern of patterns) {
@@ -54,7 +54,7 @@ function getFrontEndTransformer(
   filename: string,
   pluginOptions: FilePluginOptions
 ): SourceTransformer | undefined {
-  if (pluginOptions.handleSvg && filename.endsWith(".svg")) {
+  if (pluginOptions.handleSvg && filename.toLowerCase().endsWith(".svg")) {
     return transformSrcSvg;
   } else if (pluginOptions.loader) {
     return transformSrcEsbuild;
@@ -64,7 +64,7 @@ function getFrontEndTransformer(
 
 /**
  * Transforms the given source code using the appropriate transformers.
- * @param { Script, filename, options, plugins } Babel transformer arguments
+ * @param { src, filename, options, plugins } Babel transformer arguments
  * @returns The transformed Babel file result or a promise that resolves to it
  */
 export function transform({

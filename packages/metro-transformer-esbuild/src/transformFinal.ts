@@ -34,7 +34,10 @@ export function hermesParse(src: string, options?: HermesParserOptions): Node {
   return require("hermes-parser").parse(src, options);
 }
 
-function handleResult(
+/**
+ * @internal
+ */
+export function handleResult(
   result: BabelFileResult | null | undefined
 ): BabelFileResult {
   // no result means the file was ignored, we return null for the ast to signal this to the caller
@@ -56,14 +59,9 @@ function handleResult(
  * @param args babel transformer arguments, this includes the source code, filename, and babel options
  * @returns An object containing the transformed AST and metadata
  */
-export function transformFinal({
-  src,
-  filename,
-  options,
-  plugins,
-  pluginOptions = {},
-}: TransformerArgs) {
-  const babelConfig = getBabelConfig(pluginOptions, filename, options, plugins);
+export function transformFinal(args: TransformerArgs) {
+  const { src, pluginOptions } = args;
+  const babelConfig = getBabelConfig(args);
   const ast = hermesParse(src, {
     babel: true,
     reactRuntimeTarget: "19",

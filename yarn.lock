@@ -213,7 +213,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:^7.25.0, @babel/generator@npm:^7.25.9, @babel/generator@npm:^7.29.0, @babel/generator@npm:^7.7.2":
+"@babel/generator@npm:^7.22.0, @babel/generator@npm:^7.25.0, @babel/generator@npm:^7.25.9, @babel/generator@npm:^7.29.0, @babel/generator@npm:^7.7.2":
   version: 7.29.1
   resolution: "@babel/generator@npm:7.29.1"
   dependencies:
@@ -4766,7 +4766,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/babel-preset@npm:0.83.1, @react-native/babel-preset@npm:^0.83.0":
+"@react-native/babel-preset@npm:0.83.1":
   version: 0.83.1
   resolution: "@react-native/babel-preset@npm:0.83.1"
   dependencies:
@@ -4821,7 +4821,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/babel-preset@npm:0.83.4":
+"@react-native/babel-preset@npm:0.83.4, @react-native/babel-preset@npm:^0.83.0":
   version: 0.83.4
   resolution: "@react-native/babel-preset@npm:0.83.4"
   dependencies:
@@ -5190,7 +5190,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/metro-babel-transformer@npm:^0.83.3":
+"@react-native/metro-babel-transformer@npm:^0.83.0":
   version: 0.83.4
   resolution: "@react-native/metro-babel-transformer@npm:0.83.4"
   dependencies:
@@ -5837,16 +5837,15 @@ __metadata:
   resolution: "@rnx-kit/metro-transformer-esbuild@workspace:packages/metro-transformer-esbuild"
   dependencies:
     "@babel/core": "npm:^7.22.0"
+    "@babel/generator": "npm:^7.22.0"
     "@react-native/babel-preset": "npm:^0.83.0"
-    "@react-native/metro-babel-transformer": "npm:^0.83.3"
+    "@react-native/metro-babel-transformer": "npm:^0.83.0"
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-react-native": "npm:^2.3.5"
     "@rnx-kit/tsconfig": "npm:*"
     "@svgr/core": "npm:^8.1.0"
     "@svgr/plugin-jsx": "npm:^8.1.0"
     "@svgr/plugin-svgo": "npm:^8.1.0"
     "@types/babel__core": "npm:^7.20.0"
-    "@types/micromatch": "npm:^4.0.10"
     esbuild: "npm:^0.27.1"
     hermes-parser: "npm:^0.34.0"
     metro-babel-transformer: "npm:^0.83.3"
@@ -7071,7 +7070,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/micromatch@npm:^4.0.0, @types/micromatch@npm:^4.0.10":
+"@types/micromatch@npm:^4.0.0":
   version: 4.0.10
   resolution: "@types/micromatch@npm:4.0.10"
   dependencies:
@@ -13733,7 +13732,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-babel-transformer@npm:0.83.3, metro-babel-transformer@npm:^0.83.1":
+"metro-babel-transformer@npm:0.83.3":
   version: 0.83.3
   resolution: "metro-babel-transformer@npm:0.83.3"
   dependencies:
@@ -13745,7 +13744,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-babel-transformer@npm:^0.83.3":
+"metro-babel-transformer@npm:^0.83.1, metro-babel-transformer@npm:^0.83.3":
   version: 0.83.5
   resolution: "metro-babel-transformer@npm:0.83.5"
   dependencies:

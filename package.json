@@ -275,6 +275,17 @@
           "@babel/preset-env"
         ]
       },
+      "packages/metro-transformer-esbuild": {
+        "entry": [
+          "src/**/*.ts",
+          "test/**/*.test.ts"
+        ],
+        "ignoreDependencies": [
+          "@react-native/babel-preset",
+          "@svgr/plugin-jsx",
+          "@svgr/plugin-svgo"
+        ]
+      },
       "packages/oxlint-config": {
         "entry": [
           "src/**/*.ts"
