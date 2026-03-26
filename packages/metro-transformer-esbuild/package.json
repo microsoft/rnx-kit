@@ -1,0 +1,68 @@
+{
+  "name": "@rnx-kit/metro-transformer-esbuild",
+  "version": "0.0.1",
+  "description": "transformer which transforms typescript files with esbuild",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-transformer-router#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-transformer-router"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/tools-react-native": "^2.3.5",
+    "esbuild": "^0.27.1",
+    "hermes-parser": "^0.34.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@react-native/babel-preset": "^0.83.0",
+    "@react-native/metro-babel-transformer": "^0.83.3",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@svgr/core": "^8.1.0",
+    "@svgr/plugin-jsx": "^8.1.0",
+    "@svgr/plugin-svgo": "^8.1.0",
+    "@types/babel__core": "^7.20.0",
+    "@types/micromatch": "^4.0.10",
+    "metro-babel-transformer": "^0.83.3",
+    "metro-config": "^0.83.3"
+  },
+  "peerDependencies": {
+    "@babel/core": "*",
+    "@svgr/core": "^8.1.0",
+    "@svgr/plugin-jsx": "^8.1.0",
+    "@svgr/plugin-svgo": "^8.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@svgr/core": {
+      "optional": true
+    },
+    "@svgr/plugin-jsx": {
+      "optional": true
+    },
+    "@svgr/plugin-svgo": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18.12"
+  }
+}

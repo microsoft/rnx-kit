@@ -1,11 +1,11 @@
 {
   "editor.defaultFormatter": "oxc.oxc-vscode",
-  "editor.formatOnSave": true,
   "editor.detectIndentation": false,
   "editor.trimAutoWhitespace": true,
   "editor.insertSpaces": true,
   "editor.tabSize": 2,
 
+  "eslint.enable": false,
   "prettier.enable": false,
 
   "oxc.enable": true,
@@ -13,6 +13,13 @@
   "oxc.enable.oxlint": true,
   "oxc.lint.run": "onType",
   "oxc.typeAware": true,
+
+  "editor.formatOnSave": false, // disable default behavior
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always",
+    "source.format.oxc": "always",
+    "quickfix.copilot": "never"
+  },
 
   "files.trimTrailingWhitespace": true,
   "files.associations": {
