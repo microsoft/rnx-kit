@@ -12,6 +12,7 @@ describe("no unnecessary array allocations", () => {
       ...ARRAY_METHODS.map((m) => `Array.from([]).${m}();`),
       ...ARRAY_METHODS.map((m) => `const a = []; a.${m}();`),
       ...ARRAY_METHODS.map((m) => `let a; a.map().${m}();`),
+      ...ARRAY_METHODS.map((m) => `function f(a) { return a.map().${m}(); }`),
     ],
     invalid: [
       ...ARRAY_METHODS.map((m) => ({
@@ -36,6 +37,10 @@ describe("no unnecessary array allocations", () => {
       })),
       ...ARRAY_METHODS.map((m) => ({
         code: `function f(a: string[]): string[] { return a.map().${m}(); }`,
+        errors: 1,
+      })),
+      ...ARRAY_METHODS.map((m) => ({
+        code: `function f(a = []): string[] { return a.map().${m}(); }`,
         errors: 1,
       })),
     ],

@@ -14,6 +14,16 @@ const {
 const ARRAY_METHODS = ["filter", "flatMap", "map", "reduce", "reduceRight"];
 
 /**
+ * @param {TSESTree.Identifier} node
+ * @returns {boolean}
+ */
+function isAssignedArrayType(node) {
+  return (
+    node.parent.type === "AssignmentPattern" && isArrayType(node.parent.right)
+  );
+}
+
+/**
  * @param {Rule.RuleContext} context
  * @param {TSESTree.Expression} node
  * @returns {boolean}
@@ -28,7 +38,8 @@ function isArrayVariable(context, node) {
 
   switch (defn?.type) {
     case "Parameter": {
-      return isArrayType(/** @type {TSESTree.Identifier} */ (defn.name));
+      const id = /** @type {TSESTree.Identifier} */ (defn.name);
+      return isArrayType(id) || isAssignedArrayType(id);
     }
 
     case "Variable": {
@@ -91,16 +102,12 @@ module.exports = {
 
         // [].map().filter()
         // ^
-        const callee = obj.callee.object;
-        if (isArrayType(callee)) {
-          context.report({ node, messageId: "error" });
-          return;
-        }
-
+        //
         // const a = [];
         // a.map().filter()
         // ^
-        if (isArrayVariable(context, callee)) {
+        const callee = obj.callee.object;
+        if (isArrayType(callee) || isArrayVariable(context, callee)) {
           context.report({ node, messageId: "error" });
           return;
         }
