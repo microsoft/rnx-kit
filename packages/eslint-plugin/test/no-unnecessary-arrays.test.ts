@@ -34,6 +34,10 @@ describe("no unnecessary array allocations", () => {
         code: `[].map().filter().${m}();`,
         errors: 1,
       })),
+      ...ARRAY_METHODS.map((m) => ({
+        code: `function f(a: string[]): string[] { return a.map().${m}(); }`,
+        errors: 1,
+      })),
     ],
   });
 });

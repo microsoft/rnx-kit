@@ -16,16 +16,33 @@ const ARRAY_METHODS = ["filter", "flatMap", "map", "reduce", "reduceRight"];
 /**
  * @param {Rule.RuleContext} context
  * @param {TSESTree.Expression} node
- * @returns {TSESTree.VariableDeclarator | undefined}
+ * @returns {boolean}
  */
-function getVariableDeclarator(context, node) {
+function isArrayVariable(context, node) {
   if (node.type !== "Identifier") {
-    return;
+    return false;
   }
 
   const scope = context.sourceCode.getScope(node);
-  const decl = scope.set.get(node.name)?.defs?.[0]?.node;
-  return decl?.type === "VariableDeclarator" ? decl : undefined;
+  const defn = scope.set.get(node.name)?.defs?.[0];
+
+  switch (defn?.type) {
+    case "Parameter": {
+      return isArrayType(/** @type {TSESTree.Identifier} */ (defn.name));
+    }
+
+    case "Variable": {
+      const decl = defn.node;
+      if (decl.type === "VariableDeclarator") {
+        return (
+          isArrayType(/** @type {TSESTree.Identifier} */ (decl.id)) ||
+          isArrayType(/** @type {TSESTree.Expression | null} */ (decl.init))
+        );
+      }
+    }
+  }
+
+  return false;
 }
 
 /**
@@ -83,11 +100,7 @@ module.exports = {
         // const a = [];
         // a.map().filter()
         // ^
-        const variable = getVariableDeclarator(context, callee);
-        if (
-          variable &&
-          (isArrayType(variable.id) || isArrayType(variable.init))
-        ) {
+        if (isArrayVariable(context, callee)) {
           context.report({ node, messageId: "error" });
           return;
         }
