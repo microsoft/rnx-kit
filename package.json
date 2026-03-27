@@ -47,7 +47,7 @@
     "@typescript/native-preview": "catalog:",
     "@yarnpkg/types": "^4.0.0",
     "eslint": "catalog:",
-    "knip": "^5.30.2",
+    "knip": "^6.0.0",
     "nx": "patch:nx@npm%3A22.5.4#~/.yarn/patches/nx-npm-22.5.4-3d43ac9c10.patch",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
@@ -91,17 +91,11 @@
       ".github/workflows/pr.yml",
       ".github/workflows/rnx-build.yml"
     ],
-    "ignoreBinaries": [
-      "clang-format",
-      "ktlint",
-      "rnx-kit-scripts",
-      "swiftformat",
-      "swiftlint"
-    ],
     "ignoreDependencies": [
       "@types/*"
     ],
     "metro": false,
+    "react-native": false,
     "workspaces": {
       ".": {
         "ignoreDependencies": [
@@ -118,8 +112,7 @@
       },
       "incubator/@react-native-webapis/battery-status": {
         "entry": [
-          "src/index.ts",
-          "react-native.config.js"
+          "src/index.ts"
         ],
         "ignoreDependencies": [
           "@babel/core",
@@ -129,7 +122,6 @@
       "incubator/@react-native-webapis/web-storage": {
         "entry": [
           "src/index.ts",
-          "react-native.config.js",
           "test/**/*.test.{js,mjs,ts,tsx}"
         ],
         "ignoreDependencies": [
@@ -156,11 +148,7 @@
         ]
       },
       "incubator/ignore": {},
-      "incubator/fork-sync": {
-        "entry": [
-          "oxlint.config.ts"
-        ]
-      },
+      "incubator/fork-sync": {},
       "incubator/lint-lockfile": {
         "entry": [
           "src/{cli,index}.ts",
@@ -234,10 +222,6 @@
           "*.{cjs,js}",
           "test/**/*.test.ts",
           "test/__fixtures__/**/*.js"
-        ],
-        "ignoreDependencies": [
-          "react",
-          "react-native"
         ]
       },
       "packages/metro-config": {
@@ -277,7 +261,7 @@
       },
       "packages/oxlint-config": {
         "entry": [
-          "src/**/*.ts"
+          "src/**/*.js"
         ]
       },
       "packages/react-native-auth": {
@@ -326,7 +310,6 @@
       "packages/tsconfig": {},
       "packages/types-*": {
         "entry": [
-          "oxlint.config.ts",
           "src/*.ts"
         ]
       },
