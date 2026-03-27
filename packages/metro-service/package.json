@@ -25,6 +25,11 @@
       "typescript": "./src/index.ts",
       "default": "./lib/index.js"
     },
+    "./assets": {
+      "types": "./lib/assets.d.ts",
+      "typescript": "./src/assets.ts",
+      "default": "./lib/assets.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
