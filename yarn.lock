@@ -15927,8 +15927,8 @@ __metadata:
   linkType: hard
 
 "react-native-test-app@npm:^5.0.5":
-  version: 5.0.14
-  resolution: "react-native-test-app@npm:5.0.14"
+  version: 5.1.0
+  resolution: "react-native-test-app@npm:5.1.0"
   dependencies:
     "@rnx-kit/react-native-host": "npm:^0.5.15"
     "@rnx-kit/tools-react-native": "npm:^2.1.0"
@@ -15959,7 +15959,7 @@ __metadata:
     init: scripts/init.mjs
     init-test-app: scripts/init.mjs
     install-windows-test-app: windows/app.mjs
-  checksum: 10c0/82890ee6d1a9e8324929eef56a349e5f793ee196f8fd09c972243a1234b4264baa1ed051cd4cee7337eaa71688556f3e7cc4521dc9d700748c86187ec9d22af9
+  checksum: 10c0/4c0867d6a04eaff96402fb8f7df3cc40d4a7e365847a732c602a4dcecb3605f59b87d5e76eee0888ed06771c95fae0452384e374ffa0c5a4333aaca43848c906
   languageName: node
   linkType: hard
 
