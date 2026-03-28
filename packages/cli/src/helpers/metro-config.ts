@@ -8,6 +8,7 @@ import {
   esbuildTransformerConfig,
   MetroSerializer as MetroSerializerEsbuild,
 } from "@rnx-kit/metro-serializer-esbuild";
+import { mergeTransformerConfigs } from "@rnx-kit/tools-react-native/metro-utils";
 import type { BundleParameters } from "@rnx-kit/types-bundle-config";
 import type { ConfigT, SerializerConfigT } from "metro-config";
 import type { WritableDeep } from "type-fest";
@@ -170,7 +171,10 @@ export function customizeMetroConfig(
         ? extraParams.treeShake
         : undefined
     );
-    Object.assign(metroConfig.transformer, esbuildTransformerConfig);
+    metroConfig.transformer = mergeTransformerConfigs(
+      metroConfig.transformer,
+      esbuildTransformerConfig
+    ) as WritableDeep<ConfigT>["transformer"];
   } else if (metroPlugins.length > 0) {
     // MetroSerializer acts as a CustomSerializer, and it works with both
     // older and newer versions of Metro. Older versions expect a return
