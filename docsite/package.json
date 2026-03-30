@@ -32,11 +32,11 @@
     "typescript": "catalog:"
   },
   "resolutions": {
-    "@docsearch/react": "link:../incubator/ignore",
+    "@docsearch/react": "ignore:",
     "@pnpm/network.ca-file/graceful-fs": "^4.2.10",
-    "algoliasearch": "link:../incubator/ignore",
-    "algoliasearch-helper": "link:../incubator/ignore",
-    "node-gyp": "link:../incubator/ignore"
+    "algoliasearch": "ignore:",
+    "algoliasearch-helper": "ignore:",
+    "node-gyp": "ignore:"
   },
   "browserslist": {
     "production": [
