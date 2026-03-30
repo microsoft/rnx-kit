@@ -16563,7 +16563,7 @@ __metadata:
     nx: "patch:nx@npm%3A22.5.4#~/.yarn/patches/nx-npm-22.5.4-3d43ac9c10.patch"
     oxfmt: "catalog:"
     oxlint: "catalog:"
-    suggestion-bot: "npm:^4.0.0"
+    suggestion-bot: "workspace:*"
     typescript: "catalog:"
   languageName: unknown
   linkType: soft
@@ -17408,19 +17408,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"suggestion-bot@npm:^4.0.0":
-  version: 4.0.3
-  resolution: "suggestion-bot@npm:4.0.3"
+"suggestion-bot@workspace:*, suggestion-bot@workspace:packages/suggestion-bot":
+  version: 0.0.0-use.local
+  resolution: "suggestion-bot@workspace:packages/suggestion-bot"
   dependencies:
     "@octokit/core": "npm:^7.0.0"
     "@octokit/plugin-rest-endpoint-methods": "npm:^17.0.0"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@types/node": "npm:^24.0.0"
     azure-devops-node-api: "npm:^15.0.0"
     parse-diff: "npm:^0.11.0"
   bin:
     suggestion-bot: cli.js
-  checksum: 10c0/6a09741e8830ea205a1ead6c3191eb40c237e5859535c32fb139db7f495528fbf4e9dfe18cf9ac6f0bb3aa65cd6e99e73037633f6ce97423d65016d424c5640d
-  languageName: node
-  linkType: hard
+  languageName: unknown
+  linkType: soft
 
 "supports-color@npm:^5.3.0":
   version: 5.5.0

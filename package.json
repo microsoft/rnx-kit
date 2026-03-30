@@ -51,7 +51,7 @@
     "nx": "patch:nx@npm%3A22.5.4#~/.yarn/patches/nx-npm-22.5.4-3d43ac9c10.patch",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
-    "suggestion-bot": "^4.0.0",
+    "suggestion-bot": "workspace:*",
     "typescript": "catalog:"
   },
   "resolutions": {

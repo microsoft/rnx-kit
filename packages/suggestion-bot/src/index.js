@@ -1,9 +1,3 @@
-//
-// Copyright (c) Tommy Nguyen
-//
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
-//
 // @ts-check
 
 /**
@@ -40,6 +34,7 @@ async function getClient() {
  * @param {Options=} options
  * @returns {Promise<void>}
  */
+// oxlint-disable-next-line no-default-export
 export default async function suggest(diff, options = {}) {
   const { makeReview } = await getClient();
   try {

@@ -1,11 +1,11 @@
 # suggestion-bot
 
-[![build](https://github.com/tido64/suggestion-bot/actions/workflows/build.yml/badge.svg)](https://github.com/tido64/suggestion-bot/actions/workflows/build.yml)
+[![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/suggestion-bot)](https://www.npmjs.com/package/suggestion-bot)
 
 `suggestion-bot` submits code reviews with suggestions based on your diffs.
 
-![screenshot of code review with suggestions](docs/screenshot.png)
+![screenshot of code review with suggestions](./docs/screenshot.png)
 
 ## Usage
 
@@ -45,8 +45,7 @@ If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with
 -- or --
 
 - Host your code on [Azure DevOps](https://dev.azure.com/)
-- An Azure DevOps
-  [personal access token](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page)
+- An Azure DevOps [personal access token][ado-personal-access-token]
 
 ## Recipes
 
@@ -73,11 +72,11 @@ If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with
        runs-on: ubuntu-latest
        steps:
          - name: Set up Node.js
-           uses: actions/setup-node@v1
+           uses: actions/setup-node@v6
            with:
-             node-version: 18
+             node-version: 24
          - name: Checkout
-           uses: actions/checkout@v2
+           uses: actions/checkout@v6
          - name: Install
            run: yarn
          - name: ClangFormat
@@ -89,9 +88,7 @@ If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with
 
 ### Using `suggestion-bot` with `clang-format`
 
-Use
-[`clang-format-diff`](https://clang.llvm.org/docs/ClangFormat.html#script-for-patch-reformatting)
-to format only changed files:
+Use [`clang-format-diff`][] to format only changed files:
 
 ```sh
 curl --silent --show-error --remote-name https://raw.githubusercontent.com/llvm/llvm-project/release/10.x/clang/tools/clang-format/clang-format-diff.py
@@ -102,8 +99,8 @@ git diff --unified=0 --no-color @^ \
 
 ### Using `suggestion-bot` with Prettier
 
-We must first write a script that pipes [Prettier](https://prettier.io/)'s
-output to `diff` so we can feed it to `suggestion-bot` later.
+We must first write a script that pipes [Prettier][]'s output to `diff` so we
+can feed it to `suggestion-bot` later.
 
 ```js
 #!/usr/bin/env node
@@ -131,3 +128,9 @@ Node:
 ```sh
 node scripts/prettier-diff.mjs $(git ls-files '*.js')
 ```
+
+<!-- References -->
+
+[Prettier]: https://prettier.io/
+[`clang-format-diff`]: https://clang.llvm.org/docs/ClangFormat.html#script-for-patch-reformatting
+[ado-personal-access-token]: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page
