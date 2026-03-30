@@ -7,6 +7,7 @@ export default defineConfig({
   extends: [sdlRequired, strict, stylistic],
   rules: {
     "@rnx-kit/no-foreach-with-captured-variables": "error",
+    "@rnx-kit/no-unnecessary-arrays": "error",
   },
   overrides: [
     {
