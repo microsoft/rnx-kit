@@ -1,26 +1,6 @@
 import esbuild from "esbuild";
 import type { TransformOptions } from "esbuild";
-import type {
-  FilePluginOptions,
-  TransformerArgs,
-  TransformerPluginOptions,
-} from "./types";
-
-/**
- * @internal
- */
-export function isTypescriptFile(filename: string): boolean {
-  // is the file extension .ts, .mts, .cts, .tsx, .mtsx, or .ctsx?
-  return /\.([cm]?ts)x?$/i.test(filename);
-}
-
-/**
- * @internal
- */
-export function isJavaScriptFile(filename: string): boolean {
-  // is the file extension .js, .mjs, or .cjs?
-  return /\.([cm]?js)x?$/i.test(filename);
-}
+import type { TransformerArgs } from "./types";
 
 /**
  * @internal
@@ -54,31 +34,6 @@ export function getSupported(target: string): TransformOptions["supported"] {
   return undefined;
 }
 
-/**
- * Updates the transformer plugin options based on the file type and settings. In particular if handleJsx is enabled but
- * handleJs is not, disable this settings for jsx files to allow the babel transformer to handle them.
- * @param options The current transformer plugin options.
- * @param filename The name of the file being transformed.
- * @returns The updated transformer plugin options.
- */
-export function updateOptions(
-  options: TransformerPluginOptions,
-  filename: string
-): FilePluginOptions {
-  filename = filename.toLowerCase();
-  const result: FilePluginOptions = { ...options };
-  if (isTypescriptFile(filename)) {
-    result.isJsx = filename.endsWith("x");
-    result.loader = result.isJsx ? "tsx" : "ts";
-  } else if (isJavaScriptFile(filename)) {
-    result.isJsx = filename.endsWith("x");
-    if (options.handleJs) {
-      result.loader = result.isJsx ? "jsx" : "js";
-    }
-  }
-  return result;
-}
-
 export function transformSrcEsbuild({
   src,
   filename,
@@ -86,13 +41,13 @@ export function transformSrcEsbuild({
   pluginOptions,
 }: TransformerArgs): string | Promise<string> {
   // get the loader for the file, will be undefined if we should skip this file
-  const { loader, handleJsx, asyncTransform } = pluginOptions;
+  const { loader, mode, asyncTransform } = pluginOptions;
   if (!loader) {
     return src;
   }
   const target = getTarget(options);
-  const jsx = handleJsx ? "automatic" : "preserve";
-  const jsxDev = Boolean(handleJsx && options.dev);
+  const jsx = mode.jsx === "esbuild" ? "automatic" : "preserve";
+  const jsxDev = Boolean(mode.jsx === "esbuild" && options.dev);
 
   // set up the options
   const esbuildOptions: TransformOptions = {

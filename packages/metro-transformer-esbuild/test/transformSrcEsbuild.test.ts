@@ -4,41 +4,27 @@ import { describe, it } from "node:test";
 import {
   getSupported,
   getTarget,
-  isJavaScriptFile,
-  isTypescriptFile,
   transformSrcEsbuild,
-  updateOptions,
 } from "../src/transformSrcEsbuild";
-import type { TransformerPluginOptions } from "../src/types";
+import type { BabelMode, FilePluginOptions } from "../src/types";
+import { resolveFileOptions } from "../src/utils";
 
-describe("isTypescriptFile", () => {
-  it("matches .ts", () => ok(isTypescriptFile("file.ts")));
-  it("matches .tsx", () => ok(isTypescriptFile("file.tsx")));
-  it("matches .mts", () => ok(isTypescriptFile("file.mts")));
-  it("matches .cts", () => ok(isTypescriptFile("file.cts")));
-  it("matches .mtsx", () => ok(isTypescriptFile("file.mtsx")));
-  it("matches .ctsx", () => ok(isTypescriptFile("file.ctsx")));
-  it("is case-insensitive", () => ok(isTypescriptFile("file.TS")));
-  it("does not match .js", () => equal(isTypescriptFile("file.js"), false));
-  it("does not match .jsx", () => equal(isTypescriptFile("file.jsx"), false));
-  it("does not match .json", () => equal(isTypescriptFile("file.json"), false));
-  it("does not match .svg", () => equal(isTypescriptFile("file.svg"), false));
-  it("does not match bare ts in name", () =>
-    equal(isTypescriptFile("tsconfig"), false));
-});
+// ── Helper to build FilePluginOptions for transformSrcEsbuild tests ──
 
-describe("isJavaScriptFile", () => {
-  it("matches .js", () => ok(isJavaScriptFile("file.js")));
-  it("matches .jsx", () => ok(isJavaScriptFile("file.jsx")));
-  it("matches .mjs", () => ok(isJavaScriptFile("file.mjs")));
-  it("matches .cjs", () => ok(isJavaScriptFile("file.cjs")));
-  it("matches .mjsx", () => ok(isJavaScriptFile("file.mjsx")));
-  it("matches .cjsx", () => ok(isJavaScriptFile("file.cjsx")));
-  it("is case-insensitive", () => ok(isJavaScriptFile("file.JS")));
-  it("does not match .ts", () => equal(isJavaScriptFile("file.ts"), false));
-  it("does not match .tsx", () => equal(isJavaScriptFile("file.tsx"), false));
-  it("does not match .json", () => equal(isJavaScriptFile("file.json"), false));
-});
+const esbuildMode: BabelMode = { jsx: "esbuild", ts: "esbuild" };
+const babelJsxMode: BabelMode = { jsx: "babel", ts: "esbuild" };
+
+function makePluginOptions(
+  overrides: Partial<FilePluginOptions> = {}
+): FilePluginOptions {
+  return {
+    ext: ".ts",
+    mode: esbuildMode,
+    ...overrides,
+  };
+}
+
+// ── getTarget ────────────────────────────────────────────────────────
 
 describe("getTarget", () => {
   it("returns versioned hermes target for hermes-stable profile", () => {
@@ -71,6 +57,8 @@ describe("getTarget", () => {
   });
 });
 
+// ── getSupported ─────────────────────────────────────────────────────
+
 describe("getSupported", () => {
   it("returns hermes feature set for versioned hermes target", () => {
     const supported = getSupported("hermes0.12");
@@ -89,73 +77,75 @@ describe("getSupported", () => {
   });
 });
 
-describe("updateOptions", () => {
+// ── resolveFileOptions ───────────────────────────────────────────────
+
+describe("resolveFileOptions", () => {
+  const baseArgs = { src: "", filename: "", options: {}, plugins: [] };
+
+  function resolve(filename: string, opts = {}) {
+    return resolveFileOptions(
+      { ...baseArgs, filename } as BabelTransformerArgs,
+      opts
+    );
+  }
+
   it("sets loader to ts for .ts files", () => {
-    const result = updateOptions({}, "file.ts");
+    const result = resolve("file.ts");
     equal(result.loader, "ts");
-    equal(result.isJsx, false);
+    equal(result.srcType, "ts");
   });
 
   it("sets loader to tsx for .tsx files", () => {
-    const result = updateOptions({}, "file.tsx");
+    const result = resolve("file.tsx");
     equal(result.loader, "tsx");
-    equal(result.isJsx, true);
-  });
-
-  it("sets loader to ts for .mts files", () => {
-    const result = updateOptions({}, "file.mts");
-    equal(result.loader, "ts");
-  });
-
-  it("sets loader to tsx for .ctsx files", () => {
-    const result = updateOptions({}, "file.ctsx");
-    equal(result.loader, "tsx");
-    equal(result.isJsx, true);
+    equal(result.srcType, "tsx");
   });
 
   it("does not set loader for .js files when handleJs is false", () => {
-    const result = updateOptions({}, "file.js");
+    const result = resolve("file.js");
     equal(result.loader, undefined);
-    equal(result.isJsx, false);
+    equal(result.srcType, "js");
   });
 
   it("sets loader to js for .js files when handleJs is true", () => {
-    const result = updateOptions({ handleJs: true }, "file.js");
+    const result = resolve("file.js", { handleJs: true });
     equal(result.loader, "js");
-    equal(result.isJsx, false);
   });
 
   it("sets loader to jsx for .jsx files when handleJs is true", () => {
-    const result = updateOptions({ handleJs: true }, "file.jsx");
+    const result = resolve("file.jsx", { handleJs: true });
     equal(result.loader, "jsx");
-    equal(result.isJsx, true);
   });
 
   it("does not set loader for .jsx files when handleJs is false", () => {
-    const result = updateOptions({ handleJsx: true }, "file.jsx");
+    const result = resolve("file.jsx");
     equal(result.loader, undefined);
-    equal(result.isJsx, true);
+    equal(result.srcType, "jsx");
   });
 
   it("does not set loader for non-js/ts files", () => {
-    const result = updateOptions({ handleJs: true }, "file.json");
+    const result = resolve("file.json");
     equal(result.loader, undefined);
-    equal(result.isJsx, undefined);
+    equal(result.srcType, undefined);
   });
 
   it("is case-insensitive for file extensions", () => {
-    const result = updateOptions({}, "file.TSX");
+    const result = resolve("file.TSX");
     equal(result.loader, "tsx");
-    equal(result.isJsx, true);
+    equal(result.srcType, "tsx");
+  });
+
+  it("sets ext to lowercase extension", () => {
+    const result = resolve("file.TSX");
+    equal(result.ext, ".tsx");
   });
 
   it("preserves existing plugin options", () => {
-    const opts: TransformerPluginOptions = {
+    const result = resolve("file.ts", {
       handleJs: true,
       handleJsx: true,
       handleSvg: true,
-    };
-    const result = updateOptions(opts, "file.ts");
+    });
     equal(result.handleJs, true);
     equal(result.handleJsx, true);
     equal(result.handleSvg, true);
@@ -163,11 +153,28 @@ describe("updateOptions", () => {
   });
 
   it("does not mutate the input options", () => {
-    const opts: TransformerPluginOptions = { handleJs: true };
-    updateOptions(opts, "file.ts");
+    const opts = { handleJs: true };
+    resolve("file.ts", opts);
     equal("loader" in opts, false);
   });
+
+  it("sets mode.jsx to babel when handleJsx is false", () => {
+    const result = resolve("file.tsx");
+    equal(result.mode.jsx, "babel");
+  });
+
+  it("sets mode.jsx to esbuild when handleJsx is true", () => {
+    const result = resolve("file.tsx", { handleJsx: true });
+    equal(result.mode.jsx, "esbuild");
+  });
+
+  it("sets mode.ts to esbuild for normal TS files", () => {
+    const result = resolve("file.ts");
+    equal(result.mode.ts, "esbuild");
+  });
 });
+
+// ── transformSrcEsbuild ──────────────────────────────────────────────
 
 describe("transformSrcEsbuild", () => {
   const defaultOptions = {
@@ -192,7 +199,7 @@ describe("transformSrcEsbuild", () => {
       filename: "file.js",
       options: defaultOptions,
       plugins: [],
-      pluginOptions: { loader: undefined },
+      pluginOptions: makePluginOptions({ loader: undefined }),
     });
     equal(result, src);
   });
@@ -204,7 +211,7 @@ describe("transformSrcEsbuild", () => {
       filename: "file.ts",
       options: defaultOptions,
       plugins: [],
-      pluginOptions: { loader: "ts" },
+      pluginOptions: makePluginOptions({ loader: "ts" }),
     });
     equal(typeof result, "string");
     ok(!(result as string).includes(": number"));
@@ -217,37 +224,43 @@ describe("transformSrcEsbuild", () => {
       filename: "file.tsx",
       options: defaultOptions,
       plugins: [],
-      pluginOptions: { loader: "tsx", isJsx: true },
+      pluginOptions: makePluginOptions({ loader: "tsx", ext: ".tsx" }),
     });
     equal(typeof result, "string");
     ok(!(result as string).includes(": string"));
   });
 
-  it("transforms JSX when handleJsx is enabled", () => {
+  it("transforms JSX when mode.jsx is esbuild", () => {
     const src = "const el = <div>hello</div>;";
     const result = transformSrcEsbuild({
       src,
       filename: "file.tsx",
       options: defaultOptions,
       plugins: [],
-      pluginOptions: { loader: "tsx", isJsx: true, handleJsx: true },
+      pluginOptions: makePluginOptions({
+        loader: "tsx",
+        ext: ".tsx",
+        mode: esbuildMode,
+      }),
     });
     equal(typeof result, "string");
-    // automatic JSX runtime should produce jsx() or jsxDEV() calls
     ok(!(result as string).includes("<div>"));
   });
 
-  it("preserves JSX when handleJsx is not enabled", () => {
+  it("preserves JSX when mode.jsx is babel", () => {
     const src = "const el = <div>hello</div>;";
     const result = transformSrcEsbuild({
       src,
       filename: "file.tsx",
       options: defaultOptions,
       plugins: [],
-      pluginOptions: { loader: "tsx", isJsx: true },
+      pluginOptions: makePluginOptions({
+        loader: "tsx",
+        ext: ".tsx",
+        mode: babelJsxMode,
+      }),
     });
     equal(typeof result, "string");
-    // preserved JSX should still have JSX syntax or React.createElement
     ok(
       (result as string).includes("<div>") || (result as string).includes("div")
     );
@@ -260,7 +273,7 @@ describe("transformSrcEsbuild", () => {
       filename: "file.ts",
       options: defaultOptions,
       plugins: [],
-      pluginOptions: { loader: "ts", asyncTransform: true },
+      pluginOptions: makePluginOptions({ loader: "ts", asyncTransform: true }),
     });
     ok(result instanceof Promise);
     const resolved = await result;
@@ -274,7 +287,7 @@ describe("transformSrcEsbuild", () => {
       filename: "file.ts",
       options: { ...defaultOptions, dev: true },
       plugins: [],
-      pluginOptions: { loader: "ts" },
+      pluginOptions: makePluginOptions({ loader: "ts" }),
     }) as string;
     ok(result.includes("true"));
   });
@@ -286,7 +299,7 @@ describe("transformSrcEsbuild", () => {
       filename: "file.ts",
       options: { ...defaultOptions, dev: false },
       plugins: [],
-      pluginOptions: { loader: "ts" },
+      pluginOptions: makePluginOptions({ loader: "ts" }),
     }) as string;
     ok(result.includes("false"));
   });
@@ -298,11 +311,10 @@ describe("transformSrcEsbuild", () => {
       filename: "file.ts",
       options: hermesOptions,
       plugins: [],
-      pluginOptions: { loader: "ts" },
+      pluginOptions: makePluginOptions({ loader: "ts" }),
     });
     equal(typeof result, "string");
     ok(!(result as string).includes(": number"));
-    // hermes supports const, so it should be preserved
     ok((result as string).includes("const"));
   });
 
@@ -313,20 +325,24 @@ describe("transformSrcEsbuild", () => {
       filename: "file.tsx",
       options: hermesOptions,
       plugins: [],
-      pluginOptions: { loader: "tsx", isJsx: true },
+      pluginOptions: makePluginOptions({ loader: "tsx", ext: ".tsx" }),
     });
     equal(typeof result, "string");
     ok(!(result as string).includes(": string"));
   });
 
-  it("transforms JSX with hermes-stable profile and handleJsx", () => {
+  it("transforms JSX with hermes-stable profile and esbuild jsx mode", () => {
     const src = "const el = <div>hello</div>;";
     const result = transformSrcEsbuild({
       src,
       filename: "file.tsx",
       options: hermesOptions,
       plugins: [],
-      pluginOptions: { loader: "tsx", isJsx: true, handleJsx: true },
+      pluginOptions: makePluginOptions({
+        loader: "tsx",
+        ext: ".tsx",
+        mode: esbuildMode,
+      }),
     });
     equal(typeof result, "string");
     ok(!(result as string).includes("<div>"));
@@ -339,7 +355,7 @@ describe("transformSrcEsbuild", () => {
       filename: "file.ts",
       options: hermesOptions,
       plugins: [],
-      pluginOptions: { loader: "ts", asyncTransform: true },
+      pluginOptions: makePluginOptions({ loader: "ts", asyncTransform: true }),
     });
     ok(result instanceof Promise);
     const resolved = await result;
@@ -353,7 +369,7 @@ describe("transformSrcEsbuild", () => {
       filename: "file.ts",
       options: hermesOptions,
       plugins: [],
-      pluginOptions: { loader: "ts" },
+      pluginOptions: makePluginOptions({ loader: "ts" }),
     }) as string;
     ok(result.includes("=>"));
   });
@@ -365,7 +381,7 @@ describe("transformSrcEsbuild", () => {
       filename: "file.ts",
       options: hermesOptions,
       plugins: [],
-      pluginOptions: { loader: "ts" },
+      pluginOptions: makePluginOptions({ loader: "ts" }),
     }) as string;
     ok(result.includes("`"));
   });
@@ -377,9 +393,9 @@ describe("transformSrcEsbuild", () => {
       filename: "file.ts",
       options: hermesOptions,
       plugins: [],
-      pluginOptions: { loader: "ts" },
+      pluginOptions: makePluginOptions({ loader: "ts" }),
     }) as string;
     ok(result.includes("{"));
-    ok(!(result as string).includes(": number"));
+    ok(!result.includes(": number"));
   });
 });

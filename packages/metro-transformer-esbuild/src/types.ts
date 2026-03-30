@@ -42,19 +42,34 @@ export type TransformerPluginOptions = {
 };
 
 /**
+ * Who should handle the transformation of a given set of options
+ */
+export type Responsibility = "esbuild" | "babel";
+
+/**
+ * Babel mode configuration, will vary the preset configuration and cache key based on these settings.
+ */
+export type BabelMode = {
+  jsx: Responsibility;
+  ts: Responsibility;
+};
+
+/**
  * File specific options that are appended to the plugin options when transforming a file based on file type and settings.
  * @internal
  */
 export type FilePluginOptions = TransformerPluginOptions & {
-  /**
-   * The esbuild loader to use for the file, if applicable. This is used to pass through the loader to the upstream transformer
-   */
+  /** source type for the file, regardless of whether to use the esbuild transformer */
+  srcType?: Extract<Loader, "ts" | "tsx" | "js" | "jsx">;
+
+  /** esbuild loader value, only set if the transformer should run with esbuild for this file */
   loader?: Loader;
 
-  /**
-   * Is this a jsx file
-   */
-  isJsx?: boolean;
+  /** lowercase extension name for convenience */
+  ext: string;
+
+  /** mode settings for running the babel transformer */
+  mode: BabelMode;
 };
 
 /**

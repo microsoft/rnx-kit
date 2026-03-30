@@ -7,7 +7,10 @@ import type { TransformerPluginOptions } from "./types";
  */
 const packageFiles = [
   "babelConfig",
+  "babelMode",
+  "babelPluginCache",
   "babelTransformer",
+  "babelUtils",
   "index",
   "transformFinal",
   "transformSrcEsbuild",

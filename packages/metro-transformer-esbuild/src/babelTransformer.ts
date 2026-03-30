@@ -1,18 +1,16 @@
 import type { BabelFileResult } from "@babel/core";
 import type { BabelTransformerArgs } from "metro-babel-transformer";
-import path from "node:path";
 import { createCacheKey } from "./createCacheKey";
 import { transformFinal } from "./transformFinal";
-import { transformSrcEsbuild, updateOptions } from "./transformSrcEsbuild";
+import { transformSrcEsbuild } from "./transformSrcEsbuild";
 import { transformSrcSvg } from "./transformSrcSvg";
 import type {
-  TransformerPluginOptions,
   UpstreamTransformer,
   TransformerModule,
   SourceTransformer,
   FilePluginOptions,
 } from "./types";
-import { isPromiseLike, lazyInit } from "./utils";
+import { isPromiseLike, lazyInit, resolveFileOptions } from "./utils";
 import { getTransformerPluginOptions, toArray } from "./utils";
 
 /**
@@ -28,12 +26,11 @@ export const getCacheKey = lazyInit(() => createCacheKey(getPluginOptions()));
 /**
  * Cached lookup for the upstream transformer for a given file type
  */
-function getUpstreamTransformer(
-  filename: string,
-  { upstreamDelegates }: TransformerPluginOptions
-): UpstreamTransformer {
+function getUpstreamTransformer({
+  upstreamDelegates,
+  ext,
+}: FilePluginOptions): UpstreamTransformer {
   if (upstreamDelegates) {
-    const ext = path.extname(filename).toLowerCase();
     for (const delegatePath of Object.keys(upstreamDelegates)) {
       const patterns = toArray(upstreamDelegates[delegatePath]);
       for (const pattern of patterns) {
@@ -50,13 +47,14 @@ function getUpstreamTransformer(
 /**
  * Get the front-end transformer to use for a given file, if any.
  */
-function getFrontEndTransformer(
-  filename: string,
-  pluginOptions: FilePluginOptions
-): SourceTransformer | undefined {
-  if (pluginOptions.handleSvg && filename.toLowerCase().endsWith(".svg")) {
+function getFrontEndTransformer({
+  ext,
+  loader,
+  handleSvg,
+}: FilePluginOptions): SourceTransformer | undefined {
+  if (handleSvg && ext === ".svg") {
     return transformSrcSvg;
-  } else if (pluginOptions.loader) {
+  } else if (loader) {
     return transformSrcEsbuild;
   }
   return undefined;
@@ -67,23 +65,17 @@ function getFrontEndTransformer(
  * @param { src, filename, options, plugins } Babel transformer arguments
  * @returns The transformed Babel file result or a promise that resolves to it
  */
-export function transform({
-  src,
-  filename,
-  options,
-  plugins,
-}: BabelTransformerArgs): BabelFileResult | Promise<BabelFileResult> {
-  const args = {
-    src,
-    filename,
-    options,
-    plugins,
-    pluginOptions: updateOptions(getPluginOptions(), filename),
-  };
+export function transform(
+  baseArgs: BabelTransformerArgs
+): BabelFileResult | Promise<BabelFileResult> {
+  // get options from the environment, then combine with the babel args to get the full plugin options for this file
+  const baseOptions = getPluginOptions();
+  const pluginOptions = resolveFileOptions(baseArgs, baseOptions);
+  const args = { ...baseArgs, pluginOptions };
 
   // get the appropriate transformers for this file
-  const finalTransform = getUpstreamTransformer(filename, args.pluginOptions);
-  const sourceTransform = getFrontEndTransformer(filename, args.pluginOptions);
+  const finalTransform = getUpstreamTransformer(pluginOptions);
+  const sourceTransform = getFrontEndTransformer(pluginOptions);
 
   // if there is a source transformer, either typescript or svg, run it first and pass the results to the final transformer
   if (sourceTransform) {

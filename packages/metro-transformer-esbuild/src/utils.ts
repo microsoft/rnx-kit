@@ -1,7 +1,9 @@
 import type { TransformOptions, PluginTarget } from "@babel/core";
+import type { BabelTransformerArgs } from "metro-babel-transformer";
 import type { TransformerConfigT } from "metro-config";
 import { createRequire } from "node:module";
-import type { TransformerPluginOptions } from "./types";
+import path from "node:path";
+import type { FilePluginOptions, TransformerPluginOptions } from "./types";
 
 export type MakeHmrPreset = () => TransformOptions;
 
@@ -89,4 +91,87 @@ export function setTransformerPluginOptions(
 export function getTransformerPluginOptions(): TransformerPluginOptions {
   const optionsStr = process.env[envVarName];
   return optionsStr ? JSON.parse(optionsStr) : {};
+}
+
+/** allocate this once to optimize the repeated calls */
+const jsExtensions = new Set([".js", ".jsx", ".cjs", ".mjs", ".cjsx", ".mjsx"]);
+
+/**
+ * Updates the transformer plugin options with specifics for this file
+ * @param envOptions The current transformer plugin options.
+ * @param filename The name of the file being transformed.
+ * @returns The updated transformer plugin options.
+ */
+export function resolveFileOptions(
+  { src, filename }: BabelTransformerArgs,
+  envOptions: TransformerPluginOptions
+): FilePluginOptions {
+  const ext = path.extname(filename).toLowerCase();
+  const isTs = ext === ".ts" || ext === ".tsx";
+  const isJs = jsExtensions.has(ext);
+  let srcType: FilePluginOptions["srcType"] = undefined;
+  let loader: FilePluginOptions["loader"] = undefined;
+
+  if (isTs) {
+    srcType = ext === ".tsx" ? "tsx" : "ts";
+  } else if (isJs) {
+    srcType = ext.endsWith("x") ? "jsx" : "js";
+  }
+
+  // check for codegen for applicable file types, this requires the slow path through babel
+  const hasCodegen =
+    srcType && srcType !== "tsx" && src.includes("codegenNativeComponent");
+
+  // set up the loader if esbuild should run for this file
+  if (srcType && !hasCodegen && (isTs || envOptions.handleJs)) {
+    loader = srcType;
+  }
+
+  // if codegen, or we aren't handling jsx, or it's a js file and we're not handling js, delegate to babel
+  const jsx =
+    hasCodegen || !envOptions.handleJsx || (isJs && !envOptions.handleJs)
+      ? "babel"
+      : "esbuild";
+
+  // return the new options object with the file specific settings
+  return {
+    ...envOptions,
+    srcType,
+    loader,
+    ext,
+    mode: {
+      ts: hasCodegen ? "babel" : "esbuild",
+      jsx,
+    },
+  };
+}
+
+/**
+ * Helper to avoid creating new arrays unless necessary. This is the value setter with an update cache
+ */
+export type ArrayUpdates<T> = Record<number, T | null>;
+
+export function setArrayValue<T>(
+  index: number,
+  oldValue: T,
+  value: T | null,
+  updates: ArrayUpdates<T>
+): void {
+  if (oldValue !== value) {
+    updates[index] = value;
+  }
+}
+
+export function getUpdatedArray<T>(base: T[], updates: ArrayUpdates<T>): T[] {
+  if (Object.keys(updates).length === 0) {
+    return base;
+  }
+  const result: T[] = [];
+  for (let i = 0; i < base.length; i++) {
+    const entry = i in updates ? updates[i] : base[i];
+    if (entry !== null) {
+      result.push(entry);
+    }
+  }
+  return result;
 }

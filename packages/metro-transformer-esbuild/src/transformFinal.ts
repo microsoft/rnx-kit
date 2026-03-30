@@ -1,5 +1,9 @@
 import type { BabelFileResult, Node } from "@babel/core";
-import { transformFromAstSync, transformFromAstAsync } from "@babel/core";
+import {
+  transformFromAstSync,
+  transformFromAstAsync,
+  parseSync,
+} from "@babel/core";
 import { getBabelConfig } from "./babelConfig";
 import type { TransformerArgs } from "./types";
 
@@ -61,12 +65,26 @@ export function handleResult(
  */
 export function transformFinal(args: TransformerArgs) {
   const { src, pluginOptions } = args;
+  const { srcType, mode } = pluginOptions;
   const babelConfig = getBabelConfig(args);
-  const ast = hermesParse(src, {
-    babel: true,
-    reactRuntimeTarget: "19",
-    sourceType: babelConfig.sourceType ?? undefined,
-  });
+  const isTs = srcType === "ts" || srcType === "tsx";
+  const slowParse = isTs && mode.ts === "babel";
+
+  // parse the ast using hermes unless we are told to be in slow mode
+  const ast = slowParse
+    ? parseSync(src, babelConfig)
+    : hermesParse(src, {
+        babel: true,
+        reactRuntimeTarget: "19",
+        sourceType: babelConfig.sourceType ?? undefined,
+      });
+
+  // if the ast fails to parse return null to signal the file should be skipped
+  if (!ast) {
+    return handleResult(null);
+  }
+
+  // if we are in async mode, use the async transform, otherwise use the sync transform and return the results
   const { asyncTransform } = pluginOptions;
   if (asyncTransform) {
     return transformFromAstAsync(ast, src, babelConfig).then((result) =>

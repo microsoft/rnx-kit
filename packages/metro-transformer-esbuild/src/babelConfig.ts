@@ -1,26 +1,14 @@
-import type {
-  ConfigItem,
-  PluginItem,
-  TransformCaller,
-  TransformOptions,
-} from "@babel/core";
+import type { TransformCaller, TransformOptions } from "@babel/core";
 import { loadPartialConfig } from "@babel/core";
 import type { BabelTransformerArgs } from "metro-babel-transformer";
 import fs from "node:fs";
 import path from "node:path";
-import type { FilePluginOptions, TransformerArgs } from "./types";
+import { BabelModeHelper } from "./babelMode";
+import { getBabelPresetPath } from "./babelPluginCache";
+import type { TransformerArgs } from "./types";
 import { lazyInit, requireFromCwd } from "./utils";
 
 type BabelTransformerOptions = BabelTransformerArgs["options"];
-
-const blockedPlugins = new Set<string>(["transform-typescript", "const-enum"]);
-
-const jsxPlugins = new Set<string>([
-  "transform-react-jsx",
-  "transform-react-jsx-development",
-  "transform-react-jsx-self",
-  "transform-react-jsx-source",
-]);
 
 // cache the hot module reload config the first time it is requested.
 const getHmrConfig = lazyInit(() =>
@@ -79,6 +67,8 @@ export const getPartialBabelConfig = (() => {
         : process.env.BABEL_ENV || "production",
       code: false,
       highlightCode: true,
+      ast: true,
+      cloneInputAst: false,
     };
 
     // either route to a config file or create a default config
@@ -88,7 +78,7 @@ export const getPartialBabelConfig = (() => {
       // If no babel config file is found, load the default react-native config
       babelRc.presets = [
         [
-          requireFromCwd("@react-native/babel-preset"),
+          require(getBabelPresetPath()),
           {
             projectRoot,
             ...presetOptions,
@@ -109,94 +99,63 @@ export const getPartialBabelConfig = (() => {
   };
 })();
 
-/**
- * @internal
- */
-export function resolvePluginName(plugin: PluginItem): string | undefined {
-  if (typeof plugin === "string") {
-    return plugin;
-  } else if (Array.isArray(plugin)) {
-    if (typeof plugin[0] === "string") {
-      return plugin[0];
-    }
-  } else if (typeof plugin === "object" && plugin !== null) {
-    return (plugin as ConfigItem).name;
+export function getCachableConfig(
+  { options, plugins }: TransformerArgs,
+  modeHelper: BabelModeHelper
+): TransformOptions {
+  // see if options have already been cached for this mode, if so return them immediately
+  const cachedOptions = modeHelper.getCachedOptions();
+  if (cachedOptions) {
+    return cachedOptions;
   }
-  return undefined;
-}
 
-/**
- * @internal
- */
-export function addPluginToConfig(
-  { handleJsx, loader }: FilePluginOptions,
-  plugin: PluginItem
-) {
-  const pluginName = resolvePluginName(plugin);
-  const isEsbuildHandlingJsx = handleJsx && loader != null;
-  if (
-    pluginName &&
-    (blockedPlugins.has(pluginName) ||
-      (isEsbuildHandlingJsx && jsxPlugins.has(pluginName)))
-  ) {
-    return false;
-  }
-  return true;
-}
-
-/**
- * Get the babel config for a specific file. This will attempt to cache as much information s
- * @param filename
- * @param options
- * @param pluginOptions
- * @param mixinPlugins
- * @returns
- */
-export function getBabelConfig({
-  pluginOptions,
-  filename,
-  options,
-  plugins: mixinPlugins,
-}: TransformerArgs): TransformOptions {
-  // load the partial config
+  // get the partial config that is shared across all files and modes, this is cached on the first call
   const partialConfig = getPartialBabelConfig(options);
 
-  // build the list of plugins to use, filtering out plugins that should not apply
-  const plugins: PluginItem[] = [];
-  for (const plugin of partialConfig.plugins || []) {
-    if (addPluginToConfig(pluginOptions, plugin)) {
-      plugins.push(plugin);
-    }
-  }
-  if (mixinPlugins) {
-    for (const plugin of mixinPlugins) {
-      if (addPluginToConfig(pluginOptions, plugin)) {
-        plugins.push(plugin);
-      }
-    }
-  }
+  // now create the parts of the config that are specific to this mode or otherwise fixed, this adjust the config
+  // for the current mode, then cache the results so that we only do this once for each mode.
+  return modeHelper.adjustAndCacheOptions({
+    ...partialConfig,
+    // caller informs the preset resolution cache and disambiguates the different configs
+    caller: {
+      name: "metro",
+      bundler: "metro", // custom metro key
+      platform: options.platform,
+      rnxMode: modeHelper.key, // custom key for this plugin
+    } as TransformCaller,
+    // the parameterized plugins are fixed additions by metro and need to be mixed in but are stable
+    plugins: [...(partialConfig.plugins ?? []), ...(plugins ?? [])],
+  });
+}
 
-  // setup hot module reload if in dev mode and this is not a node module
+/**
+ * Get the babel config for a specific file. This caches as much of the config as possible
+ * across files, only adding file-specific settings (filename, HMR plugins) per call.
+ * @param args the transformer args, including file specific options
+ * @returns the babel config for the file
+ */
+export function getBabelConfig(args: TransformerArgs): TransformOptions {
+  const { filename, options, pluginOptions } = args;
+  // get the cached partial config
+  const modeHelper = BabelModeHelper.find(pluginOptions.mode);
+  const cachedConfig = getCachableConfig(args, modeHelper);
+  const plugins = [...(cachedConfig.plugins ?? [])];
+
+  // setup the hmr config if necessary, note hot isn't on the type but this is the check in the RN transformer
+  const useHmr = options.dev && (options as { hot?: boolean }).hot;
   const hmrConfig =
-    options.dev && !filename.includes("node_modules")
-      ? getHmrConfig()
-      : undefined;
+    useHmr && !filename.includes("node_modules") ? getHmrConfig() : undefined;
+
+  // add the hmr plugins to the mixin list so they get filtered with everything else
   if (hmrConfig && hmrConfig.plugins) {
     plugins.push(...hmrConfig.plugins);
   }
 
-  // return the full babel config for the file
+  // return the config plus any file specific options
   return {
-    ...partialConfig,
+    ...cachedConfig,
     ...hmrConfig,
     filename,
-    caller: {
-      name: "metro",
-      bundler: "metro",
-      platform: options.platform,
-    } as TransformCaller,
-    ast: true,
-    cloneInputAst: false,
     plugins,
   };
 }
