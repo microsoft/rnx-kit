@@ -1,0 +1,40 @@
+{
+  "name": "@rnx-kit/yarn-plugin-ignore",
+  "version": "0.0.1",
+  "private": true,
+  "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-ignore",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-ignore#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/yarn-plugin-ignore"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "dist/yarn-plugin-ignore.cjs",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle --platform yarn --sourceMap",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@yarnpkg/core": "^4.2.0",
+    "@yarnpkg/fslib": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=18.12",
+    "yarn": ">=4.0"
+  },
+  "experimental": true
+}
