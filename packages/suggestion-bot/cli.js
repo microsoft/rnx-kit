@@ -1,12 +1,5 @@
 #!/usr/bin/env node
 
-//
-// Copyright (c) Tommy Nguyen
-//
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
-//
-
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath, URL } from "node:url";
