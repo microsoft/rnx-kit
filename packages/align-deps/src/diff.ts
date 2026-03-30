@@ -1,6 +1,7 @@
 import type { PackageManifest } from "@rnx-kit/types-node";
-import semverCoerce from "semver/functions/coerce.js";
+import type { RangeOptions } from "semver";
 import semverRangeSubset from "semver/ranges/subset.js";
+import semverValidRange from "semver/ranges/valid.js";
 import { dependencySections } from "./helpers.ts";
 import type { Changes, Options } from "./types.ts";
 
@@ -8,12 +9,12 @@ function isStrictlyEqual(version: string, range: string) {
   return version === range;
 }
 
-export function isSubset(sub: string, dom: string) {
+export function isSubset(sub: string, dom: string, options?: RangeOptions) {
   // If either side is not a valid version number, fall back to strict equality
-  if (!semverCoerce(sub) || !semverCoerce(dom)) {
+  if (!semverValidRange(sub) || !semverValidRange(dom)) {
     return isStrictlyEqual(sub, dom);
   }
-  return semverRangeSubset(sub, dom);
+  return semverRangeSubset(sub, dom, options);
 }
 
 export function diff(
