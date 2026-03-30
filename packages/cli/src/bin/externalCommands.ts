@@ -1,0 +1,38 @@
+import type { Command, Config } from "@react-native-community/cli-types";
+import { resolveCommunityCLI } from "@rnx-kit/tools-react-native/context";
+import { RNX_FAST_PATH } from "./constants.ts";
+
+function tryImport(module: string, fromDir: string) {
+  try {
+    const p = require.resolve(module, { paths: [fromDir] });
+    return require(p);
+  } catch (_) {
+    return undefined;
+  }
+}
+
+export function findExternalCommands(config: Config): Command[] {
+  if (RNX_FAST_PATH in config) {
+    // Fast path means we don't need to do anything here
+    return [];
+  }
+
+  const externalCommands: Command[] = [
+    {
+      name: "config",
+      description:
+        "Prints the configuration for the project and its dependencies in JSON format; used by autolinking",
+      func: () => console.log(JSON.stringify(config, undefined, 2)),
+    },
+  ];
+
+  const rncli = resolveCommunityCLI(config.root);
+
+  const cliDoctor = tryImport("@react-native-community/cli-doctor", rncli);
+  if (cliDoctor?.commands) {
+    const commands = Object.values(cliDoctor.commands) as Command[];
+    externalCommands.push(...commands);
+  }
+
+  return externalCommands;
+}

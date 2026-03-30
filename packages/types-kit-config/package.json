@@ -1,0 +1,43 @@
+{
+  "name": "@rnx-kit/types-kit-config",
+  "version": "1.0.0",
+  "description": "Type definitions for the rnx-kit configuration",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-kit-config#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/types-kit-config"
+  },
+  "files": [
+    "src"
+  ],
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
+  },
+  "dependencies": {
+    "@rnx-kit/types-bundle-config": "^1.0.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/oxlint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*"
+  },
+  "engines": {
+    "node": ">=18.12"
+  }
+}

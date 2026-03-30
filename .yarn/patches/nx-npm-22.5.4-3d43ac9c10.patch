@@ -1,0 +1,23 @@
+diff --git a/src/tasks-runner/task-orchestrator.js b/src/tasks-runner/task-orchestrator.js
+index 1a02cf31055ad22135008665acd4292233348c79..fbf3a57ca68faf7efeb0fd44bdea0ec6c5bbd921 100644
+--- a/src/tasks-runner/task-orchestrator.js
++++ b/src/tasks-runner/task-orchestrator.js
+@@ -761,16 +761,8 @@ class TaskOrchestrator {
+ }
+ exports.TaskOrchestrator = TaskOrchestrator;
+ function getThreadCount(options, taskGraph) {
+-    if (options['parallel'] === 'false' ||
+-        options['parallel'] === false) {
+-        options['parallel'] = 1;
+-    }
+-    else if (options['parallel'] === 'true' ||
+-        options['parallel'] === true ||
+-        options['parallel'] === undefined ||
+-        options['parallel'] === '') {
+-        options['parallel'] = Number(options['maxParallel'] || 3);
+-    }
++    const threads = require("os").availableParallelism();
++    options['parallel'] = process.env["CI"] ? threads : threads - 1;
+     const maxParallel = options['parallel'] +
+         Object.values(taskGraph.tasks).filter((t) => t.continuous).length;
+     const totalTasks = Object.keys(taskGraph.tasks).length;

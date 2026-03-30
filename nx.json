@@ -1,0 +1,45 @@
+{
+  "extends": "nx/presets/npm.json",
+  "defaultBase": "main",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [
+      "{workspaceRoot}/.github/workflows/pr.yml",
+      "{workspaceRoot}/packages/eslint-config/*",
+      "{workspaceRoot}/packages/eslint-plugin/*",
+      "{workspaceRoot}/packages/jest-preset/*",
+      "{workspaceRoot}/packages/oxlint-config/*",
+      "{workspaceRoot}/packages/tsconfig/*",
+      "{workspaceRoot}/yarn.lock"
+    ],
+    "production": ["default"]
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build", "clean", "lint"],
+      "cache": true
+    },
+    "build:ci": {
+      "cache": true
+    },
+    "bundle": {
+      "dependsOn": ["build"]
+    },
+    "bundle+esbuild": {
+      "dependsOn": ["build"]
+    },
+    "format": {
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "cache": true
+    }
+  },
+  "tui": {
+    "enabled": false
+  }
+}

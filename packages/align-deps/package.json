@@ -1,0 +1,75 @@
+{
+  "name": "@rnx-kit/align-deps",
+  "version": "3.4.2",
+  "description": "Manage dependencies within a repository and across many repositories",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/align-deps"
+  },
+  "bin": {
+    "rnx-align-deps": "lib/index.js"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/index.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
+    "update-preset": "node --no-warnings --conditions=typescript scripts/update-preset.ts",
+    "update-profile": "node --no-warnings --conditions=typescript scripts/update-profile.ts",
+    "update-readme": "node --no-warnings --conditions=typescript scripts/update-readme.ts"
+  },
+  "dependencies": {
+    "@rnx-kit/types-kit-config": "^1.0.0",
+    "@rnx-kit/types-node": "^1.0.0"
+  },
+  "devDependencies": {
+    "@octokit/core": "^7.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "^17.0.0",
+    "@react-native-community/cli-types": "^20.0.0",
+    "@rnx-kit/config": "*",
+    "@rnx-kit/console": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tools-language": "*",
+    "@rnx-kit/tools-node": "*",
+    "@rnx-kit/tools-shell": "*",
+    "@rnx-kit/tools-workspaces": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/js-yaml": "^4.0.5",
+    "@types/prompts": "^2.0.0",
+    "@types/semver": "^7.0.0",
+    "@types/yargs": "^16.0.0",
+    "detect-indent": "^6.0.0",
+    "js-yaml": "^4.1.1",
+    "markdown-table": "^3.0.0",
+    "package-json": "^10.0.0",
+    "prompts": "^2.4.0",
+    "recast": "^0.23.0",
+    "semver": "^7.0.0",
+    "yargs": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

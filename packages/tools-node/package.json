@@ -1,0 +1,70 @@
+{
+  "name": "@rnx-kit/tools-node",
+  "version": "3.0.4",
+  "description": "A collection of supplemental NodeJS functions and types",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-node#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-node"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "module.d.ts",
+    "module.js",
+    "package.d.ts",
+    "package.js",
+    "path.d.ts",
+    "path.js",
+    "src"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./module": {
+      "types": "./lib/module.d.ts",
+      "typescript": "./src/module.ts",
+      "default": "./lib/module.js"
+    },
+    "./package": {
+      "types": "./lib/package.d.ts",
+      "typescript": "./src/package.ts",
+      "default": "./lib/package.js"
+    },
+    "./path": {
+      "types": "./lib/path.d.ts",
+      "typescript": "./src/path.ts",
+      "default": "./lib/path.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
+    "update-readme": "rnx-kit-scripts update-api-readme"
+  },
+  "dependencies": {
+    "@rnx-kit/types-node": "^1.0.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

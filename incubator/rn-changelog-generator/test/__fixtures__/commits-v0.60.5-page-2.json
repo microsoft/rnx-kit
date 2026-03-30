@@ -1,0 +1,2372 @@
+[
+  {
+    "sha": "99bc31cfa609e838779c29343684365a2ed6169f",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6OTliYzMxY2ZhNjA5ZTgzODc3OWMyOTM0MzY4NDM2NWEyZWQ2MTY5Zg==",
+    "commit": {
+      "author": {
+        "name": "Robert Ying",
+        "email": "yingrui205@gmail.com",
+        "date": "2019-06-24T08:48:57Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-28T07:38:10Z"
+      },
+      "message": "Fix regression of improper assets copy (revert #24518 #24778) (#25363)\n\nSummary:\nPull requests https://github.com/facebook/react-native/issues/24518 #24778 make Gradle copy all **generated** assets and resources into `android/app/src/res`, which is a bad behavior, because `src/res` goes into version control and should hold only those **original** resource files.\n\nThese changes in https://github.com/facebook/react-native/issues/24518 #24778 were merged into 0.60.0-rc release and cause regression.\n\nThis pull request will:\n\n- Revert pull requests https://github.com/facebook/react-native/issues/24518 #24778\n- Close https://github.com/facebook/react-native/issues/25325\n\n## Changelog\n\n[Android] [Fixed] - Fix regression of improper assets copy (revert https://github.com/facebook/react-native/issues/24518 #24778)\nPull Request resolved: https://github.com/facebook/react-native/pull/25363\n\nTest Plan: It is a revert pull request and the reverted script should work the same as it has in 0.59.x.\n\nDifferential Revision: D15963329\n\nPulled By: cpojer\n\nfbshipit-source-id: 5619a318dbdb40e816e37b6e37d4fe32caa46e9e",
+      "tree": {
+        "sha": "b8213b190bc1547c90ae48fb5dbfd3017d5e2be2",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/b8213b190bc1547c90ae48fb5dbfd3017d5e2be2"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/99bc31cfa609e838779c29343684365a2ed6169f",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/99bc31cfa609e838779c29343684365a2ed6169f",
+    "html_url": "https://github.com/facebook/react-native/commit/99bc31cfa609e838779c29343684365a2ed6169f",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/99bc31cfa609e838779c29343684365a2ed6169f/comments",
+    "author": {
+      "login": "robertying",
+      "id": 22592111,
+      "node_id": "MDQ6VXNlcjIyNTkyMTEx",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/22592111?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/robertying",
+      "html_url": "https://github.com/robertying",
+      "followers_url": "https://api.github.com/users/robertying/followers",
+      "following_url": "https://api.github.com/users/robertying/following{/other_user}",
+      "gists_url": "https://api.github.com/users/robertying/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/robertying/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/robertying/subscriptions",
+      "organizations_url": "https://api.github.com/users/robertying/orgs",
+      "repos_url": "https://api.github.com/users/robertying/repos",
+      "events_url": "https://api.github.com/users/robertying/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/robertying/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "c36c481016dc008ffe92883697d72251c3f97ba2",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/c36c481016dc008ffe92883697d72251c3f97ba2",
+        "html_url": "https://github.com/facebook/react-native/commit/c36c481016dc008ffe92883697d72251c3f97ba2"
+      }
+    ]
+  },
+  {
+    "sha": "c36c481016dc008ffe92883697d72251c3f97ba2",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6YzM2YzQ4MTAxNmRjMDA4ZmZlOTI4ODM2OTdkNzIyNTFjM2Y5N2JhMg==",
+    "commit": {
+      "author": {
+        "name": "Dulmandakh",
+        "email": "dulmandakh@gmail.com",
+        "date": "2019-06-23T06:33:51Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-28T07:38:01Z"
+      },
+      "message": "bump fresco to 2.0.0, supports AndroidX (#25358)\n\nSummary:\nBump Fresco to 2.0.0, which supports AndroidX. We should cherry-pick to 0.60 release, to support brown field apps but also native components.\n\n## Changelog\n\n[Android] [Changed] - Bump Fresco to 2.0.0, supports AndroidX\nPull Request resolved: https://github.com/facebook/react-native/pull/25358\n\nTest Plan: CI is green, and RNTester builds and runs as expected.\n\nDifferential Revision: D15959443\n\nPulled By: mdvacca\n\nfbshipit-source-id: 58ba2c3e4d1342014d6ea632cd865b4f413548d9",
+      "tree": {
+        "sha": "f4d901c309883463aaca8e0ea090c74f1917d83e",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/f4d901c309883463aaca8e0ea090c74f1917d83e"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/c36c481016dc008ffe92883697d72251c3f97ba2",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/c36c481016dc008ffe92883697d72251c3f97ba2",
+    "html_url": "https://github.com/facebook/react-native/commit/c36c481016dc008ffe92883697d72251c3f97ba2",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/c36c481016dc008ffe92883697d72251c3f97ba2/comments",
+    "author": {
+      "login": "dulmandakh",
+      "id": 178494,
+      "node_id": "MDQ6VXNlcjE3ODQ5NA==",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/178494?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/dulmandakh",
+      "html_url": "https://github.com/dulmandakh",
+      "followers_url": "https://api.github.com/users/dulmandakh/followers",
+      "following_url": "https://api.github.com/users/dulmandakh/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dulmandakh/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/dulmandakh/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dulmandakh/subscriptions",
+      "organizations_url": "https://api.github.com/users/dulmandakh/orgs",
+      "repos_url": "https://api.github.com/users/dulmandakh/repos",
+      "events_url": "https://api.github.com/users/dulmandakh/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/dulmandakh/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "13f4fa024568ab1c84beb140ee5c35b1950692f2",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/13f4fa024568ab1c84beb140ee5c35b1950692f2",
+        "html_url": "https://github.com/facebook/react-native/commit/13f4fa024568ab1c84beb140ee5c35b1950692f2"
+      }
+    ]
+  },
+  {
+    "sha": "13f4fa024568ab1c84beb140ee5c35b1950692f2",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6MTNmNGZhMDI0NTY4YWIxYzg0YmViMTQwZWU1YzM1YjE5NTA2OTJmMg==",
+    "commit": {
+      "author": {
+        "name": "Dulmandakh",
+        "email": "dulmandakh@gmail.com",
+        "date": "2019-06-22T05:55:06Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-28T07:37:51Z"
+      },
+      "message": "custom fontWeight numeric values for Text on Android (#25341)\n\nSummary:\nI found that on Android we only support 2 fontWeight options, either **normal** or **bold**, even developer can set any numeric value. But iOS supports all possible numeric values. This PR tries to add support for all possible numeric values on Android, even if it's supported only on Android P(28) and above.\n\nThis change might break texts where fontWeight use improperly, because this PR removes conversion of values above 500 to BOLD and below 500 to normal.\n\nFYI, also moved **mCustomTypefaceCache** usage up because it was working after unnecessary mFontCache usage.\n\n## Changelog\n\n[Android] [Changed] - add custom font weight support to Text component on Android, only on P(API 28) and above versions.\nPull Request resolved: https://github.com/facebook/react-native/pull/25341\n\nTest Plan: RNTester app's Text examples will show Rubik Regular, Rubik Light, Rubik Bold, Rubik Medium and Rubik Medium Italic texts in corresponding font family, style and weights.\n\nDifferential Revision: D15956350\n\nPulled By: mdvacca\n\nfbshipit-source-id: 61079d953c65fb34ab4497d44c22317912a5a616",
+      "tree": {
+        "sha": "22849e68113ba7d9935cae4a7e2dcb20bf9e2c9e",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/22849e68113ba7d9935cae4a7e2dcb20bf9e2c9e"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/13f4fa024568ab1c84beb140ee5c35b1950692f2",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/13f4fa024568ab1c84beb140ee5c35b1950692f2",
+    "html_url": "https://github.com/facebook/react-native/commit/13f4fa024568ab1c84beb140ee5c35b1950692f2",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/13f4fa024568ab1c84beb140ee5c35b1950692f2/comments",
+    "author": {
+      "login": "dulmandakh",
+      "id": 178494,
+      "node_id": "MDQ6VXNlcjE3ODQ5NA==",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/178494?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/dulmandakh",
+      "html_url": "https://github.com/dulmandakh",
+      "followers_url": "https://api.github.com/users/dulmandakh/followers",
+      "following_url": "https://api.github.com/users/dulmandakh/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dulmandakh/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/dulmandakh/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dulmandakh/subscriptions",
+      "organizations_url": "https://api.github.com/users/dulmandakh/orgs",
+      "repos_url": "https://api.github.com/users/dulmandakh/repos",
+      "events_url": "https://api.github.com/users/dulmandakh/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/dulmandakh/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "9792f2c9d7f47b1f66e196c7f70497d3253ef6e6",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/9792f2c9d7f47b1f66e196c7f70497d3253ef6e6",
+        "html_url": "https://github.com/facebook/react-native/commit/9792f2c9d7f47b1f66e196c7f70497d3253ef6e6"
+      }
+    ]
+  },
+  {
+    "sha": "9792f2c9d7f47b1f66e196c7f70497d3253ef6e6",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6OTc5MmYyYzlkN2Y0N2IxZjY2ZTE5NmM3ZjcwNDk3ZDMyNTNlZjZlNg==",
+    "commit": {
+      "author": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-20T10:40:30Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-20T10:40:30Z"
+      },
+      "message": "[0.60.0-rc.2] Bump version numbers",
+      "tree": {
+        "sha": "9c86f048938e74c1f725ad2fddf55a92681c1936",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/9c86f048938e74c1f725ad2fddf55a92681c1936"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/9792f2c9d7f47b1f66e196c7f70497d3253ef6e6",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/9792f2c9d7f47b1f66e196c7f70497d3253ef6e6",
+    "html_url": "https://github.com/facebook/react-native/commit/9792f2c9d7f47b1f66e196c7f70497d3253ef6e6",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/9792f2c9d7f47b1f66e196c7f70497d3253ef6e6/comments",
+    "author": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "53cec2dc1f1f5d143d0bb9752629b72350ebd112",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/53cec2dc1f1f5d143d0bb9752629b72350ebd112",
+        "html_url": "https://github.com/facebook/react-native/commit/53cec2dc1f1f5d143d0bb9752629b72350ebd112"
+      }
+    ]
+  },
+  {
+    "sha": "53cec2dc1f1f5d143d0bb9752629b72350ebd112",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6NTNjZWMyZGMxZjFmNWQxNDNkMGJiOTc1MjYyOWI3MjM1MGViZDExMg==",
+    "commit": {
+      "author": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-20T09:07:32Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-20T09:07:32Z"
+      },
+      "message": "[LOCAL] bump version in template to match repo",
+      "tree": {
+        "sha": "bae1a6004e27dddbb9cc827c65a01749ace2b10b",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/bae1a6004e27dddbb9cc827c65a01749ace2b10b"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/53cec2dc1f1f5d143d0bb9752629b72350ebd112",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/53cec2dc1f1f5d143d0bb9752629b72350ebd112",
+    "html_url": "https://github.com/facebook/react-native/commit/53cec2dc1f1f5d143d0bb9752629b72350ebd112",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/53cec2dc1f1f5d143d0bb9752629b72350ebd112/comments",
+    "author": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "b4f3d4b92e8db8d230fc2b46fc083c4bd5617558",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/b4f3d4b92e8db8d230fc2b46fc083c4bd5617558",
+        "html_url": "https://github.com/facebook/react-native/commit/b4f3d4b92e8db8d230fc2b46fc083c4bd5617558"
+      }
+    ]
+  },
+  {
+    "sha": "b4f3d4b92e8db8d230fc2b46fc083c4bd5617558",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6YjRmM2Q0YjkyZThkYjhkMjMwZmMyYjQ2ZmMwODNjNGJkNTYxNzU1OA==",
+    "commit": {
+      "author": {
+        "name": "Rick Hanlon",
+        "email": "rickhanlonii@fb.com",
+        "date": "2019-06-19T18:56:38Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-20T09:06:01Z"
+      },
+      "message": "Move scheduler to dependencies\n\nSummary: Fixes https://github.com/react-native-community/releases/issues/116#issuecomment-503449687\n\nReviewed By: gaearon\n\nDifferential Revision: D15901557\n\nfbshipit-source-id: 653119c181585cf9a4a561b350c66bd10cb674bd",
+      "tree": {
+        "sha": "ab401c6ffce39ad8174f536f09414cef86c4ae6b",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/ab401c6ffce39ad8174f536f09414cef86c4ae6b"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/b4f3d4b92e8db8d230fc2b46fc083c4bd5617558",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/b4f3d4b92e8db8d230fc2b46fc083c4bd5617558",
+    "html_url": "https://github.com/facebook/react-native/commit/b4f3d4b92e8db8d230fc2b46fc083c4bd5617558",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/b4f3d4b92e8db8d230fc2b46fc083c4bd5617558/comments",
+    "author": {
+      "login": "rickhanlonii",
+      "id": 2440089,
+      "node_id": "MDQ6VXNlcjI0NDAwODk=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/2440089?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/rickhanlonii",
+      "html_url": "https://github.com/rickhanlonii",
+      "followers_url": "https://api.github.com/users/rickhanlonii/followers",
+      "following_url": "https://api.github.com/users/rickhanlonii/following{/other_user}",
+      "gists_url": "https://api.github.com/users/rickhanlonii/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/rickhanlonii/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/rickhanlonii/subscriptions",
+      "organizations_url": "https://api.github.com/users/rickhanlonii/orgs",
+      "repos_url": "https://api.github.com/users/rickhanlonii/repos",
+      "events_url": "https://api.github.com/users/rickhanlonii/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/rickhanlonii/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "e741488659cb786f78f42d5e285d628026d2cd7f",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/e741488659cb786f78f42d5e285d628026d2cd7f",
+        "html_url": "https://github.com/facebook/react-native/commit/e741488659cb786f78f42d5e285d628026d2cd7f"
+      }
+    ]
+  },
+  {
+    "sha": "e741488659cb786f78f42d5e285d628026d2cd7f",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6ZTc0MTQ4ODY1OWNiNzg2Zjc4ZjQyZDVlMjg1ZDYyODAyNmQyY2Q3Zg==",
+    "commit": {
+      "author": {
+        "name": "Salakar",
+        "email": "mike.diarmid@gmail.com",
+        "date": "2019-04-24T13:13:20Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-19T13:10:57Z"
+      },
+      "message": "Implement changes to enable native modules auto linking (#24506)\n\nSummary:\nReplaces #24099 (original PR became detached for some reason)\n\nImplements the template changes required to enable native modules auto-linking for both Android & iOS.\n\nRequires the following to be merged first and an updated CLI to be published:\n\n- [x] https://github.com/react-native-community/react-native-cli/pull/254\n- [x] https://github.com/react-native-community/react-native-cli/pull/256\n- [x] https://github.com/react-native-community/react-native-cli/pull/258\n\ncc grabbou thymikee orta for review\n\n- [ ] https://github.com/facebook/react-native/pull/24517 update CLI version)\n\n[TEMPLATE] [FEATURE] - Enable auto-initialization/linking of react native modules for new projects\nPull Request resolved: https://github.com/facebook/react-native/pull/24506\n\nDifferential Revision: D15062701\n\nPulled By: cpojer\n\nfbshipit-source-id: 65296cbec2925405fe8033de71910325e0c719bc\n\n# Conflicts:\n#\ttemplate/ios/Podfile",
+      "tree": {
+        "sha": "7eb731c58302e230d94e0950569a5ddd4a203a64",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/7eb731c58302e230d94e0950569a5ddd4a203a64"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/e741488659cb786f78f42d5e285d628026d2cd7f",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/e741488659cb786f78f42d5e285d628026d2cd7f",
+    "html_url": "https://github.com/facebook/react-native/commit/e741488659cb786f78f42d5e285d628026d2cd7f",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/e741488659cb786f78f42d5e285d628026d2cd7f/comments",
+    "author": {
+      "login": "Salakar",
+      "id": 5347038,
+      "node_id": "MDQ6VXNlcjUzNDcwMzg=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5347038?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Salakar",
+      "html_url": "https://github.com/Salakar",
+      "followers_url": "https://api.github.com/users/Salakar/followers",
+      "following_url": "https://api.github.com/users/Salakar/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Salakar/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Salakar/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Salakar/subscriptions",
+      "organizations_url": "https://api.github.com/users/Salakar/orgs",
+      "repos_url": "https://api.github.com/users/Salakar/repos",
+      "events_url": "https://api.github.com/users/Salakar/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Salakar/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "bf4ee6f5c1879948f4bd4f7ef3d60d88b6269e43",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/bf4ee6f5c1879948f4bd4f7ef3d60d88b6269e43",
+        "html_url": "https://github.com/facebook/react-native/commit/bf4ee6f5c1879948f4bd4f7ef3d60d88b6269e43"
+      }
+    ]
+  },
+  {
+    "sha": "bf4ee6f5c1879948f4bd4f7ef3d60d88b6269e43",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6YmY0ZWU2ZjVjMTg3OTk0OGY0YmQ0ZjdlZjNkNjBkODhiNjI2OWU0Mw==",
+    "commit": {
+      "author": {
+        "name": "Michał Pierzchała",
+        "email": "thymikee@gmail.com",
+        "date": "2019-06-13T15:51:59Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-19T11:54:50Z"
+      },
+      "message": "Bump CLI to 2.0.0-rc.2 (#25241)\n\nSummary:\nFixing Metro validation issue. Hope that helps with fixing the CI �.\n\n## Changelog\n\n[General] [Changed] - Bump CLI to 2.0.0-rc.2\nPull Request resolved: https://github.com/facebook/react-native/pull/25241\n\nDifferential Revision: D15803610\n\nPulled By: cpojer\n\nfbshipit-source-id: 22136db1583f8cf5a40afd5d8a561d98cb6de982",
+      "tree": {
+        "sha": "ed6a75a547892def1c82a3f5179299da69eb5b26",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/ed6a75a547892def1c82a3f5179299da69eb5b26"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/bf4ee6f5c1879948f4bd4f7ef3d60d88b6269e43",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/bf4ee6f5c1879948f4bd4f7ef3d60d88b6269e43",
+    "html_url": "https://github.com/facebook/react-native/commit/bf4ee6f5c1879948f4bd4f7ef3d60d88b6269e43",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/bf4ee6f5c1879948f4bd4f7ef3d60d88b6269e43/comments",
+    "author": {
+      "login": "thymikee",
+      "id": 5106466,
+      "node_id": "MDQ6VXNlcjUxMDY0NjY=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5106466?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/thymikee",
+      "html_url": "https://github.com/thymikee",
+      "followers_url": "https://api.github.com/users/thymikee/followers",
+      "following_url": "https://api.github.com/users/thymikee/following{/other_user}",
+      "gists_url": "https://api.github.com/users/thymikee/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/thymikee/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/thymikee/subscriptions",
+      "organizations_url": "https://api.github.com/users/thymikee/orgs",
+      "repos_url": "https://api.github.com/users/thymikee/repos",
+      "events_url": "https://api.github.com/users/thymikee/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/thymikee/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "cecba01b71045920892560f53676381462c11598",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/cecba01b71045920892560f53676381462c11598",
+        "html_url": "https://github.com/facebook/react-native/commit/cecba01b71045920892560f53676381462c11598"
+      }
+    ]
+  },
+  {
+    "sha": "cecba01b71045920892560f53676381462c11598",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6Y2VjYmEwMWI3MTA0NTkyMDg5MjU2MGY1MzY3NjM4MTQ2MmMxMTU5OA==",
+    "commit": {
+      "author": {
+        "name": "zhongwuzw",
+        "email": "zhongwuzw@qq.com",
+        "date": "2019-06-05T11:58:11Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-19T11:54:39Z"
+      },
+      "message": "Removed autoresizing mask for modal host container view (#25150)\n\nSummary:\nFixes #18177 . Related #24497. Autoresizing mask would conflict with `AutoLayout`. For example , it would impact `SafeAreaView`. And actually we don't need to use autoresizing mask,  we observe the bounds change notification and [update the frame manually](https://github.com/facebook/react-native/blob/1151c096dab17e5d9a6ac05b61aacecd4305f3db/React/Views/RCTModalHostView.m#L59).\n\n## Changelog\n\n[iOS] [Fixed] - Removed autoresizing mask for modal host container view\nPull Request resolved: https://github.com/facebook/react-native/pull/25150\n\nDifferential Revision: D15645148\n\nPulled By: cpojer\n\nfbshipit-source-id: 95d5f40feaa980b959a3de6e273dccac8158c57b",
+      "tree": {
+        "sha": "326ea411d5454cb6299f8bb1b495e10c646e12e7",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/326ea411d5454cb6299f8bb1b495e10c646e12e7"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/cecba01b71045920892560f53676381462c11598",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/cecba01b71045920892560f53676381462c11598",
+    "html_url": "https://github.com/facebook/react-native/commit/cecba01b71045920892560f53676381462c11598",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/cecba01b71045920892560f53676381462c11598/comments",
+    "author": {
+      "login": "zhongwuzw",
+      "id": 5061845,
+      "node_id": "MDQ6VXNlcjUwNjE4NDU=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5061845?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/zhongwuzw",
+      "html_url": "https://github.com/zhongwuzw",
+      "followers_url": "https://api.github.com/users/zhongwuzw/followers",
+      "following_url": "https://api.github.com/users/zhongwuzw/following{/other_user}",
+      "gists_url": "https://api.github.com/users/zhongwuzw/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/zhongwuzw/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/zhongwuzw/subscriptions",
+      "organizations_url": "https://api.github.com/users/zhongwuzw/orgs",
+      "repos_url": "https://api.github.com/users/zhongwuzw/repos",
+      "events_url": "https://api.github.com/users/zhongwuzw/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/zhongwuzw/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "06fffc204252eb0b4ca3524768c6fbd4d78d79ab",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/06fffc204252eb0b4ca3524768c6fbd4d78d79ab",
+        "html_url": "https://github.com/facebook/react-native/commit/06fffc204252eb0b4ca3524768c6fbd4d78d79ab"
+      }
+    ]
+  },
+  {
+    "sha": "06fffc204252eb0b4ca3524768c6fbd4d78d79ab",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6MDZmZmZjMjA0MjUyZWIwYjRjYTM1MjQ3NjhjNmZiZDRkNzhkNzlhYg==",
+    "commit": {
+      "author": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-10T11:30:15Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-10T11:30:15Z"
+      },
+      "message": "[0.60.0-rc.1] Bump version numbers",
+      "tree": {
+        "sha": "454312a1f5c1d88a27d929e2ca206f34592c42e1",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/454312a1f5c1d88a27d929e2ca206f34592c42e1"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/06fffc204252eb0b4ca3524768c6fbd4d78d79ab",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/06fffc204252eb0b4ca3524768c6fbd4d78d79ab",
+    "html_url": "https://github.com/facebook/react-native/commit/06fffc204252eb0b4ca3524768c6fbd4d78d79ab",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/06fffc204252eb0b4ca3524768c6fbd4d78d79ab/comments",
+    "author": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "5ecc87bf3e9a8b5e87048c47d5027c02a573f0a1",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/5ecc87bf3e9a8b5e87048c47d5027c02a573f0a1",
+        "html_url": "https://github.com/facebook/react-native/commit/5ecc87bf3e9a8b5e87048c47d5027c02a573f0a1"
+      }
+    ]
+  },
+  {
+    "sha": "5ecc87bf3e9a8b5e87048c47d5027c02a573f0a1",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6NWVjYzg3YmYzZTlhOGI1ZTg3MDQ4YzQ3ZDUwMjdjMDJhNTczZjBhMQ==",
+    "commit": {
+      "author": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T16:54:20Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T16:54:20Z"
+      },
+      "message": "bump versions to match the requirements",
+      "tree": {
+        "sha": "6514cffff62ac2b181891ba9991c62c4c5a9dd05",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/6514cffff62ac2b181891ba9991c62c4c5a9dd05"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/5ecc87bf3e9a8b5e87048c47d5027c02a573f0a1",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/5ecc87bf3e9a8b5e87048c47d5027c02a573f0a1",
+    "html_url": "https://github.com/facebook/react-native/commit/5ecc87bf3e9a8b5e87048c47d5027c02a573f0a1",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/5ecc87bf3e9a8b5e87048c47d5027c02a573f0a1/comments",
+    "author": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "7082c3e44979e0b83fcf67c0e90f92e7d670f60d",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/7082c3e44979e0b83fcf67c0e90f92e7d670f60d",
+        "html_url": "https://github.com/facebook/react-native/commit/7082c3e44979e0b83fcf67c0e90f92e7d670f60d"
+      }
+    ]
+  },
+  {
+    "sha": "7082c3e44979e0b83fcf67c0e90f92e7d670f60d",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6NzA4MmMzZTQ0OTc5ZTBiODNmY2Y2N2MwZTkwZjkyZTdkNjcwZjYwZA==",
+    "commit": {
+      "author": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:52:42Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:52:42Z"
+      },
+      "message": "re-add the hasteImpl",
+      "tree": {
+        "sha": "2046b49d64701c2d69aa6fe957769fe893e26695",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/2046b49d64701c2d69aa6fe957769fe893e26695"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/7082c3e44979e0b83fcf67c0e90f92e7d670f60d",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/7082c3e44979e0b83fcf67c0e90f92e7d670f60d",
+    "html_url": "https://github.com/facebook/react-native/commit/7082c3e44979e0b83fcf67c0e90f92e7d670f60d",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/7082c3e44979e0b83fcf67c0e90f92e7d670f60d/comments",
+    "author": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "39ce412b254fb7c0f9f23926575a105cbc114b48",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/39ce412b254fb7c0f9f23926575a105cbc114b48",
+        "html_url": "https://github.com/facebook/react-native/commit/39ce412b254fb7c0f9f23926575a105cbc114b48"
+      }
+    ]
+  },
+  {
+    "sha": "39ce412b254fb7c0f9f23926575a105cbc114b48",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6MzljZTQxMmIyNTRmYjdjMGY5ZjIzOTI2NTc1YTEwNWNiYzExNGI0OA==",
+    "commit": {
+      "author": {
+        "name": "Michał Pierzchała",
+        "email": "thymikee@gmail.com",
+        "date": "2019-06-07T10:04:54Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:14:32Z"
+      },
+      "message": "Bump CLI to 2.0.0-rc.0 (#25175)\n\nSummary:\nUpgrading the CLI to the latest with a bunch of fixes and features included.\n\n## Changelog\n\n[General] [Changed] - Bump CLI to 2.0.0-rc.0\nPull Request resolved: https://github.com/facebook/react-native/pull/25175\n\nDifferential Revision: D15694764\n\nPulled By: cpojer\n\nfbshipit-source-id: 25fbf1c275ed5379e1cdb372512b6bb6327dea92\n\n# Conflicts:\n#\tjest/hasteImpl.js\n#\tpackage.json\n#\tyarn.lock",
+      "tree": {
+        "sha": "fa74021ed717ff8aea99dcca2e9844824f4e0708",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/fa74021ed717ff8aea99dcca2e9844824f4e0708"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/39ce412b254fb7c0f9f23926575a105cbc114b48",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/39ce412b254fb7c0f9f23926575a105cbc114b48",
+    "html_url": "https://github.com/facebook/react-native/commit/39ce412b254fb7c0f9f23926575a105cbc114b48",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/39ce412b254fb7c0f9f23926575a105cbc114b48/comments",
+    "author": {
+      "login": "thymikee",
+      "id": 5106466,
+      "node_id": "MDQ6VXNlcjUxMDY0NjY=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5106466?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/thymikee",
+      "html_url": "https://github.com/thymikee",
+      "followers_url": "https://api.github.com/users/thymikee/followers",
+      "following_url": "https://api.github.com/users/thymikee/following{/other_user}",
+      "gists_url": "https://api.github.com/users/thymikee/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/thymikee/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/thymikee/subscriptions",
+      "organizations_url": "https://api.github.com/users/thymikee/orgs",
+      "repos_url": "https://api.github.com/users/thymikee/repos",
+      "events_url": "https://api.github.com/users/thymikee/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/thymikee/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "00c7cf3d682953c17e3f14f88528a975d894217d",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/00c7cf3d682953c17e3f14f88528a975d894217d",
+        "html_url": "https://github.com/facebook/react-native/commit/00c7cf3d682953c17e3f14f88528a975d894217d"
+      }
+    ]
+  },
+  {
+    "sha": "00c7cf3d682953c17e3f14f88528a975d894217d",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6MDBjN2NmM2Q2ODI5NTNjMTdlM2YxNGY4ODUyOGE5NzVkODk0MjE3ZA==",
+    "commit": {
+      "author": {
+        "name": "Пётр Потапов",
+        "email": "dr.potapoff.peter@gmail.com",
+        "date": "2019-06-07T09:44:21Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:13:00Z"
+      },
+      "message": "Fix: RefreshControl in FlatList makes borderWidth not working (#24411)\n\nSummary:\nFixes #22752\n\nOn line 1021 you are passing base style to props:\n`style: [baseStyle, this.props.style],`\n\nExplicitly passing base style to ScrollView just overrides this line and doesn't let developers to customise style of any inheritors of ScrollView (not only FlatList) with custom RefreshControl.\n\nSo this line (1113) seems to be removed.\n\n## Changelog\n\n[GENERAL] [Fixed] - fix of Android's bug that doesn't let override ScrollView's Style with custom RefreshControl.\nPull Request resolved: https://github.com/facebook/react-native/pull/24411\n\nDifferential Revision: D15713061\n\nPulled By: cpojer\n\nfbshipit-source-id: 461259800f867af15e53e0743a5057ea4528ae69",
+      "tree": {
+        "sha": "1aa3416c7b83af6255c05a7baee7e6be58f085df",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/1aa3416c7b83af6255c05a7baee7e6be58f085df"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/00c7cf3d682953c17e3f14f88528a975d894217d",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/00c7cf3d682953c17e3f14f88528a975d894217d",
+    "html_url": "https://github.com/facebook/react-native/commit/00c7cf3d682953c17e3f14f88528a975d894217d",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/00c7cf3d682953c17e3f14f88528a975d894217d/comments",
+    "author": {
+      "login": "Nizarius",
+      "id": 20745917,
+      "node_id": "MDQ6VXNlcjIwNzQ1OTE3",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/20745917?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Nizarius",
+      "html_url": "https://github.com/Nizarius",
+      "followers_url": "https://api.github.com/users/Nizarius/followers",
+      "following_url": "https://api.github.com/users/Nizarius/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Nizarius/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Nizarius/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Nizarius/subscriptions",
+      "organizations_url": "https://api.github.com/users/Nizarius/orgs",
+      "repos_url": "https://api.github.com/users/Nizarius/repos",
+      "events_url": "https://api.github.com/users/Nizarius/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Nizarius/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "a916dd6632a5e206ab0dbecb89bac8886e1257a5",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/a916dd6632a5e206ab0dbecb89bac8886e1257a5",
+        "html_url": "https://github.com/facebook/react-native/commit/a916dd6632a5e206ab0dbecb89bac8886e1257a5"
+      }
+    ]
+  },
+  {
+    "sha": "a916dd6632a5e206ab0dbecb89bac8886e1257a5",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6YTkxNmRkNjYzMmE1ZTIwNmFiMGRiZWNiODliYWM4ODg2ZTEyNTdhNQ==",
+    "commit": {
+      "author": {
+        "name": "Nate",
+        "email": "nate.hunzaker@gmail.com",
+        "date": "2019-06-05T13:09:09Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:12:11Z"
+      },
+      "message": "Android Fix for 9145: No longer hard code build port (#23616)\n\nSummary:\n### Problem\n\nAccording to https://github.com/facebook/react-native/issues/9145, the `--port` setting is not respected when executing `react-native run-android`. The templates that report things like what port the dev server runs on are hard coded as well.\n\n### Solution\n\nThis commit replaces the hardcoded instances of port 8081 on Android with a build configuration property. This allows setting of the port React Native Android connects to for the local build server.\n\nFor this change to work, there must also be an update to the react native CLI to pass along this setting:\n\nhttps://github.com/react-native-community/react-native-cli/compare/master...nhunzaker:9145-android-no-port-hardcode-cli\n\nTo avoid some noise on their end, I figured I wouldn't submit a PR until it's this approach is deemed workable.\n\n## Changelog\n\n[Android][fixed] - `react-native run-android --port <x>` correctly connects to dev server and related error messages display the correct port\nPull Request resolved: https://github.com/facebook/react-native/pull/23616\n\nDifferential Revision: D15645200\n\nPulled By: cpojer\n\nfbshipit-source-id: 3bdfd458b8ac3ec78290736c9ed0db2e5776ed46",
+      "tree": {
+        "sha": "5a40b6762385c0808d973bda58b07a83b5f98f2b",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/5a40b6762385c0808d973bda58b07a83b5f98f2b"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/a916dd6632a5e206ab0dbecb89bac8886e1257a5",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/a916dd6632a5e206ab0dbecb89bac8886e1257a5",
+    "html_url": "https://github.com/facebook/react-native/commit/a916dd6632a5e206ab0dbecb89bac8886e1257a5",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/a916dd6632a5e206ab0dbecb89bac8886e1257a5/comments",
+    "author": {
+      "login": "nhunzaker",
+      "id": 590904,
+      "node_id": "MDQ6VXNlcjU5MDkwNA==",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/590904?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/nhunzaker",
+      "html_url": "https://github.com/nhunzaker",
+      "followers_url": "https://api.github.com/users/nhunzaker/followers",
+      "following_url": "https://api.github.com/users/nhunzaker/following{/other_user}",
+      "gists_url": "https://api.github.com/users/nhunzaker/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/nhunzaker/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/nhunzaker/subscriptions",
+      "organizations_url": "https://api.github.com/users/nhunzaker/orgs",
+      "repos_url": "https://api.github.com/users/nhunzaker/repos",
+      "events_url": "https://api.github.com/users/nhunzaker/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/nhunzaker/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "eb73dbe24e76c028f406039d4a809eaf2b263f1e",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/eb73dbe24e76c028f406039d4a809eaf2b263f1e",
+        "html_url": "https://github.com/facebook/react-native/commit/eb73dbe24e76c028f406039d4a809eaf2b263f1e"
+      }
+    ]
+  },
+  {
+    "sha": "eb73dbe24e76c028f406039d4a809eaf2b263f1e",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6ZWI3M2RiZTI0ZTc2YzAyOGY0MDYwMzlkNGE4MDllYWYyYjI2M2YxZQ==",
+    "commit": {
+      "author": {
+        "name": "Eric Lewis",
+        "email": "ericlewis777@gmail.com",
+        "date": "2019-06-04T19:54:59Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:12:03Z"
+      },
+      "message": "Fix Xcode 11 build (#25146)\n\nSummary:\nFixes build in Xcode 11 beta, the signature for `__unused` was changed. This adds a new check for the new style.\n\n## Changelog\n\n[iOS] [Fixed] - Xcode 11 beta build\nPull Request resolved: https://github.com/facebook/react-native/pull/25146\n\nDifferential Revision: D15628404\n\nPulled By: cpojer\n\nfbshipit-source-id: 781a188a0e1562a3316fbe62920b12b03a44e4a7",
+      "tree": {
+        "sha": "590fc8e8b8fe0b6eec9bbe510cf0ce625ac068a4",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/590fc8e8b8fe0b6eec9bbe510cf0ce625ac068a4"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/eb73dbe24e76c028f406039d4a809eaf2b263f1e",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/eb73dbe24e76c028f406039d4a809eaf2b263f1e",
+    "html_url": "https://github.com/facebook/react-native/commit/eb73dbe24e76c028f406039d4a809eaf2b263f1e",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/eb73dbe24e76c028f406039d4a809eaf2b263f1e/comments",
+    "author": {
+      "login": "ericlewis",
+      "id": 674503,
+      "node_id": "MDQ6VXNlcjY3NDUwMw==",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/674503?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/ericlewis",
+      "html_url": "https://github.com/ericlewis",
+      "followers_url": "https://api.github.com/users/ericlewis/followers",
+      "following_url": "https://api.github.com/users/ericlewis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ericlewis/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/ericlewis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ericlewis/subscriptions",
+      "organizations_url": "https://api.github.com/users/ericlewis/orgs",
+      "repos_url": "https://api.github.com/users/ericlewis/repos",
+      "events_url": "https://api.github.com/users/ericlewis/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/ericlewis/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "bcc9fcf1c747cc55e55834486beb0dc125befe08",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/bcc9fcf1c747cc55e55834486beb0dc125befe08",
+        "html_url": "https://github.com/facebook/react-native/commit/bcc9fcf1c747cc55e55834486beb0dc125befe08"
+      }
+    ]
+  },
+  {
+    "sha": "bcc9fcf1c747cc55e55834486beb0dc125befe08",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6YmNjOWZjZjFjNzQ3Y2M1NWU1NTgzNDQ4NmJlYjBkYzEyNWJlZmUwOA==",
+    "commit": {
+      "author": {
+        "name": "Sharon Gong",
+        "email": "xuelung@amazon.com",
+        "date": "2019-06-04T14:02:14Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:11:56Z"
+      },
+      "message": "Fix accessibilityActions accessors (#25134)\n\nSummary:\nThe accessibilityActions accessors  in UIView+React.m are not aligned with the property declaration in the header file.\n\n## Changelog\n\n[General] [Fixed] - Fix accessibilityActions accessors\nPull Request resolved: https://github.com/facebook/react-native/pull/25134\n\nDifferential Revision: D15621848\n\nPulled By: cpojer\n\nfbshipit-source-id: f344689292ae7988e46d0d4263980306d364366b",
+      "tree": {
+        "sha": "e35166068e54d2fb2bc27167420af2cb8dd0a33e",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/e35166068e54d2fb2bc27167420af2cb8dd0a33e"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/bcc9fcf1c747cc55e55834486beb0dc125befe08",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/bcc9fcf1c747cc55e55834486beb0dc125befe08",
+    "html_url": "https://github.com/facebook/react-native/commit/bcc9fcf1c747cc55e55834486beb0dc125befe08",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/bcc9fcf1c747cc55e55834486beb0dc125befe08/comments",
+    "author": {
+      "login": "xuelgong",
+      "id": 45978880,
+      "node_id": "MDQ6VXNlcjQ1OTc4ODgw",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/45978880?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/xuelgong",
+      "html_url": "https://github.com/xuelgong",
+      "followers_url": "https://api.github.com/users/xuelgong/followers",
+      "following_url": "https://api.github.com/users/xuelgong/following{/other_user}",
+      "gists_url": "https://api.github.com/users/xuelgong/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/xuelgong/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/xuelgong/subscriptions",
+      "organizations_url": "https://api.github.com/users/xuelgong/orgs",
+      "repos_url": "https://api.github.com/users/xuelgong/repos",
+      "events_url": "https://api.github.com/users/xuelgong/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/xuelgong/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "3e937eac2b2cb22673ac0824123bf6881b4fbac3",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/3e937eac2b2cb22673ac0824123bf6881b4fbac3",
+        "html_url": "https://github.com/facebook/react-native/commit/3e937eac2b2cb22673ac0824123bf6881b4fbac3"
+      }
+    ]
+  },
+  {
+    "sha": "3e937eac2b2cb22673ac0824123bf6881b4fbac3",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6M2U5MzdlYWMyYjJjYjIyNjczYWMwODI0MTIzYmY2ODgxYjRmYmFjMw==",
+    "commit": {
+      "author": {
+        "name": "Dratwas",
+        "email": "drapich.piotr@gmail.com",
+        "date": "2019-06-03T14:08:42Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:11:50Z"
+      },
+      "message": "fix indexed RAM bundle (#24967)\n\nSummary:\nCo-Authored: zamotany\nWith React Native 0.59.8 the app keeps crashing with indexed RAM bundle on Android with the following error:\n\n```\n2019-05-09 11:58:06.684 2793-2856/? E/AndroidRuntime: FATAL EXCEPTION: mqt_js\n    Process: com.ramtestapp, PID: 2793\n    com.facebook.jni.CppException: getPropertyAsObject: property '__fbRequireBatchedBridge' is not an Object\n\n    no stack\n        at com.facebook.react.bridge.queue.NativeRunnable.run(Native Method)\n        at android.os.Handler.handleCallback(Handler.java:873)\n        at android.os.Handler.dispatchMessage(Handler.java:99)\n        at com.facebook.react.bridge.queue.MessageQueueThreadHandler.dispatchMessage(MessageQueueThreadHandler.java:29)\n        at android.os.Looper.loop(Looper.java:193)\n        at com.facebook.react.bridge.queue.MessageQueueThreadImpl$4.run(MessageQueueThreadImpl.java:232)\n        at java.lang.Thread.run(Thread.java:764)\n```\n\nAfter investigation we found that when using any bundle, let it be non-ram, FIle RAM bundle or Index RAM bundle, the `CatalystInstanceImpl.java` is always using `loadScriptsFromAsset`, which is calling `CatalystInstanceImpl::jniLoadScriptFromAssets` in C++. This method when checking if bundle is a RAM bundle, uses `JniJSModulesUnbundle::isUnbundle` which only check for js-modules/UNBUNDLE - file generated when building File RAM bundle. There is no other logic to handle Indexed RAM bundle, so it figures that the bundle is not RAM, cause there is no js-modules/UNBUNDLE file and tries to load as regular bundle and fails.\n\nIn this PR we added check if it is indexed RAM bundle in `jniLoadScriptFromAssets` and handle it if it is.\n## Changelog\n[Android] [Fixed] fix indexed RAM bundle\n\nSolves https://github.com/facebook/react-native/issues/21282\nPull Request resolved: https://github.com/facebook/react-native/pull/24967\n\nDifferential Revision: D15575924\n\nPulled By: cpojer\n\nfbshipit-source-id: 5ea428e0b793edd8242243f39f933d1092b35260",
+      "tree": {
+        "sha": "c6c352408419572ed1c77d1c1c0b5b3021186b44",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/c6c352408419572ed1c77d1c1c0b5b3021186b44"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/3e937eac2b2cb22673ac0824123bf6881b4fbac3",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/3e937eac2b2cb22673ac0824123bf6881b4fbac3",
+    "html_url": "https://github.com/facebook/react-native/commit/3e937eac2b2cb22673ac0824123bf6881b4fbac3",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/3e937eac2b2cb22673ac0824123bf6881b4fbac3/comments",
+    "author": {
+      "login": "dratwas",
+      "id": 16336501,
+      "node_id": "MDQ6VXNlcjE2MzM2NTAx",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16336501?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/dratwas",
+      "html_url": "https://github.com/dratwas",
+      "followers_url": "https://api.github.com/users/dratwas/followers",
+      "following_url": "https://api.github.com/users/dratwas/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dratwas/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/dratwas/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dratwas/subscriptions",
+      "organizations_url": "https://api.github.com/users/dratwas/orgs",
+      "repos_url": "https://api.github.com/users/dratwas/repos",
+      "events_url": "https://api.github.com/users/dratwas/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/dratwas/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "0d05051f3cb324688797274b892c611f88a6bd60",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/0d05051f3cb324688797274b892c611f88a6bd60",
+        "html_url": "https://github.com/facebook/react-native/commit/0d05051f3cb324688797274b892c611f88a6bd60"
+      }
+    ]
+  },
+  {
+    "sha": "0d05051f3cb324688797274b892c611f88a6bd60",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6MGQwNTA1MWYzY2IzMjQ2ODg3OTcyNzRiODkyYzYxMWY4OGE2YmQ2MA==",
+    "commit": {
+      "author": {
+        "name": "Michael Mason",
+        "email": "mjmasn@users.noreply.github.com",
+        "date": "2019-06-03T13:46:45Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:11:43Z"
+      },
+      "message": "- Fix missing whitespace in debug instructions (#25122)\n\nSummary:\nFixes minor whitespace issue with the new new-app template.\n\n## Changelog\n\n[Android] [Fixed] - Fix missing whitespace in debug instructions\nPull Request resolved: https://github.com/facebook/react-native/pull/25122\n\nDifferential Revision: D15602100\n\nPulled By: cpojer\n\nfbshipit-source-id: 07c51c6359e37826941de659bcedea692ff3315a",
+      "tree": {
+        "sha": "4c49c2c8dfef31801e933857504abfa5acb1eee8",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/4c49c2c8dfef31801e933857504abfa5acb1eee8"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/0d05051f3cb324688797274b892c611f88a6bd60",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/0d05051f3cb324688797274b892c611f88a6bd60",
+    "html_url": "https://github.com/facebook/react-native/commit/0d05051f3cb324688797274b892c611f88a6bd60",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/0d05051f3cb324688797274b892c611f88a6bd60/comments",
+    "author": {
+      "login": "mjmasn",
+      "id": 2977095,
+      "node_id": "MDQ6VXNlcjI5NzcwOTU=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/2977095?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/mjmasn",
+      "html_url": "https://github.com/mjmasn",
+      "followers_url": "https://api.github.com/users/mjmasn/followers",
+      "following_url": "https://api.github.com/users/mjmasn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mjmasn/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/mjmasn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mjmasn/subscriptions",
+      "organizations_url": "https://api.github.com/users/mjmasn/orgs",
+      "repos_url": "https://api.github.com/users/mjmasn/repos",
+      "events_url": "https://api.github.com/users/mjmasn/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/mjmasn/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "54471963e02e15e42d48764de9dfc67aab23c2fb",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/54471963e02e15e42d48764de9dfc67aab23c2fb",
+        "html_url": "https://github.com/facebook/react-native/commit/54471963e02e15e42d48764de9dfc67aab23c2fb"
+      }
+    ]
+  },
+  {
+    "sha": "54471963e02e15e42d48764de9dfc67aab23c2fb",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6NTQ0NzE5NjNlMDJlMTVlNDJkNDg3NjRkZTlkZmM2N2FhYjIzYzJmYg==",
+    "commit": {
+      "author": {
+        "name": "Janic Duplessis",
+        "email": "janicduplessis@gmail.com",
+        "date": "2019-05-31T08:32:13Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:11:36Z"
+      },
+      "message": "Remove vendored fetch polyfill, update to whatwg-fetch@3.0 (#24418)\n\nSummary:\nThe original reason for vendoring the fetch polyfill was to remove the default blob response type but this was reverted.\n\nHere's a little history around the fetch polyfill and the blob issue:\n\n- Original commit introducing the vendored polyfill: #19333, the goal was to fix a memory leak because our blob implementation doesn't release resources automatically. Not an ideal fix but since the issue was pretty severe and the infra for a proper fix was not in place.\n- This introduced an issue when downloading images using `fetch` which was fixed by #22063 which re-added the default blob content type. However that re-introduced the original fetch memory leak.\n- We have better infra now with jsi and I was able to get blob deallocation working, see #24405\n\nCurrently the vendored fetch polyfill is useless since it was changed back to the original version. We can just use the npm version again. I also updated to 3.0 which brings better spec compliance and support for cancellation via `AbortController`, https://github.com/github/fetch/releases/tag/v3.0.0.\n\n## Changelog\n\n[General] [Changed] - Remove vendored fetch polyfill, update to whatwg-fetch@3.0\nPull Request resolved: https://github.com/facebook/react-native/pull/24418\n\nDifferential Revision: D14932683\n\nPulled By: cpojer\n\nfbshipit-source-id: 915e3d25978e8b9d7507ed807e7fba45aa88385a",
+      "tree": {
+        "sha": "807a241a9eaf595eecb833991795979d38281746",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/807a241a9eaf595eecb833991795979d38281746"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/54471963e02e15e42d48764de9dfc67aab23c2fb",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/54471963e02e15e42d48764de9dfc67aab23c2fb",
+    "html_url": "https://github.com/facebook/react-native/commit/54471963e02e15e42d48764de9dfc67aab23c2fb",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/54471963e02e15e42d48764de9dfc67aab23c2fb/comments",
+    "author": {
+      "login": "janicduplessis",
+      "id": 2677334,
+      "node_id": "MDQ6VXNlcjI2NzczMzQ=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2677334?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/janicduplessis",
+      "html_url": "https://github.com/janicduplessis",
+      "followers_url": "https://api.github.com/users/janicduplessis/followers",
+      "following_url": "https://api.github.com/users/janicduplessis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/janicduplessis/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/janicduplessis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/janicduplessis/subscriptions",
+      "organizations_url": "https://api.github.com/users/janicduplessis/orgs",
+      "repos_url": "https://api.github.com/users/janicduplessis/repos",
+      "events_url": "https://api.github.com/users/janicduplessis/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/janicduplessis/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "1b8f7e7a366cb69155ef930dfb581969a5389ad0",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/1b8f7e7a366cb69155ef930dfb581969a5389ad0",
+        "html_url": "https://github.com/facebook/react-native/commit/1b8f7e7a366cb69155ef930dfb581969a5389ad0"
+      }
+    ]
+  },
+  {
+    "sha": "1b8f7e7a366cb69155ef930dfb581969a5389ad0",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6MWI4ZjdlN2EzNjZjYjY5MTU1ZWY5MzBkZmI1ODE5NjlhNTM4OWFkMA==",
+    "commit": {
+      "author": {
+        "name": "Petter Hesselberg",
+        "email": "petterh@microsoft.com",
+        "date": "2019-05-30T18:05:56Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:11:29Z"
+      },
+      "message": "Don't reference null android.ndkDirectory in build.gradle (#25088)\n\nSummary:\nIf you (try to) build React Native for Android without having the NDK properly installed and referenced, you get the following error:\n\n>A problem occurred evaluating project ':ReactAndroid'.\n\\> Cannot get property 'absolutePath' on null object\n\nThis is not an overly helpful diagnostic. This PR results in this message instead:\n\n>ndk-build binary cannot be found, check if you've set $ANDROID_NDK environment variable correctly or if ndk.dir is setup in local.properties\n\nFixes #25087\n\n## Changelog\n\n[Android] [Fixed] - Show proper error message instead of throwing a NullReferenceException if Gradle cannot find the NDK\nPull Request resolved: https://github.com/facebook/react-native/pull/25088\n\nDifferential Revision: D15559271\n\nPulled By: cpojer\n\nfbshipit-source-id: 35c9a9321af4e4a34bf519144ada48884b48352d",
+      "tree": {
+        "sha": "ac293b232d9b86503f711a6fe7acea6866372e01",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/ac293b232d9b86503f711a6fe7acea6866372e01"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/1b8f7e7a366cb69155ef930dfb581969a5389ad0",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/1b8f7e7a366cb69155ef930dfb581969a5389ad0",
+    "html_url": "https://github.com/facebook/react-native/commit/1b8f7e7a366cb69155ef930dfb581969a5389ad0",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/1b8f7e7a366cb69155ef930dfb581969a5389ad0/comments",
+    "author": {
+      "login": "petterh",
+      "id": 3366765,
+      "node_id": "MDQ6VXNlcjMzNjY3NjU=",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/3366765?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/petterh",
+      "html_url": "https://github.com/petterh",
+      "followers_url": "https://api.github.com/users/petterh/followers",
+      "following_url": "https://api.github.com/users/petterh/following{/other_user}",
+      "gists_url": "https://api.github.com/users/petterh/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/petterh/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/petterh/subscriptions",
+      "organizations_url": "https://api.github.com/users/petterh/orgs",
+      "repos_url": "https://api.github.com/users/petterh/repos",
+      "events_url": "https://api.github.com/users/petterh/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/petterh/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "46500b3e36df6f54e216382bc7ab257d45d7a2cc",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/46500b3e36df6f54e216382bc7ab257d45d7a2cc",
+        "html_url": "https://github.com/facebook/react-native/commit/46500b3e36df6f54e216382bc7ab257d45d7a2cc"
+      }
+    ]
+  },
+  {
+    "sha": "46500b3e36df6f54e216382bc7ab257d45d7a2cc",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6NDY1MDBiM2UzNmRmNmY1NGUyMTYzODJiYzdhYjI1N2Q0NWQ3YTJjYw==",
+    "commit": {
+      "author": {
+        "name": "Andrea Cimitan",
+        "email": "andrea.cimitan@gmail.com",
+        "date": "2019-05-28T14:30:00Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:11:22Z"
+      },
+      "message": "Linking.getInitialURL() to work with NFC tags on Android (#25055)\n\nSummary:\nThis PR solves bug https://github.com/facebook/react-native/issues/24393 for Android. Allows an app to be opened with an NFC tag and getting the url trough Linking.getInitialURL()\n\n## Changelog\n[Android] [Fixed] - This branch checks also for `ACTION_NDEF_DISCOVERED` intent matches to set the initialURL\nPull Request resolved: https://github.com/facebook/react-native/pull/25055\n\nDifferential Revision: D15516873\n\nPulled By: cpojer\n\nfbshipit-source-id: e8803738d857a69e1063e926fc3858a416a0b25e",
+      "tree": {
+        "sha": "6860de6792bc237ef54da08f661527c970b50efa",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/6860de6792bc237ef54da08f661527c970b50efa"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/46500b3e36df6f54e216382bc7ab257d45d7a2cc",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/46500b3e36df6f54e216382bc7ab257d45d7a2cc",
+    "html_url": "https://github.com/facebook/react-native/commit/46500b3e36df6f54e216382bc7ab257d45d7a2cc",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/46500b3e36df6f54e216382bc7ab257d45d7a2cc/comments",
+    "author": {
+      "login": "cimitan",
+      "id": 2470182,
+      "node_id": "MDQ6VXNlcjI0NzAxODI=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/2470182?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cimitan",
+      "html_url": "https://github.com/cimitan",
+      "followers_url": "https://api.github.com/users/cimitan/followers",
+      "following_url": "https://api.github.com/users/cimitan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/cimitan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/cimitan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/cimitan/subscriptions",
+      "organizations_url": "https://api.github.com/users/cimitan/orgs",
+      "repos_url": "https://api.github.com/users/cimitan/repos",
+      "events_url": "https://api.github.com/users/cimitan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/cimitan/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "ed40f382e82ec7976f070e87ddb96a77cb6ca016",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/ed40f382e82ec7976f070e87ddb96a77cb6ca016",
+        "html_url": "https://github.com/facebook/react-native/commit/ed40f382e82ec7976f070e87ddb96a77cb6ca016"
+      }
+    ]
+  },
+  {
+    "sha": "ed40f382e82ec7976f070e87ddb96a77cb6ca016",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6ZWQ0MGYzODJlODJlYzc5NzZmMDcwZTg3ZGRiOTZhNzdjYjZjYTAxNg==",
+    "commit": {
+      "author": {
+        "name": "Oleksandr Melnykov",
+        "email": "omelnykov@fb.com",
+        "date": "2019-05-24T09:50:40Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:11:14Z"
+      },
+      "message": "Fix backgroundColor top level prop of TextInput\n\nSummary:\nChangelog: [Android] [FIXED] - Fix backgroundColor top level prop of TextInput\n\nThis diff fixes two issues with the `backgroundColor` top level property of TextInput on Android:\n * Now it is possible to set a **string** value for the top-level `backgroundColor` property of TextInput (crashed the app previously):\n```\n<TextInput backgroundColor=\"#ffccbb\">Hello, React Native</TextInput>\n```\n* Now it's possible to set an **integer** value for the top-level `backgroundColor` property of TextInput (had no effect previously):\n```\n<TextInput backgroundColor={0xffccbbff}>Hello, React Native</TextInput>\n```\n\nA `customType = \"Color\"` annotation parameter must be provided for `ReactBaseTextShadowNode.setBackgroundColor(...)` since the color value must be previously processed in JS before sending it over the bridge to the native code. The JS code will parse the color value and return the proper ARGB color integer to the native platforms (https://fburl.com/uqup52tn).\n\nWithout providing the custom type for the background color, if a string value is set for the top-level `backgroundColor` property in the JS code, the Android code will crash since it expects an integer value for the color in `ReactBaseTextShadowNode.setBackgroundColor(...)`, but a string will be passed from JS without any conversion and there will be a `ClassCastException` thrown. If an integer value without the alpha component (like `0xffccbb`) is set, the Android native view would get an integer color value with its alpha component set to `0x00`, which means a transparent color.\n\nOn a side note: the alpha component of a color must always be set when using an integer value for `backgroundColor` since the JS code, while processing the color type, shifts the rightmost 8 bytes (alpha component) to the leftmost position. If those 8 bytes are not the alpha component, you will get the wrong color in the end. It doesn't seem to be a problem for string values of `backgroundColor` though.\n\nReviewed By: mdvacca\n\nDifferential Revision: D15453980\n\nfbshipit-source-id: f3f5d9c9877cdbce79a67f2ed93ad4589576d166",
+      "tree": {
+        "sha": "55069244e82883927e8cfd50be320693aa771888",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/55069244e82883927e8cfd50be320693aa771888"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/ed40f382e82ec7976f070e87ddb96a77cb6ca016",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/ed40f382e82ec7976f070e87ddb96a77cb6ca016",
+    "html_url": "https://github.com/facebook/react-native/commit/ed40f382e82ec7976f070e87ddb96a77cb6ca016",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/ed40f382e82ec7976f070e87ddb96a77cb6ca016/comments",
+    "author": {
+      "login": "makovkastar",
+      "id": 1076309,
+      "node_id": "MDQ6VXNlcjEwNzYzMDk=",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1076309?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/makovkastar",
+      "html_url": "https://github.com/makovkastar",
+      "followers_url": "https://api.github.com/users/makovkastar/followers",
+      "following_url": "https://api.github.com/users/makovkastar/following{/other_user}",
+      "gists_url": "https://api.github.com/users/makovkastar/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/makovkastar/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/makovkastar/subscriptions",
+      "organizations_url": "https://api.github.com/users/makovkastar/orgs",
+      "repos_url": "https://api.github.com/users/makovkastar/repos",
+      "events_url": "https://api.github.com/users/makovkastar/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/makovkastar/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "8d61a4e5f90893b3d7baec1d6a76603786ea7a1c",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/8d61a4e5f90893b3d7baec1d6a76603786ea7a1c",
+        "html_url": "https://github.com/facebook/react-native/commit/8d61a4e5f90893b3d7baec1d6a76603786ea7a1c"
+      }
+    ]
+  },
+  {
+    "sha": "8d61a4e5f90893b3d7baec1d6a76603786ea7a1c",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6OGQ2MWE0ZTVmOTA4OTNiM2Q3YmFlYzFkNmE3NjYwMzc4NmVhN2ExYw==",
+    "commit": {
+      "author": {
+        "name": "Dulmandakh",
+        "email": "dulmandakh+github@gmail.com",
+        "date": "2019-05-24T18:49:03Z"
+      },
+      "committer": {
+        "name": "Lorenzo Sciandra",
+        "email": "lorenzo.sciandra@gmail.com",
+        "date": "2019-06-07T14:11:05Z"
+      },
+      "message": "bump android gradle plugin to 3.4.1 (#24883)\n\nSummary:\nbump android gradle plugin to 3.4.1, includes many fixes and improvements.\n\n## Changelog\n\n[Android] [Changed] - bump android gradle plugin to 3.4.1\nPull Request resolved: https://github.com/facebook/react-native/pull/24883\n\nDifferential Revision: D15474556\n\nPulled By: hramos\n\nfbshipit-source-id: 8d1eb91855b9f416ed3380c61f34672deded26c1",
+      "tree": {
+        "sha": "cf7ac90dfc0bfcbeadc2ec5d99289e632f28eb70",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/cf7ac90dfc0bfcbeadc2ec5d99289e632f28eb70"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/8d61a4e5f90893b3d7baec1d6a76603786ea7a1c",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/8d61a4e5f90893b3d7baec1d6a76603786ea7a1c",
+    "html_url": "https://github.com/facebook/react-native/commit/8d61a4e5f90893b3d7baec1d6a76603786ea7a1c",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/8d61a4e5f90893b3d7baec1d6a76603786ea7a1c/comments",
+    "author": {
+      "login": "dulmandakh",
+      "id": 178494,
+      "node_id": "MDQ6VXNlcjE3ODQ5NA==",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/178494?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/dulmandakh",
+      "html_url": "https://github.com/dulmandakh",
+      "followers_url": "https://api.github.com/users/dulmandakh/followers",
+      "following_url": "https://api.github.com/users/dulmandakh/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dulmandakh/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/dulmandakh/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dulmandakh/subscriptions",
+      "organizations_url": "https://api.github.com/users/dulmandakh/orgs",
+      "repos_url": "https://api.github.com/users/dulmandakh/repos",
+      "events_url": "https://api.github.com/users/dulmandakh/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/dulmandakh/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kelset",
+      "id": 16104054,
+      "node_id": "MDQ6VXNlcjE2MTA0MDU0",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16104054?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kelset",
+      "html_url": "https://github.com/kelset",
+      "followers_url": "https://api.github.com/users/kelset/followers",
+      "following_url": "https://api.github.com/users/kelset/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kelset/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kelset/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kelset/subscriptions",
+      "organizations_url": "https://api.github.com/users/kelset/orgs",
+      "repos_url": "https://api.github.com/users/kelset/repos",
+      "events_url": "https://api.github.com/users/kelset/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kelset/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "55332afb2901c975381c78adcd572ede6218915a",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/55332afb2901c975381c78adcd572ede6218915a",
+        "html_url": "https://github.com/facebook/react-native/commit/55332afb2901c975381c78adcd572ede6218915a"
+      }
+    ]
+  },
+  {
+    "sha": "55332afb2901c975381c78adcd572ede6218915a",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6NTUzMzJhZmIyOTAxYzk3NTM4MWM3OGFkY2Q1NzJlZGU2MjE4OTE1YQ==",
+    "commit": {
+      "author": {
+        "name": "Héctor Ramos",
+        "email": "hector@hectorramos.com",
+        "date": "2019-05-30T15:29:45Z"
+      },
+      "committer": {
+        "name": "Héctor Ramos",
+        "email": "hector@hectorramos.com",
+        "date": "2019-05-30T15:29:45Z"
+      },
+      "message": "[0.60.0-rc.0] Bump version numbers",
+      "tree": {
+        "sha": "ef68c1468523a95848c6507f0c7f5a009e1d9fd1",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/ef68c1468523a95848c6507f0c7f5a009e1d9fd1"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/55332afb2901c975381c78adcd572ede6218915a",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/55332afb2901c975381c78adcd572ede6218915a",
+    "html_url": "https://github.com/facebook/react-native/commit/55332afb2901c975381c78adcd572ede6218915a",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/55332afb2901c975381c78adcd572ede6218915a/comments",
+    "author": {
+      "login": "hramos",
+      "id": 165856,
+      "node_id": "MDQ6VXNlcjE2NTg1Ng==",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/165856?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/hramos",
+      "html_url": "https://github.com/hramos",
+      "followers_url": "https://api.github.com/users/hramos/followers",
+      "following_url": "https://api.github.com/users/hramos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hramos/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/hramos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hramos/subscriptions",
+      "organizations_url": "https://api.github.com/users/hramos/orgs",
+      "repos_url": "https://api.github.com/users/hramos/repos",
+      "events_url": "https://api.github.com/users/hramos/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/hramos/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "hramos",
+      "id": 165856,
+      "node_id": "MDQ6VXNlcjE2NTg1Ng==",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/165856?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/hramos",
+      "html_url": "https://github.com/hramos",
+      "followers_url": "https://api.github.com/users/hramos/followers",
+      "following_url": "https://api.github.com/users/hramos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hramos/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/hramos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hramos/subscriptions",
+      "organizations_url": "https://api.github.com/users/hramos/orgs",
+      "repos_url": "https://api.github.com/users/hramos/repos",
+      "events_url": "https://api.github.com/users/hramos/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/hramos/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "d014fc71539f7d44049754c43a9d605cd6e94b8c",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/d014fc71539f7d44049754c43a9d605cd6e94b8c",
+        "html_url": "https://github.com/facebook/react-native/commit/d014fc71539f7d44049754c43a9d605cd6e94b8c"
+      }
+    ]
+  },
+  {
+    "sha": "d014fc71539f7d44049754c43a9d605cd6e94b8c",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6ZDAxNGZjNzE1MzlmN2Q0NDA0OTc1NGM0M2E5ZDYwNWNkNmU5NGI4Yw==",
+    "commit": {
+      "author": {
+        "name": "Héctor Ramos",
+        "email": "hector@hectorramos.com",
+        "date": "2019-05-30T15:28:56Z"
+      },
+      "committer": {
+        "name": "Héctor Ramos",
+        "email": "hector@hectorramos.com",
+        "date": "2019-05-30T15:28:56Z"
+      },
+      "message": "Use newer Docker container, with ssl support",
+      "tree": {
+        "sha": "eb941125861f6f1940ca0a9fdf93136c7405328a",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/eb941125861f6f1940ca0a9fdf93136c7405328a"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/d014fc71539f7d44049754c43a9d605cd6e94b8c",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/d014fc71539f7d44049754c43a9d605cd6e94b8c",
+    "html_url": "https://github.com/facebook/react-native/commit/d014fc71539f7d44049754c43a9d605cd6e94b8c",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/d014fc71539f7d44049754c43a9d605cd6e94b8c/comments",
+    "author": {
+      "login": "hramos",
+      "id": 165856,
+      "node_id": "MDQ6VXNlcjE2NTg1Ng==",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/165856?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/hramos",
+      "html_url": "https://github.com/hramos",
+      "followers_url": "https://api.github.com/users/hramos/followers",
+      "following_url": "https://api.github.com/users/hramos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hramos/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/hramos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hramos/subscriptions",
+      "organizations_url": "https://api.github.com/users/hramos/orgs",
+      "repos_url": "https://api.github.com/users/hramos/repos",
+      "events_url": "https://api.github.com/users/hramos/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/hramos/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "hramos",
+      "id": 165856,
+      "node_id": "MDQ6VXNlcjE2NTg1Ng==",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/165856?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/hramos",
+      "html_url": "https://github.com/hramos",
+      "followers_url": "https://api.github.com/users/hramos/followers",
+      "following_url": "https://api.github.com/users/hramos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hramos/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/hramos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hramos/subscriptions",
+      "organizations_url": "https://api.github.com/users/hramos/orgs",
+      "repos_url": "https://api.github.com/users/hramos/repos",
+      "events_url": "https://api.github.com/users/hramos/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/hramos/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "29496ede07dc57b70d646d75037769d00ce8b49c",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/29496ede07dc57b70d646d75037769d00ce8b49c",
+        "html_url": "https://github.com/facebook/react-native/commit/29496ede07dc57b70d646d75037769d00ce8b49c"
+      }
+    ]
+  },
+  {
+    "sha": "29496ede07dc57b70d646d75037769d00ce8b49c",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6Mjk0OTZlZGUwN2RjNTdiNzBkNjQ2ZDc1MDM3NzY5ZDAwY2U4YjQ5Yw==",
+    "commit": {
+      "author": {
+        "name": "Héctor Ramos",
+        "email": "hector@hectorramos.com",
+        "date": "2019-05-30T15:23:24Z"
+      },
+      "committer": {
+        "name": "Héctor Ramos",
+        "email": "hector@hectorramos.com",
+        "date": "2019-05-30T15:23:24Z"
+      },
+      "message": "Revert \"[0.60.0-rc.0] Bump version numbers\"\n\nThis reverts commit f4508a67653e99b59414b6e0d07f65b1052a7d46.",
+      "tree": {
+        "sha": "49ea6f6154522c85e15e5c0371a17bc1fe3eb015",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/49ea6f6154522c85e15e5c0371a17bc1fe3eb015"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/29496ede07dc57b70d646d75037769d00ce8b49c",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/29496ede07dc57b70d646d75037769d00ce8b49c",
+    "html_url": "https://github.com/facebook/react-native/commit/29496ede07dc57b70d646d75037769d00ce8b49c",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/29496ede07dc57b70d646d75037769d00ce8b49c/comments",
+    "author": {
+      "login": "hramos",
+      "id": 165856,
+      "node_id": "MDQ6VXNlcjE2NTg1Ng==",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/165856?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/hramos",
+      "html_url": "https://github.com/hramos",
+      "followers_url": "https://api.github.com/users/hramos/followers",
+      "following_url": "https://api.github.com/users/hramos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hramos/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/hramos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hramos/subscriptions",
+      "organizations_url": "https://api.github.com/users/hramos/orgs",
+      "repos_url": "https://api.github.com/users/hramos/repos",
+      "events_url": "https://api.github.com/users/hramos/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/hramos/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "hramos",
+      "id": 165856,
+      "node_id": "MDQ6VXNlcjE2NTg1Ng==",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/165856?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/hramos",
+      "html_url": "https://github.com/hramos",
+      "followers_url": "https://api.github.com/users/hramos/followers",
+      "following_url": "https://api.github.com/users/hramos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hramos/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/hramos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hramos/subscriptions",
+      "organizations_url": "https://api.github.com/users/hramos/orgs",
+      "repos_url": "https://api.github.com/users/hramos/repos",
+      "events_url": "https://api.github.com/users/hramos/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/hramos/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "f4508a67653e99b59414b6e0d07f65b1052a7d46",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/f4508a67653e99b59414b6e0d07f65b1052a7d46",
+        "html_url": "https://github.com/facebook/react-native/commit/f4508a67653e99b59414b6e0d07f65b1052a7d46"
+      }
+    ]
+  },
+  {
+    "sha": "f4508a67653e99b59414b6e0d07f65b1052a7d46",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6ZjQ1MDhhNjc2NTNlOTliNTk0MTRiNmUwZDA3ZjY1YjEwNTJhN2Q0Ng==",
+    "commit": {
+      "author": {
+        "name": "Mike Grabowski",
+        "email": "grabbou@gmail.com",
+        "date": "2019-05-30T11:34:40Z"
+      },
+      "committer": {
+        "name": "Mike Grabowski",
+        "email": "grabbou@gmail.com",
+        "date": "2019-05-30T11:34:40Z"
+      },
+      "message": "[0.60.0-rc.0] Bump version numbers",
+      "tree": {
+        "sha": "58f8a9c35922cc9207bb251545508983ebb3cc62",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/58f8a9c35922cc9207bb251545508983ebb3cc62"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/f4508a67653e99b59414b6e0d07f65b1052a7d46",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/f4508a67653e99b59414b6e0d07f65b1052a7d46",
+    "html_url": "https://github.com/facebook/react-native/commit/f4508a67653e99b59414b6e0d07f65b1052a7d46",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/f4508a67653e99b59414b6e0d07f65b1052a7d46/comments",
+    "author": {
+      "login": "grabbou",
+      "id": 2464966,
+      "node_id": "MDQ6VXNlcjI0NjQ5NjY=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2464966?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/grabbou",
+      "html_url": "https://github.com/grabbou",
+      "followers_url": "https://api.github.com/users/grabbou/followers",
+      "following_url": "https://api.github.com/users/grabbou/following{/other_user}",
+      "gists_url": "https://api.github.com/users/grabbou/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/grabbou/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/grabbou/subscriptions",
+      "organizations_url": "https://api.github.com/users/grabbou/orgs",
+      "repos_url": "https://api.github.com/users/grabbou/repos",
+      "events_url": "https://api.github.com/users/grabbou/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/grabbou/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "grabbou",
+      "id": 2464966,
+      "node_id": "MDQ6VXNlcjI0NjQ5NjY=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2464966?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/grabbou",
+      "html_url": "https://github.com/grabbou",
+      "followers_url": "https://api.github.com/users/grabbou/followers",
+      "following_url": "https://api.github.com/users/grabbou/following{/other_user}",
+      "gists_url": "https://api.github.com/users/grabbou/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/grabbou/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/grabbou/subscriptions",
+      "organizations_url": "https://api.github.com/users/grabbou/orgs",
+      "repos_url": "https://api.github.com/users/grabbou/repos",
+      "events_url": "https://api.github.com/users/grabbou/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/grabbou/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "53e32a47e4062f428f8d714333236cedbe05b482",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/53e32a47e4062f428f8d714333236cedbe05b482",
+        "html_url": "https://github.com/facebook/react-native/commit/53e32a47e4062f428f8d714333236cedbe05b482"
+      }
+    ]
+  },
+  {
+    "sha": "53e32a47e4062f428f8d714333236cedbe05b482",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6NTNlMzJhNDdlNDA2MmY0MjhmOGQ3MTQzMzMyMzZjZWRiZTA1YjQ4Mg==",
+    "commit": {
+      "author": {
+        "name": "Héctor Ramos",
+        "email": "hector@hectorramos.com",
+        "date": "2019-05-29T01:15:43Z"
+      },
+      "committer": {
+        "name": "Héctor Ramos",
+        "email": "hector@hectorramos.com",
+        "date": "2019-05-29T01:15:43Z"
+      },
+      "message": "Remove duplicate Android SDK steps already present in container",
+      "tree": {
+        "sha": "49ea6f6154522c85e15e5c0371a17bc1fe3eb015",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/49ea6f6154522c85e15e5c0371a17bc1fe3eb015"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/53e32a47e4062f428f8d714333236cedbe05b482",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/53e32a47e4062f428f8d714333236cedbe05b482",
+    "html_url": "https://github.com/facebook/react-native/commit/53e32a47e4062f428f8d714333236cedbe05b482",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/53e32a47e4062f428f8d714333236cedbe05b482/comments",
+    "author": {
+      "login": "hramos",
+      "id": 165856,
+      "node_id": "MDQ6VXNlcjE2NTg1Ng==",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/165856?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/hramos",
+      "html_url": "https://github.com/hramos",
+      "followers_url": "https://api.github.com/users/hramos/followers",
+      "following_url": "https://api.github.com/users/hramos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hramos/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/hramos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hramos/subscriptions",
+      "organizations_url": "https://api.github.com/users/hramos/orgs",
+      "repos_url": "https://api.github.com/users/hramos/repos",
+      "events_url": "https://api.github.com/users/hramos/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/hramos/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "hramos",
+      "id": 165856,
+      "node_id": "MDQ6VXNlcjE2NTg1Ng==",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/165856?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/hramos",
+      "html_url": "https://github.com/hramos",
+      "followers_url": "https://api.github.com/users/hramos/followers",
+      "following_url": "https://api.github.com/users/hramos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hramos/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/hramos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hramos/subscriptions",
+      "organizations_url": "https://api.github.com/users/hramos/orgs",
+      "repos_url": "https://api.github.com/users/hramos/repos",
+      "events_url": "https://api.github.com/users/hramos/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/hramos/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "41742b3fe3d21a9e1554d096ab46929593ba744e",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/41742b3fe3d21a9e1554d096ab46929593ba744e",
+        "html_url": "https://github.com/facebook/react-native/commit/41742b3fe3d21a9e1554d096ab46929593ba744e"
+      }
+    ]
+  },
+  {
+    "sha": "41742b3fe3d21a9e1554d096ab46929593ba744e",
+    "node_id": "MDY6Q29tbWl0MjkwMjg3NzU6NDE3NDJiM2ZlM2QyMWE5ZTE1NTRkMDk2YWI0NjkyOTU5M2JhNzQ0ZQ==",
+    "commit": {
+      "author": {
+        "name": "Héctor Ramos",
+        "email": "hector@hectorramos.com",
+        "date": "2019-05-28T14:56:31Z"
+      },
+      "committer": {
+        "name": "Héctor Ramos",
+        "email": "hector@hectorramos.com",
+        "date": "2019-05-28T14:56:31Z"
+      },
+      "message": "Fix config for 0.60 release",
+      "tree": {
+        "sha": "5f28b65092723aa9ae931bb6c16018a2eb6ae221",
+        "url": "https://api.github.com/repos/facebook/react-native/git/trees/5f28b65092723aa9ae931bb6c16018a2eb6ae221"
+      },
+      "url": "https://api.github.com/repos/facebook/react-native/git/commits/41742b3fe3d21a9e1554d096ab46929593ba744e",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/commits/41742b3fe3d21a9e1554d096ab46929593ba744e",
+    "html_url": "https://github.com/facebook/react-native/commit/41742b3fe3d21a9e1554d096ab46929593ba744e",
+    "comments_url": "https://api.github.com/repos/facebook/react-native/commits/41742b3fe3d21a9e1554d096ab46929593ba744e/comments",
+    "author": {
+      "login": "hramos",
+      "id": 165856,
+      "node_id": "MDQ6VXNlcjE2NTg1Ng==",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/165856?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/hramos",
+      "html_url": "https://github.com/hramos",
+      "followers_url": "https://api.github.com/users/hramos/followers",
+      "following_url": "https://api.github.com/users/hramos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hramos/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/hramos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hramos/subscriptions",
+      "organizations_url": "https://api.github.com/users/hramos/orgs",
+      "repos_url": "https://api.github.com/users/hramos/repos",
+      "events_url": "https://api.github.com/users/hramos/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/hramos/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "hramos",
+      "id": 165856,
+      "node_id": "MDQ6VXNlcjE2NTg1Ng==",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/165856?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/hramos",
+      "html_url": "https://github.com/hramos",
+      "followers_url": "https://api.github.com/users/hramos/followers",
+      "following_url": "https://api.github.com/users/hramos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hramos/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/hramos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hramos/subscriptions",
+      "organizations_url": "https://api.github.com/users/hramos/orgs",
+      "repos_url": "https://api.github.com/users/hramos/repos",
+      "events_url": "https://api.github.com/users/hramos/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/hramos/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "5be47faff7788728dfc1820df5e40d8a29c7fa71",
+        "url": "https://api.github.com/repos/facebook/react-native/commits/5be47faff7788728dfc1820df5e40d8a29c7fa71",
+        "html_url": "https://github.com/facebook/react-native/commit/5be47faff7788728dfc1820df5e40d8a29c7fa71"
+      }
+    ]
+  }
+]

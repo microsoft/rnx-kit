@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.esm.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "erasableSyntaxOnly": true,
+    "rewriteRelativeImportExtensions": true
+  }
+}

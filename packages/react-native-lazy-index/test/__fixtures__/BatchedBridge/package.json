@@ -1,0 +1,6 @@
+{
+  "experiences": {
+    "callable:Module-01": "./module-01",
+    "callable:Module-02": "./module-02"
+  }
+}

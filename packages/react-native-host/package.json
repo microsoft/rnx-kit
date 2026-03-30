@@ -1,0 +1,38 @@
+{
+  "name": "@rnx-kit/react-native-host",
+  "version": "0.5.16",
+  "description": "Simplify React Native initialization",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-host#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/react-native-host"
+  },
+  "files": [
+    "ReactNativeHost.podspec",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/src",
+    "cocoa",
+    "react-native.config.js"
+  ],
+  "scripts": {
+    "format": "rnx-kit-scripts format",
+    "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
+    "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.66"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

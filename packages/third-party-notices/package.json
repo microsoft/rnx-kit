@@ -1,0 +1,58 @@
+{
+  "name": "@rnx-kit/third-party-notices",
+  "version": "2.0.2",
+  "description": "Library and tool to build a third party notices file based on a js bundle's source map",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/third-party-notices#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/third-party-notices"
+  },
+  "bin": {
+    "build-tpn": "./lib/build-tpn.js"
+  },
+  "files": [
+    "bin",
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/tools-node": "^3.0.0",
+    "spdx-expression-parse": "^4.0.0",
+    "yargs": "^16.0.0"
+  },
+  "devDependencies": {
+    "@react-native-community/cli-types": "^20.0.0",
+    "@rnx-kit/metro-serializer": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0",
+    "@types/yargs": "^16.0.0",
+    "metro-source-map": "^0.83.1"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

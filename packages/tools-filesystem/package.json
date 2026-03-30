@@ -1,0 +1,60 @@
+{
+  "name": "@rnx-kit/tools-filesystem",
+  "version": "0.2.0",
+  "description": "A collection of commonly used functions for manipulating the filesystem",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-filesystem#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-filesystem"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./mocks": {
+      "types": "./lib/mockfs/index.d.ts",
+      "typescript": "./src/mockfs/index.ts",
+      "default": "./lib/mockfs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
+    "update-readme": "rnx-kit-scripts update-api-readme"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0",
+    "memfs": "^4.56.10"
+  },
+  "peerDependencies": {
+    "memfs": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "memfs": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18.12"
+  }
+}

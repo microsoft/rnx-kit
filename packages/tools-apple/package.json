@@ -1,0 +1,68 @@
+{
+  "name": "@rnx-kit/tools-apple",
+  "version": "0.2.3",
+  "description": "A collection of functions for deploying apps on iOS or macOS",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-apple#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-apple"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "src"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./cocoapods": {
+      "types": "./lib/cocoapods.d.ts",
+      "typescript": "./src/cocoapods.ts",
+      "default": "./lib/cocoapods.js"
+    },
+    "./ios": {
+      "types": "./lib/ios.d.ts",
+      "typescript": "./src/ios.ts",
+      "default": "./lib/ios.js"
+    },
+    "./macos": {
+      "types": "./lib/macos.d.ts",
+      "typescript": "./src/macos.ts",
+      "default": "./lib/macos.js"
+    },
+    "./xcode": {
+      "types": "./lib/xcode.d.ts",
+      "typescript": "./src/xcode.ts",
+      "default": "./lib/xcode.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "update-readme": "rnx-kit-scripts update-api-readme"
+  },
+  "dependencies": {
+    "@rnx-kit/tools-shell": "^0.2.2",
+    "fast-xml-parser": "^5.3.4"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

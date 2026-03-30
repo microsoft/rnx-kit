@@ -1,0 +1,342 @@
+{
+  "name": "rnx-kit",
+  "version": "0.0.0",
+  "private": true,
+  "homepage": "https://github.com/microsoft/rnx-kit#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit"
+  },
+  "workspaces": {
+    "packages": [
+      "incubator/*",
+      "incubator/@react-native-webapis/*",
+      "packages/*",
+      "scripts"
+    ]
+  },
+  "scripts": {
+    "build": "nx run-many --target build",
+    "build:ci": "nx affected --targets build,test",
+    "build:ci:all": "nx run-many --targets build,test",
+    "build-scope": "nx build",
+    "bundle": "nx run-many --target bundle",
+    "bundle:ci": "nx affected --target bundle",
+    "change": "changeset add",
+    "change:check": "changeset status",
+    "clean": "git clean -dfqx --exclude=.yarn/cache",
+    "clear-cache": "nx clear-cache",
+    "format": "node scripts/src/index.js format",
+    "lint": "nx run-many --target lint",
+    "new-package": "node scripts/new-package.ts",
+    "publish:changesets": "changeset publish",
+    "rnx-align-deps": "yarn workspace @rnx-kit/align-deps bundle && scripts/rnx-align-deps.js",
+    "show-affected": "nx show projects --affected",
+    "test": "nx run-many --targets build,test",
+    "update-readme": "nx run-many --target update-readme",
+    "version:changesets": "changeset version && yarn install --mode update-lockfile"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.22.0",
+    "@types/node": "^24.0.0",
+    "@typescript/native-preview": "catalog:",
+    "@yarnpkg/types": "^4.0.0",
+    "eslint": "catalog:",
+    "knip": "^6.0.0",
+    "nx": "patch:nx@npm%3A22.5.4#~/.yarn/patches/nx-npm-22.5.4-3d43ac9c10.patch",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "suggestion-bot": "^4.0.0",
+    "typescript": "catalog:"
+  },
+  "resolutions": {
+    "@microsoft/eslint-plugin-sdl/eslint-plugin-react": "^7.37.3",
+    "@microsoft/eslint-plugin-sdl/eslint-plugin-security": "^1.4.0",
+    "@rnx-kit/react-native-host": "workspace:*",
+    "@vue/compiler-sfc": "link:./incubator/ignore",
+    "node-gyp": "link:./incubator/ignore",
+    "nx/minimatch": "^10.2.4",
+    "react-native-macos/@react-native/assets-registry": "^0.78.0",
+    "react-native-macos/@react-native/codegen": "^0.78.0",
+    "react-native-macos/@react-native/community-cli-plugin": "^0.78.0",
+    "react-native-macos/@react-native/gradle-plugin": "^0.78.0",
+    "react-native-macos/@react-native/js-polyfills": "^0.78.0",
+    "react-native-macos/@react-native/normalize-colors": "^0.78.0",
+    "react-native-windows/@react-native/assets-registry": "^0.79.0",
+    "react-native-windows/@react-native/codegen": "^0.79.0",
+    "react-native-windows/@react-native/community-cli-plugin": "^0.79.0",
+    "react-native-windows/@react-native/gradle-plugin": "^0.79.0",
+    "react-native-windows/@react-native/js-polyfills": "^0.79.0",
+    "react-native-windows/@react-native/normalize-colors": "^0.79.0",
+    "react-native-windows/@react-native/virtualized-lists": "^0.79.0"
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "packageManager": "yarn@4.10.3",
+  "knip": {
+    "include": [
+      "dependencies"
+    ],
+    "exclude": [
+      "optionalPeerDependencies",
+      "unlisted"
+    ],
+    "ignore": [
+      ".github/workflows/pr.yml",
+      ".github/workflows/rnx-build.yml"
+    ],
+    "ignoreDependencies": [
+      "@types/*"
+    ],
+    "metro": false,
+    "react-native": false,
+    "workspaces": {
+      ".": {
+        "ignoreDependencies": [
+          "eslint"
+        ]
+      },
+      "incubator/*": {
+        "entry": [
+          "src/index.{js,ts}"
+        ],
+        "project": [
+          "src/**/*.{js,ts,tsx}"
+        ]
+      },
+      "incubator/@react-native-webapis/battery-status": {
+        "entry": [
+          "src/index.ts"
+        ],
+        "ignoreDependencies": [
+          "@babel/core",
+          "@babel/preset-env"
+        ]
+      },
+      "incubator/@react-native-webapis/web-storage": {
+        "entry": [
+          "src/index.ts",
+          "test/**/*.test.{js,mjs,ts,tsx}"
+        ],
+        "ignoreDependencies": [
+          "@babel/core",
+          "@babel/preset-env"
+        ]
+      },
+      "incubator/build": {
+        "entry": [
+          "src/{cli,index,version}.ts",
+          "test/**/*.test.ts"
+        ]
+      },
+      "incubator/commitlint-lite": {
+        "entry": [
+          "src/{cli,index}.ts",
+          "test/**/*.test.ts"
+        ]
+      },
+      "incubator/esbuild-bundle-analyzer": {
+        "entry": [
+          "src/{cli,index}.ts",
+          "test/**/*.test.ts"
+        ]
+      },
+      "incubator/ignore": {},
+      "incubator/fork-sync": {},
+      "incubator/lint-lockfile": {
+        "entry": [
+          "src/{cli,index}.ts",
+          "test/**/*.test.ts"
+        ]
+      },
+      "incubator/react-native-test-app-msal": {},
+      "incubator/rn-changelog-generator": {
+        "ignoreDependencies": [
+          "@rnx-kit/jest-preset"
+        ]
+      },
+      "incubator/tools-typescript": {
+        "entry": [
+          "test/**/*.test.ts"
+        ],
+        "ignoreDependencies": [
+          "@rnx-kit/jest-preset"
+        ]
+      },
+      "incubator/yarn-plugin-dynamic-extensions": {
+        "entry": [
+          "*.js"
+        ]
+      },
+      "packages/*": {
+        "entry": [
+          "src/index.{js,ts}",
+          "test/**/*.test.{js,mjs,ts,tsx}"
+        ],
+        "project": [
+          "src/**/*.{js,ts,tsx}"
+        ]
+      },
+      "packages/babel-preset-metro-react-native": {
+        "entry": [
+          "test/**/*.test.js",
+          "test/__fixtures__/**/*.ts"
+        ],
+        "ignoreDependencies": [
+          "@rnx-kit/babel-plugin-import-path-remapper"
+        ]
+      },
+      "packages/align-deps": {
+        "entry": [
+          "scripts/*",
+          "src/cli.ts",
+          "test/**/*.{js,ts}"
+        ]
+      },
+      "packages/cli": {
+        "entry": [
+          "scripts/**/*.ts",
+          "src/bin/rnx-cli.ts",
+          "src/index.ts",
+          "test/**/*.test.ts"
+        ],
+        "ignoreDependencies": [
+          "@babel/core",
+          "@babel/preset-env",
+          "@rnx-kit/jest-preset"
+        ]
+      },
+      "packages/eslint-config": {
+        "entry": [
+          "*.js"
+        ]
+      },
+      "packages/jest-preset": {
+        "entry": [
+          "*.{cjs,js}",
+          "test/**/*.test.ts",
+          "test/__fixtures__/**/*.js"
+        ]
+      },
+      "packages/metro-config": {
+        "entry": [
+          "src/**/*.js",
+          "test/**/*.test.ts"
+        ],
+        "ignoreDependencies": [
+          "@babel/core",
+          "@babel/preset-env"
+        ]
+      },
+      "packages/metro-plugin-duplicates-checker": {
+        "entry": [
+          "test/**/*.{js,ts}"
+        ]
+      },
+      "packages/metro-plugin-typescript": {
+        "ignoreDependencies": [
+          "@rnx-kit/jest-preset"
+        ]
+      },
+      "packages/metro-resolver-symlinks": {
+        "ignoreDependencies": [
+          "@rnx-kit/jest-preset"
+        ]
+      },
+      "packages/metro-serializer-esbuild": {
+        "entry": [
+          "metro.config.js",
+          "test/**/*.test.ts",
+          "test/__fixtures__/**/*.ts"
+        ],
+        "ignoreDependencies": [
+          "@babel/preset-env"
+        ]
+      },
+      "packages/oxlint-config": {
+        "entry": [
+          "src/**/*.js"
+        ]
+      },
+      "packages/react-native-auth": {
+        "ignoreDependencies": [
+          "@babel/core",
+          "@babel/preset-env",
+          "@react-native-community/cli",
+          "@react-native-community/cli-platform-android",
+          "@react-native-community/cli-platform-ios",
+          "@react-native/metro-config"
+        ]
+      },
+      "packages/react-native-host": {
+        "entry": [
+          "react-native.config.js"
+        ]
+      },
+      "packages/react-native-lazy-index": {
+        "entry": [
+          "test/**/*.test.ts",
+          "test/__fixtures__/**/*.js"
+        ],
+        "ignoreDependencies": [
+          "babel-plugin-codegen"
+        ]
+      },
+      "packages/test-app*": {
+        "entry": [
+          "*.js",
+          "test/*.{js,mjs,ts,tsx}"
+        ],
+        "ignoreDependencies": [
+          "@babel/preset-env",
+          "@react-native-community/cli",
+          "@react-native-community/cli-platform-android",
+          "@react-native-community/cli-platform-ios",
+          "@react-native-webapis/web-storage",
+          "@rnx-kit/*"
+        ]
+      },
+      "packages/tools-shell": {
+        "ignoreDependencies": [
+          "@rnx-kit/jest-preset"
+        ]
+      },
+      "packages/tsconfig": {},
+      "packages/types-*": {
+        "entry": [
+          "src/*.ts"
+        ]
+      },
+      "scripts": {
+        "entry": [
+          "*.{cjs,js}",
+          "src/**/*.js"
+        ],
+        "ignoreDependencies": [
+          "jest"
+        ]
+      }
+    }
+  },
+  "rnx-kit": {
+    "lint": {
+      "lockfile": {
+        "noDuplicates": {
+          "packages": [
+            "#react-native",
+            [
+              "react",
+              2
+            ]
+          ]
+        }
+      }
+    }
+  }
+}

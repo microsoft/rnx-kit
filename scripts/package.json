@@ -1,0 +1,44 @@
+{
+  "name": "@rnx-kit/scripts",
+  "version": "0.0.0",
+  "private": true,
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/scripts#readme",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "scripts"
+  },
+  "bin": {
+    "rnx-kit-scripts": "src/index.js"
+  },
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
+  },
+  "dependencies": {
+    "@typescript/native-preview": "catalog:",
+    "@yarnpkg/cli": "^4.6.0",
+    "clipanion": "^4.0.0-rc.4",
+    "esbuild": "^0.27.1",
+    "jest": "^29.2.1",
+    "markdown-table": "^3.0.0",
+    "oxfmt": "catalog:",
+    "tsx": "^4.15.0",
+    "typedoc": "^0.28.0",
+    "typescript": "catalog:",
+    "yargs": "^16.0.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/tsconfig": "workspace:*",
+    "@types/jest": "^29.2.1",
+    "@types/node": "^24.0.0",
+    "@types/yargs": "^16.0.0"
+  }
+}

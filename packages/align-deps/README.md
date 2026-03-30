@@ -1,0 +1,752 @@
+# @rnx-kit/align-deps
+
+[![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/align-deps)](https://www.npmjs.com/package/@rnx-kit/align-deps)
+
+`@rnx-kit/align-deps` is a tool for managing dependencies within a repository
+and across many repositories. It ensures that your packages are using compatible
+dependencies and versions, given a set of [requirements](#requirements), based
+on [customizable presets](#presets) with known good packages and versions that
+are curated from real apps. You can even bring your own presets that are
+tailored to your needs.
+
+Note that this tool was previously known as `dep-check`, but it was renamed to
+avoid name clashes and other reasons. For more details, you can read the RFC:
+[`dep-check` v2](https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md).
+
+If you want to learn how `align-deps` is used at Microsoft, and see a demo of
+how it works in a monorepo, you can watch the
+["Improve all the repos – exploring Microsoft’s DevExp"](https://youtu.be/DAEnPV78rQc?t=1085)
+talk by [@kelset](https://github.com/kelset) and
+[@tido64](https://github.com/tido64) at React Native Europe 2021.
+
+To learn more about how `align-deps` works, please read the
+[design document](https://microsoft.github.io/rnx-kit/docs/architecture/dependency-management).
+
+## Installation
+
+```sh
+yarn add @rnx-kit/align-deps --dev
+```
+
+or if you're using npm
+
+```sh
+npm add --save-dev @rnx-kit/align-deps
+```
+
+You can also run this tool using `npx`
+
+```sh
+npx @rnx-kit/align-deps@latest [options] [packages...]
+```
+
+but note that profiles may change between each run. We therefore don't recommend
+that you use `npx` if you intend to run this tool on CI or as part of
+post-install. It should be fine if you run it manually.
+
+## Usage
+
+```sh
+yarn rnx-align-deps [options] [packages...]
+```
+
+Listing paths to packages that should be checked is optional. If omitted,
+`align-deps` will look for the closest `package.json` using Node module
+resolution. If the target package is a root package defining workspaces, they
+will all be included.
+
+Examples:
+
+- Ensure dependencies are compatible with react-native 0.70 without a config:
+
+  ```sh
+  yarn rnx-align-deps --requirements react-native@0.70
+  ```
+
+- Initialize a config for your app (or library):
+
+  ```sh
+  yarn rnx-align-deps --init app
+  # or specify `library` for a library
+  ```
+
+- Apply changes suggested by `align-deps`:
+
+  ```sh
+  yarn rnx-align-deps --write
+  ```
+
+- Interactively update supported react-native versions (or bump version used for
+  development):
+
+  ```sh
+  yarn rnx-align-deps --set-version
+  ```
+
+### `--diff-mode`
+
+Sets the algorithm used to determine if versions differ.
+
+Valid values:
+
+- `strict` — version strings must be equal
+- `allow-subset` — allow ranges that are entirely contained by the target
+  version range
+  - **OK:** `0.74.0` is a subset of `^0.74.0`
+  - **OK:** `^0.74.0` is a subset of `^0.74.0`
+  - **OK:** `^0.74.2` is a subset of `^0.74.0`
+  - **NOT OK:** `^0.74.0` is **not** a subset of `0.74.0`
+
+> [!WARNING]
+>
+> While algorithms other than `strict` allow you to use exact version or version
+> range subsets, they will also increase the risk of introducing duplicate
+> packages within your repository. You will have to be more vigilant and rely on
+> tooling (such as [`yarn dedupe`](https://yarnpkg.com/cli/dedupe)) to reduce
+> the risk.
+
+Default: `strict`
+
+### `--exclude-packages`
+
+Comma-separated list of package names to exclude from inspection.
+
+> [!NOTE]
+>
+> `--exclude-packages` will only exclude packages that do not have a
+> configuration. Packages that have a configuration, will still be checked.
+
+### `--export-catalogs <path>`
+
+Exports dependency catalogs for use with [pnpm](https://pnpm.io/catalogs) or
+[Yarn catalogs](https://yarnpkg.com/features/catalogs). The specified path must
+point to the package manager's config file.
+
+- pnpm: `pnpm-workspace.yaml`
+- Yarn: `.yarnrc.yml`
+
+### `--init <app | library>`
+
+When integrating `@rnx-kit/align-deps` for the first time, it may be a
+cumbersome to manually add all capabilities yourself. You can run this tool with
+`--init`, and it will try to add a sensible configuration based on what is
+currently defined in the specified `package.json`.
+
+### `--loose`
+
+Determines how strict the React Native version requirement should be. Useful for
+apps that depend on a newer React Native version than their dependencies declare
+support for.
+
+Default: `false`
+
+### `--no-unmanaged`
+
+Whether unmanaged capabilities should be treated as errors.
+
+Default: `false`
+
+### `--presets`
+
+Comma-separated list of presets. This can be names to built-in presets, or paths
+to external presets. Paths can point to a JSON file, a `.js` file, or a module
+name. The module must default export an object similar to the one below:
+
+```js
+module.exports = {
+  0.69: {
+    "my-capability": {
+      name: "my-module",
+      version: "1.0.0",
+    },
+  },
+  "0.70": {
+    "my-capability": {
+      name: "my-module",
+      version: "1.1.0",
+    },
+  },
+};
+```
+
+For a more complete example, have a look at the
+[default preset](https://github.com/microsoft/rnx-kit/blob/e1d4b2484303cac04e0ec6a4e79d854c694b96b4/packages/align-deps/src/presets/microsoft/react-native.ts).
+
+See [Presets](#presets) for more details.
+
+> [!NOTE]
+>
+> This flag is only be considered when a package is not configured. The presets
+> specified in the [configuration](#configure) will always take precedence.
+
+### `--requirements`
+
+Comma-separated list of requirements to apply if a package is _not configured_.
+
+For example, `--requirements react-native@0.70` will make sure your packages are
+compatible with `react-native` 0.70.
+
+See [Requirements](#requirements) for more details.
+
+### `--set-version`
+
+Sets production and development `react-native` version requirements for any
+configured package. The value should be a comma-separated list of `react-native`
+versions to set. The first number specifies the development version. For
+example, `--set-version 0.70,0.69` will set the following values:
+
+```json
+{
+  "rnx-kit": {
+    "alignDeps": {
+      "requirements": {
+        "development": ["react-native@0.70"],
+        "production": ["react-native@0.69 || 0.70"]
+      }
+    }
+  }
+}
+```
+
+If the version numbers are omitted, an _interactive prompt_ will appear.
+
+> [!NOTE]
+>
+> A `rnx-align-deps --write` run will be invoked right after changes have been
+> made. As such, this flag will fail if changes are needed before making any
+> modifications.
+
+### `--verbose`
+
+Specify to increase logging verbosity.
+
+Default: `false`
+
+### `--write`
+
+Writes all proposed changes to the specified `package.json`.
+
+Default: `false`
+
+## Configure
+
+While `@rnx-kit/align-deps` can ensure your dependencies are aligned without a
+configuration, you can only get the more advanced features, such as dependencies
+section re-ordering (`dependencies` vs `peerDependencies`) and transitive
+dependency detection (A -> B -> C), by adding a configuration. Your
+configuration must be in an `"rnx-kit"` section of your `package.json`, and have
+the following shapes depending on the package type:
+
+```ts
+export type AppConfig = {
+  kitType: "app";
+  alignDeps: {
+    /**
+     * Presets to use for aligning dependencies.
+     * @default ["microsoft/react-native"]
+     */
+    presets?: string[];
+
+    /**
+     * Requirements for this package, e.g.
+     * `react-native@>=0.70`.
+     */
+    requirements: string[];
+
+    /**
+     * Capabilities used by the kit.
+     */
+    capabilities: Capability[];
+  };
+};
+
+export type LibraryConfig = {
+  kitType: "library";
+  alignDeps: {
+    /**
+     * Presets to use for aligning dependencies.
+     * @default ["microsoft/react-native"]
+     */
+    presets?: string[];
+
+    /**
+     * Requirements for this package, e.g.
+     * `react-native@>=0.70`. `development` is for
+     * package authors, and `production` is for
+     * consumers.
+     */
+    requirements: { development: string[]; production: string[] };
+
+    /**
+     * Capabilities used by the kit.
+     */
+    capabilities: Capability[];
+  };
+};
+```
+
+For example, this is a config for a library that supports `react-native` 0.69
+and 0.70, and uses 0.70 internally:
+
+```js
+{
+  "name": "useful-library",
+  "version": "1.0",
+  ...
+  "rnx-kit": {
+    "kitType": "library",
+    "alignDeps": {
+      "requirements": {
+        "development": ["react-native@0.70"],
+        "production": ["react-native@0.69 || 0.70"]
+      }
+      "capabilities": [
+        "core-android",
+        "core-ios"
+      ]
+    }
+  }
+}
+```
+
+## Capabilities
+
+The following table contains the currently supported capabilities and what they
+resolve to:
+
+<details>
+<summary>Capabilities Table</summary>
+
+<!-- The following table can be updated by running `yarn update-readme` -->
+<!-- @rnx-kit/align-deps/capabilities start -->
+
+| Capability                           | 0.84                                                              | 0.83                                                              | 0.82                                                              | 0.81                                                              | 0.80                                                              | 0.79                                                              | 0.78                                                              | 0.77                                                              | 0.76                                                              | 0.75                                                              | 0.74                                                              | 0.73                                                              | 0.72                                                              | 0.71                                                              | 0.70                                                              | 0.69                                                              | 0.68                                                              | 0.67                                                              | 0.66                                                              | 0.65                                                              | 0.64                                                              | 0.63                                                              | 0.62                                                              | 0.61                                                              |
+| ------------------------------------ | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- |
+| core                                 | react-native@^0.84.0                                              | react-native@^0.83.0                                              | react-native@^0.82.0                                              | react-native@^0.81.6                                              | react-native@^0.80.0                                              | react-native@^0.79.0                                              | react-native@^0.78.0                                              | react-native@^0.77.0                                              | react-native@^0.76.0                                              | react-native@^0.75.0                                              | react-native@^0.74.0                                              | react-native@^0.73.0                                              | react-native@^0.72.0                                              | react-native@^0.71.0                                              | react-native@^0.70.0                                              | react-native@^0.69.0                                              | react-native@^0.68.0                                              | react-native@^0.67.0                                              | react-native@^0.66.0                                              | react-native@^0.65.0                                              | react-native@^0.64.2                                              | react-native@^0.63.2                                              | react-native@^0.62.3                                              | react-native@^0.61.5                                              |
+| core-android                         | react-native@^0.84.0                                              | react-native@^0.83.0                                              | react-native@^0.82.0                                              | react-native@^0.81.6                                              | react-native@^0.80.0                                              | react-native@^0.79.0                                              | react-native@^0.78.0                                              | react-native@^0.77.0                                              | react-native@^0.76.0                                              | react-native@^0.75.0                                              | react-native@^0.74.0                                              | react-native@^0.73.0                                              | react-native@^0.72.0                                              | react-native@^0.71.0                                              | react-native@^0.70.0                                              | react-native@^0.69.0                                              | react-native@^0.68.0                                              | react-native@^0.67.0                                              | react-native@^0.66.0                                              | react-native@^0.65.0                                              | react-native@^0.64.2                                              | react-native@^0.63.2                                              | react-native@^0.62.3                                              | react-native@^0.61.5                                              |
+| core-ios                             | react-native@^0.84.0                                              | react-native@^0.83.0                                              | react-native@^0.82.0                                              | react-native@^0.81.6                                              | react-native@^0.80.0                                              | react-native@^0.79.0                                              | react-native@^0.78.0                                              | react-native@^0.77.0                                              | react-native@^0.76.0                                              | react-native@^0.75.0                                              | react-native@^0.74.0                                              | react-native@^0.73.0                                              | react-native@^0.72.0                                              | react-native@^0.71.0                                              | react-native@^0.70.0                                              | react-native@^0.69.0                                              | react-native@^0.68.0                                              | react-native@^0.67.0                                              | react-native@^0.66.0                                              | react-native@^0.65.0                                              | react-native@^0.64.2                                              | react-native@^0.63.2                                              | react-native@^0.62.3                                              | react-native@^0.61.5                                              |
+| core-macos                           | react-native-macos@^0.84.0                                        | react-native-macos@^0.83.0                                        | react-native-macos@^0.82.0                                        | react-native-macos@^0.81.0                                        | react-native-macos@^0.80.0                                        | react-native-macos@^0.79.0                                        | react-native-macos@^0.78.0                                        | react-native-macos@^0.77.0                                        | react-native-macos@^0.76.0                                        | react-native-macos@^0.75.0                                        | react-native-macos@^0.74.0                                        | react-native-macos@^0.73.0                                        | react-native-macos@^0.72.0                                        | react-native-macos@^0.71.0                                        | react-native-macos@^0.70.0                                        | react-native-macos@^0.69.0                                        | react-native-macos@^0.68.0                                        | react-native-macos@^0.67.0                                        | react-native-macos@^0.66.0                                        | react-native-macos@^0.65.0                                        | react-native-macos@^0.64.0                                        | react-native-macos@^0.63.0                                        | react-native-macos@^0.62.0                                        | react-native-macos@^0.61.0                                        |
+| core-visionos                        | @callstack/react-native-visionos@^0.84.0                          | @callstack/react-native-visionos@^0.83.0                          | @callstack/react-native-visionos@^0.82.0                          | @callstack/react-native-visionos@^0.81.0                          | @callstack/react-native-visionos@^0.80.0                          | @callstack/react-native-visionos@^0.79.0                          | @callstack/react-native-visionos@^0.78.0                          | @callstack/react-native-visionos@^0.77.0                          | @callstack/react-native-visionos@^0.76.0                          | @callstack/react-native-visionos@^0.75.0                          | @callstack/react-native-visionos@^0.74.0                          | @callstack/react-native-visionos@^0.73.0                          | Meta package for installing `react`                               | Meta package for installing `react`                               | Meta package for installing `react`                               | Meta package for installing `react`                               | Meta package for installing `react`                               | Meta package for installing `react`                               | Meta package for installing `react`                               | Meta package for installing `react`                               | Meta package for installing `react`                               | Meta package for installing `react`                               | Meta package for installing `react`                               | Meta package for installing `react`                               |
+| core-windows                         | react-native-windows@^0.84.0                                      | react-native-windows@^0.83.0                                      | react-native-windows@^0.82.0                                      | react-native-windows@^0.81.0                                      | react-native-windows@^0.80.0                                      | react-native-windows@^0.79.0                                      | react-native-windows@^0.78.0                                      | react-native-windows@^0.77.0                                      | react-native-windows@^0.76.0                                      | react-native-windows@^0.75.0                                      | react-native-windows@^0.74.0                                      | react-native-windows@^0.73.0                                      | react-native-windows@^0.72.0                                      | react-native-windows@^0.71.0                                      | react-native-windows@^0.70.0                                      | react-native-windows@^0.69.0                                      | react-native-windows@^0.68.0                                      | react-native-windows@^0.67.0                                      | react-native-windows@^0.66.0                                      | react-native-windows@^0.65.0                                      | react-native-windows@^0.64.0                                      | react-native-windows@^0.63.0                                      | react-native-windows@^0.62.0                                      | react-native-windows@^0.61.0                                      |
+| animation                            | react-native-reanimated@^4.2.0                                    | react-native-reanimated@^4.2.0                                    | react-native-reanimated@^4.2.0                                    | react-native-reanimated@^3.19.0                                   | react-native-reanimated@^3.18.0                                   | react-native-reanimated@^3.17.5                                   | react-native-reanimated@^3.17.0                                   | react-native-reanimated@^3.16.7                                   | react-native-reanimated@^3.16.1                                   | react-native-reanimated@^3.15.0                                   | react-native-reanimated@^3.9.0                                    | react-native-reanimated@^3.6.0                                    | react-native-reanimated@^3.3.0                                    | react-native-reanimated@^2.14.1                                   | react-native-reanimated@^2.10.0                                   | react-native-reanimated@^2.9.0                                    | react-native-reanimated@^2.5.0                                    | react-native-reanimated@^2.2.4                                    | react-native-reanimated@^2.2.3                                    | react-native-reanimated@^2.2.1                                    | react-native-reanimated@^2.1.0                                    | react-native-reanimated@^1.13.3                                   | react-native-reanimated@^1.13.3                                   | react-native-reanimated@^1.13.3                                   |
+| babel-preset-react-native            | @react-native/babel-preset@^0.84.0                                | @react-native/babel-preset@^0.83.0                                | @react-native/babel-preset@^0.82.0                                | @react-native/babel-preset@^0.81.0                                | @react-native/babel-preset@^0.80.0                                | @react-native/babel-preset@^0.79.0                                | @react-native/babel-preset@^0.78.0                                | @react-native/babel-preset@^0.77.0                                | @react-native/babel-preset@^0.76.0                                | @react-native/babel-preset@^0.75.0                                | @react-native/babel-preset@^0.74.0                                | @react-native/babel-preset@^0.73.0                                | metro-react-native-babel-preset@^0.76.5                           | metro-react-native-babel-preset@^0.73.7                           | metro-react-native-babel-preset@^0.72.1                           | metro-react-native-babel-preset@^0.70.3                           | metro-react-native-babel-preset@^0.67.0                           | metro-react-native-babel-preset@^0.66.2                           | metro-react-native-babel-preset@^0.66.2                           | metro-react-native-babel-preset@^0.66.0                           | metro-react-native-babel-preset@^0.64.0                           | metro-react-native-babel-preset@^0.59.0                           | metro-react-native-babel-preset@^0.58.0                           | metro-react-native-babel-preset@^0.56.0                           |
+| base64                               | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        | react-native-base64@^0.2.1                                        |
+| checkbox                             | @react-native-community/checkbox@^0.5.20                          | @react-native-community/checkbox@^0.5.20                          | @react-native-community/checkbox@^0.5.20                          | @react-native-community/checkbox@^0.5.20                          | @react-native-community/checkbox@^0.5.20                          | @react-native-community/checkbox@^0.5.20                          | @react-native-community/checkbox@^0.5.20                          | @react-native-community/checkbox@^0.5.20                          | @react-native-community/checkbox@^0.5.20                          | @react-native-community/checkbox@^0.5.15                          | @react-native-community/checkbox@^0.5.15                          | @react-native-community/checkbox@^0.5.15                          | @react-native-community/checkbox@^0.5.15                          | @react-native-community/checkbox@^0.5.15                          | @react-native-community/checkbox@^0.5.8                           | @react-native-community/checkbox@^0.5.8                           | @react-native-community/checkbox@^0.5.8                           | @react-native-community/checkbox@^0.5.8                           | @react-native-community/checkbox@^0.5.8                           | @react-native-community/checkbox@^0.5.8                           | @react-native-community/checkbox@^0.5.8                           | @react-native-community/checkbox@^0.5.7                           | @react-native-community/checkbox@^0.5.7                           | @react-native-community/checkbox@^0.5.7                           |
+| clipboard                            | @react-native-clipboard/clipboard@^1.16.0                         | @react-native-clipboard/clipboard@^1.16.0                         | @react-native-clipboard/clipboard@^1.16.0                         | @react-native-clipboard/clipboard@^1.16.0                         | @react-native-clipboard/clipboard@^1.16.0                         | @react-native-clipboard/clipboard@^1.16.0                         | @react-native-clipboard/clipboard@^1.16.0                         | @react-native-clipboard/clipboard@^1.16.0                         | @react-native-clipboard/clipboard@^1.14.0                         | @react-native-clipboard/clipboard@^1.14.0                         | @react-native-clipboard/clipboard@^1.14.0                         | @react-native-clipboard/clipboard@^1.14.0                         | @react-native-clipboard/clipboard@^1.10.0                         | @react-native-clipboard/clipboard@^1.10.0                         | @react-native-clipboard/clipboard@^1.10.0                         | @react-native-clipboard/clipboard@^1.10.0                         | @react-native-clipboard/clipboard@^1.10.0                         | @react-native-clipboard/clipboard@^1.9.0                          | @react-native-clipboard/clipboard@^1.9.0                          | @react-native-clipboard/clipboard@^1.9.0                          | @react-native-clipboard/clipboard@^1.8.3                          | @react-native-community/clipboard@^1.5.1                          | @react-native-community/clipboard@^1.5.1                          | @react-native-community/clipboard@^1.5.1                          |
+| community/cli                        | @react-native-community/cli@^20.1.0                               | @react-native-community/cli@^20.0.0                               | @react-native-community/cli@^20.0.0                               | @react-native-community/cli@^20.0.0                               | @react-native-community/cli@^19.0.0                               | @react-native-community/cli@^18.0.0                               | @react-native-community/cli@^15.0.1                               | @react-native-community/cli@^15.0.1                               | @react-native-community/cli@^15.0.1                               | @react-native-community/cli@^14.0.0                               | @react-native-community/cli@^13.6.4                               | @react-native-community/cli@^12.1.1                               | @react-native-community/cli@^11.3.2                               | @react-native-community/cli@^10.0.0                               | @react-native-community/cli@^9.0.0                                | @react-native-community/cli@^8.0.4                                | @react-native-community/cli@^7.0.3                                | @react-native-community/cli@^6.0.0                                | @react-native-community/cli@^6.0.0                                | @react-native-community/cli@^6.0.0                                | @react-native-community/cli@^5.0.1                                | @react-native-community/cli@^4.10.0                               | @react-native-community/cli@^4.5.1                                | @react-native-community/cli@^3.0.0                                |
+| community/cli-android                | @react-native-community/cli-platform-android@^20.1.0              | @react-native-community/cli-platform-android@^20.0.0              | @react-native-community/cli-platform-android@^20.0.0              | @react-native-community/cli-platform-android@^20.0.0              | @react-native-community/cli-platform-android@^19.0.0              | @react-native-community/cli-platform-android@^18.0.0              | @react-native-community/cli-platform-android@^15.0.1              | @react-native-community/cli-platform-android@^15.0.1              | @react-native-community/cli-platform-android@^15.0.1              | @react-native-community/cli-platform-android@^14.0.0              | @react-native-community/cli-platform-android@^13.6.4              | @react-native-community/cli-platform-android@^12.1.1              | @react-native-community/cli-platform-android@^11.3.2              | @react-native-community/cli-platform-android@^10.0.0              | @react-native-community/cli-platform-android@^9.0.0               | @react-native-community/cli-platform-android@^8.0.4               | @react-native-community/cli-platform-android@^7.0.1               | @react-native-community/cli-platform-android@^6.0.0               | @react-native-community/cli-platform-android@^6.0.0               | @react-native-community/cli-platform-android@^6.0.0               | @react-native-community/cli-platform-android@^5.0.1               | @react-native-community/cli-platform-android@^4.10.0              | @react-native-community/cli-platform-android@^4.5.1               | @react-native-community/cli-platform-android@^3.0.0               |
+| community/cli-ios                    | @react-native-community/cli-platform-ios@^20.1.0                  | @react-native-community/cli-platform-ios@^20.0.0                  | @react-native-community/cli-platform-ios@^20.0.0                  | @react-native-community/cli-platform-ios@^20.0.0                  | @react-native-community/cli-platform-ios@^19.0.0                  | @react-native-community/cli-platform-ios@^18.0.0                  | @react-native-community/cli-platform-ios@^15.0.1                  | @react-native-community/cli-platform-ios@^15.0.1                  | @react-native-community/cli-platform-ios@^15.0.1                  | @react-native-community/cli-platform-ios@^14.0.0                  | @react-native-community/cli-platform-ios@^13.6.4                  | @react-native-community/cli-platform-ios@^12.1.1                  | @react-native-community/cli-platform-ios@^11.3.2                  | @react-native-community/cli-platform-ios@^10.0.0                  | @react-native-community/cli-platform-ios@^9.0.0                   | @react-native-community/cli-platform-ios@^8.0.4                   | @react-native-community/cli-platform-ios@^7.0.1                   | @react-native-community/cli-platform-ios@^6.0.0                   | @react-native-community/cli-platform-ios@^6.0.0                   | @react-native-community/cli-platform-ios@^6.0.0                   | @react-native-community/cli-platform-ios@^5.0.1                   | @react-native-community/cli-platform-ios@^4.10.0                  | @react-native-community/cli-platform-ios@^4.5.0                   | @react-native-community/cli-platform-ios@^3.0.0                   |
+| core/metro-config                    | @react-native/metro-config@^0.84.0                                | @react-native/metro-config@^0.83.0                                | @react-native/metro-config@^0.82.0                                | @react-native/metro-config@^0.81.0                                | @react-native/metro-config@^0.80.0                                | @react-native/metro-config@^0.79.0                                | @react-native/metro-config@^0.78.0                                | @react-native/metro-config@^0.77.0                                | @react-native/metro-config@^0.76.0                                | @react-native/metro-config@^0.75.0                                | @react-native/metro-config@^0.74.0                                | @react-native/metro-config@^0.73.0                                | @react-native/metro-config@^0.72.0                                | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 |
+| core/testing                         | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` | Meta package for installing `core`, `jest`, `react-test-renderer` |
+| datetime-picker                      | @react-native-community/datetimepicker@^8.4.4                     | @react-native-community/datetimepicker@^8.4.4                     | @react-native-community/datetimepicker@^8.4.4                     | @react-native-community/datetimepicker@^8.4.4                     | @react-native-community/datetimepicker@^8.4.4                     | @react-native-community/datetimepicker@^8.4.4                     | @react-native-community/datetimepicker@^8.0.0                     | @react-native-community/datetimepicker@^8.0.0                     | @react-native-community/datetimepicker@^8.0.0                     | @react-native-community/datetimepicker@^8.0.0                     | @react-native-community/datetimepicker@^8.0.0                     | @react-native-community/datetimepicker@^8.0.0                     | @react-native-community/datetimepicker@^7.6.2                     | @react-native-community/datetimepicker@^6.4.2                     | @react-native-community/datetimepicker@^6.3.3                     | @react-native-community/datetimepicker@^6.0.2                     | @react-native-community/datetimepicker@^6.0.2                     | @react-native-community/datetimepicker@^3.5.2                     | @react-native-community/datetimepicker@^3.5.2                     | @react-native-community/datetimepicker@^3.5.2                     | @react-native-community/datetimepicker@^3.4.6                     | @react-native-community/datetimepicker@^3.0.9                     | @react-native-community/datetimepicker@^3.0.9                     | @react-native-community/datetimepicker@^3.0.9                     |
+| filesystem                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.18.0                                           | react-native-fs@^2.17.0                                           | react-native-fs@^2.16.6                                           | react-native-fs@^2.16.6                                           | react-native-fs@^2.16.6                                           |
+| floating-action                      | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.22.0                              | react-native-floating-action@^1.21.0                              | react-native-floating-action@^1.21.0                              | react-native-floating-action@^1.18.0                              | react-native-floating-action@^1.18.0                              |
+| gestures                             | react-native-gesture-handler@^2.29.1                              | react-native-gesture-handler@^2.29.1                              | react-native-gesture-handler@^2.29.1                              | react-native-gesture-handler@^2.28.0                              | react-native-gesture-handler@^2.26.0                              | react-native-gesture-handler@^2.26.0                              | react-native-gesture-handler@^2.24.0                              | react-native-gesture-handler@^2.22.0                              | react-native-gesture-handler@^2.20.0                              | react-native-gesture-handler@^2.18.1                              | react-native-gesture-handler@^2.18.1                              | react-native-gesture-handler@^2.14.0                              | react-native-gesture-handler@^2.12.0                              | react-native-gesture-handler@^2.9.0                               | react-native-gesture-handler@^2.6.0                               | react-native-gesture-handler@^2.5.0                               | react-native-gesture-handler@^2.3.2                               | react-native-gesture-handler@^1.10.3                              | react-native-gesture-handler@^1.10.3                              | react-native-gesture-handler@^1.10.3                              | react-native-gesture-handler@^1.10.3                              | react-native-gesture-handler@^1.10.3                              | react-native-gesture-handler@^1.9.0                               | react-native-gesture-handler@^1.9.0                               |
+| hermes                               | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | -                                                                 | hermes-engine@~0.11.0                                             | hermes-engine@~0.11.0                                             | hermes-engine@~0.9.0                                              | hermes-engine@~0.9.0                                              | hermes-engine@~0.8.1                                              | hermes-engine@~0.7.0                                              | hermes-engine@~0.5.0                                              | hermes-engine@~0.4.0                                              | hermes-engine@^0.2.1                                              |
+| hooks                                | @react-native-community/hooks@^100.1.0                            | @react-native-community/hooks@^100.1.0                            | @react-native-community/hooks@^100.1.0                            | @react-native-community/hooks@^100.1.0                            | @react-native-community/hooks@^100.1.0                            | @react-native-community/hooks@^100.1.0                            | @react-native-community/hooks@^100.1.0                            | @react-native-community/hooks@^100.1.0                            | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.8.0                              | @react-native-community/hooks@^2.6.0                              | @react-native-community/hooks@^2.6.0                              | @react-native-community/hooks@^2.6.0                              | @react-native-community/hooks@^2.6.0                              |
+| html                                 | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^6.1.0                                   | react-native-render-html@^5.1.1                                   | react-native-render-html@^5.1.1                                   | react-native-render-html@^5.1.0                                   | react-native-render-html@^5.1.0                                   | react-native-render-html@^5.1.0                                   |
+| jest                                 | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^29.2.1                                                      | jest@^26.6.3                                                      | jest@^26.6.3                                                      | jest@^26.6.3                                                      | jest@^26.6.3                                                      | jest@^26.6.3                                                      | jest@^26.6.3                                                      | jest@^26.5.2                                                      | jest@^24.9.0                                                      | jest@^24.8.0                                                      | jest@^24.8.0                                                      |
+| lazy-index                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | @rnx-kit/react-native-lazy-index@^2.1.7                           | react-native-lazy-index@^2.1.1                                    | react-native-lazy-index@^2.1.1                                    | react-native-lazy-index@^2.1.1                                    | react-native-lazy-index@^2.1.1                                    | react-native-lazy-index@^2.1.1                                    |
+| masked-view                          | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.3.0                      | @react-native-masked-view/masked-view@^0.2.9                      | @react-native-masked-view/masked-view@^0.2.9                      | @react-native-masked-view/masked-view@^0.2.7                      | @react-native-masked-view/masked-view@^0.2.7                      | @react-native-masked-view/masked-view@^0.2.6                      | @react-native-masked-view/masked-view@^0.2.6                      | @react-native-masked-view/masked-view@^0.2.6                      | @react-native-masked-view/masked-view@^0.2.6                      | @react-native-masked-view/masked-view@^0.2.4                      | @react-native-masked-view/masked-view@^0.2.4                      | @react-native-masked-view/masked-view@^0.2.4                      | @react-native-masked-view/masked-view@^0.2.4                      |
+| metro                                | metro@^0.83.3                                                     | metro@^0.83.3                                                     | metro@^0.83.1                                                     | metro@^0.83.1                                                     | metro@^0.82.2                                                     | metro@^0.82.0                                                     | metro@^0.81.3                                                     | metro@^0.81.3                                                     | metro@^0.81.0                                                     | metro@^0.80.3                                                     | metro@^0.80.3                                                     | metro@^0.80.0                                                     | metro@^0.76.5                                                     | metro@^0.73.7                                                     | metro@^0.72.1                                                     | metro@^0.70.1                                                     | metro@^0.67.0                                                     | metro@^0.66.2                                                     | metro@^0.66.2                                                     | metro@^0.66.0                                                     | metro@^0.64.0                                                     | metro@^0.59.0                                                     | metro@^0.58.0                                                     | metro@^0.56.0                                                     |
+| metro-config                         | metro-config@^0.83.3                                              | metro-config@^0.83.3                                              | metro-config@^0.83.1                                              | metro-config@^0.83.1                                              | metro-config@^0.82.2                                              | metro-config@^0.82.0                                              | metro-config@^0.81.3                                              | metro-config@^0.81.3                                              | metro-config@^0.81.0                                              | metro-config@^0.80.3                                              | metro-config@^0.80.3                                              | metro-config@^0.80.0                                              | metro-config@^0.76.5                                              | metro-config@^0.73.7                                              | metro-config@^0.72.1                                              | metro-config@^0.70.1                                              | metro-config@^0.67.0                                              | metro-config@^0.66.2                                              | metro-config@^0.66.2                                              | metro-config@^0.66.0                                              | metro-config@^0.64.0                                              | metro-config@^0.59.0                                              | metro-config@^0.58.0                                              | metro-config@^0.56.0                                              |
+| metro-core                           | metro-core@^0.83.3                                                | metro-core@^0.83.3                                                | metro-core@^0.83.1                                                | metro-core@^0.83.1                                                | metro-core@^0.82.2                                                | metro-core@^0.82.0                                                | metro-core@^0.81.3                                                | metro-core@^0.81.3                                                | metro-core@^0.81.0                                                | metro-core@^0.80.3                                                | metro-core@^0.80.3                                                | metro-core@^0.80.0                                                | metro-core@^0.76.5                                                | metro-core@^0.73.7                                                | metro-core@^0.72.1                                                | metro-core@^0.70.1                                                | metro-core@^0.67.0                                                | metro-core@^0.66.2                                                | metro-core@^0.66.2                                                | metro-core@^0.66.0                                                | metro-core@^0.64.0                                                | metro-core@^0.59.0                                                | metro-core@^0.58.0                                                | metro-core@^0.56.0                                                |
+| metro-react-native-babel-transformer | @react-native/metro-babel-transformer@^0.84.0                     | @react-native/metro-babel-transformer@^0.83.0                     | @react-native/metro-babel-transformer@^0.82.0                     | @react-native/metro-babel-transformer@^0.81.0                     | @react-native/metro-babel-transformer@^0.80.0                     | @react-native/metro-babel-transformer@^0.79.0                     | @react-native/metro-babel-transformer@^0.78.0                     | @react-native/metro-babel-transformer@^0.77.0                     | @react-native/metro-babel-transformer@^0.76.0                     | @react-native/metro-babel-transformer@^0.75.0                     | @react-native/metro-babel-transformer@^0.74.0                     | @react-native/metro-babel-transformer@^0.73.0                     | metro-react-native-babel-transformer@^0.76.5                      | metro-react-native-babel-transformer@^0.73.7                      | metro-react-native-babel-transformer@^0.72.1                      | metro-react-native-babel-transformer@^0.70.1                      | metro-react-native-babel-transformer@^0.67.0                      | metro-react-native-babel-transformer@^0.66.2                      | metro-react-native-babel-transformer@^0.66.2                      | metro-react-native-babel-transformer@^0.66.0                      | metro-react-native-babel-transformer@^0.64.0                      | metro-react-native-babel-transformer@^0.59.0                      | metro-react-native-babel-transformer@^0.58.0                      | metro-react-native-babel-transformer@^0.56.0                      |
+| metro-resolver                       | metro-resolver@^0.83.3                                            | metro-resolver@^0.83.3                                            | metro-resolver@^0.83.1                                            | metro-resolver@^0.83.1                                            | metro-resolver@^0.82.2                                            | metro-resolver@^0.82.0                                            | metro-resolver@^0.81.3                                            | metro-resolver@^0.81.3                                            | metro-resolver@^0.81.0                                            | metro-resolver@^0.80.3                                            | metro-resolver@^0.80.3                                            | metro-resolver@^0.80.0                                            | metro-resolver@^0.76.5                                            | metro-resolver@^0.73.7                                            | metro-resolver@^0.72.1                                            | metro-resolver@^0.70.1                                            | metro-resolver@^0.67.0                                            | metro-resolver@^0.66.2                                            | metro-resolver@^0.66.2                                            | metro-resolver@^0.66.0                                            | metro-resolver@^0.64.0                                            | metro-resolver@^0.59.0                                            | metro-resolver@^0.58.0                                            | metro-resolver@^0.56.0                                            |
+| metro-runtime                        | metro-runtime@^0.83.3                                             | metro-runtime@^0.83.3                                             | metro-runtime@^0.83.1                                             | metro-runtime@^0.83.1                                             | metro-runtime@^0.82.2                                             | metro-runtime@^0.82.0                                             | metro-runtime@^0.81.3                                             | metro-runtime@^0.81.3                                             | metro-runtime@^0.81.0                                             | metro-runtime@^0.80.3                                             | metro-runtime@^0.80.3                                             | metro-runtime@^0.80.0                                             | metro-runtime@^0.76.5                                             | metro-runtime@^0.73.7                                             | metro-runtime@^0.72.1                                             | metro-runtime@^0.70.1                                             | metro-runtime@^0.67.0                                             | metro-runtime@^0.66.2                                             | metro-runtime@^0.66.2                                             | metro-runtime@^0.66.0                                             | metro-runtime@^0.64.0                                             | metro-runtime@^0.59.0                                             | metro-runtime@^0.58.0                                             | metro-runtime@^0.56.0                                             |
+| modal                                | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^11.10.0                                       | react-native-modal@^11.5.6                                        | react-native-modal@^11.5.6                                        | react-native-modal@^11.5.6                                        |
+| navigation/native                    | @react-navigation/native@^7.1.14                                  | @react-navigation/native@^7.1.14                                  | @react-navigation/native@^7.1.14                                  | @react-navigation/native@^7.1.14                                  | @react-navigation/native@^7.1.14                                  | @react-navigation/native@^7.1.14                                  | @react-navigation/native@^7.1.14                                  | @react-navigation/native@^7.1.14                                  | @react-navigation/native@^7.1.14                                  | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^5.9.8                                   | @react-navigation/native@^5.9.8                                   | @react-navigation/native@^5.9.4                                   | @react-navigation/native@^5.7.6                                   | @react-navigation/native@^5.7.6                                   |
+| navigation/stack                     | @react-navigation/stack@^7.4.2                                    | @react-navigation/stack@^7.4.2                                    | @react-navigation/stack@^7.4.2                                    | @react-navigation/stack@^7.4.2                                    | @react-navigation/stack@^7.4.2                                    | @react-navigation/stack@^7.4.2                                    | @react-navigation/stack@^7.4.2                                    | @react-navigation/stack@^7.4.2                                    | @react-navigation/stack@^7.4.2                                    | @react-navigation/stack@^6.3.21                                   | @react-navigation/stack@^6.3.21                                   | @react-navigation/stack@^6.3.21                                   | @react-navigation/stack@^6.2.0                                    | @react-navigation/stack@^6.2.0                                    | @react-navigation/stack@^6.2.0                                    | @react-navigation/stack@^6.2.0                                    | @react-navigation/stack@^6.2.0                                    | @react-navigation/stack@^6.2.0                                    | @react-navigation/stack@^6.2.0                                    | @react-navigation/stack@^5.14.9                                   | @react-navigation/stack@^5.14.9                                   | @react-navigation/stack@^5.14.4                                   | @react-navigation/stack@^5.9.3                                    | @react-navigation/stack@^5.9.3                                    |
+| netinfo                              | @react-native-community/netinfo@^11.3.3                           | @react-native-community/netinfo@^11.3.3                           | @react-native-community/netinfo@^11.3.3                           | @react-native-community/netinfo@^11.3.3                           | @react-native-community/netinfo@^11.3.3                           | @react-native-community/netinfo@^11.3.3                           | @react-native-community/netinfo@^11.3.3                           | @react-native-community/netinfo@^11.3.3                           | @react-native-community/netinfo@^11.3.3                           | @react-native-community/netinfo@^11.3.3                           | @react-native-community/netinfo@^11.3.3                           | @react-native-community/netinfo@^11.3.0                           | @react-native-community/netinfo@^9.0.0                            | @react-native-community/netinfo@^9.0.0                            | @react-native-community/netinfo@^9.0.0                            | @react-native-community/netinfo@^8.0.0                            | @react-native-community/netinfo@^7.0.0                            | @react-native-community/netinfo@^7.0.0                            | @react-native-community/netinfo@^7.0.0                            | @react-native-community/netinfo@^7.0.0                            | @react-native-community/netinfo@^6.0.2                            | @react-native-community/netinfo@^5.9.10                           | @react-native-community/netinfo@^5.9.10                           | @react-native-community/netinfo@^5.7.1                            |
+| popover                              | react-native-popover-view@^6.0.1                                  | react-native-popover-view@^6.0.1                                  | react-native-popover-view@^6.0.1                                  | react-native-popover-view@^6.0.1                                  | react-native-popover-view@^6.0.1                                  | react-native-popover-view@^6.0.1                                  | react-native-popover-view@^6.0.1                                  | react-native-popover-view@^6.0.1                                  | react-native-popover-view@^5.1.8                                  | react-native-popover-view@^5.1.8                                  | react-native-popover-view@^5.1.8                                  | react-native-popover-view@^5.1.8                                  | react-native-popover-view@^5.1.8                                  | react-native-popover-view@^5.0.0                                  | react-native-popover-view@^5.0.0                                  | react-native-popover-view@^5.0.0                                  | react-native-popover-view@^4.0.3                                  | react-native-popover-view@^4.0.3                                  | react-native-popover-view@^4.0.3                                  | react-native-popover-view@^4.0.3                                  | react-native-popover-view@^4.0.3                                  | react-native-popover-view@^3.1.1                                  | react-native-popover-view@^3.1.1                                  | react-native-popover-view@^3.1.1                                  |
+| react                                | react@19.2.3                                                      | react@19.2.0                                                      | react@19.1.1                                                      | react@19.1.4                                                      | react@19.1.0                                                      | react@19.0.0                                                      | react@19.0.0                                                      | react@18.3.1                                                      | react@18.3.1                                                      | react@^18.2.0                                                     | react@18.2.0                                                      | react@18.2.0                                                      | react@18.2.0                                                      | react@18.2.0                                                      | react@18.1.0                                                      | react@18.0.0                                                      | react@17.0.2                                                      | react@17.0.2                                                      | react@17.0.2                                                      | react@17.0.2                                                      | react@17.0.1                                                      | react@16.13.1                                                     | react@16.11.0                                                     | react@16.9.0                                                      |
+| react-dom                            | react-dom@^19.2.3                                                 | react-dom@^19.2.0                                                 | react-dom@^19.1.1                                                 | react-dom@^19.1.0                                                 | react-dom@^19.1.0                                                 | react-dom@^19.0.0                                                 | react-dom@^19.0.0                                                 | react-dom@^18.3.1                                                 | react-dom@^18.3.1                                                 | react-dom@^18.2.0                                                 | react-dom@^18.2.0                                                 | react-dom@^18.2.0                                                 | react-dom@^18.2.0                                                 | react-dom@^18.2.0                                                 | react-dom@^18.1.0                                                 | react-dom@^18.0.0                                                 | react-dom@17.0.2                                                  | react-dom@17.0.2                                                  | react-dom@17.0.2                                                  | react-dom@17.0.2                                                  | react-dom@17.0.1                                                  | react-dom@16.13.1                                                 | react-dom@16.11.0                                                 | react-dom@16.9.0                                                  |
+| react-test-renderer                  | react-test-renderer@19.2.3                                        | react-test-renderer@19.2.0                                        | react-test-renderer@19.1.1                                        | react-test-renderer@19.1.0                                        | react-test-renderer@19.1.0                                        | react-test-renderer@19.0.0                                        | react-test-renderer@19.0.0                                        | react-test-renderer@18.3.1                                        | react-test-renderer@18.3.1                                        | react-test-renderer@^18.2.0                                       | react-test-renderer@18.2.0                                        | react-test-renderer@18.2.0                                        | react-test-renderer@18.2.0                                        | react-test-renderer@18.2.0                                        | react-test-renderer@18.1.0                                        | react-test-renderer@18.0.0                                        | react-test-renderer@17.0.2                                        | react-test-renderer@17.0.2                                        | react-test-renderer@17.0.2                                        | react-test-renderer@17.0.2                                        | react-test-renderer@17.0.1                                        | react-test-renderer@16.13.1                                       | react-test-renderer@16.11.0                                       | react-test-renderer@16.9.0                                        |
+| safe-area                            | react-native-safe-area-context@^5.6.0                             | react-native-safe-area-context@^5.6.0                             | react-native-safe-area-context@^5.6.0                             | react-native-safe-area-context@^5.6.0                             | react-native-safe-area-context@^5.4.0                             | react-native-safe-area-context@^5.4.0                             | react-native-safe-area-context@^5.2.0                             | react-native-safe-area-context@^5.1.0                             | react-native-safe-area-context@^4.12.0                            | react-native-safe-area-context@^4.10.5                            | react-native-safe-area-context@^4.10.5                            | react-native-safe-area-context@^4.8.2                             | react-native-safe-area-context@&gt;=4.5.3 &lt;4.8                 | react-native-safe-area-context@^4.5.1                             | react-native-safe-area-context@^4.4.1                             | react-native-safe-area-context@^4.3.1                             | react-native-safe-area-context@^3.2.0                             | react-native-safe-area-context@^3.2.0                             | react-native-safe-area-context@^3.2.0                             | react-native-safe-area-context@^3.2.0                             | react-native-safe-area-context@^3.2.0                             | react-native-safe-area-context@^3.2.0                             | react-native-safe-area-context@^3.1.9                             | react-native-safe-area-context@^3.1.9                             |
+| screens                              | react-native-screens@^4.19.0                                      | react-native-screens@^4.19.0                                      | react-native-screens@^4.19.0                                      | react-native-screens@^4.19.0                                      | react-native-screens@&gt;=4.14.0 &lt;4.19.0                       | react-native-screens@&gt;=4.14.0 &lt;4.19.0                       | react-native-screens@&gt;=4.5 &lt;4.14.0                          | react-native-screens@&gt;=4.5 &lt;4.14.0                          | react-native-screens@&gt;=4.0 &lt;4.5                             | react-native-screens@^3.34.0                                      | react-native-screens@^3.31.0                                      | react-native-screens@^3.28.0                                      | react-native-screens@&gt;=3.21.0 &lt;3.28.0                       | react-native-screens@^3.19.0                                      | react-native-screens@^3.18.2                                      | react-native-screens@^3.14.1                                      | react-native-screens@^3.13.1                                      | react-native-screens@^3.9.0                                       | react-native-screens@^3.9.0                                       | react-native-screens@^3.7.0                                       | react-native-screens@^3.1.1                                       | react-native-screens@^2.18.1                                      | react-native-screens@^2.10.1                                      | react-native-screens@^2.10.1                                      |
+| shimmer                              | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.6.0                                       | react-native-shimmer@^0.5.0                                       | react-native-shimmer@^0.5.0                                       | react-native-shimmer@^0.5.0                                       | react-native-shimmer@^0.5.0                                       | react-native-shimmer@^0.5.0                                       | react-native-shimmer@^0.5.0                                       | react-native-shimmer@^0.5.0                                       | react-native-shimmer@^0.5.0                                       | react-native-shimmer@^0.5.0                                       | react-native-shimmer@^0.5.0                                       |
+| sqlite                               | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^6.0.1                                | react-native-sqlite-storage@^5.0.0                                | react-native-sqlite-storage@^5.0.0                                | react-native-sqlite-storage@^5.0.0                                | react-native-sqlite-storage@^5.0.0                                | react-native-sqlite-storage@^5.0.0                                | react-native-sqlite-storage@^3.3.11                               | react-native-sqlite-storage@^3.3.11                               | react-native-sqlite-storage@^3.3.11                               |
+| storage                              | @react-native-async-storage/async-storage@^2.2.0                  | @react-native-async-storage/async-storage@^2.2.0                  | @react-native-async-storage/async-storage@^2.2.0                  | @react-native-async-storage/async-storage@^2.2.0                  | @react-native-async-storage/async-storage@^2.2.0                  | @react-native-async-storage/async-storage@^2.0.0                  | @react-native-async-storage/async-storage@^2.0.0                  | @react-native-async-storage/async-storage@^2.0.0                  | @react-native-async-storage/async-storage@^2.0.0                  | @react-native-async-storage/async-storage@^2.0.0                  | @react-native-async-storage/async-storage@^2.0.0                  | @react-native-async-storage/async-storage@^1.22.0                 | @react-native-async-storage/async-storage@^1.18.2                 | @react-native-async-storage/async-storage@^1.17.11                | @react-native-async-storage/async-storage@^1.17.10                | @react-native-async-storage/async-storage@^1.17.7                 | @react-native-async-storage/async-storage@^1.17.3                 | @react-native-async-storage/async-storage@^1.15.16                | @react-native-async-storage/async-storage@^1.15.9                 | @react-native-async-storage/async-storage@^1.15.8                 | @react-native-async-storage/async-storage@^1.15.8                 | @react-native-community/async-storage@^1.12.1                     | @react-native-community/async-storage@^1.12.1                     | @react-native-community/async-storage@^1.12.1                     |
+| svg                                  | react-native-svg@^15.15.1                                         | react-native-svg@^15.15.1                                         | react-native-svg@^15.15.1                                         | react-native-svg@^15.12.1                                         | react-native-svg@^15.12.0                                         | react-native-svg@^15.11.2                                         | react-native-svg@^15.11.2                                         | react-native-svg@&gt;=15.11.1 &lt;15.13.0                         | react-native-svg@&gt;=15.8.0 &lt;15.13.0                          | react-native-svg@&gt;=15.6.0 &lt;15.13.0                          | react-native-svg@&gt;=15.4.0 &lt;15.13.0                          | react-native-svg@&gt;=15.0.0 &lt;15.13.0                          | react-native-svg@^13.14.0                                         | react-native-svg@^13.14.0                                         | react-native-svg@^12.3.0                                          | react-native-svg@^12.3.0                                          | react-native-svg@^12.3.0                                          | react-native-svg@^12.1.1                                          | react-native-svg@^12.1.1                                          | react-native-svg@^12.1.1                                          | react-native-svg@^12.1.1                                          | react-native-svg@^12.1.1                                          | react-native-svg@^12.1.1                                          | react-native-svg@^12.1.1                                          |
+| test-app                             | react-native-test-app@^5.0.5                                      | react-native-test-app@^5.0.5                                      | react-native-test-app@^4.4.12                                     | react-native-test-app@^4.4.11                                     | react-native-test-app@^4.4.11                                     | react-native-test-app@^4.4.11                                     | react-native-test-app@^4.3.1                                      | react-native-test-app@^4.0.9                                      | react-native-test-app@^3.10.18                                    | react-native-test-app@^3.9.2                                      | react-native-test-app@^3.9.2                                      | react-native-test-app@^2.5.34                                     | react-native-test-app@^2.5.5                                      | react-native-test-app@^2.2.1                                      | react-native-test-app@^1.6.9                                      | react-native-test-app@^1.3.10                                     | react-native-test-app@^1.3.5                                      | react-native-test-app@^1.1.7                                      | react-native-test-app@^1.0.6                                      | react-native-test-app@^0.11.4                                     | react-native-test-app@^0.11.4                                     | react-native-test-app@^0.11.4                                     | react-native-test-app@^0.11.4                                     | react-native-test-app@^0.11.4                                     |
+| webview                              | react-native-webview@^13.14.1                                     | react-native-webview@^13.14.1                                     | react-native-webview@^13.14.1                                     | react-native-webview@^13.14.1                                     | react-native-webview@^13.14.1                                     | react-native-webview@^13.14.1                                     | react-native-webview@^13.14.1                                     | react-native-webview@^13.14.1                                     | react-native-webview@^13.12.2                                     | react-native-webview@^13.12.2                                     | react-native-webview@^13.12.2                                     | react-native-webview@^13.10.0                                     | react-native-webview@^13.2.2                                      | react-native-webview@^12.0.2                                      | react-native-webview@^11.23.0                                     | react-native-webview@^11.23.0                                     | react-native-webview@^11.22.6                                     | react-native-webview@^11.13.0                                     | react-native-webview@^11.13.0                                     | react-native-webview@^11.13.0                                     | react-native-webview@^11.4.2                                      | react-native-webview@^11.4.2                                      | react-native-webview@^11.0.3                                      | react-native-webview@^11.0.3                                      |
+
+<!-- @rnx-kit/align-deps/capabilities end -->
+
+</details>
+
+To add new capabilities, first add it to
+[`packages/config/src/kitConfig.ts`](https://github.com/microsoft/rnx-kit/blob/e1d4b2484303cac04e0ec6a4e79d854c694b96b4/packages/config/src/kitConfig.ts#L6),
+then update the
+[preset](https://github.com/microsoft/rnx-kit/blob/e1d4b2484303cac04e0ec6a4e79d854c694b96b4/packages/align-deps/src/presets/microsoft/react-native.ts).
+For an example, have a look at how the
+[`hermes` capability was added](https://github.com/microsoft/rnx-kit/commit/c79828791a6ac5cf19b4abfff6347542af49eaec).
+
+If you're looking to update capabilities to a more recent version, run
+`yarn update-profile` to help determine whether we need to bump any packages.
+
+## Presets
+
+A profile is a list of capabilities that map to specific versions of packages. A
+preset is a collection of such profiles. It can be a JSON file, or a JS file
+that default exports it. Presets are consumed via the `presets` key in your
+[configuration](#configure), or the [`--presets`](#--presets) flag.
+
+### Extending Built-in Presets
+
+The built-in preset, `microsoft/react-native`, contains a profile for every
+supported version of react-native. The profiles are named after every minor
+release, e.g. `0.69` or `0.70`.
+
+To add a new capability, e.g. `my-capability`, to the built-in profiles `0.69`
+and `0.70`, create a custom preset like below:
+
+```js
+// my-preset/index.js
+module.exports = {
+  0.69: {
+    "my-capability": {
+      name: "my-module",
+      version: "1.0.0",
+    },
+  },
+  "0.70": {
+    "my-capability": {
+      name: "my-module",
+      version: "1.1.0",
+    },
+  },
+};
+```
+
+Then add it to your configuration:
+
+```diff
+ {
+   "name": "my-package",
+   ...
+   "rnx-kit": {
+     "alignDeps": {
+       "presets": [
+         "microsoft/react-native",
++        "my-preset"
+       ],
+       "requirements": ["react-native@0.70"],
+       "capabilities": [
+         ...
+       ]
+     }
+   }
+ }
+```
+
+Or if you need to align unconfigured packages, specify
+`--presets microsoft/react-native,my-preset`.
+
+Make sure that `microsoft/react-native` is declared before your custom preset.
+This will tell `align-deps` to append capabilities when the profile names match.
+
+You can also use this feature to _override_ capabilities. For instance:
+
+```js
+// my-preset/index.js
+module.exports = {
+  "0.70": {
+    core: {
+      name: "react-native",
+      version: "^0.70.3-myCustomFork.1",
+    },
+  },
+};
+```
+
+With this preset, `core` will be resolved to your custom fork of `react-native`
+instead of the official version.
+
+Note that profile names are only needed when you want to extend or override
+presets. Otherwise, you can name your profiles whatever you want.
+
+For a complete example of a preset, have a look at
+[`microsoft/react-native`](https://github.com/microsoft/rnx-kit/blob/e1d4b2484303cac04e0ec6a4e79d854c694b96b4/packages/align-deps/src/presets/microsoft/react-native.ts).
+
+### Custom Capabilities
+
+Normally, a capability resolves to a version of a package. For instance, `core`
+is a capability that resolves to `react-native`:
+
+```js
+{
+  "core": {
+    name: "react-native",
+    version: "0.0.0",
+  },
+}
+```
+
+A capability can depend on other capabilities. For example, we can ensure that
+`react-native` gets installed along with `react-native-windows` by declaring
+that `core-windows` depends on `core`:
+
+```js
+{
+  "core-windows": {
+    name: "react-native-windows",
+    version: "0.0.0",
+    capabilities: ["core"],
+  },
+}
+```
+
+You can also create capabilities that don't resolve to a package, but to a list
+of capabilities instead:
+
+```js
+{
+  "core/all": {
+    name: "#meta",
+    capabilities: [
+      "core-android",
+      "core-ios",
+      "core-macos",
+      "core-windows",
+    ],
+  },
+}
+```
+
+We call these **meta** capabilities. To make it easier to identify them (both
+for humans and machines), the `name` field must be set to `#meta`, and the
+`capabilities` field must be a non-empty array of other capabilities. The
+`version` field is no longer used and can be dropped. To use a meta capability
+in your rnx-kit configuration, there's nothing specific to be done — for
+instance:
+
+```diff
+ {
+   "name": "my-package",
+   ...
+   "rnx-kit": {
+     "alignDeps": {
+       "presets": ["microsoft/react-native", "my-preset"],
+       "requirements": ["react-native@0.70"],
+       "capabilities": [
++        "core/all"
+       ]
+     }
+   }
+ }
+```
+
+## Requirements
+
+Requirements are what determines which profiles should be used. This is how it
+roughly works:
+
+- The list of presets are loaded and _merged_ into a giant preset
+- For each profile in the _merged_ preset, check whether they fulfill the
+  requirements
+  - Profiles that do not fulfill the requirements are discarded
+- Use the remaining profiles to align the target package
+
+For example, given the following configuration:
+
+```js
+{
+  "name": "useful-library",
+  "version": "1.0",
+  ...
+  "rnx-kit": {
+    "kitType": "library",
+    "alignDeps": {
+      "requirements": {
+        "development": ["react-native@0.70"],
+        "production": ["react-native@0.69 || 0.70"]
+      }
+      "capabilities": [
+        "core-android",  // `core-android` resolves to `react-native`
+        "core-ios"       // `core-ios` also resolves to `react-native`
+      ]
+    }
+  }
+}
+```
+
+`microsoft/react-native/0.70` will be used for development since it is the only
+profile that fulfills the requirement, `react-native@0.70`. `align-deps` ensures
+that `react-native` is correctly declared under `devDependencies`.
+
+```diff
+ {
+   "name": "useful-library",
+   "version": "1.0",
++  "devDependencies" {
++    "react-native": "^0.70.0"
++  }
+   ...
+ }
+```
+
+For production, there are two profiles that fulfill the requirements,
+`microsoft/react-native/0.69` and `microsoft/react-native/0.70`. Since this
+package is a library, `align-deps` ensures that `react-native` is correctly
+declared under `peerDependencies`:
+
+```diff
+ {
+   "name": "useful-library",
+   "version": "1.0",
++  "peerDependencies": {
++    "react-native": "^0.69.0 || ^0.70.0"
++  },
+   "devDependencies" {
+     "react-native": "^0.70.0"
+   }
+   ...
+ }
+```
+
+If the package was an app, `align-deps` would've ensured that `react-native` is
+only declared under `dependencies`.
+
+You can read more about the usage of the different dependencies sections in
+[Dependency Management](https://microsoft.github.io/rnx-kit/docs/architecture/dependency-management).
+
+One important thing to note here is that if there are multiple capabilities
+resolving to the same package, only the first occurrence of the package is
+checked. To illustrate this scenario, consider the following:
+
+```ts
+const builtInPreset = {
+  "0.69": {
+    core: {
+      name: "react-native",
+      version: "^0.69.0",
+    },
+  },
+  "0.70": {
+    core: {
+      name: "react-native",
+      version: "^0.70.0",
+    },
+  },
+};
+
+const customPreset = {
+  "0.69": {
+    "custom-capability": {
+      name: "react-native",
+      version: "^0.70.0-fork.1",
+    },
+  },
+};
+
+const megaPreset = mergePresets([builtInPreset, customPreset]);
+/*
+{
+  "0.69": {
+    core: {
+      name: "react-native",
+      version: "^0.69.0",
+    },
+    "custom-capability": {
+      name: "react-native",
+      version: "^0.70.0-fork.1",
+    },
+  },
+  "0.70": {
+    core: {
+      name: "react-native",
+      version: "^0.70.0",
+    },
+  },
+}
+ */
+
+const filteredPreset = filterPreset(megaPreset, ["react-native@0.70"]);
+/* ??? */
+```
+
+If `filterPreset` checked all capabilities in the profiles, it would return both
+`0.69` and `0.70` here because `custom-capability` would satisfy
+`react-native@0.70`. This is unexpected behaviour. Instead, `align-deps` looks
+for the first package matching the name and _then_ checks whether it fulfills
+the requirement. With this algorithm, only `0.70` is returned.
+
+## Migrating From `dep-check`
+
+Changes from `dep-check` to `align-deps` mostly surrounds the configuration
+schema, and renaming of a couple of flags:
+
+- In most cases, your old configuration will still work as before. `align-deps`
+  will tell you how to convert the old config, but you can also specify
+  `--migrate-config` to let `align-deps` do it for you.
+
+- The following flags were renamed:
+
+  | Old                  | New                                 |
+  | -------------------- | ----------------------------------- |
+  | `--custom-profiles`  | [`--presets`](#--presets)           |
+  | `--exclude-packages` | _no change_                         |
+  | `--init`             | _no change_                         |
+  | `--vigilant`         | [`--requirements`](#--requirements) |
+  | `--set-version`      | _no change_                         |
+  | `--write`            | _no change_                         |
+
+- Because the new config schema no longer relies on profile names to determine a
+  profile, we had to _drop support_ for declaring capabilities at the root level
+  because we cannot reliably detect whether an entry is a package or a profile.
+  You will have to add those capabilities to all the profiles you want them
+  added to.
+
+## Terminology
+
+| Terminology      | Definition (as used in `align-deps`'s context)                                                                                                                                  |
+| :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| capability       | A capability is in essence a feature that the kit uses. A capability is usually mapped to an npm package. Which versions of the package is determined by a profile (see below). |
+| package manifest | This normally refers to a package's `package.json`.                                                                                                                             |
+| preset           | A collection of profiles.                                                                                                                                                       |
+| profile          | A profile is a mapping of capabilities to npm packages at a specific version or version range.                                                                                  |
+
+## Contribution
+
+### Updating an Existing Profile
+
+Updating an existing profile is unfortunately a manual process.
+
+We have a script that fetches the latest version of all capabilities and
+presents them in a table together with the current versions.
+
+```sh
+yarn update-profile
+```
+
+Outputs something like:
+
+```
+| Capability   | Name          | Version   | Latest | Homepage                                        |
+| ------------ | ------------- | --------- | ------ | ----------------------------------------------- |
+| core         | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
+| core-android | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
+| core-ios     | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
+| hermes       | hermes-engine | ~0.11.0   | =      |                                                 |
+| react        | react         | 17.0.2    | 18.1.0 | https://reactjs.org/                            |
+| ...                                                                                                 |
+```
+
+With this information, we can see which packages have been updated since the
+last profile, and scan their change logs for interesting changes that may affect
+compatibility.
+
+### Adding a Profile for a New Version of `react-native`
+
+The `update-profile` script can also be used to add a profile. For instance, to
+add a profile for `react-native` 0.69, run:
+
+```sh
+yarn update-profile 0.69
+```
+
+The script will try to figure out what version of `react`, `metro`, etc. should
+be set to, and write to `src/presets/microsoft/react-native/profile-0.69.ts`.
+Please verify that this profile looks correct before checking it in.

@@ -1,0 +1,56 @@
+{
+  "name": "@rnx-kit/react-native-lazy-index",
+  "version": "4.0.0",
+  "description": "Hermes/RAM bundle friendly index.js with on-demand loaded modules",
+  "keywords": [
+    "babel",
+    "bundle",
+    "codegen",
+    "index.js",
+    "inline",
+    "lazy",
+    "macro",
+    "on-demand",
+    "performance",
+    "ram",
+    "react",
+    "react-native",
+    "require"
+  ],
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-lazy-index#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/react-native-lazy-index"
+  },
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "babel-plugin-codegen": "^4.1.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.59"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

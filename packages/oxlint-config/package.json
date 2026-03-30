@@ -1,0 +1,88 @@
+{
+  "name": "@rnx-kit/oxlint-config",
+  "version": "1.0.3",
+  "description": "Shareable oxlint configs",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/oxlint-config#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/oxlint-config"
+  },
+  "files": [
+    "src"
+  ],
+  "type": "module",
+  "main": "src/configs/recommended.js",
+  "exports": {
+    ".": {
+      "default": "./src/configs/recommended.js"
+    },
+    "./eslint-recommended": {
+      "default": "./src/configs/eslint-recommended.js"
+    },
+    "./private": {
+      "default": "./private.ts"
+    },
+    "./recommended": {
+      "default": "./src/configs/recommended.js"
+    },
+    "./sdl-common": {
+      "default": "./src/configs/sdl-common.js"
+    },
+    "./sdl-node": {
+      "default": "./src/configs/sdl-node.js"
+    },
+    "./sdl-react": {
+      "default": "./src/configs/sdl-react.js"
+    },
+    "./sdl-required": {
+      "default": "./src/configs/sdl-required.js"
+    },
+    "./strict": {
+      "default": "./src/configs/strict.js"
+    },
+    "./types-only": {
+      "default": "./src/configs/types-only.js"
+    },
+    "./typescript-recommended": {
+      "default": "./src/configs/typescript-recommended.js"
+    },
+    "./typescript-stylistic": {
+      "default": "./src/configs/typescript-stylistic.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
+  },
+  "dependencies": {
+    "@microsoft/eslint-plugin-sdl": "^1.0.0",
+    "@react-native/eslint-plugin": "^0.84.0",
+    "@rnx-kit/eslint-plugin": "^0.9.8"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "eslint": "^9.0.0",
+    "oxlint": "^1.51.0"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0",
+    "oxlint": "^1.50.0"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=22.11"
+  }
+}

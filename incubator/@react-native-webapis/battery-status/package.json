@@ -1,0 +1,53 @@
+{
+  "name": "@react-native-webapis/battery-status",
+  "version": "0.3.3",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - Battery Status API for React Native",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/@react-native-webapis/battery-status#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/@react-native-webapis/battery-status"
+  },
+  "files": [
+    "RNWBatteryStatus.podspec",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/src",
+    "ios",
+    "lib",
+    "macos",
+    "windows",
+    "react-native.config.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
+    "lint": "rnx-kit-scripts lint",
+    "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0",
+    "react": "19.2.0",
+    "react-native": "^0.83.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-native": ">=0.74.0"
+  },
+  "engines": {
+    "node": ">=16.17"
+  },
+  "experimental": true
+}

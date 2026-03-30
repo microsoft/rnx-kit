@@ -1,0 +1,45 @@
+{
+  "name": "@rnx-kit/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shareable ESLint config for @rnx-kit",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/eslint-config#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/eslint-config"
+  },
+  "files": [
+    "index.js"
+  ],
+  "exports": {
+    ".": {
+      "default": "./index.js"
+    },
+    "./types-only": {
+      "default": "./types-only.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "format": "oxfmt README.md index.js package.json"
+  },
+  "dependencies": {
+    "@microsoft/eslint-plugin-sdl": "^1.0.0",
+    "@rnx-kit/eslint-plugin": "workspace:*"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

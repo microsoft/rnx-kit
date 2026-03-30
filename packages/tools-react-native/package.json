@@ -1,0 +1,94 @@
+{
+  "name": "@rnx-kit/tools-react-native",
+  "version": "2.3.5",
+  "description": "A collection of supplemental react-native functions and types",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-react-native#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-react-native"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "cache.d.ts",
+    "cache.js",
+    "cli.d.ts",
+    "cli.js",
+    "context.d.ts",
+    "context.js",
+    "metro.d.ts",
+    "metro.js",
+    "platform.d.ts",
+    "platform.js",
+    "src"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./cache": {
+      "types": "./lib/cache.d.ts",
+      "typescript": "./src/cache.ts",
+      "default": "./lib/cache.js"
+    },
+    "./cli": {
+      "types": "./lib/cli.d.ts",
+      "typescript": "./src/cli.ts",
+      "default": "./lib/cli.js"
+    },
+    "./context": {
+      "types": "./lib/context.d.ts",
+      "typescript": "./src/context.ts",
+      "default": "./lib/context.js"
+    },
+    "./metro": {
+      "types": "./lib/metro.d.ts",
+      "typescript": "./src/metro.ts",
+      "default": "./lib/metro.js"
+    },
+    "./platform": {
+      "types": "./lib/platform.d.ts",
+      "typescript": "./src/platform.ts",
+      "default": "./lib/platform.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
+    "update-readme": "rnx-kit-scripts update-api-readme"
+  },
+  "dependencies": {
+    "@rnx-kit/tools-filesystem": "^0.2.0",
+    "@rnx-kit/tools-node": "^3.0.4",
+    "@rnx-kit/types-bundle-config": "^1.0.0"
+  },
+  "devDependencies": {
+    "@react-native-community/cli": "^20.0.0",
+    "@react-native-community/cli-types": "^20.0.0",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0",
+    "memfs": "^4.56.10",
+    "metro": "^0.83.3",
+    "metro-config": "^0.83.3",
+    "metro-core": "^0.83.3",
+    "metro-resolver": "^0.83.3",
+    "metro-source-map": "^0.83.1"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

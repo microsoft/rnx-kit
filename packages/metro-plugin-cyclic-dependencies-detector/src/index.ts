@@ -1,0 +1,19 @@
+import type { MetroPlugin } from "@rnx-kit/metro-serializer";
+import type { CyclicDependencyPluginOptions } from "@rnx-kit/types-plugin-cyclic-dependencies";
+import { detectCycles } from "./detectCycles.ts";
+
+export { packageRelativePath } from "./detectCycles.ts";
+
+export function CyclicDependencies(
+  pluginOptions: CyclicDependencyPluginOptions = {}
+): MetroPlugin {
+  return (entryPoint, _preModules, graph, _options) => {
+    detectCycles(entryPoint, graph, pluginOptions);
+  };
+}
+
+CyclicDependencies.type = "serializer";
+
+// `export default` required for plugin interface
+// oxlint-disable-next-line no-default-export
+export default CyclicDependencies;

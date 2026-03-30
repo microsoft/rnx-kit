@@ -1,0 +1,54 @@
+{
+  "name": "@rnx-kit/tools-workspaces",
+  "version": "0.2.3",
+  "description": "A collection of tools for working with workspaces",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-workspaces#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-workspaces"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "src"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
+    "update-readme": "rnx-kit-scripts update-api-readme"
+  },
+  "dependencies": {
+    "fast-glob": "^3.2.7",
+    "find-up": "^5.0.0",
+    "micromatch": "^4.0.0",
+    "read-yaml-file": "^2.1.0",
+    "strip-json-comments": "^3.1.1"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/micromatch": "^4.0.0",
+    "@types/node": "^24.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

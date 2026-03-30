@@ -1,0 +1,423 @@
+/* jshint esversion: 8, node: true */
+// @ts-check
+
+const {
+  findMetroPath,
+  requireModuleFromMetro,
+} = require("@rnx-kit/tools-react-native/metro");
+const fs = require("node:fs");
+const path = require("node:path");
+const { applyExpoWorkarounds, isExpoConfig } = require("./expoConfig");
+
+/**
+ * @typedef {import("metro-config").MetroConfig} MetroConfig;
+ * @typedef {MetroConfig & {
+ *   platform?: string;
+ *   unstable_allowAssetsOutsideProjectRoot?: boolean;
+ * }} InputConfig;
+ */
+
+/** Packages that must be resolved to one specific copy. */
+const UNIQUE_MODULES = ["react", "react-native"];
+
+/**
+ * A minimum list of folders that should be watched by Metro.
+ * @returns {string[]}
+ */
+function defaultWatchFolders() {
+  const {
+    findWorkspacePackagesSync,
+    findWorkspaceRootSync,
+  } = require("@rnx-kit/tools-workspaces");
+
+  try {
+    const root = findWorkspaceRootSync();
+    if (!root) {
+      return [];
+    }
+
+    const packages = findWorkspacePackagesSync();
+    if (!Array.isArray(packages) || packages.length === 0) {
+      return [];
+    }
+
+    // In a monorepo, in particular when using Yarn workspaces, packages are
+    // symlinked in the root `node_modules` folder so it needs to be watched.
+    const rootNodeModules = path.join(root, "node_modules");
+    if (fs.existsSync(rootNodeModules)) {
+      packages.unshift(rootNodeModules);
+    }
+
+    // Rush + pnpm downloads dependencies into a separate folder.
+    const rushPnpmDir = path.join(
+      root,
+      "common",
+      "temp",
+      "node_modules",
+      ".pnpm"
+    );
+    if (fs.existsSync(rushPnpmDir)) {
+      packages.unshift(rushPnpmDir);
+    }
+
+    return packages;
+  } catch (_) {
+    return [];
+  }
+}
+
+/**
+ * Ensures that the empty module is resolvable if there are no watch folders.
+ * @param {MetroConfig} config
+ * @returns {MetroConfig}
+ */
+function ensureEmptyModule(config) {
+  const { resolver, watchFolders } = config;
+  if (!Array.isArray(watchFolders) || watchFolders.length === 0) {
+    const emptyModulePath = resolver?.emptyModulePath;
+    if (emptyModulePath) {
+      // @ts-expect-error If there are no watch folders, Metro won't be able to
+      // resolve the empty module.
+      config.watchFolders = [path.dirname(emptyModulePath)];
+    }
+  }
+  return config;
+}
+
+/**
+ * Extracts unique parts from a Yarn store directory.
+ * @param {string} p
+ * @returns {[string, string]}
+ */
+function extractUniquePartsFromYarnStoreDir(p) {
+  const parts = p.split("-");
+  const length = parts.length;
+
+  // Example: node_modules/.store/react-native-virtual-3e97acc5aa
+  if (parts[length - 2] === "virtual") {
+    return [parts.slice(0, length - 1).join("-"), parts.slice(-1).join("-")];
+  }
+
+  // Example: node_modules/.store/@react-native-assets-registry-npm-0.81.0-rc.5-d313abaf5e
+  const index = parts.lastIndexOf("npm");
+  if (index > 0) {
+    const pos = index + 1;
+    return [parts.slice(0, pos).join("-"), parts.slice(pos).join("-")];
+  }
+
+  throw new Error(`Failed to parse Yarn store directory: ${p}`);
+}
+
+/**
+ * Returns the path to specified module; `undefined` if not found.
+ *
+ * Note that this function resolves symlinks. This is necessary for setups that
+ * only have symlinks under `node_modules` (e.g. with pnpm).
+ *
+ * @param {string} name
+ * @param {string=} startDir
+ * @returns {string | undefined}
+ */
+function resolveModule(name, startDir) {
+  const { findPackageDependencyDir } = require("@rnx-kit/tools-node/package");
+  return findPackageDependencyDir(name, {
+    startDir,
+    resolveSymlinks: true,
+  });
+}
+
+/**
+ * Returns the path to specified package, and a regex to exclude extra copies of
+ * it.
+ *
+ * The regex pattern should be added to the blocklist, while the path should be
+ * added to `extraNodeModules` so Metro can resolve the correct copy regardless
+ * of where it might be installed. You should also restart Watchman and reset
+ * Metro cache if you're adding/removing excludes.
+ *
+ * @see exclusionList for further information.
+ *
+ * @param {string} packageName Name of the package to exclude extra copies of
+ * @param {string=} searchStartDir Directory to resolve the correct module location from
+ * @returns {[string, RegExp]}
+ */
+function resolveUniqueModule(packageName, searchStartDir) {
+  const result = resolveModule(packageName, searchStartDir);
+  if (!result) {
+    throw new Error(`Cannot find module '${packageName}'`);
+  }
+
+  // Yarn's pnpm layout differs from pnpm:
+  // - @babel-core -> node_modules/.store/@babel-core-npm-7.27.1-0f1bf48e52/package
+  // - react-native -> node_modules/.store/react-native-virtual-3e97acc5aa/package
+  if (path.basename(result) === "package" && result.includes(".store")) {
+    const storePath = path.dirname(result);
+    const [pre, unique] = extractUniquePartsFromYarnStoreDir(storePath);
+    const preEscaped = pre.replaceAll("\\", "\\\\").replaceAll(".", "\\.");
+    const exclusionRE = new RegExp(
+      `${preEscaped}-[-.\\w]+(?<!${unique})\\${path.sep}package\\${path.sep}`
+    );
+    return [result, exclusionRE];
+  }
+
+  // Find the node_modules folder and account for cases when packages are
+  // nested within workspace folders. Examples:
+  // - path/to/node_modules/@babel/runtime
+  // - path/to/node_modules/prop-types
+  const owningDir = path.dirname(result.slice(0, -packageName.length));
+  const escapedPath = owningDir.replace(/[+.\\]/g, "\\$&");
+  const escapedPackageName = path
+    .normalize(packageName)
+    .replaceAll("\\", "\\\\");
+
+  const exclusionRE = new RegExp(
+    `(?<!${escapedPath})\\${path.sep}node_modules\\${path.sep}${escapedPackageName}\\${path.sep}`
+  );
+  return [result, exclusionRE];
+}
+
+/**
+ * Resolves modules that need to be unique.
+ * @param {string[]} modules
+ * @param {string} projectRoot
+ * @returns {Record<string, string>}
+ */
+function resolveUniqueModules(modules, projectRoot) {
+  /** @type Record<string, string> */
+  const extraModules = {};
+  for (const name of modules) {
+    const resolvedPath = resolveModule(name, projectRoot);
+    if (resolvedPath) {
+      extraModules[name] = resolvedPath;
+    }
+  }
+
+  // Additional modules that often cause issues in pnpm setups
+
+  // Out-of-tree platforms are resolved by redirecting `react-native` ->
+  // `react-native-<platform>`. This may cause extra confusion because it looks
+  // like Metro is unable to resolve `react-native` even though it's present on
+  // disk.
+  const {
+    getAvailablePlatforms,
+  } = require("@rnx-kit/tools-react-native/platform");
+  const availablePlatforms = getAvailablePlatforms(projectRoot);
+  for (const pkgName of Object.values(availablePlatforms)) {
+    if (!pkgName) {
+      continue;
+    }
+
+    const p = resolveModule(pkgName, projectRoot);
+    if (p) {
+      extraModules[pkgName] = p;
+    }
+  }
+
+  /** @type {(prev: string | undefined, curr: string) => string | undefined} */
+  const chainedResolve = (prev, curr) =>
+    prev ? resolveModule(curr, prev) : undefined;
+
+  // `@babel/runtime` may become an implicit dependency depending on whether
+  // Babel decides to inject helpers while transforming code
+  const metroDir = findMetroPath(projectRoot) || require.resolve("metro");
+  const babelRuntime =
+    // Starting with `metro` 0.71.0, `@babel/runtime` can be found through
+    // `metro` -> `metro-runtime`
+    ["metro-runtime", "@babel/runtime"].reduce(chainedResolve, metroDir) ||
+    // Prior to `metro` 0.71.0, we can find `@babel/runtime` by going through
+    // `metro-react-native-babel-preset`
+    //     -> `@babel/plugin-transform-regenerator`
+    //     -> `regenerator-transform`
+    [
+      "metro-react-native-babel-preset",
+      "@babel/plugin-transform-regenerator",
+      "regenerator-transform",
+      "@babel/runtime",
+    ].reduce(chainedResolve, projectRoot);
+  if (babelRuntime) {
+    extraModules["@babel/runtime"] = babelRuntime;
+  }
+
+  return extraModules;
+}
+
+/**
+ * Returns a regex to exclude extra copies of specified package.
+ *
+ * Note that when using this function to exclude packages, you should also add
+ * the path to the correct copy in `extraNodeModules` so Metro can resolve them
+ * when referenced from modules that are siblings of the module that has them
+ * installed. You should also restart Watchman and reset Metro cache if you're
+ * adding/removing excludes.
+ *
+ * @see exclusionList for further information.
+ *
+ * @param {string} packageName Name of the package to exclude extra copies of
+ * @param {string=} searchStartDir Directory to resolve the correct module location from
+ * @returns {RegExp}
+ */
+function excludeExtraCopiesOf(packageName, searchStartDir) {
+  const [, exclusionRE] = resolveUniqueModule(packageName, searchStartDir);
+  return exclusionRE;
+}
+
+/**
+ * Helper function for generating a package exclusion list.
+ *
+ * One of the most important things this function does is to exclude extra
+ * copies of packages that cannot have duplicates, e.g. `react` and
+ * `react-native`. But with how Metro currently resolves modules, some packages
+ * will not be able to find them if a local copy exists. For instance, in the
+ * below scenario, Metro cannot resolve `react-native` in
+ * `another-awesome-package` because it does not look in `my-awesome-package`.
+ * To help Metro, we will also need to add a corresponding entry to
+ * `extraNodeModules`.
+ *
+ *     workspace
+ *     ├── node_modules
+ *     │   └── react-native@0.62.2  <-- should be ignored
+ *     └── packages
+ *         ├── my-awesome-package
+ *         │   └── node_modules
+ *         │       └── react-native@0.61.5  <-- should take precedence
+ *         └── another-awesome-package  <-- imported by my-awesome-package,
+ *                                          but uses workspace's react-native
+ *
+ * @param {RegExp[]=} additionalExclusions
+ * @param {string=} projectRoot
+ * @returns {RegExp[]}
+ */
+function exclusionList(additionalExclusions = [], projectRoot = process.cwd()) {
+  return [
+    ...UNIQUE_MODULES.map((name) => excludeExtraCopiesOf(name, projectRoot)),
+
+    // Ignore common directories generated by build tools
+    /[/\\](.*?\.bundle|.*?\.noindex|\.vs|\.vscode|Pods|__tests__)[/\\]/,
+
+    // Ignore unrelated file changes
+    /\.(a|apk|appx|bak|bat|binlog|c|cache|cc|class|cpp|cs|dex|dll|env|exe|flat|gz|h|hpp|jar|lock|m|mm|modulemap|o|obj|pch|pdb|plist|pbxproj|sh|so|tflite|tgz|tlog|wrn|xcconfig|xcscheme|xcworkspacedata|zip)$/,
+
+    ...additionalExclusions,
+  ];
+}
+
+/**
+ * @param {string} projectRoot
+ * @param {InputConfig} inputConfig
+ * @returns {MetroConfig}
+ */
+function additionalConfig(projectRoot, inputConfig) {
+  const blockList = exclusionList([], projectRoot);
+
+  /** @type {import("type-fest").WritableDeep<MetroConfig["transformer"]>} */
+  const transformer = {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: false,
+      },
+    }),
+  };
+
+  /** @type {import("type-fest").Writable<MetroConfig>} */
+  const config = {
+    resolver: {
+      resolverMainFields: ["react-native", "browser", "main"],
+      blacklistRE: blockList, // For Metro < 0.60
+      blockList, // For Metro >= 0.60
+    },
+    transformer,
+    watchFolders: inputConfig.watchFolders ?? defaultWatchFolders(),
+  };
+
+  if (inputConfig.unstable_allowAssetsOutsideProjectRoot) {
+    // We currently cannot enable this by default because it affects the
+    // structure of the assets folder, breaking release builds.
+    transformer.assetPlugins = [
+      require.resolve("./assetPlugins/rewriteAssetURLs.js"),
+    ];
+  } else {
+    const { restoreAssetURL } = require("./assetPlugins/escapeAssetURLs.js");
+    config.server = {
+      // Some platforms (notably Windows) still prefer `enhanceMiddleware` over
+      // `rewriteRequestUrl`. We need to set both to ensure asset URLs are
+      // properly restored.
+      enhanceMiddleware: (middleware) => {
+        /** @type {import("connect").NextHandleFunction} */
+        return (req, res, next) => {
+          req.url = restoreAssetURL(req.url ?? "");
+          return middleware(req, res, next);
+        };
+      },
+      rewriteRequestUrl: restoreAssetURL,
+    };
+
+    transformer.assetPlugins = [
+      require.resolve("./assetPlugins/escapeAssetURLs.js"),
+    ];
+  }
+
+  return config;
+}
+
+module.exports = {
+  defaultWatchFolders,
+  excludeExtraCopiesOf,
+  exclusionList,
+  extractUniquePartsFromYarnStoreDir,
+  resolveUniqueModule,
+
+  /**
+   * Helper function for configuring Metro.
+   * @param {InputConfig=} inputConfig
+   * @returns {MetroConfig}
+   */
+  makeMetroConfig: ({ platform, ...inputConfig } = {}) => {
+    const projectRoot = inputConfig.projectRoot || process.cwd();
+
+    const { mergeConfig } = requireModuleFromMetro("metro-config", projectRoot);
+    const { getDefaultConfig } = require("./defaultConfig");
+
+    const customBlockList =
+      inputConfig.resolver &&
+      (inputConfig.resolver.blockList || inputConfig.resolver.blacklistRE);
+
+    /** @type {MetroConfig[]} */
+    const [defaultConfig, ...configs] = [
+      ...getDefaultConfig(projectRoot, platform),
+      additionalConfig(projectRoot, inputConfig),
+      {
+        ...inputConfig,
+        resolver: {
+          ...inputConfig.resolver,
+          ...(customBlockList
+            ? {
+                // Metro introduced `blockList` in 0.60, but still prefers
+                // `blacklistRE` if it is also set. We set both to ensure that
+                // the blocks get applied.
+                blacklistRE: customBlockList,
+                blockList: customBlockList,
+              }
+            : {}),
+          extraNodeModules: {
+            /**
+             * Ensure that Metro is able to resolve packages that cannot be
+             * duplicated.
+             * @see exclusionList for further information.
+             */
+            ...resolveUniqueModules(UNIQUE_MODULES, projectRoot),
+            ...inputConfig.resolver?.extraNodeModules,
+          },
+        },
+      },
+    ];
+
+    const userConfig = configs[configs.length - 1];
+    if (isExpoConfig(userConfig)) {
+      applyExpoWorkarounds(userConfig, defaultConfig);
+    }
+
+    const finalConfig = mergeConfig(defaultConfig, ...configs);
+    return ensureEmptyModule(finalConfig);
+  },
+};

@@ -1,0 +1,28 @@
+/**
+ * This is the main configuration file for Rush.
+ * For full documentation, please see https://rushjs.io
+ */
+{
+  "projects": [
+    {
+      "packageName": "rush-conan",
+      "projectFolder": "packages/conan"
+    },
+    {
+      "packageName": "rush-dutch",
+      "projectFolder": "packages/dutch"
+    },
+    {
+      "packageName": "rush-john",
+      "projectFolder": "packages/john"
+    },
+    {
+      "packageName": "rush-quaid",
+      "projectFolder": "packages/quaid"
+    },
+    {
+      "packageName": "rush-t-800",
+      "projectFolder": "packages/t-800"
+    }
+  ]
+}

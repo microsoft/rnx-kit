@@ -1,0 +1,40 @@
+{
+  "name": "@rnx-kit/yarn-plugin-dynamic-extensions",
+  "version": "0.1.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-dynamic-extensions",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-dynamic-extensions#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/yarn-plugin-dynamic-extensions"
+  },
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@yarnpkg/core": "^4.0.0",
+    "@yarnpkg/fslib": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=18.12",
+    "yarn": ">=4.0"
+  },
+  "experimental": true
+}

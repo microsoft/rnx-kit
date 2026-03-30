@@ -1,0 +1,230 @@
+{
+  "$defs": {
+    "bundleParameters": {
+      "allOf": [{ "$ref": "#/$defs/bundlerRuntimeParameters" }],
+      "type": "object",
+      "properties": {
+        "entryFile": {
+          "description": "Path to the .js file which is the entry-point for building the bundle. Either absolute, or relative to the package.",
+          "type": "string"
+        },
+        "assetsDest": {
+          "description": "Path where all bundle assets (strings, images, fonts, sounds, ...) are written. Either absolute, or relative to the package.",
+          "type": "string",
+          "default": "dist"
+        },
+        "bundleOutput": {
+          "description": "Path to the output bundle file, either absolute or relative to the package.",
+          "type": "string",
+          "default": "index.[platform].bundle"
+        },
+        "bundleEncoding": {
+          "description": "Encoding scheme to use when writing the bundle file. Currently limited to UTF-8, UTF-16 (little endian), and 7-bit ASCII.",
+          "type": "string",
+          "enum": ["utf8", "utf16le", "ascii"]
+        },
+        "sourcemapOutput": {
+          "description": "Path to use when creating the bundle source map file. Either absolute, or relative to the package.",
+          "type": "string"
+        },
+        "sourcemapSourcesRoot": {
+          "description": "Path to the package's source files. Used to make source-map paths relative and therefore portable.",
+          "type": "string"
+        },
+        "indexedBundleFormat": {
+          "description": "Force the \"Indexed RAM\" bundle file format, even when targeting Android. Only applies to the `rnx-ram-bundle` command.",
+          "type": "boolean"
+        }
+      }
+    },
+    "bundlerRuntimeParameters": {
+      "type": "object",
+      "properties": {
+        "plugins": {
+          "description": "Plugins passed to the Metro config.",
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              {
+                "type": "array",
+                "items": {
+                  "oneOf": [{ "type": "string" }, { "type": "object" }]
+                }
+              }
+            ]
+          },
+          "uniqueItems": true
+        },
+        "treeShake": {
+          "description": "Choose whether to enable tree shaking.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "depCheckConfig": {
+      "type": "object",
+      "properties": {
+        "kitType": {
+          "description": "Whether this kit is an \"app\" or a \"library\".",
+          "type": "string",
+          "enum": ["app", "library"]
+        },
+        "reactNativeVersion": {
+          "description": "Supported versions of React Native. Must be parseable by https://github.com/npm/node-semver.",
+          "type": "string"
+        },
+        "reactNativeDevVersion": {
+          "description": "The version of React Native to use for development. Must be parseable by https://github.com/npm/node-semver. If omitted, the minimum supported version will be used.",
+          "type": "string"
+        },
+        "capabilities": {
+          "description": "Capabilities used by the kit.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "string" },
+              {
+                "type": "string",
+                "enum": [
+                  "core",
+                  "core-android",
+                  "core-ios",
+                  "core-macos",
+                  "core-windows",
+                  "core/testing",
+                  "animation",
+                  "babel-preset-react-native",
+                  "base64",
+                  "checkbox",
+                  "clipboard",
+                  "datetime-picker",
+                  "filesystem",
+                  "floating-action",
+                  "gestures",
+                  "hermes",
+                  "hooks",
+                  "html",
+                  "jest",
+                  "lazy-index",
+                  "masked-view",
+                  "metro",
+                  "metro-config",
+                  "metro-core",
+                  "metro-react-native-babel-transformer",
+                  "metro-resolver",
+                  "metro-runtime",
+                  "modal",
+                  "navigation/native",
+                  "navigation/stack",
+                  "netinfo",
+                  "popover",
+                  "react",
+                  "react-dom",
+                  "react-test-renderer",
+                  "safe-area",
+                  "screens",
+                  "shimmer",
+                  "sqlite",
+                  "storage",
+                  "svg",
+                  "test-app",
+                  "webview"
+                ]
+              }
+            ]
+          }
+        },
+        "customProfiles": {
+          "description": "Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a module name.",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "rnx-kit": {
+      "description": "Configuration for an rnx-kit package",
+      "allOf": [{ "$ref": "#/$defs/depCheckConfig" }],
+      "type": "object",
+      "properties": {
+        "bundle": {
+          "description": "Defines how a kit is bundled. Includes shared bundling parameters with platform-specific overrides.",
+          "type": "array",
+          "items": {
+            "allOf": [{ "$ref": "#/$defs/bundleParameters" }],
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Unique identifier for this bundle definition. Only used as a reference within the kit build system.",
+                "type": "string"
+              },
+              "targets": {
+                "description": "The platform(s) for which this kit may be bundled.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["android", "ios", "macos", "win32", "windows"]
+                }
+              },
+              "platforms": {
+                "description": "Platform-specific overrides for bundling parameters. Any parameter not listed in an override gets its value from the shared bundle definition, or falls back to defaults.",
+                "type": "object",
+                "properties": {
+                  "android": { "$ref": "#/$defs/bundleParameters" },
+                  "ios": { "$ref": "#/$defs/bundleParameters" },
+                  "macos": { "$ref": "#/$defs/bundleParameters" },
+                  "win32": { "$ref": "#/$defs/bundleParameters" },
+                  "windows": { "$ref": "#/$defs/bundleParameters" }
+                }
+              }
+            }
+          }
+        },
+        "server": {
+          "allOf": [{ "$ref": "#/$defs/bundlerRuntimeParameters" }],
+          "type": "object",
+          "properties": {
+            "projectRoot": {
+              "description": "Path to the root of your react-native experience project. The bundle server uses this root path to resolve all web requests. Either absolute, or relative to the package.",
+              "type": "string"
+            },
+            "assetPlugins": {
+              "description": "Additional asset plugins to be used by the Metro Babel transformer. Comma-separated list containing plugin modules and/or absolute paths to plugin packages.",
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "sourceExts": {
+              "description": "Additional source-file extensions to include when generating bundles. Comma-separated list, excluding the leading dot.",
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "platformBundle": {
+          "description": "Whether this kit produces a platform bundle. If true then all defaults will be used. Otherwise the object allows more detailed specification of platform bundle functionality.",
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "properties": {
+                "distPath": {
+                  "description": "Relative path for location within the package to find the built platform bundles.",
+                  "type": "string",
+                  "default": "./dist"
+                },
+                "bundlePrefix": {
+                  "description": "Prefix for the bundle name.",
+                  "type": "string",
+                  "default": "index"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

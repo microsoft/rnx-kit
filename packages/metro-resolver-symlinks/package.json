@@ -1,0 +1,53 @@
+{
+  "name": "@rnx-kit/metro-resolver-symlinks",
+  "version": "0.2.11",
+  "description": "Metro resolver with support for symlinks",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-resolver-symlinks#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-resolver-symlinks"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/tools-node": "^3.0.3",
+    "@rnx-kit/tools-react-native": "^2.3.2",
+    "enhanced-resolve": "^5.8.3"
+  },
+  "devDependencies": {
+    "@rnx-kit/jest-preset": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0",
+    "metro-resolver": "^0.83.3",
+    "oxc-resolver": "^11.0.0"
+  },
+  "peerDependencies": {
+    "oxc-resolver": "^11.0.0"
+  },
+  "peerDependenciesMeta": {
+    "oxc-resolver": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

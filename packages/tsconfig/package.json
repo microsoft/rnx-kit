@@ -1,0 +1,52 @@
+{
+  "name": "@rnx-kit/tsconfig",
+  "version": "3.0.1",
+  "description": "Base TypeScript configs for working with Node",
+  "keywords": [
+    "node",
+    "tsconfig",
+    "typescript"
+  ],
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tsconfig#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tsconfig"
+  },
+  "files": [
+    "tsconfig.esm.json",
+    "tsconfig.esm.node.json",
+    "tsconfig.node.json",
+    "tsconfig.json"
+  ],
+  "main": "tsconfig.json",
+  "exports": {
+    ".": {
+      "default": "./tsconfig.json"
+    },
+    "./tsconfig.esm.json": {
+      "default": "./tsconfig.esm.json"
+    },
+    "./tsconfig.json": {
+      "default": "./tsconfig.json"
+    },
+    "./tsconfig.node.json": {
+      "default": "./tsconfig.node.json"
+    },
+    "./tsconfig.esm.node.json": {
+      "default": "./tsconfig.esm.node.json"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "format": "oxfmt package.json tsconfig*.json"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

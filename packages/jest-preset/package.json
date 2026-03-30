@@ -1,0 +1,58 @@
+{
+  "name": "@rnx-kit/jest-preset",
+  "version": "0.3.1",
+  "description": "Jest preset for React Native code bases",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/jest-preset#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/jest-preset"
+  },
+  "files": [
+    "jest-preset.js",
+    "src"
+  ],
+  "main": "src/index.js",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-typescript": "^7.0.0",
+    "@rnx-kit/tools-react-native": "^2.3.2",
+    "find-up": "^5.0.0"
+  },
+  "devDependencies": {
+    "@jest/types": "^29.2.1",
+    "@react-native-community/cli-types": "^20.0.0",
+    "@react-native/babel-preset": "^0.83.0",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0",
+    "react": "19.2.0",
+    "react-native": "^0.83.0"
+  },
+  "peerDependencies": {
+    "react-native": "^0.0.0-0 || >=0.73"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    }
+  },
+  "jest": {
+    "preset": "./private/jest-preset.js"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

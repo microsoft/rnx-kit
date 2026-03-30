@@ -1,0 +1,1 @@
+/* Dummy file so @react-native-community/cli recognizes this as an iOS package */

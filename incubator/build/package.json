@@ -1,0 +1,104 @@
+{
+  "name": "@rnx-kit/build",
+  "version": "0.8.0",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - @rnx-kit/build builds your app in the cloud",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/build#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/build"
+  },
+  "bin": {
+    "rnx-build": "lib/cli.js",
+    "rnx-build-apple": "scripts/build-apple.sh"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "scripts",
+    "workflows"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    },
+    "./build": {
+      "types": "./lib/build.d.ts",
+      "import": "./lib/build.js"
+    },
+    "./constants": {
+      "types": "./lib/constants.d.ts",
+      "import": "./lib/constants.js"
+    },
+    "./distribution": {
+      "types": "./lib/distribution.d.ts",
+      "import": "./lib/distribution.js"
+    },
+    "./git": {
+      "types": "./lib/git.d.ts",
+      "import": "./lib/git.js"
+    },
+    "./packageManager": {
+      "types": "./lib/packageManager.d.ts",
+      "import": "./lib/packageManager.js"
+    },
+    "./qrcode": {
+      "types": "./lib/qrcode.d.ts",
+      "import": "./lib/qrcode.js"
+    },
+    "./remotes": {
+      "types": "./lib/remotes.d.ts",
+      "import": "./lib/remotes.js"
+    },
+    "./types": {
+      "types": "./lib/types.d.ts"
+    },
+    "./scripts/build-apple": {
+      "require": "./scripts/build-apple.sh"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "rnx-build": "node lib/cli.js",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@octokit/auth-oauth-device": "^8.0.0",
+    "@octokit/core": "^7.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "^17.0.0",
+    "@octokit/request-error": "^7.0.0",
+    "@rnx-kit/config": "^0.7.0",
+    "@rnx-kit/tools-android": "^0.2.0",
+    "@rnx-kit/tools-apple": "^0.2.0",
+    "@rnx-kit/tools-node": "^3.0.0",
+    "@rnx-kit/tools-shell": "^0.2.0",
+    "@rnx-kit/tools-windows": "^0.2.0",
+    "env-paths": "^3.0.0",
+    "git-url-parse": "^16.0.0",
+    "node-fetch": "^3.3.2",
+    "ora": "^8.0.0",
+    "qrcode": "^1.5.0",
+    "yargs": "^16.0.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0",
+    "@types/qrcode": "^1.4.2",
+    "@types/yargs": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=20.9"
+  },
+  "experimental": true
+}

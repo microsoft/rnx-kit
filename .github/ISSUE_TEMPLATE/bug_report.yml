@@ -1,0 +1,73 @@
+name: "Bug report \U0001F41B"
+description: Create a report to help us improve
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to file this issue.
+
+        Please note that rnx-kit is still in the early stages of development.
+        We are hard at work, adding new packages and features on a regular basis.
+        We welcome your feedback in this bug report. Given our focus on building
+        out the first "complete" version of @rnx-kit, supporting external users is
+        not currently a high priority, so we unfortunately cannot guarantee prompt
+        responses at this time.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect to happen? Can you attach build logs? Can you attach screenshots?
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+  - type: input
+    id: package
+    attributes:
+      label: Affected Package
+      description: Which package are you having issues with?
+      placeholder: "Example: @rnx-kit/cli"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Which version of the affected package are you using?
+      placeholder: "Example: 0.9.14"
+    validations:
+      required: true
+  - type: checkboxes
+    id: platforms
+    attributes:
+      label: Which platforms are you seeing this issue on?
+      description: "Select all that apply:"
+      options:
+        - label: Android
+        - label: iOS
+        - label: macOS
+        - label: Windows
+  - type: textarea
+    id: system-info
+    attributes:
+      label: System Information
+      placeholder: Run `npx react-native info` and paste the output here.
+      render: true
+    validations:
+      required: true
+  - type: textarea
+    id: repro-steps
+    attributes:
+      label: Steps to Reproduce
+      description: Tell us how to reproduce this issue, or provide a minimal demo where your issue can be easily reproduced.
+      placeholder: Tell us how to reproduce this issue.
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/microsoft/react-native-test-app/blob/trunk/CODE_OF_CONDUCT.md).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

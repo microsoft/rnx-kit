@@ -1,0 +1,43 @@
+# @react-native-webapis/battery-status
+
+## 0.3.3
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+
+## 0.3.2
+
+### Patch Changes
+
+- f8ef3cb: Addressed Gradle 9.0 syntax deprecation warnings
+
+## 0.3.1
+
+### Patch Changes
+
+- c88c843: Migrate away from deprecated `ReactModuleInfo` constructor
+
+## 0.3.0
+
+### Minor Changes
+
+- dd56196: Migrate away from deprecated `TurboReactPackage`. This is a
+  requirement for supporting 0.77 and above.
+
+## 0.2.0
+
+### Minor Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
+## 0.1.0
+
+### Minor Changes
+
+- 1e32c300: bump to 0.1 so to publish
+
+### Patch Changes
+
+- b5648feb: fix for podspec

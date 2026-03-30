@@ -1,0 +1,84 @@
+import {
+  BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES,
+  applyCommandLineOverrides,
+} from "../../src/bundle/overrides.ts";
+import type { CLIPlatformBundleConfig } from "../../src/bundle/types.ts";
+
+describe("bundle/overrides/applyCommandLineOverrides()", () => {
+  const config: CLIPlatformBundleConfig = {
+    entryFile: "src/index.js",
+    bundleOutput: "main.jsbundle",
+    sourcemapUseAbsolutePath: false,
+    treeShake: true,
+    plugins: [
+      "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+      "@rnx-kit/metro-plugin-duplicates-checker",
+      "@rnx-kit/metro-plugin-typescript",
+    ],
+    indexedRamBundle: false,
+    platform: "ios",
+  };
+
+  test("has no effect when no overrides are given", () => {
+    const copy = { ...config };
+    applyCommandLineOverrides(copy, {}, [
+      ...BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES,
+      "treeShake",
+    ]);
+    expect(copy).toEqual(config);
+  });
+
+  function testOverride(name: string, value: unknown) {
+    const copy = { ...config };
+    if (name in copy) {
+      if (name !== undefined && name !== null) {
+        expect(copy[name]).not.toEqual(value);
+      }
+    }
+    applyCommandLineOverrides(copy, { [name]: value }, [
+      ...BUNDLE_CONFIG_COMMAND_LINE_OVERRIDES,
+      "treeShake",
+      "indexedRamBundle",
+    ]);
+    expect(copy).toEqual({
+      ...config,
+      [name]: value,
+    });
+  }
+
+  test("changes `entryFile` using an override", () => {
+    testOverride("entryFile", "foo.js");
+  });
+
+  test("changes `bundleOutput` using an override", () => {
+    testOverride("bundleOutput", "foo.bundle");
+  });
+
+  test("sets `bundleEncoding` using an override", () => {
+    testOverride("bundleEncoding", "utf8");
+  });
+
+  test("sets `sourcemapOutput` using an override", () => {
+    testOverride("sourcemapOutput", "out/foo.map");
+  });
+
+  test("sets `sourcemapSourcesRoot` using an override", () => {
+    testOverride("sourcemapSourcesRoot", "/myrepo/packags/foo");
+  });
+
+  test("changes `sourcemapUseAbsolutePath` using an override", () => {
+    testOverride("sourcemapUseAbsolutePath", true);
+  });
+
+  test("sets `assetsDest` using an override", () => {
+    testOverride("assetsDest", "dist");
+  });
+
+  test("changes `treeShake` using an override", () => {
+    testOverride("treeShake", false);
+  });
+
+  test("changes `indexedRamBundle` using an override", () => {
+    testOverride("indexedRamBundle", true);
+  });
+});

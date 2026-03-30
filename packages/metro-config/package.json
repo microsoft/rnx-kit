@@ -1,0 +1,58 @@
+{
+  "name": "@rnx-kit/metro-config",
+  "version": "2.2.4",
+  "description": "Metro config for monorepos",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-config#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-config"
+  },
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "scripts": {
+    "build": "rnx-kit-scripts build --with-tsc",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/tools-node": "^3.0.0",
+    "@rnx-kit/tools-react-native": "^2.3.1",
+    "@rnx-kit/tools-workspaces": "^0.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/babel__core": "^7.0.0",
+    "@types/connect": "^3.4.36",
+    "metro": "^0.83.3",
+    "metro-config": "^0.83.3",
+    "metro-resolver": "^0.83.3",
+    "react": "19.2.0",
+    "react-native": "^0.83.0",
+    "type-fest": "^4.0.0"
+  },
+  "peerDependencies": {
+    "@react-native/metro-config": "*",
+    "react": "*",
+    "react-native": "*"
+  },
+  "peerDependenciesMeta": {
+    "@react-native/metro-config": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "SampleCrossApp",
+  "displayName": "SampleCrossApp",
+  "components": [
+    {
+      "appKey": "SampleCrossApp",
+      "displayName": "SampleCrossApp"
+    }
+  ],
+  "resources": {
+    "windows": ["dist/assets", "dist/main.windows.bundle"]
+  }
+}

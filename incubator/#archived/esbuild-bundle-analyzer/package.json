@@ -1,0 +1,55 @@
+{
+  "name": "@rnx-kit/esbuild-bundle-analyzer",
+  "version": "0.3.0",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - A tool for analyzing an esbuild bundle/metafile",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/esbuild-bundle-analyzer#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "bin": {
+    "rnx-analyzer": "./lib/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/esbuild-bundle-analyzer"
+  },
+  "scripts": {
+    "prepare": "echo '⚠️  esbuild-bundle-analyzer is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test --silent"
+  },
+  "dependencies": {
+    "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "^2.0.0",
+    "@rnx-kit/metro-plugin-duplicates-checker": "^3.0.0",
+    "@rnx-kit/tools-node": "^3.0.0",
+    "chalk": "^4.1.0",
+    "yargs": "^16.0.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^22.0.0",
+    "@types/yargs": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
+  },
+  "jest": {
+    "preset": "@rnx-kit/jest-preset/private"
+  },
+  "experimental": true
+}

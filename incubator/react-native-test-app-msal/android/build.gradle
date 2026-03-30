@@ -1,0 +1,195 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+import java.nio.file.Paths
+
+static int toVersionNumber(String version) {
+    def (major, minor, patch) = version.findAll(/\d+/)
+    return (major as int) * 10000 + (minor as int) * 100 + (patch as int)
+}
+
+buildscript {
+    ext.ensureProperty = { config, property ->
+        if (!config.containsKey(property)) {
+            throw new MissingPropertyException("Missing '$property' in 'react-native-test-app-msal' config")
+        }
+        return config[property]
+    }
+
+    ext.findFile = { fileName ->
+        def currentDirPath = rootDir == null ? null : rootDir.toString()
+
+        while (currentDirPath != null) {
+            def currentDir = file(currentDirPath);
+            def requestedFile = Paths.get(currentDirPath, fileName).toFile()
+
+            if (requestedFile.exists()) {
+                return requestedFile
+            }
+
+            currentDirPath = currentDir.getParent()
+        }
+
+        return null
+    }
+
+    ext.findNodeModulesPath = { packageName ->
+        return findFile(Paths.get("node_modules", packageName).toString())
+    }
+
+    ext.getExtProp = { prop, defaultValue ->
+        return rootProject.ext.has(prop) ? rootProject.ext.get(prop) : defaultValue
+    }
+
+    ext.getStringArray = { config, property ->
+        return (!config.containsKey(property) || config[property].size() == 0)
+            ? ""
+            : "\"${config[property].join('", "')}\""
+    }
+
+    ext.kotlinVersion = getExtProp("kotlinVersion", "1.7.21")
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        def androidPluginVersion = getExtProp("androidPluginVersion", "7.2.2")
+        if (androidPluginVersion) {
+            classpath("com.android.tools.build:gradle:${androidPluginVersion}")
+        }
+
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    }
+}
+
+plugins {
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+}
+
+repositories {
+    maven {
+        url = "${findNodeModulesPath('react-native')}/android"
+    }
+
+    google()
+    mavenCentral()
+
+    // https://github.com/AzureAD/microsoft-authentication-library-for-android#step-1-declare-dependency-on-msal
+    maven {
+        url = "https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1"
+    }
+}
+
+def rnxAuthPackage = findNodeModulesPath("@rnx-kit/react-native-auth")
+def rnxDisableAuthProperty = "com.microsoft.reacttestapp.msal.disableRnxAuthModule"
+def rnxAuthSkipModuleRegistration =
+    rnxAuthPackage == null ||
+    (rootProject.hasProperty(rnxDisableAuthProperty) && rootProject.property(rnxDisableAuthProperty).toString().equalsIgnoreCase("true"))
+
+android {
+    def manifest = new JsonSlurper().parseText(findFile("app.json").text)
+    def config = manifest["react-native-test-app-msal"]
+    if (config == null) {
+        throw new MissingPropertyException("Missing 'react-native-test-app-msal' field in 'app.json'")
+    }
+
+    def signatureHash = ensureProperty(config, "signatureHash")
+
+    compileSdkVersion = getExtProp("compileSdkVersion", 31)
+
+    defaultConfig {
+        minSdkVersion = getExtProp("minSdkVersion", 23)
+        targetSdkVersion = getExtProp("targetSdkVersion", 29)
+
+        buildConfigField(
+            "String[]",
+            "ReactTestAppMSAL_msaScopes",
+            "new String[]{${getStringArray(config, "msaScopes")}}")
+        buildConfigField(
+            "String[]",
+            "ReactTestAppMSAL_orgScopes",
+            "new String[]{${getStringArray(config, "orgScopes")}}")
+
+        manifestPlaceholders = [
+            msalRedirectUriPath: "/$signatureHash"
+        ]
+    }
+
+    lintOptions {
+        abortOnError = false
+    }
+
+    sourceSets {
+        def clientId = ensureProperty(config, "clientId")
+
+        def appProject = rootProject.subprojects.find { it.name == "app" }
+        def applicationId = appProject.android.defaultConfig.applicationId
+        def redirectUri = "msauth://${applicationId}/${URLEncoder.encode(signatureHash, "UTF-8")}"
+
+        def generatedResDir = file("${appProject.buildDir}/generated/react-native-test-app-msal/src/main/res")
+
+        task copyMsalConfig {
+            mustRunAfter(":app:clean")
+            doLast {
+                def generatedRawDir = file("${generatedResDir}/raw")
+                generatedRawDir.mkdirs()
+
+                new FileTreeBuilder(generatedRawDir).file("msal_config.json").newWriter().withWriter {
+                    it << JsonOutput.toJson([
+                        authorities: [
+                            [
+                                type: "AAD",
+                                audience: [
+                                    type: "AzureADandPersonalMicrosoftAccount"
+                                ],
+                                default: true
+                            ],
+                            [
+                                type: "AAD",
+                                audience: [
+                                    type: "PersonalMicrosoftAccount"
+                                ],
+                            ],
+                        ],
+                        client_id: clientId,
+                        redirect_uri: redirectUri,
+                        broker_redirect_uri_registered: false,
+                        account_mode: "MULTIPLE"
+                    ])
+                }
+            }
+        }
+
+        preBuild.dependsOn(copyMsalConfig)
+
+        main.res.srcDirs += generatedResDir
+
+        if (rnxAuthSkipModuleRegistration) {
+            main.java.srcDirs += "src/nornx/java"
+        } else {
+            main.java.srcDirs += "src/rnx/java"
+        }
+    }
+}
+
+dependencies {
+    def kotlinVersionNumber = toVersionNumber(kotlinVersion)
+    if (kotlinVersionNumber >= 10800) {
+        implementation("androidx.activity:activity-ktx:1.9.3")
+    } else {
+        implementation(["androidx.activity", "activity-ktx", "1.6.1"].join(":"))
+    }
+
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.microsoft.identity.client:msal:5.5.0")
+
+    //noinspection GradleDynamicVersion
+    implementation("com.facebook.react:react-native:+")
+
+    if (rnxAuthPackage != null) {
+        implementation(project(path: ":rnx-kit_react-native-auth"))
+    }
+}

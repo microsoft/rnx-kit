@@ -1,0 +1,64 @@
+{
+  "name": "@rnx-kit/tools-shell",
+  "version": "0.2.2",
+  "description": "A collection of functions for writing shell scripts",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-shell#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-shell"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "src"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./async": {
+      "types": "./lib/async.d.ts",
+      "typescript": "./src/async.ts",
+      "default": "./lib/async.js"
+    },
+    "./command": {
+      "types": "./lib/command.d.ts",
+      "typescript": "./src/command.ts",
+      "default": "./lib/command.js"
+    },
+    "./untar": {
+      "types": "./lib/untar.d.ts",
+      "typescript": "./src/untar.ts",
+      "default": "./lib/untar.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
+    "update-readme": "rnx-kit-scripts update-api-readme"
+  },
+  "devDependencies": {
+    "@rnx-kit/jest-preset": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0"
+  },
+  "jest": {
+    "preset": "@rnx-kit/jest-preset/private"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

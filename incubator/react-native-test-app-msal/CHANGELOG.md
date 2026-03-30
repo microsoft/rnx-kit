@@ -1,0 +1,237 @@
+# Change Log - @rnx-kit/react-native-test-app-msal
+
+## 5.0.3
+
+### Patch Changes
+
+- f8ef3cb: Addressed Gradle 9.0 syntax deprecation warnings
+- Updated dependencies [f8ef3cb]
+  - @rnx-kit/react-native-auth@0.3.2
+
+## 5.0.2
+
+### Patch Changes
+
+- c4c2df9: Build fixes for React Native 0.78+
+- Updated dependencies [c4c2df9]
+  - @rnx-kit/react-native-auth@0.3.1
+
+## 5.0.1
+
+### Patch Changes
+
+- c88c843: Migrate away from deprecated `ReactModuleInfo` constructor
+
+## 5.0.0
+
+### Major Changes
+
+- dd56196: Migrate away from deprecated `TurboReactPackage`. This is a
+  requirement for supporting 0.77 and above.
+
+## 4.0.0
+
+### Major Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
+### Patch Changes
+
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/react-native-auth@0.3.0
+
+## 3.0.3
+
+### Patch Changes
+
+- fdbe742: Bump `com.microsoft.identity.client:msal` to v5.5.0
+
+## 3.0.2
+
+### Patch Changes
+
+- 5fe3ce8: Bumped `com.google.android.material:material` to 1.12.0
+- bb65748: Bumped `androidx.activity:activity-ktx` to 1.9.1
+- 4b2251e: Bumped `com.microsoft.identity.client:msal` to 5.4.2
+
+## 3.0.1
+
+### Patch Changes
+
+- af82a1f: Migrate away from deprecated
+  `acquireTokenSilent(Array<(out) String!>, IAccount, String): IAuthenticationResult!`
+
+## 3.0.0
+
+### Major Changes
+
+- 28fc3f6: Minimum `compileSdkVersion` is now 34, as required by
+  `com.microsoft.identity.client:msal` v5
+
+## 2.1.9
+
+### Patch Changes
+
+- b962503: Removed unused files from the published package
+
+## 2.1.8
+
+### Patch Changes
+
+- c1c0f7a: Fix build issues with React Native 0.73
+- Updated dependencies [c1c0f7a]
+  - @rnx-kit/react-native-auth@0.2.6
+
+## 2.1.7
+
+### Patch Changes
+
+- fe7db24e: Update dependency `com.microsoft.identity.client:msal` to v4.7.0
+
+## 2.1.6
+
+### Patch Changes
+
+- 24ffac89: Bump `com.microsoft.identity.client:msal` to v4.6.3
+
+## 2.1.5
+
+### Patch Changes
+
+- 4079b5bc: Implement `initWithHost:` introduced in `react-native-test-app`
+  2.5.11
+
+## 2.1.4
+
+### Patch Changes
+
+- 3c97f6f9: Bump `com.microsoft.identity.client:msal` to v4.6.1
+- 525a764e: Use `androidx.activity:activity-ktx` 1.7.2 if Kotlin version is 1.8
+  or greater
+
+## 2.1.3
+
+### Patch Changes
+
+- 5df3bb78: Update dependency `com.microsoft.identity.client:msal` to v4.5.0
+
+## 2.1.2
+
+### Patch Changes
+
+- f41f538c: Update dependency com.google.android.material:material to v1.8.0
+- f18acaca: Fix the "Kotlin Gradle plugin was loaded multiple times" warning
+- Updated dependencies [f18acaca]
+  - @rnx-kit/react-native-auth@0.2.2
+
+## 2.1.1
+
+### Patch Changes
+
+- bffb1769: Bump `com.microsoft.identity.client:msal` to v4.2.0
+
+## 2.1.0
+
+### Minor Changes
+
+- 6dac8ed5: Add flag to support optional auth module registration
+
+## 2.0.2
+
+### Patch Changes
+
+- 1b080e9b: Bump dependencies:
+  - `androidx.activity:activity-ktx` 1.5.1 -> 1.6.1
+  - `com.google.android.material:material` 1.6.1 -> 1.7.0
+  - `com.microsoft.identity.client:msal` 4.0.4 -> 4.1.3
+
+## 2.0.1
+
+### Patch Changes
+
+- 234c51e2: Bump `com.microsoft.identity.client:msal` to v4.0.4
+
+## 2.0.0
+
+### Major Changes
+
+- afd170e6: Add acquireTokenWithResource to Auth API, rename acquireToken to
+  acquireTokenWithScopes
+
+### Patch Changes
+
+- Updated dependencies [afd170e6]
+  - @rnx-kit/react-native-auth@0.2.0
+
+## 1.0.5
+
+### Patch Changes
+
+- 4c462bf3: Android: Bump com.microsoft.identity.client:msal to 4.0.1
+
+## 1.0.4
+
+### Patch Changes
+
+- 203f327c: Depend on an explicit version of Kotlin Android plugin using the
+  [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block)
+- Updated dependencies [203f327c]
+  - @rnx-kit/react-native-auth@0.1.4
+
+## 1.0.3
+
+### Patch Changes
+
+- 01e91b07: Fixed build fail on macOS
+- Updated dependencies [641edba5]
+  - @rnx-kit/react-native-auth@0.1.3
+
+## 1.0.2
+
+### Patch Changes
+
+- aec1f838: Fix git tag format in podspec
+- Updated dependencies [aec1f838]
+  - @rnx-kit/react-native-auth@0.1.2
+
+## 1.0.1
+
+### Patch Changes
+
+- 8c62b6a: Fixed `msal_config.json` being generated before the `:app:clean` task
+  is run, causing MSAL to throw an exception on initialisation because of the
+  missing configuration file.
+- 521505c: Throw if `msal_config.json` is missing, otherwise Android will throw
+  a cryptic/generic exception that's hard to debug.
+
+## 1.0.0
+
+### Patch Changes
+
+- 6507cb5: Adds support for @rnx-kit/react-native-auth module
+- Updated dependencies [6507cb5]
+  - @rnx-kit/react-native-auth@0.1.0
+
+## 0.3.0
+
+### Minor Changes
+
+- 1c5e36d: Added support for Android
+
+## 0.2.0
+
+Mon, 22 Nov 2021 12:15:07 GMT
+
+### Minor changes
+
+- Refactored auth callback to make it simpler to add properties to the result.
+  (4123478+tido64@users.noreply.github.com)
+
+## 0.1.0
+
+Wed, 03 Nov 2021 18:15:39 GMT
+
+### Minor changes
+
+- MSAL module for react-native-test-app
+  (4123478+tido64@users.noreply.github.com)

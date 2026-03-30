@@ -1,0 +1,84 @@
+name: "@rnx-kit/align-deps"
+on:
+  merge_group:
+  schedule:
+    # Run at 4:00, Monday through Friday
+    - cron: 0 4 * * 1-5
+  workflow_dispatch:
+env:
+  NODE_OPTIONS: "--disable-proto=delete"
+jobs:
+  update:
+    name: "Update `microsoft/react-native` preset"
+    permissions: {}
+    if: ${{ github.repository == 'microsoft/rnx-kit' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          filter: blob:none
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: yarn
+      - name: Install package dependencies
+        run: |
+          yarn
+      - name: Look for new React Native release candidates
+        id: find-release-candidate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          yarn update-profile --release-candidate 1> update-profile.output.txt
+          if [[ -s update-profile.output.txt ]]; then
+            echo 'found=1' >> $GITHUB_OUTPUT
+          fi
+        working-directory: packages/align-deps
+        continue-on-error: true
+      - name: Include additional capabilities from PR feedback
+        if: ${{ steps.find-release-candidate.outputs.found != '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          yarn update-preset
+          yarn update-readme
+          yarn format
+        working-directory: packages/align-deps
+      - name: Update local packages with the new profile
+        if: ${{ steps.find-release-candidate.outputs.found != '' }}
+        run: |
+          yarn rnx-align-deps --write
+          yarn install --mode update-lockfile
+          yarn dedupe --mode update-lockfile
+      - name: Generate changeset
+        id: changeset
+        if: ${{ steps.find-release-candidate.outputs.found != '' }}
+        run: |
+          echo '---' > .changeset/rnx-align-deps.md
+          echo '"@rnx-kit/align-deps": patch' >> .changeset/rnx-align-deps.md
+          echo '---' >> .changeset/rnx-align-deps.md
+          echo '' >> .changeset/rnx-align-deps.md
+          head -n 1 packages/align-deps/update-profile.output.txt >> .changeset/rnx-align-deps.md
+          echo "message=$(head -n 1 packages/align-deps/update-profile.output.txt | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+      - name: Generate token for submitting pull requests
+        id: app-token
+        if: ${{ steps.find-release-candidate.outputs.found != '' }}
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+      - name: Create or update pull request
+        if: ${{ steps.find-release-candidate.outputs.found != '' }}
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          commit-message: "fix(align-deps): ${{ steps.changeset.outputs.message }}"
+          branch: rnx-align-deps/main
+          sign-commits: true
+          title: "fix(align-deps): ${{ steps.changeset.outputs.message }}"
+          body-path: packages/align-deps/update-profile.output.txt
+    timeout-minutes: 15

@@ -1,0 +1,43 @@
+import type {
+  CustomResolutionContext,
+  CustomResolver,
+  Resolution,
+} from "metro-resolver";
+
+type ExperimentalOptions = {
+  experimental_retryResolvingFromDisk?: boolean | "force";
+};
+
+export type CallResolver = (
+  resolve: CustomResolver,
+  context: ResolutionContextCompat,
+  moduleName: string,
+  platform: string
+) => Resolution;
+
+export type MetroResolver = typeof import("metro-resolver").resolve;
+
+export type ResolutionContextCompat = CustomResolutionContext & {
+  /**
+   * Introduced in 0.76
+   * @see {@link https://github.com/facebook/metro/commit/c6548f7ccc5b8ad59ea98f4bd7f1f5822deec0cd}
+   */
+  assetExts?: Set<string>;
+
+  /**
+   * Removed in 0.76
+   * @see {@link https://github.com/facebook/metro/commit/c6548f7ccc5b8ad59ea98f4bd7f1f5822deec0cd}
+   */
+  isAssetFile?: (file: string) => boolean;
+};
+
+export type ModuleResolver = (
+  context: ResolutionContextCompat,
+  moduleName: string,
+  platform: string
+) => string;
+
+export type Options = ExperimentalOptions & {
+  remapModule?: ModuleResolver;
+  resolver?: "metro" | "enhanced-resolve" | "oxc-resolver";
+};

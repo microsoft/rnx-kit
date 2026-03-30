@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 80,
+  "trailingComma": "es5",
+  "ignorePatterns": [],
+  "sortImports": {
+    "groups": [
+      ["builtin", "external"],
+      ["internal", "subpath"]
+    ],
+    "newlinesBetween": false
+  },
+  "sortPackageJson": true
+}

@@ -1,0 +1,52 @@
+{
+  "name": "@rnx-kit/patcher-rnmacos",
+  "version": "0.2.0",
+  "experimental": true,
+  "description": "EXPERIMENTAL - USE WITH CAUTION - A tool to generate patches and apply them to a codebase",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/patcher-rnmacos#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "bin": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/patcher-rnmacos"
+  },
+  "scripts": {
+    "prepare": "echo '⚠️ patcher-rnmacos is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/fs-extra": "^9.0.0",
+    "@types/istextorbinary": "^2.3.0",
+    "@types/node": "^22.0.0"
+  },
+  "dependencies": {
+    "commander": "^4.1.1",
+    "fs-extra": "^10.0.0",
+    "istextorbinary": "^3.3.0",
+    "winston": "^3.2.1"
+  },
+  "engines": {
+    "node": ">=16.17"
+  },
+  "jest": {
+    "preset": "@rnx-kit/jest-preset/private"
+  }
+}

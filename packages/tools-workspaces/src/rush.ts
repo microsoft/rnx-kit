@@ -1,0 +1,34 @@
+import * as path from "node:path";
+import { readJSON, readJSONSync } from "./common.ts";
+
+type RushProject = {
+  packageName: string;
+  projectFolder: string;
+};
+
+function parse(
+  { projects }: { projects: RushProject[] },
+  configFile: string
+): string[] {
+  const root = path.dirname(configFile);
+  return projects.map((project: RushProject) =>
+    path.join(root, project.projectFolder)
+  );
+}
+
+// https://rushjs.io/pages/configs/rush_json/
+export async function findWorkspacePackages(
+  configFile: string
+): Promise<string[]> {
+  const project = await readJSON(configFile);
+  return parse(project, configFile);
+}
+
+export function findWorkspacePackagesSync(configFile: string): string[] {
+  const project = readJSONSync(configFile);
+  return parse(project, configFile);
+}
+
+export function getPackageFilters(_sentinel: string): string[] | undefined {
+  return undefined;
+}

@@ -1,0 +1,41 @@
+{
+  "name": "@rnx-kit/react-native-test-app-msal",
+  "version": "5.0.3",
+  "description": "Microsoft Authentication Library (MSAL) module for react-native-test-app",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/react-native-test-app-msal#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/react-native-test-app-msal"
+  },
+  "files": [
+    "ReactTestApp-MSAL.podspec",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/src",
+    "ios"
+  ],
+  "scripts": {
+    "format:c": "clang-format -i $(git ls-files '*.h' '*.m')",
+    "format:swift": "swiftformat ios",
+    "lint:kt": "ktlint --relative 'android/src/**/*.kt'",
+    "lint:swift": "swiftlint"
+  },
+  "peerDependencies": {
+    "@rnx-kit/react-native-auth": "*",
+    "react-native-test-app": ">=0.9.16"
+  },
+  "peerDependenciesMeta": {
+    "@rnx-kit/react-native-auth": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

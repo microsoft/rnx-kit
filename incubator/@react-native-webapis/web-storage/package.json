@@ -1,0 +1,75 @@
+{
+  "name": "@react-native-webapis/web-storage",
+  "version": "0.4.5",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - Web Storage API for React Native",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/@react-native-webapis/web-storage#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/@react-native-webapis/web-storage"
+  },
+  "files": [
+    "RNWWebStorage.podspec",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/src",
+    "ios",
+    "lib",
+    "macos",
+    "react-native.config.js",
+    "src",
+    "windows"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
+    "lint": "rnx-kit-scripts lint",
+    "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "react": "19.2.0",
+    "react-native": "^0.83.0"
+  },
+  "peerDependencies": {
+    "@callstack/react-native-visionos": ">=0.74",
+    "react": ">=18.2.0",
+    "react-native": ">=0.74",
+    "react-native-macos": ">=0.74",
+    "react-native-windows": ">=0.74"
+  },
+  "peerDependenciesMeta": {
+    "@callstack/react-native-visionos": {
+      "optional": true
+    },
+    "react-native-macos": {
+      "optional": true
+    },
+    "react-native-windows": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=16.17"
+  },
+  "codegenConfig": {
+    "name": "RNWWebStorageSpec",
+    "type": "all",
+    "jsSrcsDir": "./src",
+    "android": {
+      "javaPackageName": "org.reactnativewebapis.webstorage"
+    }
+  },
+  "experimental": true
+}

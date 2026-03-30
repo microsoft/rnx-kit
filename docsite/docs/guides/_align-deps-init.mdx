@@ -1,0 +1,38 @@
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+<Tabs groupId="package-manager">
+<TabItem value="yarn" label="Yarn" default>
+
+```sh
+yarn rnx-align-deps --init app
+```
+
+```sh
+yarn rnx-align-deps --init library
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```sh
+pnpm rnx-align-deps --init app
+```
+
+```sh
+pnpm rnx-align-deps --init library
+```
+
+</TabItem>
+<TabItem value="npm" label="npm">
+
+```sh
+npx rnx-align-deps --init app
+```
+
+```sh
+npx rnx-align-deps --init library
+```
+
+</TabItem>
+</Tabs>

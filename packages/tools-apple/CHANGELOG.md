@@ -1,0 +1,60 @@
+# @rnx-kit/tools-apple
+
+## 0.2.3
+
+### Patch Changes
+
+- bc907ce: Bumped `fast-xml-parser` to address a security vulnerability
+
+## 0.2.2
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+- Updated dependencies [8c27733]
+  - @rnx-kit/tools-shell@0.2.2
+
+## 0.2.1
+
+### Patch Changes
+
+- cc857ea: Added a new function, `checkPodsManifestLock`, for checking whether
+  the CocoaPods sandbox is in sync with its `Podfile.lock`
+
+## 0.2.0
+
+### Minor Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
+### Patch Changes
+
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/tools-shell@0.2.0
+
+## 0.1.2
+
+### Patch Changes
+
+- ba1a1fd: Added primitives for building 'build' and 'run' commands
+
+## 0.1.1
+
+### Patch Changes
+
+- dddf041: Make sure iPhone Pro simulators can be selected if none are specified
+- Updated dependencies [9ddb5f8]
+  - @rnx-kit/tools-shell@0.1.2
+
+## 0.1.0
+
+### Minor Changes
+
+- d3f91da: `@rnx-kit/tools-apple` is a collection of functions for deploying
+  apps on iOS or macOS
+
+### Patch Changes
+
+- Updated dependencies [8c242dc]
+  - @rnx-kit/tools-shell@0.1.0

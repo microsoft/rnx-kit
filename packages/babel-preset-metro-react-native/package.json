@@ -1,0 +1,61 @@
+{
+  "name": "@rnx-kit/babel-preset-metro-react-native",
+  "version": "3.0.2",
+  "description": "Babel preset for React Native applications",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/babel-preset-metro-react-native#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/babel-preset-metro-react-native"
+  },
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "NODE_OPTIONS=--experimental-vm-modules rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/console": "^2.0.0",
+    "babel-plugin-const-enum": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/plugin-transform-typescript": "^7.20.0",
+    "@babel/runtime": "^7.20.0",
+    "@react-native/babel-preset": "^0.83.0",
+    "@rnx-kit/babel-plugin-import-path-remapper": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/babel__core": "^7.0.0",
+    "@types/node": "^24.0.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/plugin-transform-typescript": "^7.20.0",
+    "@babel/runtime": "^7.20.0",
+    "@react-native/babel-preset": "*"
+  },
+  "peerDependenciesMeta": {
+    "@babel/plugin-transform-typescript": {
+      "optional": true
+    }
+  },
+  "jest": {
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.js$"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

@@ -1,0 +1,9 @@
+*.sln
+.vs/
+ARM/
+ARM64/
+ExperimentalFeatures.props
+NuGet.Config
+packages/
+x64/
+x86/

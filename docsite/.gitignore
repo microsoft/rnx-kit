@@ -1,0 +1,23 @@
+# Dependencies
+/node_modules
+
+# Production
+/build
+
+# Generated files
+.docusaurus
+.cache-loader
+docs/contributing.md
+test-repos/
+
+# Misc
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.yarn/
+@rnx-kit-docsite-workspaces.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

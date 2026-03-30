@@ -1,0 +1,82 @@
+{
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "editor.detectIndentation": false,
+  "editor.trimAutoWhitespace": true,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+
+  "prettier.enable": false,
+
+  "oxc.enable": true,
+  "oxc.enable.oxfmt": true,
+  "oxc.enable.oxlint": true,
+  "oxc.lint.run": "onType",
+  "oxc.typeAware": true,
+
+  "files.trimTrailingWhitespace": true,
+  "files.associations": {
+    "**/package.json.hbs": "json",
+    "**/*.json.hbs": "jsonc",
+    "**/README.md.hbs": "markdown"
+  },
+  "files.exclude": {
+    "**/lib-amd": true,
+    "**/lib-commonjs": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.hg/store/**": true,
+    "**/lib": true,
+    "**/lib-commonjs": true,
+    "**/lib-amd": true
+  },
+
+  "js/ts.preferences.quoteStyle": "single",
+  "js/ts.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+  "js/ts.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+  "js/ts.tsdk.path": "./node_modules/typescript/lib",
+
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/lib": true,
+    "**/lib-amd": true,
+    "**/lib-commonjs": true,
+    "**/dist": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[handlebars]": {
+    "editor.formatOnSave": false
+  },
+  "cSpell.words": [
+    "TESTPAGE",
+    "beachball",
+    "consts",
+    "fluentui",
+    "Lage",
+    "macos",
+    "netinfo",
+    "nuget",
+    "onboarded",
+    "pnpm",
+    "syncpack",
+    "transpiles",
+    "unconfigured"
+  ]
+}

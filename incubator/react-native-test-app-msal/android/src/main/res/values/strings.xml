@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_type">Account type: %1$s</string>
+    <string name="account_type_personal">Personal</string>
+    <string name="account_type_work">Work or school</string>
+    <string name="add_account">Add account</string>
+    <string name="auth_error_message">Auth error message</string>
+    <string name="copy">Copy</string>
+    <string name="error_refresh">Failed to refresh access token</string>
+    <string name="error_sign_in">Failed to sign in</string>
+    <string name="error_sign_out">Failed to sign out</string>
+    <string name="ok">OK</string>
+    <string name="select_account_type">Select account type</string>
+    <string name="selected_account">Selected account</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_out_of_all_accounts">Sign out of all accounts</string>
+</resources>

@@ -1,0 +1,69 @@
+{
+  "name": "@rnx-kit/metro-serializer-esbuild",
+  "version": "0.3.1",
+  "description": "esbuild serializer for Metro",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-serializer-esbuild"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/tools-node": "^3.0.4",
+    "@rnx-kit/tools-react-native": "^2.3.3",
+    "@rnx-kit/types-metro-serializer-esbuild": "^1.0.0",
+    "esbuild": "^0.27.1",
+    "esbuild-plugin-lodash": "^1.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@fluentui/utilities": "8.13.9",
+    "@react-native-community/cli-types": "^20.0.0",
+    "@react-native/babel-preset": "^0.83.0",
+    "@react-native/metro-config": "^0.83.0",
+    "@rnx-kit/babel-plugin-import-path-remapper": "*",
+    "@rnx-kit/babel-preset-metro-react-native": "*",
+    "@rnx-kit/metro-config": "*",
+    "@rnx-kit/metro-serializer": "*",
+    "@rnx-kit/metro-service": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0",
+    "lodash-es": "^4.17.21",
+    "metro": "^0.83.3",
+    "metro-config": "^0.83.3",
+    "metro-transform-worker": "^0.83.1",
+    "react": "19.2.0",
+    "react-native": "^0.83.0"
+  },
+  "engines": {
+    "node": ">=22.11"
+  }
+}

@@ -1,0 +1,293 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  /* Our vars */
+  --react-native-color-rgb: 97, 218, 251;
+  --background-surface-color-rgb: 255, 255, 255;
+  --color-primary-rgb: 14, 83, 189;
+  --font-color-base-rgb: 28, 30, 33;
+  --footer-background-color-rgb: 235, 235, 235;
+  --hover-overlay-rgb: 0, 0, 0;
+  --hover-overlay-alpha: 0.15;
+  --github-mark-bg: url("../../static/img/github-logo.svg");
+
+  /* Infima vars */
+  --ifm-background-surface-color: rgb(var(--background-surface-color-rgb));
+
+  --ifm-color-primary: rgb(var(--color-primary-rgb));
+  --ifm-color-primary-dark: #0d4baa;
+  --ifm-color-primary-darker: #0c47a1;
+  --ifm-color-primary-darkest: #0a3a84;
+  --ifm-color-primary-light: #0f5bd0;
+  --ifm-color-primary-lighter: #105fd9;
+  --ifm-color-primary-lightest: #1a6eee;
+
+  --ifm-code-background: rgb(226, 227, 228);
+  --ifm-code-padding-horizontal: 0.25rem;
+  --ifm-code-padding-vertical: 0.25rem;
+  --ifm-code-font-size: 95%;
+
+  --ifm-font-color-base: rgb(var(--font-color-base-rgb));
+
+  --ifm-hover-overlay: rgba(
+    var(--hover-overlay-rgb),
+    var(--hover-overlay-alpha)
+  );
+
+  --ifm-link-decoration: none;
+  --ifm-link-hover-color: var(--ifm-link-color);
+  --ifm-link-hover-decoration: none;
+
+  --ifm-navbar-item-padding-vertical: 4px;
+  --ifm-navbar-item-padding-horizontal: 18px;
+
+  --ifm-footer-background-color: rgb(var(--footer-background-color-rgb));
+
+  --ifm-tabs-padding-horizontal: 1rem;
+  --ifm-tabs-padding-vertical: 0.2rem;
+
+  --ifm-transition-fast: 100ms;
+  --ifm-transition-slow: 300ms;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+html[data-theme="dark"] {
+  /* Our vars */
+  --background-color-rgb: 10, 11, 12;
+  --background-surface-color-rgb: 36, 37, 38;
+  --color-primary-rgb: 14, 147, 253;
+  --font-color-base-rgb: 245, 246, 247;
+  --footer-background-color-rgb: 20, 21, 22;
+  --hover-overlay-rgb: 255, 255, 255;
+
+  /* Infima vars */
+  --ifm-background-color: rgb(var(--background-color-rgb));
+  --ifm-background-surface-color: rgb(var(--background-surface-color-rgb));
+
+  --ifm-color-primary: rgb(var(--color-primary-rgb));
+  --ifm-color-primary-dark: #0285ee;
+  --ifm-color-primary-darker: #027ee1;
+  --ifm-color-primary-darkest: #0268b9;
+  --ifm-color-primary-light: #289ffd;
+  --ifm-color-primary-lighter: #36a5fd;
+  --ifm-color-primary-lightest: #5db7fe;
+
+  --ifm-hover-overlay: rgba(
+    var(--hover-overlay-rgb),
+    var(--hover-overlay-alpha)
+  );
+
+  --ifm-footer-background-color: rgb(var(--footer-background-color-rgb));
+}
+
+[data-theme='light'] .DocSearch {
+  --docsearch-primary-color: var(--ifm-color-primary);
+  --docsearch-text-color: var(--ifm-font-color-base);
+  --docsearch-muted-color: var(--ifm-color-secondary-darkest);
+  --docsearch-container-background: rgba(94, 100, 112, 0.7);
+  /* Modal */
+  --docsearch-modal-background: var(--ifm-color-secondary-lighter);
+  /* Search box */
+  --docsearch-searchbox-background: var(--ifm-color-secondary);
+  --docsearch-searchbox-focus-background: var(--ifm-color-white);
+  /* Hit */
+  --docsearch-hit-color: var(--ifm-font-color-base);
+  --docsearch-hit-active-color: var(--ifm-color-white);
+  --docsearch-hit-background: var(--ifm-color-white);
+  /* Footer */
+  --docsearch-footer-background: var(--ifm-color-white);
+}
+
+[data-theme='dark'] .DocSearch {
+  --docsearch-text-color: var(--ifm-font-color-base);
+  --docsearch-muted-color: var(--ifm-color-secondary-darkest);
+  --docsearch-container-background: rgba(47, 55, 69, 0.7);
+  /* Modal */
+  --docsearch-modal-background: var(--ifm-background-color);
+  /* Search box */
+  --docsearch-searchbox-background: var(--ifm-background-color);
+  --docsearch-searchbox-focus-background: var(--ifm-color-black);
+  /* Hit */
+  --docsearch-hit-color: var(--ifm-font-color-base);
+  --docsearch-hit-active-color: var(--ifm-color-white);
+  --docsearch-hit-background: var(--ifm-color-emphasis-100);
+  /* Footer */
+  --docsearch-footer-background: var(--ifm-background-surface-color);
+  --docsearch-key-gradient: linear-gradient(
+    -26.5deg,
+    var(--ifm-color-emphasis-200) 0%,
+    var(--ifm-color-emphasis-100) 100%
+  );
+}
+/*
+ * Icons
+ */
+.github-mark-24px::after {
+  background-image: var(--github-mark-bg);
+  background-position: 50%;
+  background-repeat: no-repeat;
+  content: "";
+  display: flex;
+  width: 24px;
+  height: 24px;
+  opacity: 0.9;
+}
+
+html[data-theme="dark"] .github-mark-24px::after {
+  filter: invert();
+}
+
+/*
+ * Code blocks
+ */
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme="dark"] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+code {
+  border: none;
+}
+
+/* Code in links should have just the link background, not the gray code bg */
+a code {
+  background: none;
+}
+
+html[data-theme="light"] div[class^="codeBlockContainer"] {
+  box-shadow: 2px 2px 20px 2px rgba(0, 0, 0, 0.2);
+}
+
+/*
+ * Navbar
+ */
+.navbar .navbar__link--active::after {
+  background: var(--ifm-navbar-link-hover-color);
+  content: "";
+  display: flex;
+  height: 4px;
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-top: -4px;
+  position: relative;
+  top: 18px;
+  width: calc(100% + 40px);
+}
+
+html[data-theme="light"] .navbar {
+  box-shadow: 0 10px 15px rgb(0 0 0 / 19%);
+}
+
+html[data-theme="dark"] .navbar {
+  box-shadow: 0 10px 15px rgb(0 0 0 / 60%);
+}
+
+/*
+ * Links
+ */
+.markdown a {
+  background-color: rgba(187, 239, 253, 0.4);
+  border-bottom: 1px solid var(--ifm-hr-border-color);
+  color: var(--ifm-font-color-base);
+  display: initial;
+  line-height: calc(var(--ifm-font-size-base) + 4px);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.markdown a:hover {
+  background-color: rgb(211, 245, 253);
+  color: var(--ifm-font-color-base);
+  border-bottom: 1px solid var(--ifm-hr-border-color);
+}
+
+html[data-theme="dark"] .markdown a {
+  background-color: rgba(var(--react-native-color-rgb), 0.2);
+  border-bottom-color: rgba(var(--react-native-color-rgb), 0.3);
+}
+
+html[data-theme="dark"] .markdown a:hover {
+  background-color: rgba(var(--react-native-color-rgb), 0.4);
+  border-bottom-color: rgb(var(--react-native-color-rgb));
+}
+
+.alert a {
+  --ifm-link-decoration: none;
+}
+
+/*
+ * Menus
+ */
+.menu li,
+.menu li:hover,
+.menu a,
+.menu a:hover {
+  color: var(--ifm-font-color-base);
+}
+
+/* dropdown menu titles */
+.menu__list-item-collapsible {
+  font-size: 16px;
+  padding: 0px 12px;
+}
+
+/* child items under a dropdown menu title */
+.menu__list .menu__list {
+  margin-top: 0.15rem;
+}
+
+.menu__list .menu__list .menu__link {
+  font-size: 13px;
+  font-weight: var(--ifm-font-weight-normal);
+  line-height: 16px;
+  padding: 3px 12px;
+}
+
+.menu__list-item:not(:first-child) {
+  margin-top: 0.15rem;
+}
+
+/* selected child item */
+.menu__list .menu__list .menu__link--active {
+  border-left-color: var(--ifm-menu-color-active);
+  border-left-style: solid;
+  border-left-width: 4px;
+  color: var(--ifm-font-color-base);
+  padding-left: 8px;
+}
+
+/*
+ * Table of contents
+ */
+.table-of-contents {
+  font-size: 80%;
+  line-height: 1.4;
+}
+
+.table-of-contents__link--active {
+  border-left: 4px solid var(--ifm-menu-color-active);
+  color: var(--ifm-font-color-base);
+  font-weight: var(--ifm-font-weight-bold);
+  margin-left: -16px;
+  padding-left: 12px;
+  pointer-events: none;
+}
+
+/*
+ * Footer
+ */
+.footer__logo {
+  width: 300px;
+  max-width: unset;
+}

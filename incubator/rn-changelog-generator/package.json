@@ -1,0 +1,51 @@
+{
+  "name": "@rnx-kit/rn-changelog-generator",
+  "version": "0.5.0",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - Generate a markdown-formatted list of changes between two version of react-native",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/rn-changelog-generator#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/rn-changelog-generator"
+  },
+  "bin": "lib/index.js",
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/index.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepare": "echo '⚠️ rn-changelog-generator is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test:local": "RN_REPO='../../../react-native' rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/fast-levenshtein": "0.0.4",
+    "@types/node": "^24.0.0",
+    "chalk": "^4.1.0",
+    "deepmerge": "^4.2.2",
+    "fast-levenshtein": "^3.0.0",
+    "p-limit": "^3.1.0",
+    "yargs": "^16.0.0"
+  },
+  "jest": {
+    "preset": "@rnx-kit/jest-preset/private"
+  },
+  "engines": {
+    "node": ">=16.17"
+  },
+  "experimental": true
+}
