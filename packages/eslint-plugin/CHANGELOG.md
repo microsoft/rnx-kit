@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.9.9
+
+### Patch Changes
+
+- 1167e57: Added a rule for unnecessary array allocations
+
 ## 0.9.8
 
 ### Patch Changes
