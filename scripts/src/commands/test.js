@@ -53,6 +53,13 @@ export class TestCommand extends Command {
       return await runScript("jest", "--passWithNoTests", ...this.args);
     }
 
+    const coverage = this.args.indexOf("--coverage");
+    if (coverage >= 0) {
+      // TODO: Code coverage is still experimental as of Node v25.9.0
+      // https://nodejs.org/api/cli.html#experimental-test-coverage
+      this.args[coverage] = "--experimental-test-coverage";
+    }
+
     const tests =
       this.args.length > 0 ? this.args : fs.globSync("test/**/*.test.ts");
     return useTsx(manifest)

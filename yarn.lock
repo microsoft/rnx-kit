@@ -5507,12 +5507,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/ignore@workspace:incubator/ignore":
-  version: 0.0.0-use.local
-  resolution: "@rnx-kit/ignore@workspace:incubator/ignore"
-  languageName: unknown
-  linkType: soft
-
 "@rnx-kit/jest-preset@npm:*, @rnx-kit/jest-preset@workspace:*, @rnx-kit/jest-preset@workspace:packages/jest-preset":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/jest-preset@workspace:packages/jest-preset"
@@ -6347,6 +6341,17 @@ __metadata:
     clipanion: "npm:^4.0.0-rc.4"
   bin:
     install-external-workspaces-plugin: bin/install-plugin.cjs
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/yarn-plugin-ignore@workspace:incubator/yarn-plugin-ignore":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/yarn-plugin-ignore@workspace:incubator/yarn-plugin-ignore"
+  dependencies:
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@yarnpkg/core": "npm:^4.2.0"
+    "@yarnpkg/fslib": "npm:^3.1.1"
   languageName: unknown
   linkType: soft
 
@@ -14286,9 +14291,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@link:./incubator/ignore::locator=rnx-kit%40workspace%3A.":
+"node-gyp@ignore:::locator=rnx-kit%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "node-gyp@link:./incubator/ignore::locator=rnx-kit%40workspace%3A."
+  resolution: "node-gyp@ignore:"
   languageName: node
   linkType: soft
 
