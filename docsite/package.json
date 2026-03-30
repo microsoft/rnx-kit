@@ -35,7 +35,8 @@
     "@docsearch/react": "link:../incubator/ignore",
     "@pnpm/network.ca-file/graceful-fs": "^4.2.10",
     "algoliasearch": "link:../incubator/ignore",
-    "algoliasearch-helper": "link:../incubator/ignore"
+    "algoliasearch-helper": "link:../incubator/ignore",
+    "node-gyp": "link:../incubator/ignore"
   },
   "browserslist": {
     "production": [
