@@ -1,0 +1,7 @@
+{
+  "extends": "@rnx-kit/tsconfig/tsconfig.esm.node.json",
+  "compilerOptions": {
+    "emitDeclarationOnly": true
+  },
+  "include": ["src/*.js", "test/*.js"]
+}

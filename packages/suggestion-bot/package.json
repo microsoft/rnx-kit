@@ -1,0 +1,64 @@
+{
+  "name": "suggestion-bot",
+  "version": "4.0.3",
+  "description": "suggestion-bot submits code reviews with suggestions based on your diffs",
+  "keywords": [
+    "code review",
+    "diff",
+    "github",
+    "pull request",
+    "review",
+    "suggestion"
+  ],
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/suggestion-bot#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/suggestion-bot"
+  },
+  "bin": "cli.js",
+  "files": [
+    "cli.js",
+    "src/**/*.d.ts",
+    "src/**/*.js"
+  ],
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": {
+      "default": "./src/index.js"
+    },
+    "./cli.js": {
+      "default": "./cli.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "//build": "We run `tsgo` directly because we don't want to output to `lib`",
+    "build": "yarn clean && tsgo",
+    "clean": "git clean -dfqx -- src/ test/",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "suggest": "suggestion-bot",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@octokit/core": "^7.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "^17.0.0",
+    "azure-devops-node-api": "^15.0.0",
+    "parse-diff": "^0.11.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0"
+  },
+  "engines": {
+    "node": ">=20.9"
+  }
+}
