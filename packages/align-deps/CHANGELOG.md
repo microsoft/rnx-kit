@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.4.3
+
+### Patch Changes
+
+- 945813d: Fixed vigilant mode not handling `catalog:` in peer dependencies
+
 ## 3.4.2
 
 ### Patch Changes
@@ -391,11 +397,13 @@
 - fbff74c8: `dep-check` has been renamed to `align-deps`
 
   ### Bug Fixes
+
   - Improved error messages: Messages should now contain the offending
     `package.json` and/or the profile causing issues.
   - Diff output has been reduced to only include the relevant sections.
 
   ### BREAKING CHANGES
+
   - A new config schema was introduced in this release
     - The old config will still work, but you are advised to migrate as soon as
       possible
