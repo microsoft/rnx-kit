@@ -4,12 +4,28 @@ import type { BabelTransformerArgs } from "metro-babel-transformer";
 
 export type TransformerPluginOptions = {
   /**
-   * Do selective preprocessing of JS files with esbuild before handing off to babel
+   * Which native engine to use for source preprocessing. Defaults to "esbuild".
+   */
+  engine?: NativeEngine;
+
+  /**
+   * Parser settings, will try oxc if not specifed
+   */
+  parser?: "oxc" | "swc" | "hermes" | "babel";
+
+  /**
+   * Disable the native preprocessing pipeline entirely and run everything through babel.
+   * When true, engine, handleJs, and handleJsx options are ignored.
+   */
+  babelOnly?: boolean;
+
+  /**
+   * Do selective preprocessing of JS files with the native engine before handing off to babel
    */
   handleJs?: boolean;
 
   /**
-   * Do JSX transformations with esbuild, will handle TSX only unless handleJs is also specified.
+   * Do JSX transformations with the native engine, will handle TSX only unless handleJs is also specified.
    */
   handleJsx?: boolean;
 
@@ -19,11 +35,23 @@ export type TransformerPluginOptions = {
    */
   handleSvg?: boolean;
 
-  /**
-   * Add a dynamic element to the cache key for the transformer. If this is a string it will be appended to the
-   * transformer key, if it is a boolean the current time will be added such that the cache entries won't match.
-   */
-  dynamicKey?: boolean | string;
+  testing?: {
+    /**
+     * Add a dynamic element to the cache key for the transformer. If this is a string it will be appended to the
+     * transformer key, if it is a boolean the current time will be added such that the cache entries won't match.
+     */
+    dynamicKey?: boolean | string;
+
+    /**
+     * Turn on performance reporting for the transformer
+     */
+    perfTrace?: boolean;
+
+    /**
+     * Instrument babel plugins to see where time is being spent in the transformation process. Only valid when perfTrace is also true.
+     */
+    tracePlugins?: boolean;
+  };
 
   /**
    * Run the transformer in async mode
@@ -42,9 +70,14 @@ export type TransformerPluginOptions = {
 };
 
 /**
- * Who should handle the transformation of a given set of options
+ * Who should handle the transformation of a given responsibility
  */
-export type Responsibility = "esbuild" | "babel";
+export type Responsibility = "native" | "babel";
+
+/**
+ * Which native engine to use for source preprocessing
+ */
+export type NativeEngine = "esbuild" | "swc";
 
 /**
  * Babel mode configuration, will vary the preset configuration and cache key based on these settings.
@@ -52,7 +85,10 @@ export type Responsibility = "esbuild" | "babel";
 export type BabelMode = {
   jsx: Responsibility;
   ts: Responsibility;
+  engine: NativeEngine;
 };
+
+export type SrcType = "js" | "jsx" | "ts" | "tsx";
 
 /**
  * File specific options that are appended to the plugin options when transforming a file based on file type and settings.
@@ -70,6 +106,12 @@ export type FilePluginOptions = TransformerPluginOptions & {
 
   /** mode settings for running the babel transformer */
   mode: BabelMode;
+
+  /** a trace function that will measure if in perf tracing mode or act as a passthrough if not */
+  trace: MeasureFunction;
+
+  /** set if we are in performance tracing mode */
+  perfTracer?: PerfTracer;
 };
 
 /**
@@ -77,8 +119,34 @@ export type FilePluginOptions = TransformerPluginOptions & {
  * can use the same signature for both standard and option aware transformers without needing to change the way we call
  * them.
  */
-export type TransformerArgs = BabelTransformerArgs & {
+export type TransformerArgs = Omit<BabelTransformerArgs, "src"> & {
+  /**
+   * The source code to be transformed, redeclared to remove readonly modifier as it may be updated
+   * during the transformation process
+   */
+  src: string;
+
+  /**
+   * Resolved options for this transformation pass
+   */
   pluginOptions: FilePluginOptions;
+
+  /**
+   * Optional source map, will be set set if the sourceTransformer returns a source map
+   */
+  map?: string;
+};
+
+export type SourceTransformResult = {
+  /**
+   * The transformed source code, returned as a string
+   */
+  code: string;
+
+  /**
+   * Source map in string form, babel doesn't handle inline source maps
+   */
+  map?: string;
 };
 
 /**
@@ -86,7 +154,7 @@ export type TransformerArgs = BabelTransformerArgs & {
  */
 export type SourceTransformer = (
   args: TransformerArgs
-) => string | Promise<string>;
+) => SourceTransformResult | Promise<SourceTransformResult>;
 
 /**
  * Signature for an upstream transformer, whose results will be returned to metro
@@ -97,4 +165,32 @@ export type UpstreamTransformer = (
 
 export type TransformerModule = {
   transform: UpstreamTransformer;
+};
+
+/**
+ * Signature for a trace function that will record information about a call and its duration. This is overloaded to
+ * support both sync and async functions and will forward the trailing args to the function being measured.
+ * This allows use with and without closures, e.g. both of these work:
+ *  measure("myFunction", () => myFunction(arg1, arg2));
+ *  measure("myFunction", myFunction, arg1, arg2);
+ */
+export type MeasureFunction = {
+  // oxlint-disable-next-line typescript/no-explicit-any
+  <TFunc extends (...args: any[]) => Promise<any>>(
+    name: string,
+    fn: TFunc,
+    ...args: Parameters<TFunc>
+  ): ReturnType<TFunc>;
+  // oxlint-disable-next-line typescript/no-explicit-any
+  <TFunc extends (...args: any[]) => any>(
+    name: string,
+    fn: TFunc,
+    ...args: Parameters<TFunc>
+  ): ReturnType<TFunc>;
+};
+
+export type PerfTracer = {
+  record: (name: string, time: number) => void;
+  trace: MeasureFunction;
+  report: () => void;
 };

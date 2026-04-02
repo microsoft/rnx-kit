@@ -1,7 +1,8 @@
 import type { BabelFileResult, Node } from "@babel/core";
 import { deepEqual, equal, ok, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { handleResult, hermesParse } from "../src/transformFinal";
+import { handleResult } from "../src/finalTransformer";
+import { hermesParse } from "../src/parse";
 
 describe("handleResult", () => {
   it("returns { ast: null } for null result", () => {
@@ -38,17 +39,26 @@ describe("hermesParse", () => {
   it("parses simple JavaScript to an AST", () => {
     const ast = hermesParse("const x = 1;", { babel: true });
     ok(ast != null);
-    equal((ast as Node & { type: string; program?: { body: unknown[] } }).type, "File");
+    equal(
+      (ast as Node & { type: string; program?: { body: unknown[] } }).type,
+      "File"
+    );
   });
 
   it("parses JSX with babel mode", () => {
     const ast = hermesParse("const el = <div>hello</div>;", { babel: true });
     ok(ast != null);
-    equal((ast as Node & { type: string; program?: { body: unknown[] } }).type, "File");
+    equal(
+      (ast as Node & { type: string; program?: { body: unknown[] } }).type,
+      "File"
+    );
   });
 
   it("produces a program body with statements", () => {
     const ast = hermesParse("const a = 1; const b = 2;", { babel: true });
-    ok((ast as Node & { type: string; program?: { body: unknown[] } }).program.body.length === 2);
+    ok(
+      (ast as Node & { type: string; program?: { body: unknown[] } }).program
+        .body.length === 2
+    );
   });
 });

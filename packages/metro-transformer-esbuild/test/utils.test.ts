@@ -124,16 +124,16 @@ describe("setTransformerPluginOptions / getTransformerPluginOptions", () => {
   });
 
   it("converts boolean dynamicKey to a timestamp string", () => {
-    setTransformerPluginOptions({ dynamicKey: true });
+    setTransformerPluginOptions({ testing: { dynamicKey: true } });
     const result = getTransformerPluginOptions();
-    equal(typeof result.dynamicKey, "string");
+    equal(typeof result.testing?.dynamicKey, "string");
     // should be a valid ISO date string
-    ok(!isNaN(Date.parse(result.dynamicKey as string)));
+    ok(!isNaN(Date.parse(result.testing?.dynamicKey as string)));
   });
 
   it("preserves string dynamicKey as-is", () => {
-    setTransformerPluginOptions({ dynamicKey: "my-key" });
+    setTransformerPluginOptions({ testing: { dynamicKey: "my-key" } });
     const result = getTransformerPluginOptions();
-    equal(result.dynamicKey, "my-key");
+    equal(result.testing?.dynamicKey, "my-key");
   });
 });

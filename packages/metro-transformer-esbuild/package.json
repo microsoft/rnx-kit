@@ -27,8 +27,13 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
+    "@rnx-kit/console": "^2.0.0",
+    "@swc/core": "^1.15.21",
     "esbuild": "^0.27.1",
-    "hermes-parser": "^0.34.0"
+    "estree-to-babel": "^12.0.1",
+    "hermes-parser": "^0.34.0",
+    "oxc-parser": "^0.120.0",
+    "swc-to-babel": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.22.0",
@@ -58,6 +63,9 @@
       "optional": true
     },
     "@svgr/plugin-svgo": {
+      "optional": true
+    },
+    "@swc/core": {
       "optional": true
     }
   },

@@ -4,8 +4,9 @@ import type { BabelTransformerArgs } from "metro-babel-transformer";
 import fs from "node:fs";
 import path from "node:path";
 import { BabelModeHelper } from "./babelMode";
-import { getBabelPresetPath } from "./babelPluginCache";
-import type { TransformerArgs } from "./types";
+import { getBabelPresetPath, getPluginCache } from "./babelPluginCache";
+import { instrumentPlugins } from "./instrumentPlugins";
+import type { MeasureFunction, TransformerArgs } from "./types";
 import { lazyInit, requireFromCwd } from "./utils";
 
 type BabelTransformerOptions = BabelTransformerArgs["options"];
@@ -99,8 +100,25 @@ export const getPartialBabelConfig = (() => {
   };
 })();
 
+// oxlint-disable-next-line typescript/no-explicit-any
+type AnyFuncType = (...args: any[]) => void;
+
+function createVisitorWrapper(trace: MeasureFunction) {
+  return <T extends AnyFuncType>(
+    key: string,
+    _visitorType: "enter" | "exit",
+    fn: AnyFuncType
+  ) => {
+    const opName = `--plugin: ${key}`;
+    function thisWrapper(this: ThisParameterType<T>, ...args: Parameters<T>) {
+      return trace(opName, () => fn.apply(this, args));
+    }
+    return thisWrapper;
+  };
+}
+
 export function getCachableConfig(
-  { options, plugins }: TransformerArgs,
+  { options, plugins, pluginOptions }: TransformerArgs,
   modeHelper: BabelModeHelper
 ): TransformOptions {
   // see if options have already been cached for this mode, if so return them immediately
@@ -111,6 +129,10 @@ export function getCachableConfig(
 
   // get the partial config that is shared across all files and modes, this is cached on the first call
   const partialConfig = getPartialBabelConfig(options);
+
+  const wrapVisitors = Boolean(
+    pluginOptions.testing?.perfTrace && pluginOptions.testing?.tracePlugins
+  );
 
   // now create the parts of the config that are specific to this mode or otherwise fixed, this adjust the config
   // for the current mode, then cache the results so that we only do this once for each mode.
@@ -125,6 +147,9 @@ export function getCachableConfig(
     } as TransformCaller,
     // the parameterized plugins are fixed additions by metro and need to be mixed in but are stable
     plugins: [...(partialConfig.plugins ?? []), ...(plugins ?? [])],
+    ...(wrapVisitors && {
+      wrapPluginVisitorMethod: createVisitorWrapper(pluginOptions.trace),
+    }),
   });
 }
 
@@ -136,9 +161,16 @@ export function getCachableConfig(
  */
 export function getBabelConfig(args: TransformerArgs): TransformOptions {
   const { filename, options, pluginOptions } = args;
+  const trace = pluginOptions.trace;
+
   // get the cached partial config
   const modeHelper = BabelModeHelper.find(pluginOptions.mode);
-  const cachedConfig = getCachableConfig(args, modeHelper);
+  const cachedConfig = trace(
+    "transform babel config cacheable",
+    getCachableConfig,
+    args,
+    modeHelper
+  );
   const plugins = [...(cachedConfig.plugins ?? [])];
 
   // setup the hmr config if necessary, note hot isn't on the type but this is the check in the RN transformer
@@ -151,11 +183,18 @@ export function getBabelConfig(args: TransformerArgs): TransformOptions {
     plugins.push(...hmrConfig.plugins);
   }
 
+  // instrument plugins for perf tracing if requested
+  const { perfTracer } = pluginOptions;
+  const instrumentedPlugins =
+    perfTracer && pluginOptions.testing?.tracePlugins
+      ? instrumentPlugins(plugins, getPluginCache(), perfTracer)
+      : plugins;
+
   // return the config plus any file specific options
   return {
     ...cachedConfig,
     ...hmrConfig,
     filename,
-    plugins,
+    plugins: instrumentedPlugins,
   };
 }

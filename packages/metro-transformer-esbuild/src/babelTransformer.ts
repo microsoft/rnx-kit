@@ -1,14 +1,17 @@
 import type { BabelFileResult } from "@babel/core";
 import type { BabelTransformerArgs } from "metro-babel-transformer";
 import { createCacheKey } from "./createCacheKey";
-import { transformFinal } from "./transformFinal";
-import { transformSrcEsbuild } from "./transformSrcEsbuild";
-import { transformSrcSvg } from "./transformSrcSvg";
+import { transformFinal } from "./finalTransformer";
+import { srcTransformEsbuild } from "./srcTransformEsbuild";
+import { srcTransformSvg } from "./srcTransformSvg";
+import { srcTransformSwc } from "./srcTransformSwc";
 import type {
   UpstreamTransformer,
   TransformerModule,
   SourceTransformer,
   FilePluginOptions,
+  TransformerArgs,
+  SourceTransformResult,
 } from "./types";
 import { isPromiseLike, lazyInit, resolveFileOptions } from "./utils";
 import { getTransformerPluginOptions, toArray } from "./utils";
@@ -47,17 +50,29 @@ function getUpstreamTransformer({
 /**
  * Get the front-end transformer to use for a given file, if any.
  */
-function getFrontEndTransformer({
+function getSourceTransformer({
   ext,
   loader,
   handleSvg,
+  mode,
 }: FilePluginOptions): SourceTransformer | undefined {
   if (handleSvg && ext === ".svg") {
-    return transformSrcSvg;
+    return srcTransformSvg;
   } else if (loader) {
-    return transformSrcEsbuild;
+    return mode.engine === "swc" ? srcTransformSwc : srcTransformEsbuild;
   }
   return undefined;
+}
+
+function applySourceResult(
+  result: SourceTransformResult,
+  args: TransformerArgs
+) {
+  args.src = result.code;
+  if (result.map) {
+    args.map = result.map;
+  }
+  return args;
 }
 
 /**
@@ -71,11 +86,20 @@ export function transform(
   // get options from the environment, then combine with the babel args to get the full plugin options for this file
   const baseOptions = getPluginOptions();
   const pluginOptions = resolveFileOptions(baseArgs, baseOptions);
-  const args = { ...baseArgs, pluginOptions };
+  const args: TransformerArgs = { ...baseArgs, pluginOptions };
+  return pluginOptions.trace("transform core", transformWorker, args);
+}
+
+function transformWorker(
+  args: TransformerArgs
+): BabelFileResult | Promise<BabelFileResult> {
+  const pluginOptions = args.pluginOptions;
+  const trace = pluginOptions.trace;
+  const upstreamOp = "transform babel upstream";
 
   // get the appropriate transformers for this file
-  const finalTransform = getUpstreamTransformer(pluginOptions);
-  const sourceTransform = getFrontEndTransformer(pluginOptions);
+  const upstreamTransform = getUpstreamTransformer(pluginOptions);
+  const sourceTransform = getSourceTransformer(pluginOptions);
 
   // if there is a source transformer, either typescript or svg, run it first and pass the results to the final transformer
   if (sourceTransform) {
@@ -83,16 +107,15 @@ export function transform(
     const srcResult = sourceTransform(args);
     // if it's a promise, this function will run asynchronously so yield execution to wait for the result
     if (isPromiseLike(srcResult)) {
-      return srcResult.then((resolvedSrc) => {
-        args.src = resolvedSrc;
-        return finalTransform(args);
-      });
+      return srcResult.then((result) =>
+        trace(upstreamOp, upstreamTransform, applySourceResult(result, args))
+      );
     } else {
       // synchronus case, just update the args immediately and continue with the final transform
-      args.src = srcResult;
+      applySourceResult(srcResult, args);
     }
   }
 
   // return the final transform, which may be a promise but transform handles both cases internally
-  return finalTransform(args);
+  return trace(upstreamOp, upstreamTransform, args);
 }

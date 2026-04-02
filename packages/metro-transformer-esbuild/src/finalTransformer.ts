@@ -1,10 +1,7 @@
-import type { BabelFileResult, Node } from "@babel/core";
-import {
-  transformFromAstSync,
-  transformFromAstAsync,
-  parseSync,
-} from "@babel/core";
+import type { BabelFileResult } from "@babel/core";
+import { transformFromAstSync, transformFromAstAsync } from "@babel/core";
 import { getBabelConfig } from "./babelConfig";
+import { parseToAst } from "./parse";
 import type { TransformerArgs } from "./types";
 
 /**
@@ -28,15 +25,6 @@ export type HermesParserOptions = {
     };
   };
 };
-
-/**
- * Parse a file to an AST using the hermes parser. Matches the signature from the hermes-parser package
- * @param src incoming source file to parse
- * @param options hermes parser options
- */
-export function hermesParse(src: string, options?: HermesParserOptions): Node {
-  return require("hermes-parser").parse(src, options);
-}
 
 /**
  * @internal
@@ -65,20 +53,12 @@ export function handleResult(
  */
 export function transformFinal(args: TransformerArgs) {
   const { src, pluginOptions } = args;
-  const { srcType, mode } = pluginOptions;
+  const { trace } = pluginOptions;
   const babelConfig = getBabelConfig(args);
-  const isTs = srcType === "ts" || srcType === "tsx";
-  const slowParse = isTs && mode.ts === "babel";
+  const opBase = "transform babel";
 
-  // parse the ast using hermes unless we are told to be in slow mode
-  const ast = slowParse
-    ? parseSync(src, babelConfig)
-    : hermesParse(src, {
-        babel: true,
-        reactRuntimeTarget: "19",
-        sourceType: babelConfig.sourceType ?? undefined,
-      });
-
+  // parse the ast using the requested parser
+  const ast = parseToAst(args, babelConfig);
   // if the ast fails to parse return null to signal the file should be skipped
   if (!ast) {
     return handleResult(null);
@@ -87,9 +67,15 @@ export function transformFinal(args: TransformerArgs) {
   // if we are in async mode, use the async transform, otherwise use the sync transform and return the results
   const { asyncTransform } = pluginOptions;
   if (asyncTransform) {
-    return transformFromAstAsync(ast, src, babelConfig).then((result) =>
-      handleResult(result)
-    );
+    return trace(
+      `${opBase} transform`,
+      transformFromAstAsync,
+      ast,
+      src,
+      babelConfig
+    ).then((result) => handleResult(result));
   }
-  return handleResult(transformFromAstSync(ast, src, babelConfig));
+  return handleResult(
+    trace(`${opBase} transform`, transformFromAstSync, ast, src, babelConfig)
+  );
 }

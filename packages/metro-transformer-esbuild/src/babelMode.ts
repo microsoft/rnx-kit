@@ -117,12 +117,12 @@ export class BabelModeHelper {
    * Given the mode, configure the plugin cache and blocked set to ensure plugins are removed as appropriate
    */
   private disablePluginsForMode() {
-    if (this.mode.ts === "esbuild") {
+    if (this.mode.ts === "native") {
       this.blockPlugin("@babel/plugin-transform-typescript");
       this.blockPlugin("@babel/preset-typescript", true);
       this.blockPlugin("babel-plugin-const-enum", true);
     }
-    if (this.mode.jsx === "esbuild") {
+    if (this.mode.jsx === "native") {
       this.blockPlugin("@babel/plugin-transform-react-jsx");
       this.blockPlugin("@babel/plugin-transform-react-jsx-development", true);
       this.blockPlugin("@babel/plugin-transform-react-jsx-self");

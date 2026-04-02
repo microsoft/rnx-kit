@@ -22,26 +22,63 @@ describe("findBabelConfigFile", () => {
 
 describe("BabelModeHelper", () => {
   it("returns the same instance for the same mode", () => {
-    const a = BabelModeHelper.find({ jsx: "babel", ts: "babel" });
-    const b = BabelModeHelper.find({ jsx: "babel", ts: "babel" });
+    const a = BabelModeHelper.find({
+      jsx: "babel",
+      ts: "babel",
+      engine: "esbuild",
+    });
+    const b = BabelModeHelper.find({
+      jsx: "babel",
+      ts: "babel",
+      engine: "esbuild",
+    });
     ok(a === b);
   });
 
   it("returns different instances for different modes", () => {
-    const a = BabelModeHelper.find({ jsx: "babel", ts: "babel" });
-    const b = BabelModeHelper.find({ jsx: "esbuild", ts: "babel" });
+    const a = BabelModeHelper.find({
+      jsx: "babel",
+      ts: "babel",
+      engine: "esbuild",
+    });
+    const b = BabelModeHelper.find({
+      jsx: "native",
+      ts: "babel",
+      engine: "esbuild",
+    });
     ok(a !== b);
   });
 
   it("produces a stable key from the mode", () => {
-    const helper = BabelModeHelper.find({ jsx: "babel", ts: "babel" });
+    const helper = BabelModeHelper.find({
+      jsx: "babel",
+      ts: "babel",
+      engine: "esbuild",
+    });
     ok(typeof helper.key === "string");
     ok(helper.key.length > 0);
   });
 
   it("returns undefined for getCachedOptions before any config is built", () => {
-    // Use a unique mode to get a fresh instance
-    const helper = BabelModeHelper.find({ jsx: "esbuild", ts: "babel" });
+    const helper = BabelModeHelper.find({
+      jsx: "native",
+      ts: "babel",
+      engine: "esbuild",
+    });
     equal(helper.getCachedOptions(), undefined);
+  });
+
+  it("differentiates by engine", () => {
+    const esbuild = BabelModeHelper.find({
+      jsx: "babel",
+      ts: "babel",
+      engine: "esbuild",
+    });
+    const swc = BabelModeHelper.find({
+      jsx: "babel",
+      ts: "babel",
+      engine: "swc",
+    });
+    ok(esbuild !== swc);
   });
 });

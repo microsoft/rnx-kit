@@ -1,8 +1,10 @@
 import type { TransformOptions, PluginTarget } from "@babel/core";
+import { warn } from "@rnx-kit/console";
 import type { BabelTransformerArgs } from "metro-babel-transformer";
 import type { TransformerConfigT } from "metro-config";
 import { createRequire } from "node:module";
 import path from "node:path";
+import { getPerfTracer, measurePassthrough } from "./perfTrace";
 import type { FilePluginOptions, TransformerPluginOptions } from "./types";
 
 export type MakeHmrPreset = () => TransformOptions;
@@ -59,6 +61,22 @@ export function lazyInit<T>(factory: () => T): () => T {
   };
 }
 
+export function optionalModule<T>(moduleName: string) {
+  const available = lazyInit<boolean>(() => {
+    try {
+      require.resolve(moduleName);
+      return true;
+    } catch {
+      warn(
+        `Optional module ${moduleName} not found, add as a devDependency to enable usage.`
+      );
+      return false;
+    }
+  });
+  const get = lazyInit<T>(() => require(moduleName) as T);
+  return { available, get };
+}
+
 /**
  * Environment variable used to pass options to the transformers.
  */
@@ -76,8 +94,11 @@ export function setTransformerPluginOptions(
   _config?: TransformerConfigT
 ) {
   // create a dynamic key if requested
-  if (options.dynamicKey && typeof options.dynamicKey === "boolean") {
-    options.dynamicKey = new Date().toISOString();
+  if (
+    options.testing?.dynamicKey &&
+    typeof options.testing.dynamicKey === "boolean"
+  ) {
+    options.testing.dynamicKey = new Date().toISOString();
   }
   // now serialize the options and set them in the environment variable
   process.env[envVarName] = JSON.stringify(options);
@@ -118,20 +139,36 @@ export function resolveFileOptions(
     srcType = ext.endsWith("x") ? "jsx" : "js";
   }
 
+  const engine = envOptions.engine ?? "esbuild";
+  const parser = envOptions.parser ?? "oxc";
+  const perfTracer = envOptions.testing?.perfTrace
+    ? getPerfTracer()
+    : undefined;
+  const trace = perfTracer ? perfTracer.trace : measurePassthrough;
+
   // check for codegen for applicable file types, this requires the slow path through babel
   const hasCodegen =
     srcType && srcType !== "tsx" && src.includes("codegenNativeComponent");
 
-  // set up the loader if esbuild should run for this file
-  if (srcType && !hasCodegen && (isTs || envOptions.handleJs)) {
+  // when babelOnly is set, skip native preprocessing entirely
+  const useNative = !envOptions.babelOnly;
+
+  // set up the loader if the native engine should run for this file
+  if (useNative && srcType && !hasCodegen && (isTs || envOptions.handleJs)) {
     loader = srcType;
   }
 
-  // if codegen, or we aren't handling jsx, or it's a js file and we're not handling js, delegate to babel
-  const jsx =
-    hasCodegen || !envOptions.handleJsx || (isJs && !envOptions.handleJs)
+  // if codegen, babelOnly, not handling jsx, or it's a js file and we're not handling js, delegate to babel
+  const jsx: FilePluginOptions["mode"]["jsx"] =
+    !useNative ||
+    hasCodegen ||
+    !envOptions.handleJsx ||
+    (isJs && !envOptions.handleJs)
       ? "babel"
-      : "esbuild";
+      : "native";
+
+  const ts: FilePluginOptions["mode"]["ts"] =
+    !useNative || hasCodegen ? "babel" : "native";
 
   // return the new options object with the file specific settings
   return {
@@ -139,10 +176,10 @@ export function resolveFileOptions(
     srcType,
     loader,
     ext,
-    mode: {
-      ts: hasCodegen ? "babel" : "esbuild",
-      jsx,
-    },
+    mode: { ts, jsx, engine },
+    parser,
+    trace,
+    perfTracer,
   };
 }
 

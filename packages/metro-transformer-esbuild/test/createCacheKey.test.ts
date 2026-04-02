@@ -26,8 +26,8 @@ describe("createCacheKey", () => {
   });
 
   it("returns different keys for different dynamicKey values", () => {
-    const key1 = createCacheKey({ dynamicKey: "a" });
-    const key2 = createCacheKey({ dynamicKey: "b" });
+    const key1 = createCacheKey({ testing: { dynamicKey: "a" } });
+    const key2 = createCacheKey({ testing: { dynamicKey: "b" } });
     notEqual(key1, key2);
   });
 

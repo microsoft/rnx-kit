@@ -1,25 +1,35 @@
 import type { BabelTransformerArgs } from "metro-babel-transformer";
 import { equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
+import { measurePassthrough } from "../src/perfTrace";
 import {
   getSupported,
   getTarget,
-  transformSrcEsbuild,
-} from "../src/transformSrcEsbuild";
+  srcTransformEsbuild,
+} from "../src/srcTransformEsbuild";
 import type { BabelMode, FilePluginOptions } from "../src/types";
 import { resolveFileOptions } from "../src/utils";
 
 // ── Helper to build FilePluginOptions for transformSrcEsbuild tests ──
 
-const esbuildMode: BabelMode = { jsx: "esbuild", ts: "esbuild" };
-const babelJsxMode: BabelMode = { jsx: "babel", ts: "esbuild" };
+const nativeMode: BabelMode = {
+  jsx: "native",
+  ts: "native",
+  engine: "esbuild",
+};
+const babelJsxMode: BabelMode = {
+  jsx: "babel",
+  ts: "native",
+  engine: "esbuild",
+};
 
 function makePluginOptions(
   overrides: Partial<FilePluginOptions> = {}
 ): FilePluginOptions {
   return {
     ext: ".ts",
-    mode: esbuildMode,
+    mode: nativeMode,
+    trace: measurePassthrough,
     ...overrides,
   };
 }
@@ -163,14 +173,34 @@ describe("resolveFileOptions", () => {
     equal(result.mode.jsx, "babel");
   });
 
-  it("sets mode.jsx to esbuild when handleJsx is true", () => {
+  it("sets mode.jsx to native when handleJsx is true", () => {
     const result = resolve("file.tsx", { handleJsx: true });
-    equal(result.mode.jsx, "esbuild");
+    equal(result.mode.jsx, "native");
   });
 
-  it("sets mode.ts to esbuild for normal TS files", () => {
+  it("sets mode.ts to native for normal TS files", () => {
     const result = resolve("file.ts");
-    equal(result.mode.ts, "esbuild");
+    equal(result.mode.ts, "native");
+  });
+
+  it("defaults engine to esbuild", () => {
+    const result = resolve("file.ts");
+    equal(result.mode.engine, "esbuild");
+  });
+
+  it("passes through engine option", () => {
+    const result = resolve("file.ts", { engine: "swc" });
+    equal(result.mode.engine, "swc");
+  });
+
+  it("sets all mode fields to babel when babelOnly is true", () => {
+    const result = resolve("file.tsx", {
+      handleJsx: true,
+      babelOnly: true,
+    });
+    equal(result.mode.ts, "babel");
+    equal(result.mode.jsx, "babel");
+    equal(result.loader, undefined);
   });
 });
 
@@ -185,7 +215,7 @@ describe("transformSrcEsbuild", () => {
     platform: "ios",
     type: "module" as const,
     unstable_transformProfile: "default" as const,
-  } satisfies BabelTransformerArgs["options"];
+  } as unknown as BabelTransformerArgs["options"];
 
   const hermesOptions = {
     ...defaultOptions,
@@ -194,45 +224,46 @@ describe("transformSrcEsbuild", () => {
 
   it("returns source unchanged when no loader is set", () => {
     const src = "const x = 1;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.js",
       options: defaultOptions,
       plugins: [],
       pluginOptions: makePluginOptions({ loader: undefined }),
     });
-    equal(result, src);
+    ok(!(result instanceof Promise));
+    equal(result.code, src);
   });
 
   it("strips typescript from .ts files synchronously", () => {
     const src = "const x: number = 1;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.ts",
       options: defaultOptions,
       plugins: [],
       pluginOptions: makePluginOptions({ loader: "ts" }),
     });
-    equal(typeof result, "string");
-    ok(!(result as string).includes(": number"));
+    ok(!(result instanceof Promise));
+    ok(!result.code.includes(": number"));
   });
 
   it("strips typescript from .tsx files synchronously", () => {
     const src = "const x: string = 'hello'; const el = <div>{x}</div>;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.tsx",
       options: defaultOptions,
       plugins: [],
       pluginOptions: makePluginOptions({ loader: "tsx", ext: ".tsx" }),
     });
-    equal(typeof result, "string");
-    ok(!(result as string).includes(": string"));
+    ok(!(result instanceof Promise));
+    ok(!result.code.includes(": string"));
   });
 
   it("transforms JSX when mode.jsx is esbuild", () => {
     const src = "const el = <div>hello</div>;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.tsx",
       options: defaultOptions,
@@ -240,16 +271,16 @@ describe("transformSrcEsbuild", () => {
       pluginOptions: makePluginOptions({
         loader: "tsx",
         ext: ".tsx",
-        mode: esbuildMode,
+        mode: nativeMode,
       }),
     });
-    equal(typeof result, "string");
-    ok(!(result as string).includes("<div>"));
+    ok(!(result instanceof Promise));
+    ok(!result.code.includes("<div>"));
   });
 
   it("preserves JSX when mode.jsx is babel", () => {
     const src = "const el = <div>hello</div>;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.tsx",
       options: defaultOptions,
@@ -260,15 +291,13 @@ describe("transformSrcEsbuild", () => {
         mode: babelJsxMode,
       }),
     });
-    equal(typeof result, "string");
-    ok(
-      (result as string).includes("<div>") || (result as string).includes("div")
-    );
+    ok(!(result instanceof Promise));
+    ok(result.code.includes("<div>") || result.code.includes("div"));
   });
 
   it("returns a promise when asyncTransform is true", async () => {
     const src = "const x: number = 1;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.ts",
       options: defaultOptions,
@@ -277,63 +306,65 @@ describe("transformSrcEsbuild", () => {
     });
     ok(result instanceof Promise);
     const resolved = await result;
-    ok(!resolved.includes(": number"));
+    ok(!resolved.code.includes(": number"));
   });
 
   it("defines __DEV__ based on dev option", () => {
     const src = "const isDev = __DEV__;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.ts",
       options: { ...defaultOptions, dev: true },
       plugins: [],
       pluginOptions: makePluginOptions({ loader: "ts" }),
-    }) as string;
-    ok(result.includes("true"));
+    });
+    ok(!(result instanceof Promise));
+    ok(result.code.includes("true"));
   });
 
   it("defines __DEV__ as false for production", () => {
     const src = "const isDev = __DEV__;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.ts",
       options: { ...defaultOptions, dev: false },
       plugins: [],
       pluginOptions: makePluginOptions({ loader: "ts" }),
-    }) as string;
-    ok(result.includes("false"));
+    });
+    ok(!(result instanceof Promise));
+    ok(result.code.includes("false"));
   });
 
   it("strips typescript with hermes-stable profile", () => {
     const src = "const x: number = 1;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.ts",
       options: hermesOptions,
       plugins: [],
       pluginOptions: makePluginOptions({ loader: "ts" }),
     });
-    equal(typeof result, "string");
-    ok(!(result as string).includes(": number"));
-    ok((result as string).includes("const"));
+    ok(!(result instanceof Promise));
+    ok(!result.code.includes(": number"));
+    ok(result.code.includes("const"));
   });
 
   it("strips typescript from .tsx with hermes-stable profile", () => {
     const src = "const x: string = 'hello'; const el = <div>{x}</div>;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.tsx",
       options: hermesOptions,
       plugins: [],
       pluginOptions: makePluginOptions({ loader: "tsx", ext: ".tsx" }),
     });
-    equal(typeof result, "string");
-    ok(!(result as string).includes(": string"));
+    ok(!(result instanceof Promise));
+    ok(!result.code.includes(": string"));
   });
 
   it("transforms JSX with hermes-stable profile and esbuild jsx mode", () => {
     const src = "const el = <div>hello</div>;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.tsx",
       options: hermesOptions,
@@ -341,16 +372,16 @@ describe("transformSrcEsbuild", () => {
       pluginOptions: makePluginOptions({
         loader: "tsx",
         ext: ".tsx",
-        mode: esbuildMode,
+        mode: nativeMode,
       }),
     });
-    equal(typeof result, "string");
-    ok(!(result as string).includes("<div>"));
+    ok(!(result instanceof Promise));
+    ok(!result.code.includes("<div>"));
   });
 
   it("handles hermes-stable profile with async transform", async () => {
     const src = "const x: number = 1;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.ts",
       options: hermesOptions,
@@ -359,43 +390,46 @@ describe("transformSrcEsbuild", () => {
     });
     ok(result instanceof Promise);
     const resolved = await result;
-    ok(!resolved.includes(": number"));
+    ok(!resolved.code.includes(": number"));
   });
 
   it("preserves arrow functions with hermes target", () => {
     const src = "const fn = (x: number) => x + 1;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.ts",
       options: hermesOptions,
       plugins: [],
       pluginOptions: makePluginOptions({ loader: "ts" }),
-    }) as string;
-    ok(result.includes("=>"));
+    });
+    ok(!(result instanceof Promise));
+    ok(result.code.includes("=>"));
   });
 
   it("preserves template literals with hermes target", () => {
     const src = "const msg: string = `hello ${name}`;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.ts",
       options: hermesOptions,
       plugins: [],
       pluginOptions: makePluginOptions({ loader: "ts" }),
-    }) as string;
-    ok(result.includes("`"));
+    });
+    ok(!(result instanceof Promise));
+    ok(result.code.includes("`"));
   });
 
   it("preserves destructuring with hermes target", () => {
     const src = "const { a, b }: { a: number; b: number } = obj;";
-    const result = transformSrcEsbuild({
+    const result = srcTransformEsbuild({
       src,
       filename: "file.ts",
       options: hermesOptions,
       plugins: [],
       pluginOptions: makePluginOptions({ loader: "ts" }),
-    }) as string;
-    ok(result.includes("{"));
-    ok(!result.includes(": number"));
+    });
+    ok(!(result instanceof Promise));
+    ok(result.code.includes("{"));
+    ok(!result.code.includes(": number"));
   });
 });
