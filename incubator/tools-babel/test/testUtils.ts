@@ -35,23 +35,15 @@ export function createBabelTransformerArgs(
 export const getFixtures = lazyInit(() => {
   const dirFixtures = path.resolve(__dirname, "__fixtures__");
   const dirLang = path.join(dirFixtures, "lang");
-  const dirAst = path.join(dirFixtures, "ast");
-  fs.mkdirSync(dirAst, { recursive: true });
   const files = fs.readdirSync(dirLang);
 
   function getAst(file: string): Node | null {
     const filePath = path.join(dirLang, file);
-    const astPath = path.join(dirAst, `${path.parse(file).name}.json`);
-    if (fs.existsSync(astPath)) {
-      const ast = JSON.parse(fs.readFileSync(astPath, "utf-8"));
-      return ast;
-    }
     const args = createBabelTransformerArgs(filePath, undefined, {});
     const settings = {};
     const config = getBabelConfig(args, settings);
     if (config) {
       const ast = parseSync(args.src, config);
-      fs.writeFileSync(astPath, JSON.stringify(ast, null, 2));
       return ast;
     } else {
       console.warn(`Babel skipping file ${file} due to config issues`);
@@ -59,5 +51,5 @@ export const getFixtures = lazyInit(() => {
     return null;
   }
 
-  return { dirLang, dirAst, files, getAst };
+  return { dirLang, files, getAst };
 });

@@ -33,5 +33,3 @@ npm add --save-dev @rnx-kit/tools-babel
 ```
 
 ## Usage
-
-

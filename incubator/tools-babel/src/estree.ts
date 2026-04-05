@@ -140,22 +140,32 @@ function convertLiteral(node: MutableNode): void {
 
   const { value, raw } = node;
 
-  // preserve raw in extra for Babel compatibility
+  // preserve raw in extra for Babel compatibility, then remove from node
   if (raw !== undefined) {
     node.extra = node.extra || {};
     node.extra.raw = raw;
+    node.extra.rawValue = value;
+    delete node.raw;
   }
 
   if (value === null) {
     node.type = "NullLiteral";
+    delete node.extra; // Babel doesn't include extra on NullLiteral
   } else if (typeof value === "string") {
     node.type = "StringLiteral";
   } else if (typeof value === "number") {
     node.type = "NumericLiteral";
   } else if (typeof value === "boolean") {
     node.type = "BooleanLiteral";
+    delete node.extra; // Babel doesn't include extra on BooleanLiteral
   } else if (node.bigint !== undefined) {
     node.type = "BigIntLiteral";
+    // Babel stores bigint value as string, delete the numeric value
+    delete node.value;
+    // ensure bigint is a string
+    if (typeof node.bigint !== "string") {
+      node.bigint = String(node.bigint);
+    }
   } else if (node.regex) {
     node.type = "RegExpLiteral";
     node.pattern = node.regex.pattern;
@@ -201,21 +211,27 @@ function convertMethodDefinition(node: MutableNode): void {
   const { key, value } = node;
   if (!value) return;
 
-  const isPrivate = key && key.type === "PrivateIdentifier";
+  const keyType = key && key.type;
+  const isPrivate =
+    keyType === "PrivateIdentifier" || keyType === "PrivateName";
 
   // hoist function properties to the method node
   node.params = value.params;
   node.body = value.body;
   node.generator = value.generator;
   node.async = value.async;
-  node.expression = value.expression;
   node.id = value.id ?? null;
   delete node.value;
+  // Babel doesn't include expression on ClassMethod/ClassPrivateMethod
+  delete node.expression;
 
   if (isPrivate) {
     node.type = "ClassPrivateMethod";
-    // convert PrivateIdentifier key to PrivateName
-    convertPrivateIdentifierToName(key);
+    if (keyType === "PrivateIdentifier") {
+      convertPrivateIdentifierToName(key);
+    }
+    // Babel doesn't include computed on private methods
+    delete node.computed;
   } else {
     node.type = "ClassMethod";
   }
@@ -226,9 +242,14 @@ function convertMethodDefinition(node: MutableNode): void {
  */
 function convertPropertyDefinition(node: MutableNode): void {
   if (node.decorators && node.decorators.length === 0) delete node.decorators;
-  if (node.key && node.key.type === "PrivateIdentifier") {
+  const keyType = node.key && node.key.type;
+  if (keyType === "PrivateIdentifier" || keyType === "PrivateName") {
     node.type = "ClassPrivateProperty";
-    convertPrivateIdentifierToName(node.key);
+    if (keyType === "PrivateIdentifier") {
+      convertPrivateIdentifierToName(node.key);
+    }
+    // Babel doesn't include computed on private properties
+    delete node.computed;
   } else {
     node.type = "ClassProperty";
   }
@@ -267,6 +288,7 @@ function markParenthesized(node: MutableNode): void {
 
   expr.extra = expr.extra || {};
   expr.extra.parenthesized = true;
+  expr.extra.parenStart = node.start;
 }
 
 /**
@@ -344,6 +366,13 @@ function convertProperty(node: MutableNode): void {
     delete node.method;
   } else {
     node.type = "ObjectProperty";
+    // Babel doesn't include kind: "init" on ObjectProperty
+    if (node.kind === "init") delete node.kind;
+    // Babel sets extra.shorthand for shorthand properties
+    if (node.shorthand) {
+      node.extra = node.extra || {};
+      node.extra.shorthand = true;
+    }
   }
 }
 
@@ -354,15 +383,56 @@ function convertImportDeclaration(node: MutableNode): void {
   if (!node.attributes) {
     node.attributes = [];
   }
+  if (!node.importKind) {
+    node.importKind = "value";
+  }
 }
 
 /**
- * Convert ExportDeclaration to ensure attributes array exists.
+ * Convert ExportDeclaration to ensure attributes array exists, and handle
+ * `export * as X from` which ESTree represents as ExportAllDeclaration with
+ * an `exported` field but Babel represents as ExportNamedDeclaration.
  */
 function convertExportDeclaration(node: MutableNode): void {
   if (!node.attributes) {
     node.attributes = [];
   }
+  if (!node.exportKind) {
+    node.exportKind = "value";
+  }
+}
+
+/**
+ * Convert ExportAllDeclaration with an `exported` field to ExportNamedDeclaration.
+ * ESTree: `export * as X from "foo"` → ExportAllDeclaration { exported: Identifier }
+ * Babel:  `export * as X from "foo"` → ExportNamedDeclaration { specifiers: [ExportNamespaceSpecifier] }
+ */
+function convertExportAllWithExported(node: MutableNode): void {
+  if (!node.exported) return;
+
+  // convert Literal exported name to StringLiteral for Babel compatibility
+  const exported = node.exported;
+  if (exported.type === "Literal" && typeof exported.value === "string") {
+    exported.type = "StringLiteral";
+    if (exported.raw !== undefined) {
+      exported.extra = exported.extra || {};
+      exported.extra.raw = exported.raw;
+      exported.extra.rawValue = exported.value;
+    }
+  }
+
+  node.type = "ExportNamedDeclaration";
+  node.specifiers = [
+    {
+      type: "ExportNamespaceSpecifier",
+      exported,
+      loc: exported.loc,
+      start: exported.start,
+      end: exported.end,
+    },
+  ];
+  node.declaration = null;
+  delete node.exported;
 }
 
 /**
@@ -395,6 +465,39 @@ function convertTSAbstractMethodDefinition(node: MutableNode): void {
   node.id = value.id;
   node.returnType = value.returnType;
   delete node.value;
+}
+
+// ── Common cleanup for OXC nodes ─────────────────────────────────────
+
+/**
+ * Strip fields that OXC adds but Babel doesn't include, and normalize values.
+ * Called on every node during the visitor pass.
+ */
+function cleanupOxcExtras(n: MutableNode): void {
+  // OXC adds empty decorators arrays; Babel's class transform errors on them
+  if (n.decorators && n.decorators.length === 0) delete n.decorators;
+  // OXC includes optional: false on non-optional calls/members; Babel omits it
+  // But Babel DOES include optional on OptionalCallExpression/OptionalMemberExpression
+  if (
+    n.optional === false &&
+    n.type !== "OptionalCallExpression" &&
+    n.type !== "OptionalMemberExpression"
+  ) {
+    delete n.optional;
+  }
+  // OXC includes expression on functions; Babel omits it
+  if (
+    n.type === "FunctionDeclaration" ||
+    n.type === "FunctionExpression" ||
+    n.type === "ArrowFunctionExpression"
+  ) {
+    delete n.expression;
+  }
+  // Note: do NOT delete shorthand: false — Babel includes it on ObjectProperty
+  // OXC keeps `raw` directly on numeric/string/bool literals; Babel uses extra.raw only
+  if (n.type === "Literal" || n.type === "TemplateLiteral") {
+    // handled in convertLiteral, but template elements have raw too
+  }
 }
 
 // ── Visitor (built once at module load) ──────────────────────────────
@@ -441,13 +544,10 @@ function resetContext(newlines: number[]): void {
 function buildVisitor(): VisitorObject {
   const visitor: VisitorObject = {};
 
-  // default handler: add source location + convert comments + strip empty decorators
+  // default handler: add source location + convert comments + strip OXC extras
   const defaultHandler = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
-    // OXC adds empty decorators arrays to many node types; Babel's class
-    // transform interprets their presence as "has decorators" and errors
-    if (n.decorators && n.decorators.length === 0) delete n.decorators;
+    processNode(n);
     if (n.comments) convertNodeComments(n);
   };
 
@@ -455,17 +555,23 @@ function buildVisitor(): VisitorObject {
     visitor[key] = defaultHandler;
   }
 
+  // helper: default processing shared by all specialized handlers
+  const processNode = (n: MutableNode) => {
+    setLocation(n, ctx.newlines);
+    cleanupOxcExtras(n);
+  };
+
   // override specific node types with specialized conversion
   visitor.Literal = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     convertLiteral(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.Property = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     const isMethodLike =
       n.value &&
       n.value.type === "FunctionExpression" &&
@@ -474,41 +580,46 @@ function buildVisitor(): VisitorObject {
       ctx.deferredObjectMethods.push(n);
     } else {
       n.type = "ObjectProperty";
+      if (n.kind === "init") delete n.kind;
+      if (n.shorthand) {
+        n.extra = n.extra || {};
+        n.extra.shorthand = true;
+      }
     }
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.ChainExpression = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     ctx.deferredChainExpressions.push(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.MethodDefinition = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     ctx.deferredMethods.push(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.PropertyDefinition = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     ctx.deferredPropertyDefs.push(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.PrivateIdentifier = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     convertPrivateIdentifierToName(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.ParenthesizedExpression = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     markParenthesized(n);
     ctx.deferredReplacements.push(n);
     if (n.comments) convertNodeComments(n);
@@ -516,56 +627,57 @@ function buildVisitor(): VisitorObject {
 
   visitor.Program = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     extractDirectives(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.BlockStatement = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     extractDirectives(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.ImportDeclaration = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     convertImportDeclaration(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.ExportNamedDeclaration = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     convertExportDeclaration(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.ExportAllDeclaration = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     convertExportDeclaration(n);
+    convertExportAllWithExported(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.TSInterfaceHeritage = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     convertTSInterfaceHeritage(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.TSAbstractMethodDefinition = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     ctx.deferredAbstractMethods.push(n);
     if (n.comments) convertNodeComments(n);
   };
 
   visitor.JSXText = (node: Node) => {
     const n = node as MutableNode;
-    setLocation(n, ctx.newlines);
+    processNode(n);
     if (n.raw !== undefined) {
       n.extra = n.extra || {};
       n.extra.raw = n.raw;
@@ -633,9 +745,15 @@ export function toBabelAST(
   }
   delete prog.comments;
 
+  // Babel adds extra.topLevelAwait to the program node
+  if (!prog.extra) {
+    prog.extra = { topLevelAwait: false };
+  }
+
   return {
     type: "File",
     program: prog,
     comments,
+    errors: [],
   } as unknown as ParseResult;
 }

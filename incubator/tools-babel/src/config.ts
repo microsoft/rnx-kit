@@ -151,6 +151,7 @@ export function getBabelConfig(
     highlightCode: true,
     ast: true,
     cloneInputAst: false,
+    sourceType: "unambiguous",
     wrapPluginVisitorMethod,
   });
 
