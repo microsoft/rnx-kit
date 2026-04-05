@@ -25,22 +25,23 @@ export type BabelTransformerArgs = {
  * internal routines this allows the same args object to be used and mutated in place to avoid unnecessary copying
  * and object creation.
  */
-export type TransformerArgs = {
-  /** Filename of the source file being transformed */
-  readonly filename: string;
+export type TransformerArgs<T extends TransformerContext = TransformerContext> =
+  {
+    /** Filename of the source file being transformed */
+    readonly filename: string;
 
-  /** Metro's babel transformer options */
-  readonly options: BabelTransformerOptions;
+    /** Metro's babel transformer options */
+    readonly options: BabelTransformerOptions;
 
-  /** Babel config, will already have the plugins applied */
-  config: TransformOptions;
+    /** Babel config, will already have the plugins applied */
+    config: TransformOptions;
 
-  /** current value for src, may have been modified during the transformation process */
-  src: string;
+    /** current value for src, may have been modified during the transformation process */
+    src: string;
 
-  /** info and state about the file being transformed */
-  context: TransformerContext;
-};
+    /** info and state about the file being transformed */
+    context: T;
+  };
 
 /**
  * The context for a given transformation pass, combination of file specific information and broader settings

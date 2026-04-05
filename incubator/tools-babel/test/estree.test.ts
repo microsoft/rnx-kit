@@ -6,7 +6,7 @@
 import type { Node } from "@babel/core";
 import { ok } from "node:assert/strict";
 import path from "node:path";
-import { before, describe, it } from "node:test";
+import { describe, it } from "node:test";
 import { getBabelConfig } from "../src/config";
 import { initTransformerContext } from "../src/options";
 import { oxcParseToAst } from "../src/parse";
@@ -49,6 +49,11 @@ const IGNORED_FIELDS = new Set([
   "innerComments",
   "tokens",
 ]);
+
+const fixtures = getFixtures();
+const jsCommentFiles = fixtures.getFiles("js-comments")!;
+const jsNonCommentFiles = fixtures.getFiles("js-no-comments")!;
+const tsFiles = fixtures.getFiles("ts")!;
 
 /**
  * Recursively compare two AST nodes and return the number of differences.
@@ -105,23 +110,6 @@ function countDiffs(
 // ── Tests ────────────────────────────────────────────────────────────
 
 describe("estree: OXC vs Babel AST comparison", () => {
-  let fixtures: ReturnType<typeof getFixtures>;
-  let jsNonCommentFiles: string[];
-  let jsCommentFiles: string[];
-  let tsFiles: string[];
-
-  before(() => {
-    fixtures = getFixtures();
-    const jsFiles = fixtures.files.filter(
-      (f) => f.endsWith(".js") || f.endsWith(".jsx")
-    );
-    jsCommentFiles = jsFiles.filter((f) => f.startsWith("comments-"));
-    jsNonCommentFiles = jsFiles.filter((f) => !f.startsWith("comments-"));
-    tsFiles = fixtures.files.filter(
-      (f) => f.endsWith(".ts") || f.endsWith(".tsx")
-    );
-  });
-
   describe("JS/JSX non-comment fixtures — AST comparison", () => {
     it("most fixtures produce identical ASTs", () => {
       let exact = 0;
