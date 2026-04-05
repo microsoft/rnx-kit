@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/metro-transformer-esbuild",
+  "name": "@rnx-kit/metro-transformer-native",
   "version": "0.0.1",
-  "description": "transformer which transforms typescript files with esbuild",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-transformer-esbuild#readme",
+  "description": "transformer which transforms typescript files with native tools",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-transformer-native#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/metro-transformer-esbuild"
+    "directory": "packages/metro-transformer-native"
   },
   "files": [
     "lib/**/*.d.ts",
@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/tools-babel": "^0.0.1",
     "@swc/core": "^1.15.21",
     "esbuild": "^0.27.1",
     "estree-to-babel": "^12.0.1",

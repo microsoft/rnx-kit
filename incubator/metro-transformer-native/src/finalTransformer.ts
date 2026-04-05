@@ -5,28 +5,6 @@ import { parseToAst } from "./parse";
 import type { TransformerArgs } from "./types";
 
 /**
- * Types for hermes parser, defined here as they are in flow types in the hermes-parser package
- */
-export type HermesParserOptions = {
-  allowReturnOutsideFunction?: boolean;
-  babel?: boolean;
-  flow?: "all" | "detect";
-  enableExperimentalComponentSyntax?: boolean;
-  enableExperimentalFlowMatchSyntax?: boolean;
-  enableExperimentalFlowRecordSyntax?: boolean;
-  reactRuntimeTarget?: "18" | "19";
-  sourceFilename?: string;
-  sourceType?: "module" | "script" | "unambiguous";
-  tokens?: boolean;
-  transformOptions?: {
-    TransformEnumSyntax?: {
-      enable: boolean;
-      getRuntime?: () => unknown;
-    };
-  };
-};
-
-/**
  * @internal
  */
 export function handleResult(
