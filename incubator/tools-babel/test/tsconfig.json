@@ -1,0 +1,13 @@
+{
+  "extends": "@rnx-kit/tsconfig/tsconfig.node.json",
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "rootDir": "..",
+    "sourceRoot": "..",
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": ["."],
+  "exclude": ["__fixtures__"]
+}

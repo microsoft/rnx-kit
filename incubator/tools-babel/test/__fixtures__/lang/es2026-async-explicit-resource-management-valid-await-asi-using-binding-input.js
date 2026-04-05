@@ -1,4 +1,0 @@
-{
-  await
-  using using = h();
-}
