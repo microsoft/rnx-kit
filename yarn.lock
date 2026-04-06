@@ -213,7 +213,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:^7.22.0, @babel/generator@npm:^7.25.0, @babel/generator@npm:^7.25.9, @babel/generator@npm:^7.29.0, @babel/generator@npm:^7.7.2":
+"@babel/generator@npm:^7.20.0, @babel/generator@npm:^7.22.0, @babel/generator@npm:^7.25.0, @babel/generator@npm:^7.25.9, @babel/generator@npm:^7.29.0, @babel/generator@npm:^7.7.2":
   version: 7.29.1
   resolution: "@babel/generator@npm:7.29.1"
   dependencies:
@@ -6008,7 +6008,7 @@ __metadata:
     "@babel/generator": "npm:^7.22.0"
     "@react-native/babel-preset": "npm:^0.83.0"
     "@react-native/metro-babel-transformer": "npm:^0.83.0"
-    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/reporter": "npm:^0.2.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-babel": "npm:^0.0.1"
     "@rnx-kit/tsconfig": "npm:*"
@@ -6400,11 +6400,13 @@ __metadata:
   resolution: "@rnx-kit/tools-babel@workspace:incubator/tools-babel"
   dependencies:
     "@babel/core": "npm:^7.20.0"
+    "@babel/generator": "npm:^7.20.0"
     "@react-native/babel-preset": "npm:^0.83.0"
     "@rnx-kit/reporter": "npm:^0.2.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/babel__core": "npm:^7.20.0"
+    "@types/babel__generator": "npm:^7.20.0"
     hermes-parser: "npm:^0.34.0"
     metro-babel-transformer: "npm:^0.83.1"
     oxc-parser: "npm:^0.123.0"
@@ -7228,6 +7230,15 @@ __metadata:
   dependencies:
     "@babel/types": "npm:^7.0.0"
   checksum: 10c0/e0051b450e4ba2df0a7e386f08df902a4e920f6f8d6f185d69ddbe9b0e2e2d3ae434bb51e437bc0fca2a9a0f5dc4ca44d3a1941ef75e74371e8be5bf64416fe4
+  languageName: node
+  linkType: hard
+
+"@types/babel__generator@npm:^7.20.0":
+  version: 7.27.0
+  resolution: "@types/babel__generator@npm:7.27.0"
+  dependencies:
+    "@babel/types": "npm:^7.0.0"
+  checksum: 10c0/9f9e959a8792df208a9d048092fda7e1858bddc95c6314857a8211a99e20e6830bdeb572e3587ae8be5429e37f2a96fcf222a9f53ad232f5537764c9e13a2bbd
   languageName: node
   linkType: hard
 

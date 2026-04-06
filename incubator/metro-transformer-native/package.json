@@ -27,7 +27,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/reporter": "^0.2.0",
     "@rnx-kit/tools-babel": "^0.0.1",
     "@swc/core": "^1.15.21",
     "esbuild": "^0.27.1",
@@ -71,6 +71,6 @@
     }
   },
   "engines": {
-    "node": ">=18.12"
+    "node": ">=22"
   }
 }

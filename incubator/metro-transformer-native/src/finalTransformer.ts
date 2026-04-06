@@ -1,7 +1,6 @@
 import type { BabelFileResult } from "@babel/core";
 import { transformFromAstSync, transformFromAstAsync } from "@babel/core";
-import { getBabelConfig } from "./babelConfig";
-import { parseToAst } from "./parse";
+import { parseToAst } from "@rnx-kit/tools-babel";
 import type { TransformerArgs } from "./types";
 
 /**
@@ -30,30 +29,28 @@ export function handleResult(
  * @returns An object containing the transformed AST and metadata
  */
 export function transformFinal(args: TransformerArgs) {
-  const { src, pluginOptions } = args;
-  const { trace } = pluginOptions;
-  const babelConfig = getBabelConfig(args);
+  const { src, context, config } = args;
+  const { trace, asyncTransform } = context;
   const opBase = "transform babel";
 
   // parse the ast using the requested parser
-  const ast = parseToAst(args, babelConfig);
+  const ast = parseToAst(args);
   // if the ast fails to parse return null to signal the file should be skipped
   if (!ast) {
     return handleResult(null);
   }
 
   // if we are in async mode, use the async transform, otherwise use the sync transform and return the results
-  const { asyncTransform } = pluginOptions;
   if (asyncTransform) {
     return trace(
       `${opBase} transform`,
       transformFromAstAsync,
       ast,
       src,
-      babelConfig
+      config
     ).then((result) => handleResult(result));
   }
   return handleResult(
-    trace(`${opBase} transform`, transformFromAstSync, ast, src, babelConfig)
+    trace(`${opBase} transform`, transformFromAstSync, ast, src, config)
   );
 }

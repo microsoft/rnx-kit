@@ -47,10 +47,10 @@ function getSvgrConfig(found: Config | null): Config {
 export function srcTransformSvg({
   src,
   filename,
-  pluginOptions,
+  context,
 }: TransformerArgs): SourceTransformResult | Promise<SourceTransformResult> {
   const { resolveConfig, transform } = svgCore.get();
-  const { asyncTransform, trace } = pluginOptions;
+  const { asyncTransform, trace } = context;
   const opConfig = "transform src svg config";
   const opTransform = "transform src svg transform";
   if (asyncTransform) {

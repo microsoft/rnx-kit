@@ -1,17 +1,18 @@
+import type { SrcSyntax } from "@rnx-kit/tools-babel";
 import type { JscConfig, Options as SwcOptions, Output } from "@swc/core";
 import type {
-  FilePluginOptions,
   SourceTransformer,
   SourceTransformResult,
   TransformerArgs,
+  TransformerContext,
 } from "./types";
 import { optionalModule } from "./utils";
 
 /**
  * Get the SWC parser configuration based on the file's loader type.
  */
-function getParserConfig(loader: string): JscConfig["parser"] {
-  switch (loader) {
+function getParserConfig(srcSyntax: SrcSyntax): JscConfig["parser"] {
+  switch (srcSyntax) {
     case "tsx":
       return { syntax: "typescript", tsx: true };
     case "ts":
@@ -27,15 +28,16 @@ function getParserConfig(loader: string): JscConfig["parser"] {
 export const swcCore = optionalModule<typeof import("@swc/core")>("@swc/core");
 
 function getSwcOptions(args: TransformerArgs): SwcOptions {
-  const { filename, options, pluginOptions } = args;
-  const { loader, mode } = pluginOptions;
-  const jsxTransform = mode.jsx === "native";
+  const { filename, options, context } = args;
+  const { srcSyntax, handleJsx } = context;
+  const jsxTransform =
+    handleJsx && (srcSyntax === "tsx" || srcSyntax === "jsx");
 
   return {
     filename,
     sourceFileName: filename,
     jsc: {
-      parser: getParserConfig(loader!),
+      parser: getParserConfig(srcSyntax),
       target: "es2022",
       transform: {
         react: jsxTransform
@@ -55,33 +57,30 @@ function getSwcOptions(args: TransformerArgs): SwcOptions {
 const swcOpName = "transform src swc";
 
 export const srcTransformSwc: SourceTransformer = (args: TransformerArgs) => {
-  const { pluginOptions, src } = args;
-  const { loader, trace, asyncTransform } = pluginOptions;
-  if (!loader) {
-    return { code: src };
-  }
+  const { context, src } = args;
+  const { trace, asyncTransform } = context;
   const swcOptions = getSwcOptions(args);
   if (asyncTransform) {
     const { transform } = swcCore.get();
     return trace(swcOpName, transform, src, swcOptions).then((result) =>
-      handleSwcResult(result, pluginOptions)
+      handleSwcResult(result, context)
     );
   } else {
     const { transformSync } = swcCore.get();
     return handleSwcResult(
       trace(swcOpName, transformSync, src, swcOptions),
-      pluginOptions
+      context
     );
   }
 };
 
 function handleSwcResult(
   result: Output,
-  pluginOptions: FilePluginOptions
+  context: TransformerContext
 ): SourceTransformResult {
-  const srcType = pluginOptions.srcType;
+  const srcType = context.srcSyntax;
   if (srcType === "ts" || srcType === "tsx") {
-    pluginOptions.srcType = srcType === "ts" ? "js" : "jsx";
+    context.srcSyntax = srcType === "ts" ? "js" : "jsx";
   }
   // SWC's handling of TypeScript is not always fully compatible with Babel's, so we need to do an additional pass through Babel to handle any syntax that SWC doesn't support or doesn't transform in the same way.
   return { code: result.code, map: result.map };

@@ -1,9 +1,9 @@
 import type { TransformerConfigT } from "metro-config";
-import type { TransformerPluginOptions } from "./types";
-import { setTransformerPluginOptions } from "./utils";
+import { setTransformerPluginOptions } from "./context";
+import type { TransformerOptions } from "./types";
 
 export function MetroTransformerEsbuild(
-  options: TransformerPluginOptions = {},
+  options: Partial<TransformerOptions> = {},
   config: Partial<TransformerConfigT> = {}
 ): Partial<TransformerConfigT> {
   // push the options to the environment so they can be accessed by the transformer

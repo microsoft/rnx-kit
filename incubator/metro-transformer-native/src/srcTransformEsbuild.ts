@@ -1,8 +1,8 @@
 import type { TransformOptions, TransformResult } from "esbuild";
 import type {
-  FilePluginOptions,
   SourceTransformResult,
   TransformerArgs,
+  TransformerContext,
 } from "./types";
 import { optionalModule } from "./utils";
 
@@ -44,22 +44,19 @@ export function srcTransformEsbuild({
   src,
   filename,
   options,
-  pluginOptions,
+  context,
 }: TransformerArgs): SourceTransformResult | Promise<SourceTransformResult> {
   // get the loader for the file, will be undefined if we should skip this file
-  const { loader, mode, asyncTransform, trace } = pluginOptions;
-  if (!loader) {
-    return { code: src };
-  }
+  const { srcSyntax, asyncTransform, trace, handleJsx } = context;
   const target = getTarget(options);
-  const jsx = mode.jsx === "native" ? "automatic" : "preserve";
-  const jsxDev = Boolean(mode.jsx === "native" && options.dev);
+  const jsx = handleJsx ? "automatic" : "preserve";
+  const jsxDev = Boolean(handleJsx && options.dev);
   const esbuildOpName = "transform src esbuild";
 
   // set up the options
   const esbuildOptions: TransformOptions = {
     sourcefile: filename,
-    loader,
+    loader: srcSyntax,
     target,
     supported: getSupported(target),
     jsx,
@@ -73,24 +70,24 @@ export function srcTransformEsbuild({
   if (asyncTransform) {
     const { transform } = esbuild.get();
     return trace(esbuildOpName, transform, src, esbuildOptions).then((result) =>
-      resolveResult(result, pluginOptions)
+      resolveResult(result, context)
     );
   } else {
     const { transformSync } = esbuild.get();
     return resolveResult(
       trace(esbuildOpName, transformSync, src, esbuildOptions),
-      pluginOptions
+      context
     );
   }
 }
 
 function resolveResult(
   result: TransformResult,
-  pluginOptions: FilePluginOptions
+  context: TransformerContext
 ): SourceTransformResult {
-  const srcType = pluginOptions.srcType;
+  const srcType = context.srcSyntax;
   if (srcType === "ts" || srcType === "tsx") {
-    pluginOptions.srcType = srcType === "ts" ? "js" : "jsx";
+    context.srcSyntax = srcType === "ts" ? "js" : "jsx";
   }
   return { code: result.code, map: result.map ? result.map : undefined };
 }

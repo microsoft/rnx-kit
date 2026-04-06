@@ -1,23 +1,27 @@
 import type { BabelFileResult } from "@babel/core";
-import type { Loader } from "esbuild";
-import type { BabelTransformerArgs } from "metro-babel-transformer";
+import type {
+  TransformerSettings,
+  TransformerArgs as BaseTransformerArgs,
+  TransformerContext as BaseTransformerContext,
+} from "@rnx-kit/tools-babel";
 
-export type TransformerPluginOptions = {
+export type TransformerNativeOptions = {
   /**
    * Which native engine to use for source preprocessing. Defaults to "esbuild".
    */
   engine?: NativeEngine;
 
   /**
-   * Parser settings, will try oxc if not specifed
+   * Whether native transformations are enabled. Top-level options to disable native transformations entirely.
+   * @default true
    */
-  parser?: "oxc" | "swc" | "hermes" | "babel";
+  nativeTransform?: boolean;
 
   /**
-   * Disable the native preprocessing pipeline entirely and run everything through babel.
-   * When true, engine, handleJs, and handleJsx options are ignored.
+   * Do selective preprocessing of TS/TSX files with the native engine before handing off to babel
+   * @default true
    */
-  babelOnly?: boolean;
+  handleTs?: boolean;
 
   /**
    * Do selective preprocessing of JS files with the native engine before handing off to babel
@@ -30,28 +34,22 @@ export type TransformerPluginOptions = {
   handleJsx?: boolean;
 
   /**
+   * Natively handle module syntax transformations
+   */
+  handleModules?: boolean;
+
+  /**
    * Handle SVG transformations using svgr core, will require the optional peer dependencies to be fulfilled
    * to work correctly.
    */
   handleSvg?: boolean;
 
-  testing?: {
-    /**
-     * Add a dynamic element to the cache key for the transformer. If this is a string it will be appended to the
-     * transformer key, if it is a boolean the current time will be added such that the cache entries won't match.
-     */
-    dynamicKey?: boolean | string;
-
-    /**
-     * Turn on performance reporting for the transformer
-     */
-    perfTrace?: boolean;
-
-    /**
-     * Instrument babel plugins to see where time is being spent in the transformation process. Only valid when perfTrace is also true.
-     */
-    tracePlugins?: boolean;
-  };
+  /**
+   * Add an additional element to the cache key for the transformer. If this is a string it will be appended directly, if
+   * set to true the current time will be used ensuring the cache is always invalidated. Boolean mode is for testing/perf measurement
+   * purposes.
+   */
+  dynamicKey?: boolean | string;
 
   /**
    * Run the transformer in async mode
@@ -69,73 +67,20 @@ export type TransformerPluginOptions = {
   upstreamDelegates?: Record<string, string | string[]>;
 };
 
-/**
- * Who should handle the transformation of a given responsibility
- */
-export type Responsibility = "native" | "babel";
+export type TransformerOptions = TransformerNativeOptions &
+  Omit<TransformerSettings, "trace">;
+
+export type TransformerContext = BaseTransformerContext &
+  TransformerNativeOptions;
+
+export type TransformerArgs = BaseTransformerArgs<TransformerContext>;
 
 /**
  * Which native engine to use for source preprocessing
  */
 export type NativeEngine = "esbuild" | "swc";
 
-/**
- * Babel mode configuration, will vary the preset configuration and cache key based on these settings.
- */
-export type BabelMode = {
-  jsx: Responsibility;
-  ts: Responsibility;
-  engine: NativeEngine;
-};
-
 export type SrcType = "js" | "jsx" | "ts" | "tsx";
-
-/**
- * File specific options that are appended to the plugin options when transforming a file based on file type and settings.
- * @internal
- */
-export type FilePluginOptions = TransformerPluginOptions & {
-  /** source type for the file, regardless of whether to use the esbuild transformer */
-  srcType?: Extract<Loader, "ts" | "tsx" | "js" | "jsx">;
-
-  /** esbuild loader value, only set if the transformer should run with esbuild for this file */
-  loader?: Loader;
-
-  /** lowercase extension name for convenience */
-  ext: string;
-
-  /** mode settings for running the babel transformer */
-  mode: BabelMode;
-
-  /** a trace function that will measure if in perf tracing mode or act as a passthrough if not */
-  trace: MeasureFunction;
-
-  /** set if we are in performance tracing mode */
-  perfTracer?: PerfTracer;
-};
-
-/**
- * Arguments to pass through to various transformer packages. This is an extension of the standard args such that we
- * can use the same signature for both standard and option aware transformers without needing to change the way we call
- * them.
- */
-export type TransformerArgs = Omit<BabelTransformerArgs, "src"> & {
-  /**
-   * The source code to be transformed, redeclared to remove readonly modifier as it may be updated
-   * during the transformation process
-   */
-  src: string;
-
-  /**
-   * Resolved options for this transformation pass
-   */
-  pluginOptions: FilePluginOptions;
-
-  /**
-   * Optional source map, will be set set if the sourceTransformer returns a source map
-   */
-  map?: string;
-};
 
 export type SourceTransformResult = {
   /**
@@ -165,32 +110,4 @@ export type UpstreamTransformer = (
 
 export type TransformerModule = {
   transform: UpstreamTransformer;
-};
-
-/**
- * Signature for a trace function that will record information about a call and its duration. This is overloaded to
- * support both sync and async functions and will forward the trailing args to the function being measured.
- * This allows use with and without closures, e.g. both of these work:
- *  measure("myFunction", () => myFunction(arg1, arg2));
- *  measure("myFunction", myFunction, arg1, arg2);
- */
-export type MeasureFunction = {
-  // oxlint-disable-next-line typescript/no-explicit-any
-  <TFunc extends (...args: any[]) => Promise<any>>(
-    name: string,
-    fn: TFunc,
-    ...args: Parameters<TFunc>
-  ): ReturnType<TFunc>;
-  // oxlint-disable-next-line typescript/no-explicit-any
-  <TFunc extends (...args: any[]) => any>(
-    name: string,
-    fn: TFunc,
-    ...args: Parameters<TFunc>
-  ): ReturnType<TFunc>;
-};
-
-export type PerfTracer = {
-  record: (name: string, time: number) => void;
-  trace: MeasureFunction;
-  report: () => void;
 };
