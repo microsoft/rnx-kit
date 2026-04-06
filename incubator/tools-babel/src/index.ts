@@ -2,15 +2,16 @@ export { getBabelConfig, filterConfigPlugins } from "./config";
 
 export { toBabelAST } from "./estree";
 
-export { initTransformerContext } from "./options";
+export { initTransformerContext, makeTransformerArgs } from "./options";
 export { hermesParseToAst, oxcParseToAst, parseToAst } from "./parse";
 
-export type { ResolvedPlugin } from "./plugins";
+export type { ResolvedPlugin, PluginVisitor } from "./plugins";
 export {
   isConfigItem,
   isPluginObj,
   getPluginKey,
   getPluginTarget,
+  updateTransformOptions,
 } from "./plugins";
 
 export { getTrace, tracePassthrough, traceCache } from "./tracing";
@@ -20,7 +21,9 @@ export type {
   BabelTransformerArgs,
   FileContext,
   HermesParserOptions,
+  SrcSyntax,
   TraceFunction,
   TransformerArgs,
   TransformerContext,
+  TransformerSettings,
 } from "./types";

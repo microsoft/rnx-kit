@@ -48,22 +48,21 @@ export type TransformerArgs<T extends TransformerContext = TransformerContext> =
  */
 export type TransformerContext = FileContext & TransformerSettings;
 
+export type SrcSyntax = "js" | "jsx" | "ts" | "tsx";
+
 /**
  * Information about a file that is being transformed, these options may be mutated as transformation
  * progresses to reflect changes to the source or to track state about the file.
  */
 export type FileContext = {
-  /** file extension, after aliasing, .[cm]js => .js, .[cm]jsx => .jsx, etc. */
+  /** file extension, lower case */
   ext: string;
+
+  /** syntax type of the source file */
+  srcSyntax: SrcSyntax;
 
   /** if a native tool has modified source, a map in serialized JSON format can be added */
   map?: string;
-
-  /** Has typescript syntax */
-  hasTs: boolean;
-
-  /** Has JSX syntax (either .jsx or .tsx extension) */
-  hasJsx: boolean;
 
   /** May contain flow syntax */
   mayContainFlow: boolean;
@@ -92,10 +91,10 @@ export type TransformerSettings = {
   parseFlowDefault?: boolean;
 
   /** Extension for unknown file types, if unset will return a null ast */
-  parseExtDefault?: string;
+  parseExtDefault?: SrcSyntax;
 
-  /** Extension aliases, e.g. { ".svg": ".jsx" } to treat svg as jsx files */
-  parseExtAliases?: Record<string, string>;
+  /** Syntax aliases, e.g. { ".svg": "jsx" } to treat svg as jsx files */
+  parseExtAliases?: Record<string, SrcSyntax>;
 
   /** Whether to enable performance tracing */
   tracePerformance?: boolean;

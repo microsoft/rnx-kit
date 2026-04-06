@@ -6,22 +6,23 @@ import type {
   TransformerContext,
   TransformerArgs,
   BabelTransformerArgs,
+  SrcSyntax,
 } from "./types";
 
-function getBaseExt(ext: string, fallback?: string): string | undefined {
+function getBaseExt(ext: string, fallback?: SrcSyntax): SrcSyntax | undefined {
   switch (ext) {
     case ".ts":
-      return ".ts";
+      return "ts";
     case ".tsx":
-      return ".tsx";
+      return "tsx";
     case ".js":
     case ".cjs":
     case ".mjs":
-      return ".js";
+      return "js";
     case ".jsx":
     case ".cjsx":
     case ".mjsx":
-      return ".jsx";
+      return "jsx";
     default:
       return fallback;
   }
@@ -40,16 +41,16 @@ export function initTransformerContext<
   const {
     parseFlowDefault = true,
     parseExtAliases,
-    parseExtDefault = ".js",
+    parseExtDefault = "js",
   } = settings;
   const trace = getTrace(settings);
 
-  const base = path.extname(filename).toLowerCase();
-  const ext: string | undefined =
-    parseExtAliases?.[base] ?? getBaseExt(base, parseExtDefault);
+  const ext = path.extname(filename).toLowerCase();
+  const srcSyntax: SrcSyntax | undefined =
+    parseExtAliases?.[ext] ?? getBaseExt(ext, parseExtDefault);
 
   // invalid extension and no default means this file should be skipped, return undefined to indicate that
-  if (!ext) {
+  if (!srcSyntax) {
     return undefined;
   }
 
@@ -57,19 +58,29 @@ export function initTransformerContext<
     ...settings,
     trace,
     ext,
-    hasTs: Boolean(ext === ".ts" || ext === ".tsx"),
-    hasJsx: Boolean(ext === ".jsx" || ext === ".tsx"),
-    mayContainFlow: ext === ".js" || ext === ".jsx" ? parseFlowDefault : false,
+    srcSyntax,
+    mayContainFlow:
+      srcSyntax === "js" || srcSyntax === "jsx" ? parseFlowDefault : false,
     isNodeModule: filename.includes("node_modules"),
   } as T;
 }
 
+/**
+ * This forms the TransformerArgs type, which does the following:
+ * - Initialize the context with file specific information and common settings
+ * - Optionally call the updateContext function allowing the caller to add additional configuration
+ * - Get the babel config for this file, returning null if the file should be skipped
+ * @param babelArgs the metro transformer args
+ * @param settings additional configuration options to mix in
+ * @param updateContext a function that allows additional configuration to be added to the context
+ * @returns the transformer arguments or null if babel can't be loaded for the file
+ */
 export function makeTransformerArgs<
   T extends TransformerContext = TransformerContext,
 >(
   babelArgs: BabelTransformerArgs,
   settings?: Partial<TransformerSettings>,
-  updateContext?: (context: T) => void
+  updateContext?: (context: T, args: BabelTransformerArgs) => void
 ): TransformerArgs<T> | null {
   const { filename, src, options } = babelArgs;
   const context = initTransformerContext<T>(filename, {
@@ -78,7 +89,7 @@ export function makeTransformerArgs<
   });
   if (context) {
     if (updateContext) {
-      updateContext(context);
+      updateContext(context, babelArgs);
     }
     const config = getBabelConfig(babelArgs, context);
     if (config) {

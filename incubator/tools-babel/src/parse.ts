@@ -2,11 +2,7 @@ import type { Node } from "@babel/core";
 import { parseSync as parseSyncBabel } from "@babel/core";
 import type { OxcError } from "oxc-parser";
 import { toBabelAST } from "./estree";
-import type {
-  HermesParserOptions,
-  TransformerArgs,
-  TransformerContext,
-} from "./types";
+import type { HermesParserOptions, TransformerArgs } from "./types";
 
 export function isFlowError(errors: OxcError[]): boolean {
   return errors.some((e) => e.message === "Flow is not supported");
@@ -19,13 +15,6 @@ export function isFlowError(errors: OxcError[]): boolean {
  */
 export function hermesParse(src: string, options?: HermesParserOptions): Node {
   return require("hermes-parser").parse(src, options);
-}
-
-function getSrcType(context: TransformerContext): "ts" | "tsx" | "js" | "jsx" {
-  if (context.hasTs) {
-    return context.hasJsx ? "tsx" : "ts";
-  }
-  return context.hasJsx ? "jsx" : "js";
 }
 
 export function oxcParseToAst({
@@ -42,8 +31,9 @@ export function oxcParseToAst({
 
   const oxcResult = trace("transform parse oxc", parseSync, filename, src, {
     sourceType: config.sourceType ?? "unambiguous",
-    lang: getSrcType(context),
-    astType: context.hasTs ? "ts" : "js",
+    lang: context.srcSyntax,
+    astType:
+      context.srcSyntax === "ts" || context.srcSyntax === "tsx" ? "ts" : "js",
   });
 
   const errors = oxcResult.errors;

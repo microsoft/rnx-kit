@@ -11,7 +11,6 @@ import { getPluginKey, pluginTraceFactory } from "./plugins.ts";
 import { getTrace } from "./tracing.ts";
 import type { BabelTransformerArgs, TransformerSettings } from "./types.ts";
 import type { BabelTransformerOptions } from "./types.ts";
-import { assertValue } from "./utility.ts";
 
 // cache the hot module reload config the first time it is requested.
 const getHmrConfig = lazyInit(() =>
@@ -21,6 +20,13 @@ const getHmrConfig = lazyInit(() =>
 function checkRcFile(projectRoot: string, file: string): string | undefined {
   const filePath = path.resolve(projectRoot, file);
   return fs.existsSync(filePath) ? filePath : undefined;
+}
+
+function assertValue<T>(value: T | null | undefined, message?: string): T {
+  if (value == null) {
+    throw new Error(message ?? "Unexpected null or undefined value");
+  }
+  return value;
 }
 
 /**
