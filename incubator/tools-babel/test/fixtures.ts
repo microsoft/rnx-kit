@@ -182,10 +182,15 @@ export class FileData {
 
   get oxcTransformedAst(): Node | null {
     if (this._oxcTransformedAst === undefined) {
-      this._oxcTransformedAst = this.oxcAst
-        ? (transformFromAstSync(this.oxcAst, this.args.src, this.args.config)
-            ?.ast ?? null)
-        : null;
+      try {
+        this._oxcTransformedAst = this.oxcAst
+          ? (transformFromAstSync(this.oxcAst, this.args.src, this.args.config)
+              ?.ast ?? null)
+          : null;
+      } catch (err) {
+        this._oxcTransformedAst = null;
+        this.error ??= err as Error;
+      }
     }
     return this._oxcTransformedAst;
   }

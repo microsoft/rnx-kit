@@ -22,6 +22,27 @@ export function getTrace(
     : tracePassthrough);
 }
 
+export function createTrace(
+  record: (op: string, time?: number) => void
+): TraceFunction {
+  return <T>(op: string, fn: (...args: unknown[]) => T, ...args: unknown[]) => {
+    // add the entry to make the report appear in call order
+    record(op);
+    // now time the passed in function
+    const start = performance.now();
+    const result = fn(...args);
+    if (isPromiseLike(result)) {
+      return result.then((res) => {
+        record(op, performance.now() - start);
+        return res;
+      });
+    } else {
+      record(op, performance.now() - start);
+      return result;
+    }
+  };
+}
+
 type PerfData = { total: number; calls: number; longest: number };
 type ReportData = {
   name: string;
@@ -41,12 +62,12 @@ function toReportData(
   return {
     name: formatter.cyanBright(name),
     sortKey: total,
-    total: formatter.greenBright(total.toFixed(1)),
+    total: formatter.greenBright(total.toFixed(0)),
     calls: formatter.greenBright(String(calls)),
     avgTime: formatter.greenBright(
-      (entry.calls > 0 ? entry.total / entry.calls : 0).toFixed(1)
+      (entry.calls > 0 ? entry.total / entry.calls : 0).toFixed(0)
     ),
-    longest: formatter.greenBright(longest.toFixed(1)),
+    longest: formatter.greenBright(longest.toFixed(0)),
   };
 }
 
@@ -69,25 +90,8 @@ export const traceCache = lazyInit(() => {
     }
   }
 
-  function trace(
-    op: string,
-    fn: (...args: unknown[]) => unknown,
-    ...args: unknown[]
-  ) {
-    const start = performance.now();
-    // add the entry to make the report appear in call order
-    record(op);
-    const result = fn(...args);
-    if (isPromiseLike(result)) {
-      return result.then((res) => {
-        record(op, performance.now() - start);
-        return res;
-      });
-    } else {
-      record(op, performance.now() - start);
-      return result;
-    }
-  }
+  // create the trace function that calls record with timing information
+  const trace = createTrace(record);
 
   function report() {
     if (!reported) {

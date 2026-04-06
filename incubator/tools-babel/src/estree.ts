@@ -160,17 +160,25 @@ function convertLiteral(node: MutableNode): void {
     delete node.extra; // Babel doesn't include extra on BooleanLiteral
   } else if (node.bigint !== undefined) {
     node.type = "BigIntLiteral";
-    // Babel stores bigint value as string, delete the numeric value
-    delete node.value;
-    // ensure bigint is a string
+    // Babel stores bigint as string
     if (typeof node.bigint !== "string") {
       node.bigint = String(node.bigint);
+    }
+    // Babel doesn't include value on BigIntLiteral, and rawValue should be string
+    delete node.value;
+    if (node.extra) {
+      node.extra.rawValue = node.bigint;
     }
   } else if (node.regex) {
     node.type = "RegExpLiteral";
     node.pattern = node.regex.pattern;
     node.flags = node.regex.flags;
     delete node.regex;
+    delete node.value;
+    // Babel includes extra.raw on RegExp (the raw source text) but not rawValue
+    if (node.extra) {
+      delete node.extra.rawValue;
+    }
   }
 }
 
@@ -178,15 +186,40 @@ function convertLiteral(node: MutableNode): void {
  * Recursively mark MemberExpression/CallExpression nodes within a chain
  * as their Optional* counterparts.
  */
-function markOptionalChain(node: MutableNode): void {
-  if (!node) return;
+/**
+ * Collect chain nodes in bottom-up order, then mark them top-down.
+ * Single O(N) pass instead of O(N²) from nested hasOptionalDescendant checks.
+ */
+function markOptionalChain(root: MutableNode): void {
+  if (!root) return;
 
-  if (node.type === "MemberExpression") {
-    node.type = "OptionalMemberExpression";
-    markOptionalChain(node.object);
-  } else if (node.type === "CallExpression") {
-    node.type = "OptionalCallExpression";
-    markOptionalChain(node.callee);
+  // walk down to collect chain nodes and find the lowest optional point
+  const chain: MutableNode[] = [];
+  let node: MutableNode | undefined = root;
+  let lowestOptional = -1;
+
+  while (node) {
+    if (node.type === "MemberExpression" || node.type === "CallExpression") {
+      chain.push(node);
+      if (node.optional) lowestOptional = chain.length - 1;
+      node = node.type === "MemberExpression" ? node.object : node.callee;
+    } else {
+      break;
+    }
+  }
+
+  // no optional nodes found — nothing to convert
+  if (lowestOptional < 0) return;
+
+  // convert nodes from root (index 0) down to the lowest optional point
+  for (let i = 0; i <= lowestOptional; i++) {
+    const n = chain[i];
+    if (n.type === "MemberExpression") {
+      n.type = "OptionalMemberExpression";
+    } else {
+      n.type = "OptionalCallExpression";
+    }
+    if (!n.optional) n.optional = false;
   }
 }
 
@@ -227,10 +260,7 @@ function convertMethodDefinition(node: MutableNode): void {
 
   if (isPrivate) {
     node.type = "ClassPrivateMethod";
-    if (keyType === "PrivateIdentifier") {
-      convertPrivateIdentifierToName(key);
-    }
-    // Babel doesn't include computed on private methods
+    if (keyType === "PrivateIdentifier") convertPrivateIdentifierToName(key);
     delete node.computed;
   } else {
     node.type = "ClassMethod";
@@ -245,10 +275,7 @@ function convertPropertyDefinition(node: MutableNode): void {
   const keyType = node.key && node.key.type;
   if (keyType === "PrivateIdentifier" || keyType === "PrivateName") {
     node.type = "ClassPrivateProperty";
-    if (keyType === "PrivateIdentifier") {
-      convertPrivateIdentifierToName(node.key);
-    }
-    // Babel doesn't include computed on private properties
+    if (keyType === "PrivateIdentifier") convertPrivateIdentifierToName(node.key);
     delete node.computed;
   } else {
     node.type = "ClassProperty";
@@ -331,6 +358,7 @@ function extractDirectives(node: MutableNode): void {
         extra: {
           raw: JSON.stringify(stmt.directive),
           rawValue: stmt.directive,
+          expressionValue: stmt.directive,
         },
       },
     });
@@ -356,14 +384,17 @@ function convertProperty(node: MutableNode): void {
   if (isObjectMethod) {
     const value = node.value;
     node.type = "ObjectMethod";
-    node.kind = node.kind || "method";
+    // methods have kind "init" in ESTree but "method" in Babel
+    if (node.method || node.kind === "init") {
+      node.kind = "method";
+    }
     node.params = value.params;
     node.body = value.body;
     node.generator = value.generator;
     node.async = value.async;
     node.id = null;
     delete node.value;
-    delete node.method;
+    delete node.shorthand;
   } else {
     node.type = "ObjectProperty";
     // Babel doesn't include kind: "init" on ObjectProperty
@@ -467,37 +498,55 @@ function convertTSAbstractMethodDefinition(node: MutableNode): void {
   delete node.value;
 }
 
+/**
+ * Convert ESTree ImportExpression to Babel's CallExpression with Import callee.
+ * This matches the behavior of @react-native/babel-preset with createImportExpressions: false.
+ */
+function convertImportExpression(node: MutableNode): void {
+  // ESTree: ImportExpression { source, options? }
+  // Babel:  CallExpression { callee: Import, arguments: [source, options?] }
+  const args = [node.source];
+  if (node.options) args.push(node.options);
+
+  node.type = "CallExpression";
+  node.callee = {
+    type: "Import",
+    start: node.start,
+    end: node.start + 6, // "import" is 6 chars
+    loc: node.loc
+      ? {
+          start: node.loc.start,
+          end: {
+            line: node.loc.start.line,
+            column: node.loc.start.column + 6,
+            index: node.start + 6,
+          },
+        }
+      : undefined,
+  };
+  node.arguments = args;
+  delete node.source;
+  delete node.options;
+  delete node.phase;
+}
+
 // ── Common cleanup for OXC nodes ─────────────────────────────────────
 
 /**
  * Strip fields that OXC adds but Babel doesn't include, and normalize values.
  * Called on every node during the visitor pass.
  */
+/**
+ * Lightweight cleanup for the hot path — only checks that apply broadly.
+ * Type-specific cleanup is done in dedicated visitor handlers to avoid
+ * string comparisons on every node.
+ */
 function cleanupOxcExtras(n: MutableNode): void {
   // OXC adds empty decorators arrays; Babel's class transform errors on them
   if (n.decorators && n.decorators.length === 0) delete n.decorators;
-  // OXC includes optional: false on non-optional calls/members; Babel omits it
-  // But Babel DOES include optional on OptionalCallExpression/OptionalMemberExpression
-  if (
-    n.optional === false &&
-    n.type !== "OptionalCallExpression" &&
-    n.type !== "OptionalMemberExpression"
-  ) {
-    delete n.optional;
-  }
-  // OXC includes expression on functions; Babel omits it
-  if (
-    n.type === "FunctionDeclaration" ||
-    n.type === "FunctionExpression" ||
-    n.type === "ArrowFunctionExpression"
-  ) {
-    delete n.expression;
-  }
-  // Note: do NOT delete shorthand: false — Babel includes it on ObjectProperty
-  // OXC keeps `raw` directly on numeric/string/bool literals; Babel uses extra.raw only
-  if (n.type === "Literal" || n.type === "TemplateLiteral") {
-    // handled in convertLiteral, but template elements have raw too
-  }
+  // OXC includes optional: false on many nodes; Babel generally omits it.
+  // Nodes in optional chains get optional re-set during chain conversion.
+  if (n.optional === false) delete n.optional;
 }
 
 // ── Visitor (built once at module load) ──────────────────────────────
@@ -514,6 +563,7 @@ type ConvertContext = {
   deferredPropertyDefs: MutableNode[];
   deferredObjectMethods: MutableNode[];
   deferredAbstractMethods: MutableNode[];
+  deferredImportExpressions: MutableNode[];
 };
 
 // Singleton context — mutated in place by toBabelAST before each visitor run
@@ -525,6 +575,7 @@ const ctx: ConvertContext = {
   deferredPropertyDefs: [],
   deferredObjectMethods: [],
   deferredAbstractMethods: [],
+  deferredImportExpressions: [],
 };
 
 function resetContext(newlines: number[]): void {
@@ -535,6 +586,7 @@ function resetContext(newlines: number[]): void {
   ctx.deferredPropertyDefs.length = 0;
   ctx.deferredObjectMethods.length = 0;
   ctx.deferredAbstractMethods.length = 0;
+  ctx.deferredImportExpressions.length = 0;
 }
 
 /**
@@ -586,6 +638,36 @@ function buildVisitor(): VisitorObject {
         n.extra.shorthand = true;
       }
     }
+    if (n.comments) convertNodeComments(n);
+  };
+
+  // Function types: OXC includes expression on functions; Babel omits it
+  const functionHandler = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    delete n.expression;
+    if (n.comments) convertNodeComments(n);
+  };
+  visitor.FunctionDeclaration = functionHandler;
+  visitor.FunctionExpression = functionHandler;
+  visitor.ArrowFunctionExpression = functionHandler;
+
+  // Import/Export specifiers: OXC adds importKind on specifiers; Babel doesn't
+  const specifierHandler = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    if (n.importKind === "value") delete n.importKind;
+    if (n.comments) convertNodeComments(n);
+  };
+  visitor.ImportSpecifier = specifierHandler;
+  visitor.ImportDefaultSpecifier = specifierHandler;
+  visitor.ImportNamespaceSpecifier = specifierHandler;
+  visitor.ExportSpecifier = specifierHandler;
+
+  visitor.ImportExpression = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    ctx.deferredImportExpressions.push(n);
     if (n.comments) convertNodeComments(n);
   };
 
@@ -653,6 +735,14 @@ function buildVisitor(): VisitorObject {
     if (n.comments) convertNodeComments(n);
   };
 
+  visitor.ExportDefaultDeclaration = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    // Babel doesn't include attributes on ExportDefaultDeclaration
+    if (n.attributes && n.attributes.length === 0) delete n.attributes;
+    if (n.comments) convertNodeComments(n);
+  };
+
   visitor.ExportAllDeclaration = (node: Node) => {
     const n = node as MutableNode;
     processNode(n);
@@ -716,6 +806,9 @@ export function toBabelAST(
   );
 
   // post-process deferred nodes now that all children have been visited
+  for (const node of ctx.deferredImportExpressions) {
+    convertImportExpression(node);
+  }
   for (const node of ctx.deferredChainExpressions) {
     convertChainExpression(node);
   }

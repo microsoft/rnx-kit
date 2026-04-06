@@ -2,12 +2,12 @@
  * Diagnostic test that finds structural AST differences between OXC and Babel
  * on a single simple non-comment JS fixture, reporting all differences.
  */
-import type { Node } from "@babel/core";
 import { ok } from "node:assert/strict";
-import path from "node:path";
 import { before, describe, it } from "node:test";
-import type { FileData } from "./testUtils";
-import { createBabelTransformerArgs, getFixtures } from "./testUtils";
+import type { AnyNode } from "./analysis";
+import { diffAst } from "./analysis";
+import type { FileData } from "./fixtures";
+import { getFixtures } from "./fixtures";
 
 const fixtures = getFixtures();
 const fileCache: Record<string, FileData> = {};
@@ -17,98 +17,6 @@ function getFile(file: string): FileData {
     fileCache[file] = fixtures.getFileData(file);
   }
   return fileCache[file];
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyNode = Record<string, any>;
-
-/**
- * Compare two AST nodes recursively and collect differences.
- * Ignores loc, start, end, and comments fields.
- */
-function diffAst(
-  oxc: AnyNode | null | undefined,
-  babel: AnyNode | null | undefined,
-  nodePath: string,
-  diffs: string[],
-  maxDiffs = 30
-): void {
-  if (diffs.length >= maxDiffs) return;
-
-  if (oxc === babel) return;
-  if (oxc == null && babel == null) return;
-
-  if (oxc == null || babel == null) {
-    diffs.push(
-      `${nodePath}: oxc=${JSON.stringify(oxc)}, babel=${JSON.stringify(babel)}`
-    );
-    return;
-  }
-
-  if (typeof oxc !== typeof babel) {
-    diffs.push(
-      `${nodePath}: type mismatch oxc=${typeof oxc} babel=${typeof babel}`
-    );
-    return;
-  }
-
-  if (typeof oxc !== "object") {
-    if (oxc !== babel) {
-      diffs.push(
-        `${nodePath}: oxc=${JSON.stringify(oxc)}, babel=${JSON.stringify(babel)}`
-      );
-    }
-    return;
-  }
-
-  if (Array.isArray(oxc) && Array.isArray(babel)) {
-    if (oxc.length !== babel.length) {
-      diffs.push(
-        `${nodePath}: array length oxc=${oxc.length}, babel=${babel.length}`
-      );
-    }
-    const len = Math.min(oxc.length, babel.length);
-    for (let i = 0; i < len; i++) {
-      diffAst(oxc[i], babel[i], `${nodePath}[${i}]`, diffs, maxDiffs);
-    }
-    return;
-  }
-
-  // skip fields that are expected to differ
-  const skip = new Set([
-    "loc",
-    "start",
-    "end",
-    "comments",
-    "leadingComments",
-    "trailingComments",
-    "innerComments",
-    "tokens",
-  ]);
-
-  const allKeys = new Set([...Object.keys(oxc), ...Object.keys(babel)]);
-  for (const key of allKeys) {
-    if (skip.has(key)) continue;
-    if (!(key in oxc) && key in babel) {
-      // babel has a field oxc doesn't
-      const val = babel[key];
-      // ignore undefined/null fields in babel
-      if (val != null) {
-        diffs.push(
-          `${nodePath}.${key}: missing in oxc, babel=${JSON.stringify(val).slice(0, 80)}`
-        );
-      }
-    } else if (key in oxc && !(key in babel)) {
-      const val = oxc[key];
-      if (val != null) {
-        diffs.push(
-          `${nodePath}.${key}: extra in oxc=${JSON.stringify(val).slice(0, 80)}`
-        );
-      }
-    } else {
-      diffAst(oxc[key], babel[key], `${nodePath}.${key}`, diffs, maxDiffs);
-    }
-  }
 }
 
 describe("AST diff diagnostic", () => {
@@ -140,7 +48,7 @@ describe("AST diff diagnostic", () => {
       totalFiles++;
 
       const diffs: string[] = [];
-      diffAst(oxcAst as AnyNode, babelAst as AnyNode, "File", diffs, 50);
+      diffAst(oxcAst, babelAst, "File", diffs, 50);
 
       if (diffs.length === 0) {
         matchFiles++;
