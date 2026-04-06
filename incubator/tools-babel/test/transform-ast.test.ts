@@ -2,38 +2,18 @@
  * Diagnostic test that finds structural AST differences between OXC and Babel
  * on a single simple non-comment JS fixture, reporting all differences.
  */
-import type { Node } from "@babel/core";
-import { transformFromAstSync } from "@babel/core";
 import { ok } from "node:assert/strict";
-import path from "node:path";
-import { before, describe, it } from "node:test";
-import { getBabelConfig } from "../src/config";
-import { initTransformerContext } from "../src/options";
-import { oxcParseToAst } from "../src/parse";
-import { tracePassthrough } from "../src/tracing";
-import type { TransformerContext } from "../src/types";
-import { createBabelTransformerArgs, getFixtures } from "./testUtils";
+import { describe, it } from "node:test";
+import { getFixtures, type FileData } from "./testUtils";
 
 const fixtures = getFixtures();
+const fileCache: Record<string, FileData> = {};
 
-function oxcParseAndTransform(filePath: string, src: string) {
-  const args = createBabelTransformerArgs(filePath, src, {});
-  const settings = { trace: tracePassthrough };
-  const context = initTransformerContext<TransformerContext>(
-    filePath,
-    settings
-  );
-  const config = getBabelConfig(args, settings);
-  if (!context || !config) return null;
-  try {
-    const ast = oxcParseToAst({ ...args, context, config });
-    if (ast) {
-      const result = transformFromAstSync(ast, src, config);
-      return result?.ast ?? null;
-    }
-  } catch {
-    return null;
+function getFile(file: string): FileData {
+  if (!fileCache[file]) {
+    fileCache[file] = fixtures.getFileData(file);
   }
+  return fileCache[file];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -143,18 +123,14 @@ describe("Transformed AST diff diagnostic", () => {
     let babelFailed = 0;
 
     for (const file of jsFiles) {
-      let babelAst: ReturnType<typeof fixtures.getTransformedAst> | null = null;
-      try {
-        babelAst = fixtures.getTransformedAst(file);
-      } catch {
+      const fileData = getFile(file);
+      const babelAst = fileData.babelTransformedAst;
+      if (!babelAst && fileData.error) {
         babelFailed++;
-        continue;
       }
       if (!babelAst) continue;
 
-      const filePath = path.join(fixtures.dirLang, file);
-      const src = fixtures.getSrc(file);
-      const oxcAst = oxcParseAndTransform(filePath, src);
+      const oxcAst = fileData.oxcTransformedAst;
       if (!oxcAst) continue;
       totalFiles++;
 
@@ -187,13 +163,17 @@ describe("Transformed AST diff diagnostic", () => {
     const patterns: Record<string, number> = {};
     const examples: Record<string, string> = {};
     for (const file of jsFiles) {
-      const babelAst = fixtures.getAst(file);
-      if (!babelAst) continue;
-      const filePath = path.join(fixtures.dirLang, file);
-      const oxcAst = oxcParseAndTransform(filePath);
-      if (!oxcAst) continue;
+      const fileData = getFile(file);
+      if (!fileData.babelTransformedAst || !fileData.oxcTransformedAst)
+        continue;
       const diffs: string[] = [];
-      diffAst(oxcAst as AnyNode, babelAst as AnyNode, "File", diffs, 100);
+      diffAst(
+        fileData.oxcTransformedAst as AnyNode,
+        fileData.babelTransformedAst as AnyNode,
+        "File",
+        diffs,
+        100
+      );
       for (const d of diffs) {
         // normalize the path to just field/type pattern
         const normalized = d

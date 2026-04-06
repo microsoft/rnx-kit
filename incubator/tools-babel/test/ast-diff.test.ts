@@ -6,27 +6,17 @@ import type { Node } from "@babel/core";
 import { ok } from "node:assert/strict";
 import path from "node:path";
 import { before, describe, it } from "node:test";
-import { getBabelConfig } from "../src/config";
-import { initTransformerContext } from "../src/options";
-import { oxcParseToAst } from "../src/parse";
-import { tracePassthrough } from "../src/tracing";
-import type { TransformerContext } from "../src/types";
+import type { FileData } from "./testUtils";
 import { createBabelTransformerArgs, getFixtures } from "./testUtils";
 
-function oxcParse(filePath: string): Node | null {
-  const args = createBabelTransformerArgs(filePath, undefined, {});
-  const settings = { trace: tracePassthrough };
-  const context = initTransformerContext<TransformerContext>(
-    filePath,
-    settings
-  );
-  const config = getBabelConfig(args, settings);
-  if (!context || !config) return null;
-  try {
-    return oxcParseToAst({ ...args, context, config });
-  } catch {
-    return null;
+const fixtures = getFixtures();
+const fileCache: Record<string, FileData> = {};
+
+function getFile(file: string): FileData {
+  if (!fileCache[file]) {
+    fileCache[file] = fixtures.getFileData(file);
   }
+  return fileCache[file];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -141,11 +131,11 @@ describe("AST diff diagnostic", () => {
     let diffFiles = 0;
 
     for (const file of jsFiles) {
-      const babelAst = fixtures.getAst(file);
+      const fileData = getFile(file);
+      const babelAst = fileData.babelAst;
       if (!babelAst) continue;
 
-      const filePath = path.join(fixtures.dirLang, file);
-      const oxcAst = oxcParse(filePath);
+      const oxcAst = fileData.oxcAst;
       if (!oxcAst) continue;
       totalFiles++;
 
@@ -178,21 +168,25 @@ describe("AST diff diagnostic", () => {
     const patterns: Record<string, number> = {};
     const examples: Record<string, string> = {};
     for (const file of jsFiles) {
-      const babelAst = fixtures.getAst(file);
-      if (!babelAst) continue;
-      const filePath = path.join(fixtures.dirLang, file);
-      const oxcAst = oxcParse(filePath);
-      if (!oxcAst) continue;
-      const diffs: string[] = [];
-      diffAst(oxcAst as AnyNode, babelAst as AnyNode, "File", diffs, 100);
-      for (const d of diffs) {
-        // normalize the path to just field/type pattern
-        const normalized = d
-          .replace(/\[\d+\]/g, "[]")
-          .replace(/File\.program\.body\[\].*\./, "...");
-        const key = normalized.slice(0, 120);
-        patterns[key] = (patterns[key] || 0) + 1;
-        if (!examples[key]) examples[key] = `${file}: ${d}`;
+      const fileData = getFile(file);
+      if (fileData.babelAst && fileData.oxcAst) {
+        const diffs: string[] = [];
+        diffAst(
+          fileData.oxcAst as AnyNode,
+          fileData.babelAst as AnyNode,
+          "File",
+          diffs,
+          100
+        );
+        for (const d of diffs) {
+          // normalize the path to just field/type pattern
+          const normalized = d
+            .replace(/\[\d+\]/g, "[]")
+            .replace(/File\.program\.body\[\].*\./, "...");
+          const key = normalized.slice(0, 120);
+          patterns[key] = (patterns[key] || 0) + 1;
+          if (!examples[key]) examples[key] = `${file}: ${d}`;
+        }
       }
     }
 

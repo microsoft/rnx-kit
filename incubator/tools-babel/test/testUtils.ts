@@ -1,13 +1,22 @@
 import { parseSync, transformFromAstSync } from "@babel/core";
 import type { Node } from "@babel/core";
+import { generate } from "@babel/generator";
 import { lazyInit } from "@rnx-kit/reporter";
 import fs from "node:fs";
 import path from "node:path";
-import { getBabelConfig } from "../src/config.ts";
+import { makeTransformerArgs } from "../src/options.ts";
+import { oxcParseToAst } from "../src/parse.ts";
+import { tracePassthrough } from "../src/tracing.ts";
 import type {
   BabelTransformerArgs,
   BabelTransformerOptions,
+  TransformerArgs,
+  TransformerSettings,
 } from "../src/types.ts";
+
+export const stockSettings: TransformerSettings = {
+  trace: tracePassthrough,
+};
 
 export function createBabelTransformerArgs(
   filename: string,
@@ -45,17 +54,22 @@ function isJsFile(filePath: string): boolean {
 }
 
 export const getFixtures = lazyInit(() => {
-  const dirFixtures = path.resolve(__dirname, "__fixtures__");
-  const dirLang = path.join(dirFixtures, "lang");
-  const files = fs.readdirSync(dirLang);
+  const dir = path.resolve(__dirname, "__fixtures__");
+  const files = fs.readdirSync(dir);
   const filesets: Record<string, string[]> = {};
   const srcCache: Record<string, string> = {};
 
   function getSrc(file: string): string {
-    return (srcCache[file] ??= fs.readFileSync(
-      path.join(dirLang, file),
-      "utf8"
-    ));
+    return (srcCache[file] ??= fs.readFileSync(path.join(dir, file), "utf8"));
+  }
+
+  function getBabelArgs(
+    file: string,
+    overrides: Partial<BabelTransformerOptions> = {}
+  ): BabelTransformerArgs {
+    const filename = path.join(dir, file);
+    const src = getSrc(file);
+    return createBabelTransformerArgs(filename, src, overrides);
   }
 
   function getFiles(
@@ -80,48 +94,117 @@ export const getFixtures = lazyInit(() => {
     return files;
   }
 
-  function setupParse(
+  function getFileData(
     file: string,
     overrides: Partial<BabelTransformerOptions> = {}
-  ) {
-    const filename = path.join(dirLang, file);
-    const src = getSrc(file);
-    const args = createBabelTransformerArgs(filename, src, overrides);
-    const settings = {};
-    const config = getBabelConfig(args, settings);
-    return { src, filename, config };
+  ): FileData {
+    const babelArgs = getBabelArgs(file, overrides);
+    return new FileData(babelArgs);
   }
 
-  function getAst(
-    file: string,
-    overrides: Partial<BabelTransformerOptions> = {}
-  ): Node | null {
-    const { src, config } = setupParse(file, overrides);
-    if (config) {
-      const ast = parseSync(src, config);
-      return ast;
-    }
-    console.warn(`Babel skipping file ${file} due to config issues`);
-    return null;
-  }
-
-  function getTransformedAst(
-    file: string,
-    overrides: Partial<BabelTransformerArgs["options"]> = {}
-  ): Node | null {
-    const { src, config } = setupParse(file, overrides);
-    if (config) {
-      const ast = parseSync(src, config);
-      if (ast) {
-        const result = transformFromAstSync(ast, src, config);
-        return result?.ast ?? null;
-      }
-      return ast;
-    }
-
-    console.warn(`Babel skipping file ${file} due to config issues`);
-    return null;
-  }
-
-  return { dirLang, files, getAst, getFiles, getSrc, getTransformedAst };
+  return {
+    dir,
+    files,
+    getFileData,
+    getFiles,
+    getSrc,
+    getBabelArgs,
+  };
 });
+
+export class FileData {
+  babelArgs: BabelTransformerArgs;
+  error?: Error;
+  private _args?: TransformerArgs;
+  private _babelAst?: Node | null;
+  private _oxcAst?: Node | null;
+  private _babelTransformedAst?: Node | null;
+  private _oxcTransformedAst?: Node | null;
+  private _srcBabel?: string | null;
+  private _srcOxc?: string | null;
+  private _srcTransformedBabel?: string | null;
+  private _srcTransformedOxc?: string | null;
+
+  constructor(babelArgs: BabelTransformerArgs) {
+    this.babelArgs = babelArgs;
+  }
+
+  get args(): TransformerArgs {
+    return (this._args ??= makeTransformerArgs(this.babelArgs, stockSettings)!);
+  }
+
+  get babelAst(): Node | null {
+    if (this._babelAst === undefined) {
+      const args = this.args;
+      this._babelAst = args ? parseSync(args.src, args.config) : null;
+    }
+    return this._babelAst;
+  }
+
+  get oxcAst(): Node | null {
+    if (this._oxcAst === undefined) {
+      this._oxcAst = this.args ? oxcParseToAst(this.args) : null;
+    }
+    return this._oxcAst;
+  }
+
+  get srcBabel(): string | null {
+    if (this._srcBabel === undefined) {
+      this._srcBabel = this.babelAst ? generate(this.babelAst).code : null;
+    }
+    return this._srcBabel;
+  }
+
+  get srcOxc(): string | null {
+    if (this._srcOxc === undefined) {
+      this._srcOxc = this.oxcAst ? generate(this.oxcAst).code : null;
+    }
+    return this._srcOxc;
+  }
+
+  get babelTransformedAst(): Node | null {
+    if (this._babelTransformedAst === undefined) {
+      try {
+        this._babelTransformedAst = this.babelAst
+          ? (transformFromAstSync(
+              this.babelAst,
+              this.args.src,
+              this.args.config
+            )?.ast ?? null)
+          : null;
+      } catch (err) {
+        this._babelTransformedAst = null;
+        this.error = err as Error;
+      }
+    }
+    return this._babelTransformedAst;
+  }
+
+  get oxcTransformedAst(): Node | null {
+    if (this._oxcTransformedAst === undefined) {
+      this._oxcTransformedAst = this.oxcAst
+        ? (transformFromAstSync(this.oxcAst, this.args.src, this.args.config)
+            ?.ast ?? null)
+        : null;
+    }
+    return this._oxcTransformedAst;
+  }
+
+  get srcTransformedBabel(): string | null {
+    if (this._srcTransformedBabel === undefined) {
+      this._srcTransformedBabel = this.babelTransformedAst
+        ? generate(this.babelTransformedAst).code
+        : null;
+    }
+    return this._srcTransformedBabel;
+  }
+
+  get srcTransformedOxc(): string | null {
+    if (this._srcTransformedOxc === undefined) {
+      this._srcTransformedOxc = this.oxcTransformedAst
+        ? generate(this.oxcTransformedAst).code
+        : null;
+    }
+    return this._srcTransformedOxc;
+  }
+}

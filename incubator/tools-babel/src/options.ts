@@ -1,6 +1,12 @@
 import path from "node:path";
+import { getBabelConfig } from "./config";
 import { getTrace } from "./tracing";
-import type { TransformerSettings, TransformerContext } from "./types";
+import type {
+  TransformerSettings,
+  TransformerContext,
+  TransformerArgs,
+  BabelTransformerArgs,
+} from "./types";
 
 function getBaseExt(ext: string, fallback?: string): string | undefined {
   switch (ext) {
@@ -56,4 +62,28 @@ export function initTransformerContext<
     mayContainFlow: ext === ".js" || ext === ".jsx" ? parseFlowDefault : false,
     isNodeModule: filename.includes("node_modules"),
   } as T;
+}
+
+export function makeTransformerArgs<
+  T extends TransformerContext = TransformerContext,
+>(
+  babelArgs: BabelTransformerArgs,
+  settings?: Partial<TransformerSettings>,
+  updateContext?: (context: T) => void
+): TransformerArgs<T> | null {
+  const { filename, src, options } = babelArgs;
+  const context = initTransformerContext<T>(filename, {
+    ...settings,
+    trace: getTrace(settings),
+  });
+  if (context) {
+    if (updateContext) {
+      updateContext(context);
+    }
+    const config = getBabelConfig(babelArgs, context);
+    if (config) {
+      return { filename, src, options, context, config };
+    }
+  }
+  return null;
 }
