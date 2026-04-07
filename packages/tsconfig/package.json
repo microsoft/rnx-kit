@@ -38,6 +38,9 @@
     "./tsconfig.node.json": {
       "default": "./tsconfig.node.json"
     },
+    "./tsconfig.nodenext.json": {
+      "default": "./tsconfig.nodenext.json"
+    },
     "./tsconfig.esm.node.json": {
       "default": "./tsconfig.esm.node.json"
     },
