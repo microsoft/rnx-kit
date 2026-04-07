@@ -2,7 +2,7 @@
   "name": "@rnx-kit/metro-transformer-native",
   "version": "0.0.1",
   "description": "transformer which transforms typescript files with native tools",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-transformer-native#readme",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/metro-transformer-native#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/metro-transformer-native"
+    "directory": "incubator/metro-transformer-native"
   },
   "files": [
     "lib/**/*.d.ts",
@@ -29,12 +29,7 @@
   "dependencies": {
     "@rnx-kit/reporter": "^0.2.0",
     "@rnx-kit/tools-babel": "^0.0.1",
-    "@swc/core": "^1.15.21",
-    "esbuild": "^0.27.1",
-    "estree-to-babel": "^12.0.1",
-    "hermes-parser": "^0.34.0",
-    "oxc-parser": "^0.120.0",
-    "swc-to-babel": "^5.0.2"
+    "@swc/core": "^1.15.21"
   },
   "devDependencies": {
     "@babel/core": "^7.22.0",

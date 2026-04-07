@@ -2,7 +2,7 @@ import type { TransformerConfigT } from "metro-config";
 import { setTransformerPluginOptions } from "./context";
 import type { TransformerOptions } from "./types";
 
-export function MetroTransformerEsbuild(
+export function MetroTransformerNative(
   options: Partial<TransformerOptions> = {},
   config: Partial<TransformerConfigT> = {}
 ): Partial<TransformerConfigT> {

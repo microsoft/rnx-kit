@@ -7,11 +7,6 @@ import type {
 
 export type TransformerNativeOptions = {
   /**
-   * Which native engine to use for source preprocessing. Defaults to "esbuild".
-   */
-  engine?: NativeEngine;
-
-  /**
    * Whether native transformations are enabled. Top-level options to disable native transformations entirely.
    * @default true
    */
@@ -99,7 +94,7 @@ export type SourceTransformResult = {
  */
 export type SourceTransformer = (
   args: TransformerArgs
-) => SourceTransformResult | Promise<SourceTransformResult>;
+) => SourceTransformResult | null | Promise<SourceTransformResult | null>;
 
 /**
  * Signature for an upstream transformer, whose results will be returned to metro

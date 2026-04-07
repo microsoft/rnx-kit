@@ -297,10 +297,15 @@ function markParenthesized(node: MutableNode): void {
 function inlineReplaceWithExpression(node: MutableNode): void {
   const expr = node.expression;
   if (!expr) return;
+  // Check if the inner node has its own `expression` field (e.g. TSAsExpression,
+  // TSSatisfiesExpression). If so, we must NOT delete it after copying.
+  const innerHasExpression = "expression" in expr;
   for (const key in expr) {
     node[key] = expr[key];
   }
-  delete node.expression;
+  if (!innerHasExpression) {
+    delete node.expression;
+  }
 }
 
 function extractDirectives(node: MutableNode): void {

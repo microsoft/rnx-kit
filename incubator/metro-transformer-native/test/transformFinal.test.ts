@@ -2,7 +2,10 @@ import type { BabelFileResult, Node } from "@babel/core";
 import { deepEqual, equal, ok, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { handleResult } from "../src/finalTransformer";
-import { hermesParse } from "../src/parse";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const hermesParse = (src: string, options: Record<string, unknown>) =>
+  require("hermes-parser").parse(src, options) as Node;
 
 describe("handleResult", () => {
   it("returns { ast: null } for null result", () => {

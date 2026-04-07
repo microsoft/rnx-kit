@@ -5,7 +5,6 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import { getPluginOptions, getTransformerArgs } from "./context";
 import { transformFinal } from "./finalTransformer";
-import { srcTransformEsbuild } from "./srcTransformEsbuild";
 import { srcTransformSvg } from "./srcTransformSvg";
 import { srcTransformSwc } from "./srcTransformSwc";
 import type {
@@ -23,6 +22,7 @@ import { toArray } from "./utils";
  */
 const packageFiles = [
   "babelTransformer",
+  "context",
   "finalTransformer",
   "index",
   "srcTransformEsbuild",
@@ -73,7 +73,6 @@ function getUpstreamTransformer({
  * Get the front-end transformer to use for a given file, if any.
  */
 function getSourceTransformer({
-  engine,
   ext,
   handleSvg,
   nativeTransform,
@@ -81,7 +80,7 @@ function getSourceTransformer({
   if (handleSvg && ext === ".svg") {
     return srcTransformSvg;
   } else if (nativeTransform) {
-    return engine === "swc" ? srcTransformSwc : srcTransformEsbuild;
+    return srcTransformSwc;
   }
   return undefined;
 }
@@ -127,16 +126,15 @@ function transformWorker(
   const sourceTransform = getSourceTransformer(context);
 
   // if there is a source transformer, either typescript or svg, run it first and pass the results to the final transformer
+  // a null result means the source transformer couldn't handle the file (e.g. Flow syntax) — fall through to Babel
   if (sourceTransform) {
-    // get the result, may be a promise or not
     const srcResult = sourceTransform(args);
-    // if it's a promise, this function will run asynchronously so yield execution to wait for the result
     if (isPromiseLike(srcResult)) {
-      return srcResult.then((result) =>
-        trace(upstreamOp, upstreamTransform, applySourceResult(result, args))
-      );
-    } else {
-      // synchronus case, just update the args immediately and continue with the final transform
+      return srcResult.then((result) => {
+        if (result) applySourceResult(result, args);
+        return trace(upstreamOp, upstreamTransform, args);
+      });
+    } else if (srcResult) {
       applySourceResult(srcResult, args);
     }
   }

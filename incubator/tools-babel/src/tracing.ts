@@ -136,7 +136,7 @@ function outputRow(
 ): number {
   const { name, calls, total, avgTime, longest } = entry;
   const msg = [
-    formatter.cyanBright(name.padEnd(nameMinWidth, " ")),
+    formatter.pad(formatter.cyanBright(name), nameMinWidth, "left"),
     formatter.pad(calls, 10, "right"),
     formatter.pad(total, 10, "right"),
     formatter.pad(avgTime, 10, "right"),

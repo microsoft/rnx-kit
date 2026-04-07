@@ -7,7 +7,7 @@ import type { TransformerContext, TransformerOptions } from "./types";
 /**
  * Environment variable used to pass options to the transformers.
  */
-const envVarName = "RNX_TRANSFORMER_ESBUILD_OPTIONS";
+const envVarName = "RNX_TRANSFORMER_NATIVE_OPTIONS";
 
 /**
  * Cached options, obtained from the environment on demand
@@ -26,7 +26,10 @@ export function getTransformerArgs(args: BabelTransformerArgs) {
   );
 }
 
-export function updateTransformerContext(context: TransformerContext): void {
+export function updateTransformerContext(
+  context: TransformerContext,
+  args: BabelTransformerArgs
+): void {
   // create a new copy of the native transform settings for this file
   const {
     srcSyntax,
@@ -40,8 +43,13 @@ export function updateTransformerContext(context: TransformerContext): void {
   // determine what work needs to be done based on native options
   if (nativeTransform) {
     if (srcSyntax === "ts" || srcSyntax === "tsx") {
-      context.nativeTransform = context.handleTs = handleTs;
-      context.handleJsx = handleJsx && srcSyntax === "tsx";
+      if (args.src.includes("codegenNativeComponent")) {
+        // codegen native component calls need to go through babel
+        context.nativeTransform = false;
+      } else {
+        context.nativeTransform = context.handleTs = handleTs;
+        context.handleJsx = handleJsx && srcSyntax === "tsx";
+      }
     } else {
       context.nativeTransform = handleJs && nonLangTransforms;
       context.handleJsx = handleJsx && srcSyntax === "jsx";
@@ -60,6 +68,7 @@ export function updateTransformerContext(context: TransformerContext): void {
     }
     if (context.handleModules) {
       disabled.add("transform-modules-commonjs");
+      disabled.add("transform-dynamic-import");
     }
   }
 }

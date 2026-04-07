@@ -30,6 +30,7 @@ export const swcCore = optionalModule<typeof import("@swc/core")>("@swc/core");
 function getSwcOptions(args: TransformerArgs): SwcOptions {
   const { filename, options, context } = args;
   const { srcSyntax, handleJsx } = context;
+  const { experimentalImportSupport } = options;
   const jsxTransform =
     handleJsx && (srcSyntax === "tsx" || srcSyntax === "jsx");
 
@@ -48,7 +49,9 @@ function getSwcOptions(args: TransformerArgs): SwcOptions {
           : undefined,
       },
     },
-    module: { type: "nodenext" },
+    module: experimentalImportSupport
+      ? { type: "es6" }
+      : { type: "commonjs", strict: true, strictMode: true },
     sourceMaps: true,
     isModule: true,
   };
@@ -60,17 +63,23 @@ export const srcTransformSwc: SourceTransformer = (args: TransformerArgs) => {
   const { context, src } = args;
   const { trace, asyncTransform } = context;
   const swcOptions = getSwcOptions(args);
+  // return null on parse errors to fall through to Babel
   if (asyncTransform) {
     const { transform } = swcCore.get();
-    return trace(swcOpName, transform, src, swcOptions).then((result) =>
-      handleSwcResult(result, context)
+    return trace(swcOpName, transform, src, swcOptions).then(
+      (result) => handleSwcResult(result, context),
+      () => null
     );
   } else {
-    const { transformSync } = swcCore.get();
-    return handleSwcResult(
-      trace(swcOpName, transformSync, src, swcOptions),
-      context
-    );
+    try {
+      const { transformSync } = swcCore.get();
+      return handleSwcResult(
+        trace(swcOpName, transformSync, src, swcOptions),
+        context
+      );
+    } catch {
+      return null;
+    }
   }
 };
 
@@ -81,7 +90,8 @@ function handleSwcResult(
   const srcType = context.srcSyntax;
   if (srcType === "ts" || srcType === "tsx") {
     context.srcSyntax = srcType === "ts" ? "js" : "jsx";
+  } else {
+    context.mayContainFlow = false;
   }
-  // SWC's handling of TypeScript is not always fully compatible with Babel's, so we need to do an additional pass through Babel to handle any syntax that SWC doesn't support or doesn't transform in the same way.
   return { code: result.code, map: result.map };
 }

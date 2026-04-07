@@ -1,55 +1,35 @@
 /**
- * Tests that parse each fixture with oxc (using the optimized estree conversion)
- * and hermes, comparing the resulting ASTs against Babel's parser output as reference.
- * Focused on JS/JSX since the pipeline is: swc strips TS → oxc parses JS → convert to Babel AST.
+ * Tests that parse each fixture with oxc and hermes, comparing the resulting
+ * ASTs against Babel's parser output as reference.
  */
 import type { Node } from "@babel/core";
 import { parseSync as babelParseSync } from "@babel/core";
 import generate from "@babel/generator";
-import type { BabelTransformerArgs } from "metro-babel-transformer";
+import {
+  hermesParseToAst,
+  makeTransformerArgs,
+  oxcParseToAst,
+  tracePassthrough,
+} from "@rnx-kit/tools-babel";
+import type {
+  BabelTransformerArgs,
+  TransformerArgs,
+} from "@rnx-kit/tools-babel";
 import { deepEqual, equal, ok } from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { before, describe, it } from "node:test";
-import { getBabelConfig } from "../src/babelConfig";
-import { hermesParseToAst, oxcParseToAst } from "../src/parse";
-import { measurePassthrough } from "../src/perfTrace";
-import type {
-  BabelMode,
-  FilePluginOptions,
-  TransformerArgs,
-} from "../src/types";
-import { setTransformerPluginOptions } from "../src/utils";
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
 const fixturesDir = path.join(__dirname, "__fixtures__");
-
-const defaultMode: BabelMode = {
-  jsx: "babel",
-  ts: "babel",
-  engine: "esbuild",
-};
+const settings = { trace: tracePassthrough };
 
 function readFixture(name: string): string {
   return fs.readFileSync(path.join(fixturesDir, name), "utf8");
 }
 
-function srcTypeFromName(name: string): FilePluginOptions["srcType"] {
-  const ext = path.extname(name).toLowerCase();
-  if (ext === ".ts") return "ts";
-  if (ext === ".tsx") return "tsx";
-  if (ext === ".jsx") return "jsx";
-  if (ext === ".js") return "js";
-  return undefined;
-}
-
-function makeArgs(
-  name: string,
-  src: string,
-  parserOverride?: FilePluginOptions["parser"]
-): TransformerArgs {
-  const ext = path.extname(name).toLowerCase();
+function makeBabelArgs(name: string, src: string): BabelTransformerArgs {
   return {
     src,
     filename: path.join(fixturesDir, name),
@@ -59,22 +39,18 @@ function makeArgs(
       hot: false,
       minify: false,
       platform: "ios",
-      type: "module",
       projectRoot: process.cwd(),
       enableBabelRCLookup: true,
       enableBabelRuntime: false,
       publicPath: "/",
       globalPrefix: "",
       unstable_transformProfile: "default",
-    } as BabelTransformerArgs["options"],
-    pluginOptions: {
-      ext,
-      srcType: srcTypeFromName(name),
-      mode: defaultMode,
-      trace: measurePassthrough,
-      parser: parserOverride,
-    } as FilePluginOptions,
-  };
+    },
+  } as BabelTransformerArgs;
+}
+
+function makeArgs(name: string, src: string): TransformerArgs | undefined {
+  return makeTransformerArgs(makeBabelArgs(name, src), settings);
 }
 
 type ASTNode = Node & {
@@ -96,27 +72,25 @@ function toCode(ast: Node): string {
   return generate(ast).code;
 }
 
-/**
- * Strip comment lines for comparison — hermes drops leading comments,
- * and oxc may order them differently.
- */
 function stripComments(code: string): string {
   return code
     .split("\n")
-    .filter((line) => !line.trimStart().startsWith("//"))
+    .filter((line) => {
+      const trimmed = line.trimStart();
+      return !trimmed.startsWith("//") && !trimmed.startsWith("/*");
+    })
     .join("\n")
     .trim();
 }
 
 function babelParse(name: string, src: string): Node | null {
-  const args = makeArgs(name, src, "babel");
-  const babelConfig = getBabelConfig(args);
-  return babelParseSync(src, babelConfig);
+  const args = makeArgs(name, src);
+  if (!args) return null;
+  return babelParseSync(src, args.config);
 }
 
 // ── Fixtures ─────────────────────────────────────────────────────────
 
-// JS/JSX fixtures covering the key ESTree→Babel conversion patterns
 const jsFixtures = [
   { name: "simple.js", description: "basic JS" },
   { name: "literals.js", description: "literal types" },
@@ -133,10 +107,6 @@ const jsFixtures = [
 // ── Tests: oxc vs babel ──────────────────────────────────────────────
 
 describe("parse: oxc vs babel (JS/JSX)", () => {
-  before(() => {
-    setTransformerPluginOptions({});
-  });
-
   for (const { name, description } of jsFixtures) {
     describe(`${name} (${description})`, () => {
       let src: string;
@@ -147,9 +117,8 @@ describe("parse: oxc vs babel (JS/JSX)", () => {
         src = readFixture(name);
         babelAst = babelParse(name, src)!;
         ok(babelAst != null, "Babel parse failed");
-
-        const args = makeArgs(name, src, "oxc");
-        oxcAst = oxcParseToAst(args);
+        const args = makeArgs(name, src);
+        oxcAst = args ? oxcParseToAst(args) : null;
       });
 
       it("produces a non-null AST", () => {
@@ -158,27 +127,20 @@ describe("parse: oxc vs babel (JS/JSX)", () => {
 
       it("has the same number of top-level statements", () => {
         if (!oxcAst) return;
-        const oxcBody = getBody(oxcAst);
-        const babelBody = getBody(babelAst);
-        equal(
-          oxcBody.length,
-          babelBody.length,
-          `Statement count: oxc=${oxcBody.length}, babel=${babelBody.length}`
-        );
+        equal(getBody(oxcAst).length, getBody(babelAst).length);
       });
 
       it("has matching statement types", () => {
         if (!oxcAst) return;
-        const oxcTypes = getStatementTypes(getBody(oxcAst));
-        const babelTypes = getStatementTypes(getBody(babelAst));
-        deepEqual(oxcTypes, babelTypes);
+        deepEqual(
+          getStatementTypes(getBody(oxcAst)),
+          getStatementTypes(getBody(babelAst))
+        );
       });
 
       it("generates equivalent code (ignoring comments)", () => {
         if (!oxcAst) return;
-        const oxcCode = stripComments(toCode(oxcAst));
-        const babelCode = stripComments(toCode(babelAst));
-        equal(oxcCode, babelCode);
+        equal(stripComments(toCode(oxcAst)), stripComments(toCode(babelAst)));
       });
     });
   }
@@ -187,24 +149,18 @@ describe("parse: oxc vs babel (JS/JSX)", () => {
 // ── Tests: hermes vs babel ───────────────────────────────────────────
 
 describe("parse: hermes vs babel (JS/JSX)", () => {
-  before(() => {
-    setTransformerPluginOptions({});
-  });
-
   for (const { name, description } of jsFixtures) {
     describe(`${name} (${description})`, () => {
       let src: string;
       let babelAst: Node;
-      let hermesAst: Node;
+      let hermesAst: Node | null;
 
       before(() => {
         src = readFixture(name);
         babelAst = babelParse(name, src)!;
         ok(babelAst != null, "Babel parse failed");
-
-        const args = makeArgs(name, src, "hermes");
-        const babelConfig = getBabelConfig(args);
-        hermesAst = hermesParseToAst(args, babelConfig);
+        const args = makeArgs(name, src);
+        hermesAst = args ? hermesParseToAst(args) : null;
       });
 
       it("produces a non-null AST", () => {
@@ -212,25 +168,24 @@ describe("parse: hermes vs babel (JS/JSX)", () => {
       });
 
       it("has the same number of top-level statements", () => {
-        const hermesBody = getBody(hermesAst);
-        const babelBody = getBody(babelAst);
-        equal(
-          hermesBody.length,
-          babelBody.length,
-          `Statement count: hermes=${hermesBody.length}, babel=${babelBody.length}`
-        );
+        if (!hermesAst) return;
+        equal(getBody(hermesAst).length, getBody(babelAst).length);
       });
 
       it("has matching statement types", () => {
-        const hermesTypes = getStatementTypes(getBody(hermesAst));
-        const babelTypes = getStatementTypes(getBody(babelAst));
-        deepEqual(hermesTypes, babelTypes);
+        if (!hermesAst) return;
+        deepEqual(
+          getStatementTypes(getBody(hermesAst)),
+          getStatementTypes(getBody(babelAst))
+        );
       });
 
       it("generates equivalent code (ignoring comments)", () => {
-        const hermesCode = stripComments(toCode(hermesAst));
-        const babelCode = stripComments(toCode(babelAst));
-        equal(hermesCode, babelCode);
+        if (!hermesAst) return;
+        equal(
+          stripComments(toCode(hermesAst)),
+          stripComments(toCode(babelAst))
+        );
       });
     });
   }

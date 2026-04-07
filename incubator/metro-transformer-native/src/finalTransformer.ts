@@ -22,7 +22,7 @@ export function handleResult(
 /**
  * Transforms the given source code using Babel and Hermes parser. This replaces the functionality in
  * @react-native/metro-babel-transformer with the assumption that we will always use hermes-parser and that
- * typescript will be handled by esbuild.
+ * typescript will be handled by a native engine (esbuild or swc).
  *
  * @param pluginOptions options for this plugin
  * @param args babel transformer arguments, this includes the source code, filename, and babel options

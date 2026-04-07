@@ -1,5 +1,5 @@
 /**
- * End-to-end tests that run both the esbuild transformer and the built-in
+ * End-to-end tests that run both the native transformer and the built-in
  * @react-native/metro-babel-transformer on the same fixture files, then
  * compare the results to ensure compatibility.
  */
@@ -12,9 +12,9 @@ import path from "node:path";
 import { before, describe, it } from "node:test";
 // Our transformer (imported directly, not through the babelTransformerPath
 // indirection, so we can control plugin options in-process)
-import { transform as esbuildTransform } from "../src/babelTransformer";
+import { transform as nativeTransform } from "../src/babelTransformer";
 // ── Transformer imports ──────────────────────────────────────────────
-import { setTransformerPluginOptions } from "../src/utils";
+import { setTransformerPluginOptions } from "../src/context";
 
 // The built-in React Native transformer
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -162,74 +162,74 @@ const fixtures = [
 
 // ── Tests ────────────────────────────────────────────────────────────
 
-describe("e2e: esbuild transformer vs @react-native/metro-babel-transformer", () => {
+describe("e2e: native transformer vs @react-native/metro-babel-transformer", () => {
   before(() => {
-    // Set up the plugin options so that the esbuild transformer picks them up.
-    // This simulates what MetroTransformerEsbuild() does when configuring metro.
+    // Set up the plugin options so that the native transformer picks them up.
+    // This simulates what MetroTransformerNative() does when configuring metro.
     setTransformerPluginOptions({});
   });
 
   for (const { name, description } of fixtures) {
     describe(name, () => {
       let src: string;
-      let esbuildResult: BabelFileResult;
+      let nativeResult: BabelFileResult;
       let rnResult: BabelFileResult;
 
       before(() => {
         src = readFixture(name);
         const args = makeArgs(name, src);
-        esbuildResult = esbuildTransform(args) as BabelFileResult;
+        nativeResult = nativeTransform(args) as BabelFileResult;
         rnResult = rnTransformer.transform(args);
       });
 
       it(`produces a non-null AST (${description})`, () => {
-        ok(esbuildResult.ast != null, "esbuild transformer produced null AST");
+        ok(nativeResult.ast != null, "native transformer produced null AST");
         ok(rnResult.ast != null, "RN transformer produced null AST");
       });
 
       it("produces an AST with a program body", () => {
-        const esbuildBody = getBody(esbuildResult);
+        const nativeBody = getBody(nativeResult);
         const rnBody = getBody(rnResult);
-        ok(esbuildBody.length > 0, "esbuild AST body is empty");
+        ok(nativeBody.length > 0, "native AST body is empty");
         ok(rnBody.length > 0, "RN AST body is empty");
       });
 
       it("produces a comparable number of top-level statements", () => {
-        const esbuildBody = getBody(esbuildResult);
+        const nativeBody = getBody(nativeResult);
         const rnBody = getBody(rnResult);
-        // Allow some variance — esbuild may elide type-only exports that
+        // Allow some variance — native engine may elide type-only exports that
         // Babel's TS plugin leaves as empty statements, or vice versa.
-        const ratio = esbuildBody.length / rnBody.length;
+        const ratio = nativeBody.length / rnBody.length;
         ok(
           ratio >= 0.5 && ratio <= 2.0,
-          `Statement count diverged too much: esbuild=${esbuildBody.length}, rn=${rnBody.length}`
+          `Statement count diverged too much: native=${nativeBody.length}, rn=${rnBody.length}`
         );
       });
 
       it("has matching core statement types", () => {
-        const esbuildTypes = getStatementTypes(getBody(esbuildResult));
+        const nativeTypes = getStatementTypes(getBody(nativeResult));
         const rnTypes = getStatementTypes(getBody(rnResult));
         // At minimum, both should contain at least one common statement type
-        const esbuildSet = new Set(esbuildTypes);
+        const nativeSet = new Set(nativeTypes);
         const rnSet = new Set(rnTypes);
-        const common = [...esbuildSet].filter((t) => rnSet.has(t));
+        const common = [...nativeSet].filter((t) => rnSet.has(t));
         ok(
           common.length > 0,
-          `No common statement types between esbuild (${[...esbuildSet].join(", ")}) and RN (${[...rnSet].join(", ")})`
+          `No common statement types between esbuild (${[...nativeSet].join(", ")}) and RN (${[...rnSet].join(", ")})`
         );
       });
 
       it("produces an AST with a reasonable node count", () => {
-        const esbuildCount = countNodes(esbuildResult.ast as ASTNode);
+        const nativeCount = countNodes(nativeResult.ast as ASTNode);
         const rnCount = countNodes(rnResult.ast as ASTNode);
         // Both should produce substantial ASTs (not trivially collapsed)
-        ok(esbuildCount > 10, `esbuild AST has too few nodes: ${esbuildCount}`);
+        ok(nativeCount > 10, `native AST has too few nodes: ${nativeCount}`);
         ok(rnCount > 10, `RN AST has too few nodes: ${rnCount}`);
         // And they should be in the same ballpark
-        const ratio = esbuildCount / rnCount;
+        const ratio = nativeCount / rnCount;
         ok(
           ratio >= 0.3 && ratio <= 3.0,
-          `Node count ratio out of range: esbuild=${esbuildCount}, rn=${rnCount}, ratio=${ratio.toFixed(2)}`
+          `Node count ratio out of range: native=${nativeCount}, rn=${rnCount}, ratio=${ratio.toFixed(2)}`
         );
       });
     });
@@ -245,7 +245,7 @@ describe("e2e: source location validation", () => {
     it(`${name}: all AST nodes have valid source locations (${description})`, () => {
       const src = readFixture(name);
       const args = makeArgs(name, src);
-      const result = esbuildTransform(args) as BabelFileResult;
+      const result = nativeTransform(args) as BabelFileResult;
       ok(result.ast != null);
       verifySourceLocations(result.ast as ASTNode, name);
     });
@@ -269,11 +269,11 @@ describe("e2e: JS files produce identical code (hermesParser + hot enabled)", ()
     it(`${name}: generated code matches exactly (${description})`, () => {
       const src = readFixture(name);
       const args = makeArgs(name, src, { hermesParser: true, hot: true });
-      const esbuildResult = esbuildTransform(args) as BabelFileResult;
+      const nativeResult = nativeTransform(args) as BabelFileResult;
       const rnResult = rnTransformer.transform(args);
-      const esbuildCode = toCode(esbuildResult);
+      const nativeCode = toCode(nativeResult);
       const rnCode = toCode(rnResult);
-      equal(esbuildCode, rnCode);
+      equal(nativeCode, rnCode);
     });
   }
 });
@@ -288,10 +288,10 @@ describe("e2e: TypeScript type erasure", () => {
   );
 
   for (const { name, description } of tsFixtures) {
-    it(`${name}: esbuild result contains no TypeScript-specific AST nodes (${description})`, () => {
+    it(`${name}: native result contains no TypeScript-specific AST nodes (${description})`, () => {
       const src = readFixture(name);
       const args = makeArgs(name, src);
-      const result = esbuildTransform(args) as BabelFileResult;
+      const result = nativeTransform(args) as BabelFileResult;
       const body = getBody(result);
 
       const tsNodeTypes = new Set([
@@ -306,32 +306,32 @@ describe("e2e: TypeScript type erasure", () => {
       for (const node of body) {
         ok(
           !tsNodeTypes.has(node.type),
-          `Found TypeScript AST node '${node.type}' in esbuild output for ${name}`
+          `Found TypeScript AST node '${node.type}' in native output for ${name}`
         );
       }
     });
   }
 });
 
-describe("e2e: handleJs option transforms JS files through esbuild", () => {
+describe("e2e: handleJs option transforms JS files through native engine", () => {
   before(() => {
     setTransformerPluginOptions({ handleJs: true });
   });
 
-  it("simple.js: produces valid AST when preprocessed by esbuild", () => {
+  it("simple.js: produces valid AST when preprocessed by native engine", () => {
     const src = readFixture("simple.js");
     const args = makeArgs("simple.js", src);
-    const result = esbuildTransform(args) as BabelFileResult;
+    const result = nativeTransform(args) as BabelFileResult;
     ok(result.ast != null);
     const body = getBody(result);
     ok(body.length > 0);
     verifySourceLocations(result.ast as ASTNode, "simple.js");
   });
 
-  it("component.jsx: produces valid AST when preprocessed by esbuild", () => {
+  it("component.jsx: produces valid AST when preprocessed by native engine", () => {
     const src = readFixture("component.jsx");
     const args = makeArgs("component.jsx", src);
-    const result = esbuildTransform(args) as BabelFileResult;
+    const result = nativeTransform(args) as BabelFileResult;
     ok(result.ast != null);
     const body = getBody(result);
     ok(body.length > 0);
@@ -348,9 +348,9 @@ describe("e2e: platform variations", () => {
     it(`simple.ts: transforms successfully for platform=${platform}`, () => {
       const src = readFixture("simple.ts");
       const args = makeArgs("simple.ts", src, { platform });
-      const esbuildResult = esbuildTransform(args) as BabelFileResult;
-      ok(esbuildResult.ast != null);
-      const body = getBody(esbuildResult);
+      const nativeResult = nativeTransform(args) as BabelFileResult;
+      ok(nativeResult.ast != null);
+      const body = getBody(nativeResult);
       ok(body.length > 0);
     });
   }
@@ -365,9 +365,9 @@ describe("e2e: dev vs production", () => {
     it(`modules.ts: transforms in ${dev ? "development" : "production"} mode`, () => {
       const src = readFixture("modules.ts");
       const args = makeArgs("modules.ts", src, { dev });
-      const esbuildResult = esbuildTransform(args) as BabelFileResult;
-      ok(esbuildResult.ast != null);
-      const body = getBody(esbuildResult);
+      const nativeResult = nativeTransform(args) as BabelFileResult;
+      ok(nativeResult.ast != null);
+      const body = getBody(nativeResult);
       ok(body.length > 0);
     });
   }
@@ -375,8 +375,8 @@ describe("e2e: dev vs production", () => {
 
 describe("e2e: source map line coverage", () => {
   // Verify that source locations in the AST cover a meaningful range.
-  // For TS files, esbuild strips types and produces new output — the AST
-  // locations reflect the esbuild output, not the original source. So we
+  // For TS files, native engine strips types and produces new output — the AST
+  // locations reflect the native output, not the original source. So we
   // check that locations exist and span a reasonable range, rather than
   // mapping back to original line numbers.
   before(() => {
@@ -427,7 +427,7 @@ describe("e2e: source map line coverage", () => {
     it(`${name}: AST nodes have valid source locations`, () => {
       const src = readFixture(name);
       const args = makeArgs(name, src);
-      const result = esbuildTransform(args) as BabelFileResult;
+      const result = nativeTransform(args) as BabelFileResult;
       const body = getBody(result);
 
       // Collect locations from body nodes and their immediate children
