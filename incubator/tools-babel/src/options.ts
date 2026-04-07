@@ -40,10 +40,12 @@ export function initTransformerContext<
 >(filename: string, settings: Partial<TransformerSettings>): T | undefined {
   const {
     parseFlowDefault = true,
+    parseFlowWorkspace = false,
     parseExtAliases,
     parseExtDefault = "js",
   } = settings;
   const trace = getTrace(settings);
+  const isNodeModule = filename.includes("node_modules");
 
   const ext = path.extname(filename).toLowerCase();
   const srcSyntax: SrcSyntax | undefined =
@@ -54,14 +56,21 @@ export function initTransformerContext<
     return undefined;
   }
 
+  const isJsFile = srcSyntax === "js" || srcSyntax === "jsx";
+  const flowDefault = isNodeModule ? parseFlowDefault : parseFlowWorkspace;
+  const mayContainFlow =
+    isJsFile &&
+    (flowDefault ||
+      filename.endsWith(".flow.js") ||
+      filename.endsWith(".flow.jsx"));
+
   return {
     ...settings,
     trace,
     ext,
     srcSyntax,
-    mayContainFlow:
-      srcSyntax === "js" || srcSyntax === "jsx" ? parseFlowDefault : false,
-    isNodeModule: filename.includes("node_modules"),
+    mayContainFlow,
+    isNodeModule,
   } as T;
 }
 

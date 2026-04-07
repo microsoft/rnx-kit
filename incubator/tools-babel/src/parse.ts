@@ -25,7 +25,9 @@ export function oxcParseToAst({
 }: TransformerArgs): Node | null {
   const { parseSync } = require("oxc-parser");
   const { trace, parseDisableOxc } = context;
-  if (parseDisableOxc) {
+  // setting disabled specifically turns off auto-detection, otherwise avoid flow files
+  const disabled = parseDisableOxc ?? context.mayContainFlow;
+  if (disabled) {
     return null;
   }
 

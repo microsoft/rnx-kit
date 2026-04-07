@@ -90,6 +90,9 @@ export type TransformerSettings = {
   /** Starting flow code state for .js(x) files */
   parseFlowDefault?: boolean;
 
+  /** whether this workspace uses flow */
+  parseFlowWorkspace?: boolean;
+
   /** Extension for unknown file types, if unset will return a null ast */
   parseExtDefault?: SrcSyntax;
 

@@ -5,7 +5,7 @@ import { lazyInit } from "@rnx-kit/reporter";
 import fs from "node:fs";
 import path from "node:path";
 import { makeTransformerArgs } from "../src/options.ts";
-import { oxcParseToAst } from "../src/parse.ts";
+import { oxcParseToAst, oxcParseToAstLib } from "../src/parse.ts";
 import { tracePassthrough } from "../src/tracing.ts";
 import type {
   BabelTransformerArgs,
