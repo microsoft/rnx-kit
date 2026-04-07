@@ -44,10 +44,6 @@ function getColumn(offset: number, line: number, newlines: number[]): number {
   return line <= 1 ? offset : offset - newlines[line - 2] - 1;
 }
 
-/**
- * Set the Babel source location directly on a node. Avoids allocating
- * intermediate tuple arrays — line and column are computed inline.
- */
 // Minimal loc shape that satisfies Babel without allocating unused fields.
 // `filename` and `identifierName` are typed as required by SourceLocation
 // but Babel doesn't need them on every node.
@@ -88,11 +84,8 @@ export function getNewlines(src: string): number[] {
   return newlines;
 }
 
-// ── ESTree to Babel conversion (single-pass, no @babel/traverse) ─────
+// ── Comment conversion ──────────────────────────────────────────────
 
-/**
- * Convert comment format from ESTree to Babel. Mutates in place.
- */
 function convertComment(comment: MutableNode): void {
   if (comment.type === "Line") {
     comment.type = "CommentLine";
@@ -103,7 +96,6 @@ function convertComment(comment: MutableNode): void {
 
 /**
  * Distribute node-attached comments into Babel's leading/trailing/inner format.
- * Runs on every node that has an ESTree `comments` array.
  */
 function convertNodeComments(node: MutableNode): void {
   const comments = node.comments;
@@ -132,15 +124,14 @@ function convertNodeComments(node: MutableNode): void {
   if (inner) node.innerComments = inner;
 }
 
-/**
- * Convert ESTree Literal node to the appropriate Babel literal type.
- */
+// ── Imperative conversion functions ─────────────────────────────────
+// These handle complex structural transforms that don't fit a table.
+
 function convertLiteral(node: MutableNode): void {
   if (node.type !== "Literal") return;
 
   const { value, raw } = node;
 
-  // preserve raw in extra for Babel compatibility, then remove from node
   if (raw !== undefined) {
     node.extra = node.extra || {};
     node.extra.raw = raw;
@@ -150,17 +141,16 @@ function convertLiteral(node: MutableNode): void {
 
   if (value === null) {
     node.type = "NullLiteral";
-    delete node.extra; // Babel doesn't include extra on NullLiteral
+    delete node.extra;
   } else if (typeof value === "string") {
     node.type = "StringLiteral";
   } else if (typeof value === "number") {
     node.type = "NumericLiteral";
   } else if (typeof value === "boolean") {
     node.type = "BooleanLiteral";
-    delete node.extra; // Babel doesn't include extra on BooleanLiteral
+    delete node.extra;
   } else if (node.bigint !== undefined) {
     node.type = "BigIntLiteral";
-    // Babel stores the numeric value as a string in `value`, not `bigint`
     const bigintStr =
       typeof node.bigint === "string" ? node.bigint : String(node.bigint);
     node.value = bigintStr;
@@ -174,7 +164,6 @@ function convertLiteral(node: MutableNode): void {
     node.flags = node.regex.flags;
     delete node.regex;
     delete node.value;
-    // Babel includes extra.raw on RegExp (the raw source text) but not rawValue
     if (node.extra) {
       delete node.extra.rawValue;
     }
@@ -182,17 +171,12 @@ function convertLiteral(node: MutableNode): void {
 }
 
 /**
- * Recursively mark MemberExpression/CallExpression nodes within a chain
- * as their Optional* counterparts.
- */
-/**
  * Collect chain nodes in bottom-up order, then mark them top-down.
  * Single O(N) pass instead of O(N²) from nested hasOptionalDescendant checks.
  */
 function markOptionalChain(root: MutableNode): void {
   if (!root) return;
 
-  // walk down to collect chain nodes and find the lowest optional point
   const chain: MutableNode[] = [];
   let node: MutableNode | undefined = root;
   let lowestOptional = -1;
@@ -207,10 +191,8 @@ function markOptionalChain(root: MutableNode): void {
     }
   }
 
-  // no optional nodes found — nothing to convert
   if (lowestOptional < 0) return;
 
-  // convert nodes from root (index 0) down to the lowest optional point
   for (let i = 0; i <= lowestOptional; i++) {
     const n = chain[i];
     if (n.type === "MemberExpression") {
@@ -222,22 +204,13 @@ function markOptionalChain(root: MutableNode): void {
   }
 }
 
-/**
- * Convert a ChainExpression's children to Babel's Optional* types and
- * inline-replace the wrapper. Must be called AFTER the visitor has finished
- * walking so that child type mutations don't interfere with visitor key lookup.
- */
 function convertChainExpression(node: MutableNode): void {
   const expr = node.expression;
   if (!expr) return;
-
   markOptionalChain(expr);
   inlineReplaceWithExpression(node);
 }
 
-/**
- * Convert ESTree MethodDefinition to Babel ClassMethod/ClassPrivateMethod.
- */
 function convertMethodDefinition(node: MutableNode): void {
   if (node.decorators && node.decorators.length === 0) delete node.decorators;
   const { key, value } = node;
@@ -247,45 +220,38 @@ function convertMethodDefinition(node: MutableNode): void {
   const isPrivate =
     keyType === "PrivateIdentifier" || keyType === "PrivateName";
 
-  // hoist function properties to the method node
   node.params = value.params;
   node.body = value.body;
   node.generator = value.generator;
   node.async = value.async;
   node.id = value.id ?? null;
   delete node.value;
-  // Babel doesn't include expression on ClassMethod/ClassPrivateMethod
   delete node.expression;
 
   if (isPrivate) {
     node.type = "ClassPrivateMethod";
     if (keyType === "PrivateIdentifier") convertPrivateIdentifierToName(key);
-    // Babel only includes computed on private getters/setters, not regular methods
     if (node.kind === "get" || node.kind === "set") {
       if (node.computed === undefined) node.computed = false;
     } else {
       delete node.computed;
     }
   } else if (node.body === null) {
-    // Ambient methods (no body) → TSDeclareMethod
     node.type = "TSDeclareMethod";
     if (node.computed === undefined) node.computed = false;
   } else {
     node.type = "ClassMethod";
-    // Babel always includes computed on ClassMethod (defaults to false)
     if (node.computed === undefined) node.computed = false;
   }
 }
 
-/**
- * Convert ESTree PropertyDefinition to Babel ClassProperty/ClassPrivateProperty.
- */
 function convertPropertyDefinition(node: MutableNode): void {
   if (node.decorators && node.decorators.length === 0) delete node.decorators;
   const keyType = node.key && node.key.type;
   if (keyType === "PrivateIdentifier" || keyType === "PrivateName") {
     node.type = "ClassPrivateProperty";
-    if (keyType === "PrivateIdentifier") convertPrivateIdentifierToName(node.key);
+    if (keyType === "PrivateIdentifier")
+      convertPrivateIdentifierToName(node.key);
     delete node.computed;
   } else {
     node.type = "ClassProperty";
@@ -293,9 +259,6 @@ function convertPropertyDefinition(node: MutableNode): void {
   }
 }
 
-/**
- * Convert TSAbstractPropertyDefinition to ClassProperty with abstract: true.
- */
 function convertTSAbstractPropertyDefinition(node: MutableNode): void {
   node.type = "ClassProperty";
   node.abstract = true;
@@ -303,9 +266,6 @@ function convertTSAbstractPropertyDefinition(node: MutableNode): void {
   if (node.computed === undefined) node.computed = false;
 }
 
-/**
- * Convert ESTree PrivateIdentifier to Babel PrivateName in place.
- */
 function convertPrivateIdentifierToName(node: MutableNode): void {
   const name = node.name;
   const loc = node.loc;
@@ -326,51 +286,34 @@ function convertPrivateIdentifierToName(node: MutableNode): void {
   delete node.name;
 }
 
-/**
- * Mark the inner expression as parenthesized. The actual node replacement
- * happens in post-processing (see inlineReplaceWithExpression).
- */
 function markParenthesized(node: MutableNode): void {
   const expr = node.expression;
   if (!expr) return;
-
   expr.extra = expr.extra || {};
   expr.extra.parenthesized = true;
   expr.extra.parenStart = node.start;
 }
 
-/**
- * Inline-replace a wrapper node (ChainExpression, ParenthesizedExpression)
- * with its expression child by copying all child properties onto the parent.
- * Safe to call after the visitor has finished walking.
- */
 function inlineReplaceWithExpression(node: MutableNode): void {
   const expr = node.expression;
   if (!expr) return;
-
   for (const key in expr) {
     node[key] = expr[key];
   }
   delete node.expression;
 }
 
-/**
- * Extract "use strict" and similar directives from the body of a
- * BlockStatement or Program.
- */
 function extractDirectives(node: MutableNode): void {
-  if (node.directives) return; // already processed
+  if (node.directives) return;
 
   node.directives = [];
   const body = node.body;
   if (!Array.isArray(body)) return;
 
-  // directives must be leading contiguous ExpressionStatements with a directive property
   let i = 0;
   while (i < body.length) {
     const stmt = body[i];
     if (stmt.type !== "ExpressionStatement" || !stmt.directive) break;
-
     node.directives.push({
       type: "Directive",
       value: {
@@ -386,16 +329,11 @@ function extractDirectives(node: MutableNode): void {
     i++;
   }
 
-  // remove directive statements from body
   if (i > 0) {
     node.body = body.slice(i);
   }
 }
 
-/**
- * Convert ESTree Property to Babel ObjectProperty, and handle object method
- * shorthand (method: true with FunctionExpression value).
- */
 function convertProperty(node: MutableNode): void {
   const isObjectMethod =
     node.value &&
@@ -405,7 +343,6 @@ function convertProperty(node: MutableNode): void {
   if (isObjectMethod) {
     const value = node.value;
     node.type = "ObjectMethod";
-    // methods have kind "init" in ESTree but "method" in Babel
     if (node.method || node.kind === "init") {
       node.kind = "method";
     }
@@ -418,9 +355,7 @@ function convertProperty(node: MutableNode): void {
     delete node.shorthand;
   } else {
     node.type = "ObjectProperty";
-    // Babel doesn't include kind: "init" on ObjectProperty
     if (node.kind === "init") delete node.kind;
-    // Babel sets extra.shorthand for shorthand properties
     if (node.shorthand) {
       node.extra = node.extra || {};
       node.extra.shorthand = true;
@@ -428,41 +363,19 @@ function convertProperty(node: MutableNode): void {
   }
 }
 
-/**
- * Convert ImportDeclaration to ensure attributes array exists.
- */
 function convertImportDeclaration(node: MutableNode): void {
-  if (!node.attributes) {
-    node.attributes = [];
-  }
-  if (!node.importKind) {
-    node.importKind = "value";
-  }
+  if (!node.attributes) node.attributes = [];
+  if (!node.importKind) node.importKind = "value";
 }
 
-/**
- * Convert ExportDeclaration to ensure attributes array exists, and handle
- * `export * as X from` which ESTree represents as ExportAllDeclaration with
- * an `exported` field but Babel represents as ExportNamedDeclaration.
- */
 function convertExportDeclaration(node: MutableNode): void {
-  if (!node.attributes) {
-    node.attributes = [];
-  }
-  if (!node.exportKind) {
-    node.exportKind = "value";
-  }
+  if (!node.attributes) node.attributes = [];
+  if (!node.exportKind) node.exportKind = "value";
 }
 
-/**
- * Convert ExportAllDeclaration with an `exported` field to ExportNamedDeclaration.
- * ESTree: `export * as X from "foo"` → ExportAllDeclaration { exported: Identifier }
- * Babel:  `export * as X from "foo"` → ExportNamedDeclaration { specifiers: [ExportNamespaceSpecifier] }
- */
 function convertExportAllWithExported(node: MutableNode): void {
   if (!node.exported) return;
 
-  // convert Literal exported name to StringLiteral for Babel compatibility
   const exported = node.exported;
   if (exported.type === "Literal" && typeof exported.value === "string") {
     exported.type = "StringLiteral";
@@ -487,9 +400,6 @@ function convertExportAllWithExported(node: MutableNode): void {
   delete node.exported;
 }
 
-/**
- * Convert TSInterfaceHeritage MemberExpression chain to TSQualifiedName.
- */
 function convertTSInterfaceHeritage(node: MutableNode): void {
   let expr = node.expression;
   while (expr && expr.type === "MemberExpression") {
@@ -502,13 +412,9 @@ function convertTSInterfaceHeritage(node: MutableNode): void {
   }
 }
 
-/**
- * Convert TSAbstractMethodDefinition to TSDeclareMethod.
- */
 function convertTSAbstractMethodDefinition(node: MutableNode): void {
   const { value } = node;
   if (!value) return;
-
   node.type = "TSDeclareMethod";
   node.abstract = true;
   node.generator = value.generator;
@@ -519,13 +425,7 @@ function convertTSAbstractMethodDefinition(node: MutableNode): void {
   delete node.value;
 }
 
-/**
- * Convert ESTree ImportExpression to Babel's CallExpression with Import callee.
- * This matches the behavior of @react-native/babel-preset with createImportExpressions: false.
- */
 function convertImportExpression(node: MutableNode): void {
-  // ESTree: ImportExpression { source, options? }
-  // Babel:  CallExpression { callee: Import, arguments: [source, options?] }
   const args = [node.source];
   if (node.options) args.push(node.options);
 
@@ -533,7 +433,7 @@ function convertImportExpression(node: MutableNode): void {
   node.callee = {
     type: "Import",
     start: node.start,
-    end: node.start + 6, // "import" is 6 chars
+    end: node.start + 6,
     loc: node.loc
       ? {
           start: node.loc.start,
@@ -551,82 +451,335 @@ function convertImportExpression(node: MutableNode): void {
   delete node.phase;
 }
 
-// ── Common cleanup for OXC nodes ─────────────────────────────────────
+function convertEnumDeclaration(node: MutableNode): void {
+  if (node.body && node.body.members && !node.members) {
+    node.members = node.body.members;
+    delete node.body;
+  }
+}
+
+// ── Universal cleanup (hot path — runs on every node) ───────────────
 
 /**
- * Strip fields that OXC adds but Babel doesn't include, and normalize values.
- * Called on every node during the visitor pass.
- */
-/**
- * Lightweight cleanup for the hot path — only checks that apply broadly.
- * Type-specific cleanup is done in dedicated visitor handlers to avoid
- * string comparisons on every node.
+ * Strip fields that OXC adds on many node types but Babel omits.
+ * Only truly universal checks belong here — type-specific cleanup
+ * is handled by the per-node-type ops table below.
  */
 function cleanupOxcExtras(n: MutableNode): void {
-  // OXC adds empty decorators arrays; Babel's class transform errors on them
   if (n.decorators && n.decorators.length === 0) delete n.decorators;
-  // OXC includes optional: false on many nodes; Babel generally omits it.
-  // Nodes in optional chains get optional re-set during chain conversion.
   if (n.optional === false) delete n.optional;
-  // OXC adds typeAnnotation: null on Identifiers; Babel omits it
   if (n.typeAnnotation === null) delete n.typeAnnotation;
-
-  // OXC includes many TS-specific boolean-false and empty-array fields that
-  // Babel omits. Note: `static` is NOT removed because Babel keeps it on class
-  // members even in JS.
+  // These TS flags appear on many node types (PropertyDefinition, MethodDefinition,
+  // ClassDeclaration, FunctionExpression, VariableDeclarator, AccessorProperty, etc.)
+  // so they stay global rather than being enumerated per-type in the ops table.
   if (n.declare === false) delete n.declare;
   if (n.definite === false) delete n.definite;
   if (n.override === false) delete n.override;
   if (n.readonly === false) delete n.readonly;
   if (n.abstract === false) delete n.abstract;
-  if (n.const === false) delete n.const;
-  if (n.in === false) delete n.in;
-  if (n.out === false) delete n.out;
-  if (n.global === false) delete n.global;
-
-  // Note: typeArguments → typeParameters and superTypeArguments → superTypeParameters
-  // are done in post-processing, NOT here, because the visitor uses visitorKeys
-  // which reference "typeArguments" — renaming before traversal breaks child visiting.
 }
 
-// ── Visitor (built once at module load) ──────────────────────────────
+// ── Per-node-type ops table ─────────────────────────────────────────
+//
+// Declarative rules applied per node type. This is the single place to
+// look up "what transforms apply to node type X?". Complex structural
+// transforms use the `custom` callback; simple field operations use the
+// other fields.
+//
+// Consumed once at module load to build visitor handler functions.
 
-/**
- * Mutable conversion context, reset per toBabelAST call. Avoids rebuilding
- * the visitor object and its ~165 handler assignments on every file.
- */
+type NodeOps = {
+  /** Rename the node type */
+  type?: string;
+  /** Fields to unconditionally delete */
+  delete?: string[];
+  /** Fields to delete when they are empty arrays */
+  deleteIfEmpty?: string[];
+  /** Fields to delete when false */
+  deleteIfFalse?: string[];
+  /** Field renames: [from, to] pairs */
+  rename?: [from: string, to: string][];
+  /** Default values to set if the field is undefined */
+  defaults?: [field: string, value: unknown][];
+  /** Key in ctx.deferred — node is collected for post-processing */
+  defer?: string;
+  /** Imperative handler for logic that doesn't fit the table */
+  custom?: (n: MutableNode) => void;
+};
+
+function applyOps(n: MutableNode, ops: NodeOps): void {
+  if (ops.type) n.type = ops.type;
+  if (ops.delete) {
+    for (const f of ops.delete) delete n[f];
+  }
+  if (ops.deleteIfEmpty) {
+    for (const f of ops.deleteIfEmpty) {
+      if (n[f] && n[f].length === 0) delete n[f];
+    }
+  }
+  if (ops.deleteIfFalse) {
+    for (const f of ops.deleteIfFalse) {
+      if (n[f] === false) delete n[f];
+    }
+  }
+  if (ops.rename) {
+    for (const [from, to] of ops.rename) {
+      if (n[from] !== undefined && n[to] === undefined) {
+        n[to] = n[from];
+        delete n[from];
+      }
+    }
+  }
+  if (ops.defaults) {
+    for (const [f, v] of ops.defaults) {
+      if (n[f] === undefined) n[f] = v;
+    }
+  }
+  if (ops.defer) ctx.deferred[ops.defer].push(n);
+  if (ops.custom) ops.custom(n);
+}
+
+// ── The table ───────────────────────────────────────────────────────
+
+const nodeOps: Record<string, NodeOps> = {
+  // ── Literals ──
+  Literal: { custom: convertLiteral },
+
+  // ── Functions: delete expression, track ranges for top-level await ──
+  FunctionDeclaration: {
+    delete: ["expression"],
+    custom: (n) => ctx.functionRanges.push(n.start, n.end),
+  },
+  FunctionExpression: {
+    delete: ["expression"],
+    custom: (n) => ctx.functionRanges.push(n.start, n.end),
+  },
+  ArrowFunctionExpression: {
+    delete: ["expression"],
+    custom: (n) => ctx.functionRanges.push(n.start, n.end),
+  },
+  TSDeclareFunction: { delete: ["expression"] },
+
+  // ── Top-level await detection ──
+  AwaitExpression: {
+    custom: (n) => {
+      if (!ctx.hasTopLevelAwait) {
+        ctx.hasTopLevelAwait = !isInsideFunction(n.start, n.end);
+      }
+    },
+  },
+  ForOfStatement: {
+    custom: (n) => {
+      if (!ctx.hasTopLevelAwait && n.await) {
+        ctx.hasTopLevelAwait = !isInsideFunction(n.start, n.end);
+      }
+    },
+  },
+
+  // ── Properties ──
+  Property: {
+    custom: (n) => {
+      const isMethodLike =
+        n.value &&
+        n.value.type === "FunctionExpression" &&
+        (n.method || n.kind === "get" || n.kind === "set");
+      if (isMethodLike) {
+        ctx.deferred.objectMethods.push(n);
+      } else {
+        n.type = "ObjectProperty";
+        if (n.kind === "init") delete n.kind;
+        if (n.shorthand) {
+          n.extra = n.extra || {};
+          n.extra.shorthand = true;
+        }
+      }
+    },
+  },
+
+  // ── Import/Export specifiers ──
+  ImportSpecifier: {
+    custom: (n) => {
+      if (ctx.isTypeScript) {
+        if (!n.importKind) n.importKind = "value";
+      } else {
+        if (n.importKind === "value") delete n.importKind;
+      }
+    },
+  },
+  ImportDefaultSpecifier: {
+    custom: (n) => {
+      if (ctx.isTypeScript) {
+        if (!n.importKind) n.importKind = "value";
+      } else {
+        if (n.importKind === "value") delete n.importKind;
+      }
+    },
+  },
+  ImportNamespaceSpecifier: {
+    custom: (n) => {
+      if (ctx.isTypeScript) {
+        if (!n.importKind) n.importKind = "value";
+      } else {
+        if (n.importKind === "value") delete n.importKind;
+      }
+    },
+  },
+  ExportSpecifier: {
+    custom: (n) => {
+      if (n.importKind === "value") delete n.importKind;
+      const exported = n.exported;
+      if (
+        exported &&
+        exported.type === "StringLiteral" &&
+        exported.raw !== undefined
+      ) {
+        delete exported.raw;
+      }
+    },
+  },
+
+  // ── Import/Export declarations ──
+  ImportDeclaration: { custom: convertImportDeclaration },
+  ExportNamedDeclaration: { custom: convertExportDeclaration },
+  ExportDefaultDeclaration: { deleteIfEmpty: ["attributes"] },
+  ExportAllDeclaration: {
+    custom: (n) => {
+      convertExportDeclaration(n);
+      convertExportAllWithExported(n);
+    },
+  },
+
+  // ── Deferred nodes (need children visited first) ──
+  ImportExpression: { defer: "importExpressions" },
+  ChainExpression: { defer: "chainExpressions" },
+  MethodDefinition: { defer: "methods" },
+  PropertyDefinition: { defer: "propertyDefs" },
+  ParenthesizedExpression: { defer: "replacements", custom: markParenthesized },
+  PrivateIdentifier: { custom: convertPrivateIdentifierToName },
+
+  // ── Program / Block directives ──
+  Program: { custom: extractDirectives },
+  BlockStatement: { custom: extractDirectives },
+
+  // ── Classes ──
+  ClassDeclaration: { deleteIfEmpty: ["implements"] },
+  ClassExpression: { deleteIfEmpty: ["implements"] },
+
+  // ── JSX ──
+  JSXOpeningFragment: { delete: ["attributes", "selfClosing"] },
+  JSXText: {
+    custom: (n) => {
+      if (n.raw !== undefined) {
+        n.extra = n.extra || {};
+        n.extra.raw = n.raw;
+        n.extra.rawValue = n.raw;
+        delete n.raw;
+      }
+    },
+  },
+
+  // ── TypeScript: type renames ──
+  TSClassImplements: { type: "TSExpressionWithTypeArguments" },
+  TSInterfaceHeritage: {
+    type: "TSExpressionWithTypeArguments",
+    custom: convertTSInterfaceHeritage,
+  },
+
+  // ── TypeScript: interface / type members ──
+  TSPropertySignature: { deleteIfFalse: ["static"] },
+  TSIndexSignature: { deleteIfFalse: ["static"] },
+  TSInterfaceDeclaration: { deleteIfEmpty: ["extends"] },
+
+  // ── TypeScript: function-like types (params→parameters, returnType→typeAnnotation) ──
+  TSFunctionType: {
+    rename: [
+      ["params", "parameters"],
+      ["returnType", "typeAnnotation"],
+    ],
+  },
+  TSConstructorType: {
+    rename: [
+      ["params", "parameters"],
+      ["returnType", "typeAnnotation"],
+    ],
+  },
+  TSCallSignatureDeclaration: {
+    rename: [
+      ["params", "parameters"],
+      ["returnType", "typeAnnotation"],
+    ],
+  },
+  TSConstructSignatureDeclaration: {
+    rename: [
+      ["params", "parameters"],
+      ["returnType", "typeAnnotation"],
+    ],
+  },
+  TSMethodSignature: {
+    rename: [
+      ["params", "parameters"],
+      ["returnType", "typeAnnotation"],
+    ],
+  },
+
+  // ── TypeScript: type parameters ──
+  TSTypeParameter: {
+    deleteIfFalse: ["const", "in", "out"],
+    custom: (n) => {
+      if (n.name && typeof n.name === "object" && n.name.type === "Identifier") {
+        n.name = n.name.name;
+      }
+    },
+  },
+
+  // ── TypeScript: enums ──
+  TSEnumMember: { delete: ["computed"] },
+  TSEnumDeclaration: { defer: "enumDeclarations", deleteIfFalse: ["const"] },
+  TSModuleDeclaration: { deleteIfFalse: ["global"] },
+
+  // ── TypeScript: import equals ──
+  TSImportEqualsDeclaration: { defaults: [["isExport", false]] },
+
+  // ── TypeScript: abstract members (deferred) ──
+  TSAbstractMethodDefinition: { defer: "abstractMethods" },
+  TSAbstractPropertyDefinition: { defer: "abstractPropertyDefs" },
+};
+
+// ── Post-processors for deferred nodes ──────────────────────────────
+// Order matters: some conversions depend on children being fully visited.
+
+const postProcessors: [key: string, fn: (node: MutableNode) => void][] = [
+  ["importExpressions", convertImportExpression],
+  ["chainExpressions", convertChainExpression],
+  ["replacements", inlineReplaceWithExpression],
+  ["methods", convertMethodDefinition],
+  ["propertyDefs", convertPropertyDefinition],
+  ["objectMethods", convertProperty],
+  ["abstractMethods", convertTSAbstractMethodDefinition],
+  ["enumDeclarations", convertEnumDeclaration],
+  ["abstractPropertyDefs", convertTSAbstractPropertyDefinition],
+];
+
+// Collect all deferred keys from the table + postProcessors
+const deferredKeys = postProcessors.map(([key]) => key);
+
+// ── Conversion context ──────────────────────────────────────────────
+
 type ConvertContext = {
   newlines: number[];
   hasTopLevelAwait: boolean;
   isTypeScript: boolean;
   /** Flat array of [start, end, start, end, ...] for all function nodes */
   functionRanges: number[];
-  deferredChainExpressions: MutableNode[];
-  deferredReplacements: MutableNode[];
-  deferredMethods: MutableNode[];
-  deferredPropertyDefs: MutableNode[];
-  deferredObjectMethods: MutableNode[];
-  deferredAbstractMethods: MutableNode[];
-  deferredImportExpressions: MutableNode[];
-  deferredEnumDeclarations: MutableNode[];
-  deferredAbstractPropertyDefs: MutableNode[];
+  deferred: Record<string, MutableNode[]>;
 };
 
-// Singleton context — mutated in place by toBabelAST before each visitor run
 const ctx: ConvertContext = {
   newlines: [],
   hasTopLevelAwait: false,
   isTypeScript: false,
   functionRanges: [],
-  deferredChainExpressions: [],
-  deferredReplacements: [],
-  deferredMethods: [],
-  deferredPropertyDefs: [],
-  deferredObjectMethods: [],
-  deferredAbstractMethods: [],
-  deferredImportExpressions: [],
-  deferredEnumDeclarations: [],
-  deferredAbstractPropertyDefs: [],
+  deferred: Object.fromEntries(deferredKeys.map((k) => [k, []])),
 };
 
 function resetContext(newlines: number[], isTypeScript: boolean): void {
@@ -634,21 +787,9 @@ function resetContext(newlines: number[], isTypeScript: boolean): void {
   ctx.hasTopLevelAwait = false;
   ctx.isTypeScript = isTypeScript;
   ctx.functionRanges.length = 0;
-  ctx.deferredChainExpressions.length = 0;
-  ctx.deferredReplacements.length = 0;
-  ctx.deferredMethods.length = 0;
-  ctx.deferredPropertyDefs.length = 0;
-  ctx.deferredObjectMethods.length = 0;
-  ctx.deferredAbstractMethods.length = 0;
-  ctx.deferredImportExpressions.length = 0;
-  ctx.deferredEnumDeclarations.length = 0;
-  ctx.deferredAbstractPropertyDefs.length = 0;
+  for (const list of Object.values(ctx.deferred)) list.length = 0;
 }
 
-/**
- * Build the visitor once at module load. All handlers close over `ctx` which
- * is reset before each toBabelAST call.
- */
 /**
  * Check if a node range is contained within any recorded function range.
  */
@@ -662,10 +803,17 @@ function isInsideFunction(start: number, end: number): boolean {
   return false;
 }
 
+// ── Visitor (built once at module load) ─────────────────────────────
+
 function buildVisitor(): VisitorObject {
   const visitor: VisitorObject = {};
 
-  // default handler: add source location + convert comments + strip OXC extras
+  const processNode = (n: MutableNode) => {
+    setLocation(n, ctx.newlines);
+    cleanupOxcExtras(n);
+  };
+
+  // Default handler: location + cleanup + comments
   const defaultHandler = (node: Node) => {
     const n = node as MutableNode;
     processNode(n);
@@ -676,349 +824,37 @@ function buildVisitor(): VisitorObject {
     visitor[key] = defaultHandler;
   }
 
-  // helper: default processing shared by all specialized handlers
-  const processNode = (n: MutableNode) => {
-    setLocation(n, ctx.newlines);
-    cleanupOxcExtras(n);
-  };
-
-  // override specific node types with specialized conversion
-  visitor.Literal = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    convertLiteral(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.Property = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    const isMethodLike =
-      n.value &&
-      n.value.type === "FunctionExpression" &&
-      (n.method || n.kind === "get" || n.kind === "set");
-    if (isMethodLike) {
-      ctx.deferredObjectMethods.push(n);
-    } else {
-      n.type = "ObjectProperty";
-      if (n.kind === "init") delete n.kind;
-      if (n.shorthand) {
-        n.extra = n.extra || {};
-        n.extra.shorthand = true;
-      }
-    }
-    if (n.comments) convertNodeComments(n);
-  };
-
-  // Function types: OXC includes expression on functions; Babel omits it
-  // Also record function ranges for top-level await detection.
-  const functionHandler = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    delete n.expression;
-    ctx.functionRanges.push(n.start, n.end);
-    if (n.comments) convertNodeComments(n);
-  };
-  visitor.FunctionDeclaration = functionHandler;
-  visitor.FunctionExpression = functionHandler;
-  visitor.ArrowFunctionExpression = functionHandler;
-  visitor.TSDeclareFunction = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    delete n.expression;
-    if (n.comments) convertNodeComments(n);
-  };
-
-  // AwaitExpression: detect top-level await
-  visitor.AwaitExpression = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (!ctx.hasTopLevelAwait) {
-      ctx.hasTopLevelAwait = !isInsideFunction(n.start, n.end);
-    }
-    if (n.comments) convertNodeComments(n);
-  };
-
-  // ForOfStatement: detect `for await (...of...)` at top level
-  visitor.ForOfStatement = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (!ctx.hasTopLevelAwait && n.await) {
-      ctx.hasTopLevelAwait = !isInsideFunction(n.start, n.end);
-    }
-    if (n.comments) convertNodeComments(n);
-  };
-
-  // Import/Export specifiers: In JS, Babel omits importKind "value"; in TS, it keeps it
-  const specifierHandler = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (ctx.isTypeScript) {
-      // TS: Babel includes importKind: "value" on all specifiers
-      if (!n.importKind) n.importKind = "value";
-    } else {
-      // JS: Babel omits importKind on specifiers
-      if (n.importKind === "value") delete n.importKind;
-    }
-    if (n.comments) convertNodeComments(n);
-  };
-  visitor.ImportSpecifier = specifierHandler;
-  visitor.ImportDefaultSpecifier = specifierHandler;
-  visitor.ImportNamespaceSpecifier = specifierHandler;
-  visitor.ExportSpecifier = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (n.importKind === "value") delete n.importKind;
-    // Remove raw from exported StringLiteral — Babel puts it in extra, not on node
-    const exported = n.exported;
-    if (exported && exported.type === "StringLiteral" && exported.raw !== undefined) {
-      delete exported.raw;
-    }
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.ImportExpression = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    ctx.deferredImportExpressions.push(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.ChainExpression = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    ctx.deferredChainExpressions.push(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.MethodDefinition = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    ctx.deferredMethods.push(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.PropertyDefinition = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    ctx.deferredPropertyDefs.push(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.PrivateIdentifier = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    convertPrivateIdentifierToName(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.ParenthesizedExpression = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    markParenthesized(n);
-    ctx.deferredReplacements.push(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.Program = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    extractDirectives(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.BlockStatement = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    extractDirectives(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.ImportDeclaration = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    convertImportDeclaration(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.ExportNamedDeclaration = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    convertExportDeclaration(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.ExportDefaultDeclaration = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    // Babel doesn't include attributes on ExportDefaultDeclaration
-    if (n.attributes && n.attributes.length === 0) delete n.attributes;
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.ExportAllDeclaration = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    convertExportDeclaration(n);
-    convertExportAllWithExported(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  // TSClassImplements → TSExpressionWithTypeArguments (Babel name)
-  visitor.TSClassImplements = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    n.type = "TSExpressionWithTypeArguments";
-    if (n.comments) convertNodeComments(n);
-  };
-
-  // TS interface/type members: Babel omits static: false on these
-  const tsInterfaceMemberHandler = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (n.static === false) delete n.static;
-    if (n.comments) convertNodeComments(n);
-  };
-  visitor.TSPropertySignature = tsInterfaceMemberHandler;
-  visitor.TSIndexSignature = tsInterfaceMemberHandler;
-
-  // TSInterfaceDeclaration: remove empty extends
-  visitor.TSInterfaceDeclaration = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (n.extends && n.extends.length === 0) delete n.extends;
-    if (n.comments) convertNodeComments(n);
-  };
-
-  // TSInterfaceHeritage: convert to TSExpressionWithTypeArguments + MemberExpr chain
-  visitor.TSInterfaceHeritage = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    n.type = "TSExpressionWithTypeArguments";
-    convertTSInterfaceHeritage(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.TSInstantiationExpression = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  // ClassDeclaration/ClassExpression: cleanup empty implements
-  const classHandler = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (n.implements && n.implements.length === 0) delete n.implements;
-    if (n.comments) convertNodeComments(n);
-  };
-  visitor.ClassDeclaration = classHandler;
-  visitor.ClassExpression = classHandler;
-
-  // TSEnumMember: Babel doesn't include computed
-  visitor.TSEnumMember = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    delete n.computed;
-    if (n.comments) convertNodeComments(n);
-  };
-
-  // TSEnumDeclaration: deferred because OXC uses body.members which we need
-  // to flatten to members. Must happen AFTER children are visited.
-  visitor.TSEnumDeclaration = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    ctx.deferredEnumDeclarations.push(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  // TSImportEqualsDeclaration: Babel includes isExport (defaults to false)
-  visitor.TSImportEqualsDeclaration = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (n.isExport === undefined) n.isExport = false;
-    if (n.comments) convertNodeComments(n);
-  };
-
-  // TS function-like types: OXC uses params/returnType, Babel uses parameters/typeAnnotation
-  const tsFunctionLikeHandler = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (n.params && !n.parameters) {
-      n.parameters = n.params;
-      delete n.params;
-    }
-    if (n.returnType && !n.typeAnnotation) {
-      n.typeAnnotation = n.returnType;
-      delete n.returnType;
-    }
-    if (n.comments) convertNodeComments(n);
-  };
-  visitor.TSFunctionType = tsFunctionLikeHandler;
-  visitor.TSConstructorType = tsFunctionLikeHandler;
-  visitor.TSCallSignatureDeclaration = tsFunctionLikeHandler;
-  visitor.TSConstructSignatureDeclaration = tsFunctionLikeHandler;
-  visitor.TSMethodSignature = tsFunctionLikeHandler;
-
-  // TSTypeParameter: Babel uses name as string, OXC uses Identifier node
-  visitor.TSTypeParameter = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (n.name && typeof n.name === "object" && n.name.type === "Identifier") {
-      n.name = n.name.name;
-    }
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.TSAbstractMethodDefinition = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    ctx.deferredAbstractMethods.push(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.TSAbstractPropertyDefinition = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    ctx.deferredAbstractPropertyDefs.push(n);
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.JSXOpeningFragment = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    // Babel doesn't include attributes or selfClosing on JSXOpeningFragment
-    delete n.attributes;
-    delete n.selfClosing;
-    if (n.comments) convertNodeComments(n);
-  };
-
-  visitor.JSXText = (node: Node) => {
-    const n = node as MutableNode;
-    processNode(n);
-    if (n.raw !== undefined) {
-      n.extra = n.extra || {};
-      n.extra.raw = n.raw;
-      n.extra.rawValue = n.raw;
-      delete n.raw;
-    }
-    if (n.comments) convertNodeComments(n);
-  };
+  // Generate specialized handlers from the ops table
+  for (const [nodeType, ops] of Object.entries(nodeOps)) {
+    visitor[nodeType as keyof VisitorObject] = (node: Node) => {
+      const n = node as MutableNode;
+      processNode(n);
+      applyOps(n, ops);
+      if (n.comments) convertNodeComments(n);
+    };
+  }
 
   return visitor;
 }
 
-// Build once at module load
 const moduleVisitor = buildVisitor();
 
+// ── Post-visitor: rename typeArguments → typeParameters ──────────────
+// Done after the visitor pass because the visitor uses visitorKeys which
+// reference "typeArguments" — renaming during traversal breaks child visiting.
+
 /**
- * Recursively rename typeArguments → typeParameters and
- * superTypeArguments → superTypeParameters on all nodes.
+ * Post-visitor tree walk that handles two tasks in a single pass:
+ * 1. Rename typeArguments → typeParameters, superTypeArguments → superTypeParameters
+ * 2. Fix comment attachment around function params/args using source text
  */
-function renameTypeArguments(node: MutableNode): void {
+function postVisitorWalk(
+  node: MutableNode,
+  source: string | undefined
+): void {
   if (!node || typeof node !== "object") return;
   if (Array.isArray(node)) {
-    for (const child of node) renameTypeArguments(child);
+    for (const child of node) postVisitorWalk(child, source);
     return;
   }
   if (node.typeArguments && !node.typeParameters) {
@@ -1032,12 +868,826 @@ function renameTypeArguments(node: MutableNode): void {
   for (const key of Object.keys(node)) {
     const val = node[key];
     if (val && typeof val === "object" && key !== "loc") {
-      renameTypeArguments(val);
+      postVisitorWalk(val, source);
+    }
+  }
+  if (source) {
+    fixupFunctionCommentsSingle(node, source);
+    fixupParenthesizedLeading(node);
+  }
+}
+
+// ── Comment attachment ──────────────────────────────────────────────
+// OXC returns comments as a flat array on the parse result, not attached
+// to individual nodes. Babel's generator requires node-attached comments
+// (leadingComments, trailingComments, innerComments). This section
+// distributes comments to nodes based on source positions.
+
+type RawComment = {
+  type: string;
+  value: string;
+  start: number;
+  end: number;
+};
+
+// Fields to skip when collecting children for comment attachment
+const COMMENT_SKIP_KEYS = new Set([
+  "loc",
+  "type",
+  "start",
+  "end",
+  "leadingComments",
+  "trailingComments",
+  "innerComments",
+  "extra",
+  "directives",
+]);
+
+function isAstNode(val: unknown): val is MutableNode {
+  return (
+    val !== null &&
+    typeof val === "object" &&
+    typeof (val as MutableNode).start === "number" &&
+    typeof (val as MutableNode).end === "number" &&
+    typeof (val as MutableNode).type === "string"
+  );
+}
+
+/**
+ * Find the lower bound index: first comment with start >= pos.
+ */
+function commentLowerBound(comments: MutableNode[], pos: number): number {
+  let lo = 0;
+  let hi = comments.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (comments[mid].start < pos) lo = mid + 1;
+    else hi = mid;
+  }
+  return lo;
+}
+
+/**
+ * Attach comments to AST nodes based on source positions.
+ *
+ * Walks the tree field-by-field. For array fields (params, arguments, body,
+ * elements, etc.), comments between elements are attached as:
+ *   - **body** arrays (statement lists): trailing on prev AND leading on next
+ *   - **all other** arrays: ONLY leading on next
+ *   - empty arrays: inner on the parent node
+ *
+ * Comments between different fields follow statement-body rules (both).
+ * Comments inside a leaf node with no children are inner.
+ *
+ * Returns the full converted comments array for File.comments.
+ */
+function attachComments(
+  root: MutableNode,
+  rawComments: RawComment[],
+  newlines: number[]
+): MutableNode[] {
+  if (!rawComments || rawComments.length === 0) return [];
+
+  // Convert raw OXC comments to Babel format with locations
+  const comments: MutableNode[] = rawComments.map((c) => {
+    const startLine = getLine(c.start, newlines);
+    const endLine = getLine(c.end, newlines);
+    return {
+      type: c.type === "Line" ? "CommentLine" : "CommentBlock",
+      value: c.value,
+      start: c.start,
+      end: c.end,
+      loc: {
+        start: {
+          line: startLine,
+          column: getColumn(c.start, startLine, newlines),
+          index: c.start,
+        },
+        end: {
+          line: endLine,
+          column: getColumn(c.end, endLine, newlines),
+          index: c.end,
+        },
+      } as SourceLocation,
+    };
+  });
+
+  // Set of comment indices already attached — avoids double-attaching
+  const attached = new Set<number>();
+
+  /**
+   * Claim unattached comments in [rangeStart, rangeEnd) and push to target array.
+   * Returns the index past the last comment checked.
+   */
+  function claim(
+    ci: number,
+    rangeEnd: number,
+    target: MutableNode,
+    kind: "leadingComments" | "trailingComments" | "innerComments"
+  ): number {
+    while (ci < comments.length && comments[ci].end <= rangeEnd) {
+      if (!attached.has(ci)) {
+        (target[kind] ??= []).push(comments[ci]);
+        attached.add(ci);
+      }
+      ci++;
+    }
+    return ci;
+  }
+
+  /**
+   * Like claim, but also attaches as trailing on `prev` (for body-style gaps).
+   */
+  function claimBoth(
+    ci: number,
+    rangeEnd: number,
+    prev: MutableNode,
+    next: MutableNode
+  ): number {
+    while (ci < comments.length && comments[ci].end <= rangeEnd) {
+      if (!attached.has(ci)) {
+        (prev.trailingComments ??= []).push(comments[ci]);
+        (next.leadingComments ??= []).push(comments[ci]);
+        attached.add(ci);
+      }
+      ci++;
+    }
+    return ci;
+  }
+
+  /**
+   * Process an array of AST nodes (e.g. params, arguments, body).
+   * For `body` arrays, comments between elements get both trailing+leading.
+   * For other arrays, only leading on the next element.
+   * Empty arrays → inner on parent.
+   */
+  function processArray(
+    parent: MutableNode,
+    arr: MutableNode[],
+    fieldName: string,
+    ciStart: number,
+    regionEnd: number
+  ): number {
+    let ci = ciStart;
+    const isBody = fieldName === "body";
+
+    if (arr.length === 0) {
+      // Empty array — comments in this region are inner on parent
+      ci = claim(ci, regionEnd, parent, "innerComments");
+      return ci;
+    }
+
+    // Before first element
+    ci = claim(ci, arr[0].start, arr[0], "leadingComments");
+
+    // Process each element
+    for (let i = 0; i < arr.length; i++) {
+      visit(arr[i]);
+      // Advance past comments inside this element
+      while (ci < comments.length && comments[ci].start < arr[i].end) ci++;
+
+      if (i < arr.length - 1) {
+        // Gap between arr[i] and arr[i+1]
+        if (isBody) {
+          ci = claimBoth(ci, arr[i + 1].start, arr[i], arr[i + 1]);
+        } else {
+          ci = claim(ci, arr[i + 1].start, arr[i + 1], "leadingComments");
+        }
+      }
+    }
+
+    // After last element
+    const last = arr[arr.length - 1];
+    ci = claim(ci, regionEnd, last, "trailingComments");
+
+    return ci;
+  }
+
+  /**
+   * Recursively visit a node and attach comments to it and its descendants.
+   */
+  function visit(node: MutableNode): void {
+    // Find comment range for this node
+    let ci = commentLowerBound(comments, node.start);
+    const hi = commentLowerBound(comments, node.end);
+    if (ci >= hi) return; // no comments in this node's range
+
+    // Collect child fields in source order: [fieldName, value, startPos]
+    const fields: [string, MutableNode | MutableNode[], number][] = [];
+    for (const key of Object.keys(node)) {
+      if (COMMENT_SKIP_KEYS.has(key)) continue;
+      const val = node[key];
+      if (!val || typeof val !== "object") continue;
+      if (Array.isArray(val)) {
+        const astItems = val.filter(isAstNode);
+        if (astItems.length > 0 || val === node.params || val === node.arguments || val === node.elements || val === node.properties || val === node.body) {
+          const pos = astItems.length > 0 ? astItems[0].start : node.start;
+          fields.push([key, astItems, pos]);
+        }
+      } else if (isAstNode(val)) {
+        fields.push([key, val, val.start]);
+      }
+    }
+    fields.sort((a, b) => a[2] - b[2]);
+
+    if (fields.length === 0) {
+      // Leaf node — all comments are inner
+      claim(ci, node.end, node, "innerComments");
+      return;
+    }
+
+    // Process gaps between fields and recurse into each field
+    for (let fi = 0; fi < fields.length; fi++) {
+      const [fieldName, value] = fields[fi];
+      const regionEnd =
+        fi < fields.length - 1
+          ? (fields[fi + 1][2] as number)
+          : node.end;
+
+      if (Array.isArray(value)) {
+        ci = processArray(node, value as MutableNode[], fieldName, ci, regionEnd);
+      } else {
+        const child = value as MutableNode;
+        // Gap before this child
+        ci = claim(ci, child.start, child, "leadingComments");
+        visit(child);
+        // Advance past comments inside this child
+        while (ci < comments.length && comments[ci].start < child.end) ci++;
+      }
+
+      // Gap between this field and the next (or end of node)
+      if (fi < fields.length - 1) {
+        const nextField = fields[fi + 1];
+        const nextStart = nextField[2] as number;
+
+        // Get last node of current field and first of next
+        let lastOfCurrent: MutableNode | undefined;
+        let firstOfNext: MutableNode | undefined;
+
+        if (Array.isArray(value)) {
+          const arr = value as MutableNode[];
+          if (arr.length > 0) lastOfCurrent = arr[arr.length - 1];
+        } else {
+          lastOfCurrent = value as MutableNode;
+        }
+
+        const nextVal = nextField[1];
+        if (Array.isArray(nextVal)) {
+          const arr = nextVal as MutableNode[];
+          if (arr.length > 0) firstOfNext = arr[0];
+        } else {
+          firstOfNext = nextVal as MutableNode;
+        }
+
+        if (lastOfCurrent) {
+          // Between two different fields: trailing on previous only
+          ci = claim(ci, nextStart, lastOfCurrent, "trailingComments");
+        } else if (firstOfNext) {
+          ci = claim(ci, nextStart, firstOfNext, "leadingComments");
+        } else {
+          // Both sides are empty arrays — inner on parent
+          ci = claim(ci, nextStart, node, "innerComments");
+        }
+      }
+    }
+
+    // Remaining unclaimed comments after the last field:
+    // - If there's a last positioned child, trailing on it
+    // - Otherwise, inner on the node
+    if (ci < hi) {
+      // Find the last positioned child across all fields
+      let lastChild: MutableNode | undefined;
+      for (let fi = fields.length - 1; fi >= 0 && !lastChild; fi--) {
+        const val = fields[fi][1];
+        if (Array.isArray(val)) {
+          const arr = val as MutableNode[];
+          if (arr.length > 0) lastChild = arr[arr.length - 1];
+        } else {
+          lastChild = val as MutableNode;
+        }
+      }
+
+      while (ci < hi) {
+        if (!attached.has(ci)) {
+          if (lastChild) {
+            (lastChild.trailingComments ??= []).push(comments[ci]);
+          } else {
+            (node.innerComments ??= []).push(comments[ci]);
+          }
+          attached.add(ci);
+        }
+        ci++;
+      }
+    }
+  }
+
+  visit(root);
+  return comments;
+}
+
+/**
+ * For nodes with extra.parenthesized, reclaim comments from the previous
+ * sibling's trailing that fall inside the paren range (between parenStart
+ * and the node's actual start).
+ *
+ * This fixes cases like: a || (COMMENT b || c) where the comment
+ * between ( and b gets attached as trailing on a instead of leading
+ * on the parenthesized expression.
+ */
+function fixupParenthesizedLeading(parent: MutableNode): void {
+  // Collect all positioned children sorted by start
+  const children: { key: string; node: MutableNode }[] = [];
+  for (const key of Object.keys(parent)) {
+    if (COMMENT_SKIP_KEYS.has(key)) continue;
+    const val = parent[key];
+    if (!val || typeof val !== "object") continue;
+    if (Array.isArray(val)) {
+      for (const item of val) {
+        if (isAstNode(item)) children.push({ key, node: item });
+      }
+    } else if (isAstNode(val)) {
+      children.push({ key, node: val });
+    }
+  }
+  children.sort((a, b) => a.node.start - b.node.start);
+
+  // For each parenthesized child, reclaim comments from the preceding child
+  for (let i = 1; i < children.length; i++) {
+    const right = children[i].node;
+    if (!right.extra?.parenthesized) continue;
+    const parenStart = right.extra.parenStart;
+    if (typeof parenStart !== "number") continue;
+
+    const left = children[i - 1].node;
+    if (!left.trailingComments) continue;
+
+    const keep: MutableNode[] = [];
+    for (const c of left.trailingComments) {
+      // Any comment in the gap between left and the parenthesized right
+      // belongs to the right operand (Babel semantics)
+      if (c.start > left.end) {
+        (right.leadingComments ??= []).push(c);
+      } else {
+        keep.push(c);
+      }
+    }
+    if (keep.length > 0) left.trailingComments = keep;
+    else delete left.trailingComments;
+  }
+}
+
+/**
+ * For nodes that start with keywords followed by `(` (switch, catch, while,
+ * for, if), move comments from the first child's leadingComments that are
+ * between the keyword and `(` into innerComments on the node.
+ *
+ * Also handles class/object methods where `async`, `static`, `*` keywords
+ * precede the key — comments between keywords are inner on the method.
+ */
+function fixupKeywordToParen(node: MutableNode, source: string): void {
+  // Determine the first positioned child field
+  let firstChild: MutableNode | undefined;
+  const type = node.type;
+
+  if (
+    type === "SwitchStatement" ||
+    type === "WhileStatement" ||
+    type === "DoWhileStatement" ||
+    type === "IfStatement"
+  ) {
+    firstChild =
+      node.discriminant || node.test || node.consequent || undefined;
+  } else if (type === "CatchClause") {
+    firstChild = node.param || node.body || undefined;
+  } else if (type === "ForStatement") {
+    firstChild = node.init || node.test || node.update || node.body;
+  } else if (type === "ForInStatement" || type === "ForOfStatement") {
+    firstChild = node.left || node.right || node.body;
+  } else if (
+    type === "ClassMethod" ||
+    type === "ClassPrivateMethod" ||
+    type === "ObjectMethod" ||
+    type === "TSDeclareMethod"
+  ) {
+    firstChild = node.key;
+  }
+
+  if (!firstChild || !firstChild.leadingComments) return;
+
+  // Find `(` between node start and first child start
+  let openParen = -1;
+  for (let i = node.start; i < firstChild.start; i++) {
+    const ch = source.charCodeAt(i);
+    if (ch === 40) {
+      openParen = i;
+      break;
+    }
+    if (ch === 47) {
+      const next = source.charCodeAt(i + 1);
+      if (next === 42) {
+        const end = source.indexOf("*/", i + 2);
+        if (end >= 0) i = end + 1;
+      } else if (next === 47) {
+        const end = source.indexOf("\n", i + 2);
+        if (end >= 0) i = end;
+      }
+    }
+  }
+
+  // For class/object methods: there may be no `(` before the key.
+  // Instead, look for `*` (generator marker) to split at.
+  if (
+    openParen < 0 &&
+    (type === "ClassMethod" ||
+      type === "ClassPrivateMethod" ||
+      type === "ObjectMethod" ||
+      type === "TSDeclareMethod")
+  ) {
+    // Find `*` between node start and key start
+    let starPos = -1;
+    for (let i = node.start; i < firstChild.start; i++) {
+      const ch = source.charCodeAt(i);
+      if (ch === 42) {
+        starPos = i;
+        break;
+      }
+      if (ch === 47) {
+        const next = source.charCodeAt(i + 1);
+        if (next === 42) {
+          const end = source.indexOf("*/", i + 2);
+          if (end >= 0) i = end + 1;
+        } else if (next === 47) {
+          const end = source.indexOf("\n", i + 2);
+          if (end >= 0) i = end;
+        }
+      }
+    }
+    if (starPos >= 0) {
+      // Move key.leading comments before `*` to method.inner
+      const keep: MutableNode[] = [];
+      for (const c of firstChild.leadingComments) {
+        if (c.end <= starPos) {
+          (node.innerComments ??= []).push(c);
+        } else {
+          keep.push(c);
+        }
+      }
+      if (keep.length > 0) firstChild.leadingComments = keep;
+      else delete firstChild.leadingComments;
+    }
+    return;
+  }
+
+  if (openParen < 0) return;
+
+  // Move comments before `(` from firstChild.leading to node.inner
+  const keep: MutableNode[] = [];
+  for (const c of firstChild.leadingComments) {
+    if (c.end <= openParen) {
+      (node.innerComments ??= []).push(c);
+    } else {
+      keep.push(c);
+    }
+  }
+  if (keep.length > 0) firstChild.leadingComments = keep;
+  else delete firstChild.leadingComments;
+}
+
+/**
+ * Fix comment attachment for a single node using source text to find
+ * punctuation positions (`(`, `)`, `=>`, `*`) that delimit regions.
+ * Called from postVisitorWalk after children are processed.
+ *
+ * Handles function-like nodes (params), call-like nodes (arguments),
+ * and keyword-to-paren nodes (switch, catch, etc.).
+ */
+function fixupFunctionCommentsSingle(
+  node: MutableNode,
+  source: string
+): void {
+  // Handle switch/catch/while/for: keyword ... (test/discriminant/param)
+  // Comments between keyword and `(` should be inner on the node.
+  fixupKeywordToParen(node, source);
+
+  // TryStatement: fix `finally` keyword comments — move handler's trailing
+  // comments that are before `finally {` to finalizer.leading
+  if (node.type === "TryStatement" && node.finalizer && node.handler) {
+    const handler = node.handler;
+    const finalizer = node.finalizer;
+    if (handler.trailingComments) {
+      // Find `finally` keyword between handler.end and finalizer.start
+      const keep: MutableNode[] = [];
+      for (const c of handler.trailingComments) {
+        if (c.end <= finalizer.start && c.start >= handler.end) {
+          (finalizer.leadingComments ??= []).push(c);
+        } else {
+          keep.push(c);
+        }
+      }
+      if (keep.length > 0) handler.trailingComments = keep;
+      else delete handler.trailingComments;
+    }
+  }
+
+  // CatchClause: handle param (singular) and body with `)` to `{` gap
+  if (node.type === "CatchClause" && node.param && node.body) {
+    let closeParen = -1;
+    for (let i = node.body.start - 1; i >= node.param.end; i--) {
+      if (source.charCodeAt(i) === 41) {
+        closeParen = i;
+        break;
+      }
+    }
+    if (closeParen >= 0) {
+      // Move param's trailing comments after `)` to body.leading
+      if (node.param.trailingComments) {
+        const keep: MutableNode[] = [];
+        for (const c of node.param.trailingComments) {
+          if (c.start >= closeParen) {
+            (node.body.leadingComments ??= []).push(c);
+          } else {
+            keep.push(c);
+          }
+        }
+        if (keep.length > 0) node.param.trailingComments = keep;
+        else delete node.param.trailingComments;
+      }
+    }
+    return;
+  }
+
+  const hasParams = Array.isArray(node.params);
+  const hasArgs = Array.isArray(node.arguments);
+  if (!hasParams && !hasArgs) return;
+
+  const arr: MutableNode[] = hasParams ? node.params : node.arguments;
+  const body = node.body;
+
+  // Find the opening `(` in the source after the id/callee/key
+  const searchStart =
+    (node.id || node.key || node.callee)?.end ?? node.start;
+  let openParen = -1;
+  for (let i = searchStart; i < node.end; i++) {
+    const ch = source.charCodeAt(i);
+    if (ch === 40) {
+      // '('
+      openParen = i;
+      break;
+    }
+    // Skip whitespace and comments (we don't need to parse comments,
+    // just skip non-paren chars)
+    if (ch === 47) {
+      // '/' — might be start of comment
+      const next = source.charCodeAt(i + 1);
+      if (next === 42) {
+        // '/*'
+        const end = source.indexOf("*/", i + 2);
+        if (end >= 0) i = end + 1;
+      } else if (next === 47) {
+        // '//'
+        const end = source.indexOf("\n", i + 2);
+        if (end >= 0) i = end;
+      }
+    }
+  }
+  if (openParen < 0) return;
+
+  // For empty params: comments between searchStart and body.start should
+  // be split at openParen: before `(` → trailing on id (if exists) or
+  // inner on node; after `(` → inner on node.
+  if (arr.length === 0 && body) {
+    // Move body-leading comments that are positionally before body into inner
+    if (body.leadingComments) {
+      const keep: MutableNode[] = [];
+      for (const c of body.leadingComments) {
+        if (c.end <= body.start) {
+          (node.innerComments ??= []).push(c);
+        } else {
+          keep.push(c);
+        }
+      }
+      if (keep.length > 0) body.leadingComments = keep;
+      else delete body.leadingComments;
+    }
+    // Move id trailing comments that are after openParen into inner
+    const id = node.id || node.key;
+    if (id && id.trailingComments) {
+      const keep: MutableNode[] = [];
+      for (const c of id.trailingComments) {
+        if (c.start > openParen) {
+          (node.innerComments ??= []).push(c);
+        } else {
+          keep.push(c);
+        }
+      }
+      if (keep.length > 0) id.trailingComments = keep;
+      else delete id.trailingComments;
+    }
+    return;
+  }
+
+  if (arr.length === 0) {
+    // Empty params/args — split inner comments at openParen
+    const owner = node.id || node.key || node.callee;
+    if (node.innerComments && owner) {
+      const keepInner: MutableNode[] = [];
+      for (const c of node.innerComments) {
+        if (c.end <= openParen) {
+          (owner.trailingComments ??= []).push(c);
+        } else {
+          keepInner.push(c);
+        }
+      }
+      if (keepInner.length > 0) node.innerComments = keepInner;
+      else delete node.innerComments;
+    }
+    // Also split owner's trailing comments at openParen
+    if (owner && owner.trailingComments) {
+      const keep: MutableNode[] = [];
+      for (const c of owner.trailingComments) {
+        if (c.start > openParen) {
+          (node.innerComments ??= []).push(c);
+        } else {
+          keep.push(c);
+        }
+      }
+      if (keep.length > 0) owner.trailingComments = keep;
+      else delete owner.trailingComments;
+    }
+    return;
+  }
+
+  // Non-empty params: comments between searchStart and first param need
+  // to be split at openParen.
+  // - Comments before `(`: stay as trailing on id/callee
+  // - Comments after `(` but before first param: leading on first param
+  const firstParam = arr[0];
+  const id = node.id || node.key || node.callee;
+
+  // Split comments at the openParen boundary:
+  // - Comments before `(` stay on id as trailing
+  // - Comments after `(` should be leading on first param
+  // First, remove from firstParam.leading any that are before `(`
+  if (firstParam.leadingComments) {
+    const keep: MutableNode[] = [];
+    for (const c of firstParam.leadingComments) {
+      if (c.start <= openParen) {
+        if (id) {
+          // Before `(` — trailing on id/callee/key
+          if (!id.trailingComments || !id.trailingComments.includes(c)) {
+            (id.trailingComments ??= []).push(c);
+          }
+        } else {
+          // No owner (e.g. ArrowFunctionExpression) — inner on node
+          (node.innerComments ??= []).push(c);
+        }
+      } else {
+        keep.push(c);
+      }
+    }
+    if (keep.length > 0) firstParam.leadingComments = keep;
+    else delete firstParam.leadingComments;
+  }
+
+  // Move id trailing comments that are after `(` to first param leading
+  if (id && id.trailingComments) {
+    const keepTrailing: MutableNode[] = [];
+    for (const c of id.trailingComments) {
+      if (c.start > openParen) {
+        if (
+          !firstParam.leadingComments ||
+          !firstParam.leadingComments.includes(c)
+        ) {
+          (firstParam.leadingComments ??= []).push(c);
+        }
+      } else {
+        keepTrailing.push(c);
+      }
+    }
+    if (keepTrailing.length > 0) id.trailingComments = keepTrailing;
+    else delete id.trailingComments;
+  }
+
+  // Fix trailing comma: if there's a `,` between last arg's end and `)`,
+  // comments after the comma should be inner on the call/new, not trailing
+  // on the last arg.
+  if (hasArgs && arr.length > 0 && node.type === "NewExpression") {
+    const lastArg = arr[arr.length - 1];
+    // Find closing `)` by scanning backwards from node end
+    let closeParenCall = -1;
+    for (let i = node.end - 1; i >= lastArg.end; i--) {
+      if (source.charCodeAt(i) === 41) {
+        closeParenCall = i;
+        break;
+      }
+    }
+    if (closeParenCall >= 0 && lastArg.trailingComments) {
+      // Check for trailing comma between lastArg.end and closeParenCall
+      let hasTrailingComma = false;
+      for (let i = lastArg.end; i < closeParenCall; i++) {
+        const ch = source.charCodeAt(i);
+        if (ch === 44) {
+          hasTrailingComma = true;
+          break;
+        }
+        if (ch === 47) {
+          const next = source.charCodeAt(i + 1);
+          if (next === 42) {
+            const end = source.indexOf("*/", i + 2);
+            if (end >= 0) i = end + 1;
+          } else if (next === 47) {
+            const end = source.indexOf("\n", i + 2);
+            if (end >= 0) i = end;
+          }
+        }
+      }
+      if (hasTrailingComma) {
+        const keep: MutableNode[] = [];
+        for (const c of lastArg.trailingComments) {
+          if (c.end <= closeParenCall) {
+            (node.innerComments ??= []).push(c);
+          } else {
+            keep.push(c);
+          }
+        }
+        if (keep.length > 0) lastArg.trailingComments = keep;
+        else delete lastArg.trailingComments;
+      }
+    }
+  }
+
+  // Fix comments around `)` and body:
+  // - Comments before `)` should be trailing on last param
+  // - Comments between `)` and body should be inner on function
+  if (body) {
+    const lastParam = arr[arr.length - 1];
+    let closeParen = -1;
+    for (let i = body.start - 1; i >= lastParam.end; i--) {
+      if (source.charCodeAt(i) === 41) {
+        closeParen = i;
+        break;
+      }
+    }
+    if (closeParen >= 0) {
+      // Process body.leadingComments first — move those before `)` to last param
+      if (body.leadingComments) {
+        const keep: MutableNode[] = [];
+        for (const c of body.leadingComments) {
+          if (c.end <= closeParen) {
+            (lastParam.trailingComments ??= []).push(c);
+          } else {
+            keep.push(c);
+          }
+        }
+        if (keep.length > 0) body.leadingComments = keep;
+        else delete body.leadingComments;
+      }
+      // Then move last param trailing comments after `)` to body.leading
+      if (lastParam.trailingComments) {
+        const keep: MutableNode[] = [];
+        for (const c of lastParam.trailingComments) {
+          if (c.start >= closeParen) {
+            (body.leadingComments ??= []).push(c);
+          } else {
+            keep.push(c);
+          }
+        }
+        if (keep.length > 0) lastParam.trailingComments = keep;
+        else delete lastParam.trailingComments;
+      }
+
+      // For arrow functions: split body.leading at `=>` position.
+      // Comments between `)` and `=>` → inner on arrow function.
+      // Comments after `=>` → stay as leading on body.
+      if (node.type === "ArrowFunctionExpression" && body.leadingComments) {
+        let arrowPos = -1;
+        for (let i = closeParen + 1; i < body.start - 1; i++) {
+          if (
+            source.charCodeAt(i) === 61 &&
+            source.charCodeAt(i + 1) === 62
+          ) {
+            arrowPos = i;
+            break;
+          }
+        }
+        if (arrowPos >= 0) {
+          const keepLeading: MutableNode[] = [];
+          for (const c of body.leadingComments) {
+            if (c.end <= arrowPos) {
+              (node.innerComments ??= []).push(c);
+            } else {
+              keepLeading.push(c);
+            }
+          }
+          if (keepLeading.length > 0) body.leadingComments = keepLeading;
+          else delete body.leadingComments;
+        }
+      }
     }
   }
 }
 
-// ── Main conversion entry point ──────────────────────────────────────
+// ── Main conversion entry point ─────────────────────────────────────
 
 /**
  * Convert an OXC ESTree Program to a Babel-compatible AST in a single pass.
@@ -1048,68 +1698,39 @@ export function toBabelAST(
   program: Program,
   source: string,
   trace: TraceFunction,
-  isTypeScript?: boolean
+  isTypeScript?: boolean,
+  rawComments?: RawComment[]
 ): ParseResult {
-  // oxc-parser skips leading/trailing comments; Babel expects program to span the full source
   program.start = 0;
   program.end = source.length;
 
-  // reset the shared context for this conversion
-  resetContext(getNewlines(source), isTypeScript ?? false);
+  const newlines = getNewlines(source);
+  resetContext(newlines, isTypeScript ?? false);
 
-  // run the single-pass visitor (pre-built at module load)
+  // Single-pass visitor (pre-built at module load)
   trace("transform parse oxc visit", () =>
     new Visitor(moduleVisitor).visit(program)
   );
 
-  // post-process deferred nodes now that all children have been visited
-  for (const node of ctx.deferredImportExpressions) {
-    convertImportExpression(node);
-  }
-  for (const node of ctx.deferredChainExpressions) {
-    convertChainExpression(node);
-  }
-  for (const node of ctx.deferredReplacements) {
-    inlineReplaceWithExpression(node);
-  }
-  for (const node of ctx.deferredMethods) {
-    convertMethodDefinition(node);
-  }
-  for (const node of ctx.deferredPropertyDefs) {
-    convertPropertyDefinition(node);
-  }
-  for (const node of ctx.deferredObjectMethods) {
-    convertProperty(node);
-  }
-  for (const node of ctx.deferredAbstractMethods) {
-    convertTSAbstractMethodDefinition(node);
-  }
-  for (const node of ctx.deferredEnumDeclarations) {
-    if (node.body && node.body.members && !node.members) {
-      node.members = node.body.members;
-      delete node.body;
-    }
-  }
-  for (const node of ctx.deferredAbstractPropertyDefs) {
-    convertTSAbstractPropertyDefinition(node);
+  // Post-process deferred nodes (children are now fully visited)
+  for (const [key, fn] of postProcessors) {
+    for (const node of ctx.deferred[key]) fn(node);
   }
 
-  // Rename typeArguments → typeParameters and superTypeArguments → superTypeParameters.
-  // Done after the visitor pass because the visitor uses visitorKeys which reference
-  // "typeArguments" — renaming before traversal would break child visiting.
-  renameTypeArguments(program as MutableNode);
-
-  // wrap in Babel's File structure
+  // Wrap in Babel's File structure
   const prog = program as MutableNode;
   if (!prog.directives) prog.directives = [];
-
-  const comments = prog.comments || [];
-  for (const c of comments) {
-    convertComment(c as MutableNode);
-  }
   delete prog.comments;
 
-  // Babel adds extra.topLevelAwait to the program node
+  // Attach comments to individual AST nodes and build File.comments
+  const comments = rawComments
+    ? attachComments(prog, rawComments, newlines)
+    : [];
+
+  // Combined post-visitor walk: rename typeArguments + fix function comments
+  // Pass source only when there are comments (skip fixup work otherwise)
+  postVisitorWalk(prog, comments.length > 0 ? source : undefined);
+
   prog.extra = { topLevelAwait: ctx.hasTopLevelAwait };
 
   return {

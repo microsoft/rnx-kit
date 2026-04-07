@@ -53,8 +53,15 @@ function isJsFile(filePath: string): boolean {
   return filePath.endsWith(".js") || filePath.endsWith(".jsx");
 }
 
-export const getFixtures = lazyInit(() => {
-  const dir = path.resolve(__dirname, "__fixtures__");
+export const getFixtures = lazyInit(() =>
+  createFixtureWrapper(path.join(__dirname, "__fixtures__/lang"))
+);
+
+export const getRealWorldFixtures = lazyInit(() =>
+  createFixtureWrapper(path.join(__dirname, "__fixtures__/realworld"))
+);
+
+export function createFixtureWrapper(dir: string) {
   const files = fs.readdirSync(dir);
   const filesets: Record<string, string[]> = {};
   const srcCache: Record<string, string> = {};
@@ -110,7 +117,7 @@ export const getFixtures = lazyInit(() => {
     getSrc,
     getBabelArgs,
   };
-});
+}
 
 export class FileData {
   babelArgs: BabelTransformerArgs;

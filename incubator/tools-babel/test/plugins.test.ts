@@ -1,10 +1,4 @@
-import type {
-  ConfigItem,
-  PluginItem,
-  PluginObj,
-  TransformOptions,
-} from "@babel/core";
-import { loadOptions } from "@babel/core";
+import type { ConfigItem, PluginItem, PluginObj } from "@babel/core";
 import { deepEqual, equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
@@ -15,14 +9,10 @@ import {
   pluginTraceFactory,
 } from "../src/plugins";
 import { tracePassthrough } from "../src/tracing";
-import { getFixtures } from "./fixtures";
 
 // ── Test helpers ─────────────────────────────────────────────────────
 
 const pluginFn = () => ({ visitor: {} });
-
-const fixtures = getFixtures();
-const config = fixtures.getFileData(fixtures.files[0]).args.config;
 
 const samplePluginObj: PluginObj = {
   visitor: {
@@ -161,10 +151,6 @@ describe("getPluginKey", () => {
 
   it("returns undefined for a tuple plugin", () => {
     equal(getPluginKey([pluginFn, {}]), undefined);
-    const resolvedConfig = loadOptions(config) as TransformOptions;
-    for (const plugin of resolvedConfig.plugins ?? []) {
-      console.log(getPluginKey(plugin));
-    }
   });
 });
 

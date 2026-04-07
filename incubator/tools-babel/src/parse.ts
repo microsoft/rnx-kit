@@ -55,7 +55,8 @@ export function oxcParseToAst({
       oxcResult.program,
       src,
       trace,
-      isTypeScript
+      isTypeScript,
+      oxcResult.comments
     );
   }
   return null;
