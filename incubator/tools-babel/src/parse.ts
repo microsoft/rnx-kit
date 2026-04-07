@@ -47,12 +47,15 @@ export function oxcParseToAst({
       throw new Error(`Failed to parse '${filename}' because of above errors`);
     }
   } else {
+    const isTypeScript =
+      context.srcSyntax === "ts" || context.srcSyntax === "tsx";
     return trace(
       "transform parse oxc convert-ast",
       toBabelAST,
       oxcResult.program,
       src,
-      trace
+      trace,
+      isTypeScript
     );
   }
   return null;

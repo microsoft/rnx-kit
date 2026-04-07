@@ -160,14 +160,13 @@ function convertLiteral(node: MutableNode): void {
     delete node.extra; // Babel doesn't include extra on BooleanLiteral
   } else if (node.bigint !== undefined) {
     node.type = "BigIntLiteral";
-    // Babel stores bigint as string
-    if (typeof node.bigint !== "string") {
-      node.bigint = String(node.bigint);
-    }
-    // Babel doesn't include value on BigIntLiteral, and rawValue should be string
-    delete node.value;
+    // Babel stores the numeric value as a string in `value`, not `bigint`
+    const bigintStr =
+      typeof node.bigint === "string" ? node.bigint : String(node.bigint);
+    node.value = bigintStr;
+    delete node.bigint;
     if (node.extra) {
-      node.extra.rawValue = node.bigint;
+      node.extra.rawValue = bigintStr;
     }
   } else if (node.regex) {
     node.type = "RegExpLiteral";
@@ -261,9 +260,20 @@ function convertMethodDefinition(node: MutableNode): void {
   if (isPrivate) {
     node.type = "ClassPrivateMethod";
     if (keyType === "PrivateIdentifier") convertPrivateIdentifierToName(key);
-    delete node.computed;
+    // Babel only includes computed on private getters/setters, not regular methods
+    if (node.kind === "get" || node.kind === "set") {
+      if (node.computed === undefined) node.computed = false;
+    } else {
+      delete node.computed;
+    }
+  } else if (node.body === null) {
+    // Ambient methods (no body) → TSDeclareMethod
+    node.type = "TSDeclareMethod";
+    if (node.computed === undefined) node.computed = false;
   } else {
     node.type = "ClassMethod";
+    // Babel always includes computed on ClassMethod (defaults to false)
+    if (node.computed === undefined) node.computed = false;
   }
 }
 
@@ -279,7 +289,18 @@ function convertPropertyDefinition(node: MutableNode): void {
     delete node.computed;
   } else {
     node.type = "ClassProperty";
+    if (node.computed === undefined) node.computed = false;
   }
+}
+
+/**
+ * Convert TSAbstractPropertyDefinition to ClassProperty with abstract: true.
+ */
+function convertTSAbstractPropertyDefinition(node: MutableNode): void {
+  node.type = "ClassProperty";
+  node.abstract = true;
+  if (node.decorators && node.decorators.length === 0) delete node.decorators;
+  if (node.computed === undefined) node.computed = false;
 }
 
 /**
@@ -547,6 +568,25 @@ function cleanupOxcExtras(n: MutableNode): void {
   // OXC includes optional: false on many nodes; Babel generally omits it.
   // Nodes in optional chains get optional re-set during chain conversion.
   if (n.optional === false) delete n.optional;
+  // OXC adds typeAnnotation: null on Identifiers; Babel omits it
+  if (n.typeAnnotation === null) delete n.typeAnnotation;
+
+  // OXC includes many TS-specific boolean-false and empty-array fields that
+  // Babel omits. Note: `static` is NOT removed because Babel keeps it on class
+  // members even in JS.
+  if (n.declare === false) delete n.declare;
+  if (n.definite === false) delete n.definite;
+  if (n.override === false) delete n.override;
+  if (n.readonly === false) delete n.readonly;
+  if (n.abstract === false) delete n.abstract;
+  if (n.const === false) delete n.const;
+  if (n.in === false) delete n.in;
+  if (n.out === false) delete n.out;
+  if (n.global === false) delete n.global;
+
+  // Note: typeArguments → typeParameters and superTypeArguments → superTypeParameters
+  // are done in post-processing, NOT here, because the visitor uses visitorKeys
+  // which reference "typeArguments" — renaming before traversal breaks child visiting.
 }
 
 // ── Visitor (built once at module load) ──────────────────────────────
@@ -557,6 +597,10 @@ function cleanupOxcExtras(n: MutableNode): void {
  */
 type ConvertContext = {
   newlines: number[];
+  hasTopLevelAwait: boolean;
+  isTypeScript: boolean;
+  /** Flat array of [start, end, start, end, ...] for all function nodes */
+  functionRanges: number[];
   deferredChainExpressions: MutableNode[];
   deferredReplacements: MutableNode[];
   deferredMethods: MutableNode[];
@@ -564,11 +608,16 @@ type ConvertContext = {
   deferredObjectMethods: MutableNode[];
   deferredAbstractMethods: MutableNode[];
   deferredImportExpressions: MutableNode[];
+  deferredEnumDeclarations: MutableNode[];
+  deferredAbstractPropertyDefs: MutableNode[];
 };
 
 // Singleton context — mutated in place by toBabelAST before each visitor run
 const ctx: ConvertContext = {
   newlines: [],
+  hasTopLevelAwait: false,
+  isTypeScript: false,
+  functionRanges: [],
   deferredChainExpressions: [],
   deferredReplacements: [],
   deferredMethods: [],
@@ -576,10 +625,15 @@ const ctx: ConvertContext = {
   deferredObjectMethods: [],
   deferredAbstractMethods: [],
   deferredImportExpressions: [],
+  deferredEnumDeclarations: [],
+  deferredAbstractPropertyDefs: [],
 };
 
-function resetContext(newlines: number[]): void {
+function resetContext(newlines: number[], isTypeScript: boolean): void {
   ctx.newlines = newlines;
+  ctx.hasTopLevelAwait = false;
+  ctx.isTypeScript = isTypeScript;
+  ctx.functionRanges.length = 0;
   ctx.deferredChainExpressions.length = 0;
   ctx.deferredReplacements.length = 0;
   ctx.deferredMethods.length = 0;
@@ -587,12 +641,27 @@ function resetContext(newlines: number[]): void {
   ctx.deferredObjectMethods.length = 0;
   ctx.deferredAbstractMethods.length = 0;
   ctx.deferredImportExpressions.length = 0;
+  ctx.deferredEnumDeclarations.length = 0;
+  ctx.deferredAbstractPropertyDefs.length = 0;
 }
 
 /**
  * Build the visitor once at module load. All handlers close over `ctx` which
  * is reset before each toBabelAST call.
  */
+/**
+ * Check if a node range is contained within any recorded function range.
+ */
+function isInsideFunction(start: number, end: number): boolean {
+  const ranges = ctx.functionRanges;
+  for (let i = 0; i < ranges.length; i += 2) {
+    if (start >= ranges[i] && end <= ranges[i + 1]) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function buildVisitor(): VisitorObject {
   const visitor: VisitorObject = {};
 
@@ -642,27 +711,71 @@ function buildVisitor(): VisitorObject {
   };
 
   // Function types: OXC includes expression on functions; Babel omits it
+  // Also record function ranges for top-level await detection.
   const functionHandler = (node: Node) => {
     const n = node as MutableNode;
     processNode(n);
     delete n.expression;
+    ctx.functionRanges.push(n.start, n.end);
     if (n.comments) convertNodeComments(n);
   };
   visitor.FunctionDeclaration = functionHandler;
   visitor.FunctionExpression = functionHandler;
   visitor.ArrowFunctionExpression = functionHandler;
+  visitor.TSDeclareFunction = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    delete n.expression;
+    if (n.comments) convertNodeComments(n);
+  };
 
-  // Import/Export specifiers: OXC adds importKind on specifiers; Babel doesn't
+  // AwaitExpression: detect top-level await
+  visitor.AwaitExpression = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    if (!ctx.hasTopLevelAwait) {
+      ctx.hasTopLevelAwait = !isInsideFunction(n.start, n.end);
+    }
+    if (n.comments) convertNodeComments(n);
+  };
+
+  // ForOfStatement: detect `for await (...of...)` at top level
+  visitor.ForOfStatement = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    if (!ctx.hasTopLevelAwait && n.await) {
+      ctx.hasTopLevelAwait = !isInsideFunction(n.start, n.end);
+    }
+    if (n.comments) convertNodeComments(n);
+  };
+
+  // Import/Export specifiers: In JS, Babel omits importKind "value"; in TS, it keeps it
   const specifierHandler = (node: Node) => {
     const n = node as MutableNode;
     processNode(n);
-    if (n.importKind === "value") delete n.importKind;
+    if (ctx.isTypeScript) {
+      // TS: Babel includes importKind: "value" on all specifiers
+      if (!n.importKind) n.importKind = "value";
+    } else {
+      // JS: Babel omits importKind on specifiers
+      if (n.importKind === "value") delete n.importKind;
+    }
     if (n.comments) convertNodeComments(n);
   };
   visitor.ImportSpecifier = specifierHandler;
   visitor.ImportDefaultSpecifier = specifierHandler;
   visitor.ImportNamespaceSpecifier = specifierHandler;
-  visitor.ExportSpecifier = specifierHandler;
+  visitor.ExportSpecifier = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    if (n.importKind === "value") delete n.importKind;
+    // Remove raw from exported StringLiteral — Babel puts it in extra, not on node
+    const exported = n.exported;
+    if (exported && exported.type === "StringLiteral" && exported.raw !== undefined) {
+      delete exported.raw;
+    }
+    if (n.comments) convertNodeComments(n);
+  };
 
   visitor.ImportExpression = (node: Node) => {
     const n = node as MutableNode;
@@ -751,10 +864,109 @@ function buildVisitor(): VisitorObject {
     if (n.comments) convertNodeComments(n);
   };
 
+  // TSClassImplements → TSExpressionWithTypeArguments (Babel name)
+  visitor.TSClassImplements = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    n.type = "TSExpressionWithTypeArguments";
+    if (n.comments) convertNodeComments(n);
+  };
+
+  // TS interface/type members: Babel omits static: false on these
+  const tsInterfaceMemberHandler = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    if (n.static === false) delete n.static;
+    if (n.comments) convertNodeComments(n);
+  };
+  visitor.TSPropertySignature = tsInterfaceMemberHandler;
+  visitor.TSIndexSignature = tsInterfaceMemberHandler;
+
+  // TSInterfaceDeclaration: remove empty extends
+  visitor.TSInterfaceDeclaration = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    if (n.extends && n.extends.length === 0) delete n.extends;
+    if (n.comments) convertNodeComments(n);
+  };
+
+  // TSInterfaceHeritage: convert to TSExpressionWithTypeArguments + MemberExpr chain
   visitor.TSInterfaceHeritage = (node: Node) => {
     const n = node as MutableNode;
     processNode(n);
+    n.type = "TSExpressionWithTypeArguments";
     convertTSInterfaceHeritage(n);
+    if (n.comments) convertNodeComments(n);
+  };
+
+  visitor.TSInstantiationExpression = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    if (n.comments) convertNodeComments(n);
+  };
+
+  // ClassDeclaration/ClassExpression: cleanup empty implements
+  const classHandler = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    if (n.implements && n.implements.length === 0) delete n.implements;
+    if (n.comments) convertNodeComments(n);
+  };
+  visitor.ClassDeclaration = classHandler;
+  visitor.ClassExpression = classHandler;
+
+  // TSEnumMember: Babel doesn't include computed
+  visitor.TSEnumMember = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    delete n.computed;
+    if (n.comments) convertNodeComments(n);
+  };
+
+  // TSEnumDeclaration: deferred because OXC uses body.members which we need
+  // to flatten to members. Must happen AFTER children are visited.
+  visitor.TSEnumDeclaration = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    ctx.deferredEnumDeclarations.push(n);
+    if (n.comments) convertNodeComments(n);
+  };
+
+  // TSImportEqualsDeclaration: Babel includes isExport (defaults to false)
+  visitor.TSImportEqualsDeclaration = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    if (n.isExport === undefined) n.isExport = false;
+    if (n.comments) convertNodeComments(n);
+  };
+
+  // TS function-like types: OXC uses params/returnType, Babel uses parameters/typeAnnotation
+  const tsFunctionLikeHandler = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    if (n.params && !n.parameters) {
+      n.parameters = n.params;
+      delete n.params;
+    }
+    if (n.returnType && !n.typeAnnotation) {
+      n.typeAnnotation = n.returnType;
+      delete n.returnType;
+    }
+    if (n.comments) convertNodeComments(n);
+  };
+  visitor.TSFunctionType = tsFunctionLikeHandler;
+  visitor.TSConstructorType = tsFunctionLikeHandler;
+  visitor.TSCallSignatureDeclaration = tsFunctionLikeHandler;
+  visitor.TSConstructSignatureDeclaration = tsFunctionLikeHandler;
+  visitor.TSMethodSignature = tsFunctionLikeHandler;
+
+  // TSTypeParameter: Babel uses name as string, OXC uses Identifier node
+  visitor.TSTypeParameter = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    if (n.name && typeof n.name === "object" && n.name.type === "Identifier") {
+      n.name = n.name.name;
+    }
     if (n.comments) convertNodeComments(n);
   };
 
@@ -765,12 +977,30 @@ function buildVisitor(): VisitorObject {
     if (n.comments) convertNodeComments(n);
   };
 
+  visitor.TSAbstractPropertyDefinition = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    ctx.deferredAbstractPropertyDefs.push(n);
+    if (n.comments) convertNodeComments(n);
+  };
+
+  visitor.JSXOpeningFragment = (node: Node) => {
+    const n = node as MutableNode;
+    processNode(n);
+    // Babel doesn't include attributes or selfClosing on JSXOpeningFragment
+    delete n.attributes;
+    delete n.selfClosing;
+    if (n.comments) convertNodeComments(n);
+  };
+
   visitor.JSXText = (node: Node) => {
     const n = node as MutableNode;
     processNode(n);
     if (n.raw !== undefined) {
       n.extra = n.extra || {};
       n.extra.raw = n.raw;
+      n.extra.rawValue = n.raw;
+      delete n.raw;
     }
     if (n.comments) convertNodeComments(n);
   };
@@ -780,6 +1010,32 @@ function buildVisitor(): VisitorObject {
 
 // Build once at module load
 const moduleVisitor = buildVisitor();
+
+/**
+ * Recursively rename typeArguments → typeParameters and
+ * superTypeArguments → superTypeParameters on all nodes.
+ */
+function renameTypeArguments(node: MutableNode): void {
+  if (!node || typeof node !== "object") return;
+  if (Array.isArray(node)) {
+    for (const child of node) renameTypeArguments(child);
+    return;
+  }
+  if (node.typeArguments && !node.typeParameters) {
+    node.typeParameters = node.typeArguments;
+    delete node.typeArguments;
+  }
+  if (node.superTypeArguments) {
+    node.superTypeParameters = node.superTypeArguments;
+    delete node.superTypeArguments;
+  }
+  for (const key of Object.keys(node)) {
+    const val = node[key];
+    if (val && typeof val === "object" && key !== "loc") {
+      renameTypeArguments(val);
+    }
+  }
+}
 
 // ── Main conversion entry point ──────────────────────────────────────
 
@@ -791,14 +1047,15 @@ const moduleVisitor = buildVisitor();
 export function toBabelAST(
   program: Program,
   source: string,
-  trace: TraceFunction
+  trace: TraceFunction,
+  isTypeScript?: boolean
 ): ParseResult {
   // oxc-parser skips leading/trailing comments; Babel expects program to span the full source
   program.start = 0;
   program.end = source.length;
 
   // reset the shared context for this conversion
-  resetContext(getNewlines(source));
+  resetContext(getNewlines(source), isTypeScript ?? false);
 
   // run the single-pass visitor (pre-built at module load)
   trace("transform parse oxc visit", () =>
@@ -827,6 +1084,20 @@ export function toBabelAST(
   for (const node of ctx.deferredAbstractMethods) {
     convertTSAbstractMethodDefinition(node);
   }
+  for (const node of ctx.deferredEnumDeclarations) {
+    if (node.body && node.body.members && !node.members) {
+      node.members = node.body.members;
+      delete node.body;
+    }
+  }
+  for (const node of ctx.deferredAbstractPropertyDefs) {
+    convertTSAbstractPropertyDefinition(node);
+  }
+
+  // Rename typeArguments → typeParameters and superTypeArguments → superTypeParameters.
+  // Done after the visitor pass because the visitor uses visitorKeys which reference
+  // "typeArguments" — renaming before traversal would break child visiting.
+  renameTypeArguments(program as MutableNode);
 
   // wrap in Babel's File structure
   const prog = program as MutableNode;
@@ -839,9 +1110,7 @@ export function toBabelAST(
   delete prog.comments;
 
   // Babel adds extra.topLevelAwait to the program node
-  if (!prog.extra) {
-    prog.extra = { topLevelAwait: false };
-  }
+  prog.extra = { topLevelAwait: ctx.hasTopLevelAwait };
 
   return {
     type: "File",
