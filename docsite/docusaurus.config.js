@@ -28,16 +28,14 @@ module.exports = {
   baseUrl: "/" + projectName + "/",
   favicon: "img/favicon.ico",
   trailingSlash: false,
+  future: {
+    v4: true,
+  },
+  onBrokenLinks: "throw",
   tagline: "Tools to boost your productivity. By and for the community.",
   organizationName,
   projectName,
   deploymentBranch: "gh-pages",
-  onBrokenLinks: "throw",
-  markdown: {
-    hooks: {
-      onBrokenMarkdownLinks: "warn",
-    },
-  },
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -127,5 +125,8 @@ module.exports = {
   customFields: {
     title1,
     title2,
+  },
+  markdown: {
+    format: "detect",
   },
 };

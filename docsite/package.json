@@ -16,14 +16,15 @@
     "write-translations": "docusaurus write-translations"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.5.0",
-    "@docusaurus/preset-classic": "^3.5.0",
+    "@docusaurus/core": "^3.10.0",
+    "@docusaurus/faster": "^3.10.0",
+    "@docusaurus/preset-classic": "^3.10.0",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
-    "docusaurus-lunr-search": "^3.5.0",
+    "docusaurus-lunr-search": "^3.6.0",
     "prism-react-renderer": "^2.3.0",
-    "react": "~19.1.1",
-    "react-dom": "~19.1.1"
+    "react": "~19.2.4",
+    "react-dom": "~19.2.4"
   },
   "devDependencies": {
     "@tsconfig/docusaurus": "^2.0.1",
@@ -32,6 +33,7 @@
     "typescript": "catalog:"
   },
   "resolutions": {
+    "@algolia/autocomplete-core": "link:../incubator/ignore",
     "@docsearch/react": "link:../incubator/ignore",
     "@pnpm/network.ca-file/graceful-fs": "^4.2.10",
     "algoliasearch": "link:../incubator/ignore",
