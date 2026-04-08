@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "types": ["node"],
+    "erasableSyntaxOnly": true,
+    "rewriteRelativeImportExtensions": true
+  }
+}
