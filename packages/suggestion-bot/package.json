@@ -1,6 +1,6 @@
 {
   "name": "suggestion-bot",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "description": "suggestion-bot submits code reviews with suggestions based on your diffs",
   "keywords": [
     "code review",
