@@ -37,7 +37,7 @@
 
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import { exists } from "./fs.ts";
+import { exists, normalizePath } from "./fs.ts";
 
 // =============================================================================
 // Types
@@ -372,9 +372,9 @@ export async function collectSyncInstructions(
         });
 
         // Add with source path comment for combined output
-        const relativePath = path
-          .relative(repoRoot, candidatePath)
-          .replace(/\\/g, "/");
+        const relativePath = normalizePath(
+          path.relative(repoRoot, candidatePath)
+        );
         combinedParts.push(`<!-- From: ${relativePath} -->\n${content}`);
       }
     }

@@ -28,7 +28,7 @@
  */
 
 import * as path from "node:path";
-import { exists } from "./fs.ts";
+import { exists, normalizePath } from "./fs.ts";
 import { spawn, type OutputChunk } from "./proc.ts";
 
 // =============================================================================
@@ -57,10 +57,6 @@ export interface MergeTool {
 // Path Utilities
 // =============================================================================
 
-/** Normalize path separators to forward slashes (for Git compatibility on Windows). */
-export function normalizePath(filePath: string): string {
-  return filePath.replace(/\\/g, "/");
-}
 
 function stripPrefix(filePath: string, prefix?: string): string | null {
   if (!prefix) {

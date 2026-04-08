@@ -33,7 +33,7 @@
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { exec } from "./proc.ts";
+import { exec, shellVar } from "./proc.ts";
 
 // =============================================================================
 // Types
@@ -73,22 +73,6 @@ async function withTempFile<T>(
 }
 
 // =============================================================================
-// Shell Escaping
-// =============================================================================
-
-/**
- * Escape a string for safe inclusion in a double-quoted shell argument.
- * Used for single-line values like titles; multiline content uses --body-file.
- */
-function escapeForShell(str: string): string {
-  return str
-    .replace(/\\/g, "\\\\")
-    .replace(/"/g, '\\"')
-    .replace(/\$/g, "\\$")
-    .replace(/`/g, "\\`");
-}
-
-// =============================================================================
 // PR Operations
 // =============================================================================
 
@@ -101,10 +85,14 @@ export async function findPR(opts: {
   cwd: string;
   repo?: string;
 }): Promise<PRInfo | null> {
-  const repoFlag = opts.repo ? ` --repo "${opts.repo}"` : "";
+  const repoFlag = opts.repo ? ` --repo ${shellVar("REPO")}` : "";
+  const env: Record<string, string> = {
+    PR_HEAD: opts.head,
+    ...(opts.repo ? { REPO: opts.repo } : {}),
+  };
   const result = await exec(
-    `gh pr list --head "${opts.head}" --json number,url --limit 1${repoFlag}`,
-    { cwd: opts.cwd, fallback: "[]" }
+    `gh pr list --head ${shellVar("PR_HEAD")} --json number,url --limit 1${repoFlag}`,
+    { cwd: opts.cwd, fallback: "[]", env }
   );
 
   let prs: { number: number; url: string }[];
@@ -136,12 +124,19 @@ export async function createPR(opts: {
   repo?: string;
 }): Promise<PRInfo> {
   return withTempFile(opts.body, async (bodyFile) => {
-    const repoFlag = opts.repo ? ` --repo "${opts.repo}"` : "";
+    const repoFlag = opts.repo ? ` --repo ${shellVar("REPO")}` : "";
+    const env: Record<string, string> = {
+      PR_HEAD: opts.head,
+      PR_BASE: opts.base,
+      PR_TITLE: opts.title,
+      BODY_FILE: bodyFile,
+      ...(opts.repo ? { REPO: opts.repo } : {}),
+    };
     const result = await exec(
-      `gh pr create --head "${opts.head}" --base "${opts.base}"` +
-        ` --title "${escapeForShell(opts.title)}"` +
-        ` --body-file "${bodyFile}"${repoFlag}`,
-      { cwd: opts.cwd }
+      `gh pr create --head ${shellVar("PR_HEAD")} --base ${shellVar("PR_BASE")}` +
+        ` --title ${shellVar("PR_TITLE")}` +
+        ` --body-file ${shellVar("BODY_FILE")}${repoFlag}`,
+      { cwd: opts.cwd, env }
     );
 
     // gh pr create outputs the PR URL on success
@@ -167,11 +162,16 @@ export async function updatePR(opts: {
   repo?: string;
 }): Promise<void> {
   await withTempFile(opts.body, async (bodyFile) => {
-    const repoFlag = opts.repo ? ` --repo "${opts.repo}"` : "";
+    const repoFlag = opts.repo ? ` --repo ${shellVar("REPO")}` : "";
+    const env: Record<string, string> = {
+      PR_TITLE: opts.title,
+      BODY_FILE: bodyFile,
+      ...(opts.repo ? { REPO: opts.repo } : {}),
+    };
     await exec(
-      `gh pr edit ${opts.number} --title "${escapeForShell(opts.title)}"` +
-        ` --body-file "${bodyFile}"${repoFlag}`,
-      { cwd: opts.cwd }
+      `gh pr edit ${opts.number} --title ${shellVar("PR_TITLE")}` +
+        ` --body-file ${shellVar("BODY_FILE")}${repoFlag}`,
+      { cwd: opts.cwd, env }
     );
   });
 }

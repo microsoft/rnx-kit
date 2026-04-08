@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { exec, ExecError } from "./proc.ts";
+import { exec, ExecError, shellVar } from "./proc.ts";
 
 export interface CopilotInvokeOptions {
   promptFile: string; // Path to prompt file (CLI will read it)
@@ -64,20 +64,21 @@ export async function invokeCopilotReadOnly(
     };
   }
 
-  // Build meta-prompt that references the prompt file
+  // Build meta-prompt — passed via env var to avoid shell escaping issues
   const metaPrompt = `Read and follow the prompt in ${options.promptFile}`;
+  const shellEnv: Record<string, string> = { COPILOT_PROMPT: metaPrompt };
 
   const allowedTools = options.allowedTools ?? DEFAULT_ALLOWED_TOOLS;
 
   // Build command string for shell execution
-  // Quote arguments that contain spaces
-  const cmdParts = ["copilot", "-p", `"${metaPrompt}"`];
+  const cmdParts = ["copilot", "-p", shellVar("COPILOT_PROMPT")];
   for (const tool of allowedTools) {
     cmdParts.push("--allow-tool", tool);
   }
   cmdParts.push("--silent");
   if (options.cwd) {
-    cmdParts.push("--add-dir", `"${options.cwd}"`);
+    shellEnv.COPILOT_CWD = options.cwd;
+    cmdParts.push("--add-dir", shellVar("COPILOT_CWD"));
   }
 
   if (options.model && options.model.trim().length > 0) {
@@ -102,7 +103,7 @@ export async function invokeCopilotReadOnly(
   try {
     for await (const chunk of exec(command, {
       cwd: options.cwd,
-      env: options.env,
+      env: { ...options.env, ...shellEnv },
       timeout,
       mode: "lines",
     })) {

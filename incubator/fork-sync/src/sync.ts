@@ -61,6 +61,7 @@ import {
   ensureDir,
   exists,
   hashFileContent,
+  normalizePath,
   removeDir,
   removeEmptyParentDirs,
 } from "./modules/fs.ts";
@@ -72,7 +73,6 @@ import {
   getChangeStats,
   getGitTreeHashes,
   isGitRepo,
-  normalizePath,
   validateCloneOrigin,
   type ChangeStats,
   type MergeResult,
