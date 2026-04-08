@@ -57,7 +57,6 @@ export interface MergeTool {
 // Path Utilities
 // =============================================================================
 
-
 function stripPrefix(filePath: string, prefix?: string): string | null {
   if (!prefix) {
     return filePath;

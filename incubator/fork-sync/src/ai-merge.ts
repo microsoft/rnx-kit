@@ -1438,7 +1438,11 @@ ${skippedSection()}${unresolvedSection()}`
             stages.remote,
             ctx.filePath
           );
-          await exec(command, { mode: "passthrough", ignoreExitCode: true, env });
+          await exec(command, {
+            mode: "passthrough",
+            ignoreExitCode: true,
+            env,
+          });
 
           // Check if resolved after fallback and stage if so
           const postContent = await fs.readFile(ctx.filePath, "utf-8");
