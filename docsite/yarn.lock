@@ -5,9 +5,9 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@algolia/autocomplete-core@link:../incubator/ignore::locator=%40rnx-kit%2Fdocsite%40workspace%3A.":
+"@algolia/autocomplete-core@ignore:":
   version: 0.0.0-use.local
-  resolution: "@algolia/autocomplete-core@link:../incubator/ignore::locator=%40rnx-kit%2Fdocsite%40workspace%3A."
+  resolution: "@algolia/autocomplete-core@ignore:"
   languageName: node
   linkType: soft
 
@@ -1800,9 +1800,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docsearch/react@link:../incubator/ignore::locator=%40rnx-kit%2Fdocsite%40workspace%3A.":
+"@docsearch/react@ignore:":
   version: 0.0.0-use.local
-  resolution: "@docsearch/react@link:../incubator/ignore::locator=%40rnx-kit%2Fdocsite%40workspace%3A."
+  resolution: "@docsearch/react@ignore:"
   languageName: node
   linkType: soft
 
@@ -4381,15 +4381,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"algoliasearch-helper@link:../incubator/ignore::locator=%40rnx-kit%2Fdocsite%40workspace%3A.":
+"algoliasearch-helper@ignore:":
   version: 0.0.0-use.local
-  resolution: "algoliasearch-helper@link:../incubator/ignore::locator=%40rnx-kit%2Fdocsite%40workspace%3A."
+  resolution: "algoliasearch-helper@ignore:"
   languageName: node
   linkType: soft
 
-"algoliasearch@link:../incubator/ignore::locator=%40rnx-kit%2Fdocsite%40workspace%3A.":
+"algoliasearch@ignore:":
   version: 0.0.0-use.local
-  resolution: "algoliasearch@link:../incubator/ignore::locator=%40rnx-kit%2Fdocsite%40workspace%3A."
+  resolution: "algoliasearch@ignore:"
   languageName: node
   linkType: soft
 
@@ -9344,9 +9344,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@link:../incubator/ignore::locator=%40rnx-kit%2Fdocsite%40workspace%3A.":
+"node-gyp@ignore:":
   version: 0.0.0-use.local
-  resolution: "node-gyp@link:../incubator/ignore::locator=%40rnx-kit%2Fdocsite%40workspace%3A."
+  resolution: "node-gyp@ignore:"
   languageName: node
   linkType: soft
 
