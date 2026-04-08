@@ -1,5 +1,11 @@
 # @rnx-kit/tsconfig
 
+## 3.0.2
+
+### Patch Changes
+
+- 0a5dea1: Add a new tsconfig file for nodenext module/moduleResolution setting
+
 ## 3.0.1
 
 ### Patch Changes
