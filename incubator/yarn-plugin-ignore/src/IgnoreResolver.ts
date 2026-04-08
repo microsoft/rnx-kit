@@ -5,7 +5,8 @@ import type {
   Resolver,
   ResolveOptions,
 } from "@yarnpkg/core";
-import { LinkType, structUtils } from "@yarnpkg/core";
+import { LinkType, Manifest, structUtils } from "@yarnpkg/core";
+import { equal } from "node:assert";
 import { IGNORE_PROTOCOL } from "./constants.ts";
 
 export class IgnoreResolver implements Resolver {
@@ -21,10 +22,8 @@ export class IgnoreResolver implements Resolver {
     return false;
   }
 
-  bindDescriptor(descriptor: Descriptor, fromLocator: Locator): Descriptor {
-    return structUtils.bindDescriptor(descriptor, {
-      locator: structUtils.stringifyLocator(fromLocator),
-    });
+  bindDescriptor(descriptor: Descriptor, _fromLocator: Locator): Descriptor {
+    return descriptor;
   }
 
   getResolutionDependencies(): Record<string, Descriptor> {
@@ -40,21 +39,17 @@ export class IgnoreResolver implements Resolver {
   }
 
   async getSatisfying(
-    descriptor: Descriptor,
-    dependencies: Record<string, Package>,
+    _descriptor: Descriptor,
+    _dependencies: Record<string, Package>,
     locators: Locator[],
-    opts: ResolveOptions
+    _opts: ResolveOptions
   ): Promise<{ locators: Locator[]; sorted: boolean }> {
-    const [locator] = await this.getCandidates(descriptor, dependencies, opts);
-    return {
-      locators: locators.filter(
-        (candidate) => candidate.locatorHash === locator.locatorHash
-      ),
-      sorted: false,
-    };
+    equal(locators.length, 1, "Expected a single locator candidate");
+    return { locators, sorted: true };
   }
 
   async resolve(locator: Locator, opts: ResolveOptions): Promise<Package> {
+    const manifest = new Manifest();
     return {
       ...locator,
 
@@ -65,13 +60,13 @@ export class IgnoreResolver implements Resolver {
 
       conditions: null,
 
-      dependencies: new Map(),
-      peerDependencies: new Map(),
+      dependencies: manifest.dependencies,
+      peerDependencies: manifest.peerDependencies,
 
-      dependenciesMeta: new Map(),
-      peerDependenciesMeta: new Map(),
+      dependenciesMeta: manifest.dependenciesMeta,
+      peerDependenciesMeta: manifest.peerDependenciesMeta,
 
-      bin: new Map(),
+      bin: manifest.bin,
     };
   }
 }

@@ -20,7 +20,7 @@ export function makeResolveOptions(): ResolveOptions {
     project: {
       configuration: {
         get() {
-          return "javascript";
+          return "node";
         },
       },
     },

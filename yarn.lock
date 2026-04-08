@@ -14291,7 +14291,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@ignore:::locator=rnx-kit%40workspace%3A.":
+"node-gyp@ignore:":
   version: 0.0.0-use.local
   resolution: "node-gyp@ignore:"
   languageName: node

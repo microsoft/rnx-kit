@@ -25,10 +25,7 @@ describe("IgnoreResolver", () => {
 
     equal(scope, locator.scope);
     equal(name, locator.name);
-    equal(
-      range,
-      `${IGNORE_PROTOCOL}::locator=%40${scope}%2F${name}%40ignore%3A`
-    );
+    equal(range, IGNORE_PROTOCOL);
   });
 
   it("returns no dependencies", () => {
@@ -80,7 +77,7 @@ describe("IgnoreResolver", () => {
       ...locator,
 
       version: "0.0.0",
-      languageName: "javascript",
+      languageName: "node",
       linkType: LinkType.SOFT,
 
       conditions: null,

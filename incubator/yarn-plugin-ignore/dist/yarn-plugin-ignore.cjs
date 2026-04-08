@@ -98,6 +98,7 @@ var plugin = (() => {
 
   // src/IgnoreResolver.ts
   var import_core = __require("@yarnpkg/core");
+  var import_node_assert = __require("assert");
   var IgnoreResolver = class {
     supportsDescriptor(descriptor) {
       return descriptor.range.startsWith(IGNORE_PROTOCOL);
@@ -108,10 +109,8 @@ var plugin = (() => {
     shouldPersistResolution() {
       return false;
     }
-    bindDescriptor(descriptor, fromLocator) {
-      return import_core.structUtils.bindDescriptor(descriptor, {
-        locator: import_core.structUtils.stringifyLocator(fromLocator)
-      });
+    bindDescriptor(descriptor, _fromLocator) {
+      return descriptor;
     }
     getResolutionDependencies() {
       return {};
@@ -119,27 +118,23 @@ var plugin = (() => {
     async getCandidates(descriptor, _dependencies, _opts) {
       return [import_core.structUtils.makeLocator(descriptor, IGNORE_PROTOCOL)];
     }
-    async getSatisfying(descriptor, dependencies, locators, opts) {
-      const [locator] = await this.getCandidates(descriptor, dependencies, opts);
-      return {
-        locators: locators.filter(
-          (candidate) => candidate.locatorHash === locator.locatorHash
-        ),
-        sorted: false
-      };
+    async getSatisfying(_descriptor, _dependencies, locators, _opts) {
+      (0, import_node_assert.equal)(locators.length, 1, "Expected a single locator candidate");
+      return { locators, sorted: true };
     }
     async resolve(locator, opts) {
+      const manifest = new import_core.Manifest();
       return {
         ...locator,
         version: "0.0.0",
         languageName: opts.project.configuration.get("defaultLanguageName"),
         linkType: import_core.LinkType.SOFT,
         conditions: null,
-        dependencies: /* @__PURE__ */ new Map(),
-        peerDependencies: /* @__PURE__ */ new Map(),
-        dependenciesMeta: /* @__PURE__ */ new Map(),
-        peerDependenciesMeta: /* @__PURE__ */ new Map(),
-        bin: /* @__PURE__ */ new Map()
+        dependencies: manifest.dependencies,
+        peerDependencies: manifest.peerDependencies,
+        dependenciesMeta: manifest.dependenciesMeta,
+        peerDependenciesMeta: manifest.peerDependenciesMeta,
+        bin: manifest.bin
       };
     }
   };

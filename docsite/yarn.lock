@@ -5,7 +5,7 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@algolia/autocomplete-core@ignore:::locator=%40rnx-kit%2Fdocsite%40workspace%3A.":
+"@algolia/autocomplete-core@ignore:":
   version: 0.0.0-use.local
   resolution: "@algolia/autocomplete-core@ignore:"
   languageName: node
@@ -1800,7 +1800,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docsearch/react@ignore:::locator=%40rnx-kit%2Fdocsite%40workspace%3A.":
+"@docsearch/react@ignore:":
   version: 0.0.0-use.local
   resolution: "@docsearch/react@ignore:"
   languageName: node
@@ -4381,13 +4381,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"algoliasearch-helper@ignore:::locator=%40rnx-kit%2Fdocsite%40workspace%3A.":
+"algoliasearch-helper@ignore:":
   version: 0.0.0-use.local
   resolution: "algoliasearch-helper@ignore:"
   languageName: node
   linkType: soft
 
-"algoliasearch@ignore:::locator=%40rnx-kit%2Fdocsite%40workspace%3A.":
+"algoliasearch@ignore:":
   version: 0.0.0-use.local
   resolution: "algoliasearch@ignore:"
   languageName: node
@@ -9344,7 +9344,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@ignore:::locator=%40rnx-kit%2Fdocsite%40workspace%3A.":
+"node-gyp@ignore:":
   version: 0.0.0-use.local
   resolution: "node-gyp@ignore:"
   languageName: node
