@@ -6046,6 +6046,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/test-fixtures@workspace:incubator/test-fixtures":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/test-fixtures@workspace:incubator/test-fixtures"
+  dependencies:
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/third-party-notices@npm:^2.0.0, @rnx-kit/third-party-notices@workspace:*, @rnx-kit/third-party-notices@workspace:packages/third-party-notices":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/third-party-notices@workspace:packages/third-party-notices"
