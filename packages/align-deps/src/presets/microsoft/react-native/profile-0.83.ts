@@ -137,4 +137,9 @@ export const profile: Profile = {
     version: "^5.0.5",
     devOnly: true,
   },
+
+  gestures: {
+    name: "react-native-gesture-handler",
+    version: "^2.30.0",
+  },
 };
