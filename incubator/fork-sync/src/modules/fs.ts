@@ -4,7 +4,8 @@
 /**
  * Filesystem utility functions.
  *
- * Common async filesystem operations with proper error handling:
+ * Common filesystem operations with proper error handling:
+ * - Path normalization (normalizePath)
  * - Existence checks (exists, isFile, isDirectory)
  * - Directory management (ensureDir, removeDir)
  * - Content hashing with CRLF normalization (hashFileContent)
@@ -16,6 +17,15 @@ import { createHash } from "node:crypto";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import * as parallel from "./parallel.ts";
+
+// =============================================================================
+// Path Utilities
+// =============================================================================
+
+/** Normalize path separators to forward slashes (for Git and cross-platform compatibility). */
+export function normalizePath(filePath: string): string {
+  return filePath.replace(/\\/g, "/");
+}
 
 // =============================================================================
 // Existence Checks

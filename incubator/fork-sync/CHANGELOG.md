@@ -1,5 +1,11 @@
 # @rnx-kit/fork-sync
 
+## 0.4.1
+
+### Patch Changes
+
+- b326fad: Improve arg escaping
+
 ## 0.4.0
 
 ### Minor Changes
