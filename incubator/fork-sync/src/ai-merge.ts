@@ -53,7 +53,7 @@ import {
 } from "./modules/fs.ts";
 import { GitRepo } from "./modules/git.ts";
 import * as proc from "./modules/proc.ts";
-const { exec } = proc;
+const { exec, shellVar } = proc;
 
 // Import claude module
 import { invokeClaudeReadOnly } from "./modules/claude.ts";
@@ -456,17 +456,22 @@ let args!: ParsedArgs;
 // Utility Functions
 // =============================================================================
 
-function quoteForCommand(value: string): string {
-  return `"${value.replace(/"/g, '\\"')}"`;
+/**
+ * Replace path separators and colons with underscores to produce a flat filename.
+ */
+function sanitizePathForFilename(relPath: string): string {
+  return relPath.replace(/[\\/:/]/g, "_");
 }
 
 /**
- * Get a safe filename from a file path by replacing separators with underscores.
+ * Get a safe filename from an absolute file path by making it relative to
+ * the working directory and replacing separators with underscores.
  * Used for both prompt and response file naming.
  */
 function getSafeName(filePath: string): string {
-  const relativePath = path.relative(args.workingDirectory, filePath);
-  return relativePath.replace(/[\\/:/]/g, "_");
+  return sanitizePathForFilename(
+    path.relative(args.workingDirectory, filePath)
+  );
 }
 
 /**
@@ -555,6 +560,12 @@ async function resolveFallbackMergeTool(): Promise<{
 
 /**
  * Apply merge tool arguments to the command.
+ *
+ * File paths are passed via environment variables rather than interpolated into
+ * the command string. This avoids shell-escaping pitfalls (cmd.exe vs POSIX sh
+ * have incompatible quoting rules) and prevents injection via crafted paths.
+ * The shell expands the variable references safely because the values never
+ * pass through the shell's command parser.
  */
 function applyMergeToolArgs(
   cmd: string,
@@ -562,29 +573,36 @@ function applyMergeToolArgs(
   local: string,
   remote: string,
   merged: string
-): string {
+): { command: string; env: Record<string, string> } {
+  const env: Record<string, string> = {
+    BASE: base,
+    LOCAL: local,
+    REMOTE: remote,
+    MERGED: merged,
+  };
+
   let replaced = false;
   let result = cmd;
 
-  const replacements: Record<string, string> = {
-    $BASE: quoteForCommand(base),
-    $LOCAL: quoteForCommand(local),
-    $REMOTE: quoteForCommand(remote),
-    $MERGED: quoteForCommand(merged),
+  const tokens: Record<string, string> = {
+    $BASE: "BASE",
+    $LOCAL: "LOCAL",
+    $REMOTE: "REMOTE",
+    $MERGED: "MERGED",
   };
 
-  for (const [token, value] of Object.entries(replacements)) {
+  for (const [token, varName] of Object.entries(tokens)) {
     if (result.includes(token)) {
-      result = result.split(token).join(value);
+      result = result.split(token).join(shellVar(varName));
       replaced = true;
     }
   }
 
   if (!replaced) {
-    result = `${result} ${quoteForCommand(base)} ${quoteForCommand(local)} ${quoteForCommand(remote)} -o ${quoteForCommand(merged)}`;
+    result = `${result} ${shellVar("BASE")} ${shellVar("LOCAL")} ${shellVar("REMOTE")} -o ${shellVar("MERGED")}`;
   }
 
-  return result;
+  return { command: result, env };
 }
 
 /**
@@ -607,12 +625,12 @@ async function launchFallbackMergeTool(
   }
 
   info(`Launching fallback merge tool: ${name}...`);
-  const command = applyMergeToolArgs(cmd, base, local, remote, merged);
+  const { command, env } = applyMergeToolArgs(cmd, base, local, remote, merged);
 
   // The command is a shell command string, so we use exec (which runs through shell).
   // Using passthrough so child processes inherit TTY status for progress UI.
   // Using ignoreExitCode since merge tools may exit non-zero for various reasons.
-  await exec(command, { mode: "passthrough", ignoreExitCode: true });
+  await exec(command, { mode: "passthrough", ignoreExitCode: true, env });
   return true;
 }
 
@@ -1164,7 +1182,7 @@ async function extractStagesForFallback(
   tempDir: string
 ): Promise<{ base: string; local: string; remote: string }> {
   const repo = new GitRepo(cwd);
-  const safeName = relPath.replace(/[\\/:/]/g, "_");
+  const safeName = sanitizePathForFilename(relPath);
   const ext = path.extname(relPath);
 
   const stages = [
@@ -1413,14 +1431,18 @@ ${skippedSection()}${unresolvedSection()}`
             ctx.relativePath,
             tempDir
           );
-          const command = applyMergeToolArgs(
+          const { command, env } = applyMergeToolArgs(
             cmd,
             stages.base,
             stages.local,
             stages.remote,
             ctx.filePath
           );
-          await exec(command, { mode: "passthrough", ignoreExitCode: true });
+          await exec(command, {
+            mode: "passthrough",
+            ignoreExitCode: true,
+            env,
+          });
 
           // Check if resolved after fallback and stage if so
           const postContent = await fs.readFile(ctx.filePath, "utf-8");

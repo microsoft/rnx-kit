@@ -35,7 +35,7 @@
  * @module claude
  */
 
-import { exec, ExecError } from "./proc.ts";
+import { exec, ExecError, shellVar } from "./proc.ts";
 
 // =============================================================================
 // Types
@@ -308,14 +308,10 @@ export async function invokeClaudeReadOnly(
   const cwd = options.cwd ?? process.cwd();
   const verbose = options.verbose ?? false;
 
-  // Build meta-prompt that references the prompt file
-  const metaPrompt = `Read and follow the prompt in ${options.promptFile}`;
-
   // Build command string for shell execution
   // Note: -p is required for non-interactive mode, --verbose is required when using --output-format stream-json
   // IMPORTANT: The prompt MUST come BEFORE --allowedTools because --allowedTools is variadic
   // and will consume all following arguments as tool names
-  // Quote arguments that may contain spaces
   const cmdParts = [
     "claude",
     "-p",
@@ -328,8 +324,12 @@ export async function invokeClaudeReadOnly(
     cmdParts.push("--model", options.model.trim());
   }
 
-  // Add meta-prompt BEFORE --allowedTools (variadic option) - quote it for shell
-  cmdParts.push(`"${metaPrompt}"`);
+  // Meta-prompt references the prompt file via env var to avoid shell escaping issues
+  const metaPrompt = `Read and follow the prompt in ${options.promptFile}`;
+  const shellEnv: Record<string, string> = { CLAUDE_PROMPT: metaPrompt };
+
+  // Add meta-prompt BEFORE --allowedTools (variadic option)
+  cmdParts.push(shellVar("CLAUDE_PROMPT"));
 
   // --allowedTools MUST be last as it consumes all following arguments
   cmdParts.push("--allowedTools", allowedTools.join(","));
@@ -348,7 +348,7 @@ export async function invokeClaudeReadOnly(
   try {
     for await (const chunk of exec(command, {
       cwd,
-      env: options.env,
+      env: { ...options.env, ...shellEnv },
       timeout,
       mode: "lines",
     })) {

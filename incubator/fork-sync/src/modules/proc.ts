@@ -389,6 +389,24 @@ export function exec(
 }
 
 // =============================================================================
+// Shell Helpers
+// =============================================================================
+
+/**
+ * Return a double-quoted shell variable reference for the current platform.
+ *
+ * Values are passed via environment variables rather than interpolated into
+ * the command string. This avoids shell-escaping pitfalls (cmd.exe vs POSIX sh
+ * have incompatible quoting rules) and prevents injection via crafted values.
+ *
+ * - Windows (cmd.exe): `"%NAME%"`
+ * - POSIX (sh): `"$NAME"`
+ */
+export function shellVar(name: string): string {
+  return process.platform === "win32" ? `"%${name}%"` : `"$${name}"`;
+}
+
+// =============================================================================
 // Mode specific implementations
 // =============================================================================
 
