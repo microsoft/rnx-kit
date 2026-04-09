@@ -6133,6 +6133,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/tools-performance@workspace:incubator/tools-performance":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/tools-performance@workspace:incubator/tools-performance"
+  dependencies:
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/tools-react-native@npm:^2.1.0, @rnx-kit/tools-react-native@npm:^2.3.0, @rnx-kit/tools-react-native@npm:^2.3.1, @rnx-kit/tools-react-native@npm:^2.3.2, @rnx-kit/tools-react-native@npm:^2.3.3, @rnx-kit/tools-react-native@npm:^2.3.5, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-react-native@workspace:packages/tools-react-native"
