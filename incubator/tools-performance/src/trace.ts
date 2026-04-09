@@ -1,5 +1,12 @@
 import type { AnyFunction, TraceFunction, TraceRecorder } from "./types.ts";
 
+/**
+ * Check if the provided value is a Promise-like object by checking if it is an object and has a "then" method that
+ * is a function. Slightly more robust than just checking for instanceof Promise, as it can handle cases where the promise is
+ * from a different realm.
+ * @param value The value to be checked
+ * @returns True if the value is Promise-like, false otherwise
+ */
 function isPromiseLike(value: unknown): value is Promise<unknown> {
   return (
     typeof value === "object" &&
@@ -8,7 +15,7 @@ function isPromiseLike(value: unknown): value is Promise<unknown> {
   );
 }
 
-/** single empty implementation of a trace recorder */
+/** single empty implementation of a trace recorder, can be used as an empty function as well */
 export function nullRecord<TTag = string>(
   _tag: TTag,
   _durationMs?: number
@@ -28,7 +35,7 @@ export function nullTrace<TFunc extends AnyFunction>(
   fn: TFunc,
   ...args: Parameters<TFunc>
 ): ReturnType<TFunc> {
-  return fn(...args);
+  return callFunction(fn, args);
 }
 
 /**
@@ -57,14 +64,41 @@ export function createTrace<TTag = string>(
   ): ReturnType<TFunc> => {
     record(tag);
     const start = performance.now();
-    const result = fn(...args);
+    const result = callFunction<TFunc>(fn, args);
     if (isPromiseLike(result)) {
-      return result.then((res) => {
+      return result.then((res: ReturnType<TFunc>) => {
         record(tag, performance.now() - start);
         return res;
-      }) as ReturnType<TFunc>;
+      });
     }
     record(tag, performance.now() - start);
     return result;
   };
+}
+
+/**
+ * Helper to call a function with variable arguments avoiding the overhead of apply for common cases where
+ * there are a low number of arguments. Generally the collection of arguments in parameters is highly optimized
+ * in modern JS engines. The fn(...args) is the more expensive operation.
+ * @param fn The function to be called
+ * @param args The arguments to be passed to the function
+ * @returns The result of the function call
+ */
+function callFunction<TFunc extends AnyFunction>(
+  fn: TFunc,
+  args: Parameters<TFunc>
+): ReturnType<TFunc> {
+  // avoid the apply/iteration overhead for common cases of low number of arguments
+  switch (args.length) {
+    case 0:
+      return fn();
+    case 1:
+      return fn(args[0]);
+    case 2:
+      return fn(args[0], args[1]);
+    case 3:
+      return fn(args[0], args[1], args[2]);
+    default:
+      return fn(...args);
+  }
 }

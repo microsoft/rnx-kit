@@ -1,5 +1,6 @@
 /**
  * Signature for any generic function type. Used for type parameters
+ * NOTE: ...unknown[] is not equivalent to ...any[] for purposes of acceptance, the use of any is intentional
  */
 // oxlint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyFunction = (...args: any[]) => any;
@@ -19,8 +20,6 @@ export type AnyFunction = (...args: any[]) => any;
  *
  * // without closure, return type is from myFunction, parameters types will be enforced based on myFunction's signature
  * trace("myFunction", myFunction, arg1, arg2);
- *
- * NOTE: ...unknown[] is not equivalent to ...any[] for purposes of acceptance, the use of any is intentional
  */
 export type TraceFunction<TTag = string> = <TFunc extends AnyFunction>(
   tag: TTag,
@@ -38,7 +37,16 @@ export type TraceRecorder<TTag = string> = (
   durationMs?: number
 ) => void;
 
-export type PerfArea = "metro" | "resolve" | "transform" | "serialize";
+/**
+ * Areas of performance tracking. This is not an exhaustive list, but a starting point for categorizing different types of operations.
+ * Custom areas can be added as needed by using arbitrary strings.
+ */
+export type PerfArea =
+  | "metro"
+  | "resolve"
+  | "transform"
+  | "serialize"
+  | (string & {});
 
 export type PerformanceConfiguration = {
   /**
