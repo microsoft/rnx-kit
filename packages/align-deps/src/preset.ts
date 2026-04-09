@@ -1,5 +1,12 @@
+import { info } from "@rnx-kit/console";
+import { readPackage } from "@rnx-kit/tools-node/package";
 import type { Capability } from "@rnx-kit/types-kit-config";
+import { spawn } from "node:child_process";
+import * as nodefs from "node:fs";
+import { findPackageJSON } from "node:module";
+import { pathToFileURL } from "node:url";
 import semverCoerce from "semver/functions/coerce.js";
+import semverGreater from "semver/functions/gt.js";
 import semverSatisfies from "semver/functions/satisfies.js";
 import semverValidRange from "semver/ranges/valid.js";
 import { gatherRequirements } from "./dependencies.ts";
@@ -12,6 +19,36 @@ type Resolution = {
   capabilities: Capability[];
 };
 
+const notifyLatestVersion = (() => {
+  const cache = new Set<string>();
+  return (preset: string, fs = nodefs): void => {
+    if (cache.has(preset)) {
+      return;
+    }
+
+    cache.add(preset);
+
+    const manifestPath = findPackageJSON(pathToFileURL(preset));
+    if (!manifestPath) {
+      return;
+    }
+
+    const { name, version } = readPackage(manifestPath, fs);
+
+    const shell = process.platform === "win32";
+    const opts = { shell, windowsVerbatimArguments: true };
+
+    spawn("npm", ["view", name, "version"], opts).stdout.on("data", (data) => {
+      const latestVersion = data.toString().trim();
+      if (semverGreater(latestVersion, version)) {
+        info(
+          `A newer version of '${name}' was found: ${latestVersion} (current: ${version})`
+        );
+      }
+    });
+  };
+})();
+
 function loadPreset(
   preset: string,
   projectRoot: string,
@@ -20,8 +57,11 @@ function loadPreset(
   switch (preset) {
     case "microsoft/react-native":
       return reactNativePreset;
-    default:
-      return require(resolve(preset, { paths: [projectRoot] }));
+    default: {
+      const spec = resolve(preset, { paths: [projectRoot] });
+      notifyLatestVersion(spec);
+      return require(spec);
+    }
   }
 }
 
