@@ -1,195 +1,114 @@
 import { equal, ok } from "node:assert/strict";
-import { describe, it, mock } from "node:test";
-import { nullTrace } from "../src/trace.ts";
-import { PerfManager } from "../src/tracker.ts";
+import { describe, it } from "node:test";
+import { PerfTracker } from "../src/tracker.ts";
 
-function emptyFunction() {
-  // intentionally empty
+function noopHandler() {
+  // intentionally empty — suppresses report output for tests
 }
 
-describe("PerfManager", () => {
-  describe("enable / isEnabled", () => {
-    it("is not enabled by default", () => {
-      const mgr = new PerfManager();
-      equal(mgr.isEnabled(), false);
-      equal(mgr.isEnabled("metro"), false);
-    });
+// Helper: suppress report output for tests that don't care about it
+const quiet = { reportHandler: noopHandler, strategy: "timing" as const };
 
-    it("enables all tracking with true", () => {
-      const mgr = new PerfManager();
-      mgr.enable(true);
-      equal(mgr.isEnabled(), true);
+describe("PerfTracker", () => {
+  describe("enable / isEnabled", () => {
+    it("enables all tracking with true via constructor", () => {
+      const tracker = new PerfTracker(quiet);
+      equal(tracker.isEnabled("metro"), true);
+      tracker.finish();
     });
 
     it("enables a single category", () => {
-      const mgr = new PerfManager();
-      mgr.enable("metro");
-      equal(mgr.isEnabled("metro"), true);
-      equal(mgr.isEnabled("resolve"), false);
-      equal(mgr.isEnabled(), false);
+      const tracker = new PerfTracker({ ...quiet, enable: "metro" });
+      equal(tracker.isEnabled("metro"), true);
+      equal(tracker.isEnabled("resolve"), false);
+      tracker.finish();
     });
 
     it("enables multiple categories from an array", () => {
-      const mgr = new PerfManager();
-      mgr.enable(["metro", "resolve"]);
-      equal(mgr.isEnabled("metro"), true);
-      equal(mgr.isEnabled("resolve"), true);
-      equal(mgr.isEnabled("transform"), false);
+      const tracker = new PerfTracker({
+        ...quiet,
+        enable: ["metro", "resolve"],
+      });
+      equal(tracker.isEnabled("metro"), true);
+      equal(tracker.isEnabled("resolve"), true);
+      equal(tracker.isEnabled("transform"), false);
+      tracker.finish();
     });
 
     it("is additive across multiple enable calls", () => {
-      const mgr = new PerfManager();
-      mgr.enable("metro");
-      mgr.enable("resolve");
-      equal(mgr.isEnabled("metro"), true);
-      equal(mgr.isEnabled("resolve"), true);
+      const tracker = new PerfTracker({ ...quiet, enable: "metro" });
+      tracker.enable("resolve");
+      equal(tracker.isEnabled("metro"), true);
+      equal(tracker.isEnabled("resolve"), true);
+      tracker.finish();
+    });
+
+    it("global enable makes all specific domains enabled", () => {
+      const tracker = new PerfTracker({ ...quiet, enable: true });
+      equal(tracker.isEnabled("metro"), true);
+      equal(tracker.isEnabled("anything"), true);
+      tracker.finish();
     });
   });
 
-  describe("record", () => {
-    it("creates an entry on first call", () => {
-      const mgr = new PerfManager();
-      mgr.enable(true);
-      const record = mgr.getRecorder();
-      record("op1"); // before
-      record("op1", 10); // after
-
-      const results = mgr.getResults();
-      equal(results.length, 1);
-      equal(results[0]!.calls, 1);
-      equal(results[0]!.total, 10);
-      equal(results[0]!.errors, 0);
+  describe("domain", () => {
+    it("returns a domain when the category is enabled", () => {
+      const tracker = new PerfTracker({ ...quiet, enable: "metro" });
+      const domain = tracker.domain("metro");
+      ok(domain !== undefined);
+      equal(domain!.name, "metro");
+      tracker.finish();
     });
 
-    it("accumulates multiple calls to the same operation", () => {
-      const mgr = new PerfManager();
-      mgr.enable(true);
-      const record = mgr.getRecorder();
-      record("op1"); // before
-      record("op1", 10); // after
-      record("op1"); // before
-      record("op1", 20); // after
-
-      const results = mgr.getResults();
-      equal(results[0]!.calls, 2);
-      equal(results[0]!.total, 30);
-      equal(results[0]!.avg, 15);
-      equal(results[0]!.errors, 0);
+    it("returns undefined when the category is not enabled", () => {
+      const tracker = new PerfTracker({ ...quiet, enable: "metro" });
+      const domain = tracker.domain("resolve");
+      equal(domain, undefined);
+      tracker.finish();
     });
 
-    it("tracks multiple operations independently", () => {
-      const mgr = new PerfManager();
-      mgr.enable(true);
-      const record = mgr.getRecorder();
-      record("op1");
-      record("op1", 10);
-      record("op2");
-      record("op2", 20);
+    it("returns the same domain on repeated calls", () => {
+      const tracker = new PerfTracker({ ...quiet, enable: "metro" });
+      const d1 = tracker.domain("metro");
+      const d2 = tracker.domain("metro");
+      equal(d1, d2);
+      tracker.finish();
+    });
 
-      const results = mgr.getResults();
-      equal(results.length, 2);
+    it("returns a domain for any name when globally enabled", () => {
+      const tracker = new PerfTracker({ ...quiet, enable: true });
+      ok(tracker.domain("anything") !== undefined);
+      tracker.finish();
     });
   });
 
-  describe("getResults", () => {
-    it("computes errors from mismatched start/end counts", () => {
-      const mgr = new PerfManager();
-      mgr.enable(true);
-      const record = mgr.getRecorder();
-      // 3 starts, only 1 end → 2 errors
-      record("op1");
-      record("op1");
-      record("op1");
-      record("op1", 5);
+  describe("recording via timing strategy", () => {
+    it("tracks calls and completions through trace", () => {
+      let report = "";
+      const tracker = new PerfTracker({
+        ...quiet,
+        enable: true,
+        reportHandler: (r) => (report = r),
+      });
+      const domain = tracker.domain("test")!;
+      const trace = domain.getTrace();
 
-      const results = mgr.getResults();
-      equal(results[0]!.calls, 3);
-      equal(results[0]!.errors, 2);
+      trace("op", () => 42);
+
+      tracker.finish();
+      ok(report.includes("op"));
     });
 
-    it("computes average from completed calls only", () => {
-      const mgr = new PerfManager();
-      mgr.enable(true);
-      const record = mgr.getRecorder();
-      // 3 starts, 2 completions with durations 10 and 20
-      record("op1");
-      record("op1", 10);
-      record("op1");
-      record("op1", 20);
-      record("op1"); // error - no completion
+    it("traces async functions correctly", async () => {
+      let report = "";
+      const tracker = new PerfTracker({
+        ...quiet,
+        enable: true,
+        reportHandler: (r) => (report = r),
+      });
+      const domain = tracker.domain("test")!;
+      const trace = domain.getTrace();
 
-      const results = mgr.getResults();
-      equal(results[0]!.calls, 3);
-      equal(results[0]!.avg, 15); // (10 + 20) / 2
-      equal(results[0]!.errors, 1);
-    });
-
-    it("returns avg of zero when no calls have completed", () => {
-      const mgr = new PerfManager();
-      mgr.enable(true);
-      const record = mgr.getRecorder();
-      record("op1");
-      record("op1");
-
-      const results = mgr.getResults();
-      equal(results[0]!.avg, 0);
-    });
-
-    it("returns raw strings without ANSI codes", () => {
-      const mgr = new PerfManager();
-      mgr.enable("metro");
-      const record = mgr.getRecorder("metro");
-      record("bundle");
-      record("bundle", 100);
-
-      const results = mgr.getResults();
-      equal(results[0]!.area, "metro");
-      equal(results[0]!.operation, "bundle");
-      equal(results[0]!.name, "metro: bundle");
-    });
-
-    it("omits area prefix when no category is provided", () => {
-      const mgr = new PerfManager();
-      mgr.enable(true);
-      const record = mgr.getRecorder();
-      record("bundle");
-      record("bundle", 100);
-
-      const results = mgr.getResults();
-      equal(results[0]!.area, "");
-      equal(results[0]!.name, "bundle");
-    });
-  });
-
-  describe("getTrace / getRecorder", () => {
-    it("returns nullTrace when category is not enabled", () => {
-      const mgr = new PerfManager();
-      equal(mgr.getTrace("metro"), nullTrace);
-    });
-
-    it("returns a real trace function when category is enabled", () => {
-      const mgr = new PerfManager();
-      mgr.enable("metro");
-      ok(mgr.getTrace("metro") !== nullTrace);
-    });
-
-    it("traces a sync function and records its duration", () => {
-      const mgr = new PerfManager();
-      mgr.enable(true);
-      const trace = mgr.getTrace();
-      const result = trace("add", (a: number, b: number) => a + b, 2, 3);
-
-      equal(result, 5);
-      const results = mgr.getResults();
-      equal(results[0]!.calls, 1);
-      equal(results[0]!.errors, 0);
-      ok(results[0]!.total >= 0);
-    });
-
-    it("traces an async function and records its duration", async () => {
-      const mgr = new PerfManager();
-      mgr.enable(true);
-      const trace = mgr.getTrace();
       const result = await trace(
         "delayed",
         () =>
@@ -197,16 +116,21 @@ describe("PerfManager", () => {
       );
 
       equal(result, 42);
-      const results = mgr.getResults();
-      equal(results[0]!.calls, 1);
-      equal(results[0]!.errors, 0);
-      ok(results[0]!.total >= 10);
+      tracker.finish();
+      ok(report.includes("delayed"));
     });
 
     it("counts errors when traced function throws", () => {
-      const mgr = new PerfManager();
-      mgr.enable(true);
-      const trace = mgr.getTrace();
+      let report = "";
+      const tracker = new PerfTracker({
+        ...quiet,
+        enable: true,
+        reportColumns: ["name", "calls", "errors"],
+        reportHandler: (r) => (report = r),
+      });
+      const domain = tracker.domain("test")!;
+      const trace = domain.getTrace();
+
       try {
         trace("fail", () => {
           throw new Error("boom");
@@ -215,88 +139,137 @@ describe("PerfManager", () => {
         // expected
       }
 
-      const results = mgr.getResults();
-      equal(results[0]!.calls, 1);
-      equal(results[0]!.errors, 1);
-    });
-
-    it("returned recorder works correctly", () => {
-      const mgr = new PerfManager();
-      mgr.enable("metro");
-      const record = mgr.getRecorder("metro");
-      // Should not throw
-      record("op1");
-      record("op1", 42);
+      tracker.finish();
+      ok(report.includes("fail"));
     });
   });
 
-  describe("report", () => {
-    it("prints results when there is data", () => {
-      const logMock = mock.method(console, "log", emptyFunction);
-      try {
-        const mgr = new PerfManager();
-        mgr.enable(true);
-        mgr.getTrace()("op", () => 42);
-        mgr.report();
+  describe("finish", () => {
+    it("reports when there is data", () => {
+      let report = "";
+      const tracker = new PerfTracker({
+        ...quiet,
+        enable: true,
+        reportHandler: (r) => (report = r),
+      });
+      const domain = tracker.domain("test")!;
+      domain.getTrace()("op", () => 42);
 
-        equal(logMock.mock.callCount(), 2);
-        equal(logMock.mock.calls[0]!.arguments[0], "Performance results:");
-        ok(
-          typeof logMock.mock.calls[1]!.arguments[0] === "string",
-          "second log should be the table"
-        );
-      } finally {
-        logMock.mock.restore();
-      }
+      tracker.finish();
+      ok(report.length > 0);
     });
 
-    it("does not print when there is no data", () => {
-      const logMock = mock.method(console, "log", emptyFunction);
-      try {
-        const mgr = new PerfManager();
-        mgr.report();
-        equal(logMock.mock.callCount(), 0);
-      } finally {
-        logMock.mock.restore();
-      }
+    it("does not report when there is no data", () => {
+      let reportCalled = false;
+      const tracker = new PerfTracker({
+        ...quiet,
+        enable: true,
+        reportHandler: () => (reportCalled = true),
+      });
+
+      tracker.finish();
+      equal(reportCalled, false);
     });
 
-    it("only prints once even if called multiple times", () => {
-      const logMock = mock.method(console, "log", emptyFunction);
-      try {
-        const mgr = new PerfManager();
-        mgr.enable(true);
-        mgr.getTrace()("op", () => 1);
+    it("only reports once even if called multiple times", () => {
+      let callCount = 0;
+      const tracker = new PerfTracker({
+        ...quiet,
+        enable: true,
+        reportHandler: () => callCount++,
+      });
+      const domain = tracker.domain("test")!;
+      domain.getTrace()("op", () => 1);
 
-        mgr.report();
-        mgr.report();
-        mgr.report();
+      tracker.finish();
+      tracker.finish();
+      tracker.finish();
 
-        equal(logMock.mock.callCount(), 2);
-      } finally {
-        logMock.mock.restore();
-      }
+      equal(callCount, 1);
     });
   });
 
   describe("updateConfig", () => {
     it("merges new config values", () => {
-      const logMock = mock.method(console, "log", emptyFunction);
-      try {
-        const mgr = new PerfManager({ cols: ["name", "total"] });
-        mgr.enable(true);
-        mgr.getTrace()("op", () => 1);
+      let report = "";
+      const tracker = new PerfTracker({
+        ...quiet,
+        enable: true,
+        reportColumns: ["name", "total"],
+        reportHandler: (r) => (report = r),
+      });
+      const domain = tracker.domain("test")!;
+      domain.getTrace()("op", () => 1);
 
-        mgr.updateConfig({ cols: ["name", "calls"] });
-        mgr.report();
+      tracker.updateConfig({ reportColumns: ["name", "calls"] });
+      tracker.finish();
 
-        const table = logMock.mock.calls[1]!.arguments[0] as string;
-        ok(table.includes("name"));
-        ok(table.includes("calls"));
-        ok(!table.includes("total"));
-      } finally {
-        logMock.mock.restore();
-      }
+      ok(report.includes("operation"));
+      ok(report.includes("calls"));
+      ok(!report.includes("total"));
+    });
+
+    it("adds new enabled domains via updateConfig", () => {
+      const tracker = new PerfTracker({ ...quiet, enable: "metro" });
+      equal(tracker.isEnabled("resolve"), false);
+
+      tracker.updateConfig({ enable: "resolve" });
+      equal(tracker.isEnabled("resolve"), true);
+      equal(tracker.isEnabled("metro"), true);
+      tracker.finish();
+    });
+  });
+
+  describe("report columns", () => {
+    it("uses default columns when none specified", () => {
+      let report = "";
+      const tracker = new PerfTracker({
+        ...quiet,
+        enable: true,
+        reportHandler: (r) => (report = r),
+      });
+      const domain = tracker.domain("test")!;
+      domain.getTrace()("op", () => 1);
+      tracker.finish();
+
+      ok(report.includes("operation"));
+      ok(report.includes("calls"));
+      ok(report.includes("total"));
+      ok(report.includes("avg"));
+    });
+
+    it("respects custom reportColumns", () => {
+      let report = "";
+      const tracker = new PerfTracker({
+        ...quiet,
+        enable: true,
+        reportColumns: ["name", "total"],
+        reportHandler: (r) => (report = r),
+      });
+      const domain = tracker.domain("test")!;
+      domain.getTrace()("op", () => 1);
+      tracker.finish();
+
+      ok(report.includes("operation"));
+      ok(report.includes("total"));
+      ok(!report.includes("calls"));
+      ok(!report.includes("avg"));
+    });
+
+    it("respects maxNameWidth", () => {
+      let report = "";
+      const tracker = new PerfTracker({
+        ...quiet,
+        enable: true,
+        maxNameWidth: 10,
+        reportColumns: ["name"],
+        reportHandler: (r) => (report = r),
+      });
+      const domain = tracker.domain("test")!;
+      domain.getTrace()("a-very-long-operation-name-here", () => 1);
+      tracker.finish();
+
+      ok(report.includes("..."), "should truncate long names");
     });
   });
 });

@@ -1,4 +1,15 @@
-import type { AnyFunction, TraceFunction, TraceRecorder } from "./types.ts";
+import type { AcceptAnyFn, TraceFunction } from "./types.ts";
+
+/**
+ * Signature for a recorder of trace information. Trace functions will call the recorder twice for each trace event.
+ * - before: const handoff = record(tag) - called with no time information
+ * - after: record(tag, handoff) - record function determines what to do with it
+ */
+// oxlint-disable-next-line @typescript-eslint/no-explicit-any
+export type TraceRecorder<THandoff = any> = (
+  operation: string,
+  handoff?: THandoff
+) => THandoff;
 
 /**
  * Check if the provided value is a Promise-like object by checking if it is an object and has a "then" method that
@@ -15,12 +26,14 @@ function isPromiseLike(value: unknown): value is Promise<unknown> {
   );
 }
 
-/** single empty implementation of a trace recorder, can be used as an empty function as well */
-export function nullRecord<TTag = string>(
-  _tag: TTag,
-  _durationMs?: number
-): void {
-  // no-op
+/** simple identity function */
+export function nullPassthrough<T>(value: T): T {
+  return value;
+}
+
+/** no-op function matching the recordTime signature */
+export function nullRecordTime(_tag: string, _duration?: number): void {
+  // intentionally empty
 }
 
 /**
@@ -30,7 +43,7 @@ export function nullRecord<TTag = string>(
  * @param args The arguments to be passed to the function
  * @returns The result of the function call
  */
-export function nullTrace<TFunc extends AnyFunction>(
+export function nullTrace<TFunc extends AcceptAnyFn>(
   _tag: unknown,
   fn: TFunc,
   ...args: Parameters<TFunc>
@@ -54,24 +67,21 @@ export function nullTrace<TFunc extends AnyFunction>(
  * @param record The recorder function to be called with trace information
  * @returns A trace function that can be used to wrap any function and record its execution time
  */
-export function createTrace<TTag = string>(
-  record: TraceRecorder<TTag>
-): TraceFunction<TTag> {
-  return <TFunc extends AnyFunction>(
-    tag: TTag,
+export function createTrace(record: TraceRecorder): TraceFunction {
+  return <TFunc extends AcceptAnyFn>(
+    tag: string,
     fn: TFunc,
     ...args: Parameters<TFunc>
   ): ReturnType<TFunc> => {
-    record(tag);
-    const start = performance.now();
+    const handoff = record(tag);
     const result = callFunction<TFunc>(fn, args);
     if (isPromiseLike(result)) {
-      return result.then((res: ReturnType<TFunc>) => {
-        record(tag, performance.now() - start);
+      return result.then((res: Awaited<ReturnType<TFunc>>) => {
+        record(tag, handoff);
         return res;
       });
     }
-    record(tag, performance.now() - start);
+    record(tag, handoff);
     return result;
   };
 }
@@ -84,7 +94,7 @@ export function createTrace<TTag = string>(
  * @param args The arguments to be passed to the function
  * @returns The result of the function call
  */
-function callFunction<TFunc extends AnyFunction>(
+function callFunction<TFunc extends AcceptAnyFn>(
   fn: TFunc,
   args: Parameters<TFunc>
 ): ReturnType<TFunc> {

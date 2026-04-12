@@ -1,18 +1,24 @@
-export { createTrace, nullRecord, nullTrace } from "./trace.ts";
+export { PerfDomain } from "./domain.ts";
+
 export {
-  getRecorder,
+  getDomain,
   getTrace,
   isTrackingEnabled,
   reportPerfData,
   trackPerformance,
 } from "./perf.ts";
-export { reportResults, formatTable } from "./report.ts";
-export { PerfManager } from "./tracker.ts";
+
+export type { TableOptions, ColumnOptions } from "./table.ts";
+export { formatAsTable } from "./table.ts";
+
+export type { TraceRecorder } from "./trace.ts";
+export { createTrace, nullTrace } from "./trace.ts";
+
+export { PerfTracker } from "./tracker.ts";
 export type {
   PerfArea,
-  PerfDataColumn,
-  PerfDataEntry,
-  PerformanceConfiguration,
+  PerfDomainOptions as PerformanceDomainOptions,
+  PerfReportColumn,
+  PerformanceOptions,
   TraceFunction,
-  TraceRecorder,
 } from "./types.ts";

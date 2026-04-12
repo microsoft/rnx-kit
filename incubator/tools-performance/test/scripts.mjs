@@ -1,11 +1,11 @@
 import {
   trackPerformance,
   getTrace,
+  getDomain,
   reportPerfData,
-  getRecorder,
 } from "../lib/index.js";
 
-trackPerformance(true);
+trackPerformance({ enable: true, strategy: "timing" });
 
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -17,9 +17,12 @@ const trace2 = getTrace("category2");
 async function main() {
   console.log("Starting performance test...");
   const throwError = false;
-  const synthetic = getRecorder("cat1");
-  synthetic("synthetic");
-  synthetic("synthetic", 12);
+
+  // Use a domain's trace for direct recording
+  const domain = getDomain("cat1");
+  const domainTrace = domain.getTrace();
+  domainTrace("direct-op", () => 42);
+
   await trace("sleep well", sleep, 15);
   await trace2("sleep well too", sleep, 20);
   await trace("sleep well again", sleep, 10);

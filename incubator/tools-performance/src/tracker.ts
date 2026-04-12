@@ -1,154 +1,221 @@
-import { reportResults } from "./report.ts";
-import { createTrace, nullRecord, nullTrace } from "./trace.ts";
+import { styleText } from "util";
+import { PerfDomain } from "./domain.ts";
+import { type ColumnOptions, formatAsTable } from "./table.ts";
 import type {
-  PerfDataEntry,
-  PerformanceConfiguration,
-  TraceFunction,
-  TraceRecorder,
+  EventFrequency,
+  PerfDomainOptions,
+  PerformanceOptions,
+  PerfReportColumn,
 } from "./types.ts";
 
-export type OperationData = {
-  order: number;
+type OperationData = {
+  name: string;
+  session: number;
   calls: number;
   completions: number;
   total: number;
 };
 
-type CategoryState = {
-  ops: Record<string, OperationData>;
-  record: TraceRecorder;
-  trace: TraceFunction;
-};
-
-export const exitHandler = (() => {
-  let callbacks: (() => void)[] | undefined = undefined;
-
-  function add(callback: () => void) {
-    if (!callbacks) {
-      callbacks = [];
-      process.on("exit", () => {
-        for (const cb of callbacks!) {
-          cb();
-        }
-      });
-    }
-    callbacks.push(callback);
-  }
-
-  function remove(callback: () => void) {
-    if (callbacks) {
-      callbacks = callbacks.filter((cb) => cb !== callback);
-    }
-  }
-
-  return { add, remove };
-})();
+const ENABLE_ALL = Symbol("enabled");
 
 /**
  * Performance manager that tracks the duration of operations across one or more categories.
  * Categories must be enabled before tracking begins. Provides trace and record functions
  * per category, and reports aggregated results at process exit or on demand.
  */
-export class PerfManager {
-  private config: PerformanceConfiguration;
-  private readonly categories = new Map<string | symbol, CategoryState>();
-  private readonly enabled = new Set<string | symbol>();
-  private readonly unscoped = Symbol("unscoped");
-  private finished = false;
+export class PerfTracker {
+  static startTime = performance.now();
+  static exitHandlers: (() => void)[] | undefined = undefined;
 
-  constructor(config: PerformanceConfiguration = {}) {
+  static addExitHandler(callback: () => void) {
+    if (!this.exitHandlers) {
+      this.exitHandlers = [];
+      process.on("exit", () => {
+        for (const cb of this.exitHandlers!) {
+          cb();
+        }
+      });
+    }
+    this.exitHandlers.push(callback);
+  }
+
+  static removeExitHandler(callback: () => void) {
+    if (this.exitHandlers) {
+      this.exitHandlers = this.exitHandlers.filter((cb) => cb !== callback);
+    }
+  }
+
+  private timings = new Map<string, OperationData>();
+  private enabled = new Set<string | symbol>();
+  private config: PerformanceOptions;
+  private domains: Record<string, PerfDomain> = {};
+  private onExit: (() => void) | undefined;
+
+  constructor(config: PerformanceOptions = {}) {
     this.config = { ...config };
-    exitHandler.add(this.report);
+    this.config.enable ??= true;
+    this.enable(this.config.enable);
+
+    this.onExit = () => this.finish(true);
+    PerfTracker.addExitHandler(this.onExit);
   }
 
-  updateConfig(newConfig: PerformanceConfiguration) {
+  updateConfig(newConfig: PerformanceOptions) {
     Object.assign(this.config, newConfig);
+    if (newConfig.enable) {
+      this.enable(newConfig.enable);
+    }
   }
 
-  enable(category: true | string | string[]) {
-    if (category === true) {
-      this.enabled.add(this.unscoped);
-    } else if (typeof category === "string") {
-      this.enabled.add(category);
+  enable(domain: true | string | string[]) {
+    if (domain === true) {
+      this.enabled.add(ENABLE_ALL);
+    } else if (typeof domain === "string") {
+      this.enabled.add(domain);
     } else {
-      for (const cat of category) {
+      for (const cat of domain) {
         this.enabled.add(cat);
       }
     }
   }
 
-  isEnabled(category?: string): boolean {
-    return this.enabled.has(category ?? this.unscoped);
+  isEnabled(domain: string, frequency?: EventFrequency): boolean {
+    if (this.enabled.has(ENABLE_ALL) || this.enabled.has(domain)) {
+      const existing = this.domains[domain];
+      return existing
+        ? existing.enabled(frequency)
+        : PerfDomain.frequencyEnabled(frequency, this.config.frequency);
+    }
+    return false;
   }
 
-  getTrace(category?: string): TraceFunction {
-    return this.getCategory(category)?.trace ?? nullTrace;
-  }
-
-  getRecorder(category?: string): TraceRecorder {
-    return this.getCategory(category)?.record ?? nullRecord;
-  }
-
-  getResults(): PerfDataEntry[] {
-    return [...this.categories.entries()].flatMap(([key, state]) => {
-      const category = typeof key === "symbol" ? "" : key;
-      return Object.entries(state.ops).map(([op, data]) =>
-        produceEntry(category, op, data)
-      );
-    });
-  }
-
-  report = (peekOnly = false) => {
-    if (!this.finished || peekOnly) {
-      const allResults = this.getResults();
-      if (allResults.length > 0) {
-        console.log("Performance results:");
-        console.log(reportResults(allResults, this.config));
-      }
-      if (!peekOnly) {
-        this.finished = true;
-        exitHandler.remove(this.report);
-      }
+  private recordTime = (tag: string, duration?: number) => {
+    const timings = this.timings;
+    const current = timings.get(tag);
+    const entry = current ?? {
+      name: tag,
+      session: performance.now() - PerfTracker.startTime,
+      calls: 0,
+      completions: 0,
+      total: 0,
+    };
+    if (duration !== undefined) {
+      entry.completions++;
+      entry.total += duration;
+    } else {
+      entry.calls++;
+    }
+    if (!current) {
+      timings.set(tag, entry);
     }
   };
 
-  private getCategory(category?: string): CategoryState | undefined {
-    const key = category ?? this.unscoped;
-    if (!this.enabled.has(key)) {
-      return undefined;
+  private getDomainOptions(): PerfDomainOptions {
+    const { strategy, frequency, waitOnStart } = this.config;
+    return strategy === "timing"
+      ? { recordTime: this.recordTime, frequency, waitOnStart }
+      : { frequency, waitOnStart };
+  }
+
+  domain(name: string): PerfDomain | undefined {
+    if (this.enabled.has(ENABLE_ALL) || this.enabled.has(name)) {
+      return (this.domains[name] ??= new PerfDomain(
+        name,
+        this.getDomainOptions()
+      ));
     }
-    let state = this.categories.get(key);
-    if (!state) {
-      const ops: Record<string, OperationData> = {};
-      const record: TraceRecorder = (op: string, duration?: number) => {
-        const entry = (ops[op] ??= {
-          order: performance.now(),
-          calls: 0,
-          completions: 0,
-          total: 0,
-        });
-        if (duration !== undefined) {
-          entry.completions++;
-          entry.total += duration;
-        } else {
-          entry.calls++;
+    return undefined;
+  }
+
+  finish(processExit = false) {
+    if (this.onExit) {
+      for (const domain of Object.values(this.domains)) {
+        domain.stop(processExit);
+      }
+      if (this.timings.size > 0) {
+        this.report();
+      }
+      if (!processExit) {
+        PerfTracker.removeExitHandler(this.onExit);
+      }
+      this.onExit = undefined;
+    }
+  }
+
+  private report() {
+    const config = this.config;
+    const { reportColumns, reportSort, showIndex, maxNameWidth } = config;
+    const cols = reportColumns ?? ["name", "calls", "total", "avg"];
+    // configure the column configs
+    const columnConfigs = cols.map((col) => ({
+      ...(COL_OPTIONS[col] ?? { label: col }),
+    }));
+    if (maxNameWidth && cols.includes("name")) {
+      columnConfigs[cols.indexOf("name")].maxWidth = maxNameWidth;
+    }
+    // filter the sort to include columns in the report
+    const sort: number[] = [];
+    if (reportSort && reportSort.length > 0) {
+      for (const sortCol of reportSort) {
+        const index = cols.indexOf(sortCol);
+        if (index !== -1) {
+          sort.push(index);
         }
-      };
-      state = { ops, record, trace: createTrace(record) };
-      this.categories.set(key, state);
+      }
     }
-    return state;
+    // maps the column keys to entries
+    const rows = Array.from(this.timings.values()).map(
+      (entry: OperationData) => {
+        return cols.map((col: PerfReportColumn) => getCellValue(entry, col));
+      }
+    );
+    const reportTo = config.reportHandler ?? console.log;
+    reportTo(formatAsTable(rows, { columns: columnConfigs, sort, showIndex }));
   }
 }
 
-function produceEntry(
-  area: string,
-  operation: string,
-  data: OperationData
-): PerfDataEntry {
-  const { calls, completions, total, order } = data;
-  const name = area ? `${area}: ${operation}` : operation;
-  const errors = calls - completions;
-  const avg = completions > 0 ? total / completions : 0;
-  return { order, name, area, operation, calls, total, avg, errors };
+type SyntheticColumns = Exclude<PerfReportColumn, keyof OperationData>;
+type GetColumnValue<T> = (entry: OperationData) => T;
+
+const SYNTHETIC_VALUES: Record<SyntheticColumns, GetColumnValue<number>> = {
+  avg: (entry) => (entry.completions > 0 ? entry.total / entry.completions : 0),
+  errors: (entry) => entry.calls - entry.completions,
+};
+
+function getCellValue(
+  entry: OperationData,
+  column: PerfReportColumn
+): string | number {
+  if (column in entry) {
+    return entry[column as keyof OperationData];
+  } else if (column in SYNTHETIC_VALUES) {
+    return SYNTHETIC_VALUES[column as SyntheticColumns](entry);
+  }
+  return "";
 }
+
+const NUM_COL_OPTIONS: ColumnOptions = {
+  digits: 0,
+  style: "green",
+  localeFmt: true,
+  align: "right",
+};
+
+function styleName(name: string): string {
+  const firstColon = name.indexOf(":");
+  if (firstColon === -1) {
+    return styleText("cyan", name);
+  }
+  const prefix = name.substring(0, firstColon);
+  const op = name.substring(firstColon + 1);
+  return `${styleText("blue", prefix)}:${styleText("cyan", op)}`;
+}
+
+const COL_OPTIONS: Record<PerfReportColumn, ColumnOptions> = {
+  name: { label: "operation", align: "left", style: styleName, maxWidth: 50 },
+  session: { label: "session", ...NUM_COL_OPTIONS },
+  calls: { label: "calls", ...NUM_COL_OPTIONS },
+  total: { label: "total", ...NUM_COL_OPTIONS },
+  avg: { label: "avg", ...NUM_COL_OPTIONS },
+  errors: { label: "errors", ...NUM_COL_OPTIONS },
+};
