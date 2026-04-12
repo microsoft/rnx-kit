@@ -132,7 +132,9 @@ export const profile: Profile = {
 
   /*********************
    * Community Modules *
-   *********************/ svg: {
+   *********************/
+
+  svg: {
     name: "react-native-svg",
     version: "^15.15.3",
   },

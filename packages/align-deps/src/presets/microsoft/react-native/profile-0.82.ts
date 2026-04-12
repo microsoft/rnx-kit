@@ -147,16 +147,16 @@ export const profile: Profile = {
 
   gestures: {
     name: "react-native-gesture-handler",
-    version: "^2.29.0",
-  },
-
-  svg: {
-    name: "react-native-svg",
-    version: ">=15.15.1 <15.15.3",
+    version: "^2.29.1",
   },
 
   screens: {
     name: "react-native-screens",
-    version: "^4.19.0",
+    version: "^4.25.0",
+  },
+
+  svg: {
+    name: "react-native-svg",
+    version: "^15.15.1",
   },
 };
