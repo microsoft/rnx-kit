@@ -136,7 +136,7 @@ export const profile: Profile = {
   },
   svg: {
     name: "react-native-svg",
-    version: ">=15.11.2 <15.15.3",
+    version: "^15.11.2",
   },
   "test-app": {
     name: "react-native-test-app",
