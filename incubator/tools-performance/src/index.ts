@@ -16,9 +16,11 @@ export { createTrace, nullTrace } from "./trace.ts";
 
 export { PerfTracker } from "./tracker.ts";
 export type {
+  EventFrequency,
   PerfArea,
-  PerfDomainOptions as PerformanceDomainOptions,
+  PerfDomainOptions,
   PerfReportColumn,
   PerformanceOptions,
   TraceFunction,
+  TraceStrategy,
 } from "./types.ts";
