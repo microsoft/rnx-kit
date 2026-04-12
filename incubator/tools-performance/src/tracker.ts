@@ -25,23 +25,23 @@ const ENABLE_ALL = Symbol("enabled");
  */
 export class PerfTracker {
   static startTime = performance.now();
-  static exitHandlers: (() => void)[] | undefined = undefined;
+  static exitHandlers?: Set<() => void> = undefined;
 
   static addExitHandler(callback: () => void) {
     if (!this.exitHandlers) {
-      this.exitHandlers = [];
+      const exitHandlers = (this.exitHandlers = new Set<() => void>());
       process.on("exit", () => {
-        for (const cb of this.exitHandlers!) {
+        for (const cb of exitHandlers) {
           cb();
         }
       });
     }
-    this.exitHandlers.push(callback);
+    this.exitHandlers.add(callback);
   }
 
   static removeExitHandler(callback: () => void) {
     if (this.exitHandlers) {
-      this.exitHandlers = this.exitHandlers.filter((cb) => cb !== callback);
+      this.exitHandlers.delete(callback);
     }
   }
 
