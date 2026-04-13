@@ -128,14 +128,14 @@ function toCellData(
     if (intlFormatter) {
       text = intlFormatter.format(value);
     } else {
-      text = digits !== undefined ? value.toFixed(digits) : String(value);
+      text = digits != null ? value.toFixed(digits) : String(value);
     }
     key = value;
   } else {
     text ??= String(value);
     key = text;
   }
-  if (maxWidth !== undefined && text.length > maxWidth) {
+  if (maxWidth != null && text.length > maxWidth) {
     text = text.slice(0, maxWidth - 3) + "...";
   }
   const width = text.length;

@@ -68,7 +68,7 @@ export class PerfDomain {
    */
   stop(processExit = false) {
     // first attempt to close the initial start event if it exists
-    if (this.startVal !== undefined) {
+    if (this.startVal != null) {
       const lastOp = this.lastTime;
       if (this.strategy === "timing" && processExit && lastOp !== undefined) {
         // in this case use the last recorded time as the end time for the domain
@@ -130,7 +130,7 @@ export class PerfDomain {
   private timingRecorder(tag: string, startTime?: number) {
     const timeNow = performance.now();
     tag = this.coerceTag(tag);
-    if (startTime === undefined) {
+    if (startTime == null) {
       this.recordTime(tag);
       this.firstTime ??= timeNow;
     } else {
@@ -142,7 +142,7 @@ export class PerfDomain {
 
   private markingRecorder(tag: string, startMark?: string) {
     tag = this.coerceTag(tag);
-    if (startMark === undefined) {
+    if (startMark == null) {
       const markerName = `${tag}:mark:${this.sequence++}`;
       performance.mark(markerName);
       return markerName;
