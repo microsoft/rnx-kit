@@ -1,4 +1,4 @@
-import type { BabelFileResult, Node } from "@babel/core";
+import type { BabelFileResult } from "@babel/core";
 import { hermesParseToAst } from "@rnx-kit/tools-babel";
 import { deepEqual, equal, ok, throws } from "node:assert/strict";
 import { describe, it } from "node:test";

@@ -29,7 +29,7 @@
   "dependencies": {
     "@rnx-kit/reporter": "^0.2.0",
     "@rnx-kit/tools-babel": "^0.0.1",
-    "@rnx-kit/tools-performance": "^0.0.1",
+    "@rnx-kit/tools-performance": "^0.1.0",
     "@swc/core": "^1.15.21"
   },
   "devDependencies": {

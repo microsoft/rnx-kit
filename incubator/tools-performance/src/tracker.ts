@@ -1,4 +1,4 @@
-import { styleText } from "util";
+import { styleText } from "node:util";
 import { PerfDomain } from "./domain.ts";
 import { type ColumnOptions, formatAsTable } from "./table.ts";
 import type {
@@ -40,9 +40,7 @@ export class PerfTracker {
   }
 
   static removeExitHandler(callback: () => void) {
-    if (this.exitHandlers) {
-      this.exitHandlers.delete(callback);
-    }
+    this.exitHandlers?.delete(callback);
   }
 
   private timings = new Map<string, OperationData>();
@@ -72,10 +70,12 @@ export class PerfTracker {
       this.enabled.add(ENABLE_ALL);
     } else if (typeof domain === "string") {
       this.enabled.add(domain);
-    } else {
+    } else if (Array.isArray(domain)) {
       for (const cat of domain) {
         this.enabled.add(cat);
       }
+    } else {
+      throw new Error(`invalid domain: ${domain}`);
     }
   }
 
@@ -99,7 +99,7 @@ export class PerfTracker {
       completions: 0,
       total: 0,
     };
-    if (duration !== undefined) {
+    if (duration != null) {
       entry.completions++;
       entry.total += duration;
     } else {
@@ -158,7 +158,7 @@ export class PerfTracker {
     if (reportSort && reportSort.length > 0) {
       for (const sortCol of reportSort) {
         const index = cols.indexOf(sortCol);
-        if (index !== -1) {
+        if (index >= 0) {
           sort.push(index);
         }
       }

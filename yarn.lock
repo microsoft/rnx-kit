@@ -5987,7 +5987,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/test-fixtures": "npm:*"
     "@rnx-kit/tools-babel": "npm:^0.0.1"
-    "@rnx-kit/tools-performance": "npm:^0.0.1"
+    "@rnx-kit/tools-performance": "npm:^0.1.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@svgr/core": "npm:^8.1.0"
     "@svgr/plugin-jsx": "npm:^8.1.0"
@@ -6386,7 +6386,7 @@ __metadata:
     "@rnx-kit/reporter": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/test-fixtures": "npm:*"
-    "@rnx-kit/tools-performance": "npm:^0.0.1"
+    "@rnx-kit/tools-performance": "npm:^0.1.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@swc/core": "npm:^1.15.24"
     "@types/babel__core": "npm:^7.20.0"
@@ -6450,7 +6450,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-performance@npm:^0.0.1, @rnx-kit/tools-performance@workspace:incubator/tools-performance":
+"@rnx-kit/tools-performance@npm:^0.1.0, @rnx-kit/tools-performance@workspace:incubator/tools-performance":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-performance@workspace:incubator/tools-performance"
   dependencies:
