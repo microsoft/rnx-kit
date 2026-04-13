@@ -283,7 +283,7 @@ function drawRow(
 /** sort compare a string or number values, both values should be of the same type */
 function compareValues<T extends string | number>(a: T, b: T): number {
   if (typeof a === "number") {
-    return a - (b as number);
+    return (b as number) - a;
   } else {
     return a.localeCompare(b as string);
   }

@@ -73,7 +73,7 @@ export class PerfDomain {
       if (this.strategy === "timing" && processExit && lastOp !== undefined) {
         // in this case use the last recorded time as the end time for the domain
         const duration = lastOp - (this.startVal as number);
-        this.recordTime("", duration);
+        this.recordTime(this.coerceTag(""), duration);
       } else {
         // otherwise just record the domain event with the start value as the handoff
         this.record("", this.startVal);
