@@ -163,7 +163,7 @@
       },
       "incubator/tools-babel": {
         "entry": [
-          "src/**/*.ts",
+          "src/**/index.ts",
           "test/**/*.ts"
         ]
       },
