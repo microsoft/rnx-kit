@@ -68,14 +68,14 @@ export function hermesParseToAst({
   config,
 }: TransformerArgs): Node | null {
   const { parseDisableHermes } = context;
-  if (!parseDisableHermes) {
-    hermesParse(src, {
-      babel: true,
-      reactRuntimeTarget: "19",
-      sourceType: config.sourceType ?? undefined,
-    });
+  if (parseDisableHermes) {
+    return null;
   }
-  return null;
+  return hermesParse(src, {
+    babel: true,
+    reactRuntimeTarget: "19",
+    sourceType: config.sourceType ?? undefined,
+  });
 }
 
 export function parseToAst(args: TransformerArgs): Node | null {
