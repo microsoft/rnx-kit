@@ -1,0 +1,56 @@
+{
+  "name": "@rnx-kit/tools-babel",
+  "version": "0.0.1",
+  "private": true,
+  "description": "EXPERIMENTAL - USE WITH CAUTION - tools-babel",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/tools-babel#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/tools-babel"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/tools-performance": "^0.0.1",
+    "hermes-parser": "^0.34.0",
+    "oxc-parser": "^0.123.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/generator": "^7.20.0",
+    "@react-native/babel-preset": "^0.83.0",
+    "@rnx-kit/reporter": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/test-fixtures": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@swc/core": "^1.15.24",
+    "@types/babel__core": "^7.20.0",
+    "@types/babel__generator": "^7.20.0",
+    "metro-babel-transformer": "^0.83.1"
+  },
+  "peerDependencies": {
+    "@babel/core": "*",
+    "@react-native/babel-preset": "*"
+  },
+  "engines": {
+    "node": ">=22.11"
+  },
+  "experimental": true
+}
