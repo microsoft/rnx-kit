@@ -1,5 +1,3 @@
-<!-- We recommend an empty change log entry for a new package: `yarn change --empty` -->
-
 # @rnx-kit/tools-babel
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
@@ -52,7 +50,10 @@ with automatic backend selection:
 import { makeTransformerArgs, parseToAst } from "@rnx-kit/tools-babel";
 
 function transform({ filename, src, options, plugins }) {
-  const args = makeTransformerArgs({ filename, src, options, plugins }, settings);
+  const args = makeTransformerArgs(
+    { filename, src, options, plugins },
+    settings
+  );
   if (!args) return null; // file should be skipped
 
   const ast = parseToAst(args);
@@ -190,7 +191,7 @@ import {
 
 // Identify plugin format
 isConfigItem(plugin); // true if ConfigItem (has `value` property)
-isPluginObj(plugin);  // true if resolved PluginObj (has `visitor` property)
+isPluginObj(plugin); // true if resolved PluginObj (has `visitor` property)
 
 // Extract the plugin target (function/string) or key (string name)
 const target = getPluginTarget(plugin);
@@ -244,7 +245,7 @@ The package integrates with `@rnx-kit/tools-performance` on two domains:
 | Domain         | Frequency | What is traced                                       |
 | -------------- | --------- | ---------------------------------------------------- |
 | `transform`    | medium    | Parse operations (OXC native, AST conversion, Babel) |
-| `babel-plugin` | high      | Individual plugin visitor method calls                |
+| `babel-plugin` | high      | Individual plugin visitor method calls               |
 
 Plugin visitor tracing wraps every visitor method via Babel's
 `wrapPluginVisitorMethod` hook. It is only enabled when high-frequency tracking
@@ -258,55 +259,59 @@ import { trackPerformance } from "@rnx-kit/tools-performance";
 trackPerformance({ enable: "transform", strategy: "timing" });
 
 // Enable per-plugin tracing (high overhead)
-trackPerformance({ enable: "babel-plugin", strategy: "timing", frequency: "high" });
+trackPerformance({
+  enable: "babel-plugin",
+  strategy: "timing",
+  frequency: "high",
+});
 ```
 
 ## TransformerSettings
 
 Settings that persist across transformation passes:
 
-| Field                  | Type                       | Default | Description                                                  |
-| ---------------------- | -------------------------- | ------- | ------------------------------------------------------------ |
-| `configCallerMixins`   | `Record<string, string>`   | --      | Extra fields added to Babel's `caller` config                |
-| `configDisabledPlugins`| `Set<string>`              | --      | Plugin keys to remove from the resolved config               |
-| `parseDisableOxc`      | `boolean`                  | --      | Disable OXC parser                                           |
-| `parseDisableHermes`   | `boolean`                  | --      | Disable Hermes parser                                        |
-| `parseFlowDefault`     | `boolean`                  | `true`  | Assume Flow in `.js`/`.jsx` files under `node_modules`       |
-| `parseFlowWorkspace`   | `boolean`                  | `false` | Assume Flow in workspace `.js`/`.jsx` files                  |
-| `parseExtDefault`      | `SrcSyntax`                | `"js"`  | Syntax for unknown file extensions (unset to skip)           |
-| `parseExtAliases`      | `Record<string, SrcSyntax>`| --      | Map extensions to syntax types (e.g. `{ ".svg": "jsx" }`)   |
+| Field                   | Type                        | Default | Description                                               |
+| ----------------------- | --------------------------- | ------- | --------------------------------------------------------- |
+| `configCallerMixins`    | `Record<string, string>`    | --      | Extra fields added to Babel's `caller` config             |
+| `configDisabledPlugins` | `Set<string>`               | --      | Plugin keys to remove from the resolved config            |
+| `parseDisableOxc`       | `boolean`                   | --      | Disable OXC parser                                        |
+| `parseDisableHermes`    | `boolean`                   | --      | Disable Hermes parser                                     |
+| `parseFlowDefault`      | `boolean`                   | `true`  | Assume Flow in `.js`/`.jsx` files under `node_modules`    |
+| `parseFlowWorkspace`    | `boolean`                   | `false` | Assume Flow in workspace `.js`/`.jsx` files               |
+| `parseExtDefault`       | `SrcSyntax`                 | `"js"`  | Syntax for unknown file extensions (unset to skip)        |
+| `parseExtAliases`       | `Record<string, SrcSyntax>` | --      | Map extensions to syntax types (e.g. `{ ".svg": "jsx" }`) |
 
 ## API Reference
 
 ### Config
 
-| Function                              | Description                                                                |
-| ------------------------------------- | -------------------------------------------------------------------------- |
-| `getBabelConfig(args, settings?)`     | Build a per-file Babel config from cached base config + file-specific settings |
-| `filterConfigPlugins(config, disabled?)` | Resolve presets/overrides and filter plugins by key                      |
+| Function                                 | Description                                                                    |
+| ---------------------------------------- | ------------------------------------------------------------------------------ |
+| `getBabelConfig(args, settings?)`        | Build a per-file Babel config from cached base config + file-specific settings |
+| `filterConfigPlugins(config, disabled?)` | Resolve presets/overrides and filter plugins by key                            |
 
 ### Parsing
 
-| Function                      | Description                                                    |
-| ----------------------------- | -------------------------------------------------------------- |
-| `parseToAst(args)`            | Parse with fallback chain: OXC -> Hermes -> Babel              |
-| `oxcParseToAst(args, trace?)` | Parse with OXC and convert ESTree to Babel AST                 |
-| `hermesParseToAst(args)`      | Parse with Hermes                                              |
-| `toBabelAST(program, source, isTypeScript?, comments?)` | Convert OXC ESTree to Babel AST |
+| Function                                                | Description                                       |
+| ------------------------------------------------------- | ------------------------------------------------- |
+| `parseToAst(args)`                                      | Parse with fallback chain: OXC -> Hermes -> Babel |
+| `oxcParseToAst(args, trace?)`                           | Parse with OXC and convert ESTree to Babel AST    |
+| `hermesParseToAst(args)`                                | Parse with Hermes                                 |
+| `toBabelAST(program, source, isTypeScript?, comments?)` | Convert OXC ESTree to Babel AST                   |
 
 ### Transformer
 
-| Function                                          | Description                                             |
-| ------------------------------------------------- | ------------------------------------------------------- |
+| Function                                                    | Description                                           |
+| ----------------------------------------------------------- | ----------------------------------------------------- |
 | `makeTransformerArgs(babelArgs, settings?, updateContext?)` | Build `TransformerArgs` with context and Babel config |
-| `initTransformerContext(filename, settings)`       | Initialize file context without building Babel config    |
+| `initTransformerContext(filename, settings)`                | Initialize file context without building Babel config |
 
 ### Plugins
 
-| Function                                | Description                                                     |
-| --------------------------------------- | --------------------------------------------------------------- |
-| `isConfigItem(plugin)`                  | Check if plugin is a Babel `ConfigItem`                         |
-| `isPluginObj(plugin)`                   | Check if plugin is a resolved `PluginObj`                       |
-| `getPluginTarget(plugin)`               | Extract the plugin target (function or string)                  |
-| `getPluginKey(plugin)`                  | Extract the key from a resolved plugin                          |
-| `updateTransformOptions(options, visitor)` | Walk and modify plugins/presets/overrides in a config        |
+| Function                                   | Description                                           |
+| ------------------------------------------ | ----------------------------------------------------- |
+| `isConfigItem(plugin)`                     | Check if plugin is a Babel `ConfigItem`               |
+| `isPluginObj(plugin)`                      | Check if plugin is a resolved `PluginObj`             |
+| `getPluginTarget(plugin)`                  | Extract the plugin target (function or string)        |
+| `getPluginKey(plugin)`                     | Extract the key from a resolved plugin                |
+| `updateTransformOptions(options, visitor)` | Walk and modify plugins/presets/overrides in a config |
