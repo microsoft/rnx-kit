@@ -1,4 +1,5 @@
 import type { Config } from "@svgr/core";
+import { getTrace } from "@rnx-kit/tools-performance";
 import path from "node:path";
 import type { SourceTransformResult, TransformerArgs } from "./types";
 import { optionalModule } from "./utils";
@@ -50,7 +51,8 @@ export function srcTransformSvg({
   context,
 }: TransformerArgs): SourceTransformResult | Promise<SourceTransformResult> {
   const { resolveConfig, transform } = svgCore.get();
-  const { asyncTransform, trace } = context;
+  const { asyncTransform } = context;
+  const trace = getTrace("transform");
   const opConfig = "transform src svg config";
   const opTransform = "transform src svg transform";
   if (asyncTransform) {

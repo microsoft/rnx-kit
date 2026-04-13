@@ -66,8 +66,7 @@ export type TransformerNativeOptions = {
   upstreamDelegates?: Record<string, string | string[]>;
 };
 
-export type TransformerOptions = TransformerNativeOptions &
-  Omit<TransformerSettings, "trace">;
+export type TransformerOptions = TransformerNativeOptions & TransformerSettings;
 
 export type TransformerContext = BaseTransformerContext &
   TransformerNativeOptions;

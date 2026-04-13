@@ -5,58 +5,12 @@
 import type { Node } from "@babel/core";
 import { parseSync as babelParseSync } from "@babel/core";
 import generate from "@babel/generator";
-import {
-  hermesParseToAst,
-  makeTransformerArgs,
-  oxcParseToAst,
-  tracePassthrough,
-} from "@rnx-kit/tools-babel";
-import type {
-  BabelTransformerArgs,
-  TransformerArgs,
-} from "@rnx-kit/tools-babel";
+import { hermesParseToAst, oxcParseToAst } from "@rnx-kit/tools-babel";
 import { deepEqual, equal, ok } from "node:assert/strict";
-import fs from "node:fs";
-import path from "node:path";
 import { before, describe, it } from "node:test";
+import { createTransformerArgs, readFixture, type ASTNode } from "./helpers";
 
 // ── Helpers ──────────────────────────────────────────────────────────
-
-const fixturesDir = path.join(__dirname, "__fixtures__");
-const settings = { trace: tracePassthrough };
-
-function readFixture(name: string): string {
-  return fs.readFileSync(path.join(fixturesDir, name), "utf8");
-}
-
-function makeBabelArgs(name: string, src: string): BabelTransformerArgs {
-  return {
-    src,
-    filename: path.join(fixturesDir, name),
-    plugins: [],
-    options: {
-      dev: true,
-      hot: false,
-      minify: false,
-      platform: "ios",
-      projectRoot: process.cwd(),
-      enableBabelRCLookup: true,
-      enableBabelRuntime: false,
-      publicPath: "/",
-      globalPrefix: "",
-      unstable_transformProfile: "default",
-    },
-  } as BabelTransformerArgs;
-}
-
-function makeArgs(name: string, src: string): TransformerArgs | undefined {
-  return makeTransformerArgs(makeBabelArgs(name, src), settings);
-}
-
-type ASTNode = Node & {
-  program?: { body?: ASTNode[] };
-  type: string;
-};
 
 function getBody(ast: Node): ASTNode[] {
   const node = ast as ASTNode;
@@ -84,7 +38,7 @@ function stripComments(code: string): string {
 }
 
 function babelParse(name: string, src: string): Node | null {
-  const args = makeArgs(name, src);
+  const args = createTransformerArgs(name, src);
   if (!args) return null;
   return babelParseSync(src, args.config);
 }
@@ -117,7 +71,7 @@ describe("parse: oxc vs babel (JS/JSX)", () => {
         src = readFixture(name);
         babelAst = babelParse(name, src)!;
         ok(babelAst != null, "Babel parse failed");
-        const args = makeArgs(name, src);
+        const args = createTransformerArgs(name, src);
         oxcAst = args ? oxcParseToAst(args) : null;
       });
 
@@ -159,7 +113,7 @@ describe("parse: hermes vs babel (JS/JSX)", () => {
         src = readFixture(name);
         babelAst = babelParse(name, src)!;
         ok(babelAst != null, "Babel parse failed");
-        const args = makeArgs(name, src);
+        const args = createTransformerArgs(name, src);
         hermesAst = args ? hermesParseToAst(args) : null;
       });
 

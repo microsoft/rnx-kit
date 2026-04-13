@@ -1,6 +1,7 @@
 import type { BabelFileResult } from "@babel/core";
 import { transformFromAstSync, transformFromAstAsync } from "@babel/core";
 import { parseToAst } from "@rnx-kit/tools-babel";
+import { getTrace } from "@rnx-kit/tools-performance";
 import type { TransformerArgs } from "./types";
 
 /**
@@ -30,7 +31,8 @@ export function handleResult(
  */
 export function transformFinal(args: TransformerArgs) {
   const { src, context, config } = args;
-  const { trace, asyncTransform } = context;
+  const { asyncTransform } = context;
+  const trace = getTrace("transform");
   const opBase = "transform babel";
 
   // parse the ast using the requested parser
@@ -48,7 +50,7 @@ export function transformFinal(args: TransformerArgs) {
       ast,
       src,
       config
-    ).then((result) => handleResult(result));
+    ).then((result: BabelFileResult | null) => handleResult(result));
   }
   return handleResult(
     trace(`${opBase} transform`, transformFromAstSync, ast, src, config)

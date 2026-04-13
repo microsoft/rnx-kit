@@ -29,6 +29,7 @@
   "dependencies": {
     "@rnx-kit/reporter": "^0.2.0",
     "@rnx-kit/tools-babel": "^0.0.1",
+    "@rnx-kit/tools-performance": "^0.0.1",
     "@swc/core": "^1.15.21"
   },
   "devDependencies": {
@@ -37,6 +38,7 @@
     "@react-native/babel-preset": "^0.83.0",
     "@react-native/metro-babel-transformer": "^0.83.0",
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/test-fixtures": "*",
     "@rnx-kit/tsconfig": "*",
     "@svgr/core": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",

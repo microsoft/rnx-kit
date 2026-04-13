@@ -5,61 +5,24 @@
  */
 import type { BabelFileResult, Node } from "@babel/core";
 import generate from "@babel/generator";
-import type { BabelTransformerArgs } from "metro-babel-transformer";
+import type { BabelTransformerArgs } from "@rnx-kit/tools-babel";
 import { equal, ok } from "node:assert/strict";
-import fs from "node:fs";
-import path from "node:path";
 import { before, describe, it } from "node:test";
 // Our transformer (imported directly, not through the babelTransformerPath
 // indirection, so we can control plugin options in-process)
 import { transform as nativeTransform } from "../src/babelTransformer";
 // ── Transformer imports ──────────────────────────────────────────────
 import { setTransformerPluginOptions } from "../src/context";
+import {
+  createFixtureArgs,
+  readFixture,
+  type ASTNode,
+} from "./helpers";
 
 // The built-in React Native transformer
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const rnTransformer = require("@react-native/metro-babel-transformer") as {
   transform: (args: BabelTransformerArgs) => BabelFileResult;
-};
-
-// ── Helpers ──────────────────────────────────────────────────────────
-
-const fixturesDir = path.join(__dirname, "__fixtures__");
-
-function readFixture(name: string): string {
-  return fs.readFileSync(path.join(fixturesDir, name), "utf8");
-}
-
-function makeArgs(
-  filename: string,
-  src: string,
-  overrides: Partial<BabelTransformerArgs["options"]> = {}
-): BabelTransformerArgs {
-  return {
-    src,
-    filename: path.join(fixturesDir, filename),
-    plugins: [],
-    options: {
-      dev: true,
-      hot: false,
-      minify: false,
-      platform: "ios",
-      type: "module",
-      projectRoot: process.cwd(),
-      enableBabelRCLookup: true,
-      enableBabelRuntime: false,
-      publicPath: "/",
-      globalPrefix: "",
-      unstable_transformProfile: "default",
-      ...overrides,
-    } as BabelTransformerArgs["options"],
-  };
-}
-
-type ASTNode = Node & {
-  program?: { body?: ASTNode[] };
-  type: string;
-  loc?: { start: { line: number; column: number } } | null;
 };
 
 function getBody(result: BabelFileResult): ASTNode[] {
@@ -177,7 +140,7 @@ describe("e2e: native transformer vs @react-native/metro-babel-transformer", () 
 
       before(() => {
         src = readFixture(name);
-        const args = makeArgs(name, src);
+        const args = createFixtureArgs(name, src);
         nativeResult = nativeTransform(args) as BabelFileResult;
         rnResult = rnTransformer.transform(args);
       });
@@ -244,7 +207,7 @@ describe("e2e: source location validation", () => {
   for (const { name, description } of fixtures) {
     it(`${name}: all AST nodes have valid source locations (${description})`, () => {
       const src = readFixture(name);
-      const args = makeArgs(name, src);
+      const args = createFixtureArgs(name, src);
       const result = nativeTransform(args) as BabelFileResult;
       ok(result.ast != null);
       verifySourceLocations(result.ast as ASTNode, name);
@@ -268,7 +231,7 @@ describe("e2e: JS files produce identical code (hermesParser + hot enabled)", ()
   for (const { name, description } of jsFixtures) {
     it(`${name}: generated code matches exactly (${description})`, () => {
       const src = readFixture(name);
-      const args = makeArgs(name, src, { hermesParser: true, hot: true });
+      const args = createFixtureArgs(name, src, { hermesParser: true, hot: true });
       const nativeResult = nativeTransform(args) as BabelFileResult;
       const rnResult = rnTransformer.transform(args);
       const nativeCode = toCode(nativeResult);
@@ -290,7 +253,7 @@ describe("e2e: TypeScript type erasure", () => {
   for (const { name, description } of tsFixtures) {
     it(`${name}: native result contains no TypeScript-specific AST nodes (${description})`, () => {
       const src = readFixture(name);
-      const args = makeArgs(name, src);
+      const args = createFixtureArgs(name, src);
       const result = nativeTransform(args) as BabelFileResult;
       const body = getBody(result);
 
@@ -320,7 +283,7 @@ describe("e2e: handleJs option transforms JS files through native engine", () =>
 
   it("simple.js: produces valid AST when preprocessed by native engine", () => {
     const src = readFixture("simple.js");
-    const args = makeArgs("simple.js", src);
+    const args = createFixtureArgs("simple.js", src);
     const result = nativeTransform(args) as BabelFileResult;
     ok(result.ast != null);
     const body = getBody(result);
@@ -330,7 +293,7 @@ describe("e2e: handleJs option transforms JS files through native engine", () =>
 
   it("component.jsx: produces valid AST when preprocessed by native engine", () => {
     const src = readFixture("component.jsx");
-    const args = makeArgs("component.jsx", src);
+    const args = createFixtureArgs("component.jsx", src);
     const result = nativeTransform(args) as BabelFileResult;
     ok(result.ast != null);
     const body = getBody(result);
@@ -347,7 +310,7 @@ describe("e2e: platform variations", () => {
   for (const platform of ["ios", "android", "web"]) {
     it(`simple.ts: transforms successfully for platform=${platform}`, () => {
       const src = readFixture("simple.ts");
-      const args = makeArgs("simple.ts", src, { platform });
+      const args = createFixtureArgs("simple.ts", src, { platform });
       const nativeResult = nativeTransform(args) as BabelFileResult;
       ok(nativeResult.ast != null);
       const body = getBody(nativeResult);
@@ -364,7 +327,7 @@ describe("e2e: dev vs production", () => {
   for (const dev of [true, false]) {
     it(`modules.ts: transforms in ${dev ? "development" : "production"} mode`, () => {
       const src = readFixture("modules.ts");
-      const args = makeArgs("modules.ts", src, { dev });
+      const args = createFixtureArgs("modules.ts", src, { dev });
       const nativeResult = nativeTransform(args) as BabelFileResult;
       ok(nativeResult.ast != null);
       const body = getBody(nativeResult);
@@ -426,7 +389,7 @@ describe("e2e: source map line coverage", () => {
   for (const { name } of fixtures) {
     it(`${name}: AST nodes have valid source locations`, () => {
       const src = readFixture(name);
-      const args = makeArgs(name, src);
+      const args = createFixtureArgs(name, src);
       const result = nativeTransform(args) as BabelFileResult;
       const body = getBody(result);
 

@@ -1,4 +1,5 @@
 import type { SrcSyntax } from "@rnx-kit/tools-babel";
+import { getTrace } from "@rnx-kit/tools-performance";
 import type { JscConfig, Options as SwcOptions, Output } from "@swc/core";
 import type {
   SourceTransformer,
@@ -61,13 +62,14 @@ const swcOpName = "transform src swc";
 
 export const srcTransformSwc: SourceTransformer = (args: TransformerArgs) => {
   const { context, src } = args;
-  const { trace, asyncTransform } = context;
+  const { asyncTransform } = context;
+  const trace = getTrace("transform");
   const swcOptions = getSwcOptions(args);
   // return null on parse errors to fall through to Babel
   if (asyncTransform) {
     const { transform } = swcCore.get();
     return trace(swcOpName, transform, src, swcOptions).then(
-      (result) => handleSwcResult(result, context),
+      (result: Output) => handleSwcResult(result, context),
       () => null
     );
   } else {

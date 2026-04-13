@@ -53,12 +53,9 @@ describe("updateTransformerContext", () => {
   ): TransformerContext {
     return {
       ext: ".ts",
-      hasTs: true,
-      hasJsx: false,
       mayContainFlow: false,
       isNodeModule: false,
       srcSyntax: "ts",
-      trace: (_name: string, fn: (...args: unknown[]) => unknown, ...args: unknown[]) => fn(...args),
       ...overrides,
     } as TransformerContext;
   }
@@ -104,7 +101,6 @@ describe("updateTransformerContext", () => {
   it("disables native transform for JS files when handleJs is not set", () => {
     const ctx = makeContext({
       ext: ".js",
-      hasTs: false,
       srcSyntax: "js",
     });
     update(ctx);
@@ -115,7 +111,6 @@ describe("updateTransformerContext", () => {
   it("enables native transform for JS files when handleJs and handleJsx are set and no flow", () => {
     const ctx = makeContext({
       ext: ".jsx",
-      hasTs: false,
       mayContainFlow: false,
       srcSyntax: "jsx",
       handleJs: true,
@@ -129,7 +124,6 @@ describe("updateTransformerContext", () => {
   it("enables native transform for JS files even with mayContainFlow (esbuild catches errors)", () => {
     const ctx = makeContext({
       ext: ".js",
-      hasTs: false,
       mayContainFlow: true,
       srcSyntax: "js",
       handleJs: true,

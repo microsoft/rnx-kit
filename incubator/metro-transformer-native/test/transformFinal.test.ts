@@ -1,11 +1,9 @@
 import type { BabelFileResult, Node } from "@babel/core";
+import { hermesParseToAst } from "@rnx-kit/tools-babel";
 import { deepEqual, equal, ok, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { handleResult } from "../src/finalTransformer";
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const hermesParse = (src: string, options: Record<string, unknown>) =>
-  require("hermes-parser").parse(src, options) as Node;
+import { createTransformerArgs, type ASTNode } from "./helpers";
 
 describe("handleResult", () => {
   it("returns { ast: null } for null result", () => {
@@ -38,30 +36,31 @@ describe("handleResult", () => {
   });
 });
 
-describe("hermesParse", () => {
+describe("hermesParseToAst", () => {
   it("parses simple JavaScript to an AST", () => {
-    const ast = hermesParse("const x = 1;", { babel: true });
+    const args = createTransformerArgs("simple.js");
+    ok(args != null, "Failed to create transformer args");
+    const ast = hermesParseToAst(args!);
     ok(ast != null);
-    equal(
-      (ast as Node & { type: string; program?: { body: unknown[] } }).type,
-      "File"
-    );
+    equal((ast as ASTNode).type, "File");
   });
 
-  it("parses JSX with babel mode", () => {
-    const ast = hermesParse("const el = <div>hello</div>;", { babel: true });
+  it("parses JSX to an AST", () => {
+    const args = createTransformerArgs("component.jsx");
+    ok(args != null, "Failed to create transformer args");
+    const ast = hermesParseToAst(args!);
     ok(ast != null);
-    equal(
-      (ast as Node & { type: string; program?: { body: unknown[] } }).type,
-      "File"
-    );
+    equal((ast as ASTNode).type, "File");
   });
 
   it("produces a program body with statements", () => {
-    const ast = hermesParse("const a = 1; const b = 2;", { babel: true });
+    const args = createTransformerArgs("simple.js");
+    ok(args != null, "Failed to create transformer args");
+    const ast = hermesParseToAst(args!);
+    ok(ast != null);
     ok(
-      (ast as Node & { type: string; program?: { body: unknown[] } }).program
-        .body.length === 2
+      (ast as ASTNode).program!.body!.length >= 2,
+      "Expected at least 2 statements"
     );
   });
 });

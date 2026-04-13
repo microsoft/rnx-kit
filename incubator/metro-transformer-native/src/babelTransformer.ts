@@ -1,5 +1,7 @@
 import type { BabelFileResult } from "@babel/core";
 import { isPromiseLike, lazyInit } from "@rnx-kit/reporter";
+import type { BabelTransformerArgs as MetroBabelTransformerArgs } from "@rnx-kit/tools-babel";
+import { getTrace } from "@rnx-kit/tools-performance";
 import type { BabelTransformerArgs } from "metro-babel-transformer";
 import crypto from "node:crypto";
 import fs from "node:fs";
@@ -105,20 +107,21 @@ export function transform(
   baseArgs: BabelTransformerArgs
 ): BabelFileResult | Promise<BabelFileResult> {
   // get options from the environment, then combine with the babel args to get the full plugin options for this file
-  const args = getTransformerArgs(baseArgs);
+  const args = getTransformerArgs(baseArgs as MetroBabelTransformerArgs);
   if (!args) {
     throw new Error(
       `Failed to load babel config for file ${baseArgs.filename}`
     );
   }
-  return args.context.trace("transform core", transformWorker, args);
+  const trace = getTrace("transform");
+  return trace("transform core", transformWorker, args);
 }
 
 function transformWorker(
   args: TransformerArgs
 ): BabelFileResult | Promise<BabelFileResult> {
   const context = args.context;
-  const trace = context.trace;
+  const trace = getTrace("transform");
   const upstreamOp = "transform babel upstream";
 
   // get the appropriate transformers for this file
