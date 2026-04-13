@@ -106,7 +106,8 @@
           "src/index.{js,ts}"
         ],
         "project": [
-          "src/**/*.{js,ts,tsx}"
+          "src/**/*.{js,ts,tsx}",
+          "test/**/*.{js,ts,tsx}"
         ]
       },
       "incubator/@react-native-webapis/battery-status": {
@@ -158,6 +159,12 @@
       "incubator/rn-changelog-generator": {
         "ignoreDependencies": [
           "@rnx-kit/jest-preset"
+        ]
+      },
+      "incubator/tools-babel": {
+        "entry": [
+          "src/**/*.ts",
+          "test/**/*.ts"
         ]
       },
       "incubator/tools-typescript": {
