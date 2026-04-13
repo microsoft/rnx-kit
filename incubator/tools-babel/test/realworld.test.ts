@@ -42,10 +42,7 @@ describe("Real-world fixtures", () => {
         const fd = getFile(file);
         if (!fd.babelAst || !fd.oxcAst) continue;
 
-        const diffs = countDiffs(
-          fd.oxcAst as AnyNode,
-          fd.babelAst as AnyNode
-        );
+        const diffs = countDiffs(fd.oxcAst as AnyNode, fd.babelAst as AnyNode);
         const diffDetails: string[] = [];
         if (diffs > 0) {
           diffAst(
@@ -105,11 +102,7 @@ describe("Real-world fixtures", () => {
           const oLines = oxcSrc.split("\n");
           let diffCount = 0;
           const diffSample: string[] = [];
-          for (
-            let i = 0;
-            i < Math.max(bLines.length, oLines.length);
-            i++
-          ) {
+          for (let i = 0; i < Math.max(bLines.length, oLines.length); i++) {
             if (bLines[i] !== oLines[i]) {
               diffCount++;
               if (diffSample.length < 3) {
