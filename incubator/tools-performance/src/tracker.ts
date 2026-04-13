@@ -70,12 +70,12 @@ export class PerfTracker {
       this.enabled.add(ENABLE_ALL);
     } else if (typeof domain === "string") {
       this.enabled.add(domain);
-    } else if (Array.isArray(category)) {
-      for (const cat of category) {
+    } else if (Array.isArray(domain)) {
+      for (const cat of domain) {
         this.enabled.add(cat);
       }
     } else {
-      throw new Error(`invalid category: ${category}`);
+      throw new Error(`invalid domain: ${domain}`);
     }
   }
 
