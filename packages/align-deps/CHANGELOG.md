@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.4.5
+
+### Patch Changes
+
+- 2b749d6: Fixed `react-native-svg` version being incorrectly constrained
+
 ## 3.4.4
 
 ### Patch Changes
