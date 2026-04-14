@@ -18,6 +18,10 @@ function createEmptyLogger(): PerfLogger {
   };
 }
 
+// metro uses point events with _start and _end to indicate the start and end of events
+const POINT_START_SUFFIX = "_start";
+const POINT_END_SUFFIX = "_end";
+
 function getSubdomainLogger(
   base: string,
   key?: string
@@ -39,15 +43,14 @@ function createLogger(subdomainName: string, domain?: PerfDomain): PerfLogger {
   const openEvents: Record<string, () => void> = {};
   return {
     point(name: string, _opts?: PerfLoggerPointOptions) {
-      const startSuffix = "_start";
-      if (name.endsWith(startSuffix)) {
-        const eventKey = name.slice(0, -startSuffix.length);
+      if (name.endsWith(POINT_START_SUFFIX)) {
+        const eventKey = name.slice(0, -POINT_START_SUFFIX.length);
         // this shouldn't happen but close any open event with the same name just in case
         openEvents[eventKey]?.();
         // now open the event for this point
         openEvents[eventKey] = domain.startEvent(eventKey);
-      } else if (name.endsWith("_end")) {
-        const eventKey = name.slice(0, -4);
+      } else if (name.endsWith(POINT_END_SUFFIX)) {
+        const eventKey = name.slice(0, -POINT_END_SUFFIX.length);
         const endEvent = openEvents[eventKey];
         if (endEvent) {
           endEvent();
