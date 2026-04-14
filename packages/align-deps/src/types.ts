@@ -27,11 +27,11 @@ export type DiffMode = "strict" | "allow-subset";
 
 export type Options = {
   presets: string[];
-  loose: boolean;
-  migrateConfig: boolean;
-  noUnmanaged: boolean;
-  verbose: boolean;
-  write: boolean;
+  loose?: boolean;
+  migrateConfig?: boolean;
+  noUnmanaged?: boolean;
+  verbose?: boolean;
+  write?: boolean;
   diffMode?: DiffMode;
   excludePackages?: string[];
   requirements?: string[];
@@ -41,13 +41,13 @@ export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
   "diff-mode"?: string;
   "exclude-packages"?: string | number;
   "export-catalogs"?: string;
-  "migrate-config": boolean;
-  "no-unmanaged": boolean;
+  "migrate-config"?: boolean;
+  "no-unmanaged"?: boolean;
   "set-version"?: string | number;
   init?: string;
   packages?: (string | number)[];
-  presets?: string | number;
-  requirements?: string | number;
+  presets?: string | number | string[];
+  requirements?: string | number | string[];
 };
 
 export type DependencyType = "direct" | "development" | "peer";

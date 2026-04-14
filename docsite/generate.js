@@ -2,6 +2,8 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
+const UTF_8 = /** @type {const} */ ({ encoding: "utf-8" });
+
 const badges = [
   "https://github\\.com/microsoft/rnx-kit/actions/workflows",
   "https://img\\.shields\\.io",
@@ -12,6 +14,7 @@ const badgesRE = new RegExp(
   "g"
 );
 
+const localImagesRE = /!\[(.*?)\]\(\.\/(.*?)\)/g;
 const titleRE = /# @rnx-kit\/(.*)/;
 
 function copyContributing() {
@@ -33,19 +36,22 @@ function generateToolsSidebar() {
       continue;
     }
 
-    const content = fs.readFileSync(manifest, { encoding: "utf-8" });
-    if (JSON.parse(content).private) {
+    if (JSON.parse(fs.readFileSync(manifest, UTF_8)).private) {
       continue;
     }
 
     const output = path.join("docs", "tools", `${pkg}.md`);
     if (!fs.existsSync(output)) {
-      const content = fs.readFileSync(readme, { encoding: "utf-8" });
+      const content = fs.readFileSync(readme, UTF_8);
       fs.writeFileSync(
         output,
         content
           .replace(titleRE, "# $1") // Remove scope from title
           .replace(badgesRE, "") // Remove badges
+          .replace(
+            localImagesRE,
+            `![$1](${path.join("..", "..", path.dirname(readme), "$2")})`
+          )
       );
     }
 

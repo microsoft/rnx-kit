@@ -22,7 +22,8 @@ function verifyEmit({
 }: TypeScriptConfig): ErrorType | null {
   return Array.isArray(include) &&
     compilerOptions?.rootDir !== include[0] &&
-    !compilerOptions?.noEmit
+    !compilerOptions?.noEmit &&
+    !compilerOptions?.emitDeclarationOnly
     ? "missing-rootDir-or-noEmit"
     : null;
 }

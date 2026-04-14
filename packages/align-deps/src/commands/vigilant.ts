@@ -4,13 +4,12 @@ import type { Capability, KitConfig } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
-import semverSubset from "semver/ranges/subset.js";
 import {
   capabilityProvidedBy,
   resolveCapabilities,
   resolveCapabilitiesUnchecked,
 } from "../capabilities.ts";
-import { stringify } from "../diff.ts";
+import { isSubset, stringify } from "../diff.ts";
 import { dependencySections, modifyManifest } from "../helpers.ts";
 import { updateDependencies } from "../manifest.ts";
 import { ensurePreset, filterPreset, mergePresets } from "../preset.ts";
@@ -46,7 +45,7 @@ function isMisalignedDirect(from: string, to: string): boolean {
 }
 
 function isMisalignedPeer(from: string, to: string): boolean {
-  return from !== to && !semverSubset(to, from, { includePrerelease: true });
+  return !isSubset(to, from, { includePrerelease: true });
 }
 
 /**

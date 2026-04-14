@@ -45,40 +45,49 @@ function getAvailableProfiles() {
 }
 
 function makeTypesEntries() {
-  return Object.entries(dependencies).reduce((types, [name, version]) => {
+  /** @type {Record<string, { name: string; version: string; devOnly: true; }>} */
+  const types = {};
+  for (const [name, version] of Object.entries(dependencies)) {
     const pkgName = `@types/${name}`;
     types[pkgName] = { name: pkgName, version, devOnly: true };
-    return types;
-  }, {});
+  }
+  return types;
 }
 
-const profile = {
-  ...makeTypesEntries(),
-  esbuild: {
-    name: "esbuild",
-    version: "^0.27.1",
-    devOnly: true,
-  },
-  "find-up": {
-    name: "find-up",
-    version: "^5.0.0",
-  },
-  "oxc-resolver": {
-    name: "oxc-resolver",
-    version: "^11.0.0",
-    devOnly: true,
-  },
-  semver: {
-    name: "semver",
-    version: "^7.0.0",
-  },
-  yargs: {
-    name: "yargs",
-    version: dependencies.yargs,
-  },
-};
+function makePreset() {
+  const profile = {
+    ...makeTypesEntries(),
+    esbuild: {
+      name: "esbuild",
+      version: "^0.27.1",
+      devOnly: true,
+    },
+    "find-up": {
+      name: "find-up",
+      version: "^5.0.0",
+    },
+    "oxc-resolver": {
+      name: "oxc-resolver",
+      version: "^11.0.0",
+      devOnly: true,
+    },
+    semver: {
+      name: "semver",
+      version: "^7.0.0",
+    },
+    yargs: {
+      name: "yargs",
+      version: dependencies.yargs,
+    },
+  };
 
-module.exports = getAvailableProfiles().reduce((preset, key) => {
-  preset[key] = profile;
+  /** @type {Record<string, typeof profile>} */
+  const preset = {};
+  for (const key of getAvailableProfiles()) {
+    preset[key] = profile;
+  }
+
   return preset;
-}, {});
+}
+
+module.exports = makePreset();

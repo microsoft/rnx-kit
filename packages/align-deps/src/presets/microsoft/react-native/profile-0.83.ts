@@ -132,9 +132,16 @@ export const profile: Profile = {
 
   /*********************
    * Community Modules *
-   *********************/ "test-app": {
+   *********************/
+
+  "test-app": {
     name: "react-native-test-app",
     version: "^5.0.5",
     devOnly: true,
+  },
+
+  gestures: {
+    name: "react-native-gesture-handler",
+    version: "^2.30.0",
   },
 };
