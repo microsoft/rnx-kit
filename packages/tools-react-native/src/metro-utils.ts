@@ -63,8 +63,13 @@ export function mergeTransformerConfigs(
 ): Partial<TransformerConfigT> {
   // collect the getTransformOptions functions from all configs, and if there are multiple, we'll create a wrapper function for them
   const getTransformOptionsFns = configs
-    .map((config) => config?.getTransformOptions)
-    .filter((fn) => typeof fn === "function");
+    .reduce<TransformerConfigT["getTransformOptions"][]>((result, config) => {
+      const getTransformOptions = config?.getTransformOptions;
+      if (typeof getTransformOptions === "function") {
+          result.push(getTransformOptions);
+      }
+      return result;
+    }, []);
 
   // if there are multiple getTransformOptions functions, create a wrapper function that calls in sequence and merges their results
   if (getTransformOptionsFns.length > 1) {
