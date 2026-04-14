@@ -62,9 +62,7 @@ export class PerfDomain {
       return nullFunction;
     }
     const startVal = this.record(tag);
-    return () => {
-      this.record(tag, startVal);
-    };
+    return () => this.record(tag, startVal);
   }
 
   /**

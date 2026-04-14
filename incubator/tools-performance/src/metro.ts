@@ -14,7 +14,7 @@ function createEmptyLogger(): PerfLogger {
   return {
     point: nullFunction,
     annotate: nullFunction,
-    subSpan: () => createEmptyLogger(),
+    subSpan: createEmptyLogger,
   };
 }
 
@@ -39,8 +39,9 @@ function createLogger(subdomainName: string, domain?: PerfDomain): PerfLogger {
   const openEvents: Record<string, () => void> = {};
   return {
     point(name: string, _opts?: PerfLoggerPointOptions) {
-      if (name.endsWith("_start")) {
-        const eventKey = name.slice(0, -6);
+      const startSuffix = "_start";
+      if (name.endsWith(startSuffix)) {
+        const eventKey = name.slice(0, -startSuffix.length);
         // this shouldn't happen but close any open event with the same name just in case
         openEvents[eventKey]?.();
         // now open the event for this point
