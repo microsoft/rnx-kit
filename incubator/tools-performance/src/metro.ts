@@ -1,0 +1,89 @@
+import type {
+  PerfAnnotations,
+  PerfLogger,
+  RootPerfLogger,
+  PerfLoggerFactoryOptions,
+  PerfLoggerFactory,
+  PerfLoggerPointOptions,
+} from "metro-config";
+import { type PerfDomain } from "./domain.ts";
+import { getDomain, registerSubdomain } from "./perf.ts";
+import { nullFunction } from "./trace.ts";
+
+function createEmptyLogger(): PerfLogger {
+  return {
+    point: nullFunction,
+    annotate: nullFunction,
+    subSpan: () => createEmptyLogger(),
+  };
+}
+
+function getSubdomainLogger(
+  base: string,
+  key?: string
+): [PerfLogger, PerfDomain | undefined] {
+  key = key != null ? `:${key}` : "";
+  const subdomain = `${base}${key}`;
+  // register the subdomain to ensure the associations are set up correctly in the tracker
+  registerSubdomain("metro", subdomain);
+  // now get the subdomain itself so we can create a logger for it
+  const domain = getDomain(`metro:${subdomain}`);
+  const logger = createLogger(subdomain, domain);
+  return [logger, domain];
+}
+
+function createLogger(subdomainName: string, domain?: PerfDomain): PerfLogger {
+  if (!domain) {
+    return createEmptyLogger();
+  }
+  const openEvents: Record<string, () => void> = {};
+  return {
+    point(name: string, _opts?: PerfLoggerPointOptions) {
+      if (name.endsWith("_start")) {
+        const eventKey = name.slice(0, -6);
+        // this shouldn't happen but close any open event with the same name just in case
+        openEvents[eventKey]?.();
+        // now open the event for this point
+        openEvents[eventKey] = domain.startEvent(eventKey);
+      } else if (name.endsWith("_end")) {
+        const eventKey = name.slice(0, -4);
+        const endEvent = openEvents[eventKey];
+        if (endEvent) {
+          endEvent();
+          delete openEvents[eventKey];
+        }
+      }
+    },
+    annotate(_annotations: PerfAnnotations) {
+      // do nothing for annotations
+    },
+    subSpan(label: string): PerfLogger {
+      const [logger] = getSubdomainLogger(subdomainName, label);
+      return logger;
+    },
+  };
+}
+
+/**
+ * Create a PerfLoggerFactory that integrates with tools-performance. This will log events
+ * based on the "metro" domain being enabled.
+ */
+export function createPerfLoggerFactory(): PerfLoggerFactory | undefined {
+  return (
+    type: "START_UP" | "BUNDLING_REQUEST" | "HMR",
+    opts?: PerfLoggerFactoryOptions
+  ): RootPerfLogger => {
+    const keyStr = opts?.key != null ? `#${opts.key}` : undefined;
+    const [logger, domain] = getSubdomainLogger(type.toLowerCase(), keyStr);
+
+    return {
+      ...logger,
+      start(_startOpts) {
+        domain?.start();
+      },
+      end(_status, _endOpts) {
+        domain?.stop();
+      },
+    };
+  };
+}

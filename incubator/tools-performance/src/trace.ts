@@ -31,8 +31,9 @@ export function nullPassthrough<T>(value: T): T {
   return value;
 }
 
-/** no-op function matching the recordTime signature */
-export function nullRecordTime(_tag: string, _duration?: number): void {
+/** no-op function taking any number of parameters and doing nothing */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function nullFunction(..._args: any[]): void {
   // intentionally empty
 }
 

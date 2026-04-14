@@ -1,4 +1,4 @@
-import { createTrace, nullTrace, nullRecordTime } from "./trace.ts";
+import { createTrace, nullTrace, nullFunction } from "./trace.ts";
 import type { TraceRecorder } from "./trace.ts";
 import type {
   EventFrequency,
@@ -53,6 +53,21 @@ export class PerfDomain {
   }
 
   /**
+   * Create a wrapper around an event to be able to manually start and stop the timing/marking.
+   * @param tag The tag for the event
+   * @returns A function that stops the event when called
+   */
+  startEvent(tag: string, frequency?: EventFrequency): () => void {
+    if (!this.enabled(frequency)) {
+      return nullFunction;
+    }
+    const startVal = this.record(tag);
+    return () => {
+      this.record(tag, startVal);
+    };
+  }
+
+  /**
    * Start performance tracking for this namespace. This will be called automatically on creation unless
    * the waitOnStart option is set. Trace events will still work without this but you won't get a boundary
    * around the events.
@@ -104,7 +119,7 @@ export class PerfDomain {
     } = options;
     this.frequency = frequency;
     this.strategy = recordTime ? "timing" : "node";
-    this.recordTime = recordTime ?? nullRecordTime;
+    this.recordTime = recordTime ?? nullFunction;
     this.record = recordTime
       ? this.timingRecorder.bind(this)
       : this.markingRecorder.bind(this);
