@@ -32,8 +32,7 @@ export function nullPassthrough<T>(value: T): T {
 }
 
 /** no-op function taking any number of parameters and doing nothing */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function nullFunction(..._args: any[]): void {
+export function nullFunction(..._args: unknown[]): void {
   // intentionally empty
 }
 
