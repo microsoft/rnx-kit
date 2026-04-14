@@ -36,7 +36,7 @@
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "metro-config": "^0.83.0"
+    "metro-config": "^0.83.3"
   },
   "engines": {
     "node": ">=22.11"
