@@ -22,9 +22,11 @@ describe("mergeTransformerConfigs()", () => {
       { minifierPath: "/minifier-a", hermesParser: false },
       { minifierPath: "/minifier-b", enableBabelRuntime: true }
     );
-    equal(result.minifierPath, "/minifier-b");
-    equal(result.hermesParser, false);
-    equal(result.enableBabelRuntime, true);
+    deepEqual(result, {
+      minifierPath: "/minifier-b",
+      hermesParser: false,
+      enableBabelRuntime: true,
+    });
   });
 
   it("later configs override earlier ones", () => {
@@ -32,7 +34,7 @@ describe("mergeTransformerConfigs()", () => {
       { hermesParser: false },
       { hermesParser: true }
     );
-    equal(result.hermesParser, true);
+    deepEqual(result, { hermesParser: true });
   });
 
   it("skips nullish configs", () => {
@@ -57,6 +59,42 @@ describe("mergeTransformerConfigs()", () => {
           transform: {
             experimentalImportSupport: false,
             inlineRequires: false,
+          },
+        }),
+      },
+      {
+        getTransformOptions: async () => ({
+          transform: {
+            experimentalImportSupport: true,
+            nonInlinedRequires: ["react"],
+          },
+        }),
+      }
+    );
+
+    const options = await result.getTransformOptions!(
+      [],
+      { dev: true, hot: true, platform: "ios" },
+      async () => []
+    );
+
+    deepEqual(options, {
+      transform: {
+        experimentalImportSupport: true,
+        inlineRequires: false,
+        nonInlinedRequires: ["react"],
+      },
+    });
+  });
+
+  it("overwrites arrays when merging multiple getTransformOptions functions", async () => {
+    const result = mergeTransformerConfigs(
+      {
+        getTransformOptions: async () => ({
+          transform: {
+            experimentalImportSupport: false,
+            inlineRequires: false,
+            nonInlinedRequires: ["lodash"],
           },
         }),
       },

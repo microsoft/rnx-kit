@@ -16,7 +16,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function simpleObjectMerge(
   ...options: Record<string, unknown>[]
 ): Record<string, unknown> {
-  /** @type {Record<string, unknown>} */
   const result: Record<string, unknown> = {};
   for (const option of options) {
     for (const [key, value] of Object.entries(option)) {
@@ -62,14 +61,15 @@ export function mergeTransformerConfigs(
   ...configs: Partial<TransformerConfigT>[]
 ): Partial<TransformerConfigT> {
   // collect the getTransformOptions functions from all configs, and if there are multiple, we'll create a wrapper function for them
-  const getTransformOptionsFns = configs
-    .reduce<TransformerConfigT["getTransformOptions"][]>((result, config) => {
-      const getTransformOptions = config?.getTransformOptions;
-      if (typeof getTransformOptions === "function") {
-          result.push(getTransformOptions);
-      }
-      return result;
-    }, []);
+  const getTransformOptionsFns = configs.reduce<
+    TransformerConfigT["getTransformOptions"][]
+  >((result, config) => {
+    const getTransformOptions = config?.getTransformOptions;
+    if (typeof getTransformOptions === "function") {
+      result.push(getTransformOptions);
+    }
+    return result;
+  }, []);
 
   // if there are multiple getTransformOptions functions, create a wrapper function that calls in sequence and merges their results
   if (getTransformOptionsFns.length > 1) {
