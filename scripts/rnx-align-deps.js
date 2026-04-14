@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { URL, fileURLToPath } from "node:url";
-// Directly import align-deps to avoid circular dependency
+// @ts-ignore Directly import align-deps to avoid circular dependency
 import { cli } from "../packages/align-deps/lib/index.js";
 
 cli({
