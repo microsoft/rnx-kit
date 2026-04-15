@@ -190,8 +190,6 @@ function markOptionalChain(root: MutableNode): void {
     }
   }
 
-  if (lowestOptional < 0) return;
-
   for (let i = 0; i <= lowestOptional; i++) {
     const n = chain[i];
     if (n.type === "MemberExpression") {

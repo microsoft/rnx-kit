@@ -24,19 +24,20 @@ export function oxcParseToAst(
   trace?: TraceFunction
 ): Node | null {
   const { parseSync } = require("oxc-parser");
-  const { parseDisableOxc } = context;
+  const { disableOxcParser: parseDisableOxc } = context;
   trace ??= getPerfTrace();
   // setting disabled specifically turns off auto-detection, otherwise avoid flow files
   const disabled = parseDisableOxc ?? context.mayContainFlow;
   if (disabled) {
     return null;
   }
+  const isTypeScript =
+    context.srcSyntax === "ts" || context.srcSyntax === "tsx";
 
   const oxcResult = trace("parse:oxc:native", parseSync, filename, src, {
     sourceType: config.sourceType ?? "unambiguous",
     lang: context.srcSyntax,
-    astType:
-      context.srcSyntax === "ts" || context.srcSyntax === "tsx" ? "ts" : "js",
+    astType: isTypeScript ? "ts" : "js",
   });
 
   const errors = oxcResult.errors;
@@ -48,8 +49,6 @@ export function oxcParseToAst(
       throw new Error(`Failed to parse '${filename}' because of above errors`);
     }
   } else {
-    const isTypeScript =
-      context.srcSyntax === "ts" || context.srcSyntax === "tsx";
     return trace(
       "parse:oxc:convert-ast",
       toBabelAST,
@@ -67,7 +66,7 @@ export function hermesParseToAst({
   context,
   config,
 }: TransformerArgs): Node | null {
-  const { parseDisableHermes } = context;
+  const { disableHermesParser: parseDisableHermes } = context;
   if (parseDisableHermes) {
     return null;
   }
