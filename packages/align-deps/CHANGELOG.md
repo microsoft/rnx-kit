@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.4.7
+
+### Patch Changes
+
+- 9ee8e97: Bump to retry publishing
+
 ## 3.4.6
 
 ### Patch Changes

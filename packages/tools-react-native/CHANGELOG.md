@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.3.7
+
+### Patch Changes
+
+- 9ee8e97: Bump to retry publishing
+
 ## 2.3.6
 
 ### Patch Changes
