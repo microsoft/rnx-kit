@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/cli
 
+## 1.1.2
+
+### Patch Changes
+
+- 0bf51d8: Add function to merge transformer configs to tools-react-native and use it in the cli
+- Updated dependencies [d58e4bf]
+- Updated dependencies [0bf51d8]
+  - @rnx-kit/align-deps@3.4.6
+  - @rnx-kit/tools-react-native@2.3.6
+
 ## 1.1.1
 
 ### Patch Changes
