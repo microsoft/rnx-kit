@@ -40,6 +40,8 @@ function getBaseExt(ext: string, fallback?: SrcSyntax): SrcSyntax | undefined {
   }
 }
 
+const NM_REGEX = /[\\/]node_modules[\\/]/;
+
 /**
  * Initialize the context object, filling in the file specific information along with the
  * transformer settings.
@@ -56,7 +58,7 @@ export function initTransformerContext<
     parseExtAliases,
     parseExtDefault = "js",
   } = settings;
-  const isNodeModule = filename.includes("node_modules");
+  const isNodeModule = NM_REGEX.test(filename);
 
   const ext = path.extname(filename).toLowerCase();
   const srcSyntax: SrcSyntax | undefined =

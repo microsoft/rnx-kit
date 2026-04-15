@@ -148,7 +148,7 @@ function convertLiteral(node: MutableNode): void {
   } else if (typeof value === "boolean") {
     node.type = "BooleanLiteral";
     delete node.extra;
-  } else if (node.bigint !== undefined) {
+  } else if (node.bigint != null) {
     node.type = "BigIntLiteral";
     const bigintStr =
       typeof node.bigint === "string" ? node.bigint : String(node.bigint);
@@ -190,8 +190,6 @@ function markOptionalChain(root: MutableNode): void {
     }
   }
 
-  if (lowestOptional < 0) return;
-
   for (let i = 0; i <= lowestOptional; i++) {
     const n = chain[i];
     if (n.type === "MemberExpression") {
@@ -214,7 +212,7 @@ function convertMethodDefinition(node: MutableNode): void {
   const { key, value } = node;
   if (!value) return;
 
-  const keyType = key && key.type;
+  const keyType = key?.type;
   const isPrivate =
     keyType === "PrivateIdentifier" || keyType === "PrivateName";
 
@@ -230,16 +228,16 @@ function convertMethodDefinition(node: MutableNode): void {
     node.type = "ClassPrivateMethod";
     if (keyType === "PrivateIdentifier") convertPrivateIdentifierToName(key);
     if (node.kind === "get" || node.kind === "set") {
-      if (node.computed === undefined) node.computed = false;
+      if (node.computed == null) node.computed = false;
     } else {
       delete node.computed;
     }
   } else if (node.body === null) {
     node.type = "TSDeclareMethod";
-    if (node.computed === undefined) node.computed = false;
+    if (node.computed == null) node.computed = false;
   } else {
     node.type = "ClassMethod";
-    if (node.computed === undefined) node.computed = false;
+    if (node.computed == null) node.computed = false;
   }
 }
 
@@ -252,14 +250,14 @@ function convertPropertyDefinition(node: MutableNode): void {
     delete node.computed;
   } else {
     node.type = "ClassProperty";
-    if (node.computed === undefined) node.computed = false;
+    if (node.computed == null) node.computed = false;
   }
 }
 
 function convertTSAbstractPropertyDefinition(node: MutableNode): void {
   node.type = "ClassProperty";
   node.abstract = true;
-  if (node.computed === undefined) node.computed = false;
+  if (node.computed == null) node.computed = false;
 }
 
 function convertPrivateIdentifierToName(node: MutableNode): void {
@@ -337,8 +335,7 @@ function extractDirectives(node: MutableNode): void {
 
 function convertProperty(node: MutableNode): void {
   const isObjectMethod =
-    node.value &&
-    node.value.type === "FunctionExpression" &&
+    node.value?.type === "FunctionExpression" &&
     (node.method || node.kind === "get" || node.kind === "set");
 
   if (isObjectMethod) {
@@ -419,7 +416,7 @@ function convertExportAllWithExported(node: MutableNode): void {
 
 function convertTSInterfaceHeritage(node: MutableNode): void {
   let expr = node.expression;
-  while (expr && expr.type === "MemberExpression") {
+  while (expr?.type === "MemberExpression") {
     expr.type = "TSQualifiedName";
     expr.left = expr.object;
     expr.right = expr.property;
@@ -469,7 +466,7 @@ function convertImportExpression(node: MutableNode): void {
 }
 
 function convertEnumDeclaration(node: MutableNode): void {
-  if (node.body && node.body.members && !node.members) {
+  if (node.body?.members && !node.members) {
     node.members = node.body.members;
     delete node.body;
   }
@@ -483,7 +480,7 @@ function convertEnumDeclaration(node: MutableNode): void {
  * is handled by the per-node-type ops table below.
  */
 function cleanupOxcExtras(n: MutableNode): void {
-  if (n.decorators && n.decorators.length === 0) delete n.decorators;
+  if (n.decorators?.length === 0) delete n.decorators;
   if (n.optional === false) delete n.optional;
   if (n.typeAnnotation === null) delete n.typeAnnotation;
   // These TS flags appear on many node types (PropertyDefinition, MethodDefinition,
@@ -531,7 +528,7 @@ function applyOps(n: MutableNode, ops: NodeOps): void {
   }
   if (ops.deleteIfEmpty) {
     for (const f of ops.deleteIfEmpty) {
-      if (n[f] && n[f].length === 0) delete n[f];
+      if (n[f]?.length === 0) delete n[f];
     }
   }
   if (ops.deleteIfFalse) {
@@ -602,8 +599,7 @@ const nodeOps: Record<string, NodeOps> = {
   Property: {
     custom: (n) => {
       const isMethodLike =
-        n.value &&
-        n.value.type === "FunctionExpression" &&
+        n.value?.type === "FunctionExpression" &&
         (n.method || n.kind === "get" || n.kind === "set");
       if (isMethodLike) {
         ctx.deferred.objectMethods.push(n);
@@ -878,7 +874,7 @@ const COMMENT_SKIP_KEYS = new Set([
 
 function isAstNode(val: unknown): val is MutableNode {
   return (
-    val !== null &&
+    val != null &&
     typeof val === "object" &&
     typeof (val as MutableNode).start === "number" &&
     typeof (val as MutableNode).end === "number" &&
@@ -1305,7 +1301,7 @@ function fixupKeywordToParen(node: MutableNode, source: string): void {
     firstChild = node.key;
   }
 
-  if (!firstChild || !firstChild.leadingComments) return;
+  if (!firstChild?.leadingComments) return;
 
   // Find `(` between node start and first child start
   const openParen = findChar(source, 40, node.start, firstChild.start);
@@ -1472,7 +1468,7 @@ function fixupFunctionCommentsSingle(node: MutableNode, source: string): void {
       if (c.start <= openParen) {
         if (id) {
           // Before `(` — trailing on id/callee/key
-          if (!id.trailingComments || !id.trailingComments.includes(c)) {
+          if (!id.trailingComments?.includes(c)) {
             (id.trailingComments ??= []).push(c);
           }
         } else {
@@ -1488,14 +1484,11 @@ function fixupFunctionCommentsSingle(node: MutableNode, source: string): void {
   }
 
   // Move id trailing comments that are after `(` to first param leading
-  if (id && id.trailingComments) {
+  if (id?.trailingComments) {
     const keepTrailing: MutableNode[] = [];
     for (const c of id.trailingComments) {
       if (c.start > openParen) {
-        if (
-          !firstParam.leadingComments ||
-          !firstParam.leadingComments.includes(c)
-        ) {
+        if (!firstParam.leadingComments?.includes(c)) {
           (firstParam.leadingComments ??= []).push(c);
         }
       } else {

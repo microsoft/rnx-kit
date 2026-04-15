@@ -145,7 +145,10 @@ async function getManifests(
     const allPackages = (await findWorkspacePackages()).map((p) =>
       path.join(path.relative(cwd, p), "package.json")
     );
-    allPackages.push(manifestPath);
+    // Add the root workspace if it isn't there
+    if (!allPackages.includes(manifestPath)) {
+      allPackages.push(manifestPath);
+    }
     return allPackages;
   } catch (e) {
     if (hasProperty(e, "message")) {

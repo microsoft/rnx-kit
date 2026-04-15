@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-react-native",
-  "version": "2.3.5",
+  "version": "2.3.7",
   "description": "A collection of supplemental react-native functions and types",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-react-native#readme",
   "license": "MIT",
@@ -28,6 +28,7 @@
     "platform.js",
     "src"
   ],
+  "type": "commonjs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
@@ -55,6 +56,11 @@
       "types": "./lib/metro.d.ts",
       "typescript": "./src/metro.ts",
       "default": "./lib/metro.js"
+    },
+    "./metro-utils": {
+      "types": "./lib/metro-utils.d.ts",
+      "typescript": "./src/metro-utils.ts",
+      "default": "./lib/metro-utils.js"
     },
     "./platform": {
       "types": "./lib/platform.d.ts",

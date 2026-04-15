@@ -92,7 +92,7 @@ function getUpdatedArray<T>(base: T[], updates: ArrayUpdates<T>): T[] {
   }
   const result: T[] = [];
   for (let i = 0; i < base.length; i++) {
-    const entry = i in updates ? updates[i] : base[i];
+    const entry = Object.hasOwn(updates, i) ? updates[i] : base[i];
     if (entry !== null) {
       result.push(entry);
     }

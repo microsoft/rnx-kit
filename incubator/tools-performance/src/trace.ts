@@ -31,8 +31,8 @@ export function nullPassthrough<T>(value: T): T {
   return value;
 }
 
-/** no-op function matching the recordTime signature */
-export function nullRecordTime(_tag: string, _duration?: number): void {
+/** no-op function taking any number of parameters and doing nothing */
+export function nullFunction(..._args: unknown[]): void {
   // intentionally empty
 }
 

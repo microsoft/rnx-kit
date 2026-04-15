@@ -1,5 +1,24 @@
 # Change Log - @rnx-kit/cli
 
+## 1.1.3
+
+### Patch Changes
+
+- 9ee8e97: Bump to retry publishing
+- Updated dependencies [9ee8e97]
+  - @rnx-kit/align-deps@3.4.7
+  - @rnx-kit/tools-react-native@2.3.7
+
+## 1.1.2
+
+### Patch Changes
+
+- 0bf51d8: Add function to merge transformer configs to tools-react-native and use it in the cli
+- Updated dependencies [d58e4bf]
+- Updated dependencies [0bf51d8]
+  - @rnx-kit/align-deps@3.4.6
+  - @rnx-kit/tools-react-native@2.3.6
+
 ## 1.1.1
 
 ### Patch Changes

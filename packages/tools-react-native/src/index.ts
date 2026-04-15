@@ -9,6 +9,7 @@ export {
   getMetroVersion,
   requireModuleFromMetro,
 } from "./metro.ts";
+export { mergeTransformerConfigs } from "./metro-utils.ts";
 export {
   expandPlatformExtensions,
   getAvailablePlatforms,

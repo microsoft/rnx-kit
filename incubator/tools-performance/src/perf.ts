@@ -53,6 +53,14 @@ export function getDomain(name: string) {
 }
 
 /**
+ * Register a subdomain under a parent domain. This domain will be enabled whenever the parent domain is enabled but can
+ * be enabled or tracked separately as well.
+ */
+export function registerSubdomain(domain: string, subdomain: string) {
+  defaultManager?.registerSubdomain(domain, subdomain);
+}
+
+/**
  * Reset the module-level performance tracker, releasing all domains and state.
  * Intended for test isolation — not part of the public API.
  * @internal

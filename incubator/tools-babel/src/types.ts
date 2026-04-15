@@ -82,10 +82,10 @@ export type TransformerSettings = {
   configDisabledPlugins?: Set<string>;
 
   /** disable the oxc parser */
-  parseDisableOxc?: boolean;
+  disableOxcParser?: boolean;
 
   /** disable the hermes parser */
-  parseDisableHermes?: boolean;
+  disableHermesParser?: boolean;
 
   /** Starting flow code state for .js(x) files */
   parseFlowDefault?: boolean;
