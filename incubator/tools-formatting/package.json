@@ -17,7 +17,8 @@
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
-  "type": "commonjs",
+  "type": "module",
+  "sideEffects": false,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {

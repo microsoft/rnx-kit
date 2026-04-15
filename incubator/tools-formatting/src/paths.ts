@@ -1,4 +1,4 @@
-import { ELLIPSIS, SEPARATORS, SRC_DIRS } from "./const";
+import { ELLIPSIS, SEPARATORS, SRC_DIRS } from "./const.ts";
 
 /**
  * Utility function for formatting file paths in a short form for display purposes. In particular,
