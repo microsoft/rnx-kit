@@ -5365,7 +5365,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/align-deps@npm:^3.4.6, @rnx-kit/align-deps@workspace:packages/align-deps":
+"@rnx-kit/align-deps@npm:^3.4.7, @rnx-kit/align-deps@workspace:packages/align-deps":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
@@ -5503,7 +5503,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.20.0"
     "@react-native-community/cli-types": "npm:^20.0.0"
     "@react-native-windows/cli": "npm:^0.79.0"
-    "@rnx-kit/align-deps": "npm:^3.4.6"
+    "@rnx-kit/align-deps": "npm:^3.4.7"
     "@rnx-kit/config": "npm:^0.7.5"
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/jest-preset": "npm:*"
@@ -5520,7 +5520,7 @@ __metadata:
     "@rnx-kit/tools-filesystem": "npm:^0.2.0"
     "@rnx-kit/tools-language": "npm:^3.0.1"
     "@rnx-kit/tools-node": "npm:^3.0.4"
-    "@rnx-kit/tools-react-native": "npm:^2.3.6"
+    "@rnx-kit/tools-react-native": "npm:^2.3.7"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^1.0.0"
     "@rnx-kit/types-kit-config": "npm:^1.0.0"
@@ -6252,7 +6252,7 @@ __metadata:
     "@rnx-kit/reporter": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/test-fixtures": "npm:*"
-    "@rnx-kit/tools-performance": "npm:^0.1.0"
+    "@rnx-kit/tools-performance": "npm:^0.1.1"
     "@rnx-kit/tsconfig": "npm:*"
     "@swc/core": "npm:^1.15.24"
     "@types/babel__core": "npm:^7.20.0"
@@ -6316,7 +6316,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-performance@npm:^0.1.0, @rnx-kit/tools-performance@workspace:incubator/tools-performance":
+"@rnx-kit/tools-performance@npm:^0.1.1, @rnx-kit/tools-performance@workspace:incubator/tools-performance":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-performance@workspace:incubator/tools-performance"
   dependencies:
@@ -6326,7 +6326,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-react-native@npm:^2.1.0, @rnx-kit/tools-react-native@npm:^2.3.0, @rnx-kit/tools-react-native@npm:^2.3.1, @rnx-kit/tools-react-native@npm:^2.3.2, @rnx-kit/tools-react-native@npm:^2.3.3, @rnx-kit/tools-react-native@npm:^2.3.5, @rnx-kit/tools-react-native@npm:^2.3.6, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
+"@rnx-kit/tools-react-native@npm:^2.1.0, @rnx-kit/tools-react-native@npm:^2.3.0, @rnx-kit/tools-react-native@npm:^2.3.1, @rnx-kit/tools-react-native@npm:^2.3.2, @rnx-kit/tools-react-native@npm:^2.3.3, @rnx-kit/tools-react-native@npm:^2.3.5, @rnx-kit/tools-react-native@npm:^2.3.7, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-react-native@workspace:packages/tools-react-native"
   dependencies:
