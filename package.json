@@ -106,8 +106,7 @@
           "src/index.{js,ts}"
         ],
         "project": [
-          "src/**/*.{js,ts,tsx}",
-          "test/**/*.{js,ts,tsx}"
+          "src/**/*.{js,ts,tsx}"
         ]
       },
       "incubator/@react-native-webapis/battery-status": {
