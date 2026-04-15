@@ -1,3 +1,4 @@
+import type { EventFrequency } from "@rnx-kit/tools-performance";
 import { InvalidArgumentError } from "commander";
 import type { TransformProfile } from "metro-babel-transformer";
 import * as path from "node:path";
@@ -25,20 +26,24 @@ export function asStringArray(value: string): string[] {
   return value.split(",");
 }
 
-export function asTransformProfile(val: string): TransformProfile {
-  switch (val) {
-    case "hermes-stable":
-    case "hermes-canary":
-    case "default":
-      return val;
-
-    default: {
-      const profiles: TransformProfile[] = [
-        "hermes-stable",
-        "hermes-canary",
-        "default",
-      ];
-      throw new InvalidArgumentError(`Expected '${profiles.join("', '")}'.`);
-    }
+export function asEnum<T extends string>(value: string, options: T[]): T {
+  if (options.includes(value as T)) {
+    return value as T;
   }
+
+  throw new InvalidArgumentError(`Expected '${options.join("', '")}'.`);
+}
+
+export function asTransformProfile(val: string): TransformProfile {
+  const TRANSFORM_PROFILES: TransformProfile[] = [
+    "hermes-stable",
+    "hermes-canary",
+    "default",
+  ];
+  return asEnum(val, TRANSFORM_PROFILES);
+}
+
+export function asFrequency(value: string): EventFrequency {
+  const FREQUENCIES: EventFrequency[] = ["low", "medium", "high"];
+  return asEnum(value, FREQUENCIES);
 }

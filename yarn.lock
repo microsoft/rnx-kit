@@ -5520,6 +5520,7 @@ __metadata:
     "@rnx-kit/tools-filesystem": "npm:^0.2.0"
     "@rnx-kit/tools-language": "npm:^3.0.1"
     "@rnx-kit/tools-node": "npm:^3.0.4"
+    "@rnx-kit/tools-performance": "npm:^0.1.1"
     "@rnx-kit/tools-react-native": "npm:^2.3.7"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^1.0.0"

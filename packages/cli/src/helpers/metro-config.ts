@@ -8,6 +8,10 @@ import {
   esbuildTransformerConfig,
   MetroSerializer as MetroSerializerEsbuild,
 } from "@rnx-kit/metro-serializer-esbuild";
+import {
+  createPerfLoggerFactory,
+  isTrackingEnabled,
+} from "@rnx-kit/tools-performance";
 import { mergeTransformerConfigs } from "@rnx-kit/tools-react-native/metro-utils";
 import type { BundleParameters } from "@rnx-kit/types-bundle-config";
 import type { ConfigT, SerializerConfigT } from "metro-config";
@@ -192,6 +196,14 @@ export function customizeMetroConfig(
   } else {
     // We don't want this set if unused
     delete metroConfig.serializer.customSerializer;
+  }
+
+  // add a performance logger if performance tracking is enabled for Metro (and the user hasn't set one)
+  console.log(
+    `Performance tracking for Metro is ${isTrackingEnabled("metro") ? "enabled" : "disabled"}.`
+  );
+  if (isTrackingEnabled("metro")) {
+    metroConfig.unstable_perfLoggerFactory = createPerfLoggerFactory();
   }
 
   const hooks = Object.values(serializerHooks);

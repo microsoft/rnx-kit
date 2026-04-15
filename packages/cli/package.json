@@ -55,6 +55,7 @@
     "@rnx-kit/tools-filesystem": "^0.2.0",
     "@rnx-kit/tools-language": "^3.0.1",
     "@rnx-kit/tools-node": "^3.0.4",
+    "@rnx-kit/tools-performance": "^0.1.1",
     "@rnx-kit/tools-react-native": "^2.3.7",
     "@rnx-kit/types-bundle-config": "^1.0.0",
     "@rnx-kit/types-kit-config": "^1.0.0",

@@ -1,5 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { loadMetroConfig } from "@rnx-kit/metro-service";
+import { reportPerfData, trackPerformance } from "@rnx-kit/tools-performance";
 import { commonBundleCommandOptions } from "./bundle/cliOptions.ts";
 import { emitBytecode } from "./bundle/hermes.ts";
 import { getCliPlatformBundleConfigs } from "./bundle/kit-config.ts";
@@ -41,11 +42,36 @@ function applyTreeShakingOverrides(
   }
 }
 
+function applyPerformanceSettings({
+  perfTrace,
+  perfMarks,
+  perfFrequency,
+  maxWorkers,
+}: CLIBundleOptions) {
+  if ((perfTrace || perfMarks) && maxWorkers !== 1) {
+    console.log(
+      "Performance tracing will miss transformations if --max-workers is not set to 1."
+    );
+  }
+  if (perfTrace) {
+    trackPerformance({
+      enable: true,
+      strategy: "timing",
+      frequency: perfFrequency ?? "medium",
+    });
+  } else if (perfMarks) {
+    trackPerformance({ strategy: "node", frequency: perfFrequency ?? "low" });
+  }
+}
+
 export async function rnxBundle(
   _argv: string[],
   cliConfig: CLIConfig,
   cliOptions: CLIBundleOptions
 ): Promise<void> {
+  // apply performance settings first so anything triggered in metro config load will have the settings
+  applyPerformanceSettings(cliOptions);
+
   const metroConfig = await loadMetroConfig(cliConfig, cliOptions);
 
   const bundleConfigs = getCliPlatformBundleConfigs(
@@ -75,6 +101,9 @@ export async function rnxBundle(
         hermes === true ? {} : hermes
       );
     }
+  }
+  if (cliOptions.perfTrace || cliOptions.perfMarks) {
+    reportPerfData();
   }
 }
 

@@ -1,4 +1,5 @@
 import type { BundleArgs } from "@rnx-kit/metro-service";
+import type { EventFrequency } from "@rnx-kit/tools-performance";
 import type {
   AllPlatforms,
   BundleParameters,
@@ -14,6 +15,9 @@ export type CLICommonBundleOptions = {
   bundleOutput?: string;
   bundleEncoding?: BundleArgs["bundleEncoding"];
   maxWorkers?: number;
+  perfTrace?: boolean;
+  perfMarks?: boolean;
+  perfFrequency?: EventFrequency;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
   sourcemapUseAbsolutePath?: boolean;

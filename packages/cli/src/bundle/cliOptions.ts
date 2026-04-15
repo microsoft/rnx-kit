@@ -1,5 +1,10 @@
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
-import { asBoolean, asNumber, asTransformProfile } from "../helpers/parsers.ts";
+import {
+  asBoolean,
+  asFrequency,
+  asNumber,
+  asTransformProfile,
+} from "../helpers/parsers.ts";
 
 export const commonBundleCommandOptions = [
   {
@@ -45,6 +50,23 @@ export const commonBundleCommandOptions = [
     description:
       "Specifies the maximum number of parallel worker threads to use for transforming files; defaults to the number of cores available on your machine",
     parse: asNumber,
+  },
+  {
+    name: "--perf-trace [boolean]",
+    description: "Enable performance tracing and output to the console",
+    parse: asBoolean,
+  },
+  {
+    name: "--perf-marks [boolean]",
+    description:
+      "Enable performance tracing via the Node.js performance marks API",
+    parse: asBoolean,
+  },
+  {
+    name: "--perf-frequency <low|medium|high>",
+    description:
+      "Frequency of performance events; higher frequencies may impact performance. Defaults to 'medium' for console and 'low' for performance marks",
+    parse: asFrequency,
   },
   {
     name: "--sourcemap-output <string>",
