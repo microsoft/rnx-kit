@@ -47,11 +47,13 @@ export class PerfTracker {
   private enabled = new Set<string | symbol>();
   private config: PerformanceOptions;
   private domains: Record<string, PerfDomain> = {};
+  private subdomains: Record<string, Set<string>> = {};
   private onExit: (() => void) | undefined;
 
   constructor(config: PerformanceOptions = {}) {
     this.config = { ...config };
     this.config.enable ??= true;
+    this.config.strategy ??= "timing";
     this.enable(this.config.enable);
 
     this.onExit = () => this.finish(true);
@@ -69,10 +71,10 @@ export class PerfTracker {
     if (domain === true) {
       this.enabled.add(ENABLE_ALL);
     } else if (typeof domain === "string") {
-      this.enabled.add(domain);
+      this.enableDomain(domain);
     } else if (Array.isArray(domain)) {
       for (const cat of domain) {
-        this.enabled.add(cat);
+        this.enableDomain(cat);
       }
     } else {
       throw new Error(`invalid domain: ${domain}`);
@@ -139,6 +141,24 @@ export class PerfTracker {
         PerfTracker.removeExitHandler(this.onExit);
       }
       this.onExit = undefined;
+    }
+  }
+
+  registerSubdomain(domain: string, subdomain: string) {
+    const qualifiedName = `${domain}:${subdomain}`;
+    this.subdomains[domain] ??= new Set<string>();
+    this.subdomains[domain].add(qualifiedName);
+    if (this.enabled.has(domain) || this.enabled.has(ENABLE_ALL)) {
+      this.enableDomain(qualifiedName);
+    }
+  }
+
+  private enableDomain(domain: string) {
+    this.enabled.add(domain);
+    if (this.subdomains[domain]) {
+      for (const subdomain of this.subdomains[domain]) {
+        this.enableDomain(subdomain);
+      }
     }
   }
 
@@ -212,10 +232,10 @@ function styleName(name: string): string {
 }
 
 const COL_OPTIONS: Record<PerfReportColumn, ColumnOptions> = {
-  name: { label: "operation", align: "left", style: styleName, maxWidth: 50 },
+  name: { label: "operation", align: "left", style: styleName, maxWidth: 70 },
   session: { label: "session", ...NUM_COL_OPTIONS },
   calls: { label: "calls", ...NUM_COL_OPTIONS },
-  total: { label: "total", ...NUM_COL_OPTIONS },
-  avg: { label: "avg", ...NUM_COL_OPTIONS },
+  total: { label: "total (ms)", ...NUM_COL_OPTIONS, digits: 1 },
+  avg: { label: "avg (ms)", ...NUM_COL_OPTIONS, digits: 1 },
   errors: { label: "errors", ...NUM_COL_OPTIONS },
 };

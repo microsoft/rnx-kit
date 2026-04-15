@@ -4,6 +4,7 @@ export {
   getDomain,
   getTrace,
   isTrackingEnabled,
+  registerSubdomain,
   reportPerfData,
   trackPerformance,
 } from "./perf.ts";
@@ -24,3 +25,5 @@ export type {
   TraceFunction,
   TraceStrategy,
 } from "./types.ts";
+
+export { createPerfLoggerFactory } from "./metro.ts";

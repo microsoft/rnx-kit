@@ -108,6 +108,23 @@ const trace = getTrace("metro");
 const myTrace = someCondition ? customTrace : nullTrace;
 ```
 
+### Manual event timing
+
+Use `startEvent` on a domain to manually control the start and end of a timed
+event. This is useful when start and end points don't wrap a single function
+call:
+
+```typescript
+import { getDomain } from "@rnx-kit/tools-performance";
+
+const domain = getDomain("metro");
+if (domain) {
+  const endEvent = domain.startEvent("resolve");
+  // ... do work across multiple steps ...
+  endEvent(); // records the duration
+}
+```
+
 ### Custom trace functions
 
 Use `createTrace` with a `TraceRecorder` to build trace functions backed by
@@ -171,6 +188,27 @@ trackPerformance({ enable: ["resolve", "transform"] });
 
 // Calls are additive — all three domains above are now enabled
 ```
+
+### Subdomains
+
+Subdomains create a parent–child relationship between domains. When a parent
+domain is enabled, all its registered subdomains are automatically enabled too.
+This is useful for organizing related operations under a single toggle.
+
+```typescript
+import { registerSubdomain, getDomain } from "@rnx-kit/tools-performance";
+
+// Register "metro:resolver" as a subdomain of "metro"
+registerSubdomain("metro", "resolver");
+
+// Enabling "metro" now also enables "metro:resolver"
+trackPerformance({ enable: "metro", strategy: "timing" });
+
+const domain = getDomain("metro:resolver"); // enabled via parent
+```
+
+Subdomains can be registered before or after the parent is enabled — the
+relationship is resolved in either order.
 
 ### Checking if tracing is enabled
 
@@ -245,40 +283,74 @@ const table = formatAsTable(
 console.log(table);
 ```
 
+## Metro Integration
+
+`createPerfLoggerFactory` returns a factory compatible with Metro's
+`unstable_perfLoggerFactory` config option. It bridges Metro's performance
+logging into the tools-performance domain system under the `"metro"` parent
+domain.
+
+```typescript
+import {
+  createPerfLoggerFactory,
+  trackPerformance,
+} from "@rnx-kit/tools-performance";
+
+// Enable the metro domain
+trackPerformance({ enable: "metro", strategy: "timing" });
+
+// Pass the factory to Metro config
+module.exports = {
+  unstable_perfLoggerFactory: createPerfLoggerFactory(),
+};
+```
+
+When Metro calls the factory, it creates subdomains like `metro:start_up`,
+`metro:bundling_request`, and `metro:hmr`. Metro's `subSpan` calls create deeper
+subdomains (e.g. `metro:start_up:resolver`). Metro's `point` events with
+`_start`/`_end` suffixes are mapped to timed events via `startEvent`.
+
+When the `"metro"` domain is not enabled, the factory returns no-op loggers with
+zero overhead.
+
 ## API Reference
 
 ### Module-Level Functions
 
-| Function                        | Description                                                             |
-| ------------------------------- | ----------------------------------------------------------------------- |
-| `trackPerformance(config?)`     | Enable tracking. Config controls domains, strategy, and report options. |
-| `getTrace(domain, frequency?)`  | Get a trace function for a domain. Returns `nullTrace` if not enabled.  |
-| `getDomain(name)`               | Get the `PerfDomain` for a domain, or `undefined` if not enabled.       |
-| `isTraceEnabled(domain, freq?)` | Check if tracing is enabled for a domain and optional frequency.        |
-| `reportPerfData()`              | Finish tracking and print the performance report.                       |
+| Function                               | Description                                                             |
+| -------------------------------------- | ----------------------------------------------------------------------- |
+| `trackPerformance(config?)`            | Enable tracking. Config controls domains, strategy, and report options. |
+| `getTrace(domain, frequency?)`         | Get a trace function for a domain. Returns `nullTrace` if not enabled.  |
+| `getDomain(name)`                      | Get the `PerfDomain` for a domain, or `undefined` if not enabled.       |
+| `isTraceEnabled(domain, freq?)`        | Check if tracing is enabled for a domain and optional frequency.        |
+| `registerSubdomain(domain, subdomain)` | Register a subdomain under a parent. Enabled when the parent is.        |
+| `reportPerfData()`                     | Finish tracking and print the performance report.                       |
+| `createPerfLoggerFactory()`            | Create a Metro-compatible `unstable_perfLoggerFactory`.                 |
 
 ### PerfTracker
 
-| Member                     | Description                                                            |
-| -------------------------- | ---------------------------------------------------------------------- |
-| `new PerfTracker(config?)` | Create a new tracker. Auto-registers a process exit handler.           |
-| `enable(domain)`           | Enable tracking for `true` (all), a string, or string array.           |
-| `isEnabled(domain, freq?)` | Check if a domain is enabled, optionally at a given frequency.         |
-| `domain(name)`             | Get or create a `PerfDomain` for an enabled domain.                    |
-| `finish(processExit?)`     | Stop all domains, print the report, and unregister. Only reports once. |
-| `updateConfig(config)`     | Merge new configuration values.                                        |
+| Member                           | Description                                                            |
+| -------------------------------- | ---------------------------------------------------------------------- |
+| `new PerfTracker(config?)`       | Create a new tracker. Auto-registers a process exit handler.           |
+| `enable(domain)`                 | Enable tracking for `true` (all), a string, or string array.           |
+| `isEnabled(domain, freq?)`       | Check if a domain is enabled, optionally at a given frequency.         |
+| `domain(name)`                   | Get or create a `PerfDomain` for an enabled domain.                    |
+| `registerSubdomain(domain, sub)` | Register a subdomain. Enabling the parent enables the subdomain.       |
+| `finish(processExit?)`           | Stop all domains, print the report, and unregister. Only reports once. |
+| `updateConfig(config)`           | Merge new configuration values.                                        |
 
 ### PerfDomain
 
-| Member                 | Description                                                            |
-| ---------------------- | ---------------------------------------------------------------------- |
-| `name`                 | Domain name (readonly).                                                |
-| `strategy`             | Tracing strategy: `"timing"` or `"node"` (readonly).                   |
-| `frequency`            | Current frequency level (mutable).                                     |
-| `start()`              | Begin domain-level timing (called automatically unless `waitOnStart`). |
-| `stop(processExit?)`   | End domain-level timing and clean up marks.                            |
-| `enabled(frequency?)`  | Check if a frequency level is active for this domain.                  |
-| `getTrace(frequency?)` | Get a trace function, or `nullTrace` if frequency is not active.       |
+| Member                   | Description                                                            |
+| ------------------------ | ---------------------------------------------------------------------- |
+| `name`                   | Domain name (readonly).                                                |
+| `strategy`               | Tracing strategy: `"timing"` or `"node"` (readonly).                   |
+| `frequency`              | Current frequency level (mutable).                                     |
+| `start()`                | Begin domain-level timing (called automatically unless `waitOnStart`). |
+| `stop(processExit?)`     | End domain-level timing and clean up marks.                            |
+| `startEvent(tag, freq?)` | Start a timed event. Returns a function to call when the event ends.   |
+| `enabled(frequency?)`    | Check if a frequency level is active for this domain.                  |
+| `getTrace(frequency?)`   | Get a trace function, or `nullTrace` if frequency is not active.       |
 
 ### Trace Primitives
 

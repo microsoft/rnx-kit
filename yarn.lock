@@ -6322,6 +6322,7 @@ __metadata:
   dependencies:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
+    metro-config: "npm:^0.83.3"
   languageName: unknown
   linkType: soft
 

@@ -17,7 +17,7 @@
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
-  "type": "module",
+  "type": "commonjs",
   "sideEffects": false,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -35,7 +35,8 @@
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*"
+    "@rnx-kit/tsconfig": "*",
+    "metro-config": "^0.83.3"
   },
   "engines": {
     "node": ">=22.11"
