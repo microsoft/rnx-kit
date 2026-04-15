@@ -148,7 +148,7 @@ function convertLiteral(node: MutableNode): void {
   } else if (typeof value === "boolean") {
     node.type = "BooleanLiteral";
     delete node.extra;
-  } else if (node.bigint !== undefined) {
+  } else if (node.bigint != null) {
     node.type = "BigIntLiteral";
     const bigintStr =
       typeof node.bigint === "string" ? node.bigint : String(node.bigint);
@@ -230,16 +230,16 @@ function convertMethodDefinition(node: MutableNode): void {
     node.type = "ClassPrivateMethod";
     if (keyType === "PrivateIdentifier") convertPrivateIdentifierToName(key);
     if (node.kind === "get" || node.kind === "set") {
-      if (node.computed === undefined) node.computed = false;
+      if (node.computed == null) node.computed = false;
     } else {
       delete node.computed;
     }
   } else if (node.body === null) {
     node.type = "TSDeclareMethod";
-    if (node.computed === undefined) node.computed = false;
+    if (node.computed == null) node.computed = false;
   } else {
     node.type = "ClassMethod";
-    if (node.computed === undefined) node.computed = false;
+    if (node.computed == null) node.computed = false;
   }
 }
 
@@ -252,14 +252,14 @@ function convertPropertyDefinition(node: MutableNode): void {
     delete node.computed;
   } else {
     node.type = "ClassProperty";
-    if (node.computed === undefined) node.computed = false;
+    if (node.computed == null) node.computed = false;
   }
 }
 
 function convertTSAbstractPropertyDefinition(node: MutableNode): void {
   node.type = "ClassProperty";
   node.abstract = true;
-  if (node.computed === undefined) node.computed = false;
+  if (node.computed == null) node.computed = false;
 }
 
 function convertPrivateIdentifierToName(node: MutableNode): void {

@@ -219,7 +219,10 @@ function drawLine(
     line += "─".repeat(colData[i].width + 2);
     line += i === colData.length - 1 ? seg[2] : seg[1];
   }
-  return line + "\n";
+  if (type !== "bottom") {
+    line += "\n";
+  }
+  return line;
 }
 
 /**
