@@ -259,30 +259,6 @@ tracker.finish();
 | `"timing"` | Records times in memory. Lower overhead, suitable for high-frequency events. Reports to console on process exit by default. |
 | `"node"`   | Uses `performance.mark` and `performance.measure`. Higher overhead, but integrates with Node.js performance tooling.        |
 
-### Table formatting
-
-The `formatAsTable` utility can format any 2D data array into a bordered table:
-
-```typescript
-import { formatAsTable } from "@rnx-kit/tools-performance";
-
-const table = formatAsTable(
-  [
-    ["parse", 12, 1],
-    ["bundle", 450, 1],
-  ],
-  {
-    columns: [
-      { label: "operation", align: "left" },
-      { label: "total (ms)", align: "right", digits: 0, localeFmt: true },
-      { label: "calls", align: "right" },
-    ],
-    sort: [1],
-  }
-);
-console.log(table);
-```
-
 ## Metro Integration
 
 `createPerfLoggerFactory` returns a factory compatible with Metro's
@@ -372,23 +348,3 @@ zero overhead.
 | `showIndex`     | `boolean`                     | `false`                          | Show row index in the report.                         |
 | `maxNameWidth`  | `number`                      | `50`                             | Max width for operation names (truncated with `...`). |
 | `reportHandler` | `(report: string) => void`    | `console.log`                    | Function that receives the formatted report.          |
-
-### TableOptions
-
-| Field       | Type                          | Default | Description                                     |
-| ----------- | ----------------------------- | ------- | ----------------------------------------------- |
-| `columns`   | `(string \| ColumnOptions)[]` | auto    | Column labels or configuration objects.         |
-| `sort`      | `number[]`                    | none    | Column indices to sort by, in precedence order. |
-| `showIndex` | `boolean`                     | `false` | Show a row index column.                        |
-| `noColors`  | `boolean`                     | `false` | Strip ANSI styling from output.                 |
-
-### ColumnOptions
-
-| Field       | Type                        | Default  | Description                                  |
-| ----------- | --------------------------- | -------- | -------------------------------------------- |
-| `label`     | `string`                    | auto     | Column header label.                         |
-| `digits`    | `number`                    | --       | Fixed decimal places for numeric values.     |
-| `localeFmt` | `boolean`                   | `false`  | Use locale number formatting.                |
-| `align`     | `"left"\|"right"\|"center"` | `"left"` | Cell text alignment.                         |
-| `maxWidth`  | `number`                    | --       | Maximum column width (truncates with `...`). |
-| `style`     | `StyleValue \| function`    | --       | ANSI style or custom formatter.              |

@@ -1,8 +1,9 @@
 {
-  "name": "@rnx-kit/tools-performance",
-  "version": "0.1.1",
-  "description": "EXPERIMENTAL - USE WITH CAUTION - tools-performance",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/tools-performance#readme",
+  "name": "@rnx-kit/tools-formatting",
+  "version": "0.0.1",
+  "private": true,
+  "description": "EXPERIMENTAL - USE WITH CAUTION - tools-formatting",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/tools-formatting#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -11,35 +12,24 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/tools-performance"
+    "directory": "incubator/tools-formatting"
   },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
   "type": "commonjs",
-  "sideEffects": false,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./lib/index.d.ts",
-      "default": "./lib/index.js"
-    }
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
-  "dependencies": {
-    "@rnx-kit/tools-formatting": "^0.0.1"
-  },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
-    "metro-config": "^0.83.3"
+    "@rnx-kit/tsconfig": "*"
   },
   "engines": {
     "node": ">=22.11"

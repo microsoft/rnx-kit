@@ -9,9 +9,6 @@ export {
   trackPerformance,
 } from "./perf.ts";
 
-export type { TableOptions, ColumnOptions } from "./table.ts";
-export { formatAsTable } from "./table.ts";
-
 export type { TraceRecorder } from "./trace.ts";
 export { createTrace, nullTrace } from "./trace.ts";
 
