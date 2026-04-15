@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.4.6
+
+### Patch Changes
+
+- d58e4bf: Fixed root workspace being checked twice depending on configuration
+
 ## 3.4.5
 
 ### Patch Changes
