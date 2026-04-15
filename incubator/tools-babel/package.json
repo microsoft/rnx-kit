@@ -28,7 +28,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-performance": "^0.1.0",
+    "@rnx-kit/tools-performance": "^0.1.1",
     "hermes-parser": "^0.34.0",
     "oxc-parser": "^0.123.0"
   },
