@@ -160,6 +160,12 @@
           "@rnx-kit/jest-preset"
         ]
       },
+      "incubator/tools-babel": {
+        "entry": [
+          "src/**/index.ts",
+          "test/**/*.ts"
+        ]
+      },
       "incubator/tools-typescript": {
         "entry": [
           "test/**/*.test.ts"
