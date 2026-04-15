@@ -22,6 +22,7 @@
     "tsconfig.esm.json",
     "tsconfig.esm.node.json",
     "tsconfig.node.json",
+    "tsconfig.nodenext.json",
     "tsconfig.json"
   ],
   "main": "tsconfig.json",
