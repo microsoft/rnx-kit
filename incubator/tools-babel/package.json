@@ -39,6 +39,7 @@
     "@rnx-kit/reporter": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/test-fixtures": "*",
+    "@rnx-kit/tools-formatting": "^0.0.1",
     "@rnx-kit/tsconfig": "*",
     "@swc/core": "^1.15.24",
     "@types/babel__core": "^7.20.0",

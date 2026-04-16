@@ -2,9 +2,9 @@
  * Diagnostic test that finds structural AST differences between OXC and Babel
  * on a single simple non-comment JS fixture, reporting all differences.
  */
+import { formatAsTable } from "@rnx-kit/tools-formatting";
 import { ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { formatAsTable } from "../../tools-performance/src/table";
 import type { AnyNode } from "./analysis";
 import { diffAst } from "./analysis";
 import type { FileData } from "./fixtures";
