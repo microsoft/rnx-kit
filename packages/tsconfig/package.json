@@ -19,11 +19,7 @@
     "directory": "packages/tsconfig"
   },
   "files": [
-    "tsconfig.esm.json",
-    "tsconfig.esm.node.json",
-    "tsconfig.node.json",
-    "tsconfig.nodenext.json",
-    "tsconfig.json"
+    "tsconfig*.json"
   ],
   "main": "tsconfig.json",
   "exports": {
@@ -33,6 +29,9 @@
     "./tsconfig.esm.json": {
       "default": "./tsconfig.esm.json"
     },
+    "./tsconfig.esm.node.json": {
+      "default": "./tsconfig.esm.node.json"
+    },
     "./tsconfig.json": {
       "default": "./tsconfig.json"
     },
@@ -41,9 +40,6 @@
     },
     "./tsconfig.nodenext.json": {
       "default": "./tsconfig.nodenext.json"
-    },
-    "./tsconfig.esm.node.json": {
-      "default": "./tsconfig.esm.node.json"
     },
     "./package.json": "./package.json"
   },
