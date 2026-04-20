@@ -189,4 +189,20 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
       `import { A } from "@rnx-kit/example/__mocks__/lib/index.js";`
     );
   });
+
+  it("prefers TypeScript source entry in exports over default", () => {
+    process.chdir("test/__fixtures__/with-exports-ts");
+    equal(
+      transform(`import { A } from "@rnx-kit/ts-example";`),
+      `import { A } from "@rnx-kit/ts-example/./src/index.ts";`
+    );
+  });
+
+  it("does not pick .d.ts entries as the main source", () => {
+    process.chdir("test/__fixtures__/with-exports-dts");
+    equal(
+      transform(`import { A } from "@rnx-kit/dts-example";`),
+      `import { A } from "@rnx-kit/dts-example/src/index.ts";`
+    );
+  });
 });
