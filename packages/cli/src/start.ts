@@ -211,6 +211,7 @@ export async function rnxStart(
       if (websocketEndpoints) {
         const endpoints = Object.entries(coreDevMiddleware.websocketEndpoints);
         for (const [key, value] of endpoints) {
+          // @ts-expect-error Intentional overwrite
           websocketEndpoints[key] = value;
         }
       } else {
