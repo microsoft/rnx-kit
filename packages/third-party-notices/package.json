@@ -44,13 +44,13 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^20.0.0",
+    "@react-native-community/cli-types": "^20.1.0",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
     "@types/yargs": "^16.0.0",
-    "metro-source-map": "^0.83.1"
+    "metro-source-map": "^0.84.0"
   },
   "engines": {
     "node": ">=16.17"

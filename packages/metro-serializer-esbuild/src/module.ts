@@ -1,16 +1,23 @@
 import { warn } from "@rnx-kit/console";
 import { findPackage, readPackage } from "@rnx-kit/tools-node/package";
 import type { BuildOptions } from "esbuild";
-import type { Module, ReadOnlyDependencies } from "metro";
+import type { Dependency, Module, ReadOnlyDependencies } from "metro";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { generateSourceMappingURL } from "./sourceMap.ts";
+
+// Metro's generated types need to be massaged
+export type ResolvedDependency = Readonly<{
+  absolutePath?: string;
+  data: Dependency["data"];
+}>;
 
 export function getModulePath(
   moduleName: string,
   parent: Module
 ): string | undefined {
-  const p = parent.dependencies.get(moduleName)?.absolutePath;
+  const dependencies: Map<string, ResolvedDependency> = parent.dependencies;
+  const p = dependencies.get(moduleName)?.absolutePath;
   if (p) {
     return p;
   }
@@ -18,7 +25,7 @@ export function getModulePath(
   // In Metro 0.72.0, the key changed from module name to a unique key in order
   // to support features such as `require.context`. For more details, see
   // https://github.com/facebook/metro/commit/52e1a00ffb124914a95e78e9f60df1bc2e2e7bf0.
-  for (const value of parent.dependencies.values()) {
+  for (const value of dependencies.values()) {
     if (value.data.name === moduleName) {
       return value.absolutePath;
     }
@@ -95,6 +102,7 @@ export function outputOf(
     );
   }
 
+  // @ts-expect-error Metro's generated types no longer define `MixedOutput` properly
   const code = jsModules[0].data.code;
   const moduleWithModuleNameOnly = {
     ...module,

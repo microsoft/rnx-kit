@@ -28,23 +28,29 @@
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-typescript": "^7.0.0",
+    "@jest/create-cache-key-function": "^29.7.0",
     "@rnx-kit/tools-react-native": "^2.3.2",
     "find-up": "^5.0.0"
   },
   "devDependencies": {
     "@jest/types": "^29.2.1",
-    "@react-native-community/cli-types": "^20.0.0",
-    "@react-native/babel-preset": "^0.83.0",
+    "@react-native-community/cli-types": "^20.1.0",
+    "@react-native/babel-preset": "^0.85.0",
+    "@react-native/jest-preset": "^0.85.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
-    "react": "19.2.0",
-    "react-native": "^0.83.0"
+    "react": "19.2.3",
+    "react-native": "^0.85.0"
   },
   "peerDependencies": {
+    "@react-native/jest-preset": ">=0.85",
     "react-native": "^0.0.0-0 || >=0.73"
   },
   "peerDependenciesMeta": {
+    "@react-native/jest-preset": {
+      "optional": true
+    },
     "react-native": {
       "optional": true
     }

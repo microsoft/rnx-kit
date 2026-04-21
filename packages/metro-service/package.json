@@ -40,16 +40,16 @@
     "node-fetch": "^2.6.7"
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^20.0.0",
+    "@react-native-community/cli-types": "^20.1.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
     "@types/node-fetch": "^2.6.5",
-    "metro": "^0.83.3",
-    "metro-config": "^0.83.3",
-    "metro-core": "^0.83.3",
-    "metro-resolver": "^0.83.3",
-    "metro-runtime": "^0.83.3"
+    "metro": "^0.84.0",
+    "metro-config": "^0.84.0",
+    "metro-core": "^0.84.0",
+    "metro-resolver": "^0.84.0",
+    "metro-runtime": "^0.84.0"
   },
   "peerDependencies": {
     "@office-iss/react-native-win32": "*",

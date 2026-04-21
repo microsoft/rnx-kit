@@ -5,7 +5,7 @@
   "packageRules": [
     {
       "groupName": "@react-native-community/cli",
-      "allowedVersions": "^20.0.0",
+      "allowedVersions": "^20.1.0",
       "matchPackageNames": ["@react-native-community/cli**"]
     },
     {
@@ -19,7 +19,7 @@
     },
     {
       "groupName": "Jest",
-      "allowedVersions": "^29.0.0",
+      "allowedVersions": "^29.2.1",
       "matchSourceUrls": ["https://github.com/facebook/jest{/,}**"]
     },
     {
@@ -29,7 +29,7 @@
     },
     {
       "groupName": "Metro",
-      "allowedVersions": "^0.83.1",
+      "allowedVersions": "^0.84.0",
       "matchSourceUrls": ["https://github.com/facebook/metro{/,}**"]
     },
     {
@@ -54,7 +54,7 @@
     {
       "groupName": "react-native",
       "matchPackageNames": ["@react-native/**", "react-native"],
-      "allowedVersions": "^0.83.0"
+      "allowedVersions": "^0.85.0"
     },
     {
       "groupName": "react-native-macos",

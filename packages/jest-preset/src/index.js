@@ -170,14 +170,23 @@ function moduleNameMapper(reactNativePlatformPath) {
  * @returns {string[] | undefined}
  */
 function setupFiles(targetPlatform, reactNativePlatformPath, searchPaths) {
-  return targetPlatform
-    ? [
-        require.resolve(
-          `${reactNativePlatformPath || "react-native"}/jest/setup.js`,
-          searchPaths
-        ),
-      ]
-    : undefined;
+  if (!targetPlatform) {
+    return undefined;
+  }
+
+  try {
+    const setup = require.resolve(
+      `${reactNativePlatformPath || "react-native"}/jest/setup.js`,
+      searchPaths
+    );
+    return [setup];
+  } catch (_) {
+    const setup = require.resolve(
+      "@react-native/jest-preset/jest/setup.js",
+      searchPaths
+    );
+    return [setup];
+  }
 }
 
 /**
@@ -201,6 +210,14 @@ function getTestEnvironment(
     } catch (_) {
       // ignore
     }
+    try {
+      return require.resolve(
+        "@react-native/jest-preset/jest/react-native-env.js",
+        searchPaths
+      );
+    } catch (_) {
+      // ignore
+    }
   }
   return undefined;
 }
@@ -208,20 +225,15 @@ function getTestEnvironment(
 /**
  * Returns transform rules for React Native.
  * @param {string | undefined} targetPlatform
- * @param {string | undefined} reactNativePlatformPath
- * @param {{ paths: string[] }} searchPaths
  * @returns {Record<string, string> | undefined}
  */
-function transformRules(targetPlatform, reactNativePlatformPath, searchPaths) {
-  const reactNative = reactNativePlatformPath || "react-native";
-  return targetPlatform
-    ? {
-        "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": require.resolve(
-          `${reactNative}/jest/assetFileTransformer.js`,
-          searchPaths
-        ),
-      }
-    : undefined;
+function transformRules(targetPlatform) {
+  if (!targetPlatform) {
+    return undefined;
+  }
+
+  const key = "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$";
+  return { [key]: require.resolve("./assetFileTransformer.js") };
 }
 
 /** @type {(defaultPlatform?: string, userOptions?: InitialOptions) => InitialOptions} */
@@ -259,7 +271,7 @@ module.exports = (
             "babel-jest",
             { presets: babelPresets(targetPlatform, searchPaths) },
           ],
-      ...transformRules(targetPlatform, platformPath, searchPaths),
+      ...transformRules(targetPlatform),
       ...userTransform,
     },
     transformIgnorePatterns: [

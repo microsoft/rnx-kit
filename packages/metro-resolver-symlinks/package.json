@@ -36,7 +36,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
-    "metro-resolver": "^0.83.3",
+    "metro-resolver": "^0.84.0",
     "oxc-resolver": "^11.0.0"
   },
   "peerDependencies": {

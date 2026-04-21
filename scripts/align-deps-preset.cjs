@@ -57,6 +57,11 @@ function makeTypesEntries() {
 function makePreset() {
   const profile = {
     ...makeTypesEntries(),
+    "@react-native-community/cli-types": {
+      name: "@react-native-community/cli-types",
+      version: "^20.1.0",
+      devOnly: true,
+    },
     esbuild: {
       name: "esbuild",
       version: "^0.27.1",
@@ -69,6 +74,21 @@ function makePreset() {
     "oxc-resolver": {
       name: "oxc-resolver",
       version: "^11.0.0",
+      devOnly: true,
+    },
+    "metro-babel-transformer": {
+      name: "metro-babel-transformer",
+      version: "^0.84.0",
+      devOnly: true,
+    },
+    "metro-source-map": {
+      name: "metro-source-map",
+      version: "^0.84.0",
+      devOnly: true,
+    },
+    "metro-transform-worker": {
+      name: "metro-transform-worker",
+      version: "^0.84.0",
       devOnly: true,
     },
     semver: {
