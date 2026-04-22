@@ -2302,6 +2302,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@isaacs/cliui@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@isaacs/cliui@npm:9.0.0"
+  checksum: 10c0/971063b7296419f85053dacd0a0285dcadaa3dfc139228b23e016c1a9848121ad4aa5e7fcca7522062014e1eb6239a7424188b9f2cba893a79c90aae5710319c
+  languageName: node
+  linkType: hard
+
 "@isaacs/fs-minipass@npm:^4.0.0":
   version: 4.0.1
   resolution: "@isaacs/fs-minipass@npm:4.0.1"
@@ -6189,7 +6196,7 @@ __metadata:
     oxc-resolver: "npm:^11.0.0"
     react: "npm:19.2.0"
     react-native: "npm:^0.83.0"
-    react-native-test-app: "npm:^5.0.5"
+    react-native-test-app: "npm:^5.1.2"
     react-test-renderer: "npm:19.2.0"
   bin:
     rnx: ../cli/scripts/rnx.bin
@@ -16348,14 +16355,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-test-app@npm:^5.0.5":
-  version: 5.1.0
-  resolution: "react-native-test-app@npm:5.1.0"
+"react-native-test-app@npm:^5.1.2":
+  version: 5.1.2
+  resolution: "react-native-test-app@npm:5.1.2"
   dependencies:
+    "@isaacs/cliui": "npm:^9.0.0"
     "@rnx-kit/react-native-host": "npm:^0.5.15"
     "@rnx-kit/tools-react-native": "npm:^2.1.0"
     ajv: "npm:^8.0.0"
-    cliui: "npm:^8.0.0"
     fast-xml-parser: "npm:^5.3.4"
     prompts: "npm:^2.4.0"
     semver: "npm:^7.3.5"
@@ -16364,9 +16371,9 @@ __metadata:
     "@callstack/react-native-visionos": 0.76 - 0.79
     "@expo/config-plugins": ">=5.0"
     react: 18.2 - 19.2
-    react-native: 0.76 - 0.84 || >=0.84.0-0 <0.85.0
+    react-native: 0.76 - 0.85 || >=0.85.0-0 <0.86.0
     react-native-macos: ^0.0.0-0 || 0.76 - 0.81
-    react-native-windows: ^0.0.0-0 || 0.76 - 0.81
+    react-native-windows: ^0.0.0-0 || 0.76 - 0.82
   peerDependenciesMeta:
     "@callstack/react-native-visionos":
       optional: true
@@ -16381,7 +16388,7 @@ __metadata:
     init: scripts/init.mjs
     init-test-app: scripts/init.mjs
     install-windows-test-app: windows/app.mjs
-  checksum: 10c0/4c0867d6a04eaff96402fb8f7df3cc40d4a7e365847a732c602a4dcecb3605f59b87d5e76eee0888ed06771c95fae0452384e374ffa0c5a4333aaca43848c906
+  checksum: 10c0/f547141ad1782ada5ef8ed94e45b6fc4b013f2e8f58402cb3300701e92b6f26ed50c0ed6ff75903dbe0d4f6349459e6ea51508d0de832c26099bc205221c9893
   languageName: node
   linkType: hard
 
