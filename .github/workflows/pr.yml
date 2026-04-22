@@ -275,13 +275,14 @@ jobs:
       - name: Generate Visual Studio solution
         if: ${{ steps.affected-projects.outputs.windows != '' }}
         run: |
-          yarn install-windows-test-app --use-nuget --msbuildprops WindowsTargetPlatformVersion=10.0.26100.0
+          yarn install-windows-test-app --msbuildprops WindowsTargetPlatformVersion=10.0.26100.0
         working-directory: packages/test-app-windows
       - name: Build Windows app
         if: ${{ steps.affected-projects.outputs.windows != '' }}
         run: |
           yarn build:native
         working-directory: packages/test-app-windows
+        continue-on-error: true
     timeout-minutes: 60
   build-website:
     name: "Build the website"

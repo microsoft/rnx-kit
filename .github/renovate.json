@@ -68,7 +68,7 @@
     {
       "groupName": "react-native-windows",
       "matchPackageNames": ["@react-native-windows/**", "react-native-windows"],
-      "allowedVersions": "^0.79.0"
+      "allowedVersions": "^0.82.0"
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],
