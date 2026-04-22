@@ -25,9 +25,9 @@
   },
   "dependencies": {
     "@react-native-webapis/web-storage": "workspace:*",
-    "react": "19.0.0",
-    "react-native": "^0.79.0",
-    "react-native-windows": "^0.79.0"
+    "react": "19.1.1",
+    "react-native": "^0.82.0",
+    "react-native-windows": "^0.82.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -35,11 +35,11 @@
     "@babel/plugin-transform-react-jsx-source": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
-    "@react-native-community/cli": "^18.0.0",
-    "@react-native-community/cli-platform-android": "^18.0.0",
-    "@react-native-community/cli-platform-ios": "^18.0.0",
-    "@react-native/babel-preset": "^0.79.0",
-    "@react-native/metro-config": "^0.79.0",
+    "@react-native-community/cli": "^20.0.0",
+    "@react-native-community/cli-platform-android": "^20.0.0",
+    "@react-native-community/cli-platform-ios": "^20.0.0",
+    "@react-native/babel-preset": "^0.82.0",
+    "@react-native/metro-config": "^0.82.0",
     "@rnx-kit/babel-preset-metro-react-native": "workspace:*",
     "@rnx-kit/build": "workspace:*",
     "@rnx-kit/cli": "workspace:*",
@@ -57,7 +57,7 @@
     "@rnx-kit/third-party-notices": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
     "@types/react": "^19.0.0",
-    "react-native-test-app": "^4.4.11"
+    "react-native-test-app": "^5.1.2"
   },
   "rnx-kit": {
     "kitType": "app",
@@ -138,7 +138,7 @@
         "@rnx-kit/scripts/align-deps-preset.cjs"
       ],
       "requirements": [
-        "react-native@0.79"
+        "react-native@0.82"
       ],
       "capabilities": [
         "core-windows",

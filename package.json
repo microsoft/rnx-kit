@@ -65,14 +65,7 @@
     "react-native-macos/@react-native/community-cli-plugin": "^0.78.0",
     "react-native-macos/@react-native/gradle-plugin": "^0.78.0",
     "react-native-macos/@react-native/js-polyfills": "^0.78.0",
-    "react-native-macos/@react-native/normalize-colors": "^0.78.0",
-    "react-native-windows/@react-native/assets-registry": "^0.79.0",
-    "react-native-windows/@react-native/codegen": "^0.79.0",
-    "react-native-windows/@react-native/community-cli-plugin": "^0.79.0",
-    "react-native-windows/@react-native/gradle-plugin": "^0.79.0",
-    "react-native-windows/@react-native/js-polyfills": "^0.79.0",
-    "react-native-windows/@react-native/normalize-colors": "^0.79.0",
-    "react-native-windows/@react-native/virtualized-lists": "^0.79.0"
+    "react-native-macos/@react-native/normalize-colors": "^0.78.0"
   },
   "engines": {
     "node": ">=18.12"

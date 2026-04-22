@@ -67,7 +67,7 @@
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@react-native-community/cli-types": "^20.1.0",
-    "@react-native-windows/cli": "^0.79.0",
+    "@react-native-windows/cli": "^0.82.0",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
