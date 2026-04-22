@@ -15,11 +15,12 @@ export class FormatCommand extends Command {
   });
 
   async execute() {
-    const oxfmt = import.meta.resolve("oxfmt/bin/oxfmt");
+    const url = new URL("../bin/oxfmt", import.meta.resolve("oxfmt"));
+    const oxfmt = fileURLToPath(url);
     process.argv = [
       process.argv0,
-      fileURLToPath(oxfmt),
-      "*.{js,json,jsx,md,mjs,mts,ts,tsx,yml}",
+      oxfmt,
+      "*.{cjs,js,json,jsx,md,mjs,mts,ts,tsx,yml}",
       "!{#archived,__fixtures__,lib}",
       "!{CHANGELOG,CODE_OF_CONDUCT,SECURITY}.md",
     ];

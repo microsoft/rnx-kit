@@ -46,7 +46,6 @@ export const transform: Transform = (args) => {
   const babelConfig = {
     // ES modules require sourceType='module' but OSS may not always want that
     sourceType: "unambiguous",
-    // @ts-expect-error `plugins` is not properly typed by Metro
     ...buildBabelConfig(filename, options, plugins),
     caller: {
       // Varies Babel's config cache - presets will be re-initialized
@@ -70,7 +69,7 @@ export const transform: Transform = (args) => {
 
   // The result from `transformFromAstSync` can be null (if the file is ignored)
   if (!transformed) {
-    return { ast: null, metadata: null };
+    return { ast: undefined, metadata: undefined };
   }
 
   return {

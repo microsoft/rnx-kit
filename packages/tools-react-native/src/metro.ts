@@ -33,7 +33,7 @@ type MetroImport =
   | typeof import("metro")
   | /* typeof import("metro/private/DeltaBundler/Serializers/baseJSBundle") */ MetroBaseJSBundle
   | typeof import("metro/private/Server").default
-  | typeof import("metro/private/lib/TerminalReporter").TerminalReporter
+  | typeof import("metro/private/lib/TerminalReporter").default
   | /* typeof import("metro/private/lib/bundleToString") */ MetroBundleToString
   | typeof import("metro/private/shared/output/bundle")
   | typeof import("metro-config")
@@ -133,7 +133,7 @@ export function requireModuleFromMetro(
 export function requireModuleFromMetro(
   moduleName: "metro/src/lib/TerminalReporter",
   fromDir?: string
-): typeof import("metro/private/lib/TerminalReporter").TerminalReporter;
+): typeof import("metro/private/lib/TerminalReporter").default;
 
 export function requireModuleFromMetro(
   moduleName: "metro/src/lib/bundleToString",

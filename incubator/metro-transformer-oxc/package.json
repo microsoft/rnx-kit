@@ -31,11 +31,11 @@
     "oxc-parser": "^0.120.0"
   },
   "devDependencies": {
-    "@react-native/babel-preset": "^0.83.0",
+    "@react-native/babel-preset": "^0.85.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",
-    "metro-babel-transformer": "^0.83.1"
+    "metro-babel-transformer": "^0.84.0"
   },
   "peerDependencies": {
     "@react-native/babel-preset": "*"

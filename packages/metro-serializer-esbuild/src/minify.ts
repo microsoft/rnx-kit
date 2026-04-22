@@ -1,5 +1,9 @@
 import type { MinifierOptions, MinifierResult } from "metro-transform-worker";
 
-module.exports = (options: MinifierOptions): MinifierResult => {
+type MinifierOptionsEx = Exclude<MinifierOptions, "map"> & {
+  map: NonNullable<MinifierOptions["map"]> | undefined;
+};
+
+module.exports = (options: MinifierOptionsEx): MinifierResult => {
   return options;
 };

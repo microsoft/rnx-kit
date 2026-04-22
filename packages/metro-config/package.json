@@ -35,11 +35,11 @@
     "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",
     "@types/connect": "^3.4.36",
-    "metro": "^0.83.3",
-    "metro-config": "^0.83.3",
-    "metro-resolver": "^0.83.3",
-    "react": "19.2.0",
-    "react-native": "^0.83.0",
+    "metro": "^0.84.0",
+    "metro-config": "^0.84.0",
+    "metro-resolver": "^0.84.0",
+    "react": "19.2.3",
+    "react-native": "^0.85.0",
     "type-fest": "^4.0.0"
   },
   "peerDependencies": {
