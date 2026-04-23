@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.4.8
+
+### Patch Changes
+
+- 3fa3488: Bumped `react-native-test-app` to support React Native for macOS/Windows up to 0.82
+
 ## 3.4.7
 
 ### Patch Changes
