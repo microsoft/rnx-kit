@@ -54,9 +54,9 @@ function findMainSourceFile(sourcePath, requester, customRemap) {
     if (typeof root === "string") {
       mainEntry = root;
     } else if (root && typeof root === "object") {
-      // Prefer a TypeScript source entry (.ts/.tsx but not .d.ts/.d.tsx)
+      // Prefer a TypeScript source entry (.ts/.tsx but not .d.ts)
       const tsEntry = Object.values(root).find(
-        (v) => typeof v === "string" && /\.tsx?$/.test(v) && !/\.d\.tsx?$/.test(v)
+        (v) => typeof v === "string" && /\.tsx?$/.test(v) && !/\.d\.ts$/.test(v)
       );
       mainEntry = tsEntry || root.default || root.require || root.import;
     }
