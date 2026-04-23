@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.3.2
+
+### Patch Changes
+
+- 9cd7c3d: Added support for `@react-native/jest-preset` and React Native 0.85
+
 ## 0.3.1
 
 ### Patch Changes
