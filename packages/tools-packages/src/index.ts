@@ -10,7 +10,12 @@ export {
 } from "./context.ts";
 
 export type { JSONValidatorOptions } from "./json.ts";
-export { createJSONValidator, isJSONValidator, compareValues } from "./json.ts";
+export {
+  createJSONValidator,
+  isJSONValidator,
+  compareValues,
+  setDefaultFixMode,
+} from "./json.ts";
 
 export {
   findPackageInfo,

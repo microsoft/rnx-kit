@@ -40,6 +40,24 @@ type JSONEditingContext = Pick<
   fix: boolean;
 };
 
+let defaultFixMode = false;
+
+/**
+ * Sets the default fix mode for JSON validators where fix is not explicitly specified
+ * @param enabled whether fix mode should be enabled by default
+ */
+export function setDefaultFixMode(enabled: boolean): void {
+  defaultFixMode = enabled;
+}
+
+/**
+ * @returns the default fix mode
+ * @internal
+ */
+export function getDefaultFixMode(): boolean {
+  return defaultFixMode;
+}
+
 /**
  * Creates a JSON editing context for a given JSON object and validator options.
  * The returned context provides methods for reporting errors, tracking changes,
@@ -53,7 +71,11 @@ function createJSONEditingContext(
   json: Record<string, JSONValue>,
   options: JSONValidatorOptions
 ): JSONEditingContext {
-  const { fix = false, reportError = console.error, reportPrefix } = options;
+  const {
+    fix = defaultFixMode,
+    reportError = console.error,
+    reportPrefix,
+  } = options;
   let changes = false;
   let errors = false;
 

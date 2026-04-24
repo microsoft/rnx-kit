@@ -15,6 +15,22 @@ import type {
 } from "./types";
 
 /**
+ * Generally fix mode is something that is enabled via command line flags or configuration.
+ * When enabled, validation routines that support "fixing" will apply changes to the underlying
+ * JSON files rather than just reporting errors. This flag is global to the package validation
+ * context and can be toggled via setFixMode().
+ */
+let fixMode = false;
+
+export function setDefaultFixMode(enabled: boolean): void {
+  fixMode = enabled;
+}
+
+export function defaultFixMode(): boolean {
+  return fixMode;
+}
+
+/**
  * Create a core package context for a given root directory and optional manifest.
  * @param root root directory of the package
  * @param manifest optional package manifest, if not provided it will be loaded from root/package.json

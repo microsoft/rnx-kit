@@ -94,6 +94,11 @@ export type PackageValidationContext<
   TManifest extends PackageManifest = PackageManifest,
 > = PackageContext<TManifest> & JSONValidator;
 
+/**
+ * PackageInfo objects are cached instances of PackageContext that may include additional metadata
+ * such as whether the package is part of a workspace. These objects are intended to be reused
+ * across multiple operations to avoid repeatedly reading and parsing the same package.json files.
+ */
 export type PackageInfo = PackageContext & {
   /** Is this a workspace package */
   workspace?: boolean;
