@@ -1,4 +1,4 @@
-import type { GetPackageValue, PackageInfo } from "./types.ts";
+import type { GetPackageValue, PackageContext } from "./types.ts";
 
 /**
  * Helper function to create a typed accessor function for getting and storing information
@@ -11,10 +11,10 @@ import type { GetPackageValue, PackageInfo } from "./types.ts";
  */
 export function createPackageValueLoader<T>(
   friendlyName: string,
-  initialize: (pkgInfo: PackageInfo) => T
+  initialize: (pkgInfo: PackageContext) => T
 ): GetPackageValue<T> {
   const symbolKey = Symbol(friendlyName);
-  return (pkgInfo: PackageInfo) => {
+  return (pkgInfo: PackageContext) => {
     if (!(symbolKey in pkgInfo)) {
       pkgInfo[symbolKey] = initialize(pkgInfo);
     }
@@ -23,7 +23,8 @@ export function createPackageValueLoader<T>(
 }
 
 /**
- * Create has/get/set accessors for a newly created symbol key that can look up values in PackageInfo
+ * Create has/get/set accessors for a newly created symbol key that can look up values in PackageContext
+ * in a way that is guaranteed to be unique and not collide with any other properties on the package context.
  *
  * @param friendlyName name used to create a symbol key for the package info
  * @returns a set of accessors for the symbol key
@@ -31,13 +32,13 @@ export function createPackageValueLoader<T>(
 export function createPackageValueAccessors<T>(friendlyName: string) {
   const symbolKey = Symbol(friendlyName);
   return {
-    has(pkgInfo: PackageInfo) {
+    has(pkgInfo: PackageContext) {
       return symbolKey in pkgInfo;
     },
-    get(pkgInfo: PackageInfo) {
+    get(pkgInfo: PackageContext) {
       return pkgInfo[symbolKey] as T;
     },
-    set(pkgInfo: PackageInfo, value: T) {
+    set(pkgInfo: PackageContext, value: T) {
       pkgInfo[symbolKey] = value;
     },
   };
