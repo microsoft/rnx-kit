@@ -110,10 +110,20 @@ export type PackageInfo = PackageContext & {
 export type GetPackageValue<T> = (pkgInfo: PackageInfo) => T;
 
 /**
- * Set of accessor functions that can be retrieved for a specific symbol
+ * Generic accessor set for storing typed values on an arbitrary object via a hidden symbol key.
+ * `get` returns `undefined` when no value has been set, so callers should check `has` first or
+ * handle `undefined` explicitly.
  */
-export type PackageValueAccessors<T> = {
-  get: GetPackageValue<T>;
-  has: (pkgInfo: PackageInfo) => boolean;
-  set: (pkgInfo: PackageInfo, value: T) => void;
+export type ObjectValueAccessors<TObj, TVal> = {
+  has: (obj: TObj) => boolean;
+  get: (obj: TObj) => TVal | undefined;
+  set: (obj: TObj, value: TVal) => void;
 };
+
+/**
+ * Set of accessor functions that can be retrieved for a specific symbol on a PackageInfo.
+ * `get` returns `undefined` when no value has been set, so callers should check `has` first
+ * or handle `undefined` explicitly. Use `createPackageValueLoader` instead when an
+ * initialize-on-miss pattern is desired (its `get` is guaranteed to return `T`).
+ */
+export type PackageValueAccessors<T> = ObjectValueAccessors<PackageInfo, T>;

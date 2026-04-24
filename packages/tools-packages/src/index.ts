@@ -1,9 +1,11 @@
 export {
+  createObjectValueAccessors,
   createPackageValueAccessors,
   createPackageValueLoader,
 } from "./accessors.ts";
 
 export {
+  asPackageValidationContext,
   createPackageContext,
   createPackageValidationContext,
   createYarnWorkspaceContext,
@@ -14,7 +16,7 @@ export {
   createJSONValidator,
   isJSONValidator,
   compareValues,
-  setDefaultFixMode,
+  setDefaultValidationOptions,
 } from "./json.ts";
 
 export {
@@ -29,6 +31,7 @@ export type {
   JSONValidator,
   JSONValuePath,
   GetPackageValue,
+  ObjectValueAccessors,
   PackageContext,
   PackageValidationContext,
   PackageInfo,

@@ -1,14 +1,16 @@
-import fs from "node:fs";
+import { writeJSONFileSync } from "@rnx-kit/tools-filesystem";
 import { styleText } from "node:util";
+import { createObjectValueAccessors } from "./accessors.ts";
 import type {
   JSONValue,
   JSONValidator,
   JSONValidationResult,
+  JSONValuePath,
 } from "./types.ts";
 
-export type JSONValidatorOptions = {
+type ResolvedOptions = {
   /** whether to apply fixes automatically when enforcing values */
-  fix?: boolean;
+  fix: boolean;
 
   /**
    * path to the JSON file being validated.
@@ -20,7 +22,7 @@ export type JSONValidatorOptions = {
   /**
    * error reporting callback. If not provided errors will be sent to console.error.
    */
-  reportError?: (message: string) => void;
+  reportError: (message: string) => void;
 
   /**
    * report prefix. If provided this string will be prepended to all error messages
@@ -28,6 +30,18 @@ export type JSONValidatorOptions = {
    */
   reportPrefix?: string;
 };
+
+/**
+ * Options type for creating a JSON validator. All properties are optional and will
+ * be resolved to a fully specified ResolvedOptions object internally by the validator.
+ */
+export type JSONValidatorOptions = Partial<ResolvedOptions>;
+
+/** helper to attach and retrieve hidden resolved options on a JSONValidator instance */
+const accessOptions = createObjectValueAccessors<
+  JSONValidator,
+  ResolvedOptions
+>("JSONValidatorOptions");
 
 /**
  * Internal type for the editing context used by the various validation helper functions
@@ -40,22 +54,37 @@ type JSONEditingContext = Pick<
   fix: boolean;
 };
 
-let defaultFixMode = false;
+const defaultOptions: Omit<JSONValidatorOptions, "jsonFilePath"> = {
+  fix: false,
+};
 
 /**
- * Sets the default fix mode for JSON validators where fix is not explicitly specified
- * @param enabled whether fix mode should be enabled by default
+ * Sets the default validation options for JSON validators where options are not explicitly specified
+ * @param options the default options to use when a JSON validator is created without explicit options
  */
-export function setDefaultFixMode(enabled: boolean): void {
-  defaultFixMode = enabled;
+export function setDefaultValidationOptions(
+  options: Omit<JSONValidatorOptions, "jsonFilePath">
+): void {
+  Object.assign(defaultOptions, options);
 }
 
 /**
- * @returns the default fix mode
- * @internal
+ * Resolve the validator options ensuring the required defaults are set
+ * @param options the user-specified JSON validator options to resolve
+ * @returns a fully resolved set of options with defaults applied where not specified
  */
-export function getDefaultFixMode(): boolean {
-  return defaultFixMode;
+function resolveValidatorOptions({
+  fix,
+  reportError,
+  reportPrefix,
+  jsonFilePath,
+}: JSONValidatorOptions): ResolvedOptions {
+  return {
+    fix: fix ?? defaultOptions.fix ?? false,
+    reportError: reportError ?? defaultOptions.reportError ?? console.error,
+    reportPrefix: reportPrefix ?? defaultOptions.reportPrefix,
+    jsonFilePath: jsonFilePath,
+  };
 }
 
 /**
@@ -69,13 +98,9 @@ export function getDefaultFixMode(): boolean {
  */
 function createJSONEditingContext(
   json: Record<string, JSONValue>,
-  options: JSONValidatorOptions
+  options: ResolvedOptions
 ): JSONEditingContext {
-  const {
-    fix = defaultFixMode,
-    reportError = console.error,
-    reportPrefix,
-  } = options;
+  const { fix, reportError, reportPrefix } = options;
   let changes = false;
   let errors = false;
 
@@ -103,74 +128,57 @@ function createJSONEditingContext(
  * and finalize the validation process, optionally writing changes back to disk if fixes
  * are enabled and a file path is provided.
  * @param json loaded JSON object to validate and potentially modify
- * @param options options controlling fix behavior, error reporting, and file writing
+ * @param userOptions options controlling fix behavior, error reporting, and file writing
  * @param baseObj optional object to assign the validator methods to, allowing the validator to be mixed into another context object if desired
  * @returns a JSONValidator instance for validating and optionally fixing the provided JSON object
  */
 export function createJSONValidator<T extends object = object>(
   json: Record<string, JSONValue>,
-  options: JSONValidatorOptions = {},
+  userOptions: JSONValidatorOptions = defaultOptions,
   baseObj?: T
 ): JSONValidator & T {
+  const resolvedOptions = resolveValidatorOptions(userOptions);
+
   // create the editing context used for helpers and change tracking
-  const context = createJSONEditingContext(json, options);
+  const context = createJSONEditingContext(json, resolvedOptions);
   const { error, changed, finish: finishResult } = context;
 
   // enforce a value at a given path in the JSON object
-  function enforce(path: string[], value: JSONValue | undefined) {
+  function enforce(path: JSONValuePath, value: JSONValue | undefined) {
+    const pathArray = Array.isArray(path) ? path : path.split(".");
     if (value === undefined) {
-      unsetValue(path, context);
+      unsetValue(pathArray, context);
     } else {
-      setValue(path, value, context);
+      setValue(pathArray, value, context);
     }
   }
 
   // write the JSON file if needed and report the results
   function finish(): JSONValidationResult {
     const result = finishResult();
-    if (result.changes && options.fix && options.jsonFilePath) {
-      fs.writeFileSync(
-        options.jsonFilePath,
-        JSON.stringify(json, null, 2) + "\n",
-        "utf-8"
-      );
+    if (result.changes && context.fix && resolvedOptions.jsonFilePath) {
+      writeJSONFileSync(resolvedOptions.jsonFilePath, json);
     }
     return result;
   }
 
   const validator: JSONValidator = { enforce, error, changed, finish };
-  return baseObj
+  const result = baseObj
     ? Object.assign(baseObj, validator)
     : (validator as JSONValidator & T);
+
+  // attach the resolved options to the result
+  accessOptions.set(result, resolvedOptions);
+  return result;
 }
 
 /**
- * Function to assert that a given object conforms to the JSONValidator interface
- * @param obj the object to check
- * @returns true if the object implements all required methods of JSONValidator, false otherwise
+ * Determine whether a given object is a JSONValidator by checking if it is a record
+ * and has the resolved options attached via the internal accessOptions accessors.
  */
-export const isJSONValidator = (() => {
-  const requiredPropTypes: Record<keyof JSONValidator, string> = {
-    enforce: "function",
-    error: "function",
-    changed: "function",
-    finish: "function",
-  };
-  return (obj: unknown): obj is JSONValidator => {
-    if (isRecord(obj)) {
-      for (const key of Object.keys(requiredPropTypes)) {
-        if (
-          !(key in obj) ||
-          typeof obj[key] !== requiredPropTypes[key as keyof JSONValidator]
-        ) {
-          return false;
-        }
-      }
-      return true;
-    }
-    return false;
-  };
-})();
+export function isJSONValidator(obj: unknown): obj is JSONValidator {
+  return isRecord(obj) && accessOptions.has(obj as JSONValidator);
+}
 
 /**
  * Removes a value at a given path in the JSON object. If the value exists at the specified path,
@@ -184,8 +192,8 @@ function unsetValue(path: string[], context: JSONEditingContext) {
     if (parent) {
       const valueKey = path[path.length - 1];
       if (valueKey in parent) {
-        context.changed();
         if (context.fix) {
+          context.changed();
           delete parent[valueKey];
         } else {
           context.error(valueMessage(path, undefined, parent[valueKey]));
@@ -243,15 +251,14 @@ function walkPath(
   for (let i = 0; i < path.length - 1; i++) {
     const segment = path[i];
     if (!isRecord(current[segment])) {
-      if (ensureExists) {
+      if (ensureExists && context.fix) {
         context.changed();
         current[segment] = {};
       } else {
         return undefined;
       }
-    } else {
-      current = current[segment];
     }
+    current = current[segment] as Record<string, unknown>;
   }
   return current;
 }
@@ -284,36 +291,57 @@ export function compareValues(value1: unknown, value2: unknown): boolean {
   ) {
     // handle the both objects are arrays case, in this case walk through them and compare each value deeply
     if (Array.isArray(value1) && Array.isArray(value2)) {
-      if (value1.length !== value2.length) {
-        return false;
-      }
-      for (let i = 0; i < value1.length; i++) {
-        if (!compareValues(value1[i], value2[i])) {
-          return false;
-        }
-      }
-      return true;
+      return compareArrays(value1, value2);
     }
 
     // handle the both plain objects case, checking keys including key ordering and comparing values deeply
     if (isRecord(value1) && isRecord(value2)) {
-      const keys = Object.keys(value1);
-      // compare the two key arrays for equality including order
-      if (!compareValues(keys, Object.keys(value2))) {
-        return false;
-      }
-
-      // now compare the values for each key recursively
-      for (const key of keys) {
-        if (!compareValues(value1[key], value2[key])) {
-          return false;
-        }
-      }
-      return true;
+      return compareObjects(value1, value2);
     }
   }
   // already did the === check at the top of the function
   return false;
+}
+
+/**
+ * Performs a deep equality check of two arrays, comparing each element recursively using `compareValues`.
+ * @param array1 The first array to compare.
+ * @param array2 The second array to compare.
+ * @returns True if the arrays are equal, false otherwise.
+ */
+function compareArrays(array1: unknown[], array2: unknown[]): boolean {
+  if (array1.length !== array2.length) {
+    return false;
+  }
+  for (let i = 0; i < array1.length; i++) {
+    if (!compareValues(array1[i], array2[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Performs a deep equality check of two objects, comparing each key and value recursively using `compareValues`.
+ * The order of keys is significant and must match exactly for the objects to be considered equal.
+ * @param obj1 The first object to compare.
+ * @param obj2 The second object to compare.
+ * @returns True if the objects are equal, false otherwise.
+ */
+function compareObjects(
+  obj1: Record<string, unknown>,
+  obj2: Record<string, unknown>
+): boolean {
+  const keys = Object.keys(obj1);
+  if (!compareArrays(keys, Object.keys(obj2))) {
+    return false;
+  }
+  for (const key of keys) {
+    if (!compareValues(obj1[key], obj2[key])) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**

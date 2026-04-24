@@ -1,4 +1,9 @@
-import type { GetPackageValue, PackageContext } from "./types.ts";
+import type {
+  GetPackageValue,
+  ObjectValueAccessors,
+  PackageContext,
+  PackageValueAccessors,
+} from "./types.ts";
 
 /**
  * Helper function to create a typed accessor function for getting and storing information
@@ -29,17 +34,33 @@ export function createPackageValueLoader<T>(
  * @param friendlyName name used to create a symbol key for the package info
  * @returns a set of accessors for the symbol key
  */
-export function createPackageValueAccessors<T>(friendlyName: string) {
+export function createPackageValueAccessors<T>(
+  friendlyName: string
+): PackageValueAccessors<T> {
+  return createObjectValueAccessors<PackageContext, T>(friendlyName);
+}
+
+/**
+ * Create has/get/set accessors using a newly created symbol key that can look up values in any object
+ * in a way that is guaranteed to be unique and not collide with any other properties on the object.
+ * @param friendlyName name used to create a symbol key for the object
+ * @returns a set of accessors for the symbol key
+ */
+export function createObjectValueAccessors<
+  TObj extends Record<string | symbol, unknown>,
+  TVal,
+>(friendlyName: string): ObjectValueAccessors<TObj, TVal> {
   const symbolKey = Symbol(friendlyName);
+  type ObjCast = { [symbolKey]?: TVal };
   return {
-    has(pkgInfo: PackageContext) {
+    has(pkgInfo: TObj) {
       return symbolKey in pkgInfo;
     },
-    get(pkgInfo: PackageContext) {
-      return pkgInfo[symbolKey] as T;
+    get(pkgInfo: TObj) {
+      return (pkgInfo as ObjCast)[symbolKey];
     },
-    set(pkgInfo: PackageContext, value: T) {
-      pkgInfo[symbolKey] = value;
+    set(pkgInfo: TObj, value: TVal) {
+      (pkgInfo as ObjCast)[symbolKey] = value;
     },
   };
 }
