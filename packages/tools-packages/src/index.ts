@@ -14,6 +14,7 @@ export {
 export type { JSONValidatorOptions } from "./json.ts";
 export {
   createJSONValidator,
+  getJSONPathSegments,
   isJSONValidator,
   compareValues,
   setDefaultValidationOptions,

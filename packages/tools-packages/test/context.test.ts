@@ -1,4 +1,5 @@
-import { deepEqual, equal, notEqual, ok } from "node:assert/strict";
+import type { Yarn } from "@yarnpkg/types";
+import { deepEqual, equal, notEqual, ok, throws } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -8,7 +9,6 @@ import {
   createPackageContext,
   createPackageValidationContext,
   createYarnWorkspaceContext,
-  type YarnWorkspace,
 } from "../src/context.ts";
 import { isJSONValidator } from "../src/json.ts";
 import type { JSONValue, JSONValuePath } from "../src/types.ts";
@@ -178,27 +178,42 @@ describe("asPackageValidationContext", () => {
 });
 
 describe("createYarnWorkspaceContext", () => {
-  function makeFakeWorkspace(cwd: string, manifest: object): YarnWorkspace {
+  function makeFakeWorkspace(
+    cwd: string,
+    manifest: object
+  ): Yarn.Constraints.Workspace {
     return {
       cwd,
       ident: null,
-      manifest: manifest as YarnWorkspace["manifest"],
+      manifest,
+      pkg: {} as Yarn.Constraints.Workspace["pkg"],
       set: mock.fn() as unknown as (
         path: JSONValuePath,
         value: JSONValue
       ) => void,
       unset: mock.fn() as unknown as (path: JSONValuePath) => void,
       error: mock.fn() as unknown as (message: string) => void,
-    };
+    } as unknown as Yarn.Constraints.Workspace;
   }
 
-  it("forwards set() to the workspace for non-undefined values", () => {
+  it("forwards set() to the workspace as a normalized array path", () => {
     const w = makeFakeWorkspace("/some/path", { name: "x" });
     const ctx = createYarnWorkspaceContext(w);
     ctx.enforce("version", "1.0.0");
     const setMock = w.set as unknown as ReturnType<typeof mock.fn>;
     equal(setMock.mock.callCount(), 1);
-    deepEqual(setMock.mock.calls[0].arguments, ["version", "1.0.0"]);
+    deepEqual(setMock.mock.calls[0].arguments, [["version"], "1.0.0"]);
+  });
+
+  it("splits dotted string paths before forwarding to set()", () => {
+    const w = makeFakeWorkspace("/some/path", { name: "x" });
+    const ctx = createYarnWorkspaceContext(w);
+    ctx.enforce("scripts.build", "rnx-kit-scripts build");
+    const setMock = w.set as unknown as ReturnType<typeof mock.fn>;
+    deepEqual(setMock.mock.calls[0].arguments, [
+      ["scripts", "build"],
+      "rnx-kit-scripts build",
+    ]);
   });
 
   it("forwards unset() to the workspace for undefined values", () => {
@@ -247,5 +262,16 @@ describe("createYarnWorkspaceContext", () => {
     const ctx = createYarnWorkspaceContext(w);
     notEqual(isJSONValidator(ctx), true);
     ok(typeof ctx.enforce === "function");
+  });
+
+  it("rejects prototype-pollution paths before forwarding to the workspace", () => {
+    const w = makeFakeWorkspace("/some/path", { name: "x" });
+    const ctx = createYarnWorkspaceContext(w);
+    throws(() => ctx.enforce("__proto__.polluted", "yes"));
+    throws(() => ctx.enforce(["constructor", "prototype", "x"], 1));
+    const setMock = w.set as unknown as ReturnType<typeof mock.fn>;
+    const unsetMock = w.unset as unknown as ReturnType<typeof mock.fn>;
+    equal(setMock.mock.callCount(), 0);
+    equal(unsetMock.mock.callCount(), 0);
   });
 });

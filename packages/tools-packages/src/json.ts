@@ -123,6 +123,29 @@ function createJSONEditingContext(
 }
 
 /**
+ * Utility function to safely parse a JSONValuePath into an array of path segments, while blocking potentially dangerous segments
+ * such as "__proto__", "constructor", and "prototype" which could lead to prototype pollution vulnerabilities if allowed
+ * to be walked or set on the JSON object.
+ * @param path the JSONValuePath to parse into segments
+ * @returns an array of path segments if the path is valid
+ * @throws an error if any blocked segments are found in the path
+ */
+export const getJSONPathSegments = (() => {
+  const blocked = new Set(["__proto__", "constructor", "prototype"]);
+  return (path: JSONValuePath): string[] => {
+    const segments = Array.isArray(path) ? path : path.split(".");
+    for (const segment of segments) {
+      if (blocked.has(segment)) {
+        throw new Error(
+          `Blocked JSON path segment: ${segment} in "${segments.join(".")}"`
+        );
+      }
+    }
+    return segments;
+  };
+})();
+
+/**
  * Creates a JSON validator for a given JSON object and options. The returned validator
  * provides methods to enforce values at specific paths, report errors, track changes,
  * and finalize the validation process, optionally writing changes back to disk if fixes
@@ -145,7 +168,7 @@ export function createJSONValidator<T extends object = object>(
 
   // enforce a value at a given path in the JSON object
   function enforce(path: JSONValuePath, value: JSONValue | undefined) {
-    const pathArray = Array.isArray(path) ? path : path.split(".");
+    const pathArray = getJSONPathSegments(path);
     if (value === undefined) {
       unsetValue(pathArray, context);
     } else {

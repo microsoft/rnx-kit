@@ -4,6 +4,7 @@ import type { Yarn } from "@yarnpkg/types";
 import path from "node:path";
 import {
   createJSONValidator,
+  getJSONPathSegments,
   isJSONValidator,
   type JSONValidatorOptions,
 } from "./json.ts";
@@ -101,10 +102,11 @@ export function createYarnWorkspaceContext<
   return {
     ...createPackageContext(workspace.cwd, workspace.manifest as TManifest),
     enforce(path: JSONValuePath, value: JSONValue | undefined): void {
+      const safePath = getJSONPathSegments(path);
       if (value === undefined) {
-        workspace.unset(path);
+        workspace.unset(safePath);
       } else {
-        workspace.set(path, value);
+        workspace.set(safePath, value);
       }
     },
     changed: yarnChangedStub,
