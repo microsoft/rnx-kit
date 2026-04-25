@@ -14,13 +14,6 @@ export type PackageContext<
 
   /** loaded package manifest, templated to allow type injection */
   readonly manifest: TManifest;
-
-  /**
-   * data storage by symbol value is allowed to have package specific values stored here. This allows
-   * other packages to attach custom data to a package context in a way that is guaranteed to be unique
-   * and not collide with any other properties on the package context.
-   */
-  [key: symbol]: unknown;
 };
 
 /**
@@ -102,6 +95,13 @@ export type PackageValidationContext<
 export type PackageInfo = PackageContext & {
   /** Is this a workspace package */
   workspace?: boolean;
+
+  /**
+   * data storage by symbol value is allowed to have package specific values stored here. This allows
+   * other packages to attach custom data to a package context in a way that is guaranteed to be unique
+   * and not collide with any other properties on the package context.
+   */
+  [key: symbol]: unknown;
 };
 
 /**

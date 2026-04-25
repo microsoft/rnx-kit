@@ -18,12 +18,29 @@ export function createPackageValueLoader<T>(
   friendlyName: string,
   initialize: (pkgInfo: PackageContext) => T
 ): GetPackageValue<T> {
+  return createValueLoader<PackageContext, T>(friendlyName, initialize);
+}
+
+/**
+ * Helper function to create a typed accessor function for getting and storing information
+ * in any object. This can be whatever you want, the key is only created and stored in
+ * the generated function so there are no collisions.
+ *
+ * @param friendlyName name used to create a symbol key for the package info
+ * @param initialize function used to initialize the value stored in the key
+ * @returns a function to retrieve the value from the object, if unset the initialize function is called
+ */
+export function createValueLoader<TObj extends object, T>(
+  friendlyName: string,
+  initialize: (obj: TObj) => T
+): (obj: TObj) => T {
   const symbolKey = Symbol(friendlyName);
-  return (pkgInfo: PackageContext) => {
-    if (!(symbolKey in pkgInfo)) {
-      pkgInfo[symbolKey] = initialize(pkgInfo);
+  type ObjCast = { [symbolKey]: T };
+  return (obj: TObj) => {
+    if (!(symbolKey in obj)) {
+      (obj as ObjCast)[symbolKey] = initialize(obj);
     }
-    return pkgInfo[symbolKey] as T;
+    return (obj as ObjCast)[symbolKey];
   };
 }
 
@@ -46,10 +63,9 @@ export function createPackageValueAccessors<T>(
  * @param friendlyName name used to create a symbol key for the object
  * @returns a set of accessors for the symbol key
  */
-export function createObjectValueAccessors<
-  TObj extends Record<string | symbol, unknown>,
-  TVal,
->(friendlyName: string): ObjectValueAccessors<TObj, TVal> {
+export function createObjectValueAccessors<TObj extends object, TVal>(
+  friendlyName: string
+): ObjectValueAccessors<TObj, TVal> {
   const symbolKey = Symbol(friendlyName);
   type ObjCast = { [symbolKey]?: TVal };
   return {

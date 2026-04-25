@@ -2,6 +2,7 @@ export {
   createObjectValueAccessors,
   createPackageValueAccessors,
   createPackageValueLoader,
+  createValueLoader,
 } from "./accessors.ts";
 
 export {
