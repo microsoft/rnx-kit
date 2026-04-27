@@ -8,10 +8,10 @@ edition = "2021"
 
 [dependencies]
 rayon = "1.10.0"
-swc_common = "0.33.22"
-swc_ecma_parser = "0.143.12"
-swc_ecma_visit = "0.98.7"
-swc_ecmascript = "0.239.21"
+swc_common = "0.40.0"
+swc_ecma_parser = "0.152.0"
+swc_ecma_visit = "0.107.0"
+swc_ecmascript = "0.257.0"
 walkdir = "2.5.0"
 
 [profile.release]
