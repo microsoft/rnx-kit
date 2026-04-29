@@ -17,7 +17,7 @@ import { ELLIPSIS, SEPARATORS, SRC_DIRS } from "./const.ts";
  * @returns The shortened file path
  */
 export function shortenPath(path: string, segments = 3): string {
-  let last = 0;
+  let last = -1;
   for (let i = path.length - 1; i > ELLIPSIS.length; i--) {
     if (SEPARATORS.includes(path[i])) {
       segments--;
@@ -25,7 +25,7 @@ export function shortenPath(path: string, segments = 3): string {
         // check the last slice to see if it starts with a known source dir, if so keep iterating.
         if (last > i && SRC_DIRS.includes(path.slice(i + 1, last))) {
           segments++;
-          last = 0;
+          last = -1;
         } else {
           return ELLIPSIS + path.slice(i);
         }
