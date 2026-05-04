@@ -1,5 +1,12 @@
 # @rnx-kit/tools-performance
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [0de79b8]
+  - @rnx-kit/tools-formatting@0.0.2
+
 ## 0.1.1
 
 ### Patch Changes
