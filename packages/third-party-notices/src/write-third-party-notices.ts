@@ -108,6 +108,18 @@ export async function getCurrentPackageId(
   return undefined;
 }
 
+function isPackageManifest(manifest: ReturnType<typeof readPackage>): boolean {
+  return Boolean(
+    manifest.license ||
+    manifest.licenses ||
+    manifest.files ||
+    manifest.exports ||
+    manifest.dependencies ||
+    manifest.peerDependencies ||
+    manifest.devDependencies
+  );
+}
+
 // helper functions
 export function normalizePath(p: string, currentPackageId?: string): string {
   let result = p.replaceAll("webpack:///", "");
@@ -159,10 +171,20 @@ export function splitSourcePath(rootPath: string, p: string): string[] {
 
   // This is most likely an absolute file path e.g.,
   // `/~/node_modules/.store/react-native-virtual-3e97acc5aa/package/index.js`
-  const pkgRoot = findPackageDir(p);
-  if (pkgRoot) {
+  let pkgRoot = findPackageDir(p);
+  while (pkgRoot) {
     const manifest = readPackage(pkgRoot);
-    return [manifest.name, pkgRoot];
+    // Retry if this package manifest seems to be a submodule manifest
+    if (isPackageManifest(manifest)) {
+      return [manifest.name, pkgRoot];
+    }
+
+    const parentDir = path.dirname(pkgRoot);
+    if (parentDir === pkgRoot) {
+      break;
+    }
+
+    pkgRoot = findPackageDir(parentDir);
   }
 
   throw new Error(`Could not parse module: ${p}`);
