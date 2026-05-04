@@ -3,6 +3,7 @@ import {
   type Locator,
   type Package,
   type ResolveOptions,
+  structUtils,
 } from "@yarnpkg/core";
 import { type PortablePath } from "@yarnpkg/fslib";
 import { coerceDescriptorTo, coerceLocatorTo } from "./utilities.ts";
@@ -59,6 +60,12 @@ export class ExternalWorkspace {
     descriptor: Descriptor,
     resolverType: ResolverType
   ) {
+    // Purely-local: no chain to declare. The local resolver's getCandidates
+    // short-circuits straight to an external: locator, so yarn doesn't need
+    // to resolve fallback:/npm: prerequisites.
+    if (resolverType === "local" && this.isLocal) {
+      return {};
+    }
     const childIndex = this.indexFromResolverType(resolverType) + 1;
     return {
       [this.dependentKeys[childIndex]]: this.transformDescriptor(
@@ -75,6 +82,20 @@ export class ExternalWorkspace {
     resolverType: ResolverType
   ) {
     const index = this.indexFromResolverType(resolverType);
+
+    // Purely-local fast path: when this is the local resolver call AND we have a
+    // localPath, skip the fallback/npm chain entirely. The chain exists to allow
+    // semver coalescing against npm and fallback when packages also live remote;
+    // for purely-internal externals (never published to npm) the chain hard-fails
+    // at the npm step. A direct external: locator is sufficient — the fetcher
+    // already resolves it via workspace.localPath.
+    if (resolverType === "local" && this.isLocal) {
+      const locator = structUtils.makeLocator(descriptor, descriptor.range);
+      this.trace(
+        `${this.prettyName}: getCandidates: (local) short-circuited to ${descriptor.range} (purely-local)`
+      );
+      return [locator];
+    }
 
     // set up the child dependencies and package, if it is available
     const [childDependencies, childPackage] = this.getNextDependencies(
