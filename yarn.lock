@@ -6064,8 +6064,8 @@ __metadata:
     "@rnx-kit/reporter": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/test-fixtures": "npm:*"
-    "@rnx-kit/tools-formatting": "npm:^0.0.1"
-    "@rnx-kit/tools-performance": "npm:^0.1.1"
+    "@rnx-kit/tools-formatting": "npm:^0.0.2"
+    "@rnx-kit/tools-performance": "npm:^0.1.2"
     "@rnx-kit/tsconfig": "npm:*"
     "@swc/core": "npm:^1.15.24"
     "@types/babel__core": "npm:^7.20.0"
@@ -6095,7 +6095,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-formatting@npm:^0.0.1, @rnx-kit/tools-formatting@workspace:incubator/tools-formatting":
+"@rnx-kit/tools-formatting@npm:^0.0.2, @rnx-kit/tools-formatting@workspace:incubator/tools-formatting":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-formatting@workspace:incubator/tools-formatting"
   dependencies:
@@ -6138,12 +6138,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-performance@npm:^0.1.1, @rnx-kit/tools-performance@workspace:incubator/tools-performance":
+"@rnx-kit/tools-performance@npm:^0.1.2, @rnx-kit/tools-performance@workspace:incubator/tools-performance":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-performance@workspace:incubator/tools-performance"
   dependencies:
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-formatting": "npm:^0.0.1"
+    "@rnx-kit/tools-formatting": "npm:^0.0.2"
     "@rnx-kit/tsconfig": "npm:*"
     metro-config: "npm:^0.84.0"
   languageName: unknown
