@@ -34,6 +34,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
+    "@rnx-kit/tools-filesystem": "^0.2.0",
     "@rnx-kit/tools-node": "^3.0.4",
     "@rnx-kit/tools-workspaces": "^0.2.1",
     "@rnx-kit/types-node": "^1.0.0"
@@ -41,7 +42,16 @@
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^24.0.0"
+    "@types/node": "^24.0.0",
+    "@yarnpkg/types": "^4.0.0"
+  },
+  "peerDependencies": {
+    "@yarnpkg/types": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@yarnpkg/types": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=16.17"
