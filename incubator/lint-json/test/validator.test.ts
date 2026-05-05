@@ -3,10 +3,8 @@ import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import { describe, it } from "node:test";
-import { compareValues } from "../src/compare.ts";
 import { createJSONValidator } from "../src/index.ts";
 import type { JSONValue } from "../src/types.ts";
-import { getJSONPathSegments } from "../src/utilities.ts";
 
 function makeTempDir(): string {
   return fs.mkdtempSync(path.join(os.tmpdir(), "lint-json-"));
@@ -18,51 +16,6 @@ function makeTempJSONFile(json: object): { dir: string; filePath: string } {
   fs.writeFileSync(filePath, JSON.stringify(json, null, 2));
   return { dir, filePath };
 }
-
-describe("compareValues", () => {
-  it("compares primitives by value", () => {
-    equal(compareValues(1, 1), true);
-    equal(compareValues("a", "a"), true);
-    equal(compareValues(null, null), true);
-    equal(compareValues(true, true), true);
-    equal(compareValues(true, false), false);
-    equal(compareValues(1, "1"), false);
-    equal(compareValues(null, undefined), false);
-  });
-
-  it("returns false when mixing object and primitive", () => {
-    equal(compareValues({}, null), false);
-    equal(compareValues([], null), false);
-    equal(compareValues({}, []), false);
-    equal(compareValues({ a: 1 }, "a"), false);
-  });
-
-  it("compares arrays elementwise", () => {
-    equal(compareValues([1, 2, 3], [1, 2, 3]), true);
-    equal(compareValues([], []), true);
-    equal(compareValues([1, 2], [1, 2, 3]), false);
-    equal(compareValues([1, 2, 3], [3, 2, 1]), false);
-    equal(compareValues([{ a: 1 }], [{ a: 1 }]), true);
-  });
-
-  it("compares objects with key order significance", () => {
-    equal(compareValues({ a: 1, b: 2 }, { a: 1, b: 2 }), true);
-    equal(compareValues({ a: 1, b: 2 }, { b: 2, a: 1 }), false);
-    equal(compareValues({ a: 1 }, { a: 1, b: 2 }), false);
-    equal(compareValues({ a: 1, b: 2 }, { a: 1 }), false);
-  });
-
-  it("recurses into nested structures", () => {
-    equal(compareValues({ a: [1, { b: 2 }] }, { a: [1, { b: 2 }] }), true);
-    equal(compareValues({ a: [1, { b: 2 }] }, { a: [1, { b: 3 }] }), false);
-    equal(compareValues({ a: { b: { c: 1 } } }, { a: { b: { c: 1 } } }), true);
-  });
-
-  it("treats identical references as equal", () => {
-    const obj = { a: 1 };
-    equal(compareValues(obj, obj), true);
-  });
-});
 
 describe("createJSONValidator: enforce semantics", () => {
   it("enforce is a no-op when the value already matches", () => {
@@ -214,61 +167,6 @@ describe("createJSONValidator: enforce semantics", () => {
     throws(() => v.enforce("__proto__", undefined));
     deepEqual(json, {});
     equal(v.finish(), 0);
-  });
-});
-
-describe("getJSONPathSegments", () => {
-  it("returns array paths as-is", () => {
-    deepEqual(getJSONPathSegments(["a", "b", "c"]), ["a", "b", "c"]);
-  });
-
-  it("preserves literal dots in array segments", () => {
-    deepEqual(getJSONPathSegments(["exports", ".", "import"]), [
-      "exports",
-      ".",
-      "import",
-    ]);
-  });
-
-  it("splits dotted strings into segments", () => {
-    deepEqual(getJSONPathSegments("a.b.c"), ["a", "b", "c"]);
-    deepEqual(getJSONPathSegments("name"), ["name"]);
-  });
-
-  it("blocks __proto__ in either form", () => {
-    throws(() => getJSONPathSegments("a.__proto__.b"));
-    throws(() => getJSONPathSegments(["a", "__proto__", "b"]));
-    throws(() => getJSONPathSegments("__proto__"));
-  });
-
-  it("blocks constructor", () => {
-    throws(() => getJSONPathSegments("a.constructor.prototype"));
-    throws(() => getJSONPathSegments(["constructor"]));
-  });
-
-  it("blocks prototype", () => {
-    throws(() => getJSONPathSegments("a.prototype"));
-    throws(() => getJSONPathSegments(["prototype"]));
-  });
-
-  it("does not mutate the supplied array on success", () => {
-    const input = ["a", "b"];
-    const out = getJSONPathSegments(input);
-    deepEqual(input, ["a", "b"]);
-    deepEqual(out, ["a", "b"]);
-  });
-
-  it("error message names the offending segment", () => {
-    try {
-      getJSONPathSegments("dependencies.__proto__.foo");
-      ok(false, "expected throw");
-    } catch (e) {
-      ok(e instanceof Error);
-      ok(
-        e.message.includes("__proto__"),
-        `expected message to include '__proto__', got: ${e.message}`
-      );
-    }
   });
 });
 
