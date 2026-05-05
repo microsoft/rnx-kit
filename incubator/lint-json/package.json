@@ -1,0 +1,43 @@
+{
+  "name": "@rnx-kit/lint-json",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - lint-json",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/lint-json#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/lint-json"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/tools-filesystem": "^0.2.0",
+    "@rnx-kit/tools-formatting": "^0.0.1"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0"
+  },
+  "engines": {
+    "node": ">=22.11"
+  },
+  "experimental": true
+}
