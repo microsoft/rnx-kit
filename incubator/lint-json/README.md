@@ -51,12 +51,12 @@ mismatches are applied to the in-memory object and the file is rewritten;
   `jsonPath` is read from disk.
 - **`options`** — see below. All optional.
 
-| Option        | Type                        | Default                              |
-| ------------- | --------------------------- | ------------------------------------ |
-| `fix`         | `boolean`                   | `false`                              |
-| `header`      | `string`                    | `"errors in: <relative path>"`       |
-| `footer`      | `string`                    | _(none)_                             |
-| `reportError` | `(message: string) => void` | `console.error`                      |
+| Option        | Type                        | Default                        |
+| ------------- | --------------------------- | ------------------------------ |
+| `fix`         | `boolean`                   | `false`                        |
+| `header`      | `string`                    | `"errors in: <relative path>"` |
+| `footer`      | `string`                    | _(none)_                       |
+| `reportError` | `(message: string) => void` | `console.error`                |
 
 ### `validator.enforce(path, value)`
 

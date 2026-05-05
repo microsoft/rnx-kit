@@ -275,9 +275,13 @@ describe("getJSONPathSegments", () => {
 describe("createJSONValidator: error and finish reporting", () => {
   it("error() flips finish() to 1 and is included in report", () => {
     const errors: string[] = [];
-    const v = createJSONValidator("ignored.json", {}, {
-      reportError: (m) => errors.push(m),
-    });
+    const v = createJSONValidator(
+      "ignored.json",
+      {},
+      {
+        reportError: (m) => errors.push(m),
+      }
+    );
     v.error("custom error");
     equal(v.finish(), 1);
     equal(errors.length, 1);
