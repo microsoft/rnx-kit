@@ -7371,10 +7371,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xmldom/xmldom@npm:^0.7.7":
-  version: 0.7.13
-  resolution: "@xmldom/xmldom@npm:0.7.13"
-  checksum: 10c0/cb02e4e8d986acf18578a5f25d1bce5e18d08718f40d8a0cdd922a4c112c8e00daf94de4e43f9556ed147c696b135f2ab81fa9a2a8a0416f60af15d156b60e40
+"@xmldom/xmldom@npm:^0.8.13":
+  version: 0.8.13
+  resolution: "@xmldom/xmldom@npm:0.8.13"
+  checksum: 10c0/06405ee6fffba631abf715a305ace338420ebcea8baf1317f19f2752f5c505952b7df45159908e7be8451a42faa54326b780616ab4d08242b20477b2973da24b
   languageName: node
   linkType: hard
 
@@ -10574,12 +10574,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-xml-builder@npm:^1.1.5":
-  version: 1.1.5
-  resolution: "fast-xml-builder@npm:1.1.5"
+"fast-xml-builder@npm:^1.1.7":
+  version: 1.1.8
+  resolution: "fast-xml-builder@npm:1.1.8"
   dependencies:
     path-expression-matcher: "npm:^1.1.3"
-  checksum: 10c0/b814ba5559cb3140de46d2846045607ab4d4c0bfc312a49d22c91efb9f7cd7004971314841e5823eeb467a5bf403e3ade8371b7912200e111df027d42ae51715
+  checksum: 10c0/4dbe486abbbece4829b7d137d2b304e2b5f7791a466f35ac99195a3e14da1f34b229dee41e48028570e052831ccbd9df911274a8877d1418ccaffcce8fb5948a
   languageName: node
   linkType: hard
 
@@ -10594,17 +10594,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-xml-parser@npm:^5.3.4, fast-xml-parser@npm:^5.3.6":
-  version: 5.7.2
-  resolution: "fast-xml-parser@npm:5.7.2"
+"fast-xml-parser@npm:^5.3.4, fast-xml-parser@npm:^5.3.6, fast-xml-parser@npm:^5.7.0":
+  version: 5.7.3
+  resolution: "fast-xml-parser@npm:5.7.3"
   dependencies:
     "@nodable/entities": "npm:^2.1.0"
-    fast-xml-builder: "npm:^1.1.5"
+    fast-xml-builder: "npm:^1.1.7"
     path-expression-matcher: "npm:^1.5.0"
     strnum: "npm:^2.2.3"
   bin:
     fxparser: src/cli/cli.js
-  checksum: 10c0/d48439ce0700add82f5e7c6ccc5a1f06483beb7cd8e88caa83c6406843e52f14988e60d05cbb3a86ffe07e073807674c807e0764d94a280e1c96d7e2011dae8e
+  checksum: 10c0/eeb802855e852ce16121396297f04131c6dbc74f863be94f19e26e386656bdb31677af469ddc6627983a48b99d8842888460ac5413063cb648fde547bb579978
   languageName: node
   linkType: hard
 
@@ -15692,17 +15692,16 @@ __metadata:
   linkType: hard
 
 "react-native-test-app@npm:^5.0.9, react-native-test-app@npm:^5.1.2":
-  version: 5.1.2
-  resolution: "react-native-test-app@npm:5.1.2"
+  version: 5.1.4
+  resolution: "react-native-test-app@npm:5.1.4"
   dependencies:
     "@isaacs/cliui": "npm:^9.0.0"
     "@rnx-kit/react-native-host": "npm:^0.5.15"
     "@rnx-kit/tools-react-native": "npm:^2.1.0"
     ajv: "npm:^8.0.0"
-    fast-xml-parser: "npm:^5.3.4"
+    fast-xml-parser: "npm:^5.7.0"
     prompts: "npm:^2.4.0"
-    semver: "npm:^7.3.5"
-    uuid: "npm:^11.0.0"
+    semver: "npm:^7.5.2"
   peerDependencies:
     "@callstack/react-native-visionos": 0.76 - 0.79
     "@expo/config-plugins": ">=5.0"
@@ -15724,7 +15723,7 @@ __metadata:
     init: scripts/init.mjs
     init-test-app: scripts/init.mjs
     install-windows-test-app: windows/app.mjs
-  checksum: 10c0/f547141ad1782ada5ef8ed94e45b6fc4b013f2e8f58402cb3300701e92b6f26ed50c0ed6ff75903dbe0d4f6349459e6ea51508d0de832c26099bc205221c9893
+  checksum: 10c0/7dc5d9621767a4f56d831e9639b09facffbcaa97d57160fced1e70c378b53c5459f88f67ade25c2c23ef250634eec861765c2dbb0dfb5529f19152ba54b7e559
   languageName: node
   linkType: hard
 
@@ -17832,15 +17831,6 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: 10c0/02ba649de1b7ca8854bfe20a82f1dfbdda3fb57a22ab4a8972a63a34553cf7aa51bc9081cf7e001b035b88186d23689d69e71b510e610a09a4c66f68aa95b672
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^11.0.0":
-  version: 11.0.5
-  resolution: "uuid@npm:11.0.5"
-  bin:
-    uuid: dist/esm/bin/uuid
-  checksum: 10c0/6f59f0c605e02c14515401084ca124b9cb462b4dcac866916a49862bcf831874508a308588c23a7718269226ad11a92da29b39d761ad2b86e736623e3a33b6e7
   languageName: node
   linkType: hard
 

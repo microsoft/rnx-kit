@@ -57,6 +57,8 @@
   "resolutions": {
     "@microsoft/eslint-plugin-sdl/eslint-plugin-react": "^7.37.3",
     "@microsoft/eslint-plugin-sdl/eslint-plugin-security": "^1.4.0",
+    "@react-native-windows/cli/@xmldom/xmldom": "^0.8.13",
+    "@react-native-windows/telemetry/@xmldom/xmldom": "^0.8.13",
     "@rnx-kit/react-native-host": "workspace:*",
     "node-gyp": "ignore:",
     "nx/minimatch": "^10.2.4"
