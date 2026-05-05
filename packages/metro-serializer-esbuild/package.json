@@ -38,7 +38,7 @@
     "@rnx-kit/tools-node": "^3.0.4",
     "@rnx-kit/tools-react-native": "^2.3.3",
     "@rnx-kit/types-metro-serializer-esbuild": "^1.0.0",
-    "esbuild": "^0.27.1",
+    "esbuild": "^0.28.0",
     "esbuild-plugin-lodash": "^1.2.0"
   },
   "devDependencies": {
