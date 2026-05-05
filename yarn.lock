@@ -5493,6 +5493,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/lint-json@workspace:incubator/lint-json":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/lint-json@workspace:incubator/lint-json"
+  dependencies:
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-filesystem": "npm:^0.2.0"
+    "@rnx-kit/tools-formatting": "npm:^0.0.1"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@types/node": "npm:^24.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/lint-lockfile@workspace:incubator/lint-lockfile":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/lint-lockfile@workspace:incubator/lint-lockfile"
