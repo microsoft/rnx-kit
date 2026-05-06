@@ -71,11 +71,17 @@ function loadBaseConfig(
     const pkgInfo = getPackageInfoFromPath(spec);
     baseConfig = getKitConfigFromPackageInfo(pkgInfo);
   } else {
-    // otherwise require the file directly
-    baseConfig = require(spec);
+    // require the file, then recurse so that any `extends` declared in the
+    // loaded module is resolved relative to its own directory
+    const loaded = require(spec) as KitConfig;
+    baseConfig = loadBaseConfig(loaded, path.dirname(spec)) ?? {};
   }
 
-  const mergedConfig = merge(baseConfig, config);
+  // Clone the base before merging: `baseConfig` may be a cached object
+  // (require cache for JS files, package-info cache for package.json refs),
+  // and `lodash.merge` mutates its target — without the clone, every
+  // subsequent extender would see the previous extender's overrides.
+  const mergedConfig = merge(structuredClone(baseConfig), config);
   delete mergedConfig["extends"];
   return mergedConfig;
 }
