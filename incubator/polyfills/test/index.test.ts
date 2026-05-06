@@ -1,10 +1,14 @@
 import * as babel from "@babel/core";
 import { deepEqual, equal, fail, match } from "node:assert/strict";
+import { createRequire } from "node:module";
 import * as path from "node:path";
 import { afterEach, describe, it } from "node:test";
 import { URL, fileURLToPath } from "node:url";
 
 describe("polyfills", () => {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const require = createRequire(import.meta.url);
+
   const currentWorkingDir = process.cwd();
   const transformOptions = {
     plugins: [require(path.join(__dirname, "..", "lib", "index.js"))],

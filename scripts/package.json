@@ -30,7 +30,6 @@
     "jest": "^29.2.1",
     "markdown-table": "^3.0.0",
     "oxfmt": "catalog:",
-    "tsx": "^4.15.0",
     "typedoc": "^0.28.0",
     "typescript": "catalog:",
     "yargs": "^16.0.0"

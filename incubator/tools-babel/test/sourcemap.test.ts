@@ -1,6 +1,3 @@
-import { transformFromAstSync } from "@babel/core";
-import type { TransformOptions } from "@babel/core";
-import { transformSync as swcTransformSync } from "@swc/core";
 /**
  * Source map tests: verify that when SWC strips TypeScript before OXC parsing,
  * passing the SWC source map as inputSourceMap to Babel produces a final
@@ -11,13 +8,18 @@ import { transformSync as swcTransformSync } from "@swc/core";
  * 2. Babel's inputSourceMap composes the SWC map with its own output map
  * 3. The composed map traces output positions back to original TS lines
  */
+import { transformFromAstSync } from "@babel/core";
+import type { TransformOptions } from "@babel/core";
+import { transformSync as swcTransformSync } from "@swc/core";
 import { ok } from "node:assert/strict";
+import { createRequire } from "node:module";
 import path from "node:path";
-import { describe, it } from "node:test";
-import { makeTransformerArgs } from "../src/options";
-import { oxcParseToAst } from "../src/parse";
-import type { TransformerSettings } from "../src/types";
-import { getRealWorldFixtures } from "./fixtures";
+import { after, before, describe, it } from "node:test";
+import { URL } from "node:url";
+import { makeTransformerArgs } from "../src/options.ts";
+import { oxcParseToAst } from "../src/parse.ts";
+import type { TransformerSettings } from "../src/types.ts";
+import { getRealWorldFixtures } from "./fixtures.ts";
 
 // Use a simple VLQ decoder to avoid needing @jridgewell/trace-mapping as a dep.
 // We only need originalPositionFor which we implement inline.
@@ -197,6 +199,17 @@ function transformWithSwcMap(file: string) {
 
 describe("Source maps with SWC pre-transform", () => {
   const files = fixtures.getFiles("ts");
+
+  before(() => {
+    global.require = createRequire(
+      new URL("../src/config.ts", import.meta.url)
+    );
+  });
+
+  after(() => {
+    // @ts-expect-error reset `require`
+    global.require = undefined;
+  });
 
   it("realworld files transform through SWC → OXC → Babel", () => {
     let success = 0;

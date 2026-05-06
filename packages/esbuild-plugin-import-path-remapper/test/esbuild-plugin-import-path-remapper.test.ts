@@ -1,7 +1,6 @@
-import esbuild from "esbuild";
-import { doesNotMatch, match } from "node:assert/strict";
-import { describe, it } from "node:test";
-
+const esbuild = require("esbuild");
+const { doesNotMatch, match } = require("node:assert/strict");
+const { describe, it } = require("node:test");
 const ImportPathRemapperPlugin = require("../src/index.ts");
 
 describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {

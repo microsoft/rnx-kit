@@ -24,14 +24,6 @@ function useJest(manifest, cwd) {
   return Boolean(manifest.jest) || fs.existsSync(cwd + "/jest.config.js");
 }
 
-/**
- * @param {Record<string, unknown>} manifest
- * @returns {boolean}
- */
-function useTsx(manifest) {
-  return manifest.type === "commonjs";
-}
-
 export class TestCommand extends Command {
   /** @override */
   static paths = [["test"]];
@@ -62,14 +54,12 @@ export class TestCommand extends Command {
 
     const tests =
       this.args.length > 0 ? this.args : fs.globSync("test/**/*.test.ts");
-    return useTsx(manifest)
-      ? await execute(
-          process.argv0,
-          "--import",
-          import.meta.resolve("tsx"),
-          "--test",
-          ...tests
-        )
-      : await execute(process.argv0, "--test", ...tests);
+    return await execute(
+      process.argv0,
+      "--disable-warning",
+      "MODULE_TYPELESS_PACKAGE_JSON",
+      "--test",
+      ...tests
+    );
   }
 }
