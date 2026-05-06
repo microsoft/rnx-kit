@@ -47,7 +47,7 @@ export function createJSONValidator(
   const context: JSONEditingContext = {
     fix: options.fix ?? false,
     raw: json ?? readJSONFileSync(jsonPath),
-    dirty: () => {
+    dirty: (_path: string[]) => {
       changes = true;
     },
     error: (message: string) => {
@@ -104,7 +104,7 @@ function unsetValue(path: string[], context: JSONEditingContext) {
       const valueKey = path[path.length - 1];
       if (valueKey in parent) {
         if (context.fix) {
-          context.dirty();
+          context.dirty(path);
           delete parent[valueKey];
         } else {
           context.error(valueMessage(path, undefined, parent[valueKey]));
@@ -135,7 +135,7 @@ function setValue(
     const currentValue = parent[key];
     if (!compareValues(currentValue, value)) {
       if (context.fix) {
-        context.dirty();
+        context.dirty(path);
         parent[key] = value;
       } else {
         context.error(valueMessage(path, value, currentValue));
@@ -164,7 +164,7 @@ function walkPath(
     const segment = path[i];
     if (!isJSONObject(current[segment])) {
       if (ensureExists && context.fix) {
-        context.dirty();
+        context.dirty(path);
         current[segment] = {};
       } else {
         return undefined;

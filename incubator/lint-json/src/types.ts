@@ -34,9 +34,10 @@ export type JSONValidator = {
 
   /**
    * JSON object being edited by the validator. This is the object that will be written out
-   * to the JSON file if fix mode is enabled and changes are made.
+   * to the JSON file if fix mode is enabled and changes are made. It is readonly as it can be modified internally
+   * but should be edited within the same object.
    */
-  raw: JSONObject;
+  readonly raw: JSONObject;
 
   /**
    * Enforce a value in the JSON file. This will either report an error in not in fix mode, or update the
@@ -57,8 +58,9 @@ export type JSONValidator = {
   /**
    * Mark the JSON as dirty, indicating that changes have been made to the JSON object and that fixes should
    * be written back to the JSON file when finish() is called if fix mode is enabled.
+   * @param path the path to the value that was modified
    */
-  dirty(): void;
+  dirty(path: string[]): void;
 
   /**
    * Finish the validation run and return the result of the JSON validation. If in fix mode and changes were made,

@@ -5525,11 +5525,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/lint-package@workspace:incubator/lint-package"
   dependencies:
+    "@rnx-kit/config": "npm:^0.7.5"
     "@rnx-kit/lint-json": "npm:^0.0.1"
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-filesystem": "npm:^0.2.0"
-    "@rnx-kit/tools-formatting": "npm:^0.0.1"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-kit-config": "npm:^1.0.0"
     "@rnx-kit/types-node": "npm:^1.0.0"
     "@types/node": "npm:^24.0.0"
     "@yarnpkg/types": "npm:^4.0.0"

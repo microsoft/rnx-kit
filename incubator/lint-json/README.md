@@ -81,6 +81,18 @@ calls failed.
 Returns `0` on success, `1` if any errors were recorded. In fix mode, writes
 the file before returning if any changes were made.
 
+### Other validator properties
+
+- **`validator.fix`** — `boolean`, read-only. The mode the validator is
+  running in.
+- **`validator.raw`** — `JSONObject`, read-only reference to the object being
+  validated. Property mutation by `enforce` happens in place; the field
+  itself can't be reassigned.
+- **`validator.dirty(path)`** — called internally when `enforce` mutates the
+  raw object in fix mode. Wrappers that delegate to this validator can
+  override `dirty` to react to specific paths (for example, invalidating a
+  cache when `path[0]` matches a watched key).
+
 ## Notes
 
 - **Object key order is significant.** Two objects with the same keys in a

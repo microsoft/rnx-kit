@@ -1,12 +1,12 @@
+import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
 import {
   createJSONValidator,
-  JSONObject,
+  type JSONObject,
   type JSONValidator,
-  type JSONValue,
-  type JSONValuePath,
 } from "@rnx-kit/lint-json";
-import { readJSONFileSync } from "@rnx-kit/tools-filesystem";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
+import type { Yarn } from "@yarnpkg/types";
 import fs from "node:fs";
 import path from "node:path";
 import { styleText } from "node:util";
@@ -24,66 +24,96 @@ import { createYarnWorkspaceValidator } from "./yarn.ts";
 export class PackageValidationContext<
   TManifest extends PackageManifest = PackageManifest,
 > implements JSONValidator {
-  /** JSON Validator signature, set up in the constructor */
-  readonly fix: boolean;
-  raw: JSONObject;
-  enforce: (path: JSONValuePath, value: JSONValue | undefined) => void;
-  error: (message: string) => void;
-  dirty: () => void;
-  finish: () => number;
-
-  readonly root: string;
-  readonly manifest: TManifest;
-  readonly name: string;
-
-  private delegates: Record<string, JSONValidator | null> = {};
-  private existingFiles: Record<string, boolean> = {};
-  private static JS_CONFIG_EXTENSIONS = [".js", ".cjs", ".mjs", ".ts"];
-
   /**
-   * Create a new PackageValidationContext for a given package root, optionally
-   * configured with a manifest, fix mode, or Yarn workspace instance.
+   * Create a package validation context for a given package root
    * @param root the root directory of the package
    * @param options optional options for additional configuration
+   * @returns a new PackageValidationContext instance
    */
-  constructor(root: string, options: PackageValidationOptions<TManifest> = {}) {
-    const { manifest, workspace, ...innerOptions } = options;
+  static create<TManifest extends PackageManifest = PackageManifest>(
+    root: string,
+    options: PackageValidationOptions<TManifest> = {}
+  ) {
+    root = path.resolve(root);
+    const { manifest, ...innerOptions } = options;
     const jsonPath = path.join(root, "package.json");
-    innerOptions.header ??=
-
-    const validator = workspace
-      ? createYarnWorkspaceValidator(workspace)
-      : createJSONValidator(jsonPath, manifest as JSONObject, innerOptions);
-
-    // delegate the JSONValidator methods to the inner validator
-    this.raw = validator.raw;
-    this.enforce = validator.enforce;
-    this.error = validator.error;
-    this.dirty = validator.dirty;
-    this.finish = validator.finish;
-
-    const { fix, footer } = options;
-    this.fix = fix ?? false;
-    this.root = path.resolve(root);
-    const manifestPath = path.join(root, "package.json");
-    this.manifest =
-      manifest ??
-      workspace?.manifest ??
-      readJSONFileSync<TManifest>(manifestPath);
-    this.name = this.manifest.name;
-    const header =
-      options.header ??
-      `${styleText("red", "errors")} in package ${this.name} (${path.relative(process.cwd(), this.root)}):`;
+    innerOptions.header ??= `${styleText("red", "errors")} in package at ${styleText("cyan", path.relative(process.cwd(), root))}:`;
+    const validator = createJSONValidator(
+      jsonPath,
+      manifest as JSONObject,
+      innerOptions
+    );
+    return new PackageValidationContext<TManifest>(root, validator);
   }
 
   /**
-   * Report an error encountered during validation. Errors are collected and
-   * reported when `finish` is called.
-   * @param message the error message to report
+   * Create a package validation context for a Yarn workspace
+   * @param workspace the Yarn workspace to validate
+   * @returns a new PackageValidationContext instance
    */
-  error(message: string) {
-    // route through the main validator so that all errors are collected in a single place
-    this.enforce.error(message);
+  static createYarn<TManifest extends PackageManifest = PackageManifest>(
+    workspace: Yarn.Constraints.Workspace
+  ) {
+    const validator = createYarnWorkspaceValidator(workspace);
+    return new PackageValidationContext<TManifest>(workspace.cwd, validator);
+  }
+
+  /**
+   * JSON Validator signature, associated with the package.json for this package.
+   * These will be set up in the constructor to route to either a standard JSON
+   * validator or a Yarn.Constraints.Workspace validator depending on the provided options.
+   */
+  get fix(): boolean {
+    return this._validator.fix;
+  }
+  get raw(): JSONObject {
+    return this._validator.raw;
+  }
+  get enforce(): JSONValidator["enforce"] {
+    return this._validator.enforce;
+  }
+  get error(): JSONValidator["error"] {
+    return this._validator.error;
+  }
+  dirty: JSONValidator["dirty"] = (pathParts: string[]) => {
+    if (pathParts.length > 0 && pathParts[0] === "rnx-kit") {
+      this._kitConfig = undefined;
+    }
+    return this._validator.dirty(pathParts);
+  };
+
+  /**
+   * Public readonly properties. The manifest will be a reference to the raw JSON object
+   * that is part of the JSONValidator signature.
+   */
+  readonly root: string;
+  get manifest(): TManifest {
+    return this.raw as TManifest;
+  }
+  get kitConfig(): KitConfig {
+    return (this._kitConfig ??=
+      getKitConfigFromPackageManifest(this.manifest, this.root) ?? {});
+  }
+
+  /**
+   * protected and private properties and helpers
+   */
+  protected static JS_CONFIG_EXTENSIONS = [".js", ".cjs", ".mjs", ".ts"];
+  protected readonly _validator: JSONValidator;
+  protected _delegates?: Record<string, JSONValidator | null>;
+  private _fileExists?: Record<string, boolean>;
+  private _attached?: Record<symbol, unknown>;
+  private _kitConfig?: KitConfig;
+
+  /**
+   * Create a new PackageValidationContext for a given package root, protected to ensure that the
+   * static factory methods are used to create instances
+   * @param root the root directory of the package
+   * @param validator the JSON validator for the package
+   */
+  protected constructor(root: string, validator: JSONValidator) {
+    this._validator = validator;
+    this.root = root;
   }
 
   /**
@@ -93,11 +123,15 @@ export class PackageValidationContext<
    * @returns a process exit code (1 if any errors were found, 0 otherwise)
    */
   finish(): number {
-    for (const delegate of Object.values(this.delegates)) {
-      delegate?.finish();
+    let code = 0;
+    if (this._delegates) {
+      for (const delegate of Object.values(this._delegates)) {
+        code |= delegate?.finish() ?? 0;
+      }
     }
     // this will flush all errors collected by the main validator and print them to the console
-    return this.enforce.finish();
+    code |= this._validator.finish();
+    return code;
   }
 
   /**
@@ -107,19 +141,20 @@ export class PackageValidationContext<
    */
   validateJSON(jsonPath: string): JSONValidator | null {
     jsonPath = path.resolve(this.root, jsonPath);
-    if (!(jsonPath in this.delegates)) {
+    const delegates = (this._delegates ??= {});
+    if (!(jsonPath in delegates)) {
       if (this.fileExists(jsonPath)) {
-        const errorHeader = `${styleText("red", "errors")} in ${path.relative(this.root, jsonPath)}:`;
-        this.delegates[jsonPath] = createJSONValidator(jsonPath, undefined, {
+        const header = `${styleText("red", "errors")} in ${path.relative(this.root, jsonPath)}:`;
+        delegates[jsonPath] = createJSONValidator(jsonPath, undefined, {
           fix: this.fix,
-          errorHeader,
+          header,
           reportError: this.error.bind(this),
         });
       } else {
-        this.delegates[jsonPath] = null;
+        delegates[jsonPath] = null;
       }
     }
-    return this.delegates[jsonPath];
+    return delegates[jsonPath];
   }
 
   /**
@@ -149,15 +184,31 @@ export class PackageValidationContext<
   }
 
   /**
+   * Simple attachment mechanism for storing arbitrary data associated with this validation context. This allows the
+   * context to be used as a base for arbitrary validation rules that may need to store state or data on the context.
+   * @param key a unique symbol identifying the data to attach
+   * @param factory a function that creates the data if it does not already exist
+   * @returns the attached data
+   */
+  attach<T>(key: symbol, factory: (base: PackageValidationContext) => T): T {
+    this._attached ??= {};
+    if (!(key in this._attached)) {
+      this._attached[key] = factory(this);
+    }
+    return this._attached[key] as T;
+  }
+
+  /**
    * Check whether a file exists at the given absolute path, caching the result
    * to avoid repeated filesystem checks.
    * @param resolvedPath the absolute path to the file to check
    * @returns true if the file exists, false otherwise
    */
   private fileExists(resolvedPath: string): boolean {
-    if (this.existingFiles[resolvedPath] === undefined) {
-      this.existingFiles[resolvedPath] = fs.existsSync(resolvedPath);
+    const fileCache = (this._fileExists ??= {});
+    if (!(resolvedPath in fileCache)) {
+      fileCache[resolvedPath] = fs.existsSync(resolvedPath);
     }
-    return this.existingFiles[resolvedPath];
+    return fileCache[resolvedPath];
   }
 }
