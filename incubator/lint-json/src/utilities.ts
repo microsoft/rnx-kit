@@ -1,6 +1,6 @@
 import path from "node:path";
 import { styleText } from "node:util";
-import type { JSONValuePath } from "./types.ts";
+import type { JSONObject, JSONValuePath } from "./types.ts";
 
 /**
  * Utility function to safely parse a JSONValuePath into an array of path segments, while blocking potentially dangerous segments
@@ -26,7 +26,7 @@ export const getJSONPathSegments = (() => {
 })();
 
 /** plain object type assertion checker */
-export function isRecord(value: unknown): value is Record<string, unknown> {
+export function isJSONObject(value: unknown): value is JSONObject {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 

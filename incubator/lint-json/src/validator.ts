@@ -12,7 +12,7 @@ import type {
 import {
   formatHeader,
   getJSONPathSegments,
-  isRecord,
+  isJSONObject,
   valueMessage,
 } from "./utilities.ts";
 
@@ -33,7 +33,7 @@ type JSONEditingContext = Omit<JSONValidator, "enforce" | "finish">;
  */
 export function createJSONValidator(
   jsonPath: string,
-  json: Record<string, JSONValue> | undefined,
+  json: JSONObject | undefined,
   options: JSONValidatorOptions = {}
 ): JSONValidator {
   // work from a resolved path so that relative paths in error messages are consistent
@@ -131,11 +131,12 @@ function setValue(
   if (!parent) {
     context.error(valueMessage(path, value, undefined));
   } else {
-    const currentValue = parent[path[path.length - 1]];
+    const key = path[path.length - 1];
+    const currentValue = parent[key];
     if (!compareValues(currentValue, value)) {
       if (context.fix) {
         context.dirty();
-        parent[path[path.length - 1]] = value;
+        parent[key] = value;
       } else {
         context.error(valueMessage(path, value, currentValue));
       }
@@ -161,7 +162,7 @@ function walkPath(
   // walk to the second to last segment, the last one is the key we want to set/unset
   for (let i = 0; i < path.length - 1; i++) {
     const segment = path[i];
-    if (!isRecord(current[segment])) {
+    if (!isJSONObject(current[segment])) {
       if (ensureExists && context.fix) {
         context.dirty();
         current[segment] = {};
