@@ -1,4 +1,4 @@
-import { isRecord } from "./utilities.ts";
+import { isJSONObject } from "./utilities.ts";
 
 /**
  * Does a deep equality check of two values. Will check objects and arrays recursively. Objects are
@@ -27,7 +27,7 @@ export function compareValues(value1: unknown, value2: unknown): boolean {
     }
 
     // handle the both plain objects case, checking keys including key ordering and comparing values deeply
-    if (isRecord(value1) && isRecord(value2)) {
+    if (isJSONObject(value1) && isJSONObject(value2)) {
       return compareObjects(value1, value2);
     }
   }
