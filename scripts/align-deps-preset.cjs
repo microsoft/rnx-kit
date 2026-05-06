@@ -64,7 +64,7 @@ function makePreset() {
     },
     esbuild: {
       name: "esbuild",
-      version: "^0.27.1",
+      version: "^0.28.0",
       devOnly: true,
     },
     "find-up": {
