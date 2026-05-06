@@ -1,51 +1,17 @@
 import {
   createJSONValidator,
-  getJSONPathSegments,
+  JSONObject,
   type JSONValidator,
   type JSONValue,
   type JSONValuePath,
 } from "@rnx-kit/lint-json";
 import { readJSONFileSync } from "@rnx-kit/tools-filesystem";
 import type { PackageManifest } from "@rnx-kit/types-node";
-import type { Yarn } from "@yarnpkg/types";
 import fs from "node:fs";
 import path from "node:path";
 import { styleText } from "node:util";
-
-/**
- * Options for configuring a PackageValidationContext instance
- */
-export type PackageValidationContextOptions<
-  TManifest extends PackageManifest = PackageManifest,
-> = {
-  /**
-   * Whether to open in fix mode
-   */
-  fix?: boolean;
-
-  /**
-   * Optional package manifest to use instead of loading from the package root, in case it is already loaded
-   * and available to avoid reading from disk again.
-   */
-  manifest?: TManifest;
-
-  /**
-   * Yarn workspace instance to use instead of operating on the package root directly
-   */
-  workspace?: Yarn.Constraints.Workspace;
-
-  /**
-   * Error header string to display at the top of the error output for this package.
-   * Typically this would include the package name and root directory to indicate
-   * which package the errors belong to when validating multiple packages.
-   */
-  header?: string;
-
-  /**
-   * Footer message to display at the end of validation output if errors were found.
-   */
-  footer?: string;
-};
+import type { PackageValidationOptions } from "./types.ts";
+import { createYarnWorkspaceValidator } from "./yarn.ts";
 
 /**
  * A validation context for a package, providing access to the package root, manifest,
@@ -57,12 +23,18 @@ export type PackageValidationContextOptions<
  */
 export class PackageValidationContext<
   TManifest extends PackageManifest = PackageManifest,
-> {
+> implements JSONValidator {
+  /** JSON Validator signature, set up in the constructor */
+  readonly fix: boolean;
+  raw: JSONObject;
+  enforce: (path: JSONValuePath, value: JSONValue | undefined) => void;
+  error: (message: string) => void;
+  dirty: () => void;
+  finish: () => number;
+
   readonly root: string;
   readonly manifest: TManifest;
   readonly name: string;
-  readonly fix: boolean;
-  enforce: JSONValidator;
 
   private delegates: Record<string, JSONValidator | null> = {};
   private existingFiles: Record<string, boolean> = {};
@@ -74,11 +46,23 @@ export class PackageValidationContext<
    * @param root the root directory of the package
    * @param options optional options for additional configuration
    */
-  constructor(
-    root: string,
-    options: PackageValidationContextOptions<TManifest> = {}
-  ) {
-    const { fix, manifest, workspace, footer: errorFooter } = options;
+  constructor(root: string, options: PackageValidationOptions<TManifest> = {}) {
+    const { manifest, workspace, ...innerOptions } = options;
+    const jsonPath = path.join(root, "package.json");
+    innerOptions.header ??=
+
+    const validator = workspace
+      ? createYarnWorkspaceValidator(workspace)
+      : createJSONValidator(jsonPath, manifest as JSONObject, innerOptions);
+
+    // delegate the JSONValidator methods to the inner validator
+    this.raw = validator.raw;
+    this.enforce = validator.enforce;
+    this.error = validator.error;
+    this.dirty = validator.dirty;
+    this.finish = validator.finish;
+
+    const { fix, footer } = options;
     this.fix = fix ?? false;
     this.root = path.resolve(root);
     const manifestPath = path.join(root, "package.json");
@@ -87,19 +71,9 @@ export class PackageValidationContext<
       workspace?.manifest ??
       readJSONFileSync<TManifest>(manifestPath);
     this.name = this.manifest.name;
-    const errorHeader =
+    const header =
       options.header ??
       `${styleText("red", "errors")} in package ${this.name} (${path.relative(process.cwd(), this.root)}):`;
-
-    if (workspace) {
-      this.enforce = createYarnWorkspaceValidator(workspace);
-    } else {
-      this.enforce = createJSONValidator(
-        manifestPath,
-        this.manifest as Record<string, JSONValue>,
-        { fix: this.fix, errorHeader, errorFooter }
-      );
-    }
   }
 
   /**
@@ -186,33 +160,4 @@ export class PackageValidationContext<
     }
     return this.existingFiles[resolvedPath];
   }
-}
-
-/**
- * Create a JSONValidator for a Yarn constraints workspace, allowing enforcement
- * of JSON values and reporting of errors within the workspace context.
- * @param workspace yarn constraints workspace to create a JSONValidator for
- * @returns json validator workspace
- */
-export function createYarnWorkspaceValidator(
-  workspace: Yarn.Constraints.Workspace
-): JSONValidator {
-  function enforce(path: JSONValuePath, value: JSONValue | undefined): void {
-    const safePath = getJSONPathSegments(path);
-    if (value === undefined) {
-      workspace.unset(safePath);
-    } else {
-      workspace.set(safePath, value);
-    }
-  }
-
-  function error(message: string): void {
-    workspace.error(message);
-  }
-
-  function finish() {
-    return 0;
-  }
-
-  return Object.assign(enforce, { error, finish });
 }
