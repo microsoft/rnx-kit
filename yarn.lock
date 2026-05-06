@@ -5493,7 +5493,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/lint-json@workspace:incubator/lint-json":
+"@rnx-kit/lint-json@npm:^0.0.1, @rnx-kit/lint-json@workspace:incubator/lint-json":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/lint-json@workspace:incubator/lint-json"
   dependencies:
@@ -5518,6 +5518,26 @@ __metadata:
     js-yaml: "npm:^4.1.1"
   bin:
     lint-lockfile: lib/cli.js
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/lint-package@workspace:incubator/lint-package":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/lint-package@workspace:incubator/lint-package"
+  dependencies:
+    "@rnx-kit/lint-json": "npm:^0.0.1"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-filesystem": "npm:^0.2.0"
+    "@rnx-kit/tools-formatting": "npm:^0.0.1"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-node": "npm:^1.0.0"
+    "@types/node": "npm:^24.0.0"
+    "@yarnpkg/types": "npm:^4.0.0"
+  peerDependencies:
+    "@yarnpkg/types": ">=4.0.0"
+  peerDependenciesMeta:
+    "@yarnpkg/types":
+      optional: true
   languageName: unknown
   linkType: soft
 
