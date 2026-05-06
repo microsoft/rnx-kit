@@ -1,5 +1,5 @@
 ---
-"@rnx-kit/lint-json": patch
+"@rnx-kit/lint-json": minor
 ---
 
 Publish json linting utilities
