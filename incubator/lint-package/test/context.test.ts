@@ -1,34 +1,24 @@
+import { mockFS, type MockFS } from "@rnx-kit/tools-filesystem/mocks";
 import type { PackageManifest } from "@rnx-kit/types-node";
 import type { Yarn } from "@yarnpkg/types";
 import { deepEqual, equal, notEqual, ok } from "node:assert/strict";
-import * as fs from "node:fs";
-import * as os from "node:os";
 import * as path from "node:path";
 import { describe, it } from "node:test";
 import { PackageValidationContext } from "../src/context.ts";
 
-function makeTempPackage(
+function makeMockPackage(
   manifest: PackageManifest,
-  files: string[] = []
-): {
-  root: string;
-  cleanup: () => void;
-} {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "lint-package-"));
-  fs.writeFileSync(
-    path.join(root, "package.json"),
-    JSON.stringify(manifest, null, 2)
-  );
+  files: string[] = [],
+  root = "/pkg"
+): { fs: MockFS; root: string } {
+  const entries: Record<string, string> = {
+    [path.join(root, "package.json")]: JSON.stringify(manifest, null, 2),
+  };
   for (const file of files) {
-    const filePath = path.join(root, file);
-    fs.mkdirSync(path.dirname(filePath), { recursive: true });
-    if (file.endsWith(".json")) {
-      fs.writeFileSync(filePath, "{}");
-    } else {
-      fs.writeFileSync(filePath, "");
-    }
+    entries[path.join(root, file)] = file.endsWith(".json") ? "{}" : "";
   }
-  return { root, cleanup: () => fs.rmSync(root, { recursive: true }) };
+  const fs = mockFS(entries);
+  return { fs, root };
 }
 
 const baseManifest: PackageManifest = { name: "@scope/foo", version: "1.0.0" };
@@ -57,14 +47,10 @@ describe("PackageValidationContext.create: construction", () => {
   });
 
   it("loads manifest from disk when not provided", () => {
-    const { root, cleanup } = makeTempPackage(baseManifest);
-    try {
-      const ctx = PackageValidationContext.create(root);
-      equal(ctx.manifest.name, "@scope/foo");
-      equal(ctx.manifest.version, "1.0.0");
-    } finally {
-      cleanup();
-    }
+    const { fs, root } = makeMockPackage(baseManifest);
+    const ctx = PackageValidationContext.create(root, { fs });
+    equal(ctx.manifest.name, "@scope/foo");
+    equal(ctx.manifest.version, "1.0.0");
   });
 
   it("default header references the package path", () => {
@@ -118,131 +104,107 @@ describe("PackageValidationContext.create: enforce / error / finish", () => {
   });
 
   it("fix mode mutates the manifest and returns 0 from finish", () => {
-    const { root, cleanup } = makeTempPackage(baseManifest);
-    try {
-      const manifest = { ...baseManifest };
-      const ctx = PackageValidationContext.create(root, {
-        manifest,
-        fix: true,
-      });
-      ctx.enforce("version", "2.0.0");
-      equal(manifest.version, "2.0.0");
-      equal(ctx.finish(), 0);
-      const written = JSON.parse(
-        fs.readFileSync(path.join(root, "package.json"), "utf-8")
-      );
-      equal(written.version, "2.0.0");
-    } finally {
-      cleanup();
-    }
+    const { fs, root } = makeMockPackage(baseManifest);
+    const manifest = { ...baseManifest };
+    const ctx = PackageValidationContext.create(root, {
+      manifest,
+      fix: true,
+      fs,
+    });
+    ctx.enforce("version", "2.0.0");
+    equal(manifest.version, "2.0.0");
+    equal(ctx.finish(), 0);
+    const written = JSON.parse(
+      fs.readFileSync(path.join(root, "package.json"), "utf-8") as string
+    );
+    equal(written.version, "2.0.0");
   });
 });
 
 describe("PackageValidationContext.create: validateJSON", () => {
   it("returns null when the requested file does not exist", () => {
-    const { root, cleanup } = makeTempPackage(baseManifest);
-    try {
-      const ctx = PackageValidationContext.create(root, {
-        manifest: baseManifest,
-      });
-      equal(ctx.validateJSON("missing.json"), null);
-    } finally {
-      cleanup();
-    }
+    const { fs, root } = makeMockPackage(baseManifest);
+    const ctx = PackageValidationContext.create(root, {
+      manifest: baseManifest,
+      fs,
+    });
+    equal(ctx.validateJSON("missing.json"), null);
   });
 
   it("returns the same delegate validator on repeated calls", () => {
-    const { root, cleanup } = makeTempPackage(baseManifest, ["tsconfig.json"]);
-    try {
-      const ctx = PackageValidationContext.create(root, {
-        manifest: baseManifest,
-      });
-      const a = ctx.validateJSON("tsconfig.json");
-      const b = ctx.validateJSON("tsconfig.json");
-      ok(a);
-      equal(a, b);
-    } finally {
-      cleanup();
-    }
+    const { fs, root } = makeMockPackage(baseManifest, ["tsconfig.json"]);
+    const ctx = PackageValidationContext.create(root, {
+      manifest: baseManifest,
+      fs,
+    });
+    const a = ctx.validateJSON("tsconfig.json");
+    const b = ctx.validateJSON("tsconfig.json");
+    ok(a);
+    equal(a, b);
   });
 
   it("aggregates delegate errors into the outer report", () => {
-    const { root, cleanup } = makeTempPackage(baseManifest, ["tsconfig.json"]);
-    try {
-      const errors: string[] = [];
-      const ctx = PackageValidationContext.create(root, {
-        manifest: baseManifest,
-        reportError: (m) => errors.push(m),
-      });
-      const ts = ctx.validateJSON("tsconfig.json");
-      ok(ts);
-      ts.enforce("compilerOptions.strict", true);
-      equal(ctx.finish(), 1);
-      equal(errors.length, 1);
-      ok(errors[0].includes("compilerOptions"));
-    } finally {
-      cleanup();
-    }
+    const { fs, root } = makeMockPackage(baseManifest, ["tsconfig.json"]);
+    const errors: string[] = [];
+    const ctx = PackageValidationContext.create(root, {
+      manifest: baseManifest,
+      reportError: (m) => errors.push(m),
+      fs,
+    });
+    const ts = ctx.validateJSON("tsconfig.json");
+    ok(ts);
+    ts.enforce("compilerOptions.strict", true);
+    equal(ctx.finish(), 1);
+    equal(errors.length, 1);
+    ok(errors[0].includes("compilerOptions"));
   });
 });
 
 describe("PackageValidationContext.create: hasFile / findJSConfig", () => {
   it("hasFile returns true for existing files and false otherwise", () => {
-    const { root, cleanup } = makeTempPackage(baseManifest, ["README.md"]);
-    try {
-      const ctx = PackageValidationContext.create(root, {
-        manifest: baseManifest,
-      });
-      equal(ctx.hasFile("README.md"), true);
-      equal(ctx.hasFile("missing.txt"), false);
-    } finally {
-      cleanup();
-    }
+    const { fs, root } = makeMockPackage(baseManifest, ["README.md"]);
+    const ctx = PackageValidationContext.create(root, {
+      manifest: baseManifest,
+      fs,
+    });
+    equal(ctx.hasFile("README.md"), true);
+    equal(ctx.hasFile("missing.txt"), false);
   });
 
   it("hasFile result is cached after first lookup", () => {
-    const { root, cleanup } = makeTempPackage(baseManifest);
-    try {
-      const ctx = PackageValidationContext.create(root, {
-        manifest: baseManifest,
-      });
-      equal(ctx.hasFile("late.txt"), false);
-      // create the file after the first check; cache should still report false
-      fs.writeFileSync(path.join(root, "late.txt"), "");
-      equal(ctx.hasFile("late.txt"), false);
-    } finally {
-      cleanup();
-    }
+    const { fs, root } = makeMockPackage(baseManifest);
+    const ctx = PackageValidationContext.create(root, {
+      manifest: baseManifest,
+      fs,
+    });
+    equal(ctx.hasFile("late.txt"), false);
+    // create the file after the first check; cache should still report false
+    fs.writeFileSync(path.join(root, "late.txt"), "");
+    equal(ctx.hasFile("late.txt"), false);
   });
 
   it("findJSConfig returns the first matching extension", () => {
-    const { root, cleanup } = makeTempPackage(baseManifest, [
+    const { fs, root } = makeMockPackage(baseManifest, [
       "metro.config.cjs",
       "metro.config.ts",
     ]);
-    try {
-      const ctx = PackageValidationContext.create(root, {
-        manifest: baseManifest,
-      });
-      const found = ctx.findJSConfig("metro.config");
-      ok(found);
-      // .js is checked first, then .cjs — .cjs exists, so it should win
-      ok(found.endsWith(".cjs"), `expected .cjs, got ${found}`);
-    } finally {
-      cleanup();
-    }
+    const ctx = PackageValidationContext.create(root, {
+      manifest: baseManifest,
+      fs,
+    });
+    const found = ctx.findJSConfig("metro.config");
+    ok(found);
+    // .js is checked first, then .cjs — .cjs exists, so it should win
+    ok(found.endsWith(".cjs"), `expected .cjs, got ${found}`);
   });
 
   it("findJSConfig returns undefined when no extension matches", () => {
-    const { root, cleanup } = makeTempPackage(baseManifest);
-    try {
-      const ctx = PackageValidationContext.create(root, {
-        manifest: baseManifest,
-      });
-      equal(ctx.findJSConfig("nope.config"), undefined);
-    } finally {
-      cleanup();
-    }
+    const { fs, root } = makeMockPackage(baseManifest);
+    const ctx = PackageValidationContext.create(root, {
+      manifest: baseManifest,
+      fs,
+    });
+    equal(ctx.findJSConfig("nope.config"), undefined);
   });
 });
 

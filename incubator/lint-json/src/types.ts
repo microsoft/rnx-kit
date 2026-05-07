@@ -1,3 +1,5 @@
+import type nodefs from "node:fs";
+
 /**
  * A path to a value in a JSON file. A single string will be split on dots to create the path,
  * but an array of strings can also be used to avoid ambiguity with dots in property names. When using an array,
@@ -96,4 +98,11 @@ export type JSONValidatorOptions = {
    * error reporting callback. If not provided output will be sent to console.error.
    */
   reportError?: (message: string) => void;
+
+  /**
+   * filesystem module to use for reading and writing the JSON file. Defaults to Node's
+   * `node:fs` module. Tests can pass a `mockFS()` instance from `@rnx-kit/tools-filesystem/mocks`
+   * to keep validation entirely in-memory.
+   */
+  fs?: typeof nodefs;
 };

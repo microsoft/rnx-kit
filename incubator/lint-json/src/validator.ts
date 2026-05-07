@@ -49,7 +49,7 @@ export function createJSONValidator<T extends JSONObject = JSONObject>(
   // create the editing context that will be passed to helper functions for enforcing values
   const context: JSONEditingContext<T> = {
     fix: options.fix ?? false,
-    raw: json ?? readJSONFileSync<T>(jsonPath),
+    raw: json ?? readJSONFileSync<T>(jsonPath, options.fs),
     dirty: (_path: string[]) => {
       changes = true;
     },
@@ -61,7 +61,7 @@ export function createJSONValidator<T extends JSONObject = JSONObject>(
   function finish(): number {
     // if changes were made and fixes are enabled, write the updated JSON back to disk
     if (changes && context.fix) {
-      writeJSONFileSync(jsonPath, context.raw);
+      writeJSONFileSync(jsonPath, context.raw, undefined, options.fs);
       changes = false;
     }
     // if any errors were encountered, format and report them

@@ -7,7 +7,7 @@ import {
 import type { KitConfig } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
 import type { Yarn } from "@yarnpkg/types";
-import fs from "node:fs";
+import nodefs from "node:fs";
 import path from "node:path";
 import { styleText } from "node:util";
 import type { PackageValidationOptions } from "./types.ts";
@@ -43,7 +43,7 @@ export class PackageValidationContext<
       manifest as JSONObject,
       innerOptions
     );
-    return new PackageValidationContext<TManifest>(root, validator);
+    return new PackageValidationContext<TManifest>(root, validator, options.fs);
   }
 
   /**
@@ -107,6 +107,7 @@ export class PackageValidationContext<
     ".mts",
   ];
   protected readonly _validator: JSONValidator;
+  protected readonly _fs: typeof nodefs;
   protected _delegates?: Record<string, JSONValidator | null>;
   private _fileExists?: Record<string, boolean>;
   private _attached?: Record<symbol, unknown>;
@@ -117,9 +118,15 @@ export class PackageValidationContext<
    * static factory methods are used to create instances
    * @param root the root directory of the package
    * @param validator the JSON validator for the package
+   * @param fs filesystem module to use for filesystem queries (defaults to Node's `node:fs`)
    */
-  protected constructor(root: string, validator: JSONValidator) {
+  protected constructor(
+    root: string,
+    validator: JSONValidator,
+    fs: typeof nodefs = nodefs
+  ) {
     this._validator = validator;
+    this._fs = fs;
     this.root = root;
   }
 
@@ -158,6 +165,7 @@ export class PackageValidationContext<
           fix: this.fix,
           header,
           reportError: this.error.bind(this),
+          fs: this._fs,
         });
       } else {
         delegates[jsonPath] = null;
@@ -216,7 +224,7 @@ export class PackageValidationContext<
   private fileExists(resolvedPath: string): boolean {
     const fileCache = (this._fileExists ??= {});
     if (!(resolvedPath in fileCache)) {
-      fileCache[resolvedPath] = fs.existsSync(resolvedPath);
+      fileCache[resolvedPath] = this._fs.existsSync(resolvedPath);
     }
     return fileCache[resolvedPath];
   }
