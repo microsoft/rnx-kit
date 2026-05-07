@@ -21,7 +21,6 @@ Configuration information for an rnx-kit package. This is retrieved from
 
 | Name                  | Type                                          | Description                                                                                                                                                                                                                                         |
 | --------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| extends               | `string \| undefined`                         | Load a base configuration from a file or module. See [Extending a base configuration](#extending-a-base-configuration).                                                                                                                             |
 | kitType               | `"app" \| "library" \| undefined`             | Library or App package. Used by the dependency manager when projecting capabilities into `dependencies`, `devDependencies`, and `peerDependencies`. Library package dependencies are private, in dev and peer. App package dependencies are public. |
 | reactNativeVersion    | `string \| undefined`                         | React Native version (or range) which this package supports.                                                                                                                                                                                        |
 | reactNativeDevVersion | `string \| undefined`                         | React Native version to use during development of this package. If not specified, the minimum `reactNativeVersion` is used.                                                                                                                         |
@@ -29,46 +28,6 @@ Configuration information for an rnx-kit package. This is retrieved from
 | server                | `ServerConfig \| undefined`                   | Specifies how the package's bundle server is configured.                                                                                                                                                                                            |
 | capabilities          | `Capability[] \| undefined`                   | List of [capabilities](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#capabilities) that this package needs. A capability is a well-known name (string).                                                                         |
 | customProfiles        | `string \| undefined`                         | Path to a file containing [custom profiles](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#custom-profiles).                                                                                                                     |
-
-#### Extending a base configuration
-
-A package can inherit from a shared configuration by setting `extends` on its
-`rnx-kit` field. The value is one of:
-
-- A relative or absolute path to a `.js` / `.cjs` / `.json` file that exports
-  a `KitConfig` (`module.exports = { ... }`).
-- A bare module specifier (e.g. `"@my-org/rnx-kit-base"`) — resolved via
-  Node's module resolution from the consuming package's directory.
-- A path to a `package.json` — its `rnx-kit` field is used as the base.
-
-The resolved configuration is the deep merge of the base into the consumer's
-own config, with consumer values winning on conflict (lodash-style merge:
-arrays are merged by index, plain objects are merged recursively). The
-`extends` field is stripped from the merged result.
-
-```jsonc
-// my-org/rnx-kit-base/index.js
-module.exports = {
-  kitType: "library",
-  reactNativeVersion: "^0.74.0",
-};
-```
-
-```jsonc
-// consumer/package.json
-{
-  "rnx-kit": {
-    "extends": "@my-org/rnx-kit-base",
-    "bundle": { "id": "core" },
-  },
-}
-```
-
-A base configuration can itself declare `extends`; the chain is resolved
-recursively, with each layer's `extends` resolved relative to the file that
-declared it. Multiple packages may safely share the same base — resolution
-does not mutate the base, so a sibling package's overrides never leak across
-into another consumer's resolved config.
 
 ### `BundleConfig` inherits `BundleParameters`
 
