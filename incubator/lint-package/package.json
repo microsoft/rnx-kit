@@ -42,11 +42,10 @@
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tools-filesystem": "^0.2.0",
+    "@rnx-kit/tools-filesystem": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
-    "@yarnpkg/types": "^4.0.0",
-    "memfs": "^4.56.10"
+    "@yarnpkg/types": "^4.0.0"
   },
   "peerDependencies": {
     "@yarnpkg/types": ">=4.0.0"
