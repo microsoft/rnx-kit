@@ -61,7 +61,10 @@
     "@react-native-windows/telemetry/@xmldom/xmldom": "^0.8.13",
     "@rnx-kit/react-native-host": "workspace:*",
     "node-gyp": "ignore:",
-    "nx/minimatch": "^10.2.4"
+    "nx/minimatch": "^10.2.4",
+    "react-native-windows/@react-native-community/cli": "^20.0.0",
+    "react-native-windows/@react-native-community/cli-platform-android": "^20.0.0",
+    "react-native-windows/@react-native-community/cli-platform-ios": "^20.0.0"
   },
   "engines": {
     "node": ">=18.12"
