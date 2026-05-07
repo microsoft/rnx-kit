@@ -19,7 +19,10 @@ import {
 /**
  * Internal partial type to pass to helper functions that enforce or unset values
  */
-type JSONEditingContext = Omit<JSONValidator, "enforce" | "finish">;
+type JSONEditingContext<T extends JSONObject> = Omit<
+  JSONValidator<T>,
+  "enforce" | "finish"
+>;
 
 /**
  * Creates a JSON validator for a given JSON object and options. The returned validator
@@ -31,11 +34,11 @@ type JSONEditingContext = Omit<JSONValidator, "enforce" | "finish">;
  * @param userOptions options controlling fix behavior, error reporting, and file writing
  * @returns a JSONValidator instance for validating and optionally fixing the provided JSON object
  */
-export function createJSONValidator(
+export function createJSONValidator<T extends JSONObject = JSONObject>(
   jsonPath: string,
-  json: JSONObject | undefined,
+  json: T | undefined,
   options: JSONValidatorOptions = {}
-): JSONValidator {
+): JSONValidator<T> {
   // work from a resolved path so that relative paths in error messages are consistent
   jsonPath = path.resolve(jsonPath);
 
@@ -44,9 +47,9 @@ export function createJSONValidator(
   const errors: string[] = [];
 
   // create the editing context that will be passed to helper functions for enforcing values
-  const context: JSONEditingContext = {
+  const context: JSONEditingContext<T> = {
     fix: options.fix ?? false,
-    raw: json ?? readJSONFileSync(jsonPath),
+    raw: json ?? readJSONFileSync<T>(jsonPath),
     dirty: (_path: string[]) => {
       changes = true;
     },
@@ -97,7 +100,10 @@ export function createJSONValidator(
  * @param path the path to the value to remove, as an array of keys representing the path in the JSON object
  * @param context the editing context used for error reporting and change tracking
  */
-function unsetValue(path: string[], context: JSONEditingContext) {
+function unsetValue<T extends JSONObject>(
+  path: string[],
+  context: JSONEditingContext<T>
+) {
   if (path.length > 0) {
     const parent = walkPath(path, context, false);
     if (parent) {
@@ -122,10 +128,10 @@ function unsetValue(path: string[], context: JSONEditingContext) {
  * @param value the value to set at the specified path
  * @param context the editing context used for error reporting and change tracking
  */
-function setValue(
+function setValue<T extends JSONObject>(
   path: string[],
   value: JSONValue,
-  context: JSONEditingContext
+  context: JSONEditingContext<T>
 ) {
   const parent = walkPath(path, context, true);
   if (!parent) {
@@ -153,12 +159,12 @@ function setValue(
  * @param ensureExists if true, missing intermediate objects along the path will be created
  * @returns the parent object of the last key in the path, or undefined if the path cannot be walked
  */
-function walkPath(
+function walkPath<T extends JSONObject>(
   path: string[],
-  context: JSONEditingContext,
+  context: JSONEditingContext<T>,
   ensureExists: boolean
 ): JSONObject | undefined {
-  let current = context.raw;
+  let current = context.raw as JSONObject;
   // walk to the second to last segment, the last one is the key we want to set/unset
   for (let i = 0; i < path.length - 1; i++) {
     const segment = path[i];

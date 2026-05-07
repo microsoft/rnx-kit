@@ -24,7 +24,7 @@ export type JSONObject = { [key: string]: JSONValue };
  * A editor and validator for a JSON object. This type provides methods to enforce values and can be run in fix mode
  * where edits will apply, or in non-fix mode where errors will be reported but no changes will be made.
  */
-export type JSONValidator = {
+export type JSONValidator<TJSON extends JSONObject = JSONObject> = {
   /**
    * Are we running in fix mode? If true, any changes made by the validator will be written
    * back to the JSON file when finish() is called. If false, changes will not be applied and only
@@ -37,7 +37,7 @@ export type JSONValidator = {
    * to the JSON file if fix mode is enabled and changes are made. It is readonly as it can be modified internally
    * but should be edited within the same object.
    */
-  readonly raw: JSONObject;
+  readonly raw: TJSON;
 
   /**
    * Enforce a value in the JSON file. This will either report an error in not in fix mode, or update the

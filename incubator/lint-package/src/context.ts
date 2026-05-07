@@ -98,7 +98,14 @@ export class PackageValidationContext<
   /**
    * protected and private properties and helpers
    */
-  protected static JS_CONFIG_EXTENSIONS = [".js", ".cjs", ".mjs", ".ts"];
+  protected static JS_CONFIG_EXTENSIONS = [
+    ".js",
+    ".cjs",
+    ".mjs",
+    ".ts",
+    ".cts",
+    ".mts",
+  ];
   protected readonly _validator: JSONValidator;
   protected _delegates?: Record<string, JSONValidator | null>;
   private _fileExists?: Record<string, boolean>;
@@ -139,13 +146,15 @@ export class PackageValidationContext<
    * @param jsonPath the path to the JSON file to validate, relative to the package root
    * @returns a JSONValidator for the specified file, or null if the file does not exist
    */
-  validateJSON(jsonPath: string): JSONValidator | null {
+  validateJSON<T extends JSONObject = JSONObject>(
+    jsonPath: string
+  ): JSONValidator<T> | null {
     jsonPath = path.resolve(this.root, jsonPath);
     const delegates = (this._delegates ??= {});
     if (!(jsonPath in delegates)) {
       if (this.fileExists(jsonPath)) {
         const header = `${styleText("red", "errors")} in ${path.relative(this.root, jsonPath)}:`;
-        delegates[jsonPath] = createJSONValidator(jsonPath, undefined, {
+        delegates[jsonPath] = createJSONValidator<T>(jsonPath, undefined, {
           fix: this.fix,
           header,
           reportError: this.error.bind(this),
@@ -154,7 +163,7 @@ export class PackageValidationContext<
         delegates[jsonPath] = null;
       }
     }
-    return delegates[jsonPath];
+    return delegates[jsonPath] as JSONValidator<T> | null;
   }
 
   /**
