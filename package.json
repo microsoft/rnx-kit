@@ -146,6 +146,12 @@
           "test/**/*.test.ts"
         ]
       },
+      "incubator/lint-package": {
+        "entry": [
+          "src/index.ts",
+          "test/**/*.test.ts"
+        ]
+      },
       "incubator/react-native-test-app-msal": {},
       "incubator/rn-changelog-generator": {
         "ignoreDependencies": [

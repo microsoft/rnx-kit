@@ -1,3 +1,5 @@
+import type nodefs from "node:fs";
+
 /**
  * A path to a value in a JSON file. A single string will be split on dots to create the path,
  * but an array of strings can also be used to avoid ambiguity with dots in property names. When using an array,
@@ -24,7 +26,7 @@ export type JSONObject = { [key: string]: JSONValue };
  * A editor and validator for a JSON object. This type provides methods to enforce values and can be run in fix mode
  * where edits will apply, or in non-fix mode where errors will be reported but no changes will be made.
  */
-export type JSONValidator = {
+export type JSONValidator<TJSON extends JSONObject = JSONObject> = {
   /**
    * Are we running in fix mode? If true, any changes made by the validator will be written
    * back to the JSON file when finish() is called. If false, changes will not be applied and only
@@ -34,9 +36,10 @@ export type JSONValidator = {
 
   /**
    * JSON object being edited by the validator. This is the object that will be written out
-   * to the JSON file if fix mode is enabled and changes are made.
+   * to the JSON file if fix mode is enabled and changes are made. It is readonly as it can be modified internally
+   * but should be edited within the same object.
    */
-  raw: JSONObject;
+  readonly raw: TJSON;
 
   /**
    * Enforce a value in the JSON file. This will either report an error in not in fix mode, or update the
@@ -57,8 +60,9 @@ export type JSONValidator = {
   /**
    * Mark the JSON as dirty, indicating that changes have been made to the JSON object and that fixes should
    * be written back to the JSON file when finish() is called if fix mode is enabled.
+   * @param path the path to the value that was modified
    */
-  dirty(): void;
+  dirty(path: string[]): void;
 
   /**
    * Finish the validation run and return the result of the JSON validation. If in fix mode and changes were made,
@@ -94,4 +98,11 @@ export type JSONValidatorOptions = {
    * error reporting callback. If not provided output will be sent to console.error.
    */
   reportError?: (message: string) => void;
+
+  /**
+   * filesystem module to use for reading and writing the JSON file. Defaults to Node's
+   * `node:fs` module. Tests can pass a `mockFS()` instance from `@rnx-kit/tools-filesystem/mocks`
+   * to keep validation entirely in-memory.
+   */
+  fs?: typeof nodefs;
 };
