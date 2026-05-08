@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.5.0
+
+### Minor Changes
+
+- 61a2965: Bump package to bundle updates to config with minor version changes
+
 ## 3.4.8
 
 ### Patch Changes
