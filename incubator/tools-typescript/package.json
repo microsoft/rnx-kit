@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-typescript",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "EXPERIMENTAL - USE WITH CAUTION - tools-typescript",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/tools-typescript#readme",
   "license": "MIT",
@@ -35,10 +35,10 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/config": "^0.7.5",
+    "@rnx-kit/config": "^0.8.0",
     "@rnx-kit/console": "^2.0.0",
     "@rnx-kit/tools-node": "^3.0.4",
-    "@rnx-kit/tools-packages": "^0.1.2",
+    "@rnx-kit/tools-packages": "^0.1.3",
     "@rnx-kit/tools-react-native": "^2.3.3",
     "@rnx-kit/types-bundle-config": "^1.0.0",
     "@rnx-kit/typescript-service": "^2.0.0"

@@ -1,5 +1,11 @@
 # @rnx-kit/tools-packages
 
+## 0.1.3
+
+### Patch Changes
+
+- 22f446e: Ensure package caching is based on normalized paths for purposes of caching
+
 ## 0.1.2
 
 ### Patch Changes

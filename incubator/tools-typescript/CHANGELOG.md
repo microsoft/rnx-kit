@@ -1,5 +1,14 @@
 # @rnx-kit/tools-typescript
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [f53f04d]
+- Updated dependencies [22f446e]
+  - @rnx-kit/config@0.8.0
+  - @rnx-kit/tools-packages@0.1.3
+
 ## 0.1.3
 
 ### Patch Changes

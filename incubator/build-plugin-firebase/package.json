@@ -38,7 +38,7 @@
     "@rnx-kit/tsconfig": "*"
   },
   "peerDependencies": {
-    "@rnx-kit/build": ">=0.8.0"
+    "@rnx-kit/build": ">=0.8.1"
   },
   "engines": {
     "node": ">=18.12"

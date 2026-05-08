@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/lint-package",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - lint-package",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/lint-package#readme",
   "license": "MIT",
@@ -35,8 +35,8 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/config": "^0.7.5",
-    "@rnx-kit/lint-json": "^0.1.0",
+    "@rnx-kit/config": "^0.8.0",
+    "@rnx-kit/lint-json": "^0.2.0",
     "@rnx-kit/types-kit-config": "^1.0.0",
     "@rnx-kit/types-node": "^1.0.0"
   },
