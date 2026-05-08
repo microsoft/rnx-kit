@@ -5076,7 +5076,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
   peerDependencies:
-    "@rnx-kit/build": ">=0.8.0"
+    "@rnx-kit/build": ">=0.8.1"
   languageName: unknown
   linkType: soft
 
@@ -5088,7 +5088,7 @@ __metadata:
     "@octokit/core": "npm:^7.0.0"
     "@octokit/plugin-rest-endpoint-methods": "npm:^17.0.0"
     "@octokit/request-error": "npm:^7.0.0"
-    "@rnx-kit/config": "npm:^0.7.0"
+    "@rnx-kit/config": "npm:^0.8.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-android": "npm:^0.2.0"
     "@rnx-kit/tools-apple": "npm:^0.2.0"
@@ -5132,7 +5132,7 @@ __metadata:
     "@react-native-community/cli-types": "npm:^20.1.0"
     "@react-native-windows/cli": "npm:^0.82.0"
     "@rnx-kit/align-deps": "npm:^3.4.7"
-    "@rnx-kit/config": "npm:^0.7.5"
+    "@rnx-kit/config": "npm:^0.8.0"
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "npm:^2.0.3"
@@ -5142,7 +5142,7 @@ __metadata:
     "@rnx-kit/metro-serializer-esbuild": "npm:^0.3.1"
     "@rnx-kit/metro-service": "npm:^4.1.5"
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/third-party-notices": "npm:^2.0.0"
+    "@rnx-kit/third-party-notices": "npm:^2.0.3"
     "@rnx-kit/tools-android": "npm:^0.2.2"
     "@rnx-kit/tools-apple": "npm:^0.2.2"
     "@rnx-kit/tools-filesystem": "npm:^0.2.0"
@@ -5192,14 +5192,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/config@npm:*, @rnx-kit/config@npm:^0.7.0, @rnx-kit/config@npm:^0.7.5, @rnx-kit/config@workspace:packages/config":
+"@rnx-kit/config@npm:*, @rnx-kit/config@npm:^0.8.0, @rnx-kit/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/config@workspace:packages/config"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.4"
-    "@rnx-kit/tools-packages": "npm:^0.1.2"
+    "@rnx-kit/tools-packages": "npm:^0.1.3"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^1.0.0"
     "@rnx-kit/types-kit-config": "npm:^1.0.0"
@@ -5315,7 +5315,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/lint-json@npm:^0.1.0, @rnx-kit/lint-json@workspace:incubator/lint-json":
+"@rnx-kit/lint-json@npm:^0.2.0, @rnx-kit/lint-json@workspace:incubator/lint-json":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/lint-json@workspace:incubator/lint-json"
   dependencies:
@@ -5331,7 +5331,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/lint-lockfile@workspace:incubator/lint-lockfile"
   dependencies:
-    "@rnx-kit/config": "npm:^0.7.5"
+    "@rnx-kit/config": "npm:^0.8.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-workspaces": "npm:^0.2.3"
     "@rnx-kit/tsconfig": "npm:*"
@@ -5347,8 +5347,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/lint-package@workspace:incubator/lint-package"
   dependencies:
-    "@rnx-kit/config": "npm:^0.7.5"
-    "@rnx-kit/lint-json": "npm:^0.1.0"
+    "@rnx-kit/config": "npm:^0.8.0"
+    "@rnx-kit/lint-json": "npm:^0.2.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-filesystem": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
@@ -5865,7 +5865,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/third-party-notices@npm:^2.0.0, @rnx-kit/third-party-notices@workspace:*, @rnx-kit/third-party-notices@workspace:packages/third-party-notices":
+"@rnx-kit/third-party-notices@npm:^2.0.3, @rnx-kit/third-party-notices@workspace:*, @rnx-kit/third-party-notices@workspace:packages/third-party-notices":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/third-party-notices@workspace:packages/third-party-notices"
   dependencies:
@@ -5979,7 +5979,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-packages@npm:^0.1.2, @rnx-kit/tools-packages@workspace:packages/tools-packages":
+"@rnx-kit/tools-packages@npm:^0.1.3, @rnx-kit/tools-packages@workspace:packages/tools-packages":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-packages@workspace:packages/tools-packages"
   dependencies:
@@ -6039,12 +6039,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-typescript@workspace:incubator/tools-typescript"
   dependencies:
-    "@rnx-kit/config": "npm:^0.7.5"
+    "@rnx-kit/config": "npm:^0.8.0"
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.4"
-    "@rnx-kit/tools-packages": "npm:^0.1.2"
+    "@rnx-kit/tools-packages": "npm:^0.1.3"
     "@rnx-kit/tools-react-native": "npm:^2.3.3"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^1.0.0"

@@ -1,5 +1,11 @@
 # @rnx-kit/lint-json
 
+## 0.2.0
+
+### Minor Changes
+
+- 00c75ee: Update to signature of dirty method and raw to readonly
+
 ## 0.1.0
 
 ### Minor Changes

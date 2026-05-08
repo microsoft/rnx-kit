@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 2.0.3
+
+### Patch Changes
+
+- f5b6034: Fixed submodule manifests being picked up as the package manifest
+
 ## 2.0.2
 
 ### Patch Changes
