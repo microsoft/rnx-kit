@@ -28,7 +28,6 @@
     "platform.js",
     "src"
   ],
-  "type": "commonjs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {

@@ -7,7 +7,7 @@ import {
   isConfigItem,
   isPluginObj,
   pluginTraceFactory,
-} from "../src/plugins";
+} from "../src/plugins.ts";
 
 // ── Test helpers ─────────────────────────────────────────────────────
 

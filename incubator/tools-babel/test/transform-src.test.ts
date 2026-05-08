@@ -5,7 +5,7 @@
  */
 import { ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { getFixtures, type FileData } from "./fixtures";
+import { getFixtures, type FileData } from "./fixtures.ts";
 
 const fixtures = getFixtures();
 const fileCache: Record<string, FileData> = {};

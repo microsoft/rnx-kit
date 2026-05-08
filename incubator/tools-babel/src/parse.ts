@@ -2,9 +2,9 @@ import type { Node } from "@babel/core";
 import { parseSync as parseSyncBabel } from "@babel/core";
 import type { TraceFunction } from "@rnx-kit/tools-performance";
 import type { OxcError } from "oxc-parser";
-import { toBabelAST } from "./estree";
-import { getPerfTrace } from "./options";
-import type { HermesParserOptions, TransformerArgs } from "./types";
+import { toBabelAST } from "./estree.ts";
+import { getPerfTrace } from "./options.ts";
+import type { HermesParserOptions, TransformerArgs } from "./types.ts";
 
 export function isFlowError(errors: OxcError[]): boolean {
   return errors.some((e) => e.message === "Flow is not supported");
