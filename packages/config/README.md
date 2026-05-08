@@ -104,6 +104,18 @@ Query for a package's rnx-kit configuration.
 | cwd       | `string \| undefined` | Read package configuration from the given directory. Ignored when `module` is given.            |
 | [Return]  | `KitConfig \| null`   | Package configuration, or `null` if nothing was found.                                          |
 
+### `getKitConfigFromPackageManifest(packageJson, packageDir)`
+
+Resolve a `KitConfig` from an already-loaded package manifest. Useful when
+the caller has already parsed `package.json` and wants to avoid re-reading
+it from disk. Any `extends` chain is resolved relative to `packageDir`.
+
+| Parameter   | Type                     | Description                                                                    |
+| ----------- | ------------------------ | ------------------------------------------------------------------------------ |
+| packageJson | `PackageManifest`        | Parsed `package.json` for the package being inspected.                         |
+| packageDir  | `string`                 | Directory containing `packageJson`. Used to resolve `extends` references.      |
+| [Return]    | `KitConfig \| undefined` | Resolved configuration, or `undefined` if the manifest has no `rnx-kit` field. |
+
 ### `getBundleConfig(config, id)`
 
 Get a bundle configuration from the rnx-kit configuration.
