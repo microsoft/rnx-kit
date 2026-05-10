@@ -8,6 +8,24 @@
 #import <React/CoreModulesPlugins.h>
 #import <ReactCommon/RCTTurboModuleManager.h>
 
+// `RNX_USE_RCT_APP_DELEGATE_HELPERS` lets a consumer opt out of pulling in
+// the React-RCTAppDelegate / ReactAppDependencyProvider helpers. They're
+// useful for the standard "single host per app" wrapper flow but are
+// deliberately incompatible with multi-host integrations (each host has
+// its own modules / executor factory). When unset, default to 1 if the
+// headers are reachable, preserving the existing behavior.
+#ifndef RNX_USE_RCT_APP_DELEGATE_HELPERS
+#  if __has_include(<React/RCTAppSetupUtils.h>) || \
+      __has_include(<React-RCTAppDelegate/RCTAppSetupUtils.h>) || \
+      __has_include(<React_RCTAppDelegate/RCTAppSetupUtils.h>)
+#    define RNX_USE_RCT_APP_DELEGATE_HELPERS 1
+#  else
+#    define RNX_USE_RCT_APP_DELEGATE_HELPERS 0
+#  endif
+#endif
+
+#if RNX_USE_RCT_APP_DELEGATE_HELPERS
+
 #if __has_include(<React/RCTAppSetupUtils.h>)  // <0.72
 #import <React/RCTAppSetupUtils.h>
 #else
@@ -46,16 +64,18 @@
 
 #endif  // __has_include(<React/RCTAppSetupUtils.h>)
 
-#if __has_include(<react/nativemodule/defaults/DefaultTurboModules.h>)  // >= 0.75
-#import <react/nativemodule/defaults/DefaultTurboModules.h>
-#endif
-
 #if __has_include(<ReactAppDependencyProvider/RCTAppDependencyProvider.h>)
 #import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
 #define USE_OSS_CODEGEN 1
 #else
 #define USE_OSS_CODEGEN 0
 #endif  // __has_include(<ReactAppDependencyProvider/RCTAppDependencyProvider.h>)
+
+#endif  // RNX_USE_RCT_APP_DELEGATE_HELPERS
+
+#if __has_include(<react/nativemodule/defaults/DefaultTurboModules.h>)  // >= 0.75
+#import <react/nativemodule/defaults/DefaultTurboModules.h>
+#endif
 
 #endif  // USE_FABRIC
 
@@ -142,6 +162,7 @@
             }
         }
     }
+#if RNX_USE_RCT_APP_DELEGATE_HELPERS
 #if USE_OSS_CODEGEN
     return RCTAppSetupDefaultModuleFromClass(moduleClass, [RCTAppDependencyProvider new]);
 #elif __has_include(<React-RCTAppDelegate/RCTDependencyProvider.h>) || __has_include(<React_RCTAppDelegate/RCTDependencyProvider.h>)
@@ -149,6 +170,12 @@
 #else
     return RCTAppSetupDefaultModuleFromClass(moduleClass);
 #endif  // USE_OSS_CODEGEN
+#else
+    // Returning nil falls back to RCTTurboModuleManager's default `[cls new]`.
+    // Custom initializers belong in `turboModuleManagerDelegate`.
+    (void)moduleClass;
+    return nil;
+#endif  // RNX_USE_RCT_APP_DELEGATE_HELPERS
 }
 
 // MARK: - Private
@@ -156,6 +183,7 @@
 - (std::unique_ptr<facebook::react::JSExecutorFactory>)initJsExecutorFactoryWithBridge:
     (RCTBridge *)bridge
 {
+#if RNX_USE_RCT_APP_DELEGATE_HELPERS
 #if USE_RUNTIME_SCHEDULER
     _runtimeScheduler =
         std::make_shared<facebook::react::RuntimeScheduler>(RCTRuntimeExecutorFromBridge(bridge));
@@ -171,6 +199,18 @@
                                                               jsInvoker:bridge.jsCallInvoker];
     return RCTAppSetupDefaultJsExecutorFactory(bridge, _turboModuleManager);
 #endif  // USE_RUNTIME_SCHEDULER
+#else
+    // Without React-RCTAppDelegate, the bridge-mode JS executor factory
+    // can't be constructed from these helpers. Bridgeless integrations
+    // never reach this code path (RCTHost owns runtime construction via
+    // RCTHostJSEngineProvider). Bridge-mode consumers wanting to use this
+    // adapter must either build with RNX_USE_RCT_APP_DELEGATE_HELPERS=1
+    // (the default when React-RCTAppDelegate is available) or supply
+    // their own RCTBridgeDelegate implementation that overrides
+    // jsExecutorFactoryForBridge:.
+    (void)bridge;
+    return nullptr;
+#endif  // RNX_USE_RCT_APP_DELEGATE_HELPERS
 }
 
 - (void)onRuntimeReady:(NSNotification *)note
