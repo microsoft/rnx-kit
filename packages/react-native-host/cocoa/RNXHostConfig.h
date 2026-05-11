@@ -7,6 +7,10 @@
 #include <jsi/jsi.h>
 #endif
 
+#if __has_include(<ReactCommon/RCTTurboModuleManager.h>)
+#import <ReactCommon/RCTTurboModuleManager.h>
+#endif
+
 @class ReactNativeHost;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -24,6 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Returns whether the bridge should be released when the app is backgrounded.
 @property (nonatomic, readonly) BOOL shouldReleaseBridgeWhenBackgrounded;
+
+#if __has_include(<ReactCommon/RCTTurboModuleManager.h>)
+/// Auxiliary ``RCTTurboModuleManagerDelegate`` consulted before
+/// ``RNXTurboModuleAdapter``'s defaults. For each delegate method the
+/// adapter implements, the auxiliary is called via ``respondsToSelector:``
+/// first; returning ``nil`` / ``Nil`` falls through to default behavior.
+@property (nonatomic, readonly, weak, nullable) id<RCTTurboModuleManagerDelegate> turboModuleManagerDelegate;
+#endif
 
 /// Logs a message.
 - (void)logWithLevel:(RCTLogLevel)level

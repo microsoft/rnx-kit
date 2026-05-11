@@ -1,5 +1,7 @@
 #import "RNXTurboModuleAdapter.h"
 
+#import "RNXHostConfig.h"
+
 #include "FollyConfig.h"
 
 #if USE_FABRIC
@@ -103,6 +105,16 @@
 
 - (Class)getModuleClassFromName:(char const *)name
 {
+    id<RNXHostConfig> config = _hostConfig;
+    if ([config respondsToSelector:@selector(turboModuleManagerDelegate)]) {
+        id<RCTTurboModuleManagerDelegate> aux = [config turboModuleManagerDelegate];
+        if ([aux respondsToSelector:_cmd]) {
+            Class cls = [aux getModuleClassFromName:name];
+            if (cls != Nil) {
+                return cls;
+            }
+        }
+    }
     return RCTCoreModulesClassProvider(name);
 }
 
@@ -120,6 +132,16 @@
 
 - (id<RCTTurboModule>)getModuleInstanceFromClass:(Class)moduleClass
 {
+    id<RNXHostConfig> config = _hostConfig;
+    if ([config respondsToSelector:@selector(turboModuleManagerDelegate)]) {
+        id<RCTTurboModuleManagerDelegate> aux = [config turboModuleManagerDelegate];
+        if ([aux respondsToSelector:_cmd]) {
+            id<RCTTurboModule> instance = [aux getModuleInstanceFromClass:moduleClass];
+            if (instance != nil) {
+                return instance;
+            }
+        }
+    }
 #if USE_OSS_CODEGEN
     return RCTAppSetupDefaultModuleFromClass(moduleClass, [RCTAppDependencyProvider new]);
 #elif __has_include(<React-RCTAppDelegate/RCTDependencyProvider.h>) || __has_include(<React_RCTAppDelegate/RCTDependencyProvider.h>)

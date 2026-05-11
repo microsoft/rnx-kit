@@ -354,6 +354,7 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 {
 #if USE_FABRIC
     _turboModuleAdapter = [[RNXTurboModuleAdapter alloc] init];
+    _turboModuleAdapter.hostConfig = _config;
     RCTEnableTurboModule(true);
 #endif
 }
