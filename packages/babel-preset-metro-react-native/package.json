@@ -56,6 +56,6 @@
     "testRegex": "/test/.*\\.test\\.js$"
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=20.18"
   }
 }

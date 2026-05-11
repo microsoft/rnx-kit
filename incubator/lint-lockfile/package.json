@@ -37,7 +37,7 @@
     "@types/js-yaml": "^4.0.5"
   },
   "engines": {
-    "node": ">=18.12"
+    "node": ">=20.18"
   },
   "experimental": true
 }

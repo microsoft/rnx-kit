@@ -5256,7 +5256,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/eslint": "npm:^9.0.0"
-    "@types/estree": "npm:*"
+    "@types/estree": "npm:^1.0.6"
     "@types/node": "npm:^24.0.0"
     "@typescript-eslint/parser": "npm:^8.0.0"
     "@typescript-eslint/types": "npm:^8.0.0"
