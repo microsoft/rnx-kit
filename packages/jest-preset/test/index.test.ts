@@ -24,23 +24,13 @@ describe("jest-preset", () => {
       platforms: ["ios", "native"],
     },
     moduleNameMapper: {},
-    setupFiles: [
-      expect.stringMatching(
-        isPnpmMode
-          ? /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]setup\.js$/
-          : /[/\\]react-native.*?[/\\]jest[/\\]setup\.js$/
-      ),
-    ],
+    setupFiles: [expect.stringMatching(/[/\\]jest[/\\]setup\.js$/)],
     testEnvironment: expect.stringMatching(
-      isPnpmMode
-        ? /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]react-native-env\.js$/
-        : /[/\\]react-native.*?[/\\]jest[/\\]react-native-env\.js$/
+      /[/\\]jest[/\\]react-native-env\.js$/
     ),
     transform: {
       "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringMatching(
-        isPnpmMode
-          ? /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]assetFileTransformer\.js$/
-          : /[/\\]react-native.*?[/\\]jest[/\\]assetFileTransformer\.js$/
+        /[/\\]src[/\\]assetFileTransformer\.js$/
       ),
       "\\.[jt]sx?$": "babel-jest",
     },
@@ -62,12 +52,12 @@ describe("jest-preset", () => {
         path.join(reactNativeMacOSPath, "jest", "setup.js")
       ),
     ],
-    testEnvironment: expect.stringContaining(
-      path.join(reactNativeMacOSPath, "jest", "react-native-env.js")
+    testEnvironment: expect.stringMatching(
+      /[/\\]jest[/\\]react-native-env\.js$/
     ),
     transform: {
-      "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
-        path.join(reactNativeMacOSPath, "jest", "assetFileTransformer.js")
+      "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringMatching(
+        /[/\\]src[/\\]assetFileTransformer\.js$/
       ),
       "\\.[jt]sx?$": "babel-jest",
     },
@@ -90,19 +80,10 @@ describe("jest-preset", () => {
       ),
     ],
     transform: {
-      "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
-        path.join(
-          reactNativeMultiPlatformPath,
-          "jest",
-          "assetFileTransformer.js"
-        )
+      "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringMatching(
+        /[/\\]src[/\\]assetFileTransformer\.js$/
       ),
-      "\\.[jt]sx?$": [
-        "babel-jest",
-        {
-          presets: [require.resolve("@react-native/babel-preset")],
-        },
-      ],
+      "\\.[jt]sx?$": "babel-jest",
     },
   };
 
@@ -122,17 +103,18 @@ describe("jest-preset", () => {
         path.join(reactNativeWindowsPath, "jest", "setup.js")
       ),
     ],
+    testEnvironment: expect.stringMatching(
+      /[/\\]jest[/\\]react-native-env\.js$/
+    ),
     transform: {
-      "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
-        path.join(reactNativeWindowsPath, "jest", "assetFileTransformer.js")
+      "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringMatching(
+        /[/\\]src[/\\]assetFileTransformer\.js$/
       ),
-      "\\.[jt]sx?$": [
-        "babel-jest",
-        {
-          presets: [require.resolve("@react-native/babel-preset")],
-        },
-      ],
+      "\\.[jt]sx?$": "babel-jest",
     },
+    transformIgnorePatterns: [
+      expect.stringMatching(/node_modules[/\\].*react-native-windows/),
+    ],
   };
 
   const consoleWarnSpy = jest.spyOn(global.console, "warn");

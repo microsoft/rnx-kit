@@ -1,0 +1,62 @@
+{
+  "name": "@rnx-kit/lint-package",
+  "version": "0.1.0",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - lint-package",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/lint-package#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/lint-package"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/config": "^0.8.0",
+    "@rnx-kit/lint-json": "^0.2.0",
+    "@rnx-kit/types-kit-config": "^1.0.0",
+    "@rnx-kit/types-node": "^1.0.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tools-filesystem": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0",
+    "@yarnpkg/types": "^4.0.0"
+  },
+  "peerDependencies": {
+    "@yarnpkg/types": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@yarnpkg/types": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=20.18"
+  },
+  "experimental": true
+}

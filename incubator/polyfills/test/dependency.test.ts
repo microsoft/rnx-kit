@@ -1,10 +1,25 @@
 import { equal, match, notEqual } from "node:assert/strict";
+import { createRequire } from "node:module";
 import * as os from "node:os";
 import * as path from "node:path";
-import { describe, it } from "node:test";
+import { after, before, describe, it } from "node:test";
+import { URL, fileURLToPath } from "node:url";
 import { getDependencyPolyfills, resolvePath } from "../src/dependency.ts";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 describe("getDependencyPolyfills()", () => {
+  before(() => {
+    global.require = createRequire(
+      new URL("../src/dependency.ts", import.meta.url)
+    );
+  });
+
+  after(() => {
+    // @ts-expect-error reset `require`
+    global.require = undefined;
+  });
+
   it("collects polyfills from included valid packages", (t) => {
     const errorMock = t.mock.method(console, "error", () => null);
 

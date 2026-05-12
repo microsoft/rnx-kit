@@ -1,6 +1,6 @@
+import { type ColumnOptions, formatAsTable } from "@rnx-kit/tools-formatting";
 import { styleText } from "node:util";
 import { PerfDomain } from "./domain.ts";
-import { type ColumnOptions, formatAsTable } from "./table.ts";
 import type {
   EventFrequency,
   PerfDomainOptions,

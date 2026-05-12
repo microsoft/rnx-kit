@@ -1,5 +1,11 @@
 # @rnx-kit/tsconfig
 
+## 3.0.3
+
+### Patch Changes
+
+- b456423: tsconfig.nodenext.json was missing from the files section
+
 ## 3.0.2
 
 ### Patch Changes

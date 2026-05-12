@@ -27,14 +27,15 @@ class PackageInfoCache {
    * @returns loaded PackageInfo for the package, or throws an exception if not found
    */
   getByPath(pkgPath: string): PackageInfo {
-    const [root, manifestPath] = this.getPackagePaths(pkgPath);
+    const resolvedPath = path.resolve(pkgPath);
+    const [root, manifestPath] = this.getPackagePaths(resolvedPath);
 
     if (!this.byRoot.has(root)) {
       // it's not in the cache so load it
       const manifest = readPackage(manifestPath);
       const workspace = this.isWorkspace(root);
 
-      // it's not a valid package if the manifest can't be laoded
+      // it's not a valid package if the manifest can't be loaded
       if (manifest) {
         // create a new entry and cache it
         this.store({ name: manifest.name, root, manifest, workspace });

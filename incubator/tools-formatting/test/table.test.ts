@@ -63,8 +63,16 @@ describe("formatAsTable", () => {
       noColors: true,
     });
     const lines = result.split("\n").filter(Boolean);
-    // first data row should have "op" left-aligned
-    ok(lines[3]!.includes("│ op"));
+    // "op" left-aligned: "│ op" with trailing padding before the next separator
+    ok(
+      lines[3]!.includes("│ op  "),
+      "left-aligned cell should have trailing padding"
+    );
+    // "1" right-aligned in a 5-char column: "│     1 │" (5 leading spaces, value, 1 trailing)
+    ok(
+      lines[3]!.includes("│     1 │"),
+      "right-aligned cell should have leading padding"
+    );
   });
 
   it("left-aligns columns by default", () => {

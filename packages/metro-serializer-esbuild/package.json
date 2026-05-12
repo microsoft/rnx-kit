@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-serializer-esbuild",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "esbuild serializer for Metro",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme",
   "license": "MIT",
@@ -38,16 +38,16 @@
     "@rnx-kit/tools-node": "^3.0.4",
     "@rnx-kit/tools-react-native": "^2.3.3",
     "@rnx-kit/types-metro-serializer-esbuild": "^1.0.0",
-    "esbuild": "^0.27.1",
+    "esbuild": "^0.28.0",
     "esbuild-plugin-lodash": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@fluentui/utilities": "8.13.9",
-    "@react-native-community/cli-types": "^20.0.0",
-    "@react-native/babel-preset": "^0.83.0",
-    "@react-native/metro-config": "^0.83.0",
+    "@react-native-community/cli-types": "^20.1.0",
+    "@react-native/babel-preset": "^0.85.0",
+    "@react-native/metro-config": "^0.85.0",
     "@rnx-kit/babel-plugin-import-path-remapper": "*",
     "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/metro-config": "*",
@@ -57,13 +57,13 @@
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
     "lodash-es": "^4.17.21",
-    "metro": "^0.83.3",
-    "metro-config": "^0.83.3",
-    "metro-transform-worker": "^0.83.1",
-    "react": "19.2.0",
-    "react-native": "^0.83.0"
+    "metro": "^0.84.0",
+    "metro-config": "^0.84.0",
+    "metro-transform-worker": "^0.84.0",
+    "react": "19.2.3",
+    "react-native": "^0.85.0"
   },
   "engines": {
-    "node": ">=22.11"
+    "node": ">=20.18"
   }
 }

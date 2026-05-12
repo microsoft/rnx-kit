@@ -6,9 +6,11 @@
  * interfaces, JSX components, hooks, native modules, theming, etc.
  */
 import { equal, ok } from "node:assert/strict";
-import { describe, it } from "node:test";
-import { countDiffs, diffAst, type AnyNode } from "./analysis";
-import { getRealWorldFixtures, type FileData } from "./fixtures";
+import { createRequire } from "node:module";
+import { after, before, describe, it } from "node:test";
+import { URL } from "node:url";
+import { countDiffs, diffAst, type AnyNode } from "./analysis.ts";
+import { getRealWorldFixtures, type FileData } from "./fixtures.ts";
 
 const fixtures = getRealWorldFixtures();
 const fileCache: Record<string, FileData> = {};
@@ -18,6 +20,17 @@ function getFile(file: string): FileData {
 }
 
 describe("Real-world fixtures", () => {
+  before(() => {
+    global.require = createRequire(
+      new URL("../src/config.ts", import.meta.url)
+    );
+  });
+
+  after(() => {
+    // @ts-expect-error reset `require`
+    global.require = undefined;
+  });
+
   describe("AST comparison", () => {
     it("all files parse with OXC", () => {
       let parsed = 0;

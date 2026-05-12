@@ -7,7 +7,7 @@ import {
   parsePlatform,
   platformExtensions,
 } from "../src/platform.ts";
-import { fixturePath } from "./fixtures.ts";
+import { fixturePath } from "./fixtures.mts";
 
 describe("React Native > Platform", () => {
   it("expandPlatformExtensions() expands returns all platform extensions", () => {

@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/cli
 
+## 1.1.4
+
+### Patch Changes
+
+- Updated dependencies [f53f04d]
+- Updated dependencies [f5b6034]
+  - @rnx-kit/config@0.8.0
+  - @rnx-kit/third-party-notices@2.0.3
+
 ## 1.1.3
 
 ### Patch Changes

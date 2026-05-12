@@ -1,19 +1,15 @@
-export { getBabelConfig, filterConfigPlugins } from "./config";
-
-export { toBabelAST } from "./estree";
-
-export { initTransformerContext, makeTransformerArgs } from "./options";
-export { hermesParseToAst, oxcParseToAst, parseToAst } from "./parse";
-
-export type { ResolvedPlugin, PluginVisitor } from "./plugins";
+export { getBabelConfig, filterConfigPlugins } from "./config.ts";
+export { toBabelAST } from "./estree.ts";
+export { initTransformerContext, makeTransformerArgs } from "./options.ts";
+export { hermesParseToAst, oxcParseToAst, parseToAst } from "./parse.ts";
+export type { ResolvedPlugin, PluginVisitor } from "./plugins.ts";
 export {
   isConfigItem,
   isPluginObj,
   getPluginKey,
   getPluginTarget,
   updateTransformOptions,
-} from "./plugins";
-
+} from "./plugins.ts";
 export type {
   BabelTransformerOptions,
   BabelTransformerArgs,
@@ -24,4 +20,4 @@ export type {
   TransformerArgs,
   TransformerContext,
   TransformerSettings,
-} from "./types";
+} from "./types.ts";

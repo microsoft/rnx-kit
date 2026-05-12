@@ -9,6 +9,7 @@ cli({
     "microsoft/react-native",
     fileURLToPath(new URL("align-deps-preset.cjs", import.meta.url)),
   ],
-  requirements: ["react-native@0.83"],
+  "no-unmanaged": true,
+  requirements: ["react-native@0.85"],
   write: process.argv.includes("--write"),
 });

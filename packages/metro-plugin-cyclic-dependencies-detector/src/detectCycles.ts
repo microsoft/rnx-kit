@@ -1,10 +1,18 @@
 import { error, warn } from "@rnx-kit/console";
 import { getPackageModuleRefFromModulePath } from "@rnx-kit/tools-node/module";
 import type { CyclicDependencyPluginOptions } from "@rnx-kit/types-plugin-cyclic-dependencies";
-import type { ReadOnlyDependencies, ReadOnlyGraph } from "metro";
+import type { Dependency, ReadOnlyDependencies, ReadOnlyGraph } from "metro";
 import * as path from "node:path";
 
 export type CyclicDependencies = Record<string, string[]>;
+
+// Metro's generated types need to be massaged
+type ResolvedDependency = Readonly<{
+  absolutePath?: string;
+  data: Dependency["data"];
+}>;
+
+type ResolvedDependencyMap = Map<string, ResolvedDependency> | undefined;
 
 export function packageRelativePath(
   modulePath: string,
@@ -42,9 +50,11 @@ export function traverseDependencies(
 
   stack.push(currentModule);
 
-  const moduleDependencies = dependencies.get(currentModule)?.dependencies;
+  const moduleDependencies: ResolvedDependencyMap =
+    dependencies.get(currentModule)?.dependencies;
   if (moduleDependencies) {
     for (const dependency of moduleDependencies.values()) {
+      // @ts-expect-error Internal property used for skipping the module later
       if (dependency["__rnxCyclicDependenciesChecked"]) {
         continue;
       }
@@ -61,6 +71,7 @@ export function traverseDependencies(
       }
 
       // Performance optimization: There is no need to traverse this module again.
+      // @ts-expect-error Internal property
       dependency["__rnxCyclicDependenciesChecked"] = true;
     }
   }

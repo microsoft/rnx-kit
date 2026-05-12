@@ -138,10 +138,4 @@ export const profile: Profile = {
     name: "react-native-reanimated",
     version: "^4.2.2",
   },
-
-  "test-app": {
-    name: "react-native-test-app",
-    version: "^5.0.14",
-    devOnly: true,
-  },
 };

@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/config
 
+## 0.8.0
+
+### Minor Changes
+
+- f53f04d: Fix issues where loading multiple kit configs in the same process would pollute the cached objects
+
+### Patch Changes
+
+- Updated dependencies [22f446e]
+  - @rnx-kit/tools-packages@0.1.3
+
 ## 0.7.5
 
 ### Patch Changes
@@ -149,14 +160,17 @@
   be updated (which seems better than silently ignoring it).
 
   Add:
+
   - bundleOutput
   - sourcemapUseAbsolutePath
 
   Remove:
+
   - bundlePrefix
   - distPath
 
   Rename:
+
   - entryPath -> entryFile
   - sourceMapPath -> sourcemapOutput
   - sourceMapSourcesRootPath -> sourcemapSourcesRoot

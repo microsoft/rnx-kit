@@ -17,7 +17,6 @@
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
-  "type": "commonjs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -40,7 +39,7 @@
     "@types/babel__helper-plugin-utils": "^7.0.0",
     "@types/babel__template": "^7.0.0",
     "@types/node": "^22.0.0",
-    "metro-config": "^0.83.1"
+    "metro-config": "^0.84.0"
   },
   "peerDependencies": {
     "@react-native/js-polyfills": "*"
@@ -51,14 +50,14 @@
     }
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=20.18"
   },
   "experimental": true,
   "rnx-kit": {
     "alignDeps": {
       "requirements": {
         "development": [
-          "react-native@0.81"
+          "react-native@0.85"
         ],
         "production": [
           "react-native@>=0.72 <1.0"

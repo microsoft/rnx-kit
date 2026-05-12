@@ -2,13 +2,15 @@
  * Diagnostic test that finds structural AST differences between OXC and Babel
  * on a single simple non-comment JS fixture, reporting all differences.
  */
+import { formatAsTable } from "@rnx-kit/tools-formatting";
 import { ok } from "node:assert/strict";
-import { describe, it } from "node:test";
-import { formatAsTable } from "../../tools-performance/src/table";
-import type { AnyNode } from "./analysis";
-import { diffAst } from "./analysis";
-import type { FileData } from "./fixtures";
-import { getFixtures, getRealWorldFixtures } from "./fixtures";
+import { createRequire } from "node:module";
+import { after, before, describe, it } from "node:test";
+import { URL } from "node:url";
+import type { AnyNode } from "./analysis.ts";
+import { diffAst } from "./analysis.ts";
+import type { FileData } from "./fixtures.ts";
+import { getFixtures, getRealWorldFixtures } from "./fixtures.ts";
 
 const fileSets = ["js-no-comments", "js-comments", "ts", "realworld"] as const;
 
@@ -40,6 +42,17 @@ function getSrc(set: (typeof fileSets)[number], file: string): string {
 }
 
 describe("AST diff diagnostic", () => {
+  before(() => {
+    global.require = createRequire(
+      new URL("../src/config.ts", import.meta.url)
+    );
+  });
+
+  after(() => {
+    // @ts-expect-error reset `require`
+    global.require = undefined;
+  });
+
   it("can parse ASTs with oxc successfully", () => {
     type RowStats = [string, number, number, number, string, string, string];
     const columns = [

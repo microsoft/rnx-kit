@@ -4,7 +4,7 @@ import * as path from "node:path";
 import { after, before, describe, it } from "node:test";
 import { URL } from "node:url";
 import { requireModuleFromMetro } from "../src/metro.ts";
-import { fixturePath } from "./fixtures.ts";
+import { fixturePath } from "./fixtures.mts";
 
 describe("requireModuleFromMetro", () => {
   // oxlint-disable-next-line typescript/no-explicit-any

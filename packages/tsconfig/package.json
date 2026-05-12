@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tsconfig",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Base TypeScript configs for working with Node",
   "keywords": [
     "node",
@@ -19,10 +19,7 @@
     "directory": "packages/tsconfig"
   },
   "files": [
-    "tsconfig.esm.json",
-    "tsconfig.esm.node.json",
-    "tsconfig.node.json",
-    "tsconfig.json"
+    "tsconfig*.json"
   ],
   "main": "tsconfig.json",
   "exports": {
@@ -32,6 +29,9 @@
     "./tsconfig.esm.json": {
       "default": "./tsconfig.esm.json"
     },
+    "./tsconfig.esm.node.json": {
+      "default": "./tsconfig.esm.node.json"
+    },
     "./tsconfig.json": {
       "default": "./tsconfig.json"
     },
@@ -40,9 +40,6 @@
     },
     "./tsconfig.nodenext.json": {
       "default": "./tsconfig.nodenext.json"
-    },
-    "./tsconfig.esm.node.json": {
-      "default": "./tsconfig.esm.node.json"
     },
     "./package.json": "./package.json"
   },

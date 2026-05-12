@@ -1,30 +1,37 @@
 import { stripVTControlCharacters, styleText } from "node:util";
+import { TABLE_STYLES } from "./const.ts";
+import type {
+  StyleValue,
+  TextOptions,
+  ColorOptions,
+  TableViewParts,
+} from "./types.ts";
 
-export type StyleValue = Parameters<typeof styleText>[0];
 export type ValueFormatter<T = unknown> = (value: T) => string;
 
-export type TableOptions = {
-  /**
-   * Configuration for each column, can be a string for the column label or an object with additional formatting
-   * options. If not provided, columns will be labeled Column1, Column2, etc.
-   */
-  columns?: (string | ColumnOptions)[];
+export type TableOptions = TextOptions &
+  ColorOptions & {
+    /**
+     * Configuration for each column, can be a string for the column label or an object with additional formatting
+     * options. If not provided, columns will be labeled Column1, Column2, etc.
+     */
+    columns?: (string | ColumnOptions)[];
 
-  /**
-   * Optional array of column indices to sort by, in order of precedence. If not provided, no sorting will be applied.
-   */
-  sort?: number[];
+    /**
+     * Optional array of column indices to sort by, in order of precedence. If not provided, no sorting will be applied.
+     */
+    sort?: number[];
 
-  /**
-   * Show an index column at the start of the table with the row number. Defaults to false.
-   */
-  showIndex?: boolean;
+    /**
+     * Show an index column at the start of the table with the row number. Defaults to false.
+     */
+    showIndex?: boolean;
 
-  /**
-   * No color styling will be applied to the table output if this is set to true. Defaults to false.
-   */
-  noColors?: boolean;
-};
+    /**
+     * Optional custom parts to use when drawing the table, such as row separators, header separators, etc.
+     */
+    tableParts?: TableViewParts;
+  };
 
 /**
  * Options for configuring column output
@@ -48,8 +55,9 @@ export type ColumnOptions = {
 
 export function formatAsTable(
   values: unknown[][],
-  { columns, sort, showIndex, noColors }: TableOptions = {}
+  options: TableOptions = {}
 ): string {
+  const { columns, sort, noColors } = options;
   if (values.length === 0) {
     return "";
   }
@@ -80,7 +88,7 @@ export function formatAsTable(
   }
 
   // now render the table based on the prepared row and column data
-  return drawTable(rows, colData, showIndex, noColors);
+  return drawTable(rows, colData, options);
 }
 
 type ResolvedColumnOptions = Omit<ColumnOptions, "label"> & {
@@ -165,17 +173,21 @@ function toRowData(
  * Draw the set of table rows with the given column data
  * @param rows processed rows to render
  * @param columns processed column data with widths and styling information
- * @param addIndex whether to add an index column at the start of the table
+ * @param options table rendering options
  * @returns a string representing the drawn table to be printed to the console
  */
 function drawTable(
   rows: CellEntry[][],
   columns: ResolvedColumnOptions[],
-  addIndex = false,
-  noColors = false
+  { showIndex, noColors, tableParts, asciiOnly }: TableOptions = {}
 ): string {
-  const indexWidth = addIndex ? Math.max(String(rows.length + 1).length, 5) : 0;
-  let output = drawLine(columns, "top", indexWidth);
+  const style =
+    tableParts ?? (asciiOnly ? TABLE_STYLES.ascii : TABLE_STYLES.default);
+  const fill = style.fill;
+  const indexWidth = showIndex
+    ? Math.max(String(rows.length + 1).length, 5)
+    : 0;
+  let output = drawLine(columns, style.top, fill, indexWidth) + "\n";
   const headerRow = columns.map((col) => {
     const rawText = stripVTControlCharacters(col.label);
     return {
@@ -183,44 +195,35 @@ function drawTable(
       width: rawText.length,
     } as CellEntry;
   });
-  output += drawRow(headerRow, columns, "index", indexWidth);
-  output += drawLine(columns, "mid", indexWidth);
+  output += drawRow(headerRow, columns, style.row, "index", indexWidth);
+  output += drawLine(columns, style.mid, fill, indexWidth) + "\n";
   for (let index = 0; index < rows.length; index++) {
-    output += drawRow(rows[index], columns, index + 1, indexWidth);
+    output += drawRow(rows[index], columns, style.row, index + 1, indexWidth);
   }
-  output += drawLine(columns, "bottom", indexWidth);
+  output += drawLine(columns, style.bottom, fill, indexWidth);
   return output;
 }
-
-const segments = {
-  top: ["┌", "┬", "┐"],
-  mid: ["├", "┼", "┤"],
-  bottom: ["└", "┴", "┘"],
-};
 
 /**
  * Draw table lines based on column widths and the type of line (top, mid, bottom)
  * @param colData set of column data with widths to determine how long to draw each segment
- * @param type one of "top", "mid", or "bottom" to determine which line segments to use
+ * @param seg the set of line segments to use for this line, in the order [left, middle, right]
  * @param indexWidth width of the index column, if present. Column will be skipped if width is 0.
  * @returns the drawn line as a string
  */
 function drawLine(
   colData: ResolvedColumnOptions[],
-  type: keyof typeof segments,
+  seg: [string, string, string],
+  fill: string,
   indexWidth = 0
 ) {
-  const seg = segments[type];
   let line = seg[0];
   if (indexWidth > 0) {
-    line += "─".repeat(indexWidth + 2) + seg[1];
+    line += fill.repeat(indexWidth + 2) + seg[1];
   }
   for (let i = 0; i < colData.length; i++) {
-    line += "─".repeat(colData[i].width + 2);
+    line += fill.repeat(colData[i].width + 2);
     line += i === colData.length - 1 ? seg[2] : seg[1];
-  }
-  if (type !== "bottom") {
-    line += "\n";
   }
   return line;
 }
@@ -266,19 +269,23 @@ function alignedText(
 function drawRow(
   cells: CellEntry[],
   columns: ResolvedColumnOptions[],
+  segments: [string, string, string],
   index: number | string,
   indexWidth = 0
 ) {
-  let row = "│";
+  let row = segments[0];
   if (indexWidth > 0) {
     const indexText = String(index);
-    row += alignedText(indexText, indexText.length, indexWidth, "right") + "│";
+    row +=
+      alignedText(indexText, indexText.length, indexWidth, "right") +
+      segments[1];
   }
 
   for (let i = 0; i < cells.length; i++) {
     const col = columns[i];
+    const segment = i === cells.length - 1 ? segments[2] : segments[1];
     const { text, width } = cells[i];
-    row += alignedText(text, width, col.width, col.align ?? "left") + "│";
+    row += alignedText(text, width, col.width, col.align ?? "left") + segment;
   }
   return row + "\n";
 }

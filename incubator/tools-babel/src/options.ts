@@ -1,14 +1,14 @@
 import { getTrace } from "@rnx-kit/tools-performance";
 import type { EventFrequency } from "@rnx-kit/tools-performance";
 import path from "node:path";
-import { getBabelConfig } from "./config";
+import { getBabelConfig } from "./config.ts";
 import type {
   TransformerSettings,
   TransformerContext,
   TransformerArgs,
   BabelTransformerArgs,
   SrcSyntax,
-} from "./types";
+} from "./types.ts";
 
 export const TRACE_DOMAIN = "transform";
 

@@ -4,7 +4,7 @@
  * with only typing fixes to make TypeScript happy.
  */
 import type { PluginItem, TransformOptions } from "@babel/core";
-import type { BabelTransformerOptions } from "metro-babel-transformer";
+import type { BabelTransformerArgs } from "metro-babel-transformer";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -20,7 +20,7 @@ const getBabelRC = (function () {
     projectRoot,
     extendsBabelConfigPath,
     ...options
-  }: BabelTransformerOptions) {
+  }: BabelTransformerArgs["options"]) {
     if (babelRC != null) {
       return babelRC;
     }
@@ -92,7 +92,7 @@ const getBabelRC = (function () {
  */
 export function buildBabelConfig(
   filename: string,
-  options: BabelTransformerOptions & { hot?: boolean },
+  options: BabelTransformerArgs["options"] & { hot?: boolean },
   plugins: PluginItem[] = []
 ): TransformOptions {
   const babelRC = getBabelRC(options);

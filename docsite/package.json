@@ -38,6 +38,8 @@
     "@pnpm/network.ca-file/graceful-fs": "^4.2.10",
     "algoliasearch": "ignore:",
     "algoliasearch-helper": "ignore:",
+    "copy-webpack-plugin/serialize-javascript": "^7.0.3",
+    "css-minimizer-webpack-plugin/serialize-javascript": "^7.0.3",
     "node-gyp": "ignore:"
   },
   "browserslist": {

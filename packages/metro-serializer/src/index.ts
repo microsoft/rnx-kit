@@ -13,7 +13,7 @@ export type MetroPlugin<T = MixedOutput> = (
   entryPoint: string,
   preModules: readonly Module<T>[],
   graph: ReadOnlyGraph<T>,
-  options: SerializerOptions<T>
+  options: SerializerOptions
 ) => void;
 
 export type Bundle = {

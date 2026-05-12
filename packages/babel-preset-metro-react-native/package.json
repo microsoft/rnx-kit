@@ -31,7 +31,7 @@
     "@babel/core": "^7.20.0",
     "@babel/plugin-transform-typescript": "^7.20.0",
     "@babel/runtime": "^7.20.0",
-    "@react-native/babel-preset": "^0.83.0",
+    "@react-native/babel-preset": "^0.85.0",
     "@rnx-kit/babel-plugin-import-path-remapper": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
@@ -56,6 +56,6 @@
     "testRegex": "/test/.*\\.test\\.js$"
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=20.18"
   }
 }

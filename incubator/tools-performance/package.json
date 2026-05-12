@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-performance",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "EXPERIMENTAL - USE WITH CAUTION - tools-performance",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/tools-performance#readme",
   "license": "MIT",
@@ -17,7 +17,6 @@
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
-  "type": "commonjs",
   "sideEffects": false,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -33,10 +32,13 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
+  "dependencies": {
+    "@rnx-kit/tools-formatting": "^0.1.0"
+  },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "metro-config": "^0.83.3"
+    "metro-config": "^0.84.0"
   },
   "engines": {
     "node": ">=22.11"

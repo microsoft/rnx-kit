@@ -43,7 +43,7 @@
     "@rnx-kit/oxlint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "metro": "^0.83.3"
+    "metro": "^0.84.0"
   },
   "peerDependencies": {
     "metro": ">=0.83.0"
