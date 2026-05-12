@@ -53,6 +53,6 @@
     "preset": "@rnx-kit/jest-preset/private"
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=20.18"
   }
 }

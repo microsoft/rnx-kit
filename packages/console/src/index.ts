@@ -1,33 +1,20 @@
-import { WriteStream } from "node:tty";
+import { styleText } from "node:util";
 
 type Color = (s: string) => string;
 type Log = typeof console.log;
 
-let errorTag: string;
-let infoTag: string;
-let warnTag: string;
+// Force disable colors in test environments
+if (process.env["NODE_TEST_CONTEXT"] || process.env["NODE_ENV"] === "test") {
+  process.env["FORCE_COLOR"] = "0";
+}
 
-export let bold: Color;
-export let dim: Color;
+const errorTag = styleText(["red", "bold"], "error");
+const infoTag = styleText(["cyan", "bold"], "info");
+const warnTag = styleText(["yellow", "bold"], "warn");
+
+export const bold: Color = (s) => styleText("bold", s);
+export const dim: Color = (s) => styleText("dim", s);
 
 export const error: Log = (...args) => console.error(errorTag, ...args);
 export const info: Log = (...args) => console.log(infoTag, ...args);
 export const warn: Log = (...args) => console.warn(warnTag, ...args);
-
-if (
-  WriteStream.prototype.hasColors() &&
-  !process.env["NODE_TEST_CONTEXT"] &&
-  process.env["NODE_ENV"] !== "test"
-) {
-  errorTag = "\u001B[31m\u001B[1merror\u001B[22m\u001B[39m";
-  infoTag = "\u001B[36m\u001B[1minfo\u001B[22m\u001B[39m";
-  warnTag = "\u001B[33m\u001B[1mwarn\u001B[22m\u001B[39m";
-  bold = (s) => "\u001B[1m" + s + "\u001B[22m";
-  dim = (s) => "\u001B[2m" + s + "\u001B[22m";
-} else {
-  errorTag = "error";
-  infoTag = "info";
-  warnTag = "warn";
-  bold = (s) => s;
-  dim = bold;
-}

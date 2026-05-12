@@ -98,7 +98,7 @@
     "@types/yargs": "^16.0.0"
   },
   "engines": {
-    "node": ">=20.9"
+    "node": ">=20.18"
   },
   "experimental": true
 }

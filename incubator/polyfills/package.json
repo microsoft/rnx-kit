@@ -50,7 +50,7 @@
     }
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=20.18"
   },
   "experimental": true,
   "rnx-kit": {

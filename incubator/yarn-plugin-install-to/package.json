@@ -37,7 +37,7 @@
     "clipanion": "^4.0.0-rc.4"
   },
   "engines": {
-    "node": ">=18.12",
+    "node": ">=20.18",
     "yarn": ">=4.0"
   },
   "experimental": true
