@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-plugin-typescript",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "description": "Metro plugin for TypeScript type validation",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-typescript#readme",
   "license": "MIT",
@@ -34,7 +34,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/console": "^3.0.0",
     "@rnx-kit/tools-node": "^3.0.4",
     "@rnx-kit/tools-react-native": "^2.3.3",
     "@rnx-kit/types-bundle-config": "^1.0.0",

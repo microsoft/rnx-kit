@@ -1,5 +1,16 @@
 # @rnx-kit/lint-lockfile
 
+## 0.2.0
+
+### Minor Changes
+
+- fe496b4: Use `node:util.styleText`, bumping minimum Node version to 20.18
+
+### Patch Changes
+
+- Updated dependencies [fe496b4]
+  - @rnx-kit/config@0.9.0
+
 ## 0.1.4
 
 ### Patch Changes

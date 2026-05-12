@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 4.0.0
+
+### Major Changes
+
+- fe496b4: Use `node:util.styleText`, bumping minimum Node version to 20.18
+
 ## 3.5.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/console
 
+## 3.0.0
+
+### Major Changes
+
+- fe496b4: Use `node:util.styleText`, bumping minimum Node version to 20.18
+
 ## 2.0.0
 
 ### Major Changes
