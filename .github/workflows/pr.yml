@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@5.1.5
         with:
           node-version: 24
       - name: Deduplicate packages
@@ -102,7 +102,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@5.1.5
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install package dependencies
@@ -130,7 +130,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@5.1.5
         with:
           platform: android
       - name: Install package dependencies
@@ -164,7 +164,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@5.1.5
         with:
           platform: ios
           xcode-developer-dir: /Applications/Xcode_16.4.app
@@ -209,7 +209,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@5.1.5
         with:
           platform: macos
           xcode-developer-dir: /Applications/Xcode_16.4.app
@@ -254,7 +254,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@5.1.5
         with:
           platform: windows
       - name: Install package dependencies
@@ -292,10 +292,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@5.1.5
         with:
           cache-npm-dependencies: ""
-      - name: Install package dependencies (docsite)
+      - name: Deduplicate packages
+        run: |
+          yarn dedupe --check
+        working-directory: docsite
+      - name: Install npm dependencies
         run: |
           yarn
         working-directory: docsite
