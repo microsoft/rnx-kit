@@ -1,5 +1,11 @@
 # @rnx-kit/yarn-plugin-external-workspaces
 
+## 0.2.0
+
+### Minor Changes
+
+- fe496b4: Use `node:util.styleText`, bumping minimum Node version to 20.18
+
 ## 0.1.3
 
 ### Patch Changes

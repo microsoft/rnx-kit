@@ -1,5 +1,16 @@
 # @rnx-kit/polyfills
 
+## 0.3.0
+
+### Minor Changes
+
+- fe496b4: Use `node:util.styleText`, bumping minimum Node version to 20.18
+
+### Patch Changes
+
+- Updated dependencies [fe496b4]
+  - @rnx-kit/console@3.0.0
+
 ## 0.2.1
 
 ### Patch Changes

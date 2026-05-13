@@ -1,7 +1,6 @@
 {
   "name": "@rnx-kit/tools-babel",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.1.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - tools-babel",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/tools-babel#readme",
   "license": "MIT",

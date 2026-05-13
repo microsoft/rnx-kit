@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.4.0
+
+### Minor Changes
+
+- fe496b4: Use `node:util.styleText`, bumping minimum Node version to 20.18
+
+### Patch Changes
+
+- Updated dependencies [fe496b4]
+  - @rnx-kit/console@3.0.0
+
 ## 0.3.2
 
 ### Patch Changes
