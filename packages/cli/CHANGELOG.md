@@ -1,5 +1,24 @@
 # Change Log - @rnx-kit/cli
 
+## 2.0.0
+
+### Major Changes
+
+- fe496b4: Use `node:util.styleText`, bumping minimum Node version to 20.18
+
+### Patch Changes
+
+- Updated dependencies [fe496b4]
+  - @rnx-kit/align-deps@4.0.0
+  - @rnx-kit/metro-plugin-cyclic-dependencies-detector@3.0.0
+  - @rnx-kit/metro-plugin-duplicates-checker@4.0.0
+  - @rnx-kit/third-party-notices@3.0.0
+  - @rnx-kit/metro-service@5.0.0
+  - @rnx-kit/console@3.0.0
+  - @rnx-kit/metro-serializer-esbuild@0.4.0
+  - @rnx-kit/metro-plugin-typescript@0.6.0
+  - @rnx-kit/config@0.9.0
+
 ## 1.1.4
 
 ### Patch Changes

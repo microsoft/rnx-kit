@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-resolver-symlinks",
-  "version": "0.2.11",
+  "version": "0.3.0",
   "description": "Metro resolver with support for symlinks",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-resolver-symlinks#readme",
   "license": "MIT",
@@ -26,7 +26,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/console": "^3.0.0",
     "@rnx-kit/tools-node": "^3.0.3",
     "@rnx-kit/tools-react-native": "^2.3.2",
     "enhanced-resolve": "^5.8.3"
