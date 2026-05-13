@@ -1,4 +1,3 @@
-import { error, warn } from "@rnx-kit/console";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { Capability, KitConfig } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
@@ -13,6 +12,7 @@ import { isSubset, stringify } from "../diff.ts";
 import { dependencySections, modifyManifest } from "../helpers.ts";
 import { updateDependencies } from "../manifest.ts";
 import { ensurePreset, filterPreset, mergePresets } from "../preset.ts";
+import { makeDefaultReporter } from "../reporter.ts";
 import type {
   AlignDepsOptions,
   Changes,
@@ -291,7 +291,7 @@ export function checkPackageManifestUnconfigured(
   manifestPath: string,
   options: Options,
   config: AlignDepsOptions,
-  logError = error,
+  reporter = makeDefaultReporter(manifestPath),
   /** @internal */ fs = nodefs
 ): ErrorCode {
   const { excludePackages, write } = options;
@@ -311,7 +311,7 @@ export function checkPackageManifestUnconfigured(
     const violations = stringify({ capabilities: warnings }, [
       `${manifestPath}: Found dependencies that are currently missing from capabilities:`,
     ]);
-    warn(violations);
+    reporter.warn(violations);
   }
 
   if (errorCount > 0) {
@@ -321,7 +321,7 @@ export function checkPackageManifestUnconfigured(
       const violations = stringify(errors, [
         `${manifestPath}: Found ${errorCount} violation(s) outside of capabilities.`,
       ]);
-      logError(violations);
+      reporter.error(violations);
       return "unsatisfied";
     }
   }
