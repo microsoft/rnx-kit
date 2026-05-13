@@ -158,6 +158,19 @@
           "@rnx-kit/jest-preset"
         ]
       },
+      "incubator/metro-transformer-native": {
+        "entry": [
+          "src/index.ts",
+          "test/**/*.ts"
+        ],
+        "ignoreDependencies": [
+          "@rnx-kit/metro-serializer-esbuild",
+          "@rnx-kit/test-fixtures",
+          "@svgr/plugin-jsx",
+          "@svgr/plugin-svgo",
+          "metro"
+        ]
+      },
       "incubator/tools-babel": {
         "entry": [
           "src/**/index.ts",

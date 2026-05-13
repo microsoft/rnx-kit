@@ -1,6 +1,7 @@
 import { lazyInit } from "@rnx-kit/reporter";
-import { makeTransformerArgs } from "@rnx-kit/tools-babel";
+import { filterConfigPlugins, makeTransformerArgs } from "@rnx-kit/tools-babel";
 import type { BabelTransformerArgs } from "@rnx-kit/tools-babel";
+import { getTrace } from "@rnx-kit/tools-performance";
 import type { TransformerConfigT } from "metro-config";
 import type { TransformerContext, TransformerOptions } from "./types";
 
@@ -10,6 +11,13 @@ import type { TransformerContext, TransformerOptions } from "./types";
 const envVarName = "RNX_TRANSFORMER_NATIVE_OPTIONS";
 
 /**
+ * Environment variable set by `@rnx-kit/metro-serializer-esbuild` when its
+ * `MetroSerializer` factory runs. Used to detect cooperation conflicts at
+ * transformer configuration time.
+ */
+const ESBUILD_ENV = "RNX_METRO_SERIALIZER_ESBUILD";
+
+/**
  * Cached options, obtained from the environment on demand
  */
 export const getPluginOptions = lazyInit(() => {
@@ -17,13 +25,38 @@ export const getPluginOptions = lazyInit(() => {
   return optionsStr ? JSON.parse(optionsStr) : {};
 });
 
+/**
+ * Pattern matching a real `codegenNativeComponent` call site. The previous
+ * `src.includes("codegenNativeComponent")` check produced false positives on
+ * comments, string literals, and unrelated substrings (e.g.
+ * `myCodegenNativeComponentHelper`). The tightened regex requires a word
+ * boundary on the left and a call (`(`) or generic-argument (`<`) on the
+ * right — which matches `codegenNativeComponent("Foo", …)` and
+ * `codegenNativeComponent<Props>(…)` and rejects most false positives.
+ *
+ * Precompiled at module scope so the per-file cost is a single regex test.
+ */
+const CODEGEN_PATTERN = /\bcodegenNativeComponent\s*[(<]/;
+
 export function getTransformerArgs(args: BabelTransformerArgs) {
   const options = getPluginOptions();
-  return makeTransformerArgs<TransformerContext>(
+  const transformerArgs = makeTransformerArgs<TransformerContext>(
     args,
     options,
     updateTransformerContext
   );
+  if (!transformerArgs) return null;
+  const trace = getTrace("transform");
+  const filtered = trace(
+    "transform filter plugins",
+    filterConfigPlugins,
+    transformerArgs.config,
+    transformerArgs.context.configDisabledPlugins
+  );
+  if (filtered) {
+    transformerArgs.config = filtered;
+  }
+  return transformerArgs;
 }
 
 export function updateTransformerContext(
@@ -43,7 +76,7 @@ export function updateTransformerContext(
   // determine what work needs to be done based on native options
   if (nativeTransform) {
     if (srcSyntax === "ts" || srcSyntax === "tsx") {
-      if (args.src.includes("codegenNativeComponent")) {
+      if (CODEGEN_PATTERN.test(args.src)) {
         // codegen native component calls need to go through babel
         context.nativeTransform = false;
       } else {
@@ -93,47 +126,20 @@ export function setTransformerPluginOptions(
     options.parseExtAliases ??= {};
     options.parseExtAliases[".svg"] = "jsx";
   }
+  // Warn when `handleModules: true` conflicts with the esbuild serializer:
+  // having SWC emit CommonJS prevents esbuild from tree-shaking, defeating
+  // the point of using `@rnx-kit/metro-serializer-esbuild`. The warning is
+  // informational only — we do not override the user's setting.
+  if (options.handleModules && process.env[ESBUILD_ENV] === "true") {
+    console.warn(
+      "@rnx-kit/metro-transformer-native: handleModules:true with @rnx-kit/metro-serializer-esbuild will disable tree-shaking. Set handleModules:false (the default) and rely on experimentalImportSupport instead."
+    );
+  }
   // now serialize the options and set them in the environment variable
   process.env[envVarName] = JSON.stringify(options);
 }
 
-export const presetKeys = [
-  "transform-flow-strip-types",
-  "syntax-hermes-parser",
-  "transform-flow-enums",
-  "transform-block-scoping",
-  "transform-class-properties",
-  "transform-private-methods",
-  "transform-private-property-in-object",
-  "syntax-dynamic-import",
-  "syntax-export-default-from",
-  "syntax-nullish-coalescing-operator",
-  "syntax-optional-chaining",
-  "transform-unicode-regex",
-  "warn-on-deep-imports",
-  "transform-react-jsx",
-  "proposal-export-default-from",
-  "transform-modules-commonjs",
-  "transform-classes",
-  "transform-arrow-functions",
-  "transform-computed-properties",
-  "transform-parameters",
-  "transform-shorthand-properties",
-  "transform-optional-catch-binding",
-  "transform-function-name",
-  "transform-literals",
-  "transform-numeric-separator",
-  "transform-sticky-regex",
-  "transform-destructuring",
-  "transform-spread",
-  "transform-object-rest-spread",
-  "transform-async-generator-functions",
-  "transform-async-to-generator",
-  "transform-react-display-name",
-  "transform-optional-chaining",
-  "transform-nullish-coalescing-operator",
-  "transform-logical-assignment-operators",
-  "transform-react-jsx-source",
-  "transform-react-jsx-self",
-  "transform-runtime",
-];
+// NOTE: a static list of preset plugin keys was previously kept here. It was
+// removed because configDisabledPlugins is now populated dynamically by
+// updateTransformerContext, and hardcoding the preset list creates drift
+// against @react-native/babel-preset.

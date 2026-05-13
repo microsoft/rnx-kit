@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-05-12T22:25:43.789Z",
+  "totalNormalizedLines": 218,
+  "nativeLineCount": 215,
+  "baselineLineCount": 218,
+  "onlyNative": 8,
+  "onlyBaseline": 9,
+  "allowedNative": 8,
+  "allowedBaseline": 9,
+  "regressionNative": 0,
+  "regressionBaseline": 0,
+  "regressionRatio": 0,
+  "threshold": 0.05,
+  "samples": {
+    "regressionNative": [],
+    "regressionBaseline": []
+  }
+}

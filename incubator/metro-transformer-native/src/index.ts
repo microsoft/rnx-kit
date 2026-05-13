@@ -15,3 +15,17 @@ export function MetroTransformerNative(
     babelTransformerPath: require.resolve("./babelTransformer"),
   };
 }
+
+export { transform, getCacheKey } from "./babelTransformer";
+
+export type {
+  NativeTarget,
+  TransformerNativeOptions,
+  TransformerOptions,
+  TransformerModule,
+  SourceTransformResult,
+  SourceTransformer,
+  UpstreamDelegate,
+  UpstreamTransformer,
+  SrcType,
+} from "./types";

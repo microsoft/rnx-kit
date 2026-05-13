@@ -66,4 +66,13 @@ describe("MetroTransformerNative", () => {
     equal(typeof parsed.dynamicKey, "string");
     ok(!isNaN(Date.parse(parsed.dynamicKey)));
   });
+
+  it("exposes transform and getCacheKey when required at babelTransformerPath", () => {
+    const config = MetroTransformerNative();
+    ok(config.babelTransformerPath != null);
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const mod = require(config.babelTransformerPath as string);
+    equal(typeof mod.transform, "function");
+    equal(typeof mod.getCacheKey, "function");
+  });
 });

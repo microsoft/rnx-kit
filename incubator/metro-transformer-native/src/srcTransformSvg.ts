@@ -1,5 +1,5 @@
-import type { Config } from "@svgr/core";
 import { getTrace } from "@rnx-kit/tools-performance";
+import type { Config } from "@svgr/core";
 import path from "node:path";
 import type { SourceTransformResult, TransformerArgs } from "./types";
 import { optionalModule } from "./utils";
@@ -50,6 +50,13 @@ export function srcTransformSvg({
   filename,
   context,
 }: TransformerArgs): SourceTransformResult | Promise<SourceTransformResult> {
+  if (!svgCore.available()) {
+    throw new Error(
+      "@rnx-kit/metro-transformer-native: handleSvg is enabled but @svgr/core is not installed. " +
+        "Add @svgr/core, @svgr/plugin-jsx, and @svgr/plugin-svgo to your project's devDependencies, " +
+        "or disable handleSvg in your options."
+    );
+  }
   const { resolveConfig, transform } = svgCore.get();
   const { asyncTransform } = context;
   const trace = getTrace("transform");

@@ -1,0 +1,4 @@
+{
+  "type": "module",
+  "//": "Marks bench/ as an ES module scope so `node --experimental-strip-types bench/*.ts` can use ESM syntax (import.meta.url, etc.). Not published — bench/ is excluded from the package files list."
+}
