@@ -16,7 +16,11 @@
   },
   "files": [
     "lib/**/*.d.ts",
+    "lib/**/*.d.cts",
+    "lib/**/*.d.mts",
     "lib/**/*.js",
+    "lib/**/*.cjs",
+    "lib/**/*.mjs",
     "test/__fixtures__/**/*"
   ],
   "type": "module",
@@ -26,6 +30,17 @@
     ".": {
       "types": "./lib/index.d.ts",
       "default": "./lib/index.js"
+    },
+    "./nodeapp": {
+      "types": "./lib/nodeapp/index.d.ts",
+      "default": "./lib/nodeapp/index.js"
+    },
+    "./nodeapp/cli": {
+      "default": "./lib/nodeapp/cli.js"
+    },
+    "./nodeapp/samples": {
+      "types": "./lib/nodeapp/data/samples.d.ts",
+      "default": "./lib/nodeapp/data/samples.js"
     }
   },
   "scripts": {
