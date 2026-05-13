@@ -9,7 +9,7 @@ import {
 } from "@rnx-kit/tools-workspaces";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { logGroupFor } from "./ci.ts";
+import { withLogGroup } from "./ci.ts";
 import { makeCheckCommand } from "./commands/check.ts";
 import { makeExportCatalogsCommand } from "./commands/exportCatalogs.ts";
 import { makeInitializeCommand } from "./commands/initialize.ts";
@@ -267,29 +267,23 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
   // disk only when everything is in order for the target package. Packages with
   // invalid or missing configurations are skipped.
   const errors = manifests.reduce((errors, manifest) => {
-    const logGroup = logGroupFor(manifest);
-    try {
-      if (logGroup) {
-        console.log(logGroup.start);
-      }
-      const result = command(manifest);
-      printError(manifest, result);
-      if (result !== "success" && result !== "excluded") {
-        return errors + 1;
-      }
-    } catch (e) {
-      if (hasProperty(e, "message")) {
-        error(`${manifest}: ${e.message}`);
-        return errors + 1;
-      }
+    return withLogGroup(manifest, () => {
+      try {
+        const result = command(manifest);
+        printError(manifest, result);
+        if (result !== "success" && result !== "excluded") {
+          return errors + 1;
+        }
+      } catch (e) {
+        if (hasProperty(e, "message")) {
+          error(`${manifest}: ${e.message}`);
+          return errors + 1;
+        }
 
-      throw e;
-    } finally {
-      if (logGroup) {
-        console.log(logGroup.end);
+        throw e;
       }
-    }
-    return errors;
+      return errors;
+    });
   }, 0);
 
   process.exitCode = errors;
