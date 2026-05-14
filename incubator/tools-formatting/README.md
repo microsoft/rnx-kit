@@ -207,7 +207,10 @@ class MyToolRegistry extends ReporterRegistry {
   // Use a tool-specific env var for the explicit override.
   protected override envKey = "MYTOOL_REPORTER";
 
-  override createReporter(type: string, options?: ReporterPropOverrides): Reporter {
+  override createReporter(
+    type: string,
+    options?: ReporterPropOverrides
+  ): Reporter {
     if (type === "teamcity") return teamcityReporter;
     return super.createReporter(type, options);
   }
@@ -230,12 +233,12 @@ override and let the next access rebuild a fresh default.
 `ReporterRegistry` is designed for subclassing. The methods worth overriding
 are:
 
-| Method                    | Purpose                                                           |
-| ------------------------- | ----------------------------------------------------------------- |
-| `createReporter`          | Add new reporter types. Fall through with `super.createReporter`. |
-| `getDefaultReporterType`  | Add CI-provider detection. Fall through with `super`.             |
-| `envKey` (property)       | Change which environment variable provides the explicit override. |
-| `reset`                   | Clear the cached default and the named-reporter cache.            |
+| Method                   | Purpose                                                           |
+| ------------------------ | ----------------------------------------------------------------- |
+| `createReporter`         | Add new reporter types. Fall through with `super.createReporter`. |
+| `getDefaultReporterType` | Add CI-provider detection. Fall through with `super`.             |
+| `envKey` (property)      | Change which environment variable provides the explicit override. |
+| `reset`                  | Clear the cached default and the named-reporter cache.            |
 
 ### Writing a custom reporter
 
@@ -451,14 +454,14 @@ normalizePath(
 Class that owns reporter resolution. Subclass to add new reporter types or
 extend default detection; install your subclass with `setReporterRegistry()`.
 
-| Method / property        | Description                                                                       |
-| ------------------------ | --------------------------------------------------------------------------------- |
-| `getReporter(opt?)`      | Resolve a `ReporterOption` to a `Reporter`. Built-in names are cached per name.   |
-| `getDefaultReporter()`   | Cached lookup of the reporter for `getDefaultReporterType()`.                     |
-| `createReporter(type, opts?)` | Construct a fresh reporter by name. **Override** to add new types.           |
-| `getDefaultReporterType()` | Compute the default reporter name from the environment. **Override** to add CI providers. |
-| `envKey` (protected)     | Environment variable consulted by the default `getDefaultReporterType`.           |
-| `reset()`                | Drop the cached default and per-name reporter cache.                              |
+| Method / property             | Description                                                                               |
+| ----------------------------- | ----------------------------------------------------------------------------------------- |
+| `getReporter(opt?)`           | Resolve a `ReporterOption` to a `Reporter`. Built-in names are cached per name.           |
+| `getDefaultReporter()`        | Cached lookup of the reporter for `getDefaultReporterType()`.                             |
+| `createReporter(type, opts?)` | Construct a fresh reporter by name. **Override** to add new types.                        |
+| `getDefaultReporterType()`    | Compute the default reporter name from the environment. **Override** to add CI providers. |
+| `envKey` (protected)          | Environment variable consulted by the default `getDefaultReporterType`.                   |
+| `reset()`                     | Drop the cached default and per-name reporter cache.                                      |
 
 #### Reporter
 
