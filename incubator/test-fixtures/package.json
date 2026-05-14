@@ -21,6 +21,7 @@
     "lib/**/*.js",
     "lib/**/*.cjs",
     "lib/**/*.mjs",
+    "src/**/*",
     "test/__fixtures__/**/*"
   ],
   "type": "module",
@@ -36,7 +37,7 @@
       "default": "./lib/nodeapp/index.js"
     },
     "./nodeapp/cli": {
-      "default": "./lib/nodeapp/cli.js"
+      "default": "./src/nodeapp/cli.ts"
     },
     "./nodeapp/samples": {
       "types": "./lib/nodeapp/data/samples.d.ts",

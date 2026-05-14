@@ -14,8 +14,35 @@
 
 import * as fs from "node:fs/promises";
 import process from "node:process";
-import { getSample } from "./data/samples.ts";
-import { execute } from "./pipeline.ts";
+import { getSample, sampleNames, samples } from "./data/samples.ts";
+import { execute, runWithResolved } from "./pipeline.ts";
+import { parseStrict } from "./stages/parse-strict.mts";
+
+// Re-export the public API so consumers can bundle the TS source directly
+// via `@rnx-kit/test-fixtures/nodeapp/cli` without separately importing
+// from the lib output of `@rnx-kit/test-fixtures/nodeapp`.
+export {
+  execute as runAppFromUnknown,
+  getSample,
+  parseStrict,
+  runWithResolved as runApp,
+  sampleNames,
+  samples,
+};
+export type {
+  AppInput,
+  AppOutput,
+  AppRecord,
+  GroupSummary,
+  Options,
+  ResolvedOptions,
+  Sample,
+  StddevMode,
+  Summary,
+  Tag,
+  TagCount,
+  Window,
+} from "./types.ts";
 
 type Args = {
   input?: string;
