@@ -14,20 +14,34 @@ export function formatAsTree(
   rows: string[],
   options: TreeFormattingOptions = {}
 ): string {
+  return formatConsoleGroup(header, rows, options).join("\n");
+}
+
+/**
+ * Format grouped content for console (or file) output, using the specified tree formatting options.
+ * @param header header text to display at the top of the tree
+ * @param rows array of strings representing each row to display under the header
+ * @param options tree formatting options to control the appearance of the tree
+ * @returns an array of strings representing the formatted tree, with each element corresponding to a line.
+ */
+export function formatConsoleGroup(
+  header: string,
+  rows: string[],
+  options: TreeFormattingOptions = {}
+): string[] {
   const { asciiOnly, treeParts } = options;
   const indent = resolveIndent(options.indent);
+  const result: string[] = [header];
 
   const treeStyle =
     treeParts ?? (asciiOnly ? TREE_STYLES.ascii : TREE_STYLES.default);
-
-  let result = header;
 
   for (let i = 0; i < rows.length; i++) {
     const isLast = i === rows.length - 1;
     const [branch, cont] = isLast ? treeStyle.last : treeStyle.row;
     const lines = rows[i].split("\n");
     for (let j = 0; j < lines.length; j++) {
-      result += "\n" + indent + (j === 0 ? branch : cont) + lines[j];
+      result.push(indent + (j === 0 ? branch : cont) + lines[j]);
     }
   }
   return result;

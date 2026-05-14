@@ -1,4 +1,10 @@
 import type { styleText } from "node:util";
+import type { SEVERITY_LEVELS } from "./const.ts";
+
+/**
+ * The severity level of a message which is used to determine how it should be formatted and displayed.
+ */
+export type Severity = keyof typeof SEVERITY_LEVELS;
 
 /**
  * The type of value that can be passed to `styleText` to apply styling to text output.
@@ -24,6 +30,70 @@ export type TextOptions = {
    */
   asciiOnly?: boolean;
 };
+
+/**
+ * Payload for a file-related message
+ */
+export type FileMessage = {
+  /**
+   * Message to display for the given file.
+   */
+  message: string;
+
+  /**
+   * File path related to the message. Will be displayed as-is unless root is also set, in which case
+   * it will be made relative to the root path and normalized into the correct format for the environment.
+   */
+  file: string;
+
+  /**
+   * Repo root path. If provided file paths will be made relative to the repo root and normalized
+   * into the correct format such that links will work in GitHub and Azure DevOps. If not provided,
+   * for links to work correctly the file path should be:
+   * - relative to the repo root
+   * - posix normalized (forward slashes)
+   */
+  root?: string;
+
+  /** 1-based line number. */
+  line?: number;
+  /** 1-based column number. */
+  col?: number;
+
+  /** 1-based end line number. Ignored on Azure Pipelines */
+  endLine?: number;
+  /** 1-based end column number. Ignored on Azure Pipelines */
+  endCol?: number;
+  /** Optional short title shown above the message in the GitHub Actions UI. */
+  title?: string;
+};
+
+export type BuiltinReporters = "github" | "azure" | "console" | "file";
+
+/**
+ * A stylistic set of options for handling output formatting for particular targets.
+ */
+export type Reporter = ColorOptions &
+  TextOptions & {
+    /** name of the reporter, for convenience */
+    readonly name: string;
+
+    /** format an annotation message */
+    formatMessage(severity: Severity, message: string): string;
+
+    /** format a file-related message */
+    formatFileMessage(severity: Severity, fileMessage: FileMessage): string;
+
+    /** format a group of messages */
+    formatGroup(header: string, children: string[]): string[];
+  };
+
+/**
+ * Specify a built-in reporter by name or a custom reporter instance to use for formatting output.
+ * If not specified, the default reporter will be used, which is determined based on environment variables
+ * and CI detection.
+ */
+export type ReporterOption = BuiltinReporters | string | Reporter;
 
 /**
  * Tree formatting options
