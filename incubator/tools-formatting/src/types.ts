@@ -1,5 +1,5 @@
 import type { styleText } from "node:util";
-import type { SEVERITY_LEVELS } from "./const.ts";
+import type { BUILTIN_REPORTERS, SEVERITY_LEVELS } from "./const.ts";
 
 /**
  * The severity level of a message which is used to determine how it should be formatted and displayed.
@@ -68,7 +68,7 @@ export type FileMessage = {
   title?: string;
 };
 
-export type BuiltinReporters = "github" | "azure" | "console" | "file";
+export type BuiltinReporter = (typeof BUILTIN_REPORTERS)[number];
 
 /**
  * A stylistic set of options for handling output formatting for particular targets.
@@ -85,15 +85,19 @@ export type Reporter = ColorOptions &
     formatFileMessage(severity: Severity, fileMessage: FileMessage): string;
 
     /** format a group of messages */
-    formatGroup(header: string, children: string[]): string[];
+    formatGroup(header: string, children: string[]): string;
   };
+
+export type ReporterPropOverrides = Partial<
+  Pick<Reporter, "noColors" | "asciiOnly" | "name">
+>;
 
 /**
  * Specify a built-in reporter by name or a custom reporter instance to use for formatting output.
  * If not specified, the default reporter will be used, which is determined based on environment variables
  * and CI detection.
  */
-export type ReporterOption = BuiltinReporters | string | Reporter;
+export type ReporterOption = BuiltinReporter | Reporter | (string & {});
 
 /**
  * Tree formatting options

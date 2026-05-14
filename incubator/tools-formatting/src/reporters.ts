@@ -1,36 +1,18 @@
-import { AzureReporter } from "./azure.ts";
+import { createAzureReporter } from "./azure.ts";
 import { REPORTER_ENV_KEY } from "./const.ts";
-import { GitHubReporter } from "./github.ts";
+import { createGitHubReporter } from "./github.ts";
 import { formatConsoleFileMessage, formatConsoleMessage } from "./messages.ts";
-import { formatConsoleGroup } from "./trees.ts";
-import type { Reporter, BuiltinReporters, ColorOptions } from "./types.ts";
+import { formatAsTree } from "./trees.ts";
+import type {
+  Reporter,
+  BuiltinReporter,
+  ReporterOption,
+  ReporterPropOverrides,
+  Severity,
+  FileMessage,
+} from "./types.ts";
 
-const disableColors: ColorOptions = {
-  noColors: true,
-};
-
-const BUILTIN_REPORTERS: Record<BuiltinReporters, Reporter> = {
-  github: GitHubReporter,
-  azure: AzureReporter,
-  console: {
-    name: "console",
-    noColors: false,
-    asciiOnly: false,
-    formatMessage: formatConsoleMessage,
-    formatFileMessage: formatConsoleFileMessage,
-    formatGroup: formatConsoleGroup,
-  },
-  file: {
-    name: "file",
-    ...disableColors,
-    asciiOnly: false,
-    formatMessage: (severity, message) =>
-      formatConsoleMessage(severity, message, disableColors),
-    formatFileMessage: (severity, fileMessage) =>
-      formatConsoleFileMessage(severity, fileMessage, disableColors),
-    formatGroup: formatConsoleGroup,
-  },
-};
+const reporterCache: Partial<Record<BuiltinReporter, Reporter>> = {};
 
 /**
  * Get a reporter instance based on the provided option. If a built-in reporter name is provided, the corresponding reporter
@@ -39,20 +21,83 @@ const BUILTIN_REPORTERS: Record<BuiltinReporters, Reporter> = {
  * @param reporter The reporter option, which can be a built-in reporter name, a custom reporter instance, or undefined to use the default reporter.
  * @returns A resolved reporter instance.
  */
-export function getReporter(
-  reporter?: BuiltinReporters | string | Reporter
-): Reporter {
+export function getReporter(reporter?: ReporterOption): Reporter {
   if (reporter) {
     if (typeof reporter === "string") {
-      const builtin = BUILTIN_REPORTERS[reporter as BuiltinReporters];
-      if (builtin) {
-        return builtin;
-      }
-    } else {
+      return (reporterCache[reporter as BuiltinReporter] ??= createReporter(
+        reporter as BuiltinReporter
+      ));
+    } else if (typeof reporter === "object" && "formatMessage" in reporter) {
       return reporter;
+    } else {
+      throw new Error(`Invalid reporter option: ${reporter}`);
     }
   }
   return getDefaultReporter();
+}
+
+/**
+ * Construct a fresh built-in reporter of the given type. Used by
+ * {@link getReporter} when a built-in name is requested; the cache layer there
+ * means most callers never invoke this directly. Available as an export so
+ * callers can build customized variants (e.g. an ASCII-only file reporter)
+ * without going through the cache.
+ * @param type The built-in reporter type to create.
+ * @param options Optional overrides for the reporter's name / color / ASCII flags.
+ * @returns A new reporter instance.
+ * @throws if `type` is not a known built-in.
+ */
+export function createReporter(
+  type: BuiltinReporter,
+  options?: ReporterPropOverrides
+): Reporter {
+  switch (type) {
+    case "github":
+      return createGitHubReporter(options);
+    case "azure":
+      return createAzureReporter(options);
+    case "console":
+    case "file":
+      return createConsoleOrFileReporter(type, options);
+    default:
+      throw new Error(`Unknown reporter type: ${type}`);
+  }
+}
+
+/**
+ * Build the shared implementation used by the `"console"` and `"file"` built-in
+ * reporters. Both delegate to the same formatters from `messages.ts` and
+ * `trees.ts`; they only differ in their default `noColors` value (`file`
+ * defaults to no colors so log files don't accumulate ANSI escape codes).
+ * @param type Either `"console"` or `"file"`.
+ * @param options Optional overrides for name / color / ASCII behavior.
+ * @returns A reporter that formats output for plain-text streams.
+ */
+export function createConsoleOrFileReporter(
+  type: Extract<BuiltinReporter, "console" | "file">,
+  options?: ReporterPropOverrides
+): Reporter {
+  const name = options?.name ?? type;
+  const noColors = options?.noColors ?? type === "file";
+  const asciiOnly = options?.asciiOnly ?? false;
+  const base = { name, noColors, asciiOnly };
+
+  function formatMessage(severity: Severity, message: string): string {
+    return formatConsoleMessage(severity, message, base);
+  }
+
+  function formatFileMessage(
+    severity: Severity,
+    fileMessage: FileMessage
+  ): string {
+    return formatConsoleFileMessage(severity, fileMessage, base);
+  }
+
+  function formatGroup(header: string, children: string[]): string {
+    return formatAsTree(header, children, base);
+  }
+
+  return Object.assign(base, { formatMessage, formatFileMessage, formatGroup });
 }
 
 /**
@@ -62,31 +107,29 @@ export function getReporter(
  */
 export const getDefaultReporter = (() => {
   let cachedReporter: Reporter | null = null;
-  return (): Reporter => (cachedReporter ??= resolveDefaultReporter());
+  return (): Reporter =>
+    (cachedReporter ??= getReporter(getDefaultReporterType()));
 })();
 
 /**
  * Resolves the default reporter to use based on environment variables and CI detection.
- * @returns The resolved reporter instance.
+ * @returns The default reporter type.
  * @internal exposed for testing
  */
-export function resolveDefaultReporter(): Reporter {
+export function getDefaultReporterType(): BuiltinReporter {
   const envReporter = process.env[REPORTER_ENV_KEY] as
-    | BuiltinReporters
+    | BuiltinReporter
     | undefined;
   if (envReporter) {
-    const reporter = BUILTIN_REPORTERS[envReporter];
-    if (reporter) {
-      return reporter;
-    }
+    return envReporter;
   }
   if (isGitHubActions()) {
-    return BUILTIN_REPORTERS.github;
+    return "github";
   }
   if (isAzurePipelines()) {
-    return BUILTIN_REPORTERS.azure;
+    return "azure";
   }
-  return BUILTIN_REPORTERS.console;
+  return "console";
 }
 
 /**

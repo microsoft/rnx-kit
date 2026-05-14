@@ -2,33 +2,17 @@ import { TREE_STYLES } from "./const.ts";
 import type { TreeFormattingOptions } from "./types.ts";
 
 /**
- * Format a header and a list of rows into a tree-like string representation using the
- * specified tree formatting options.
+ * Format grouped content for console (or file) output, using the specified tree formatting options.
  * @param header header text to display at the top of the tree
  * @param rows array of strings representing each row to display under the header
  * @param options tree formatting options to control the appearance of the tree
- * @returns a string representing the formatted tree. There will be no trailing newline.
+ * @returns a multiline string representing the formatted tree. There will be no trailing newline.
  */
 export function formatAsTree(
   header: string,
   rows: string[],
   options: TreeFormattingOptions = {}
 ): string {
-  return formatConsoleGroup(header, rows, options).join("\n");
-}
-
-/**
- * Format grouped content for console (or file) output, using the specified tree formatting options.
- * @param header header text to display at the top of the tree
- * @param rows array of strings representing each row to display under the header
- * @param options tree formatting options to control the appearance of the tree
- * @returns an array of strings representing the formatted tree, with each element corresponding to a line.
- */
-export function formatConsoleGroup(
-  header: string,
-  rows: string[],
-  options: TreeFormattingOptions = {}
-): string[] {
   const { asciiOnly, treeParts } = options;
   const indent = resolveIndent(options.indent);
   const result: string[] = [header];
@@ -39,12 +23,12 @@ export function formatConsoleGroup(
   for (let i = 0; i < rows.length; i++) {
     const isLast = i === rows.length - 1;
     const [branch, cont] = isLast ? treeStyle.last : treeStyle.row;
-    const lines = rows[i].split("\n");
+    const lines = rows[i].split(/\r?\n/);
     for (let j = 0; j < lines.length; j++) {
       result.push(indent + (j === 0 ? branch : cont) + lines[j]);
     }
   }
-  return result;
+  return result.join("\n");
 }
 
 /**

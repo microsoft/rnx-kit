@@ -13,6 +13,13 @@ export const SEVERITY_LEVELS = {
   error: 2,
 } as const;
 
+export const BUILTIN_REPORTERS = [
+  "github",
+  "azure",
+  "console",
+  "file",
+] as const;
+
 export const TREE_STYLES: Record<StyleKeys, TreeViewParts> = {
   default: {
     row: ["├── ", "│   "],

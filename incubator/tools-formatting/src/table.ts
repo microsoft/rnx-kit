@@ -106,6 +106,14 @@ type CellEntry = {
   key: string | number;
 };
 
+/**
+ * Resolve a user-provided {@link ColumnOptions} into a {@link ResolvedColumnOptions}
+ * with a label, an initial width (from the label), and a cached `Intl.NumberFormat`
+ * when locale-aware fixed-digit formatting was requested.
+ * @param config The column configuration as provided by the caller.
+ * @param index The 0-based column index, used to synthesize a label when one is missing.
+ * @returns The resolved column data used by subsequent layout passes.
+ */
 function toColumnData(
   config: ColumnOptions,
   index: number
@@ -123,6 +131,17 @@ function toColumnData(
   return { ...config, label, width, intlFormatter };
 }
 
+/**
+ * Convert a single cell value into a {@link CellEntry}: a styled text string,
+ * its visible width, and a sort key. Numeric values honor `digits` /
+ * `intlFormatter` from the column config; over-long text is truncated to
+ * `maxWidth` with an ellipsis. The column's running max width is updated
+ * in-place so downstream layout passes see the widest cell.
+ * @param value The raw value to render.
+ * @param config The resolved column config (mutated to track max width).
+ * @param noColors When true, ANSI control characters are stripped after styling.
+ * @returns The text/width/key entry for this cell.
+ */
 function toCellData(
   value: unknown,
   config: ResolvedColumnOptions,
@@ -159,6 +178,14 @@ function toCellData(
   return { text, width, key };
 }
 
+/**
+ * Convert a row of raw values into an array of {@link CellEntry}s by applying
+ * {@link toCellData} to each column.
+ * @param values The raw row values, in column order.
+ * @param columns The resolved column configurations.
+ * @param noColors When true, strip ANSI styling from each cell after rendering.
+ * @returns The processed row, ready for layout.
+ */
 function toRowData(
   values: unknown[],
   columns: ResolvedColumnOptions[],

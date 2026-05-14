@@ -43,10 +43,13 @@ export function shortenPath(path: string, segments = 3): string {
  * also makes them readable in normal logs as well as it normalizes them to forward slashes and makes them
  * relative to the repo root if a root is provided.
  * @param file The file path to normalize
- * @param root The root directory to make the file path relative to (optional)
+ * @param root The root directory to make the file path relative to, will default to process.cwd which may be less correct
  * @returns The normalized file path
  */
-export function normalizePath(file: string, root?: string): string {
-  const filePath = root ? path.relative(root, file) : file;
+export function normalizePath(
+  file: string,
+  root: string = process.cwd()
+): string {
+  const filePath = path.relative(root, file).replaceAll("\\", "/");
   return path.posix.normalize(filePath);
 }

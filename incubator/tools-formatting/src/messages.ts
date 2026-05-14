@@ -27,7 +27,7 @@ export function compareSeverity(a: Severity, b: Severity): number {
  * @param options Optional color options to determine whether to apply styling or not
  * @returns The styled text if colors are enabled, otherwise the original text
  */
-export function styleText(
+export function colorText(
   style: Parameters<typeof nodeStyleText>[0],
   text: string,
   options?: ColorOptions
@@ -51,7 +51,7 @@ export function formatConsoleMessage(
   if (!severity || !prefixColor) {
     return message;
   }
-  return `${styleText(prefixColor, severity, options)}: ${message}`;
+  return `${colorText(prefixColor, severity, options)}: ${message}`;
 }
 
 /**
@@ -69,16 +69,16 @@ export function formatConsoleFileMessage(
   options?: ColorOptions
 ): string {
   const { message, file, root, line, col, title } = fileMsg;
-  const filePath = root ? normalizePath(file, root) : file;
-  let fileMsgPart = styleText("magenta", filePath, options) + ":";
+  const filePath = normalizePath(file, root);
+  let fileMsgPart = colorText("magenta", filePath, options) + ":";
   if (line !== undefined) {
-    fileMsgPart += styleText("dim", `${line}:`, options);
+    fileMsgPart += colorText("dim", `${line}:`, options);
     if (col !== undefined) {
-      fileMsgPart += styleText("dim", `${col}:`, options);
+      fileMsgPart += colorText("dim", `${col}:`, options);
     }
   }
   if (title) {
-    fileMsgPart += `[${styleText("bold", title, options)}]`;
+    fileMsgPart += ` [${colorText("bold", title, options)}]`;
   }
   return formatConsoleMessage(severity, `${fileMsgPart} ${message}`, options);
 }

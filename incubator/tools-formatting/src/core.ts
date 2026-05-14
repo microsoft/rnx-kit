@@ -41,15 +41,13 @@ export function formatFileMessage(
  * @param header the header to display for the group
  * @param children the messages to include in the group
  * @param reporter the reporter to use for formatting, omit to use the default reporter
- * @returns the formatted group of messages, returned as an array. For github/azure these should be emitted individually rather
- * than joined with newlines, to allow the group formatting to work correctly. It is recommended they all be sent to the same
- * stream (e.g. stderr for errors)
+ * @returns the formatted group of messages
  */
 export function formatGroup(
   header: string,
   children: string[],
   reporter?: ReporterOption
-): string[] {
+): string {
   reporter = getReporter(reporter);
   return reporter.formatGroup(header, children);
 }
