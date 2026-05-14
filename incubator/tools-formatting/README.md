@@ -168,6 +168,75 @@ const asciiFile = createReporter("file", { asciiOnly: true });
 // `formatGroup` will now use `+-- ` / `` `--  `` instead of unicode trees.
 ```
 
+### Extending the registry
+
+Reporter resolution is owned by a [`ReporterRegistry`](#reporterregistry)
+instance. The package exports a process-wide singleton (accessed via
+`getReporterRegistry()`); the top-level helpers (`getReporter`,
+`getDefaultReporter`, `formatMessage`, …) all delegate to it.
+
+To add a new reporter type or change the default-resolution chain, subclass
+`ReporterRegistry` and install your instance with `setReporterRegistry()`
+at the entry point of your tool:
+
+```typescript
+import {
+  ReporterRegistry,
+  setReporterRegistry,
+  type Reporter,
+  type ReporterPropOverrides,
+} from "@rnx-kit/tools-formatting";
+
+const teamcityReporter: Reporter = {
+  name: "teamcity",
+  noColors: true,
+  asciiOnly: true,
+  formatMessage: (sev, msg) =>
+    `##teamcity[message text='${msg}' status='${sev.toUpperCase()}']`,
+  formatFileMessage: (sev, m) =>
+    `##teamcity[message text='${m.file}:${m.line ?? 0}: ${m.message}' status='${sev.toUpperCase()}']`,
+  formatGroup: (header, children) =>
+    [
+      `##teamcity[blockOpened name='${header}']`,
+      ...children,
+      "##teamcity[blockClosed]",
+    ].join("\n"),
+};
+
+class MyToolRegistry extends ReporterRegistry {
+  // Use a tool-specific env var for the explicit override.
+  protected override envKey = "MYTOOL_REPORTER";
+
+  override createReporter(type: string, options?: ReporterPropOverrides): Reporter {
+    if (type === "teamcity") return teamcityReporter;
+    return super.createReporter(type, options);
+  }
+
+  override getDefaultReporterType(): string {
+    if (process.env.TEAMCITY_VERSION) return "teamcity";
+    return super.getDefaultReporterType();
+  }
+}
+
+setReporterRegistry(new MyToolRegistry());
+```
+
+From this point on, every call to `getReporter("teamcity")` (or
+`formatMessage(...)` running under TeamCity) goes through the custom
+registry. Tests can construct their own `ReporterRegistry` instance without
+touching the singleton, or call `setReporterRegistry(undefined)` to drop the
+override and let the next access rebuild a fresh default.
+
+`ReporterRegistry` is designed for subclassing. The methods worth overriding
+are:
+
+| Method                    | Purpose                                                           |
+| ------------------------- | ----------------------------------------------------------------- |
+| `createReporter`          | Add new reporter types. Fall through with `super.createReporter`. |
+| `getDefaultReporterType`  | Add CI-provider detection. Fall through with `super`.             |
+| `envKey` (property)       | Change which environment variable provides the explicit override. |
+| `reset`                   | Clear the cached default and the named-reporter cache.            |
+
 ### Writing a custom reporter
 
 A reporter is just an object that implements the [`Reporter`
@@ -360,9 +429,13 @@ normalizePath(
 | `normalizePath(file, root?)`                          | Make a path relative to `root` (default `process.cwd()`) and convert to POSIX slashes. |
 | `getReporter(reporter?)`                              | Resolve a reporter by name, custom instance, or environment default.                   |
 | `getDefaultReporter()`                                | Get the cached default reporter for the current environment.                           |
+| `getDefaultReporterType()`                            | Get the name of the default reporter that would be selected for the environment.       |
 | `createReporter(type, opts?)`                         | Build a fresh built-in reporter, optionally overriding its defaults.                   |
 | `createGitHubReporter(opts?)`                         | Build a GitHub Actions reporter with optional overrides.                               |
 | `createAzureReporter(opts?)`                          | Build an Azure Pipelines reporter with optional overrides.                             |
+| `createConsoleOrFileReporter(type, opts?)`            | Build a `console` or `file` reporter with optional overrides.                          |
+| `getReporterRegistry()`                               | Get the process-wide singleton `ReporterRegistry` (lazily constructed).                |
+| `setReporterRegistry(registry)`                       | Replace (or clear, with `undefined`) the singleton `ReporterRegistry`.                 |
 | `isGitHubActions()`                                   | Returns `true` when `GITHUB_ACTIONS === "true"`.                                       |
 | `isAzurePipelines()`                                  | Returns `true` when `TF_BUILD === "True"`.                                             |
 
@@ -372,6 +445,20 @@ normalizePath(
 `ReporterPropOverrides`, `ColorOptions`, `TextOptions`, `StyleValue`,
 `TableOptions`, `ColumnOptions`, `TableViewParts`, `TreeFormattingOptions`,
 `TreeViewParts`.
+
+#### ReporterRegistry
+
+Class that owns reporter resolution. Subclass to add new reporter types or
+extend default detection; install your subclass with `setReporterRegistry()`.
+
+| Method / property        | Description                                                                       |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| `getReporter(opt?)`      | Resolve a `ReporterOption` to a `Reporter`. Built-in names are cached per name.   |
+| `getDefaultReporter()`   | Cached lookup of the reporter for `getDefaultReporterType()`.                     |
+| `createReporter(type, opts?)` | Construct a fresh reporter by name. **Override** to add new types.           |
+| `getDefaultReporterType()` | Compute the default reporter name from the environment. **Override** to add CI providers. |
+| `envKey` (protected)     | Environment variable consulted by the default `getDefaultReporterType`.           |
+| `reset()`                | Drop the cached default and per-name reporter cache.                              |
 
 #### Reporter
 

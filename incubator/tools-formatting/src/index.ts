@@ -16,10 +16,16 @@ export {
 export { shortenPath, normalizePath } from "./paths.ts";
 
 export {
-  getReporter,
+  ReporterRegistry,
+  createConsoleOrFileReporter,
+  createReporter,
   getDefaultReporter,
+  getDefaultReporterType,
+  getReporter,
+  getReporterRegistry,
   isAzurePipelines,
   isGitHubActions,
+  setReporterRegistry,
 } from "./reporters.ts";
 
 export type { TableOptions, ColumnOptions } from "./table.ts";
