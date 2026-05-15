@@ -3,7 +3,7 @@ import { filterConfigPlugins, makeTransformerArgs } from "@rnx-kit/tools-babel";
 import type { BabelTransformerArgs } from "@rnx-kit/tools-babel";
 import { getTrace } from "@rnx-kit/tools-performance";
 import type { TransformerConfigT } from "metro-config";
-import type { TransformerContext, TransformerOptions } from "./types";
+import type { TransformerContext, TransformerOptions } from "./types.ts";
 
 /**
  * Environment variable used to pass options to the transformers.

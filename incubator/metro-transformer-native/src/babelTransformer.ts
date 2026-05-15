@@ -6,10 +6,10 @@ import type { BabelTransformerArgs } from "metro-babel-transformer";
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { getPluginOptions, getTransformerArgs } from "./context";
-import { transformFinal } from "./finalTransformer";
-import { srcTransformSvg } from "./srcTransformSvg";
-import { srcTransformSwc } from "./srcTransformSwc";
+import { getPluginOptions, getTransformerArgs } from "./context.ts";
+import { transformFinal } from "./finalTransformer.ts";
+import { srcTransformSvg } from "./srcTransformSvg.ts";
+import { srcTransformSwc } from "./srcTransformSwc.ts";
 import type {
   UpstreamTransformer,
   TransformerModule,
@@ -18,8 +18,8 @@ import type {
   SourceTransformResult,
   TransformerContext,
   TransformerOptions,
-} from "./types";
-import { toArray } from "./utils";
+} from "./types.ts";
+import { toArray } from "./utils.ts";
 
 /**
  * Process-local memoization for resolved upstream delegates. Keyed by the

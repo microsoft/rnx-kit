@@ -1,6 +1,13 @@
 import type { TransformerConfigT } from "metro-config";
-import { setTransformerPluginOptions } from "./context";
-import type { TransformerOptions } from "./types";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { setTransformerPluginOptions } from "./context.ts";
+import type { TransformerOptions } from "./types.ts";
+
+// @ts-expect-error -- support both cjs and esm
+const thisFile = __filename ?? fileURLToPath(import.meta.url);
+const thisDir = path.dirname(thisFile);
+const extension = path.extname(thisFile);
 
 export function MetroTransformerNative(
   options: Partial<TransformerOptions> = {},
@@ -12,11 +19,11 @@ export function MetroTransformerNative(
   // now set the babelTransformerPath to our custom transformer
   return {
     ...config,
-    babelTransformerPath: require.resolve("./babelTransformer"),
+    babelTransformerPath: path.join(thisDir, "babelTransformer" + extension),
   };
 }
 
-export { transform, getCacheKey } from "./babelTransformer";
+export { transform, getCacheKey } from "./babelTransformer.ts";
 
 export type {
   NativeTarget,
@@ -28,4 +35,4 @@ export type {
   UpstreamDelegate,
   UpstreamTransformer,
   SrcType,
-} from "./types";
+} from "./types.ts";

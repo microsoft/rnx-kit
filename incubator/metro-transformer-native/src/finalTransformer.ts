@@ -2,7 +2,7 @@ import type { BabelFileResult } from "@babel/core";
 import { transformFromAstSync, transformFromAstAsync } from "@babel/core";
 import { parseToAst } from "@rnx-kit/tools-babel";
 import { getTrace } from "@rnx-kit/tools-performance";
-import type { TransformerArgs } from "./types";
+import type { TransformerArgs } from "./types.ts";
 
 /**
  * @internal

@@ -7,8 +7,8 @@ import type {
   SourceTransformResult,
   TransformerArgs,
   TransformerContext,
-} from "./types";
-import { optionalModule } from "./utils";
+} from "./types.ts";
+import { optionalModule } from "./utils.ts";
 
 const DEFAULT_TARGET: NativeTarget = "es2022";
 const SUPPORTED_TARGETS: ReadonlySet<NativeTarget> = new Set<NativeTarget>([
@@ -25,7 +25,10 @@ let warnedAboutInvalidTarget = false;
  * an environment variable cannot be type-checked).
  */
 function resolveTarget(target: unknown): NativeTarget {
-  if (typeof target === "string" && SUPPORTED_TARGETS.has(target as NativeTarget)) {
+  if (
+    typeof target === "string" &&
+    SUPPORTED_TARGETS.has(target as NativeTarget)
+  ) {
     return target as NativeTarget;
   }
   if (target !== undefined && !warnedAboutInvalidTarget) {

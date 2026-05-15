@@ -40,6 +40,8 @@
     "@babel/generator": "^7.22.0",
     "@react-native/babel-preset": "^0.83.0",
     "@react-native/metro-babel-transformer": "^0.83.0",
+    "@rnx-kit/metro-config": "*",
+    "@rnx-kit/metro-resolver-symlinks": "*",
     "@rnx-kit/metro-serializer-esbuild": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/test-fixtures": "*",

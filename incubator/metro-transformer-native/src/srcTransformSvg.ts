@@ -1,8 +1,8 @@
 import { getTrace } from "@rnx-kit/tools-performance";
 import type { Config } from "@svgr/core";
 import path from "node:path";
-import type { SourceTransformResult, TransformerArgs } from "./types";
-import { optionalModule } from "./utils";
+import type { SourceTransformResult, TransformerArgs } from "./types.ts";
+import { optionalModule } from "./utils.ts";
 
 export const svgCore =
   optionalModule<typeof import("@svgr/core")>("@svgr/core");
