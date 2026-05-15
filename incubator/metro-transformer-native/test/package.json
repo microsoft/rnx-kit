@@ -1,0 +1,4 @@
+{
+  "//": "Scope the test directory as ES modules so Node's --experimental-strip-types treats *.test.ts as ESM, matching the import/export syntax these files actually use. The package's published code (src/, lib/) stays CommonJS as declared in the root package.json.",
+  "type": "module"
+}

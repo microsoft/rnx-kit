@@ -21,9 +21,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "bench": "node --experimental-strip-types --disable-warning=ExperimentalWarning bench/run.ts",
-    "bench:bundle-compare": "node --experimental-strip-types --disable-warning=ExperimentalWarning bench/bundle-compare.ts",
-    "bench:e2e-validate": "node --experimental-strip-types --disable-warning=ExperimentalWarning bench/e2e-ratios-validate.ts",
+    "bench": "node --experimental-strip-types --disable-warning=ExperimentalWarning test/test_app/bench.mts",
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
@@ -38,6 +36,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.0",
     "@babel/generator": "^7.22.0",
+    "@babel/runtime": "^7.22.0",
     "@react-native/babel-preset": "^0.83.0",
     "@react-native/metro-babel-transformer": "^0.83.0",
     "@rnx-kit/metro-config": "*",
@@ -45,6 +44,7 @@
     "@rnx-kit/metro-serializer-esbuild": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/test-fixtures": "*",
+    "@rnx-kit/tools-formatting": "*",
     "@rnx-kit/tsconfig": "*",
     "@svgr/core": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",

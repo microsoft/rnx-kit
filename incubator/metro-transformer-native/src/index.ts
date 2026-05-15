@@ -1,11 +1,12 @@
 import type { TransformerConfigT } from "metro-config";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { setTransformerPluginOptions } from "./context.ts";
 import type { TransformerOptions } from "./types.ts";
 
-// @ts-expect-error -- support both cjs and esm
-const thisFile = __filename ?? fileURLToPath(import.meta.url);
+// The package is published as CommonJS, so `__filename` is always defined at
+// runtime. We deliberately avoid `import.meta.url` here because referencing it
+// in CJS source is a SyntaxError, even when guarded by `??`.
+const thisFile = __filename;
 const thisDir = path.dirname(thisFile);
 const extension = path.extname(thisFile);
 

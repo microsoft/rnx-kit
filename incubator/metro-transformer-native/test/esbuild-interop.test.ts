@@ -12,7 +12,7 @@
  *     transformer should warn that tree-shaking will be defeated.
  *
  * The end-to-end "an unused export disappears from the final bundle" check
- * lives in slice 05 (`bench/bundle-esbuild.ts`), where Metro.runBuild is
+ * lives in test_app (`test/test_app/permutations.mts native-esbuild-treeshake`), where Metro.runBuild is
  * available to drive a full bundle.
  */
 import type { BabelFileResult } from "@babel/core";

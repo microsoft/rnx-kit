@@ -1,4 +1,0 @@
-{
-  "//": "Resets the module-type scope so metro.config.*.js can use CommonJS require(). The bench/ package.json above sets type:module for the .ts harness files; Metro configs are conventionally CJS.",
-  "type": "commonjs"
-}
