@@ -171,6 +171,11 @@ export type FindPackageDependencyOptions = {
   startDir?: string;
 
   /**
+   * Optional directory where the search should stop.
+   */
+  stopAt?: string;
+
+  /**
    * Optional flag controlling whether symlinks can be found. Defaults to `true`.
    * When `false`, and the package dependency directory is a symlink, it will not
    * be found.
@@ -201,10 +206,12 @@ export function findPackageDependencyDir(
 ): string | undefined {
   const pkgName =
     typeof ref === "string" ? ref : path.join(ref.scope ?? "", ref.name);
+  const startDir = options?.startDir ?? process.cwd();
   const packageDir = findUp(
     path.join("node_modules", pkgName),
     {
-      startDir: options?.startDir,
+      startDir,
+      stopAt: options?.stopAt,
       type: "directory",
       allowSymlinks: options?.allowSymlinks,
     },

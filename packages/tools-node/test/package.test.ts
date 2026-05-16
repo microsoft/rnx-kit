@@ -212,4 +212,40 @@ describe("Node > Package", () => {
     );
     equal(pkgDir, undefined);
   });
+
+  it("findPackageDependencyDir() does not search beyond stopAt", () => {
+    const rootDir = path.join(testTempDir, "repo");
+    const workspaceDir = path.join(rootDir, "packages", "app");
+    const externalDir = path.join(testTempDir, "node_modules", "external");
+    const localDir = path.join(
+      rootDir,
+      "packages",
+      "node_modules",
+      "local"
+    );
+    const blockedLocalDir = path.join(rootDir, "node_modules", "blocked");
+
+    fs.mkdirSync(workspaceDir, { recursive: true });
+    fs.mkdirSync(externalDir, { recursive: true });
+    fs.mkdirSync(localDir, { recursive: true });
+    fs.mkdirSync(blockedLocalDir, { recursive: true });
+
+    const blockedPkgDir = findPackageDependencyDir("external", {
+      startDir: workspaceDir,
+      stopAt: rootDir,
+    });
+    equal(blockedPkgDir, undefined);
+
+    const localPkgDir = findPackageDependencyDir("local", {
+      startDir: workspaceDir,
+      stopAt: rootDir,
+    });
+    equal(localPkgDir, localDir);
+
+    const blockedLocalPkgDir = findPackageDependencyDir("blocked", {
+      startDir: workspaceDir,
+      stopAt: rootDir,
+    });
+    equal(blockedLocalPkgDir, undefined);
+  });
 });
