@@ -6,7 +6,7 @@
  */
 
 import type { AppRecord } from "../types.ts";
-import { asyncChunk, asyncFilter, fromArray } from "../util/iter-async.mts";
+import { asyncChunk, asyncFilter, fromArray } from "../util/iter-async.ts";
 
 export async function* streamRecords(
   records: readonly AppRecord[]

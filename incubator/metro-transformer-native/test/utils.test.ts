@@ -1,6 +1,10 @@
 import { deepEqual, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { optionalModule, toArray } from "../src/utils";
+import { requireSourceModule } from "./helpers.ts";
+
+const { optionalModule, toArray } = requireSourceModule<
+  typeof import("../src/utils.ts")
+>("../src/utils.ts");
 
 describe("toArray", () => {
   it("returns empty array for null", () => {

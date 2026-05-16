@@ -1,15 +1,38 @@
 import { ok, equal } from "node:assert/strict";
+import { createRequire } from "node:module";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { beforeEach, describe, it } from "node:test";
-import { transform } from "../src/babelTransformer";
-import { setTransformerPluginOptions } from "../src/context";
-import { createFixtureArgs } from "./helpers";
+import {
+  createFixtureArgs,
+  deleteSourceModule,
+  requireSourceModule,
+} from "./helpers.ts";
 
+function loadFreshTransformer() {
+  deleteSourceModule("../src/context.ts");
+  deleteSourceModule("../src/babelTransformer.ts");
+  const { transform } = requireSourceModule<
+    typeof import("../src/babelTransformer.ts")
+  >("../src/babelTransformer.ts");
+  const { setTransformerPluginOptions } = requireSourceModule<
+    typeof import("../src/context.ts")
+  >("../src/context.ts");
+  return { transform, setTransformerPluginOptions };
+}
+
+const require = createRequire(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dummyPath = path.join(__dirname, "__fixtures__", "dummyDelegate.cjs");
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 const dummy = require(dummyPath);
 
-beforeEach(() => dummy.__reset());
+let transform: typeof import("../src/babelTransformer.ts").transform;
+let setTransformerPluginOptions: typeof import("../src/context.ts").setTransformerPluginOptions;
+
+beforeEach(() => {
+  dummy.__reset();
+  ({ transform, setTransformerPluginOptions } = loadFreshTransformer());
+});
 
 describe("upstreamDelegates routing", () => {
   it("routes a matching extension to the delegate (absolute path)", () => {

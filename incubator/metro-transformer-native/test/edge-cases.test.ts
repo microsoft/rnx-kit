@@ -1,9 +1,18 @@
 import type { BabelFileResult } from "@babel/core";
 import { equal, ok, throws } from "node:assert/strict";
 import { beforeEach, describe, it } from "node:test";
-import { transform } from "../src/babelTransformer";
-import { setTransformerPluginOptions } from "../src/context";
-import { createFixtureArgs, type ASTNode } from "./helpers";
+import {
+  createFixtureArgs,
+  requireSourceModule,
+  type ASTNode,
+} from "./helpers.ts";
+
+const { transform } = requireSourceModule<
+  typeof import("../src/babelTransformer.ts")
+>("../src/babelTransformer.ts");
+const { setTransformerPluginOptions } = requireSourceModule<
+  typeof import("../src/context.ts")
+>("../src/context.ts");
 
 describe("edge cases", () => {
   beforeEach(() => setTransformerPluginOptions({}));

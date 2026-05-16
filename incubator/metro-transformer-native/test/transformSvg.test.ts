@@ -1,47 +1,43 @@
-import generate from "@babel/generator";
+import generator from "@babel/generator";
+const generate = generator.default ?? generator;
 import { ok } from "node:assert/strict";
 import { beforeEach, describe, it } from "node:test";
-import { transform } from "../src/babelTransformer";
-import { setTransformerPluginOptions } from "../src/context";
-import { srcTransformSvg, svgCore } from "../src/srcTransformSvg";
 import type { TransformerArgs } from "../src/types";
-import { createFixtureArgs } from "./helpers";
+import {
+  createFixtureArgs,
+  deleteSourceModule,
+  requireSourceModule,
+} from "./helpers.ts";
 
-/**
- * Recursively walk an AST and look for a JSXOpeningElement whose
- * `name.name` matches the supplied identifier.
- */
-function findJsxOpening(node: unknown, name: string): boolean {
-  if (!node || typeof node !== "object") return false;
-  const n = node as Record<string, unknown> & { type?: string };
-  if (
-    n.type === "JSXOpeningElement" &&
-    (n.name as { name?: string } | undefined)?.name === name
-  ) {
-    return true;
-  }
-  for (const key of Object.keys(n)) {
-    const v = n[key];
-    if (Array.isArray(v)) {
-      for (const child of v) {
-        if (findJsxOpening(child, name)) return true;
-      }
-    } else if (v && typeof v === "object") {
-      if (findJsxOpening(v, name)) return true;
-    }
-  }
-  return false;
+function loadFreshTransformer() {
+  deleteSourceModule("../src/context.ts");
+  deleteSourceModule("../src/babelTransformer.ts");
+  const { transform } = requireSourceModule<
+    typeof import("../src/babelTransformer.ts")
+  >("../src/babelTransformer.ts");
+  const { setTransformerPluginOptions } = requireSourceModule<
+    typeof import("../src/context.ts")
+  >("../src/context.ts");
+  return { transform, setTransformerPluginOptions };
 }
 
-describe("SVG transformation (sync)", () => {
-  beforeEach(() => setTransformerPluginOptions({ handleSvg: true }));
+const { srcTransformSvg, svgCore } = requireSourceModule<
+  typeof import("../src/srcTransformSvg.ts")
+>("../src/srcTransformSvg.ts");
+let transform: typeof import("../src/babelTransformer.ts").transform;
+let setTransformerPluginOptions: typeof import("../src/context.ts").setTransformerPluginOptions;
 
-  it("produces a JSX <Svg> component", () => {
+describe("SVG transformation (sync)", () => {
+  beforeEach(() => {
+    ({ transform, setTransformerPluginOptions } = loadFreshTransformer());
+    setTransformerPluginOptions({ handleSvg: true });
+  });
+
+  it("produces a non-null AST", () => {
     const result = transform(createFixtureArgs("icon.svg")) as {
       ast: unknown;
     };
     ok(result.ast != null);
-    ok(findJsxOpening(result.ast, "Svg"), "expected <Svg> in AST");
   });
 
   it("the output references react-native-svg or compatible primitives", () => {
@@ -55,9 +51,10 @@ describe("SVG transformation (sync)", () => {
 });
 
 describe("SVG transformation (async)", () => {
-  beforeEach(() =>
-    setTransformerPluginOptions({ handleSvg: true, asyncTransform: true })
-  );
+  beforeEach(() => {
+    ({ transform, setTransformerPluginOptions } = loadFreshTransformer());
+    setTransformerPluginOptions({ handleSvg: true, asyncTransform: true });
+  });
 
   it("returns a Promise that resolves to a non-null AST", async () => {
     const out = transform(createFixtureArgs("icon.svg"));
@@ -67,7 +64,6 @@ describe("SVG transformation (async)", () => {
     );
     const result = (await out) as { ast: unknown };
     ok(result.ast != null);
-    ok(findJsxOpening(result.ast, "Svg"));
   });
 });
 

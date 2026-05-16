@@ -16,13 +16,19 @@
  * available to drive a full bundle.
  */
 import type { BabelFileResult } from "@babel/core";
-import generate from "@babel/generator";
+import generator from "@babel/generator";
+const generate = generator.default ?? generator;
 import type { BabelTransformerOptions } from "@rnx-kit/tools-babel";
 import { ok } from "node:assert/strict";
 import { after, before, describe, it } from "node:test";
-import { transform } from "../src/babelTransformer";
-import { setTransformerPluginOptions } from "../src/context";
-import { createFixtureArgs } from "./helpers";
+import { createFixtureArgs, requireSourceModule } from "./helpers.ts";
+
+const { transform } = requireSourceModule<
+  typeof import("../src/babelTransformer.ts")
+>("../src/babelTransformer.ts");
+const { setTransformerPluginOptions } = requireSourceModule<
+  typeof import("../src/context.ts")
+>("../src/context.ts");
 
 const ESBUILD_ENV = "RNX_METRO_SERIALIZER_ESBUILD";
 

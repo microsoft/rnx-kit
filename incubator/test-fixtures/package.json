@@ -16,10 +16,7 @@
   },
   "files": [
     "lib/**/*.d.ts",
-    "lib/**/*.d.cts",
-    "lib/**/*.d.mts",
     "lib/**/*.js",
-    "lib/**/*.cjs",
     "lib/**/*.mjs",
     "src/**/*",
     "test/__fixtures__/**/*"
@@ -35,6 +32,9 @@
     "./nodeapp": {
       "types": "./lib/nodeapp/index.d.ts",
       "default": "./lib/nodeapp/index.js"
+    },
+    "./nodeapp/source": {
+      "default": "./src/nodeapp/index.ts"
     },
     "./nodeapp/cli": {
       "default": "./src/nodeapp/cli.ts"

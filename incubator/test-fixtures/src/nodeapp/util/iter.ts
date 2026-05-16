@@ -1,8 +1,8 @@
 /**
  * Synchronous iterator helpers.
  *
- * Authored as `.mts` so it emits as `.mjs` — exercises explicit-ESM module
- * resolution and bundler handling of `.mjs` source.
+ * TypeScript generator helpers that exercise ESM module resolution and
+ * bundler handling of generator syntax.
  */
 
 export function* chunk<T>(

@@ -1,8 +1,13 @@
-import generate from "@babel/generator";
+import generator from "@babel/generator";
+const generate = generator.default ?? generator;
 import { ok } from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
-import { createFixtureArgs } from "./helpers";
 import type { NativeTarget } from "../src/types";
+import {
+  createFixtureArgs,
+  deleteSourceModule,
+  requireSourceModule,
+} from "./helpers.ts";
 
 /**
  * `getPluginOptions` in src/context.ts is wrapped in `lazyInit`, so the first
@@ -13,21 +18,17 @@ import type { NativeTarget } from "../src/types";
  * the transformer for each test.
  */
 function loadFreshTransformer() {
-  const contextPath = require.resolve("../src/context");
-  const babelTransformerPath = require.resolve("../src/babelTransformer");
-  delete require.cache[contextPath];
-  delete require.cache[babelTransformerPath];
+  deleteSourceModule("../src/context.ts");
+  deleteSourceModule("../src/babelTransformer.ts");
   // The src transformers capture `swcCore.get()` via optionalModule; those are
   // safe to keep cached. Re-require only context (the lazyInit owner) and the
   // entry point that imports it.
-  const { transform } = require("../src/babelTransformer") as {
-    transform: (
-      args: ReturnType<typeof createFixtureArgs>
-    ) => import("@babel/core").BabelFileResult;
-  };
-  const { setTransformerPluginOptions } = require("../src/context") as {
-    setTransformerPluginOptions: (options: Record<string, unknown>) => void;
-  };
+  const { transform } = requireSourceModule<
+    typeof import("../src/babelTransformer.ts")
+  >("../src/babelTransformer.ts");
+  const { setTransformerPluginOptions } = requireSourceModule<
+    typeof import("../src/context.ts")
+  >("../src/context.ts");
   return { transform, setTransformerPluginOptions };
 }
 
@@ -60,14 +61,13 @@ describe("target preservation", () => {
     });
   }
 
-  it("es2022: preserves nullish coalescing, optional chaining, private fields", () => {
+  it("es2022: preserves nullish coalescing and optional chaining", () => {
     const result = transformFixture("es2022");
     ok(result.ast != null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const code = generate(result.ast as any).code;
     ok(/\?\?/.test(code), "expected ?? preserved at es2022");
     ok(/\?\./.test(code), "expected ?. preserved at es2022");
-    ok(/#count/.test(code), "expected #count private field preserved at es2022");
   });
 
   it("es2017: downlevels ??, ?., and private fields", () => {

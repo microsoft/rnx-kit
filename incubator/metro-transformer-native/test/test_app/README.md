@@ -16,7 +16,7 @@ benchmarking CLI (`yarn bench`).
 | `runBundle.mts` | Parent helper that spawns `bundle.mjs` in a fresh subprocess and returns the structured result. |
 | `evaluateBundle.mts` | Loads a built bundle in a `vm` sandbox and exercises the nodeapp API on a small sample. |
 | `permutations.mts` | Declares the matrix of `BundleOptions` permutations the harness exercises. |
-| `bench.mts` | Benchmark CLI — runs each permutation N+1 times, aggregates timing/heap, emits Markdown + JSON. |
+| `bench.mts` | Benchmark CLI — runs each permutation N+1 times, aggregates timing/heap, emits a bordered table + JSON. |
 | `options.mts` | Bundle option types, env-var protocol, default values. |
 | `node-shims/` | Per-built-in shim files (e.g., `fs.js`, `path.js`) that re-export Node built-ins so Metro can bundle them. |
 | `dist/` | Generated bundles (one per permutation). Not committed. |

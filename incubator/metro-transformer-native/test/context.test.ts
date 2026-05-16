@@ -1,11 +1,11 @@
 import type { BabelTransformerArgs } from "@rnx-kit/tools-babel";
 import { deepEqual, equal, ok } from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
-import {
-  setTransformerPluginOptions,
-  updateTransformerContext,
-} from "../src/context";
 import type { TransformerContext } from "../src/types";
+import { requireSourceModule } from "./helpers.ts";
+
+const { setTransformerPluginOptions, updateTransformerContext } =
+  requireSourceModule<typeof import("../src/context.ts")>("../src/context.ts");
 
 const envVar = "RNX_TRANSFORMER_NATIVE_OPTIONS";
 

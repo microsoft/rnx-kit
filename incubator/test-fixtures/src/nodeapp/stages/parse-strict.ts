@@ -1,8 +1,8 @@
 /**
  * Strict parsing — refuses unknown fields, requires explicit options.
  *
- * Same module-system topology as `parse.mts` but with tighter rules. Exposed
- * as a separate API surface; not part of the default pipeline.
+ * Same parser surface as `parse.ts` but with tighter rules. Exposed as a
+ * separate API surface; not part of the default pipeline.
  */
 
 import { ParseError, ValidationError } from "../errors.cjs";

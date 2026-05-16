@@ -1538,7 +1538,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.5.5":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.22.0, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.5.5":
   version: 7.29.2
   resolution: "@babel/runtime@npm:7.29.2"
   checksum: 10c0/30b80a0140d16467792e1bbeb06f655b0dab70407da38dfac7fedae9c859f9ae9d846ef14ad77bd3814c064295fe9b1bc551f1541ea14646ae9f22b71a8bc17a
@@ -5639,7 +5639,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-resolver-symlinks@workspace:*, @rnx-kit/metro-resolver-symlinks@workspace:packages/metro-resolver-symlinks":
+"@rnx-kit/metro-resolver-symlinks@npm:*, @rnx-kit/metro-resolver-symlinks@workspace:*, @rnx-kit/metro-resolver-symlinks@workspace:packages/metro-resolver-symlinks":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-resolver-symlinks@workspace:packages/metro-resolver-symlinks"
   dependencies:
@@ -5744,13 +5744,17 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.22.0"
     "@babel/generator": "npm:^7.22.0"
+    "@babel/runtime": "npm:^7.22.0"
     "@react-native/babel-preset": "npm:^0.83.0"
     "@react-native/metro-babel-transformer": "npm:^0.83.0"
+    "@rnx-kit/metro-config": "npm:*"
+    "@rnx-kit/metro-resolver-symlinks": "npm:*"
     "@rnx-kit/metro-serializer-esbuild": "npm:*"
     "@rnx-kit/reporter": "npm:^0.2.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/test-fixtures": "npm:*"
     "@rnx-kit/tools-babel": "npm:^0.1.0"
+    "@rnx-kit/tools-formatting": "npm:*"
     "@rnx-kit/tools-performance": "npm:^0.1.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@svgr/core": "npm:^8.1.0"
@@ -6180,7 +6184,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-formatting@npm:^0.1.0, @rnx-kit/tools-formatting@workspace:incubator/tools-formatting":
+"@rnx-kit/tools-formatting@npm:*, @rnx-kit/tools-formatting@npm:^0.1.0, @rnx-kit/tools-formatting@workspace:incubator/tools-formatting":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-formatting@workspace:incubator/tools-formatting"
   dependencies:

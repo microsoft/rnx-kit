@@ -79,17 +79,6 @@ node lib/nodeapp/cli.js --input data.json
 Without `--input` or `--sample`, JSON is read from stdin. Exit code is `0`
 on success, `1` on pipeline error, `2` on argv parse error.
 
-### CLI (source, no build)
-
-Node 22.6+ can run the TypeScript source directly:
-
-```sh
-node --experimental-strip-types src/nodeapp/cli.ts --sample tiny
-```
-
-This works because every `.cts` file was deliberately replaced with raw
-JSDoc-typed `.cjs` so the source is runnable without compilation.
-
 ## Samples
 
 Four named samples are bundled in `data/samples.ts`:
@@ -113,12 +102,12 @@ nodeapp/
 ├── index.ts           Public API: runApp, runAppFromUnknown, samples, parseStrict
 ├── cli.ts             Argv parsing, stdin/file input, JSON output
 ├── config.ts          Option resolution (reads defaults from constants.mjs)
-├── pipeline.ts        Orchestrator — composes stages and bridges ESM↔CJS
+├── pipeline.ts        Orchestrator — composes stages and bridges module styles
 ├── types.ts           Type-only declarations (enforced by ESLint)
 ├── errors.cjs         Raw CJS — custom error classes (JSDoc-typed)
 ├── stages/
-│   ├── parse.mts          Validate + normalize input        (ESM)
-│   ├── parse-strict.mts   Strict variant (rejects unknown keys)
+│   ├── parse.ts           Validate + normalize input
+│   ├── parse-strict.ts    Strict variant (rejects unknown keys)
 │   ├── normalize.ts       Canonicalize tags / ids (class + private fields)
 │   ├── transform.ts       Transformer class (#private, static block, iterator)
 │   ├── stats.ts           Mean / median / stddev / percentile
@@ -129,8 +118,8 @@ nodeapp/
 │   ├── aggregate.cjs      Raw CJS — group summary (CJS→CJS + CJS→ESM dynamic)
 │   └── group.cjs          Raw CJS — bucketing helpers
 ├── util/
-│   ├── iter.mts           Generator helpers (chunk, take, zip, range)
-│   ├── iter-async.mts     Async generator helpers
+│   ├── iter.ts            Generator helpers (chunk, take, zip, range)
+│   ├── iter-async.ts      Async generator helpers
 │   ├── heap.ts            MinHeap<T> — #private fields, Symbol.iterator
 │   ├── sort.ts            Stable sort + comparator builders
 │   ├── validate.ts        Type-guards
@@ -148,21 +137,20 @@ nodeapp/
 The fixture's whole point is to make bundlers and transformers do real work
 on a varied module-system surface:
 
-- **`.ts`** — ESM under `"type": "module"`; compiled to `.js`
-- **`.mts`** — explicit ESM TypeScript; compiled to `.mjs`
-- **`.cjs`** — raw CommonJS JS (no TypeScript); copied through verbatim
-- **`.mjs`** — raw ES module JS (no TypeScript); copied through verbatim
+- **`.ts`** — TypeScript source; compiled to `.js`
+- **`.cjs`** — raw CommonJS JavaScript (no TypeScript); copied through verbatim
+- **`.mjs`** — raw ES module JavaScript (no TypeScript); copied through verbatim
 
-Deliberate cross-module-system edges (these are where bundlers diverge):
+Deliberate module-loading edges (these are where bundlers diverge):
 
-| Edge                                                            | Where                                         |
-| --------------------------------------------------------------- | --------------------------------------------- |
-| ESM dynamically imports CJS (`await import("…/aggregate.cjs")`) | `pipeline.ts` → `stages/aggregate.cjs`        |
-| ESM statically imports named exports from CJS                   | `stages/parse.mts` → `errors.cjs`             |
-| CJS `require`s CJS                                              | `stages/aggregate.cjs` → `stages/group.cjs`   |
-| CJS dynamically imports ESM (`await import("…/constants.mjs")`) | `stages/aggregate.cjs` → `util/constants.mjs` |
-| ESM imports raw `.cjs` (default-import-from-CJS)                | `pipeline.ts` → `util/format.cjs`             |
-| ESM imports raw `.mjs`                                          | `config.ts` → `util/constants.mjs`            |
+| Edge                                                        | Where                                      |
+| ----------------------------------------------------------- | ------------------------------------------ |
+| ESM dynamically imports raw CJS (`await import("…/aggregate.cjs")`) | `pipeline.ts` → `stages/aggregate.cjs`     |
+| TS imports raw CJS                                          | `stages/parse.ts` → `errors.cjs`           |
+| Raw CJS `require`s raw CJS                                  | `stages/aggregate.cjs` → `stages/group.cjs`|
+| Raw CJS dynamically imports ESM (`await import("…/constants.mjs")`) | `stages/aggregate.cjs` → `util/constants.mjs` |
+| TS imports raw CJS                                          | `pipeline.ts` → `util/format.cjs`          |
+| TS imports raw `.mjs`                                       | `config.ts` → `util/constants.mjs`         |
 
 ## Language features exercised
 

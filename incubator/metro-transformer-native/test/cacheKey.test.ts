@@ -1,7 +1,13 @@
 import { doesNotThrow, equal, notEqual, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { computeCacheKey, getCacheKey } from "../src/babelTransformer";
-import { setTransformerPluginOptions } from "../src/context";
+import { requireSourceModule } from "./helpers.ts";
+
+const { computeCacheKey, getCacheKey } = requireSourceModule<
+  typeof import("../src/babelTransformer.ts")
+>("../src/babelTransformer.ts");
+const { setTransformerPluginOptions } = requireSourceModule<
+  typeof import("../src/context.ts")
+>("../src/context.ts");
 
 describe("getCacheKey", () => {
   it("does not throw when computed for the first time", () => {

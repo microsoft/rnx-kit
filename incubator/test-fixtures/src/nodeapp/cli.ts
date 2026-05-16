@@ -16,7 +16,7 @@ import * as fs from "node:fs/promises";
 import process from "node:process";
 import { getSample, sampleNames, samples } from "./data/samples.ts";
 import { execute, runWithResolved } from "./pipeline.ts";
-import { parseStrict } from "./stages/parse-strict.mts";
+import { parseStrict } from "./stages/parse-strict.ts";
 
 // Re-export the public API so consumers can bundle the TS source directly
 // via `@rnx-kit/test-fixtures/nodeapp/cli` without separately importing

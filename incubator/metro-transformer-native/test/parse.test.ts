@@ -4,11 +4,12 @@
  */
 import type { Node } from "@babel/core";
 import { parseSync as babelParseSync } from "@babel/core";
-import generate from "@babel/generator";
+import generator from "@babel/generator";
+const generate = generator.default ?? generator;
 import { hermesParseToAst, oxcParseToAst } from "@rnx-kit/tools-babel";
 import { deepEqual, equal, ok } from "node:assert/strict";
 import { before, describe, it } from "node:test";
-import { createTransformerArgs, readFixture, type ASTNode } from "./helpers";
+import { createTransformerArgs, readFixture, type ASTNode } from "./helpers.ts";
 
 // ── Helpers ──────────────────────────────────────────────────────────
 

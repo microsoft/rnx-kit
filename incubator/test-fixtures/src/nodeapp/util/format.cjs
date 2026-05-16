@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Raw CommonJS file (not TypeScript). Tests bundler handling of raw `.cjs`
+ * Raw CommonJS file (not TypeScript). Tests bundler handling of raw `.js`
  * source. Type-checked via `checkJs: true` + JSDoc.
  */
 

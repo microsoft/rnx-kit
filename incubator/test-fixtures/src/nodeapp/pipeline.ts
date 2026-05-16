@@ -6,7 +6,7 @@
 import { resolveOptions } from "./config.ts";
 import { PipelineError } from "./errors.cjs";
 import { Normalizer } from "./stages/normalize.ts";
-import { parse } from "./stages/parse.mts";
+import { parse } from "./stages/parse.ts";
 import { computeSummary } from "./stages/stats.ts";
 import { tagFrequencies } from "./stages/tags.ts";
 import { topK } from "./stages/topk.ts";

@@ -60,9 +60,9 @@ const babelRuntimeDir = path.dirname(
   require.resolve("@babel/runtime/package.json")
 );
 
-// nodeapp authors a mix of .ts/.js/.mjs source. Metro's default
-// `sourceExts` does NOT include .mjs, so we extend it here.
-const sourceExts = ["js", "mjs", "jsx", "json", "ts", "tsx"];
+// nodeapp authors a mix of .ts/.js/.cjs/.mjs source. Metro's default
+// `sourceExts` does NOT include .cjs or .mjs, so we extend it here.
+const sourceExts = ["js", "mjs", "cjs", "jsx", "json", "ts", "tsx"];
 
 const { esbuild, treeShake, minify, transformer: transformerOptions } = options;
 
@@ -82,16 +82,16 @@ if (esbuild) {
 // baseline permutation.
 let transformer;
 if (transformerOptions) {
-  const {
-    MetroTransformerNative,
-  } = require("../../lib/index.js");
-  transformer = MetroTransformerNative(transformerOptions, baseTransformerConfig);
+  const { MetroTransformerNative } = require("../../lib/index.js");
+  transformer = MetroTransformerNative(
+    transformerOptions,
+    baseTransformerConfig
+  );
 } else {
   transformer = {
     ...baseTransformerConfig,
-    babelTransformerPath: require.resolve(
-      "@react-native/metro-babel-transformer"
-    ),
+    babelTransformerPath:
+      require.resolve("@react-native/metro-babel-transformer"),
   };
 }
 

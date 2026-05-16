@@ -8,7 +8,7 @@
 
 import { getSample, sampleNames, samples } from "./data/samples.ts";
 import { execute, runWithResolved } from "./pipeline.ts";
-import { parseStrict } from "./stages/parse-strict.mts";
+import { parseStrict } from "./stages/parse-strict.ts";
 import type { AppInput, AppOutput } from "./types.ts";
 
 export type {

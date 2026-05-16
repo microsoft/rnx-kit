@@ -115,7 +115,7 @@ describe("nodeapp — module-system surface", () => {
     equal(typeof m.DEFAULT_WINDOW, "number");
   });
 
-  it("loads the raw CJS format module", async () => {
+  it("loads the raw JS format module", async () => {
     const m = await import("../src/nodeapp/util/format.cjs");
     const cjs =
       (m as { default?: { pad?: (n: number, w: number) => string } }).default ??
@@ -123,7 +123,7 @@ describe("nodeapp — module-system surface", () => {
     equal(typeof (cjs as { pad?: unknown }).pad, "function");
   });
 
-  it("loads the raw .cjs errors module from ESM", async () => {
+  it("loads the raw .js errors module from ESM", async () => {
     const m = await import("../src/nodeapp/errors.cjs");
     const cjs =
       (m as { default?: { ParseError?: new (s: string) => Error } }).default ??
@@ -134,12 +134,12 @@ describe("nodeapp — module-system surface", () => {
     equal(err.name, "ParseError");
   });
 
-  it("loads the .mts parse module", async () => {
-    const m = await import("../src/nodeapp/stages/parse.mts");
+  it("loads the .ts parse module", async () => {
+    const m = await import("../src/nodeapp/stages/parse.ts");
     equal(typeof m.parse, "function");
   });
 
-  it("loads the raw .cjs aggregate module via dynamic import", async () => {
+  it("loads the raw .js aggregate module via dynamic import", async () => {
     const m = await import("../src/nodeapp/stages/aggregate.cjs");
     const cjs = (m as { default?: { aggregateGroups?: unknown } }).default ?? m;
     equal(

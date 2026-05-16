@@ -6,7 +6,7 @@ import vm from "node:vm";
 export type NodeappApi = {
   runApp: (input: unknown) => Promise<unknown>;
   getSample: (name: string) => { input: unknown; output: unknown } | undefined;
-  samples: ReadonlyArray<{ name: string; input: unknown; output: unknown }>;
+  samples: readonly { name: string; input: unknown; output: unknown }[];
 };
 
 export type EvaluateBundleResult = {

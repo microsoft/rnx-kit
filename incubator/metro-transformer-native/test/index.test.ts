@@ -1,7 +1,13 @@
 import type { TransformerConfigT } from "metro-config";
 import { equal, ok } from "node:assert/strict";
+import { createRequire } from "node:module";
 import { afterEach, describe, it } from "node:test";
-import { MetroTransformerNative } from "../src/index";
+import { requireSourceModule } from "./helpers.ts";
+
+const { MetroTransformerNative } = requireSourceModule<
+  typeof import("../src/index.ts")
+>("../src/index.ts");
+const require = createRequire(import.meta.url);
 
 describe("MetroTransformerNative", () => {
   const envVar = "RNX_TRANSFORMER_NATIVE_OPTIONS";

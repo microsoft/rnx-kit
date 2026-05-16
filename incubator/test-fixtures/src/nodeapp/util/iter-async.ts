@@ -1,7 +1,7 @@
 /**
  * Asynchronous iterator helpers.
  *
- * Authored as `.mts` so it emits as `.mjs`. Exercises `async function*` and
+ * TypeScript async generator helpers that exercise `async function*` and
  * `for await…of` — common downlevel targets.
  */
 

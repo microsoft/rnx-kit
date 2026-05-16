@@ -2,8 +2,15 @@ import type { BabelFileResult } from "@babel/core";
 import { hermesParseToAst } from "@rnx-kit/tools-babel";
 import { deepEqual, equal, ok, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { handleResult } from "../src/finalTransformer";
-import { createTransformerArgs, type ASTNode } from "./helpers";
+import {
+  createTransformerArgs,
+  requireSourceModule,
+  type ASTNode,
+} from "./helpers.ts";
+
+const { handleResult } = requireSourceModule<
+  typeof import("../src/finalTransformer.ts")
+>("../src/finalTransformer.ts");
 
 describe("handleResult", () => {
   it("returns { ast: null } for null result", () => {

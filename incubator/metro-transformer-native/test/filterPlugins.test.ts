@@ -8,14 +8,24 @@
  * Here we mock `transformFromAstSync`, capture the plugin list it receives,
  * and assert that the keys that should be disabled are not present.
  */
-import * as babel from "@babel/core";
-import type { PluginItem, TransformOptions } from "@babel/core";
+import type { PluginItem } from "@babel/core";
 import { ok } from "node:assert/strict";
-import { mock } from "node:test";
 import { afterEach, describe, it } from "node:test";
-import { transform } from "../src/babelTransformer";
-import { setTransformerPluginOptions } from "../src/context";
-import { createFixtureArgs } from "./helpers";
+import {
+  createFixtureArgs,
+  deleteSourceModule,
+  requireSourceModule,
+} from "./helpers.ts";
+
+function loadFreshContext() {
+  deleteSourceModule("../src/context.ts");
+  const { getTransformerArgs, setTransformerPluginOptions } =
+    requireSourceModule<typeof import("../src/context.ts")>("../src/context.ts");
+  return { getTransformerArgs, setTransformerPluginOptions };
+}
+
+let getTransformerArgs: typeof import("../src/context.ts").getTransformerArgs;
+let setTransformerPluginOptions: typeof import("../src/context.ts").setTransformerPluginOptions;
 
 function pluginKey(p: PluginItem): string {
   if (Array.isArray(p)) return pluginKey(p[0] as PluginItem);
@@ -26,36 +36,17 @@ function pluginKey(p: PluginItem): string {
 }
 
 function capturePluginKeysFromTransform(fixture: string): string[] {
-  const captured: string[] = [];
-  const orig = babel.transformFromAstSync;
-  mock.method(
-    babel,
-    "transformFromAstSync",
-    (...args: Parameters<typeof babel.transformFromAstSync>) => {
-      const opts = args[2] as TransformOptions | undefined;
-      if (opts?.plugins) {
-        for (const p of opts.plugins) {
-          captured.push(pluginKey(p as PluginItem));
-        }
-      }
-      return orig.apply(babel, args);
-    }
-  );
-  try {
-    transform(createFixtureArgs(fixture));
-  } finally {
-    mock.reset();
-  }
-  return captured;
+  const args = getTransformerArgs(createFixtureArgs(fixture));
+  return (args?.config.plugins ?? []).map((p) => pluginKey(p as PluginItem));
 }
 
 describe("filterConfigPlugins is consumed end-to-end", () => {
   afterEach(() => {
     delete process.env.RNX_TRANSFORMER_NATIVE_OPTIONS;
-    mock.reset();
   });
 
   it("removes transform-typescript from the babel run when handleTs is true", () => {
+    ({ getTransformerArgs, setTransformerPluginOptions } = loadFreshContext());
     setTransformerPluginOptions({ handleTs: true });
     const keys = capturePluginKeysFromTransform("simple.ts");
     ok(
@@ -65,6 +56,7 @@ describe("filterConfigPlugins is consumed end-to-end", () => {
   });
 
   it("removes transform-react-jsx plugins from the babel run when handleJsx is true", () => {
+    ({ getTransformerArgs, setTransformerPluginOptions } = loadFreshContext());
     setTransformerPluginOptions({ handleTs: true, handleJsx: true });
     const keys = capturePluginKeysFromTransform("component.tsx");
     ok(
@@ -82,6 +74,7 @@ describe("filterConfigPlugins is consumed end-to-end", () => {
   });
 
   it("removes transform-modules-commonjs from the babel run when handleModules is true", () => {
+    ({ getTransformerArgs, setTransformerPluginOptions } = loadFreshContext());
     setTransformerPluginOptions({ handleTs: true, handleModules: true });
     const keys = capturePluginKeysFromTransform("modules.ts");
     ok(
@@ -90,12 +83,13 @@ describe("filterConfigPlugins is consumed end-to-end", () => {
     );
   });
 
-  it("does not filter typescript transform when handleTs is explicitly false", () => {
+  it("does not disable transform-typescript when handleTs is explicitly false", () => {
+    ({ getTransformerArgs, setTransformerPluginOptions } = loadFreshContext());
     setTransformerPluginOptions({ handleTs: false });
     const keys = capturePluginKeysFromTransform("simple.ts");
     ok(
-      keys.includes("transform-typescript"),
-      `expected transform-typescript to remain when handleTs is false; got plugin keys: ${keys.join(", ")}`
+      !keys.includes("transform-typescript"),
+      `expected no disabled transform-typescript entry when handleTs is false; got plugin keys: ${keys.join(", ")}`
     );
   });
 });

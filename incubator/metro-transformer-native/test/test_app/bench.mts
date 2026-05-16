@@ -20,10 +20,10 @@
  *   --no-evaluate     skip the post-bundle vm-evaluation sanity check
  */
 
+import { formatAsTable, type ColumnOptions } from "@rnx-kit/tools-formatting";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { formatAsTable, type ColumnOptions } from "@rnx-kit/tools-formatting";
 import { evaluateBundle } from "./evaluateBundle.mts";
 import { PERMUTATIONS, type Permutation } from "./permutations.mts";
 import { runBundle, type RunBundleResult } from "./runBundle.mts";
@@ -183,8 +183,8 @@ async function runPermutation(
 
 function formatBytes(n: number): string {
   if (n < 1024) return `${n}B`;
-  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)}KB`;
-  return `${(n / 1024 / 1024).toFixed(1)}MB`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / 1024 / 1024).toFixed(1)} MB`;
 }
 
 async function main() {
@@ -239,8 +239,8 @@ async function main() {
           ? "⚠️ eval-fail"
           : "🛠 built"
       : "❌ failed",
-    s.bundleMs.mean,
-    s.bundleMs.p95,
+    s.bundleMs.mean / 1000,
+    s.bundleMs.p95 / 1000,
     s.heap.mean,
     s.bytes,
   ]);
@@ -248,21 +248,21 @@ async function main() {
     { label: "Permutation", align: "left" },
     { label: "Status", align: "left" },
     {
-      label: "bundleMs mean",
+      label: "time (avg)",
       align: "right",
-      format: (v) => `${(v as number).toFixed(0)}ms`,
+      format: (v) => `${(v as number).toFixed(2)} s`,
     },
     {
-      label: "bundleMs p95",
+      label: "time (p95)",
       align: "right",
-      format: (v) => `${(v as number).toFixed(0)}ms`,
+      format: (v) => `${(v as number).toFixed(2)} s`,
     },
     {
-      label: "heap (mean)",
+      label: "heap (avg)",
       align: "right",
       format: (v) => formatBytes(v as number),
     },
-    { label: "bytes", align: "right", format: (v) => formatBytes(v as number) },
+    { label: "size", align: "right", format: (v) => formatBytes(v as number) },
   ];
 
   process.stdout.write(`# test_app bench results\n\n`);

@@ -9,25 +9,46 @@ import type { BabelTransformerOptions } from "@rnx-kit/tools-babel";
  *   - handleModules:true              → SWC emits CommonJS
  *   - neither                          → SWC runs syntax-only (no `module` field)
  */
-import * as swcCore from "@swc/core";
+import type * as swcCoreTypes from "@swc/core";
 import { equal, ok } from "node:assert/strict";
+import { createRequire } from "node:module";
 import { afterEach, describe, it, mock } from "node:test";
-import { transform } from "../src/babelTransformer";
-import { setTransformerPluginOptions } from "../src/context";
-import { createFixtureArgs } from "./helpers";
+import {
+  createFixtureArgs,
+  deleteSourceModule,
+  requireSourceModule,
+} from "./helpers.ts";
+
+const require = createRequire(import.meta.url);
+const swcCore = require("@swc/core") as typeof swcCoreTypes;
+
+function loadFreshTransformer() {
+  deleteSourceModule("../src/context.ts");
+  deleteSourceModule("../src/babelTransformer.ts");
+  const { transform } = requireSourceModule<
+    typeof import("../src/babelTransformer.ts")
+  >("../src/babelTransformer.ts");
+  const { setTransformerPluginOptions } = requireSourceModule<
+    typeof import("../src/context.ts")
+  >("../src/context.ts");
+  return { transform, setTransformerPluginOptions };
+}
+
+let transform: typeof import("../src/babelTransformer.ts").transform;
+let setTransformerPluginOptions: typeof import("../src/context.ts").setTransformerPluginOptions;
 
 type CapturedCalls = {
-  calls: swcCore.Options[];
+  calls: swcCoreTypes.Options[];
   restore: () => void;
 };
 
 function captureSwcOptions(): CapturedCalls {
-  const calls: swcCore.Options[] = [];
+  const calls: swcCoreTypes.Options[] = [];
   const orig = swcCore.transformSync;
   mock.method(
     swcCore,
     "transformSync",
-    (src: string, opts: swcCore.Options) => {
+    (src: string, opts: swcCoreTypes.Options) => {
       calls.push(opts);
       return orig(src, opts);
     }
@@ -46,7 +67,12 @@ describe("handleModules SWC wiring", () => {
     mock.restoreAll();
   });
 
+  function resetTransformer() {
+    ({ transform, setTransformerPluginOptions } = loadFreshTransformer());
+  }
+
   it("emits module.type === 'commonjs' when handleModules:true and experimentalImportSupport:false", () => {
+    resetTransformer();
     setTransformerPluginOptions({ handleModules: true });
     const cap = captureSwcOptions();
     transform(createFixtureArgs("modules.ts"));
@@ -56,6 +82,7 @@ describe("handleModules SWC wiring", () => {
   });
 
   it("emits module.type === 'es6' when experimentalImportSupport:true", () => {
+    resetTransformer();
     setTransformerPluginOptions({});
     const cap = captureSwcOptions();
     transform(
@@ -69,6 +96,7 @@ describe("handleModules SWC wiring", () => {
   });
 
   it("omits module entirely when neither flag is set", () => {
+    resetTransformer();
     setTransformerPluginOptions({});
     const cap = captureSwcOptions();
     transform(createFixtureArgs("modules.ts"));

@@ -11,7 +11,7 @@
 import { ok, equal } from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { after, before, describe, it } from "node:test";
+import { describe, it } from "node:test";
 import { evaluateBundle } from "./test_app/evaluateBundle.mts";
 import { PERMUTATIONS } from "./test_app/permutations.mts";
 import { runBundle } from "./test_app/runBundle.mts";

@@ -1,8 +1,8 @@
 /**
  * Input parsing — basic validation + shape coercion.
  *
- * Authored as `.mts` so it emits as `.mjs`. Imports `errors.cjs` (CJS) to
- * exercise ESM-named-import-from-CJS interop.
+ * TypeScript parser that imports raw JS error classes to exercise
+ * named-import-from-CommonJS interop in bundlers.
  */
 
 import { ParseError } from "../errors.cjs";

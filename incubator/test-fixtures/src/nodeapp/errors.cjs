@@ -2,8 +2,8 @@
 /**
  * Raw CommonJS module of custom error classes. Type-checked via JSDoc.
  *
- * Imported by both ESM (`.mts`/`.ts`) and CJS (`.cjs`) consumers, exercising
- * named-import-from-CJS interop in bundlers.
+ * Imported by TypeScript and raw JavaScript consumers, exercising
+ * named-import-from-CommonJS interop in bundlers.
  */
 
 "use strict";

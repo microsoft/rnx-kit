@@ -1,9 +1,14 @@
 import type { BabelFileResult } from "@babel/core";
 import { equal, ok } from "node:assert/strict";
 import { beforeEach, describe, it } from "node:test";
-import { __testOnlyGetLastContext, transform } from "../src/babelTransformer";
-import { setTransformerPluginOptions } from "../src/context";
-import { createFixtureArgs } from "./helpers";
+import { createFixtureArgs, requireSourceModule } from "./helpers.ts";
+
+const { __testOnlyGetLastContext, transform } = requireSourceModule<
+  typeof import("../src/babelTransformer.ts")
+>("../src/babelTransformer.ts");
+const { setTransformerPluginOptions } = requireSourceModule<
+  typeof import("../src/context.ts")
+>("../src/context.ts");
 
 describe("codegenNativeComponent detection", () => {
   beforeEach(() => setTransformerPluginOptions({}));
