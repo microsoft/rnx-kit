@@ -38,6 +38,55 @@ Native below 0.64.
 
 ## Usage
 
+If you use `@rnx-kit/cli` (or `react-native rnx-bundle`), enable tree shaking in
+your rnx-kit configuration:
+
+```json
+{
+  "rnx-kit": {
+    "bundle": {
+      "entryFile": "index.js",
+      "targets": ["android", "ios"],
+      "treeShake": true
+    }
+  }
+}
+```
+
+Then create a production bundle:
+
+```sh
+react-native rnx-bundle --platform ios --dev false
+```
+
+The `treeShake` property can also be an options object for this serializer. See
+the [Options](#options) section for all available options.
+
+```json
+{
+  "rnx-kit": {
+    "bundle": {
+      "treeShake": {
+        "analyze": true,
+        "metafile": "dist/esbuild-meta.json",
+        "drop": ["debugger"]
+      }
+    }
+  }
+}
+```
+
+For one-off validation, use the command-line override:
+
+```sh
+react-native rnx-bundle --platform ios --dev false --tree-shake true
+```
+
+Tree shaking only runs for production bundles. If `--dev` is true, it is turned
+off even when `treeShake` is enabled.
+
+### Manual Metro Setup
+
 esbuild works best when we pass it ES6 modules. The first thing we must do is to
 disable import/export transformation by enabling `disableImportExportTransform`
 in `babel.config.js`:
@@ -241,6 +290,10 @@ Determines whether esbuild should produce some metadata about the build in JSON
 format.
 
 See the full documentation at https://esbuild.github.io/api/#metafile.
+
+You can load the generated JSON in the
+[esbuild bundle size analyzer](https://esbuild.github.io/analyze/) to inspect
+which modules contributed to the final bundle.
 
 ## Metro + ESM Support
 
