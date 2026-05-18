@@ -77,6 +77,9 @@ jobs:
             git diff | yarn suggestion-bot
           fi
           git diff --exit-code
+      - name: Report Node minimum version inconsistencies
+        run: |
+          node scripts/lint-node-version.ts
       - name: Report @rnx-kit/build workflow inconsistencies
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

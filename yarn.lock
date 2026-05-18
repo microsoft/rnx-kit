@@ -5698,7 +5698,6 @@ __metadata:
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/jest": "npm:^29.2.1"
     "@types/node": "npm:^24.0.0"
-    "@types/yargs": "npm:^16.0.0"
     "@typescript/native-preview": "catalog:"
     "@yarnpkg/cli": "npm:^4.6.0"
     clipanion: "npm:^4.0.0-rc.4"
@@ -5708,7 +5707,6 @@ __metadata:
     oxfmt: "catalog:"
     typedoc: "npm:^0.28.0"
     typescript: "catalog:"
-    yargs: "npm:^16.0.0"
   bin:
     rnx-kit-scripts: src/index.js
   languageName: unknown

@@ -1,7 +1,6 @@
 // @ts-check
 
 /**
- * @typedef {(args?: import("yargs").Arguments, rawArgs?: string[]) => Promise<void>} Command
  * @typedef {import("node:child_process").SpawnOptions} SpawnOptions
  */
 
