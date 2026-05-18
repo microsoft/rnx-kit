@@ -9,12 +9,15 @@
  *
  * This module provides:
  * - **GitRepo**: Class wrapping a directory path, providing typed git operations
+ *   (includes **tagsPointingAt** for listing tags at a commit)
  * - **isGitRepo**: Check if a directory is a git repository
  * - **clone**: Clone a repository with progress streaming
  * - **listFilesWithExclusions**: List tracked files with .syncignore support
  * - **getAllowedRelativePaths**: Get relative paths with prefix stripping
  * - **getGitTreeHashes**: Get file hashes from `git ls-tree`
  * - **getChangeStats**: Parse `git status` into change statistics
+ * - **pickTag**: Choose a tag from candidates, biased toward continuity with
+ *   an existing tag (longest common prefix)
  *
  * @example
  * ```typescript
@@ -111,6 +114,22 @@ export class GitRepo {
     if (opts?.count) args.push("-n", String(opts.count));
     args.push(ref);
     return spawn("git", args, { cwd: this.dir, fallback: "" });
+  }
+
+  /**
+   * List tags that point exactly at the given commit.
+   * Returns [] if none, or if the git command fails.
+   * Handles both lightweight and annotated tags.
+   */
+  async tagsPointingAt(commit: string): Promise<string[]> {
+    const out = await spawn("git", ["tag", "--points-at", commit], {
+      cwd: this.dir,
+      fallback: "",
+    });
+    return out
+      .split("\n")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
   }
 
   /** Check if `base` is an ancestor of `target`. */
@@ -630,4 +649,48 @@ export async function getChangeStats(
   }
 
   return { modified, added, deleted };
+}
+
+// =============================================================================
+// Tag Utilities
+// =============================================================================
+
+function commonPrefixLength(a: string, b: string): number {
+  const max = Math.min(a.length, b.length);
+  let i = 0;
+  while (i < max && a.charCodeAt(i) === b.charCodeAt(i)) i++;
+  return i;
+}
+
+/**
+ * Pick the best tag for a synced commit from a list of candidates.
+ *
+ * Rules:
+ * - No candidates → empty string (signals "clear any previously stored tag").
+ * - One candidate → use it.
+ * - Multiple candidates, no existing tag → first lexicographic.
+ * - Multiple candidates, existing tag present → candidate with the longest
+ *   common prefix to the existing tag; ties broken lexicographically.
+ *
+ * The lexicographic tiebreak and the sort are stable, so the result is
+ * deterministic for a given input.
+ */
+export function pickTag(candidates: string[], existing: string): string {
+  if (candidates.length === 0) return "";
+  if (candidates.length === 1) return candidates[0];
+
+  const sorted = [...candidates].sort();
+  if (!existing) return sorted[0];
+
+  let best = sorted[0];
+  let bestLcp = commonPrefixLength(best, existing);
+  for (let i = 1; i < sorted.length; i++) {
+    const cand = sorted[i];
+    const lcp = commonPrefixLength(cand, existing);
+    if (lcp > bestLcp) {
+      best = cand;
+      bestLcp = lcp;
+    }
+  }
+  return best;
 }

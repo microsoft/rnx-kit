@@ -11,6 +11,7 @@ import {
   GitRepo,
   getAllowedRelativePaths,
   listFilesWithExclusions,
+  pickTag,
 } from "../src/modules/git.ts";
 import { spawn } from "../src/modules/proc.ts";
 
@@ -257,5 +258,107 @@ describe("GitRepo sparse checkout", () => {
 
     // Now other/c.txt should be back
     assert.ok(fs.existsSync(path.join(tempDir, "other", "c.txt")));
+  });
+});
+
+describe("GitRepo.tagsPointingAt", () => {
+  it("returns empty array when no tags point at the commit", async () => {
+    repo = await initRepoWithFiles(tempDir, { "a.txt": "a" });
+    const head = await repo.revParse("HEAD");
+    const tags = await repo.tagsPointingAt(head);
+    assert.deepStrictEqual(tags, []);
+  });
+
+  it("returns a single tag pointing at the commit", async () => {
+    repo = await initRepoWithFiles(tempDir, { "a.txt": "a" });
+    await spawn("git", ["tag", "v1.0.0"], { cwd: tempDir });
+
+    const head = await repo.revParse("HEAD");
+    const tags = await repo.tagsPointingAt(head);
+    assert.deepStrictEqual(tags, ["v1.0.0"]);
+  });
+
+  it("returns multiple tags pointing at the same commit", async () => {
+    repo = await initRepoWithFiles(tempDir, { "a.txt": "a" });
+    await spawn("git", ["tag", "v1.0.0"], { cwd: tempDir });
+    await spawn("git", ["tag", "release-1"], { cwd: tempDir });
+
+    const head = await repo.revParse("HEAD");
+    const tags = await repo.tagsPointingAt(head);
+    assert.deepStrictEqual(tags.sort(), ["release-1", "v1.0.0"]);
+  });
+
+  it("does not return tags pointing at other commits", async () => {
+    repo = await initRepoWithFiles(tempDir, { "a.txt": "a" });
+    const first = await repo.revParse("HEAD");
+    await spawn("git", ["tag", "v1.0.0"], { cwd: tempDir });
+
+    writeFile(path.join(tempDir, "b.txt"), "b");
+    await spawn("git", ["add", "-A"], { cwd: tempDir });
+    await spawn("git", ["commit", "-m", "second"], { cwd: tempDir });
+    await spawn("git", ["tag", "v2.0.0"], { cwd: tempDir });
+
+    assert.deepStrictEqual(await repo.tagsPointingAt(first), ["v1.0.0"]);
+    const second = await repo.revParse("HEAD");
+    assert.deepStrictEqual(await repo.tagsPointingAt(second), ["v2.0.0"]);
+  });
+});
+
+describe("pickTag", () => {
+  it("returns empty string when there are no candidates", () => {
+    assert.strictEqual(pickTag([], ""), "");
+    assert.strictEqual(pickTag([], "v24.2.0"), "");
+  });
+
+  it("returns the only candidate", () => {
+    assert.strictEqual(pickTag(["v24.3.0"], ""), "v24.3.0");
+    assert.strictEqual(pickTag(["v24.3.0"], "v24.2.0"), "v24.3.0");
+    assert.strictEqual(
+      pickTag(["nightly-2026-05-18"], "v24.2.0"),
+      "nightly-2026-05-18"
+    );
+  });
+
+  it("picks first lexicographic candidate when there is no existing tag", () => {
+    assert.strictEqual(
+      pickTag(["v24.3.0", "nightly-2026-05-18", "alpha"], ""),
+      "alpha"
+    );
+    assert.strictEqual(pickTag(["v25.0.0", "v24.3.0"], ""), "v24.3.0");
+  });
+
+  it("picks the longest-common-prefix match against the existing tag", () => {
+    assert.strictEqual(
+      pickTag(["v24.3.0", "nightly-2026-05-18"], "v24.2.0"),
+      "v24.3.0"
+    );
+    assert.strictEqual(
+      pickTag(["v25.0.0", "nightly-2026-05-18"], "v24.2.0"),
+      "v25.0.0"
+    );
+  });
+
+  it("breaks LCP ties lexicographically", () => {
+    assert.strictEqual(
+      pickTag(["v24.3.0", "v24.3.0-rc.1"], "v24.2.0"),
+      "v24.3.0"
+    );
+    assert.strictEqual(
+      pickTag(["v24.3.0-rc.1", "v24.3.0"], "v24.2.0"),
+      "v24.3.0"
+    );
+  });
+
+  it("falls back to first lexicographic candidate when no prefix matches", () => {
+    assert.strictEqual(
+      pickTag(["nightly", "preview", "rc"], "v24.2.0"),
+      "nightly"
+    );
+  });
+
+  it("is deterministic regardless of input order", () => {
+    const a = pickTag(["v24.3.0", "v24.4.0", "v25.0.0"], "v24.2.0");
+    const b = pickTag(["v25.0.0", "v24.4.0", "v24.3.0"], "v24.2.0");
+    assert.strictEqual(a, b);
   });
 });
