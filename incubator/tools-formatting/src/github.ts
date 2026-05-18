@@ -1,19 +1,19 @@
 import { normalizePath } from "./paths.ts";
 import type {
-  Reporter,
-  Severity,
   FileMessage,
-  ReporterPropOverrides,
+  Formatter,
+  FormatterPropOverrides,
+  Severity,
 } from "./types.ts";
 
 /**
- * Create a GitHub reporter instance.
- * @param options Reporter property overrides. These are ignored by the methods for now.
- * @returns A GitHub reporter instance.
+ * Create a GitHub formatter instance.
+ * @param options Formatter property overrides. These are ignored by the methods for now.
+ * @returns A GitHub formatter instance.
  */
-export function createGitHubReporter(
-  options?: ReporterPropOverrides
-): Reporter {
+export function createGitHubFormatter(
+  options?: FormatterPropOverrides
+): Formatter {
   const {
     name = "github",
     noColors = false,
@@ -97,7 +97,10 @@ function formatGitHubGroup(header: string, children: string[]): string {
  * encoded; `:` and `,` are safe to leave alone.
  */
 function escapeGitHubData(s: string): string {
-  return s.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+  return s
+    .replaceAll("%", "%25")
+    .replaceAll("\r", "%0D")
+    .replaceAll("\n", "%0A");
 }
 
 /**
@@ -106,5 +109,5 @@ function escapeGitHubData(s: string): string {
  * property delimiters.
  */
 function escapeGitHubProp(s: string): string {
-  return escapeGitHubData(s).replace(/:/g, "%3A").replace(/,/g, "%2C");
+  return escapeGitHubData(s).replaceAll(":", "%3A").replaceAll(",", "%2C");
 }

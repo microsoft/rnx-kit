@@ -1,10 +1,10 @@
 import { deepEqual, equal } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { formatFileMessage, formatGroup, formatMessage } from "../src/core.ts";
-import { getDefaultReporter } from "../src/reporters.ts";
-import type { FileMessage, Reporter, Severity } from "../src/types.ts";
+import { getDefaultFormatter } from "../src/formatters.ts";
+import type { FileMessage, Formatter, Severity } from "../src/types.ts";
 
-const customReporter: Reporter = {
+const customFormatter: Formatter = {
   name: "custom",
   noColors: true,
   asciiOnly: true,
@@ -17,25 +17,25 @@ const customReporter: Reporter = {
 };
 
 describe("core", () => {
-  it("dispatches to the default reporter when no reporter is provided", () => {
-    const reporter = getDefaultReporter();
+  it("dispatches to the default formatter when no formatter is provided", () => {
+    const formatter = getDefaultFormatter();
     const fileMessage = { message: "message", file: "src/file.ts", root: "" };
 
     equal(
       formatMessage("info", "message"),
-      reporter.formatMessage("info", "message")
+      formatter.formatMessage("info", "message")
     );
     equal(
       formatFileMessage("info", fileMessage),
-      reporter.formatFileMessage("info", fileMessage)
+      formatter.formatFileMessage("info", fileMessage)
     );
     equal(
       formatGroup("Header", ["a", "b"]),
-      reporter.formatGroup("Header", ["a", "b"])
+      formatter.formatGroup("Header", ["a", "b"])
     );
   });
 
-  it("dispatches to a built-in reporter by name", () => {
+  it("dispatches to a built-in formatter by name", () => {
     deepEqual(
       [
         formatMessage("error", "message", "azure"),
@@ -54,16 +54,16 @@ describe("core", () => {
     );
   });
 
-  it("dispatches to a custom reporter instance", () => {
+  it("dispatches to a custom formatter instance", () => {
     deepEqual(
       [
-        formatMessage("warn", "message", customReporter),
+        formatMessage("warn", "message", customFormatter),
         formatFileMessage(
           "warn",
           { message: "message", file: "src/file.ts" },
-          customReporter
+          customFormatter
         ),
-        formatGroup("Header", ["a", "b"], customReporter),
+        formatGroup("Header", ["a", "b"], customFormatter),
       ],
       [
         "message:warn:message",

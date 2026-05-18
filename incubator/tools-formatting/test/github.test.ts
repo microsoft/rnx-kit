@@ -1,17 +1,17 @@
 import { deepEqual, equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { createGitHubReporter } from "../src/github.ts";
+import { createGitHubFormatter } from "../src/github.ts";
 
-const reporter = createGitHubReporter();
+const formatter = createGitHubFormatter();
 
-describe("GitHubReporter", () => {
+describe("GitHubFormatter", () => {
   describe("formatMessage", () => {
     it("formats every severity", () => {
       deepEqual(
         [
-          reporter.formatMessage("error", "message"),
-          reporter.formatMessage("warn", "message"),
-          reporter.formatMessage("info", "message"),
+          formatter.formatMessage("error", "message"),
+          formatter.formatMessage("warn", "message"),
+          formatter.formatMessage("info", "message"),
         ],
         ["::error::message", "::warning::message", "::notice::message"]
       );
@@ -19,7 +19,7 @@ describe("GitHubReporter", () => {
 
     it("escapes data", () => {
       equal(
-        reporter.formatMessage("error", "100%\r\nmessage"),
+        formatter.formatMessage("error", "100%\r\nmessage"),
         "::error::100%25%0D%0Amessage"
       );
     });
@@ -31,14 +31,18 @@ describe("GitHubReporter", () => {
 
     it("formats a file-only annotation", () => {
       equal(
-        reporter.formatFileMessage("error", { message: "message", file, root }),
+        formatter.formatFileMessage("error", {
+          message: "message",
+          file,
+          root,
+        }),
         "::error file=src/file.ts::message"
       );
     });
 
     it("formats a file and line annotation", () => {
       equal(
-        reporter.formatFileMessage("warn", {
+        formatter.formatFileMessage("warn", {
           message: "message",
           file,
           root,
@@ -50,7 +54,7 @@ describe("GitHubReporter", () => {
 
     it("formats a file, line, and column annotation", () => {
       equal(
-        reporter.formatFileMessage("info", {
+        formatter.formatFileMessage("info", {
           message: "message",
           file,
           root,
@@ -63,7 +67,7 @@ describe("GitHubReporter", () => {
 
     it("formats all supported GitHub annotation properties", () => {
       equal(
-        reporter.formatFileMessage("error", {
+        formatter.formatFileMessage("error", {
           message: "message",
           file,
           root,
@@ -79,7 +83,7 @@ describe("GitHubReporter", () => {
 
     it("escapes data and properties", () => {
       equal(
-        reporter.formatFileMessage("error", {
+        formatter.formatFileMessage("error", {
           message: "100%\r\nmessage",
           file: "/repo/src/a:b,c.ts",
           root,
@@ -93,7 +97,7 @@ describe("GitHubReporter", () => {
   describe("formatGroup", () => {
     it("escapes special characters in the header", () => {
       equal(
-        reporter.formatGroup("100%\r\nheader", ["a", "b"]),
+        formatter.formatGroup("100%\r\nheader", ["a", "b"]),
         "::group::100%25%0D%0Aheader\na\nb\n::endgroup::"
       );
     });

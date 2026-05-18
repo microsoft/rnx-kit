@@ -1,5 +1,5 @@
 import type { styleText } from "node:util";
-import type { BUILTIN_REPORTERS, SEVERITY_LEVELS } from "./const.ts";
+import type { BUILTIN_FORMATTERS, SEVERITY_LEVELS } from "./const.ts";
 
 /**
  * The severity level of a message which is used to determine how it should be formatted and displayed.
@@ -68,14 +68,14 @@ export type FileMessage = {
   title?: string;
 };
 
-export type BuiltinReporter = (typeof BUILTIN_REPORTERS)[number];
+export type BuiltinFormatter = (typeof BUILTIN_FORMATTERS)[number];
 
 /**
  * A stylistic set of options for handling output formatting for particular targets.
  */
-export type Reporter = ColorOptions &
+export type Formatter = ColorOptions &
   TextOptions & {
-    /** name of the reporter, for convenience */
+    /** name of the formatter, for convenience */
     readonly name: string;
 
     /** format an annotation message */
@@ -88,16 +88,16 @@ export type Reporter = ColorOptions &
     formatGroup(header: string, children: string[]): string;
   };
 
-export type ReporterPropOverrides = Partial<
-  Pick<Reporter, "noColors" | "asciiOnly" | "name">
+export type FormatterPropOverrides = Partial<
+  Pick<Formatter, "noColors" | "asciiOnly" | "name">
 >;
 
 /**
- * Specify a built-in reporter by name or a custom reporter instance to use for formatting output.
- * If not specified, the default reporter will be used, which is determined based on environment variables
+ * Specify a built-in formatter by name or a custom formatter instance to use for formatting output.
+ * If not specified, the default formatter will be used, which is determined based on environment variables
  * and CI detection.
  */
-export type ReporterOption = BuiltinReporter | Reporter | (string & {});
+export type FormatterOption = BuiltinFormatter | Formatter | (string & {});
 
 /**
  * Tree formatting options

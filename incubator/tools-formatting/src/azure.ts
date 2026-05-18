@@ -1,6 +1,11 @@
 import { formatConsoleFileMessage, formatConsoleMessage } from "./messages.ts";
 import { normalizePath } from "./paths.ts";
-import type { ColorOptions, FileMessage, Reporter, Severity } from "./types.ts";
+import type {
+  ColorOptions,
+  FileMessage,
+  Formatter,
+  Severity,
+} from "./types.ts";
 
 const SEVERITY_TO_TEXT: Partial<Record<Severity, string>> = {
   error: "error",
@@ -8,45 +13,36 @@ const SEVERITY_TO_TEXT: Partial<Record<Severity, string>> = {
 };
 
 /**
- * Pre-built {@link Reporter} that emits Azure Pipelines logging commands
+ * Pre-built {@link Formatter} that emits Azure Pipelines logging commands
  * (`##vso[task.logissue ...]` for errors / warnings, `##[group]` /
  * `##[endgroup]` for collapsible sections). Colors are disabled by default.
- * Use {@link createAzureReporter} to construct a variant with different
+ * Use {@link createAzureFormatter} to construct a variant with different
  * defaults.
  */
-export const AzureReporter = createAzureReporter();
+export const AzureFormatter = createAzureFormatter();
 
 /**
- * Creates a new AzureReporter with the given options.
- * @param options Options to customize the reporter's behavior.
- * @returns A new AzureReporter instance.
+ * Creates a new AzureFormatter with the given options.
+ * @param options Options to customize the formatter's behavior.
+ * @returns A new AzureFormatter instance.
  */
-export function createAzureReporter(options?: ColorOptions): Reporter {
+export function createAzureFormatter(options?: ColorOptions): Formatter {
   const noColors = options?.noColors ?? true;
-  const base: Pick<Reporter, "name" | "noColors" | "asciiOnly"> = {
+  const formatter: Formatter = {
     name: "azure",
     noColors,
     asciiOnly: false,
+    formatMessage: (severity, message) =>
+      formatAzureMessage(severity, message, formatter),
+    formatFileMessage: (severity, fileMessage) =>
+      formatAzureFileMessage(severity, fileMessage, formatter),
+    formatGroup: (header, children) => {
+      const groupStart = `##[group]${escapeAzureData(header)}`;
+      const groupEnd = "##[endgroup]";
+      return [groupStart, ...children, groupEnd].join("\n");
+    },
   };
-
-  function formatMessage(severity: Severity, message: string): string {
-    return formatAzureMessage(severity, message, base);
-  }
-
-  function formatFileMessage(
-    severity: Severity,
-    fileMessage: FileMessage
-  ): string {
-    return formatAzureFileMessage(severity, fileMessage, base);
-  }
-
-  function formatGroup(header: string, children: string[]): string {
-    const groupStart = `##[group]${escapeAzureData(header)}`;
-    const groupEnd = "##[endgroup]";
-    return [groupStart, ...children, groupEnd].join("\n");
-  }
-
-  return Object.assign(base, { formatMessage, formatFileMessage, formatGroup });
+  return formatter;
 }
 
 /**
@@ -105,7 +101,10 @@ function formatAzureFileMessage(
  * messages don't break the single-line command format.
  */
 function escapeAzureData(s: string): string {
-  return s.replace(/%/g, "%AZP25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+  return s
+    .replaceAll("%", "%AZP25")
+    .replaceAll("\r", "%0D")
+    .replaceAll("\n", "%0A");
 }
 
 /**
@@ -114,5 +113,5 @@ function escapeAzureData(s: string): string {
  * property separator `;` and the command terminator `]`.
  */
 function escapeAzureProp(s: string): string {
-  return escapeAzureData(s).replace(/;/g, "%3B").replace(/\]/g, "%5D");
+  return escapeAzureData(s).replaceAll(";", "%3B").replaceAll("]", "%5D");
 }

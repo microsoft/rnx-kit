@@ -16,7 +16,7 @@ files, and CI build logs (GitHub Actions and Azure Pipelines).
 
 Most React Native build tooling needs to surface the same diagnostic in three
 places: a developer's terminal, a CI log, and inline annotations on a pull
-request. This package centralizes that formatting behind a small **Reporter**
+request. This package centralizes that formatting behind a small **Formatter**
 abstraction so callers write the message once and the right syntax is emitted
 for the active environment. The package also ships standalone helpers for
 tables, trees, and path shortening.
@@ -35,9 +35,9 @@ npm add --save-dev @rnx-kit/tools-formatting
 
 ## Usage
 
-### Reporters
+### Formatters
 
-A **Reporter** describes how to render three kinds of output:
+A **Formatter** describes how to render three kinds of output:
 
 | Method              | Renders                                                       |
 | ------------------- | ------------------------------------------------------------- |
@@ -45,7 +45,7 @@ A **Reporter** describes how to render three kinds of output:
 | `formatFileMessage` | A diagnostic tied to a `file:line:col` location.              |
 | `formatGroup`       | A collapsible / tree-shaped group with a header and children. |
 
-Four built-in reporters are available, keyed by name:
+Four built-in formatters are available, keyed by name:
 
 | Name        | Used for                                                                                              |
 | ----------- | ----------------------------------------------------------------------------------------------------- |
@@ -55,9 +55,9 @@ Four built-in reporters are available, keyed by name:
 | `"file"`    | A plain log file — same layout as `console`, but colors are stripped by default.                      |
 
 The top-level helpers — `formatMessage`, `formatFileMessage`, `formatGroup` —
-accept an optional reporter parameter. If omitted, a reporter is selected
-automatically by inspecting the environment (see [Default reporter
-resolution](#default-reporter-resolution)).
+accept an optional formatter parameter. If omitted, a formatter is selected
+automatically by inspecting the environment (see [Default formatter
+resolution](#default-formatter-resolution)).
 
 ```typescript
 import {
@@ -66,7 +66,7 @@ import {
   formatGroup,
 } from "@rnx-kit/tools-formatting";
 
-// Auto-detected reporter (console locally, github on GHA, azure on Azure DevOps).
+// Auto-detected formatter (console locally, github on GHA, azure on Azure DevOps).
 console.error(formatMessage("error", "Build failed"));
 
 console.error(
@@ -124,26 +124,26 @@ Type errors (3)
 └── src/baz.ts:9:7 - Property does not exist
 ```
 
-### Selecting a reporter explicitly
+### Selecting a formatter explicitly
 
-Each helper accepts an optional reporter argument. You can pass a built-in
-name, a custom `Reporter` instance, or leave it off to use the auto-detected
+Each helper accepts an optional formatter argument. You can pass a built-in
+name, a custom `Formatter` instance, or leave it off to use the auto-detected
 default.
 
 ```typescript
-import { formatMessage, getReporter } from "@rnx-kit/tools-formatting";
+import { formatMessage, getFormatter } from "@rnx-kit/tools-formatting";
 
 formatMessage("error", "boom", "github"); // built-in by name
 formatMessage("error", "boom", "console"); // force plain output on CI
-formatMessage("error", "boom", getReporter("file")); // resolve once and reuse
-formatMessage("error", "boom", myCustomReporter); // your own implementation
+formatMessage("error", "boom", getFormatter("file")); // resolve once and reuse
+formatMessage("error", "boom", myCustomFormatter); // your own implementation
 ```
 
-### Default reporter resolution
+### Default formatter resolution
 
-When no reporter is passed, `getDefaultReporter` picks one in this order:
+When no formatter is passed, `getDefaultFormatter` picks one in this order:
 
-1. The value of `process.env.RNX_TARGET_REPORTER`, if set to a built-in name.
+1. The value of `process.env.RNX_TARGET_FORMATTER`, if set to a built-in name.
 2. `"github"` if `process.env.GITHUB_ACTIONS === "true"`.
 3. `"azure"` if `process.env.TF_BUILD === "True"`.
 4. `"console"` otherwise.
@@ -155,39 +155,39 @@ are exported for callers that want to check the environment directly:
 import { isGitHubActions, isAzurePipelines } from "@rnx-kit/tools-formatting";
 ```
 
-### Customizing a built-in reporter
+### Customizing a built-in formatter
 
-`createReporter` (and the per-provider `createGitHubReporter` /
-`createAzureReporter` factories) accepts a small overrides bag for tweaking
-the reporter's `name`, `noColors`, and `asciiOnly` flags:
+`createFormatter` (and the per-provider `createGitHubFormatter` /
+`createAzureFormatter` factories) accepts a small overrides bag for tweaking
+the formatter's `name`, `noColors`, and `asciiOnly` flags:
 
 ```typescript
-import { createReporter } from "@rnx-kit/tools-formatting";
+import { createFormatter } from "@rnx-kit/tools-formatting";
 
-const asciiFile = createReporter("file", { asciiOnly: true });
+const asciiFile = createFormatter("file", { asciiOnly: true });
 // `formatGroup` will now use `+-- ` / `` `--  `` instead of unicode trees.
 ```
 
 ### Extending the registry
 
-Reporter resolution is owned by a [`ReporterRegistry`](#reporterregistry)
+Formatter resolution is owned by a [`FormatterRegistry`](#formatterregistry)
 instance. The package exports a process-wide singleton (accessed via
-`getReporterRegistry()`); the top-level helpers (`getReporter`,
-`getDefaultReporter`, `formatMessage`, …) all delegate to it.
+`getFormatterRegistry()`); the top-level helpers (`getFormatter`,
+`getDefaultFormatter`, `formatMessage`, …) all delegate to it.
 
-To add a new reporter type or change the default-resolution chain, subclass
-`ReporterRegistry` and install your instance with `setReporterRegistry()`
+To add a new formatter type or change the default-resolution chain, subclass
+`FormatterRegistry` and install your instance with `setFormatterRegistry()`
 at the entry point of your tool:
 
 ```typescript
 import {
-  ReporterRegistry,
-  setReporterRegistry,
-  type Reporter,
-  type ReporterPropOverrides,
+  FormatterRegistry,
+  setFormatterRegistry,
+  type Formatter,
+  type FormatterPropOverrides,
 } from "@rnx-kit/tools-formatting";
 
-const teamcityReporter: Reporter = {
+const teamcityFormatter: Formatter = {
   name: "teamcity",
   noColors: true,
   asciiOnly: true,
@@ -203,52 +203,52 @@ const teamcityReporter: Reporter = {
     ].join("\n"),
 };
 
-class MyToolRegistry extends ReporterRegistry {
+class MyToolRegistry extends FormatterRegistry {
   // Use a tool-specific env var for the explicit override.
-  protected override envKey = "MYTOOL_REPORTER";
+  protected override envKey = "MYTOOL_FORMATTER";
 
-  override createReporter(
+  override createFormatter(
     type: string,
-    options?: ReporterPropOverrides
-  ): Reporter {
-    if (type === "teamcity") return teamcityReporter;
-    return super.createReporter(type, options);
+    options?: FormatterPropOverrides
+  ): Formatter {
+    if (type === "teamcity") return teamcityFormatter;
+    return super.createFormatter(type, options);
   }
 
-  override getDefaultReporterType(): string {
+  override getDefaultFormatterType(): string {
     if (process.env.TEAMCITY_VERSION) return "teamcity";
-    return super.getDefaultReporterType();
+    return super.getDefaultFormatterType();
   }
 }
 
-setReporterRegistry(new MyToolRegistry());
+setFormatterRegistry(new MyToolRegistry());
 ```
 
-From this point on, every call to `getReporter("teamcity")` (or
+From this point on, every call to `getFormatter("teamcity")` (or
 `formatMessage(...)` running under TeamCity) goes through the custom
-registry. Tests can construct their own `ReporterRegistry` instance without
-touching the singleton, or call `setReporterRegistry(undefined)` to drop the
+registry. Tests can construct their own `FormatterRegistry` instance without
+touching the singleton, or call `setFormatterRegistry(undefined)` to drop the
 override and let the next access rebuild a fresh default.
 
-`ReporterRegistry` is designed for subclassing. The methods worth overriding
+`FormatterRegistry` is designed for subclassing. The methods worth overriding
 are:
 
-| Method                   | Purpose                                                           |
-| ------------------------ | ----------------------------------------------------------------- |
-| `createReporter`         | Add new reporter types. Fall through with `super.createReporter`. |
-| `getDefaultReporterType` | Add CI-provider detection. Fall through with `super`.             |
-| `envKey` (property)      | Change which environment variable provides the explicit override. |
-| `reset`                  | Clear the cached default and the named-reporter cache.            |
+| Method                    | Purpose                                                             |
+| ------------------------- | ------------------------------------------------------------------- |
+| `createFormatter`         | Add new formatter types. Fall through with `super.createFormatter`. |
+| `getDefaultFormatterType` | Add CI-provider detection. Fall through with `super`.               |
+| `envKey` (property)       | Change which environment variable provides the explicit override.   |
+| `reset`                   | Clear the cached default and the named-formatter cache.             |
 
-### Writing a custom reporter
+### Writing a custom formatter
 
-A reporter is just an object that implements the [`Reporter`
-interface](#reporter):
+A formatter is just an object that implements the [`Formatter`
+interface](#formatter):
 
 ```typescript
-import type { Reporter } from "@rnx-kit/tools-formatting";
+import type { Formatter } from "@rnx-kit/tools-formatting";
 
-const teamCityReporter: Reporter = {
+const teamCityFormatter: Formatter = {
   name: "teamcity",
   noColors: true,
   asciiOnly: false,
@@ -304,7 +304,7 @@ characters.
 
 `formatAsTree` assembles a header and a list of pre-formatted rows into a
 tree-shaped string. It is a pure formatter — no console output, no styling.
-Reporters use it internally for `console` / `file` group rendering, but it is
+Formatters use it internally for `console` / `file` group rendering, but it is
 also exported standalone:
 
 ```typescript
@@ -343,7 +343,7 @@ that is applied to every row line. The result has no trailing newline.
 
 ### Console message helpers
 
-When you want to render a single diagnostic without going through a reporter
+When you want to render a single diagnostic without going through a formatter
 (for example, you're already writing to a fixed stream), the underlying
 formatters are exported directly:
 
@@ -417,62 +417,62 @@ normalizePath(
 
 ### Functions
 
-| Function                                              | Description                                                                            |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `formatMessage(severity, message, reporter?)`         | Format a plain severity-tagged message using the chosen / default reporter.            |
-| `formatFileMessage(severity, fileMessage, reporter?)` | Format a diagnostic tied to a file location using the chosen / default reporter.       |
-| `formatGroup(header, children, reporter?)`            | Format a header + child lines as a collapsible group / tree.                           |
-| `formatAsTable(data, opts?)`                          | Format a 2D data array into a bordered table.                                          |
-| `formatAsTree(header, rows, opts?)`                   | Format a header and a list of rows into a tree-shaped string.                          |
-| `formatConsoleMessage(severity, message, opts?)`      | Format a single severity-tagged message for console output.                            |
-| `formatConsoleFileMessage(severity, fileMsg, opts?)`  | Format a single file-located diagnostic for console output.                            |
-| `colorText(style, text, opts?)`                       | Apply an ANSI style to text, respecting `noColors`.                                    |
-| `compareSeverity(a, b)`                               | Numeric comparator over severity levels (`info < warn < error`).                       |
-| `shortenPath(path, segs?)`                            | Shorten a file path to the last _segs_ segments (default 3), with `...` prefix.        |
-| `normalizePath(file, root?)`                          | Make a path relative to `root` (default `process.cwd()`) and convert to POSIX slashes. |
-| `getReporter(reporter?)`                              | Resolve a reporter by name, custom instance, or environment default.                   |
-| `getDefaultReporter()`                                | Get the cached default reporter for the current environment.                           |
-| `getDefaultReporterType()`                            | Get the name of the default reporter that would be selected for the environment.       |
-| `createReporter(type, opts?)`                         | Build a fresh built-in reporter, optionally overriding its defaults.                   |
-| `createGitHubReporter(opts?)`                         | Build a GitHub Actions reporter with optional overrides.                               |
-| `createAzureReporter(opts?)`                          | Build an Azure Pipelines reporter with optional overrides.                             |
-| `createConsoleOrFileReporter(type, opts?)`            | Build a `console` or `file` reporter with optional overrides.                          |
-| `getReporterRegistry()`                               | Get the process-wide singleton `ReporterRegistry` (lazily constructed).                |
-| `setReporterRegistry(registry)`                       | Replace (or clear, with `undefined`) the singleton `ReporterRegistry`.                 |
-| `isGitHubActions()`                                   | Returns `true` when `GITHUB_ACTIONS === "true"`.                                       |
-| `isAzurePipelines()`                                  | Returns `true` when `TF_BUILD === "True"`.                                             |
+| Function                                               | Description                                                                            |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `formatMessage(severity, message, formatter?)`         | Format a plain severity-tagged message using the chosen / default formatter.           |
+| `formatFileMessage(severity, fileMessage, formatter?)` | Format a diagnostic tied to a file location using the chosen / default formatter.      |
+| `formatGroup(header, children, formatter?)`            | Format a header + child lines as a collapsible group / tree.                           |
+| `formatAsTable(data, opts?)`                           | Format a 2D data array into a bordered table.                                          |
+| `formatAsTree(header, rows, opts?)`                    | Format a header and a list of rows into a tree-shaped string.                          |
+| `formatConsoleMessage(severity, message, opts?)`       | Format a single severity-tagged message for console output.                            |
+| `formatConsoleFileMessage(severity, fileMsg, opts?)`   | Format a single file-located diagnostic for console output.                            |
+| `colorText(style, text, opts?)`                        | Apply an ANSI style to text, respecting `noColors`.                                    |
+| `compareSeverity(a, b)`                                | Numeric comparator over severity levels (`info < warn < error`).                       |
+| `shortenPath(path, segs?)`                             | Shorten a file path to the last _segs_ segments (default 3), with `...` prefix.        |
+| `normalizePath(file, root?)`                           | Make a path relative to `root` (default `process.cwd()`) and convert to POSIX slashes. |
+| `getFormatter(formatter?)`                             | Resolve a formatter by name, custom instance, or environment default.                  |
+| `getDefaultFormatter()`                                | Get the cached default formatter for the current environment.                          |
+| `getDefaultFormatterType()`                            | Get the name of the default formatter that would be selected for the environment.      |
+| `createFormatter(type, opts?)`                         | Build a fresh built-in formatter, optionally overriding its defaults.                  |
+| `createGitHubFormatter(opts?)`                         | Build a GitHub Actions formatter with optional overrides.                              |
+| `createAzureFormatter(opts?)`                          | Build an Azure Pipelines formatter with optional overrides.                            |
+| `createConsoleOrFileFormatter(type, opts?)`            | Build a `console` or `file` formatter with optional overrides.                         |
+| `getFormatterRegistry()`                               | Get the process-wide singleton `FormatterRegistry` (lazily constructed).               |
+| `setFormatterRegistry(registry)`                       | Replace (or clear, with `undefined`) the singleton `FormatterRegistry`.                |
+| `isGitHubActions()`                                    | Returns `true` when `GITHUB_ACTIONS === "true"`.                                       |
+| `isAzurePipelines()`                                   | Returns `true` when `TF_BUILD === "True"`.                                             |
 
 ### Types
 
-`Severity`, `FileMessage`, `Reporter`, `BuiltinReporter`, `ReporterOption`,
-`ReporterPropOverrides`, `ColorOptions`, `TextOptions`, `StyleValue`,
+`Severity`, `FileMessage`, `Formatter`, `BuiltinFormatter`, `FormatterOption`,
+`FormatterPropOverrides`, `ColorOptions`, `TextOptions`, `StyleValue`,
 `TableOptions`, `ColumnOptions`, `TableViewParts`, `TreeFormattingOptions`,
 `TreeViewParts`.
 
-#### ReporterRegistry
+#### FormatterRegistry
 
-Class that owns reporter resolution. Subclass to add new reporter types or
-extend default detection; install your subclass with `setReporterRegistry()`.
+Class that owns formatter resolution. Subclass to add new formatter types or
+extend default detection; install your subclass with `setFormatterRegistry()`.
 
-| Method / property             | Description                                                                               |
-| ----------------------------- | ----------------------------------------------------------------------------------------- |
-| `getReporter(opt?)`           | Resolve a `ReporterOption` to a `Reporter`. Built-in names are cached per name.           |
-| `getDefaultReporter()`        | Cached lookup of the reporter for `getDefaultReporterType()`.                             |
-| `createReporter(type, opts?)` | Construct a fresh reporter by name. **Override** to add new types.                        |
-| `getDefaultReporterType()`    | Compute the default reporter name from the environment. **Override** to add CI providers. |
-| `envKey` (protected)          | Environment variable consulted by the default `getDefaultReporterType`.                   |
-| `reset()`                     | Drop the cached default and per-name reporter cache.                                      |
+| Method / property              | Description                                                                                |
+| ------------------------------ | ------------------------------------------------------------------------------------------ |
+| `getFormatter(opt?)`           | Resolve a `FormatterOption` to a `Formatter`. Built-in names are cached per name.          |
+| `getDefaultFormatter()`        | Cached lookup of the formatter for `getDefaultFormatterType()`.                            |
+| `createFormatter(type, opts?)` | Construct a fresh formatter by name. **Override** to add new types.                        |
+| `getDefaultFormatterType()`    | Compute the default formatter name from the environment. **Override** to add CI providers. |
+| `envKey` (protected)           | Environment variable consulted by the default `getDefaultFormatterType`.                   |
+| `reset()`                      | Drop the cached default and per-name formatter cache.                                      |
 
-#### Reporter
+#### Formatter
 
-| Field               | Type                                | Description                                                     |
-| ------------------- | ----------------------------------- | --------------------------------------------------------------- |
-| `name`              | `string`                            | Identifier for diagnostics / introspection.                     |
-| `noColors`          | `boolean`                           | Whether the reporter strips ANSI styling (consumed by helpers). |
-| `asciiOnly`         | `boolean`                           | Whether the reporter uses ASCII-only glyphs for trees/tables.   |
-| `formatMessage`     | `(severity, message) => string`     | Render a plain severity-tagged message.                         |
-| `formatFileMessage` | `(severity, fileMessage) => string` | Render a diagnostic tied to a `FileMessage`.                    |
-| `formatGroup`       | `(header, children) => string`      | Render a collapsible group; result is newline-joined.           |
+| Field               | Type                                | Description                                                      |
+| ------------------- | ----------------------------------- | ---------------------------------------------------------------- |
+| `name`              | `string`                            | Identifier for diagnostics / introspection.                      |
+| `noColors`          | `boolean`                           | Whether the formatter strips ANSI styling (consumed by helpers). |
+| `asciiOnly`         | `boolean`                           | Whether the formatter uses ASCII-only glyphs for trees/tables.   |
+| `formatMessage`     | `(severity, message) => string`     | Render a plain severity-tagged message.                          |
+| `formatFileMessage` | `(severity, fileMessage) => string` | Render a diagnostic tied to a `FileMessage`.                     |
+| `formatGroup`       | `(header, children) => string`      | Render a collapsible group; result is newline-joined.            |
 
 #### FileMessage
 
@@ -532,8 +532,8 @@ width so columns line up.
 
 ### Environment variables
 
-| Variable              | Used by                                   | Description                                                                |
-| --------------------- | ----------------------------------------- | -------------------------------------------------------------------------- |
-| `RNX_TARGET_REPORTER` | `getDefaultReporter`                      | Explicit override for the auto-detected reporter (a built-in name).        |
-| `GITHUB_ACTIONS`      | `isGitHubActions` / `getDefaultReporter`  | Set to `"true"` by the GitHub Actions runner; triggers the GH reporter.    |
-| `TF_BUILD`            | `isAzurePipelines` / `getDefaultReporter` | Set to `"True"` by the Azure Pipelines agent; triggers the Azure reporter. |
+| Variable               | Used by                                    | Description                                                                 |
+| ---------------------- | ------------------------------------------ | --------------------------------------------------------------------------- |
+| `RNX_TARGET_FORMATTER` | `getDefaultFormatter`                      | Explicit override for the auto-detected formatter (a built-in name).        |
+| `GITHUB_ACTIONS`       | `isGitHubActions` / `getDefaultFormatter`  | Set to `"true"` by the GitHub Actions runner; triggers the GH formatter.    |
+| `TF_BUILD`             | `isAzurePipelines` / `getDefaultFormatter` | Set to `"True"` by the Azure Pipelines agent; triggers the Azure formatter. |

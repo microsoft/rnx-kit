@@ -46,10 +46,9 @@ export function shortenPath(path: string, segments = 3): string {
  * @param root The root directory to make the file path relative to, will default to process.cwd which may be less correct
  * @returns The normalized file path
  */
-export function normalizePath(
-  file: string,
-  root: string = process.cwd()
-): string {
-  const filePath = path.relative(root, file).replaceAll("\\", "/");
-  return path.posix.normalize(filePath);
+export function normalizePath(file: string, root?: string): string {
+  if (root) {
+    file = path.relative(root, file);
+  }
+  return file.replaceAll("\\", "/");
 }

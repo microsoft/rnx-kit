@@ -1,16 +1,16 @@
 import { deepEqual, equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { createAzureReporter } from "../src/azure.ts";
+import { createAzureFormatter } from "../src/azure.ts";
 
-const reporter = createAzureReporter();
+const formatter = createAzureFormatter();
 
-describe("AzureReporter", () => {
+describe("AzureFormatter", () => {
   describe("formatMessage", () => {
     it("formats error and warning as Azure log issues", () => {
       deepEqual(
         [
-          reporter.formatMessage("error", "message"),
-          reporter.formatMessage("warn", "message"),
+          formatter.formatMessage("error", "message"),
+          formatter.formatMessage("warn", "message"),
         ],
         [
           "##vso[task.logissue type=error]message",
@@ -20,12 +20,12 @@ describe("AzureReporter", () => {
     });
 
     it("formats info as a console message", () => {
-      equal(reporter.formatMessage("info", "message"), "info: message");
+      equal(formatter.formatMessage("info", "message"), "info: message");
     });
 
     it("escapes Azure data", () => {
       equal(
-        reporter.formatMessage("error", "100%\r\nmessage"),
+        formatter.formatMessage("error", "100%\r\nmessage"),
         "##vso[task.logissue type=error]100%AZP25%0D%0Amessage"
       );
     });
@@ -37,14 +37,18 @@ describe("AzureReporter", () => {
 
     it("formats a file-only annotation", () => {
       equal(
-        reporter.formatFileMessage("error", { message: "message", file, root }),
+        formatter.formatFileMessage("error", {
+          message: "message",
+          file,
+          root,
+        }),
         "##vso[task.logissue type=error;sourcepath=src/file.ts]message"
       );
     });
 
     it("formats a file and line annotation", () => {
       equal(
-        reporter.formatFileMessage("warn", {
+        formatter.formatFileMessage("warn", {
           message: "message",
           file,
           root,
@@ -56,7 +60,7 @@ describe("AzureReporter", () => {
 
     it("formats a file, line, and column annotation", () => {
       equal(
-        reporter.formatFileMessage("error", {
+        formatter.formatFileMessage("error", {
           message: "message",
           file,
           root,
@@ -69,7 +73,7 @@ describe("AzureReporter", () => {
 
     it("ignores end location and title properties", () => {
       equal(
-        reporter.formatFileMessage("error", {
+        formatter.formatFileMessage("error", {
           message: "message",
           file,
           root,
@@ -85,7 +89,7 @@ describe("AzureReporter", () => {
 
     it("escapes Azure data and properties", () => {
       equal(
-        reporter.formatFileMessage("error", {
+        formatter.formatFileMessage("error", {
           message: "100%\r\nmessage]",
           file: "/repo/src/a;b].ts",
           root,
@@ -98,7 +102,7 @@ describe("AzureReporter", () => {
   describe("formatGroup", () => {
     it("escapes special characters in the header", () => {
       equal(
-        reporter.formatGroup("100%\r\nheader", ["a", "b"]),
+        formatter.formatGroup("100%\r\nheader", ["a", "b"]),
         "##[group]100%AZP25%0D%0Aheader\na\nb\n##[endgroup]"
       );
     });

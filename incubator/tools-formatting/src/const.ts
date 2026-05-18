@@ -1,6 +1,6 @@
 import type { TableViewParts, TreeViewParts } from "./types.ts";
 
-export const REPORTER_ENV_KEY = "RNX_TARGET_REPORTER";
+export const FORMATTER_ENV_KEY = "RNX_TARGET_FORMATTER";
 export const ELLIPSIS = "...";
 export const SRC_DIRS = ["src", "lib", "dist", "bin"];
 export const SEPARATORS = ["/", "\\"];
@@ -13,7 +13,7 @@ export const SEVERITY_LEVELS = {
   error: 2,
 } as const;
 
-export const BUILTIN_REPORTERS = [
+export const BUILTIN_FORMATTERS = [
   "github",
   "azure",
   "console",
