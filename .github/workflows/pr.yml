@@ -116,7 +116,7 @@ jobs:
           yarn bundle:ci --base origin/${{ github.base_ref }}
       - name: Bundle test apps with esbuild
         run: |
-          yarn nx affected --base origin/${{ github.base_ref }} --target bundle+esbuild
+          yarn nx affected --base origin/${{ github.base_ref }} --target bundle+esbuild -- --dev false
         shell: bash
     timeout-minutes: 60
   build-android-test-app:

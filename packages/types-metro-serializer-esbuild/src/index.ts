@@ -1,7 +1,8 @@
 /**
  * Plugin options for @rnx-kit/metro-serializer-esbuild.
  *
- * These options are a combinations of a subset of esbuild's BuildOptions and additional options specific to the plugin.
+ * These options are a combinations of a subset of esbuild's BuildOptions and
+ * additional options specific to the plugin.
  */
 
 /**
@@ -11,8 +12,8 @@ type Drop = "console" | "debugger";
 type LogLevel = "verbose" | "debug" | "info" | "warning" | "error" | "silent";
 
 /**
- * Options redefined from esbuild's BuildOptions, separated so type level compatibility
- * can be checked at build time
+ * Options redefined from esbuild's BuildOptions, separated so type level
+ * compatibility can be checked at build time.
  */
 export type BaseBuildOptions = {
   drop?: Drop[];
