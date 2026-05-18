@@ -41,7 +41,7 @@ static NSString *const kReactConcurrentRoot = @"concurrentRoot";
 }
 
 - (RNXView *)viewWithModuleName:(NSString *)moduleName
-              initialProperties:(NSDictionary *)initialProperties;
+              initialProperties:(NSDictionary *)initialProperties
 {
 #ifdef USE_FABRIC
     // Having `concurrentRoot` disabled when Fabric is enabled is not recommended:
