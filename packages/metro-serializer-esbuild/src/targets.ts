@@ -9,7 +9,9 @@ export function inferBuildTarget(projectRoot = process.cwd()): string {
     const { version } = JSON.parse(manifest);
     const versionNum = v(version);
 
-    if (versionNum >= v("0.83.0")) {
+    if (versionNum >= v("0.85.0")) {
+      return "hermes1";
+    } else if (versionNum >= v("0.83.0")) {
       return "hermes0.14";
     } else if (versionNum >= v("0.75.0")) {
       return "hermes0.13";

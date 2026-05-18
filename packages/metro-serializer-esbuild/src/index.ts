@@ -281,6 +281,7 @@ export function MetroSerializer(
           // https://github.com/evanw/esbuild/releases/tag/v0.14.49).
           return {
             arrow: true,
+            class: true, // Introduced in 1.0, handled by Babel otherwise
             "default-argument": true,
             destructuring: true,
             generator: true,

@@ -1,10 +1,10 @@
+import type { PackageManifest } from "@rnx-kit/types-node";
 import { deepEqual, equal, ok, throws } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import { afterEach, before, beforeEach, describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
-import type { PackageManifest } from "../src/package.ts";
 import {
   findPackage,
   findPackageDependencyDir,
