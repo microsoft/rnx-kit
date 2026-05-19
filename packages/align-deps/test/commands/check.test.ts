@@ -1,4 +1,4 @@
-import { equal, notEqual } from "node:assert/strict";
+import { equal, fail, notEqual } from "node:assert/strict";
 import type { PathOrFileDescriptor } from "node:fs";
 import { after, before, beforeEach, describe, it } from "node:test";
 import { checkPackageManifest as checkPackageManifestActual } from "../../src/commands/check.ts";
@@ -7,6 +7,7 @@ import { defaultConfig, loadConfig } from "../../src/config.ts";
 import { profile as profile_0_68 } from "../../src/presets/microsoft/react-native/profile-0.68.ts";
 import { profile as profile_0_69 } from "../../src/presets/microsoft/react-native/profile-0.69.ts";
 import { profile as profile_0_70 } from "../../src/presets/microsoft/react-native/profile-0.70.ts";
+import type { Reporter } from "../../src/reporter.ts";
 import type { Options } from "../../src/types.ts";
 import * as mockfs from "../__mocks__/fs.ts";
 import { defineRequire, packageVersion, undefineRequire } from "../helpers.ts";
@@ -29,14 +30,14 @@ function checkPackageManifest(
   manifestPath: string,
   options: Options = defaultOptions,
   _inputConfig?: ConfigResult,
-  logError?: (message: string) => void
+  reporter?: Reporter
 ) {
   const fs = mockfs as unknown as typeof import("node:fs");
   return checkPackageManifestActual(
     manifestPath,
     options,
     loadConfig(manifestPath, options, fs),
-    logError,
+    reporter,
     fs
   );
 }
@@ -287,17 +288,22 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       "package.json",
       defaultOptions,
       undefined,
-      (message) => {
-        equal(
-          message,
-          `package.json
+      {
+        info: fail,
+        warn: fail,
+        error: (message) => {
+          equal(
+            message,
+            `package.json
       ├── peerDependencies["react"]: dependency is missing, expected "18.1.0"
       ├── peerDependencies["react-native"]: dependency is missing, expected "^0.70.0"
       ├── devDependencies["react"]: dependency is missing, expected "18.1.0"
       ├── devDependencies["react-native"]: dependency is missing, expected "^0.70.0"
       └── Re-run with '--write' to fix them
 `
-        );
+          );
+        },
+        close: fail,
       }
     );
 
@@ -350,7 +356,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       "\t"
     );
     mockfs.__setMockFileWriter((_, content) => {
-      output = content;
+      output = content.toString();
     });
 
     equal(checkPackageManifest("package.json", writeOptions), "success");
@@ -688,7 +694,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       },
     });
     mockfs.__setMockFileWriter((p, _content) => {
-      didWriteToPath = p;
+      didWriteToPath = Boolean(p);
     });
 
     equal(checkPackageManifest("package.json", writeOptions), "success");
@@ -708,7 +714,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
   });
 
   it("writes changes back to 'package.json'", () => {
-    let didWriteToPath = false;
+    let destPath = "";
 
     mockfs.__setMockContent({
       ...mockManifest,
@@ -718,11 +724,11 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       },
     });
     mockfs.__setMockFileWriter((p, _content) => {
-      didWriteToPath = p;
+      destPath = p.toString();
     });
 
     equal(checkPackageManifest("package.json", writeOptions), "success");
-    equal(didWriteToPath, "package.json");
+    equal(destPath, "package.json");
   });
 
   it("preserves indentation in 'package.json'", (t) => {
@@ -739,7 +745,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       "\t"
     );
     mockfs.__setMockFileWriter((_, content) => {
-      output = content;
+      output = content.toString();
     });
 
     equal(checkPackageManifest("package.json", writeOptions), "success");

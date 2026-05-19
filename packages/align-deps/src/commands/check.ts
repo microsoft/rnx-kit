@@ -1,4 +1,3 @@
-import { error, info } from "@rnx-kit/console";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
@@ -9,6 +8,7 @@ import { isError } from "../errors.ts";
 import { modifyManifest } from "../helpers.ts";
 import { updatePackageManifest } from "../manifest.ts";
 import { resolve } from "../preset.ts";
+import { makeDefaultReporter, withGroupReporter } from "../reporter.ts";
 import type { Command, ErrorCode, Options } from "../types.ts";
 import { checkPackageManifestUnconfigured } from "./vigilant.ts";
 
@@ -41,7 +41,7 @@ export function checkPackageManifest(
   manifestPath: string,
   options: Options,
   inputConfig = loadConfig(manifestPath, options),
-  logError = error,
+  reporter = makeDefaultReporter(manifestPath),
   /** @internal */ fs = nodefs
 ): ErrorCode {
   if (isError(inputConfig)) {
@@ -64,15 +64,14 @@ export function checkPackageManifest(
 
   if (options.verbose) {
     if (kitType === "app") {
-      info(
-        `${manifestPath}: Aligning your app's dependencies according to the following profiles:`,
-        Object.keys(prodPreset).join(", ")
+      reporter.info(
+        `${manifestPath}: profiles resolved for the app: ${Object.keys(prodPreset).join(", ")}`
       );
     } else {
-      info(
-        `${manifestPath}: Aligning your library's dependencies according to the following profiles:\n` +
-          `\t- Development: ${Object.keys(devPreset).join(", ")}\n` +
-          `\t- Production: ${Object.keys(prodPreset).join(", ")}`
+      reporter.info(
+        `${manifestPath}: profiles resolved for the library:\n` +
+          `     ├── Development: ${Object.keys(devPreset).join(", ")}\n` +
+          `     └── Production: ${Object.keys(prodPreset).join(", ")}`
       );
     }
   }
@@ -95,7 +94,7 @@ export function checkPackageManifest(
       modifyManifest(manifestPath, updatedManifest, fs);
     } else {
       const violations = stringify(allChanges, [manifestPath]);
-      logError(violations);
+      reporter.error(violations);
       return "unsatisfied";
     }
   }
@@ -135,35 +134,37 @@ export function makeCheckCommand(options: Options): Command {
 
     // If the package is configured, run the normal check first.
     if (!isError(config)) {
-      const output: string[] = [];
-      const logError = (message: string) => {
-        output.push(message);
-      };
-      const res1 = checkPackageManifest(manifest, options, config, logError);
-      const res2 = checkPackageManifestUnconfigured(
-        manifest,
-        options,
-        config,
-        logError
-      );
-      for (const message of output) {
-        error(message);
-      }
-      return res1 !== "success" ? res1 : res2;
+      return withGroupReporter(manifest, (reporter) => {
+        const res1 = checkPackageManifest(manifest, options, config, reporter);
+        const res2 = checkPackageManifestUnconfigured(
+          manifest,
+          options,
+          config,
+          reporter
+        );
+        return res1 !== "success" ? res1 : res2;
+      });
     }
 
     // Otherwise, run the unconfigured check only.
     if (config === "invalid-configuration" || config === "not-configured") {
       // In "vigilant" mode, we allow packages to declare which presets should
       // be used in config, overriding the `--presets` flag.
-      return checkPackageManifestUnconfigured(manifest, options, {
-        kitType: "library",
-        alignDeps: {
-          presets,
-          requirements,
-          capabilities: [],
-        },
-        manifest: readPackage(manifest),
+      return withGroupReporter(manifest, (reporter) => {
+        return checkPackageManifestUnconfigured(
+          manifest,
+          options,
+          {
+            kitType: "library",
+            alignDeps: {
+              presets,
+              requirements,
+              capabilities: [],
+            },
+            manifest: readPackage(manifest),
+          },
+          reporter
+        );
       });
     }
 
