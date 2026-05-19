@@ -24,7 +24,7 @@ export class FormatCommand extends Command {
       "!{#archived,__fixtures__,lib}",
       "!{CHANGELOG,CODE_OF_CONDUCT,SECURITY}.md",
     ];
-    await import(oxfmt);
+    await import(url.toString());
     return 0;
   }
 }
