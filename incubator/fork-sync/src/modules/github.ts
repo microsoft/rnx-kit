@@ -12,6 +12,7 @@
  * - **findPR**: Find an existing open PR by head branch name
  * - **createPR**: Create a new pull request
  * - **updatePR**: Update an existing pull request's title and body
+ * - **closePR**: Close an existing pull request (optionally updating its body first)
  *
  * All functions use `exec()` from proc.ts (shell mode) because `gh` is
  * installed as a .cmd file on Windows and requires shell execution.
@@ -174,4 +175,39 @@ export async function updatePR(opts: {
       { cwd: opts.cwd, env }
     );
   });
+}
+
+/**
+ * Close an existing pull request.
+ *
+ * If `body` is provided, the PR body is updated first (via `gh pr edit`), then
+ * the PR is closed. Useful for posting a final "now up to date" message before
+ * closing a stale sync PR.
+ *
+ * Uses --body-file with a temp file to avoid shell escaping issues with
+ * multiline markdown content on Windows cmd.exe.
+ */
+export async function closePR(opts: {
+  number: number;
+  body?: string;
+  cwd: string;
+  repo?: string;
+}): Promise<void> {
+  const repoFlag = opts.repo ? ` --repo ${shellVar("REPO")}` : "";
+
+  if (opts.body !== undefined) {
+    await withTempFile(opts.body, async (bodyFile) => {
+      const env: Record<string, string> = {
+        BODY_FILE: bodyFile,
+        ...(opts.repo ? { REPO: opts.repo } : {}),
+      };
+      await exec(
+        `gh pr edit ${opts.number} --body-file ${shellVar("BODY_FILE")}${repoFlag}`,
+        { cwd: opts.cwd, env }
+      );
+    });
+  }
+
+  const env: Record<string, string> = opts.repo ? { REPO: opts.repo } : {};
+  await exec(`gh pr close ${opts.number}${repoFlag}`, { cwd: opts.cwd, env });
 }

@@ -73,12 +73,13 @@ import {
   getChangeStats,
   getGitTreeHashes,
   isGitRepo,
+  pickTag,
   validateCloneOrigin,
   type ChangeStats,
   type MergeResult,
   type MergeTool,
 } from "./modules/git.ts";
-import { findPR, createPR, updatePR } from "./modules/github.ts";
+import { closePR, createPR, findPR, updatePR } from "./modules/github.ts";
 import * as proc from "./modules/proc.ts";
 const { spawn, exec } = proc;
 
@@ -364,6 +365,9 @@ class SyncSession {
   changeStats!: ChangeStats;
   prNotes?: string;
   prNotesPath?: string;
+  /** True when the sync session had no file changes, same commit, and same tag.
+   * In this case sync-config.json and sync-pr-notes.md are left untouched. */
+  noOpSync = false;
 
   constructor(config: SyncConfig, args: CliArgs, repoRoot: string) {
     this.config = config;
@@ -518,7 +522,7 @@ ${style.line()}
     }
 
     const shortTarget = checkpoint.upstream.targetCommit.slice(0, 8);
-    const refName = checkpoint.upstream.tag ?? checkpoint.upstream.branch;
+    const refName = checkpoint.upstream.tag || checkpoint.upstream.branch;
 
     // Get current conflict status from git
     const mergeResult = await this.syncRepo.getMergeResult();
@@ -574,7 +578,27 @@ ${style.line()}
   private printSummary(): void {
     const depName = this.config.name;
     const shortCommit = this.targetCommit.slice(0, 8);
-    const refName = this.targetTag ?? this.targetBranch;
+    const refName = this.targetTag || this.targetBranch;
+    const localPath = this.config.localPath;
+
+    if (this.noOpSync) {
+      print(
+        () => `
+${style.line()}
+  ${style.heading("SYNC COMPLETE")}
+${style.line()}
+
+Upstream: ${this.config.repo}
+  Commit: ${style.command(shortCommit)} (${refName})
+
+${style.success("Already up to date — 0 files updated.")}
+sync-config.json and PR notes left untouched.
+
+${style.line()}
+`
+      );
+      return;
+    }
 
     const { modified, added, deleted } = this.changeStats;
     const totalChanges = modified + added + deleted;
@@ -590,7 +614,6 @@ ${style.line()}
       return result;
     };
 
-    const localPath = this.config.localPath;
     const changesSection = () =>
       totalChanges > 0
         ? `Changes to ${localPath}/:\n${changeLines().join("\n")}`
@@ -642,7 +665,7 @@ ${style.line()}
 
     const depName = this.config.name;
     const shortCommit = this.targetCommit.slice(0, 8);
-    const refName = this.targetTag ?? this.args.branch ?? this.config.branch;
+    const refName = this.targetTag || this.args.branch || this.config.branch;
     const prBranch = `fork-sync/${depName}`;
     const prTitle = `fork-sync: sync ${depName} to ${shortCommit} (${refName})`;
     const prBody = this.prNotes ?? "";
@@ -662,6 +685,48 @@ ${style.line()}
     // Detect remote and GitHub repo
     job.step("Detecting remote...");
     const ghRepo = await this.detectGitHubRepo();
+
+    // No-op sync: do not reset, stage, commit, or push. If a previous sync PR
+    // is still open, update its body to a "now up to date" note and close it.
+    // Otherwise just report that there's nothing to PR.
+    if (this.noOpSync) {
+      job.step("Checking for existing PR...");
+      const existingPR = await findPR({
+        head: prBranch,
+        cwd: this.repoRoot,
+        repo: ghRepo,
+      });
+
+      if (!existingPR) {
+        info(() => `${label()} Nothing to PR — already up to date.`);
+        job.done(() => `${label()} nothing to PR`);
+        return;
+      }
+
+      const closeBody =
+        `fork-sync: ${depName} is now up to date with ` +
+        `\`${shortCommit}\` (${refName}). Closing this PR — no changes to merge.`;
+
+      if (isDryRun) {
+        info(
+          () =>
+            `${label()} Dry run: would update and close PR #${existingPR.number}`
+        );
+        job.done(() => `${label()} dry run complete`);
+        return;
+      }
+
+      job.step(`Closing PR #${existingPR.number}...`);
+      await closePR({
+        number: existingPR.number,
+        body: closeBody,
+        cwd: this.repoRoot,
+        repo: ghRepo,
+      });
+      info(() => `${label()} Closed PR: ${existingPR.url}`);
+      job.done(() => `${label()} closed PR #${existingPR.number}`);
+      return;
+    }
 
     // Save current branch for restoration
     const originalBranch = await this.mainRepo.currentBranch();
@@ -1014,24 +1079,22 @@ ${style.line()}
   }
 
   /**
-   * Resolve target commit from args (commit, tag, or branch).
    * Resolves the target commit hash from a direct commit, tag, or branch head.
+   * When no explicit `--tag` is given, also auto-fills `targetTag` from any
+   * upstream tag pointing at the resolved commit (see {@link pickTag}).
    */
   private async resolveTarget(job: Job): Promise<void> {
     this.targetBranch = this.args.branch ?? this.config.branch;
     this.targetTag = this.args.tag;
 
-    // If commit specified directly, use it
     if (this.args.commit) {
+      // Commit specified directly
       job.step(
         `Using specified target commit: ${this.args.commit.slice(0, 8)}`
       );
       this.targetCommit = this.args.commit;
-      return;
-    }
-
-    // If tag specified, resolve to commit using local refs
-    if (this.args.tag) {
+    } else if (this.args.tag) {
+      // Tag specified — resolve to commit using local refs
       job.step(`Resolving target tag ${this.args.tag}...`);
       // git rev-list -n 1 handles both lightweight and annotated tags
       const commit = await this.syncRepo.revList(`refs/tags/${this.args.tag}`, {
@@ -1045,22 +1108,41 @@ ${style.line()}
       }
       job.step(`Tag ${this.args.tag} resolved to ${commit.slice(0, 8)}`);
       this.targetCommit = commit;
-      return;
+    } else {
+      // Otherwise, get HEAD of branch from local refs
+      job.step(`Resolving HEAD of branch ${this.targetBranch}...`);
+      const commit = await this.syncRepo.revParse(
+        `origin/${this.targetBranch}`
+      );
+      if (!commit) {
+        fatal(
+          `Branch '${this.targetBranch}' not found in local clone.\n` +
+            `Check that it exists on origin, or run: git fetch origin (in ${this.syncPath})`
+        );
+      }
+      job.step(
+        `Using latest commit ${commit.slice(0, 8)} from branch ${this.targetBranch}`
+      );
+      this.targetCommit = commit;
     }
 
-    // Otherwise, get HEAD of branch from local refs
-    job.step(`Resolving HEAD of branch ${this.targetBranch}...`);
-    const commit = await this.syncRepo.revParse(`origin/${this.targetBranch}`);
-    if (!commit) {
-      fatal(
-        `Branch '${this.targetBranch}' not found in local clone.\n` +
-          `Check that it exists on origin, or run: git fetch origin (in ${this.syncPath})`
-      );
+    // Auto-resolve tag for the target commit when the user did not pass --tag.
+    // Picks a tag that points at the commit, biased toward the existing tag's
+    // shape (longest common prefix). Falls back to "" when none exist.
+    if (this.targetTag === undefined) {
+      const candidates = await this.syncRepo.tagsPointingAt(this.targetCommit);
+      const picked = pickTag(candidates, this.config.tag);
+      if (picked) {
+        if (candidates.length > 1) {
+          job.step(
+            `Auto-selected tag ${picked} from ${candidates.length} candidates`
+          );
+        } else {
+          job.step(`Auto-detected tag ${picked} at target commit`);
+        }
+      }
+      this.targetTag = picked;
     }
-    job.step(
-      `Using latest commit ${commit.slice(0, 8)} from branch ${this.targetBranch}`
-    );
-    this.targetCommit = commit;
   }
 
   /**
@@ -1287,6 +1369,27 @@ ${style.line()}
     // Get actual change statistics from git status
     job.step("Computing change statistics...");
     const changes = await getChangeStats(this.mainRepo, this.depPathPrefix);
+    this.changeStats = changes;
+
+    const newTag = this.targetTag ?? "";
+    const totalChanges = changes.added + changes.modified + changes.deleted;
+
+    // Skip writes when this sync was a true no-op: same commit, same tag, no
+    // file deltas, and sync-config.json was already populated (first-ever
+    // syncs always write so the file gets initialized).
+    if (
+      this.config.baseCommit &&
+      this.targetCommit === this.config.baseCommit &&
+      (this.config.tag ?? "") === newTag &&
+      totalChanges === 0
+    ) {
+      this.noOpSync = true;
+      job.done(
+        () =>
+          `${label()} no changes — sync-config.json and PR notes left untouched`
+      );
+      return;
+    }
 
     // Update sync config
     job.step("Updating sync config...");
@@ -1295,11 +1398,9 @@ ${style.line()}
       branch: this.args.branch ?? this.config.branch,
       commit: this.targetCommit,
       ...(this.config.subDir ? { subDir: this.config.subDir } : {}),
-      tag: this.targetTag ?? "",
+      tag: newTag,
       lastSync: new Date().toISOString(),
     });
-
-    this.changeStats = changes;
 
     // Generate PR notes
     job.step("Generating PR notes...");
@@ -1309,7 +1410,6 @@ ${style.line()}
     this.prNotes = notes;
     this.prNotesPath = notesPath;
 
-    const totalChanges = changes.added + changes.modified + changes.deleted;
     job.done(
       () =>
         `${label()} ${totalChanges} change(s) (${changes.added} Added, ${changes.modified} Modified, ${changes.deleted} Deleted)`
@@ -1356,7 +1456,7 @@ ${style.line()}
     const commits = await this.getUpstreamCommits();
     const shortBase = this.config.baseCommit.slice(0, 8);
     const shortTarget = this.targetCommit.slice(0, 8);
-    const refName = this.targetTag ?? this.args.branch ?? this.config.branch;
+    const refName = this.targetTag || this.args.branch || this.config.branch;
     const repoUrl = this.config.repo.replace(/\.git$/, "");
 
     const lines: string[] = [];
@@ -1475,7 +1575,7 @@ ${style.line()}
 
     this.targetCommit = checkpoint.upstream.targetCommit;
     this.targetBranch = checkpoint.upstream.branch;
-    this.targetTag = checkpoint.upstream.tag;
+    this.targetTag = checkpoint.upstream.tag ?? "";
     this.workBranch = checkpoint.mergeBranches.work;
     this.targetMergeBranch = checkpoint.mergeBranches.target;
   }
