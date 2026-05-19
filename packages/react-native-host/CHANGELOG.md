@@ -1,5 +1,19 @@
 # @rnx-kit/react-native-host
 
+## 0.5.17
+
+### Patch Changes
+
+- 9d9e5a6: Don't include bridge code in bridgeless mode
+- 6171b84: fix(react-native-host): Various build fixes
+
+  - Rename inner `strongSelf` in `-setBridge:` to `innerStrongSelf` so it
+    no longer shadows the outer.
+  - Gate `#import <React/RCTCxxBridgeDelegate.h>` behind `#if !USE_BRIDGELESS`
+    to match the already-conditional protocol conformance.
+  - Drop the stray `;` before the `-viewWithModuleName:initialProperties:`
+    body.
+
 ## 0.5.16
 
 ### Patch Changes

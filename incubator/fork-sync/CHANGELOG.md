@@ -1,5 +1,11 @@
 # @rnx-kit/fork-sync
 
+## 0.4.2
+
+### Patch Changes
+
+- f41748c: Handle empty changes and autoupdate tags in sync config
+
 ## 0.4.1
 
 ### Patch Changes

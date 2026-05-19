@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.4.1
+
+### Patch Changes
+
+- 1baf028: Reverted accidental downgrade of minimum Node version
+- 6a523c1: Preserve `class` syntax for Hermes
+
 ## 0.4.0
 
 ### Minor Changes

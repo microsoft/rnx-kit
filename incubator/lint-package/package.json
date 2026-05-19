@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/lint-package",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "EXPERIMENTAL - USE WITH CAUTION - lint-package",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/lint-package#readme",
   "license": "MIT",

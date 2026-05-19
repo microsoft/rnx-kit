@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/cli
 
+## 2.0.1
+
+### Patch Changes
+
+- 1baf028: Reverted accidental downgrade of minimum Node version
+- Updated dependencies [1baf028]
+- Updated dependencies [6a523c1]
+- Updated dependencies [0a105be]
+  - @rnx-kit/metro-serializer-esbuild@0.4.1
+  - @rnx-kit/align-deps@4.0.1
+
 ## 2.0.0
 
 ### Major Changes
