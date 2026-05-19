@@ -40,7 +40,8 @@
     "algoliasearch-helper": "ignore:",
     "copy-webpack-plugin/serialize-javascript": "^7.0.3",
     "css-minimizer-webpack-plugin/serialize-javascript": "^7.0.3",
-    "node-gyp": "ignore:"
+    "node-gyp": "ignore:",
+    "selfsigned": "ignore:"
   },
   "browserslist": {
     "production": [
