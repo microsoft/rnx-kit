@@ -42,6 +42,28 @@ export type TreeFormattingOptions = TextOptions & {
 };
 
 /**
+ * The result of parsing a string for formatting, which includes the original text, its visible width,
+ * and optionally the individual lines and their widths if the string is multiline. This is used to
+ * handle strings that may contain control codes (e.g. ANSI color codes) that affect the visible width
+ * but are not part of the displayed text.
+ */
+export type ParsedString = {
+  /** The original string, control codes included */
+  text: string;
+  /** The visible width of the string, excluding control codes */
+  width: number;
+  /** The individual lines of the string, control codes valid for each line if the string is multiline */
+  lines?: string[];
+  /** The visible width of each line, excluding control codes */
+  lineWidths?: number[];
+};
+
+/**
+ * A ParsedString is a MultilineString if it has both the lines and lineWidth properties
+ */
+export type MultilineString = Required<ParsedString>;
+
+/**
  * Parts of a tree view.
  *
  * Each row of the tree has a first-line prefix and a continuation prefix used for any extra lines
