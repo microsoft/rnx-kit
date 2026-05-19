@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli#readme",
   "license": "MIT",
@@ -40,14 +40,14 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/align-deps": "^4.0.0",
+    "@rnx-kit/align-deps": "^4.0.1",
     "@rnx-kit/config": "^0.9.0",
     "@rnx-kit/console": "^3.0.0",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "^3.0.0",
     "@rnx-kit/metro-plugin-duplicates-checker": "^4.0.0",
     "@rnx-kit/metro-plugin-typescript": "^0.6.0",
     "@rnx-kit/metro-serializer": "^2.0.0",
-    "@rnx-kit/metro-serializer-esbuild": "^0.4.0",
+    "@rnx-kit/metro-serializer-esbuild": "^0.4.1",
     "@rnx-kit/metro-service": "^5.0.0",
     "@rnx-kit/third-party-notices": "^3.0.0",
     "@rnx-kit/tools-android": "^0.2.2",

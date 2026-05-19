@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 4.0.1
+
+### Patch Changes
+
+- 0a105be: Automatically group log lines on GitHub Actions and Azure Pipelines
+
 ## 4.0.0
 
 ### Major Changes
