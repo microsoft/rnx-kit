@@ -6,7 +6,6 @@
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
-#import <React/RCTCxxBridgeDelegate.h>
 #import <React/RCTDevLoadingViewSetEnabled.h>
 #import <React/RCTUtils.h>
 
@@ -16,6 +15,10 @@
 #import "RNXHostConfig.h"
 #import "RNXHostReleaser.h"
 #import "RNXTurboModuleAdapter.h"
+
+#if !USE_BRIDGELESS
+#import <React/RCTCxxBridgeDelegate.h>
+#endif  // !USE_BRIDGELESS
 
 @class RCTSurfacePresenter;
 

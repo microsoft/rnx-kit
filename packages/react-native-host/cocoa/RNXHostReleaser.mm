@@ -50,12 +50,12 @@
       RCTExecuteOnUIManagerQueue(^{
         [manager addUIBlock:^(RCTUIManager *uiManager,
                               NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-          __typeof(self) strongSelf = weakSelf;
-          if (strongSelf == nil) {
+          __typeof(self) innerStrongSelf = weakSelf;
+          if (innerStrongSelf == nil) {
               return;
           }
 
-          strongSelf->_viewRegistry = viewRegistry;
+          innerStrongSelf->_viewRegistry = viewRegistry;
         }];
       });
     });
