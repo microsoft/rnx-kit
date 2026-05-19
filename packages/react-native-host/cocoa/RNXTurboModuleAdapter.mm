@@ -80,6 +80,7 @@
 }
 #endif  // USE_FABRIC
 
+#if !USE_BRIDGELESS
 - (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:
     (RCTBridge *)bridge
 {
@@ -96,6 +97,7 @@
     return nullptr;
 #endif  // USE_FABRIC
 }
+#endif  // !USE_BRIDGELESS
 
 #if USE_FABRIC
 
@@ -131,6 +133,7 @@
 
 // MARK: - Private
 
+#if !USE_BRIDGELESS
 - (std::unique_ptr<facebook::react::JSExecutorFactory>)initJsExecutorFactoryWithBridge:
     (RCTBridge *)bridge
 {
@@ -150,6 +153,7 @@
     return RCTAppSetupDefaultJsExecutorFactory(bridge, _turboModuleManager);
 #endif  // USE_RUNTIME_SCHEDULER
 }
+#endif  // !USE_BRIDGELESS
 
 - (void)onRuntimeReady:(NSNotification *)note
 {
