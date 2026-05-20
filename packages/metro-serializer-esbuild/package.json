@@ -44,7 +44,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
-    "@fluentui/utilities": "8.13.9",
+    "@fluentui/utilities": "8.17.2",
     "@react-native-community/cli-types": "^20.1.0",
     "@react-native/babel-preset": "^0.85.0",
     "@react-native/metro-config": "^0.85.0",
