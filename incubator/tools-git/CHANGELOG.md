@@ -1,5 +1,11 @@
 # @rnx-kit/tools-git
 
+## 0.1.1
+
+### Patch Changes
+
+- def052e: Fixed exports keys not being prefixed with `.`
+
 ## 0.1.0
 
 ### Minor Changes
