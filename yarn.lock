@@ -5956,6 +5956,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/tools-git@workspace:incubator/tools-git":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/tools-git@workspace:incubator/tools-git"
+  dependencies:
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/tools-language@npm:*, @rnx-kit/tools-language@npm:^3.0.1, @rnx-kit/tools-language@workspace:packages/tools-language":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-language@workspace:packages/tools-language"
