@@ -1,5 +1,5 @@
-import { error } from "@rnx-kit/console";
 import { spawnSync } from "node:child_process";
+import { styleText } from "node:util";
 
 export const DEFAULT_BRANCH = "origin/main";
 
@@ -11,7 +11,7 @@ export function git(...args: string[]): string {
   const { stderr, stdout } = spawnSync("git", args);
   const message = stderr.toString().trim();
   if (message) {
-    error(message);
+    console.error(styleText(["red", "bold"], "error"), message);
   }
   return stdout.toString().trim();
 }

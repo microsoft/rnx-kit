@@ -35,9 +35,6 @@
     "test": "rnx-kit-scripts test",
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
-  "dependencies": {
-    "@rnx-kit/console": "^3.0.0"
-  },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
