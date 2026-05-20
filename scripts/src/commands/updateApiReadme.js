@@ -219,8 +219,8 @@ export async function updateApiReadme() {
           break;
         }
 
-        const source = getBaseName(sources);
         const numExported = exportedFunctions.length;
+        const source = getBaseName(sources);
         if (comment) {
           const { parameters } = signatures[signatures.length - 1];
           const fn = makeFunctionEntry(source, name, parameters, comment);

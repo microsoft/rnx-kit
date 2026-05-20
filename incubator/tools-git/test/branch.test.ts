@@ -1,6 +1,6 @@
 import { equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { getDefaultBranch } from "../src/index.ts";
+import { getDefaultBranch } from "../src/branch.ts";
 
 describe("getDefaultBranch()", () => {
   it("returns default branch", () => {

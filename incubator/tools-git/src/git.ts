@@ -4,7 +4,7 @@ import { styleText } from "node:util";
 export const DEFAULT_BRANCH = "origin/main";
 
 // See https://github.com/microsoft/rnx-kit/security/code-scanning/35
-const REJECTED_ARGS = ["--upload-pack", "-u"];
+export const REJECTED_ARGS = ["--upload-pack", "-u"];
 
 function sanitize(args: string[]): string[] {
   for (const a of args) {
