@@ -1,0 +1,49 @@
+{
+  "name": "@rnx-kit/tools-git",
+  "version": "0.0.1",
+  "description": "A collection of functions for common Git operations",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/tools-git#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/tools-git"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
+    "update-readme": "rnx-kit-scripts update-api-readme"
+  },
+  "dependencies": {
+    "@rnx-kit/console": "^3.0.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*"
+  },
+  "engines": {
+    "node": ">=20.18"
+  },
+  "experimental": true
+}

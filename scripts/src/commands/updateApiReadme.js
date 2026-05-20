@@ -50,20 +50,14 @@ function getBaseName(sources) {
 /**
  * @param {string} source
  * @param {string} identifier
- * @param {Comment | undefined} comment
- * @returns {comment is Comment}
+ * @returns {void}
  */
-function isCommented(source, identifier, comment) {
-  if (!comment) {
-    console.warn(
-      "WARN",
-      `${source}:`,
-      `${identifier} is exported but undocumented`
-    );
-    return false;
-  }
-
-  return true;
+function warnUndocumented(source, identifier) {
+  console.warn(
+    "WARN",
+    `${source}:`,
+    `${identifier} is exported but undocumented`
+  );
 }
 
 /**
@@ -212,8 +206,10 @@ export async function updateApiReadme() {
     switch (kind) {
       case typedoc.ReflectionKind.TypeAlias: {
         const source = getBaseName(sources);
-        if (isCommented(source, name, comment)) {
+        if (comment) {
           exportedTypes.push([source, name, renderSummary(comment.summary)]);
+        } else {
+          warnUndocumented(source, name);
         }
         break;
       }
@@ -224,7 +220,8 @@ export async function updateApiReadme() {
         }
 
         const source = getBaseName(sources);
-        if (isCommented(source, name, comment)) {
+        const numExported = exportedFunctions.length;
+        if (comment) {
           const { parameters } = signatures[signatures.length - 1];
           const fn = makeFunctionEntry(source, name, parameters, comment);
           exportedFunctions.push(fn);
@@ -232,12 +229,15 @@ export async function updateApiReadme() {
         } else {
           for (let i = signatures.length - 1; i >= 0; --i) {
             const { comment, parameters } = signatures[i];
-            if (isCommented(source, name, comment)) {
+            if (comment) {
               const fn = makeFunctionEntry(source, name, parameters, comment);
               exportedFunctions.push(fn);
               break;
             }
           }
+        }
+        if (exportedFunctions.length === numExported) {
+          warnUndocumented(source, name);
         }
         break;
       }
