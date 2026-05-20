@@ -13,6 +13,7 @@ function parseVersion(version: string): number {
 function main(targetBranch: string | undefined): number {
   const baseCommit = getBaseCommit(targetBranch, changesetsConfig.baseBranch);
   if (!baseCommit) {
+    console.error("❌ Failed to determine base commit");
     return 1;
   }
 
