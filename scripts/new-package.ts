@@ -9,7 +9,10 @@ import { getRootEnginesField } from "./src/rootWorkspace.js";
 
 type Options = {
   experimental?: boolean;
+  scope?: string;
 };
+
+type PackageScope = "rnx-kit" | "webapis";
 
 const EXPERIMENTAL_BANNER =
   "🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧\n\n### THIS TOOL IS EXPERIMENTAL — USE WITH CAUTION\n\n🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧";
@@ -28,12 +31,40 @@ function writeTextFile(destination: string, data: unknown): void {
   fs.closeSync(fd);
 }
 
-function main(projectName: string, { experimental }: Options): number {
+function getPackageScope(scope: string | undefined): PackageScope | undefined {
+  if (scope === undefined || scope === "rnx-kit") {
+    return "rnx-kit";
+  }
+
+  if (scope === "webapis") {
+    return "webapis";
+  }
+
+  console.error(`Unsupported scope '${scope}'. Expected 'rnx-kit' or 'webapis'`);
+  return undefined;
+}
+
+function main(projectName: string, { experimental, scope }: Options): number {
+  const packageScope = getPackageScope(scope);
+  if (packageScope === undefined) {
+    return 1;
+  }
+
   // do some quick sanitization
   const cleanProjectName = projectName.replace(/[|&;$%@"<>()+,]/g, "");
 
-  const packagesDir = experimental ? "incubator" : "packages";
+  const isExperimental = experimental || packageScope === "webapis";
+  const packagesDir =
+    packageScope === "webapis"
+      ? "incubator/@react-native-webapis"
+      : isExperimental
+        ? "incubator"
+        : "packages";
   const projectDir = packagesDir + "/" + cleanProjectName;
+  const manifestName =
+    packageScope === "webapis"
+      ? "@react-native-webapis/" + cleanProjectName
+      : "@rnx-kit/" + cleanProjectName;
 
   const newProjectDir = fileURLToPath(
     new URL("../" + projectDir, import.meta.url)
@@ -75,9 +106,9 @@ function main(projectName: string, { experimental }: Options): number {
   const template = JSON.parse(data.toString());
   const manifest = {
     ...template,
-    name: "@rnx-kit/" + cleanProjectName,
+    name: manifestName,
     version: "0.0.1",
-    description: experimental
+    description: isExperimental
       ? "EXPERIMENTAL - USE WITH CAUTION - " + cleanProjectName
       : cleanProjectName,
     homepage: template.homepage.replace("packages/template", projectDir),
@@ -86,7 +117,7 @@ function main(projectName: string, { experimental }: Options): number {
 
   manifest.repository.directory = projectDir;
 
-  if (experimental) {
+  if (isExperimental) {
     manifest.experimental = true;
   }
 
@@ -97,8 +128,9 @@ function main(projectName: string, { experimental }: Options): number {
   const readme = fs.readFileSync(readmePath);
   const updatedReadme = readme
     .toString()
+    .replaceAll("@rnx-kit/template", manifestName)
     .replaceAll("template", cleanProjectName)
-    .replace(WARNING_BANNER_TOKEN, experimental ? EXPERIMENTAL_BANNER : "")
+    .replace(WARNING_BANNER_TOKEN, isExperimental ? EXPERIMENTAL_BANNER : "")
     .replace(new RegExp(`${USAGE_TOKEN_START}([^]+)${USAGE_TOKEN_END}`), "");
 
   writeTextFile(readmePath, updatedReadme);
@@ -114,13 +146,21 @@ const { values, positionals } = parseArgs({
       type: "boolean",
       default: false,
     },
+    scope: {
+      description:
+        "Package scope to use; pass 'webapis' for @react-native-webapis packages",
+      type: "string",
+      default: "rnx-kit",
+    },
   },
   strict: true,
   allowPositionals: true,
   tokens: false,
 });
 if (positionals.length === 0) {
-  console.log("Usage: new-package [--experimental] <name>");
+  console.log(
+    "Usage: new-package [--experimental] [--scope rnx-kit|webapis] <name>"
+  );
   process.exitCode = 1;
 } else {
   process.exitCode = main(positionals[0], values);
