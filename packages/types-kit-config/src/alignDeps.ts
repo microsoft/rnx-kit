@@ -43,6 +43,8 @@ export type Capability =
   | "popover"
   | "react"
   | "react-dom"
+  | "react-dom/types"
+  | "react/types"
   | "react-test-renderer"
   | "safe-area"
   | "screens"

@@ -18,10 +18,22 @@ export const profile: Profile = {
     name: "react",
     version: "18.3.1",
   },
+  "react/types": {
+    name: "@types/react",
+    version: "^18.3.1",
+    capabilities: ["react"],
+    devOnly: true,
+  },
   "react-dom": {
     name: "react-dom",
     version: "^18.3.1",
     capabilities: ["react"],
+  },
+  "react-dom/types": {
+    name: "@types/react-dom",
+    version: "^18.3.1",
+    capabilities: ["react-dom"],
+    devOnly: true,
   },
   "react-test-renderer": {
     name: "react-test-renderer",

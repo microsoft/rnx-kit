@@ -68,6 +68,8 @@ export const IGNORED_CAPABILITIES = [
   "metro-runtime",
   "react",
   "react-dom",
+  "react-dom/types",
+  "react/types",
   "react-test-renderer",
 ];
 
@@ -334,10 +336,22 @@ export const profile: Profile = {
     name: "react",
     version: "${reactVersion}",
   },
+  "react/types": {
+    name: "@types/react",
+    version: "^${reactVersion}",
+    capabilities: ["react"],
+    devOnly: true,
+  },
   "react-dom": {
     name: "react-dom",
     version: "^${reactVersion}",
     capabilities: ["react"],
+  },
+  "react-dom/types": {
+    name: "@types/react-dom",
+    version: "^${reactVersion}",
+    capabilities: ["react-dom"],
+    devOnly: true,
   },
   "react-test-renderer": {
     name: "react-test-renderer",
