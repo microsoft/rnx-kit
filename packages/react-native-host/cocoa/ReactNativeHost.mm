@@ -38,6 +38,41 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 @end
 #endif  // USE_CODEGEN_PROVIDER
 
+#if USE_BRIDGELESS
+
+// Forwards host:didInitializeRuntime: from RCTHost to the consumer's RNXHostConfig.
+@interface _RNXForwardingRCTHostDelegate : NSObject <RCTHostDelegate>
+- (instancetype)initWithHost:(ReactNativeHost *)host config:(id<RNXHostConfig>)config;
+@end
+
+@implementation _RNXForwardingRCTHostDelegate {
+    __weak ReactNativeHost *_host;
+    __weak id<RNXHostConfig> _config;
+}
+
+- (instancetype)initWithHost:(ReactNativeHost *)host config:(id<RNXHostConfig>)config
+{
+    if (self = [super init]) {
+        _host = host;
+        _config = config;
+    }
+    return self;
+}
+
+- (void)host:(RCTHost *)host didInitializeRuntime:(facebook::jsi::Runtime &)runtime
+{
+    id<RNXHostConfig> config = _config;
+    ReactNativeHost *forwardedHost = _host;
+    if (forwardedHost != nil &&
+        [config respondsToSelector:@selector(host:didInitializeRuntime:)]) {
+        [config host:forwardedHost didInitializeRuntime:runtime];
+    }
+}
+
+@end
+
+#endif  // USE_BRIDGELESS
+
 @implementation ReactNativeHost {
     __weak id<RNXHostConfig> _config;
     NSDictionary *_launchOptions;
@@ -47,6 +82,9 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
     RCTHost *_reactHost;
     NSLock *_isShuttingDown;
     RNXHostReleaser *_hostReleaser;
+#if USE_BRIDGELESS
+    _RNXForwardingRCTHostDelegate *_hostDelegateProxy;
+#endif  // USE_BRIDGELESS
 #ifdef USE_REACT_NATIVE_CONFIG
     std::shared_ptr<ReactNativeConfig> _reactNativeConfig;
 #endif  // USE_REACT_NATIVE_CONFIG
@@ -102,9 +140,61 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
             });
         }
 
+        if ([config respondsToSelector:@selector(host:didLoadInstanceWithError:)]) {
+            [[NSNotificationCenter defaultCenter]
+                addObserver:self
+                   selector:@selector(_rnxInstanceDidLoad:)
+                       name:RCTJavaScriptDidLoadNotification
+                     object:nil];
+            [[NSNotificationCenter defaultCenter]
+                addObserver:self
+                   selector:@selector(_rnxInstanceDidFailToLoad:)
+                       name:RCTJavaScriptDidFailToLoadNotification
+                     object:nil];
+        }
+        if ([config respondsToSelector:@selector(hostWillUnloadInstance:)]) {
+            [[NSNotificationCenter defaultCenter]
+                addObserver:self
+                   selector:@selector(_rnxInstanceWillUnload:)
+                       name:RCTBridgeWillBeInvalidatedNotification
+                     object:nil];
+        }
+
         [self initializeReactHost];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)_rnxInstanceDidLoad:(NSNotification *)__unused notification
+{
+    id<RNXHostConfig> config = _config;
+    if ([config respondsToSelector:@selector(host:didLoadInstanceWithError:)]) {
+        [config host:self didLoadInstanceWithError:nil];
+    }
+}
+
+- (void)_rnxInstanceDidFailToLoad:(NSNotification *)notification
+{
+    id<RNXHostConfig> config = _config;
+    if ([config respondsToSelector:@selector(host:didLoadInstanceWithError:)]) {
+        NSError *error = notification.userInfo[@"error"];
+        [config host:self didLoadInstanceWithError:error ?: [NSError errorWithDomain:@"ReactNativeHost"
+                                                                                code:0
+                                                                            userInfo:nil]];
+    }
+}
+
+- (void)_rnxInstanceWillUnload:(NSNotification *)__unused notification
+{
+    id<RNXHostConfig> config = _config;
+    if ([config respondsToSelector:@selector(hostWillUnloadInstance:)]) {
+        [config hostWillUnloadInstance:self];
+    }
 }
 
 - (RCTBridge *)bridge
@@ -267,6 +357,7 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 {
 #if USE_FABRIC
     _turboModuleAdapter = [[RNXTurboModuleAdapter alloc] init];
+    _turboModuleAdapter.hostConfig = _config;
     RCTEnableTurboModule(true);
 #endif
 }
@@ -306,6 +397,10 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 #endif
     };
 
+    // Retained as an ivar because RCTHost stores host delegates weakly.
+    _hostDelegateProxy = [[_RNXForwardingRCTHostDelegate alloc] initWithHost:self
+                                                                      config:_config];
+
     __weak __typeof(self) weakSelf = self;
     if ([RCTHost instancesRespondToSelector:@selector
                  (initWithBundleURLProvider:
@@ -315,13 +410,13 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
              initWithBundleURLProvider:^{
                return [weakSelf sourceURLForBridge:nil];
              }
-                          hostDelegate:nil
+                          hostDelegate:_hostDelegateProxy
             turboModuleManagerDelegate:_turboModuleAdapter
                       jsEngineProvider:jsEngineProvider
                          launchOptions:_launchOptions];
     } else {
         _reactHost = [[RCTHost alloc] initWithBundleURL:[self sourceURLForBridge:nil]
-                                           hostDelegate:nil
+                                           hostDelegate:_hostDelegateProxy
                              turboModuleManagerDelegate:_turboModuleAdapter
                                        jsEngineProvider:jsEngineProvider];
     }
