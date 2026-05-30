@@ -129,6 +129,7 @@ describe("makeSetVersionCommand()", () => {
         "react-native": "^0.63.2",
       },
       devDependencies: {
+        "@types/react-native": "^0.63.0",
         react: "16.13.1",
         "react-native": "^0.63.2",
       },
@@ -158,6 +159,7 @@ describe("makeSetVersionCommand()", () => {
         "react-native": "^0.63.2 || ^0.64.2",
       },
       devDependencies: {
+        "@types/react-native": "^0.64.0",
         react: "17.0.1",
         "react-native": "^0.64.2",
       },
@@ -183,6 +185,7 @@ describe("makeSetVersionCommand()", () => {
         "react-native": "^0.63.2",
       },
       devDependencies: {
+        "@types/react-native": "^0.63.0",
         react: "16.13.1",
         "react-native": "^0.63.2",
       },
@@ -208,6 +211,7 @@ describe("makeSetVersionCommand()", () => {
         "react-native": "^0.63.2 || ^0.64.2",
       },
       devDependencies: {
+        "@types/react-native": "^0.64.0",
         react: "17.0.1",
         "react-native": "^0.64.2",
       },
@@ -235,6 +239,9 @@ describe("makeSetVersionCommand()", () => {
         react: "16.13.1",
         "react-native": "^0.63.2",
       },
+      devDependencies: {
+        "@types/react-native": "^0.63.0",
+      },
       "rnx-kit": {
         kitType: "app",
         alignDeps: {
@@ -260,6 +267,9 @@ describe("makeSetVersionCommand()", () => {
         react: "17.0.1",
         "react-native": "^0.64.2",
       },
+      devDependencies: {
+        "@types/react-native": "^0.64.0",
+      },
       "rnx-kit": {
         kitType: "app",
         alignDeps: {
@@ -280,6 +290,9 @@ describe("makeSetVersionCommand()", () => {
       dependencies: {
         react: "16.13.1",
         "react-native": "^0.63.2",
+      },
+      devDependencies: {
+        "@types/react-native": "^0.63.0",
       },
       "rnx-kit": {
         kitType: "app",
@@ -305,6 +318,9 @@ describe("makeSetVersionCommand()", () => {
         react: "17.0.1",
         "react-native": "^0.64.2",
       },
+      devDependencies: {
+        "@types/react-native": "^0.64.0",
+      },
       "rnx-kit": {
         kitType: "app",
         alignDeps: {
@@ -322,6 +338,9 @@ describe("makeSetVersionCommand()", () => {
       dependencies: {
         react: "16.13.1",
         "react-native": "^0.63.2",
+      },
+      devDependencies: {
+        "@types/react-native": "^0.63.0",
       },
       "rnx-kit": {
         kitType: "app",
@@ -346,6 +365,9 @@ describe("makeSetVersionCommand()", () => {
       dependencies: {
         react: "17.0.1",
         "react-native": "^0.64.2",
+      },
+      devDependencies: {
+        "@types/react-native": "^0.64.0",
       },
       "rnx-kit": {
         kitType: "app",

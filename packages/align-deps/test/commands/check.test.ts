@@ -187,6 +187,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         "react-native": packageVersion(profile_0_70, "core"),
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_70,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_70, "react"),
         "react-native": packageVersion(profile_0_70, "core"),
       },
@@ -216,6 +220,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         "react-native": packageVersion(profile_0_70, "core"),
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_70,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_70, "react"),
         "react-native": packageVersion(profile_0_70, "core"),
       },
@@ -250,6 +258,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         "react-native": packageVersion(profile_0_70, "core"),
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_70,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_70, "react"),
         "react-native": packageVersion(profile_0_70, "core"),
       },
@@ -297,6 +309,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
             `package.json
       ├── peerDependencies["react"]: dependency is missing, expected "18.1.0"
       ├── peerDependencies["react-native"]: dependency is missing, expected "^0.70.0"
+      ├── devDependencies["@types/react-native"]: dependency is missing, expected "^0.70.0"
       ├── devDependencies["react"]: dependency is missing, expected "18.1.0"
       ├── devDependencies["react-native"]: dependency is missing, expected "^0.70.0"
       └── Re-run with '--write' to fix them
@@ -400,6 +413,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         "react-native": v68_v69_v70,
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_68,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_68, "react"),
         "react-native": packageVersion(profile_0_68, "core"),
       },
@@ -429,6 +446,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         "react-native": v68_v69_v70,
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_69,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_69, "react"),
         "react-native": packageVersion(profile_0_69, "core"),
       },
@@ -461,6 +482,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         "react-native": v68_v69_v70,
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_69,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_69, "react"),
         "react-native": packageVersion(profile_0_69, "core"),
       },
@@ -494,6 +519,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         "react-native": v68_v69_v70,
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_69,
+          "types/react-native"
+        ).replace(mods, ""),
         react: packageVersion(profile_0_69, "react").replace(mods, ""),
         "react-native": packageVersion(profile_0_69, "core").replace(mods, ""),
       },
@@ -530,6 +559,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         "react-native": v68_v69_v70,
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_69,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_69, "react"),
         "react-native": packageVersion(profile_0_69, "core").replace(
           patch,
@@ -661,6 +694,10 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
         "react-native": packageVersion(profile_0_70, "core"),
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_70,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_70, "react"),
         "react-native": packageVersion(profile_0_70, "core"),
       },
@@ -685,6 +722,10 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
         "react-native": packageVersion(profile_0_70, "core"),
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_70,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_70, "react"),
         "react-native": packageVersion(profile_0_70, "core"),
       },
@@ -760,6 +801,10 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
         "react-native": v68_v69_v70,
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_68,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_68, "react"),
         "react-native": packageVersion(profile_0_68, "core"),
       },
@@ -780,6 +825,10 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
         "react-native": v68_v69_v70,
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_69,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_69, "react"),
         "react-native": packageVersion(profile_0_69, "core"),
       },
@@ -801,6 +850,10 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
         "react-native": v68_v69_v70,
       },
       devDependencies: {
+        "@types/react-native": packageVersion(
+          profile_0_69,
+          "types/react-native"
+        ),
         react: packageVersion(profile_0_69, "react"),
         "react-native": packageVersion(profile_0_69, "core"),
       },

@@ -4,7 +4,7 @@ import { baseCapabilities } from "./baseCapabilities.ts";
 const reactNative: Package = {
   name: "react-native",
   version: "^0.61.5",
-  capabilities: ["react"],
+  capabilities: ["react", "types/react-native"],
 };
 
 export const profile: Profile = {
@@ -205,6 +205,11 @@ export const profile: Profile = {
   "test-app": {
     name: "react-native-test-app",
     version: "^0.11.4",
+    devOnly: true,
+  },
+  "types/react-native": {
+    name: "@types/react-native",
+    version: "^0.61.0",
     devOnly: true,
   },
   webview: {

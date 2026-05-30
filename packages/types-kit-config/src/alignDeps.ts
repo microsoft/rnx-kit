@@ -51,6 +51,7 @@ export type Capability =
   | "storage"
   | "svg"
   | "test-app"
+  | "types/react-native"
   | "webview";
 
 /**

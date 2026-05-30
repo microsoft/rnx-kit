@@ -7,6 +7,8 @@ import { preset as defaultPreset } from "../src/presets/microsoft/react-native.t
 import { profile as profile_0_62 } from "../src/presets/microsoft/react-native/profile-0.62.ts";
 import { profile as profile_0_63 } from "../src/presets/microsoft/react-native/profile-0.63.ts";
 import { profile as profile_0_64 } from "../src/presets/microsoft/react-native/profile-0.64.ts";
+import { profile as profile_0_70 } from "../src/presets/microsoft/react-native/profile-0.70.ts";
+import { profile as profile_0_71 } from "../src/presets/microsoft/react-native/profile-0.71.ts";
 import type { Preset } from "../src/types.ts";
 import { pickPackage } from "./helpers.ts";
 
@@ -129,10 +131,12 @@ describe("resolveCapabilities()", () => {
     const { name } = profile_0_64["core"];
     const { name: reactName } = profile_0_64["react"];
     const { name: testAppName } = profile_0_64["test-app"];
+    const { name: typesName } = profile_0_64["types/react-native"];
     deepEqual(packages, {
       [name]: [profile_0_64["core"]],
       [reactName]: [profile_0_64["react"]],
       [testAppName]: [profile_0_64["test-app"]],
+      [typesName]: [profile_0_64["types/react-native"]],
     });
 
     equal(consoleWarnSpy.mock.callCount(), 0);
@@ -202,6 +206,10 @@ describe("resolveCapabilities()", () => {
     });
 
     deepEqual(packages, {
+      "@types/react-native": [
+        pickPackage(profile_0_63, "types/react-native"),
+        pickPackage(profile_0_64, "types/react-native"),
+      ],
       react: [
         pickPackage(profile_0_63, "react"),
         pickPackage(profile_0_64, "react"),
@@ -214,6 +222,37 @@ describe("resolveCapabilities()", () => {
         pickPackage(profile_0_63, "core-windows"),
         pickPackage(profile_0_64, "core-windows"),
       ],
+    });
+
+    equal(consoleWarnSpy.mock.callCount(), 0);
+  });
+
+  it("resolves React Native community type definitions for pre-0.71 profiles", (t) => {
+    const consoleWarnSpy = t.mock.method(console, "warn", () => undefined);
+
+    const packages = resolveCapabilities("package.json", ["core"], {
+      "0.70": profile_0_70,
+    });
+
+    deepEqual(packages, {
+      "@types/react-native": [pickPackage(profile_0_70, "types/react-native")],
+      react: [pickPackage(profile_0_70, "react")],
+      "react-native": [pickPackage(profile_0_70, "core")],
+    });
+
+    equal(consoleWarnSpy.mock.callCount(), 0);
+  });
+
+  it("does not resolve React Native community type definitions for 0.71 profiles", (t) => {
+    const consoleWarnSpy = t.mock.method(console, "warn", () => undefined);
+
+    const packages = resolveCapabilities("package.json", ["core"], {
+      "0.71": profile_0_71,
+    });
+
+    deepEqual(packages, {
+      react: [pickPackage(profile_0_71, "react")],
+      "react-native": [pickPackage(profile_0_71, "core")],
     });
 
     equal(consoleWarnSpy.mock.callCount(), 0);
@@ -244,6 +283,7 @@ describe("resolveCapabilities()", () => {
     );
 
     deepEqual(packages, {
+      "@types/react-native": [pickPackage(profile_0_64, "types/react-native")],
       react: [pickPackage(profile_0_64, "react")],
       "react-native": [pickPackage(profile_0_64, "core")],
       "react-native-macos": [pickPackage(profile_0_64, "core-macos")],
@@ -279,6 +319,7 @@ describe("resolveCapabilities()", () => {
     );
 
     deepEqual(packages, {
+      "@types/react-native": [pickPackage(profile_0_64, "types/react-native")],
       react: [pickPackage(profile_0_64, "react")],
       "react-native": [pickPackage(profile_0_64, "core")],
     });

@@ -175,7 +175,12 @@ describe("updatePackageManifest()", () => {
       "react-native": packageVersion(profile_0_64, "core"),
     });
     ok(!peerDependencies);
-    ok(!devDependencies);
+    deepEqual(devDependencies, {
+      "@types/react-native": packageVersion(
+        profile_0_63,
+        "types/react-native"
+      ),
+    });
   });
 
   it("removes dependencies from devDependencies for apps", () => {
@@ -201,6 +206,10 @@ describe("updatePackageManifest()", () => {
     });
     ok(!peerDependencies);
     deepEqual(devDependencies, {
+      "@types/react-native": packageVersion(
+        profile_0_63,
+        "types/react-native"
+      ),
       "react-native-test-app": "0.0.0",
       typescript: "0.0.0",
     });
@@ -231,7 +240,12 @@ describe("updatePackageManifest()", () => {
       "react-native-test-app": "0.0.0",
       typescript: "0.0.0",
     });
-    ok(!devDependencies);
+    deepEqual(devDependencies, {
+      "@types/react-native": packageVersion(
+        profile_0_63,
+        "types/react-native"
+      ),
+    });
   });
 
   it("sets dev/peer dependencies for libraries", () => {
@@ -263,6 +277,10 @@ describe("updatePackageManifest()", () => {
       ].join(" || "),
     });
     deepEqual(devDependencies, {
+      "@types/react-native": packageVersion(
+        profile_0_64,
+        "types/react-native"
+      ),
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
@@ -295,6 +313,10 @@ describe("updatePackageManifest()", () => {
       "react-native": packageVersion(profile_0_64, "core"),
     });
     deepEqual(devDependencies, {
+      "@types/react-native": packageVersion(
+        profile_0_64,
+        "types/react-native"
+      ),
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
@@ -324,6 +346,10 @@ describe("updatePackageManifest()", () => {
     });
     ok(!peerDependencies);
     deepEqual(devDependencies, {
+      "@types/react-native": packageVersion(
+        profile_0_63,
+        "types/react-native"
+      ),
       "react-native-test-app": packageVersion(profile_0_64, "test-app"),
     });
   });

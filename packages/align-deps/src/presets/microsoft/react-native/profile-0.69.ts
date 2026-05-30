@@ -4,7 +4,7 @@ import { profile as profile_0_68 } from "./profile-0.68.ts";
 const reactNative: Package = {
   name: "react-native",
   version: "^0.69.0",
-  capabilities: ["react"],
+  capabilities: ["react", "types/react-native"],
 };
 
 export const profile: Profile = {
@@ -37,6 +37,11 @@ export const profile: Profile = {
     name: "react-native-windows",
     version: "^0.69.0",
     capabilities: ["core"],
+  },
+  "types/react-native": {
+    name: "@types/react-native",
+    version: "^0.69.0",
+    devOnly: true,
   },
 
   "babel-preset-react-native": {
