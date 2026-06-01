@@ -52,6 +52,10 @@
 #define USE_UPDATE_RUNTIME_SHADOW_NODE_REFS_ON_COMMIT 1
 #endif  // __has_include(<React-RCTAppDelegate/RCTJSRuntimeConfiguratorProtocol.h>)
 
+#if !__has_include(<React/RCTCxxMethod.h>)  // >=0.87
+#define RCT_REMOVE_LEGACY_ARCH 1
+#endif  // !__has_include(<React/RCTCxxMethod.h>)
+
 #endif  // USE_FEATURE_FLAGS
 
 #endif  // USE_BRIDGELESS
