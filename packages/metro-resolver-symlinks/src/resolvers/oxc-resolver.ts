@@ -13,7 +13,16 @@ function makeOxcResolverOptions(
   context: ResolutionContextCompat,
   platform = "common"
 ): NapiResolveOptions {
-  const { alias, ...config } = makeEnhancedResolveOptions(context, platform);
+  const { alias, conditionNames, ...config } = makeEnhancedResolveOptions(
+    context,
+    platform
+  );
+  if (conditionNames.length === 1 && conditionNames[0] === "react-native") {
+    // By default, `react-native` is the only condition name provided.
+    // oxc-resolver does not provide fallbacks; we have to add them explicitly.
+    // https://github.com/facebook/react-native/blob/v0.85.3/packages/metro-config/src/index.flow.js#L59
+    conditionNames.push("import", "require", "default");
+  }
   return {
     ...config,
     alias: alias
@@ -21,6 +30,7 @@ function makeOxcResolverOptions(
           Object.entries(alias).map(([name, alias]) => [name, [alias]])
         )
       : {},
+    conditionNames,
   };
 }
 
