@@ -1,4 +1,5 @@
 import type { CustomResolver, Resolution } from "metro-resolver";
+import * as path from "node:path";
 import type { NapiResolveOptions, ResolverFactory } from "oxc-resolver";
 import type { ResolutionContextCompat } from "../types.ts";
 import { isAssetFile, resolveAsset } from "../utils/assets.ts";
@@ -52,7 +53,16 @@ export function applyOxcResolver(
   }
 
   const oxcResolve = getOxcResolver(context, platform);
-  const { path: filePath } = oxcResolve.sync(getFromDir(context), moduleName);
+  const fromDir = getFromDir(context);
+  const { error, path: filePath } = oxcResolve.sync(fromDir, moduleName);
+  if (error) {
+    const { originModulePath } = context;
+    const origin = originModulePath
+      ? path.relative(process.cwd(), originModulePath)
+      : ".";
+    throw new Error(`${origin}: ${error}`);
+  }
+
   if (!filePath) {
     return { type: "empty" };
   }
