@@ -71,24 +71,31 @@ public:
     {
         return true;
     }
+
+#ifndef RCT_REMOVE_LEGACY_ARCH
     bool enableFabricRenderer() override
     {
         return true;
     }
+
     bool useTurboModules() override
     {
         return true;
     }
+#endif  // !RCT_REMOVE_LEGACY_ARCH
+
     bool useNativeViewConfigsInBridgelessMode() override
     {
         return true;
     }
+
 #if USE_VIEW_COMMAND_RACE_FIX  // 0.77
     bool enableFixForViewCommandRace() override
     {
         return true;
     }
-#endif                                             // USE_VIEW_COMMAND_RACE_FIX
+#endif  // USE_VIEW_COMMAND_RACE_FIX
+
 #if USE_UPDATE_RUNTIME_SHADOW_NODE_REFS_ON_COMMIT  // >= 0.79
     bool useShadowNodeStateOnClone() override
     {

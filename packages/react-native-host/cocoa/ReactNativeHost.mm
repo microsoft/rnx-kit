@@ -282,8 +282,12 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 #ifndef USE_UNIFIED_FEATURE_FLAGS
     RCTSetUseNativeViewConfigsInBridgelessMode(YES);
 #endif
+
     RCTEnableTurboModuleInterop(YES);
+
+#ifndef RCT_REMOVE_LEGACY_ARCH
     RCTEnableTurboModuleInteropBridgeProxy(YES);
+#endif  // !RCT_REMOVE_LEGACY_ARCH
 
 #ifdef USE_REACT_NATIVE_CONFIG
     _reactNativeConfig = std::make_shared<ReactNativeConfig>();
@@ -307,10 +311,9 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
     };
 
     __weak __typeof(self) weakSelf = self;
-    if ([RCTHost instancesRespondToSelector:@selector
-                 (initWithBundleURLProvider:
-                               hostDelegate:turboModuleManagerDelegate:jsEngineProvider
-                                           :launchOptions:)]) {
+    if ([RCTHost instancesRespondToSelector:
+                     @selector(initWithBundleURLProvider:hostDelegate:turboModuleManagerDelegate:
+                               jsEngineProvider:launchOptions:)]) {
         _reactHost = [[RCTHost alloc]
              initWithBundleURLProvider:^{
                return [weakSelf sourceURLForBridge:nil];
