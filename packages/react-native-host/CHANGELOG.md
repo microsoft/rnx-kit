@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.18
+
+### Patch Changes
+
+- a226a87: Handle removal of `RCTEnableTurboModuleInteropBridgeProxy` and New Arch flags in `ReactNativeFeatureFlags`
+
 ## 0.5.17
 
 ### Patch Changes
