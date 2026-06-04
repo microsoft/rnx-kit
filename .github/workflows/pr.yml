@@ -159,7 +159,7 @@ jobs:
   build-ios-test-app:
     name: "Build iOS"
     permissions: {}
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -170,7 +170,6 @@ jobs:
         uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@5.1.5
         with:
           platform: ios
-          xcode-developer-dir: /Applications/Xcode_16.4.app
       - name: Install package dependencies
         run: |
           yarn
@@ -215,7 +214,6 @@ jobs:
         uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@5.1.5
         with:
           platform: macos
-          xcode-developer-dir: /Applications/Xcode_16.4.app
       - name: Install package dependencies
         run: |
           yarn
