@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.3.1
+
+### Patch Changes
+
+- 6c590d1: Provide default fallbacks for condition names when using `oxc-resolver`
+- 6c590d1: Don't ignore errors when using `oxc-resolver`
+
 ## 0.3.0
 
 ### Minor Changes
