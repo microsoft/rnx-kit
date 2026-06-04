@@ -1,4 +1,5 @@
 import type { CustomResolver, Resolution } from "metro-resolver";
+import * as path from "node:path";
 import type { NapiResolveOptions, ResolverFactory } from "oxc-resolver";
 import type { ResolutionContextCompat } from "../types.ts";
 import { isAssetFile, resolveAsset } from "../utils/assets.ts";
@@ -12,7 +13,16 @@ function makeOxcResolverOptions(
   context: ResolutionContextCompat,
   platform = "common"
 ): NapiResolveOptions {
-  const { alias, ...config } = makeEnhancedResolveOptions(context, platform);
+  const { alias, conditionNames, ...config } = makeEnhancedResolveOptions(
+    context,
+    platform
+  );
+  if (conditionNames.length === 1 && conditionNames[0] === "react-native") {
+    // By default, `react-native` is the only condition name provided.
+    // oxc-resolver does not provide fallbacks; we have to add them explicitly.
+    // https://github.com/facebook/react-native/blob/v0.85.3/packages/metro-config/src/index.flow.js#L59
+    conditionNames.push("import", "require", "default");
+  }
   return {
     ...config,
     alias: alias
@@ -20,6 +30,7 @@ function makeOxcResolverOptions(
           Object.entries(alias).map(([name, alias]) => [name, [alias]])
         )
       : {},
+    conditionNames,
   };
 }
 
@@ -52,7 +63,16 @@ export function applyOxcResolver(
   }
 
   const oxcResolve = getOxcResolver(context, platform);
-  const { path: filePath } = oxcResolve.sync(getFromDir(context), moduleName);
+  const fromDir = getFromDir(context);
+  const { error, path: filePath } = oxcResolve.sync(fromDir, moduleName);
+  if (error) {
+    const { originModulePath } = context;
+    const origin = originModulePath
+      ? path.relative(process.cwd(), originModulePath)
+      : ".";
+    throw new Error(`${origin}: ${error}`);
+  }
+
   if (!filePath) {
     return { type: "empty" };
   }
