@@ -88,4 +88,15 @@ describe("formatAsTree", () => {
     // 2 spaces of indent + "    " (last-row continuation) = 6 spaces before "b"
     equal(lines[2], "      b");
   });
+
+  it("handles CRLF line endings within a row without leaving stray \\r", () => {
+    const result = formatAsTree("Header", ["first\r\nsecond", "only"]);
+    const lines = result.split("\n");
+    equal(lines[0], "Header");
+    equal(lines[1], "├── first");
+    equal(lines[2], "│   second");
+    equal(lines[3], "└── only");
+    // No stray carriage returns in the output
+    equal(result.includes("\r"), false);
+  });
 });
