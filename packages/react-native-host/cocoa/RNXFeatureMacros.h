@@ -39,6 +39,7 @@
 
 #ifdef USE_FEATURE_FLAGS
 
+// TODO: `RCTArchConfiguratorProtocol.h` was removed in 0.87
 #if __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>) || __has_include(<React_RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
 #define USE_UNIFIED_FEATURE_FLAGS 1
 #endif  // __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
@@ -52,9 +53,12 @@
 #define USE_UPDATE_RUNTIME_SHADOW_NODE_REFS_ON_COMMIT 1
 #endif  // __has_include(<React-RCTAppDelegate/RCTJSRuntimeConfiguratorProtocol.h>)
 
-#if !__has_include(<React/RCTCxxMethod.h>)  // >=0.87
+#if REACT_NATIVE_VERSION >= 87000
 #define RCT_REMOVE_LEGACY_ARCH 1
-#endif  // !__has_include(<React/RCTCxxMethod.h>)
+#ifndef USE_UNIFIED_FEATURE_FLAGS
+#define USE_UNIFIED_FEATURE_FLAGS 1
+#endif
+#endif  // REACT_NATIVE_VERSION >= 87000
 
 #endif  // USE_FEATURE_FLAGS
 
