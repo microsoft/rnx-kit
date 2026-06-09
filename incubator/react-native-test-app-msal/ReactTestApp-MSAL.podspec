@@ -21,8 +21,8 @@ Pod::Spec.new do |s|
   s.source    = { :git => package['repository']['url'], :tag => "#{package['name']}@#{version}" }
   s.summary   = package['description']
 
-  s.ios.deployment_target = '14.0'
-  s.osx.deployment_target = '11.0'
+  s.ios.deployment_target = '15.1'
+  s.osx.deployment_target = '14.0'
 
   s.dependency 'MSAL'
 
