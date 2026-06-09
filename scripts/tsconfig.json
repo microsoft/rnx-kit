@@ -1,6 +1,7 @@
 {
   "extends": "@rnx-kit/tsconfig/tsconfig.esm.node.json",
   "compilerOptions": {
+    "rootDir": "..",
     "noEmit": true
   },
   "include": ["*.cjs", "*.js", "*.ts", "src"]
