@@ -206,11 +206,10 @@ export function findPackageDependencyDir(
 ): string | undefined {
   const pkgName =
     typeof ref === "string" ? ref : path.join(ref.scope ?? "", ref.name);
-  const startDir = options?.startDir ?? process.cwd();
   const packageDir = findUp(
     path.join("node_modules", pkgName),
     {
-      startDir,
+      startDir: options?.startDir,
       stopAt: options?.stopAt,
       type: "directory",
       allowSymlinks: options?.allowSymlinks,
