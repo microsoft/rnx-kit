@@ -48,7 +48,7 @@ struct AccountsView: View {
                 }
                 .onChange(of: selectedAccount) {
                     // `didSet` is not called when selection is changed
-                    onAccountSelected($0)
+                    onAccountSelected(selectedAccount)
                 }
                 .disabled(accounts.isEmpty)
                 #if os(iOS)
