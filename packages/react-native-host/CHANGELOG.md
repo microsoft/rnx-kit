@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.19
+
+### Patch Changes
+
+- c96eef1: Fixed detection of unified feature flags
+
 ## 0.5.18
 
 ### Patch Changes
