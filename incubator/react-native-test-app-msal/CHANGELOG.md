@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 5.1.0
+
+### Minor Changes
+
+- a78c002: - Bumped iOS deployment target to 15.1
+  - Bumped macOS deployment targt to 14.0
+  - Minor updates to satisfy deprecations in iOS 17+
+
 ## 5.0.3
 
 ### Patch Changes
