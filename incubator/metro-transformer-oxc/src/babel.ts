@@ -1,6 +1,6 @@
 /**
  * Everything in this file was copied more or less verbatim from
- * https://github.com/facebook/react-native/blob/v0.84.1/packages/react-native-babel-transformer/src/index.js
+ * https://github.com/react/react-native/blob/v0.84.1/packages/react-native-babel-transformer/src/index.js
  * with only typing fixes to make TypeScript happy.
  */
 import type { PluginItem, TransformOptions } from "@babel/core";

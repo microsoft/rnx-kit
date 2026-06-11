@@ -46,7 +46,7 @@ export type CliServerApi = {
   indexPageMiddleware: Middleware;
 };
 
-// https://github.com/facebook/react-native/blob/d208dc422c9239d126e0da674451c5898d57319d/packages/community-cli-plugin/src/commands/start/runServer.js#L32
+// https://github.com/react/react-native/blob/d208dc422c9239d126e0da674451c5898d57319d/packages/community-cli-plugin/src/commands/start/runServer.js#L32
 export type StartCommandArgs = {
   assetPlugins?: string[];
   cert?: string;
@@ -66,7 +66,7 @@ export type StartCommandArgs = {
   interactive: boolean;
 };
 
-// https://github.com/facebook/react-native/blob/3e7a873f2d1c5170a7f4c88064897e74a149c5d5/packages/dev-middleware/src/createDevMiddleware.js#L40
+// https://github.com/react/react-native/blob/3e7a873f2d1c5170a7f4c88064897e74a149c5d5/packages/dev-middleware/src/createDevMiddleware.js#L40
 type DevMiddlewareAPI = {
   middleware: Middleware;
   websocketEndpoints: RunServerOptions["websocketEndpoints"];

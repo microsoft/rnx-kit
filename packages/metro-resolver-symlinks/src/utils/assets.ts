@@ -29,7 +29,7 @@ export function isAssetFile(
  * Resolve a file path as an asset. Returns the set of files found after
  * expanding asset resolutions (e.g. `icon@2x.png`).
  *
- * @see {@link https://github.com/facebook/metro/commit/6e6f36fd982b9226b7daafd1c942c7be32f9af40}
+ * @see {@link https://github.com/react/metro/commit/6e6f36fd982b9226b7daafd1c942c7be32f9af40}
  */
 export function resolveAsset(
   context: ResolutionContextCompat,

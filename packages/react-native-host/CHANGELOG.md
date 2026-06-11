@@ -95,7 +95,7 @@
 ### Patch Changes
 
 - c2e4303: Backport fix for shadow node state not updating (see
-  https://github.com/facebook/react-native/issues/49694)
+  https://github.com/react/react-native/issues/49694)
 
 ## 0.5.6
 
@@ -179,7 +179,7 @@
 ### Patch Changes
 
 - 9f51524: Handle `launchOptions` being added to `RCTHost` initializer in 0.74
-  (see https://github.com/facebook/react-native/pull/43757)
+  (see https://github.com/react/react-native/pull/43757)
 
 ## 0.4.6
 
@@ -194,7 +194,7 @@
 - b4b5698: Implemented an `RCTHost` compatibility layer for deprecated methods,
   `-getModuleRegistry` and `-getSurfacePresenter`, and their replacements,
   `-moduleRegistry` and `-surfacePresenter` (see
-  https://github.com/facebook/react-native/commit/c3b0a8f1626939cf5c7b3864a5acf9d3dad26fb3
+  https://github.com/react/react-native/commit/c3b0a8f1626939cf5c7b3864a5acf9d3dad26fb3
   for details)
 
 ## 0.4.4
@@ -210,10 +210,10 @@
 - e02e503: Enable `concurrentRoot` by default when New Architecture is enabled.
 
   Having `concurrentRoot` disabled when Fabric is enabled is not recommended:
-  https://github.com/facebook/react-native/commit/7eaabfb174b14a30c30c7017195e8110348e5f44
+  https://github.com/react/react-native/commit/7eaabfb174b14a30c30c7017195e8110348e5f44
 
   As of 0.74, it won't be possible to opt-out:
-  https://github.com/facebook/react-native/commit/30d186c3683228d4fb7a42f804eb2fdfa7c8ac03
+  https://github.com/react/react-native/commit/30d186c3683228d4fb7a42f804eb2fdfa7c8ac03
 
 ## 0.4.2
 

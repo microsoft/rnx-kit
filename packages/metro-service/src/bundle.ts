@@ -1,4 +1,4 @@
-// Source: https://github.com/facebook/react-native/blob/0.80-stable/packages/community-cli-plugin/src/commands/bundle/buildBundle.js#L64
+// Source: https://github.com/react/react-native/blob/0.80-stable/packages/community-cli-plugin/src/commands/bundle/buildBundle.js#L64
 
 import { bold, error, info } from "@rnx-kit/console";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
@@ -52,7 +52,7 @@ export async function bundle(
   fs.mkdirSync(path.dirname(args.bundleOutput), mkdirOptions);
 
   // `runMetro` was introduced in 0.71:
-  // https://github.com/facebook/metro/commit/a0f99e136fbd2e02ab070437cee9f6e9baa36d16
+  // https://github.com/react/metro/commit/a0f99e136fbd2e02ab070437cee9f6e9baa36d16
   const { runMetro } = await importMetroForProject(config.projectRoot);
   if (!runMetro) {
     const { buildBundle } = await import("./bundle/bundle-0.66.js");

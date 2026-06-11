@@ -121,7 +121,7 @@ export async function rnxStart(
 
   const coreDevMiddleware = (() => {
     try {
-      // https://github.com/facebook/react-native/blob/7888338295476f4d4f00733309e54b8d22318e1e/packages/community-cli-plugin/src/commands/start/runServer.js#L115
+      // https://github.com/react/react-native/blob/7888338295476f4d4f00733309e54b8d22318e1e/packages/community-cli-plugin/src/commands/start/runServer.js#L115
       const { createDevMiddleware } = requireExternal(
         "@react-native/dev-middleware",
         ctx.root,

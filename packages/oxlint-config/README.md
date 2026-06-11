@@ -56,7 +56,7 @@ export default defineConfig({
     - [`react-hooks/recommended`](https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks#readme)
     - [`react/recommended`](https://github.com/yannickcr/eslint-plugin-react#recommended)
   - It also includes and enables the following rules:
-    - [`@react-native/platform-colors`](https://github.com/facebook/react-native/tree/main/packages/eslint-plugin-react-native#readme)
+    - [`@react-native/platform-colors`](https://github.com/react/react-native/tree/main/packages/eslint-plugin-react-native#readme)
       (as JS plugin)
 - [`@rnx-kit/oxlint-config/strict`](https://github.com/microsoft/rnx-kit/blob/main/packages/oxlint-config/src/configs/strict.ts)
   extends `@rnx-kit/oxlint-config/recommended` with rules that enables better

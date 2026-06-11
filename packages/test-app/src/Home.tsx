@@ -34,7 +34,7 @@ function isConcurrentReactEnabled(
   const { major, minor } = coreVersion;
   const version = major * 10000 + minor;
   // As of 0.74, it won't be possible to opt-out:
-  // https://github.com/facebook/react-native/commit/30d186c3683228d4fb7a42f804eb2fdfa7c8ac03
+  // https://github.com/react/react-native/commit/30d186c3683228d4fb7a42f804eb2fdfa7c8ac03
   return isFabric && (version >= 74 || props.concurrentRoot !== false);
 }
 

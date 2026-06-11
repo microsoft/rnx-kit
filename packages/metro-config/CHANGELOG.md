@@ -61,11 +61,11 @@
 ### Patch Changes
 
 - 90fc3ae: Handle upstream `exclusionList` no longer being public as of
-  [0.83.0](https://github.com/facebook/metro/releases/tag/v0.83.0). Our
+  [0.83.0](https://github.com/react/metro/releases/tag/v0.83.0). Our
   `exclusionList` will still be available and continue to work as before.
 
   For more context, see:
-  https://github.com/facebook/metro/issues/1564#issuecomment-3288628603
+  https://github.com/react/metro/issues/1564#issuecomment-3288628603
 
 ## 2.1.1
 

@@ -34,7 +34,7 @@ export function makeResolver(options: Options = {}): MetroResolver {
       // modules. If detected, we need to unset `resolveRequest` and retry with
       // Metro's resolver to avoid interference.
       //
-      // Ref: https://github.com/facebook/metro/blob/v0.67.0/packages/metro-resolver/src/resolve.js#L59
+      // Ref: https://github.com/react/metro/blob/v0.67.0/packages/metro-resolver/src/resolve.js#L59
       if (
         typeof requestedModuleName === "string" &&
         requestedModuleName !== moduleName
@@ -54,7 +54,7 @@ export function makeResolver(options: Options = {}): MetroResolver {
     try {
       // If a module was excluded, `_getEmptyModule()` will be called with no
       // platform set. We should let Metro handle this without interfering. See
-      // https://github.com/facebook/metro/blob/v0.71.0/packages/metro/src/node-haste/DependencyGraph/ModuleResolution.js#L97
+      // https://github.com/react/metro/blob/v0.71.0/packages/metro/src/node-haste/DependencyGraph/ModuleResolution.js#L97
       if (!platform) {
         // @ts-expect-error We pass 4 arguments instead of 3 to be backwards compatible
         return resolve(context, moduleName, platform, null);

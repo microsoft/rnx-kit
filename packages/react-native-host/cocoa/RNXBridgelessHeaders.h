@@ -37,7 +37,7 @@ using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSRuntimeFactory
 #endif  // __has_include(<react/runtime/JSEngineInstance.h>)
 
 // For details, see
-// https://github.com/facebook/react-native/commit/c3b0a8f1626939cf5c7b3864a5acf9d3dad26fb3
+// https://github.com/react/react-native/commit/c3b0a8f1626939cf5c7b3864a5acf9d3dad26fb3
 @interface RCTHost (Compatibility)
 @property (nonatomic, readonly) RCTModuleRegistry *moduleRegistry;      // Introduced in 0.74
 @property (nonatomic, readonly) RCTSurfacePresenter *surfacePresenter;  // Introduced in 0.74
@@ -62,7 +62,7 @@ using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSRuntimeFactory
 
 #ifdef USE_FEATURE_FLAGS
 
-// https://github.com/facebook/react-native/blob/0.80-stable/packages/react-native/ReactCommon/react/featureflags/ReactNativeFeatureFlagsOverridesOSSStable.h
+// https://github.com/react/react-native/blob/0.80-stable/packages/react-native/ReactCommon/react/featureflags/ReactNativeFeatureFlagsOverridesOSSStable.h
 class RNXBridgelessFeatureFlags : public facebook::react::ReactNativeFeatureFlagsDefaults
 {
 public:

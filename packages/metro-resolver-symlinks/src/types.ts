@@ -20,13 +20,13 @@ export type MetroResolver = typeof import("metro-resolver").resolve;
 export type ResolutionContextCompat = CustomResolutionContext & {
   /**
    * Introduced in 0.76
-   * @see {@link https://github.com/facebook/metro/commit/c6548f7ccc5b8ad59ea98f4bd7f1f5822deec0cd}
+   * @see {@link https://github.com/react/metro/commit/c6548f7ccc5b8ad59ea98f4bd7f1f5822deec0cd}
    */
   assetExts?: Set<string>;
 
   /**
    * Removed in 0.76
-   * @see {@link https://github.com/facebook/metro/commit/c6548f7ccc5b8ad59ea98f4bd7f1f5822deec0cd}
+   * @see {@link https://github.com/react/metro/commit/c6548f7ccc5b8ad59ea98f4bd7f1f5822deec0cd}
    */
   isAssetFile?: (file: string) => boolean;
 };

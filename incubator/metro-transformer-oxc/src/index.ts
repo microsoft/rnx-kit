@@ -1,6 +1,6 @@
 /**
  * Both `transform` and `getCacheKey` were copied from
- * https://github.com/facebook/react-native/blob/v0.84.1/packages/react-native-babel-transformer/src/index.js
+ * https://github.com/react/react-native/blob/v0.84.1/packages/react-native-babel-transformer/src/index.js
  * and modified to use `oxc-parser` where appropriate.
  */
 import { transformFromAstSync } from "@babel/core";

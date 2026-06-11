@@ -20,7 +20,7 @@ function makeOxcResolverOptions(
   if (conditionNames.length === 1 && conditionNames[0] === "react-native") {
     // By default, `react-native` is the only condition name provided.
     // oxc-resolver does not provide fallbacks; we have to add them explicitly.
-    // https://github.com/facebook/react-native/blob/v0.85.3/packages/metro-config/src/index.flow.js#L59
+    // https://github.com/react/react-native/blob/v0.85.3/packages/metro-config/src/index.flow.js#L59
     conditionNames.push("import", "require", "default");
   }
   return {

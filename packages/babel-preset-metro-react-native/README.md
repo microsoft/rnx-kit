@@ -5,7 +5,7 @@
 
 `@rnx-kit/babel-preset-metro-react-native` provides a Babel preset for React
 Native applications that you can use as a drop-in replacement for
-[`@react-native/babel-preset`](https://github.com/facebook/react-native/tree/v0.81.0/packages/react-native-babel-preset#readme)).
+[`@react-native/babel-preset`](https://github.com/react/react-native/tree/v0.81.0/packages/react-native-babel-preset#readme)).
 
 ## Usage
 

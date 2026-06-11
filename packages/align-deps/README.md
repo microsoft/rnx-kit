@@ -724,14 +724,14 @@ yarn update-profile
 Outputs something like:
 
 ```
-| Capability   | Name          | Version   | Latest | Homepage                                        |
-| ------------ | ------------- | --------- | ------ | ----------------------------------------------- |
-| core         | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
-| core-android | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
-| core-ios     | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
-| hermes       | hermes-engine | ~0.11.0   | =      |                                                 |
-| react        | react         | 17.0.2    | 18.1.0 | https://reactjs.org/                            |
-| ...                                                                                                 |
+| Capability   | Name          | Version   | Latest | Homepage                                     |
+| ------------ | ------------- | --------- | ------ | -------------------------------------------- |
+| core         | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/react/react-native#readme |
+| core-android | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/react/react-native#readme |
+| core-ios     | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/react/react-native#readme |
+| hermes       | hermes-engine | ~0.11.0   | =      |                                              |
+| react        | react         | 17.0.2    | 18.1.0 | https://reactjs.org/                         |
+| ...                                                                                              |
 ```
 
 With this information, we can see which packages have been updated since the

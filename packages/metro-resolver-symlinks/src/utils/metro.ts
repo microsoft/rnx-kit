@@ -54,14 +54,14 @@ const metroVersion = (() => {
 export function isPackageExportsEnabled({
   unstable_enablePackageExports,
 }: Pick<ResolutionContextCompat, "unstable_enablePackageExports">): boolean {
-  // https://github.com/facebook/metro/releases/tag/v0.82.0
+  // https://github.com/react/metro/releases/tag/v0.82.0
   return unstable_enablePackageExports == null
     ? metroVersion() >= 82
     : unstable_enablePackageExports;
 }
 
 export function supportsSymlinks(): boolean {
-  // https://github.com/facebook/metro/releases/tag/v0.81.0
+  // https://github.com/react/metro/releases/tag/v0.81.0
   return metroVersion() >= 81;
 }
 
@@ -179,7 +179,7 @@ export function patchMetro(options: Options): void {
   // Since we will be resolving files outside of `watchFolders`, their hashes
   // will not be found. We'll return the `filePath` as they should be unique.
   // getSha1 was replaced with getOrComputeSha1 in metro 0.82
-  // (https://github.com/facebook/metro/commit/e667aa3acd594d795bbab45c45107e7bc6322303)
+  // (https://github.com/react/metro/commit/e667aa3acd594d795bbab45c45107e7bc6322303)
   if (DependencyGraph.prototype.getSha1) {
     DependencyGraph.prototype.orig_getSha1 = DependencyGraph.prototype.getSha1;
     DependencyGraph.prototype.getSha1 = function (filePath: string): string {
@@ -188,7 +188,7 @@ export function patchMetro(options: Options): void {
       } catch (e) {
         // `ReferenceError` will always be thrown when Metro encounters a file
         // that does not exist in the Haste map.
-        // In metro 0.81 (https://github.com/facebook/metro/pull/1435)
+        // In metro 0.81 (https://github.com/react/metro/pull/1435)
         // this was changed to a standard `Error` - so verify the message
         if (e instanceof ReferenceError || isSha1Error(e)) {
           return computeSha1(filePath);
@@ -199,7 +199,7 @@ export function patchMetro(options: Options): void {
     };
   } else if (DependencyGraph.prototype.getOrComputeSha1) {
     // getSha1 was replaced with getOrComputeSha1 in metro 0.82
-    // (https://github.com/facebook/metro/commit/e667aa3acd594d795bbab45c45107e7bc6322303)
+    // (https://github.com/react/metro/commit/e667aa3acd594d795bbab45c45107e7bc6322303)
     DependencyGraph.prototype.orig_getOrComputeSha1 =
       DependencyGraph.prototype.getOrComputeSha1;
     DependencyGraph.prototype.getOrComputeSha1 = async function (
@@ -224,7 +224,7 @@ export function patchMetro(options: Options): void {
   // `Assets.getAsset`, and `Assets.getAsset` checks whether the asset lives
   // under one of `projectRoot` or `watchFolders`.
   //
-  // Last synced to: https://github.com/facebook/metro/blob/v0.83.3/packages/metro/src/Server.js#L502
+  // Last synced to: https://github.com/react/metro/blob/v0.83.3/packages/metro/src/Server.js#L502
   const Server = importMetroModule("/src/Server");
   if (!Server.prototype._processSingleAssetRequest) {
     failedToPatch("cannot find Server._processSingleAssetRequest");

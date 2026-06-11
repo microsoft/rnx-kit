@@ -85,7 +85,7 @@
 - 2fc25d4: RAM bundle is deprecated and was removed in 0.75. This command may
   stop working altogether in the future.
 
-  For more details, see https://github.com/facebook/react-native/pull/43292.
+  For more details, see https://github.com/react/react-native/pull/43292.
 
 ## 4.0.0
 
@@ -165,7 +165,7 @@
   `react-native` repository. In the process, it was renamed and its API surface
   has been reduced to the bare minimum. `buildBundleWithConfig`, which we need
   to pass our custom config to the bundler, has also been axed. For more
-  details, see https://github.com/facebook/react-native/pull/38795.
+  details, see https://github.com/react/react-native/pull/38795.
 
 - 6da44cd3: Warn if `projectRoot` may be misconfigured
 
