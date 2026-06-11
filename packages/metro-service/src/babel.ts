@@ -7,7 +7,7 @@ export function ensureBabelConfig({ projectRoot }: ConfigT): void {
   // Even though Babel supports more file extensions
   // (https://babeljs.io/docs/config-files#supported-file-extensions),
   // `@react-native/metro-babel-transformer` only supports the following. See
-  // https://github.com/facebook/react-native/blob/5eaf28b247fc66b46520a26271bdcded9d4d2338/packages/react-native-babel-transformer/src/index.js#L53.
+  // https://github.com/react/react-native/blob/5eaf28b247fc66b46520a26271bdcded9d4d2338/packages/react-native-babel-transformer/src/index.js#L53.
   const extensions = [".babelrc", ".babelrc.js", "babel.config.js"];
 
   const projectBabelRC = extensions.some((rc) => {

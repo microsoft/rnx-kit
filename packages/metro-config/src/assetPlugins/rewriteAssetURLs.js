@@ -12,7 +12,7 @@
  * handle such cases. However, this isn't properly fleshed out and only works in
  * server mode. Bundling with this plugin may cause issues with asset paths.
  *
- * For more details, see https://github.com/facebook/metro/issues/290.
+ * For more details, see https://github.com/react/metro/issues/290.
  *
  * @param {import("type-fest").Writable<AssetData>} assetData
  * @returns {AssetData}

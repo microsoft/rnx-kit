@@ -6,7 +6,7 @@ export const esbuildTransformerConfig: Partial<TransformerConfigT> = {
       /**
        * Disable `import-export-plugin` to preserve ES6 import/export syntax.
        *
-       * @see https://github.com/facebook/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L315
+       * @see https://github.com/react/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L315
        */
       experimentalImportSupport: false,
 
@@ -14,7 +14,7 @@ export const esbuildTransformerConfig: Partial<TransformerConfigT> = {
        * Disable `inline-requires` as it is only used to inline `require()`
        * calls.
        *
-       * @see https://github.com/facebook/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L319
+       * @see https://github.com/react/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L319
        */
       inlineRequires: false,
     },
@@ -35,12 +35,12 @@ export const esbuildTransformerConfig: Partial<TransformerConfigT> = {
    * Note that this setting is experimental and may be removed in a future
    * version.
    *
-   * @see https://github.com/facebook/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L388
-   * @see https://github.com/facebook/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L410
-   * @see https://github.com/facebook/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L564
-   * @see https://github.com/facebook/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro/src/ModuleGraph/worker/collectDependencies.js#L467
-   * @see https://github.com/facebook/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro/src/ModuleGraph/worker/JsFileWrapping.js#L28
-   * @see https://github.com/facebook/metro/commit/598de6f537f4d7286cee89094bcdb7101e8e4f17
+   * @see https://github.com/react/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L388
+   * @see https://github.com/react/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L410
+   * @see https://github.com/react/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L564
+   * @see https://github.com/react/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro/src/ModuleGraph/worker/collectDependencies.js#L467
+   * @see https://github.com/react/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro/src/ModuleGraph/worker/JsFileWrapping.js#L28
+   * @see https://github.com/react/metro/commit/598de6f537f4d7286cee89094bcdb7101e8e4f17
    */
   unstable_disableModuleWrapping: true,
 
@@ -51,8 +51,8 @@ export const esbuildTransformerConfig: Partial<TransformerConfigT> = {
    * Note that this setting is experimental and may be removed in a future
    * version.
    *
-   * @see https://github.com/facebook/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L434
-   * @see https://github.com/facebook/metro/commit/5b913fa0cd30ce5b90e2b1f6318454fbdd170708
+   * @see https://github.com/react/metro/blob/598de6f537f4d7286cee89094bcdb7101e8e4f17/packages/metro-transform-worker/src/index.js#L434
+   * @see https://github.com/react/metro/commit/5b913fa0cd30ce5b90e2b1f6318454fbdd170708
    */
   unstable_disableNormalizePseudoGlobals: true,
   optimizationSizeLimit: 0,

@@ -45,9 +45,9 @@ static NSString *const kReactConcurrentRoot = @"concurrentRoot";
 {
 #ifdef USE_FABRIC
     // Having `concurrentRoot` disabled when Fabric is enabled is not recommended:
-    // https://github.com/facebook/react-native/commit/7eaabfb174b14a30c30c7017195e8110348e5f44
+    // https://github.com/react/react-native/commit/7eaabfb174b14a30c30c7017195e8110348e5f44
     // As of 0.74, it won't be possible to opt-out:
-    // https://github.com/facebook/react-native/commit/30d186c3683228d4fb7a42f804eb2fdfa7c8ac03
+    // https://github.com/react/react-native/commit/30d186c3683228d4fb7a42f804eb2fdfa7c8ac03
     NSMutableDictionary *initialProps =
         initialProperties == nil
             ? [NSMutableDictionary dictionaryWithObjectsAndKeys:@YES, kReactConcurrentRoot, nil]
@@ -69,7 +69,7 @@ static NSString *const kReactConcurrentRoot = @"concurrentRoot";
     // `-initWithSurface:` implicitly calls `start` and causes race conditions.
     // This was fixed in 0.76.7, but for backwards compatibility, we should call
     // `-initWithSurface:sizeMeasureMode` when possible. For more details, see
-    // https://github.com/facebook/react-native/pull/47313.
+    // https://github.com/react/react-native/pull/47313.
     RCTSurfaceSizeMeasureMode sizeMeasureMode =
         RCTSurfaceSizeMeasureModeWidthExact | RCTSurfaceSizeMeasureModeHeightExact;
     return [[RCTSurfaceHostingProxyRootView alloc] initWithSurface:surface

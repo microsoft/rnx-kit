@@ -79,7 +79,7 @@ export function MetroSerializer(
 
         // Metro does not inject `"use strict"`, but esbuild does. We can strip
         // them out like Metro does, but it'll break the source map. See also
-        // https://github.com/facebook/metro/blob/0fe1253cc4f76aa2a7683cfb2ad0253d0a768c83/packages/metro-react-native-babel-preset/src/configs/main.js#L68
+        // https://github.com/react/metro/blob/0fe1253cc4f76aa2a7683cfb2ad0253d0a768c83/packages/metro-react-native-babel-preset/src/configs/main.js#L68
         if (!options.dev && buildOptions?.strictMode === false) {
           const encoder = new TextEncoder();
           build.onEnd(({ outputFiles }) => {

@@ -40,7 +40,7 @@ export type BundleOutputOptions = {
    *
    * Only applies to the `rnx-ram-bundle` command.
    *
-   * @deprecated {@link https://github.com/facebook/react-native/pull/43292}
+   * @deprecated {@link https://github.com/react/react-native/pull/43292}
    */
   indexedRamBundle?: OutputOptions["indexedRamBundle"];
 };

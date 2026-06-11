@@ -504,7 +504,7 @@ somewhere in your app's `build.gradle`:
 // We don't want the React plugin to bundle.
 tasks.whenTaskAdded { task ->
     // The task name can be found in `react-native-gradle-plugin`:
-    // https://github.com/facebook/react-native/blob/0.71-stable/packages/react-native-gradle-plugin/src/main/kotlin/com/facebook/react/TaskConfiguration.kt#L54
+    // https://github.com/react/react-native/blob/0.71-stable/packages/react-native-gradle-plugin/src/main/kotlin/com/facebook/react/TaskConfiguration.kt#L54
     if (task.name.startsWith("createBundle") && task.name.endsWith("JsAndAssets")) {
         task.enabled = false
     }

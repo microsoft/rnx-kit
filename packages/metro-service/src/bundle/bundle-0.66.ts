@@ -5,7 +5,7 @@ import { getSaveAssetsPlugin } from "../asset/saveAssets.ts";
 import { saveAssets } from "../asset/write.ts";
 import type { BundleArgs, RequestOptions } from "../types.ts";
 
-// Source: https://github.com/facebook/react-native/blob/0.80-stable/packages/community-cli-plugin/src/commands/bundle/buildBundle.js#L113
+// Source: https://github.com/react/react-native/blob/0.80-stable/packages/community-cli-plugin/src/commands/bundle/buildBundle.js#L113
 export async function buildBundle(
   args: BundleArgs,
   config: ConfigT,

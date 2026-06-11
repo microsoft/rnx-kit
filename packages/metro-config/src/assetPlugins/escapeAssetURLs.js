@@ -22,7 +22,7 @@ function replaceString(str, searchValue, replaceValue) {
  * so the URL doesn't collapse when resolved, then restore them in
  * `server.rewriteRequestUrl`.
  *
- * For more details, see https://github.com/facebook/metro/issues/290.
+ * For more details, see https://github.com/react/metro/issues/290.
  *
  * @param {import("type-fest").Writable<AssetData>} assetData
  * @returns {AssetData}

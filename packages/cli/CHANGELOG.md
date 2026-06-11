@@ -496,7 +496,7 @@
 - 55756581: Resolve correct `@react-native-community/cli-clean` instance through
   `react-native`
 - b231d457: Synced latest changes from upstream:
-  https://github.com/facebook/react-native/commit/982f6f99d43b21b3a81d3388591934d6f83afa63
+  https://github.com/react/react-native/commit/982f6f99d43b21b3a81d3388591934d6f83afa63
 - Updated dependencies [55756581]
 - Updated dependencies [55756581]
   - @rnx-kit/tools-node@2.1.0

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { StyleSheet, useColorScheme } from "react-native";
 
-// https://github.com/facebook/react-native/blob/0abd5d63e1c0c4708f81bd698e6d011fa75f01e5/packages/new-app-screen/src/Theme.js#L16-L33
+// https://github.com/react/react-native/blob/0abd5d63e1c0c4708f81bd698e6d011fa75f01e5/packages/new-app-screen/src/Theme.js#L16-L33
 const COLORS = {
   light: {
     background: "#f3f3f3",

@@ -38,7 +38,7 @@ function applyMetroResolverLegacy(
   platform: string
 ): Resolution {
   // Resolve redirects before we try to resolve the module:
-  // https://github.com/facebook/metro/blob/v0.76.7/docs/Resolution.md#redirectmodulepath-string--string--false
+  // https://github.com/react/metro/blob/v0.76.7/docs/Resolution.md#redirectmodulepath-string--string--false
   const realModuleName = ctx.redirectModulePath(moduleName);
   if (realModuleName === false) {
     return { type: "empty" };
@@ -56,7 +56,7 @@ function applyMetroResolver_0_81(
   platform: string
 ): Resolution {
   // Resolve redirects before we try to resolve the module:
-  // https://github.com/facebook/metro/blob/v0.76.7/docs/Resolution.md#redirectmodulepath-string--string--false
+  // https://github.com/react/metro/blob/v0.76.7/docs/Resolution.md#redirectmodulepath-string--string--false
   const realModuleName = ctx.redirectModulePath(moduleName);
   if (realModuleName === false) {
     return { type: "empty" };

@@ -42,7 +42,7 @@ export function TypeScriptPlugin(
 
   // TypeScript plugin requires the `transformOptions` property that was added
   // in 0.66.1. If the version is older, disable the plugin. See
-  // https://github.com/facebook/metro/commit/57106d273690bbcad0a795b337e43252edbc1091
+  // https://github.com/react/metro/commit/57106d273690bbcad0a795b337e43252edbc1091
   const unsupportedMetroVersion = requireMetroVersion("0.66.1");
   if (unsupportedMetroVersion) {
     warn(`TypeScriptPlugin disabled: ${unsupportedMetroVersion}`);

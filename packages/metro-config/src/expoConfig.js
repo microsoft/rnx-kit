@@ -36,7 +36,7 @@ function applyExpoWorkarounds(config, defaultConfig) {
   // Expo's default config is based on Metro's default config, and Metro's
   // default config sets some fields (like `resolveRequest`) to `null`, which
   // then overwrites our fields:
-  // https://github.com/facebook/metro/blob/v0.80.10/packages/metro-config/src/defaults/index.js#L51
+  // https://github.com/react/metro/blob/v0.80.10/packages/metro-config/src/defaults/index.js#L51
   if (config.resolver?.resolveRequest === null) {
     // @ts-expect-error The operand of a 'delete' operator cannot be a read-only property
     delete config.resolver.resolveRequest;

@@ -1,4 +1,4 @@
-// THIS FILE IS A COPY OF https://github.com/facebook/react-native/blob/v0.76.9/packages/assets/path-support.js
+// THIS FILE IS A COPY OF https://github.com/react/react-native/blob/v0.76.9/packages/assets/path-support.js
 // As of 0.77, we should be using `@react-native/community-cli-plugin` instead.
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */

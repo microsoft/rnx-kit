@@ -17,7 +17,7 @@ type BuildOutputWithAssets = BuildOutput & {
 
 /**
  * Adds the `assets` property to the `BuildOutput` type.
- * @see {@link https://github.com/facebook/metro/pull/1511}
+ * @see {@link https://github.com/react/metro/pull/1511}
  */
 function withAssets(bundle: BuildOutput): BuildOutputWithAssets {
   return bundle as unknown as BuildOutputWithAssets;
@@ -35,7 +35,7 @@ function getAssets(
   });
 }
 
-// Source: https://github.com/facebook/metro/blob/v0.82.4/packages/metro/src/index.flow.js#L386
+// Source: https://github.com/react/metro/blob/v0.82.4/packages/metro/src/index.flow.js#L386
 export async function buildBundle(
   runMetro: (typeof import("metro"))["runMetro"],
   args: BundleArgs,

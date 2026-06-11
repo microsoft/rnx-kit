@@ -3,14 +3,14 @@ import type { Module, ReadOnlyGraph, SerializerOptions } from "metro";
 import { findCommunityCliPluginPath } from "./cli.ts";
 import { resolveFrom } from "./resolve.ts";
 
-// https://github.com/facebook/metro/blob/v0.83.2/packages/metro-runtime/src/modules/types.js
+// https://github.com/react/metro/blob/v0.83.2/packages/metro-runtime/src/modules/types.js
 type Bundle = {
   modules: readonly [number, string][];
   post: string;
   pre: string;
 };
 
-// https://github.com/facebook/metro/blob/v0.83.2/packages/metro-runtime/src/modules/types.js
+// https://github.com/react/metro/blob/v0.83.2/packages/metro-runtime/src/modules/types.js
 type BundleMetadata = {
   pre: number;
   post: number;
@@ -62,7 +62,7 @@ function findMetroPathInternal(projectRoot: string): string | undefined {
   }
 
   // `metro` dependency was moved to `@react-native/community-cli-plugin` in 0.73
-  // https://github.com/facebook/react-native/commit/fdcb94ad1310af6613cfb2a2c3f22f200bfa1c86
+  // https://github.com/react/react-native/commit/fdcb94ad1310af6613cfb2a2c3f22f200bfa1c86
   const cliPluginDir = findCommunityCliPluginPath(projectRoot, rnDir);
   if (cliPluginDir) {
     return resolveFrom("metro", cliPluginDir);

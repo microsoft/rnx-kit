@@ -24,15 +24,15 @@ small part of it. In `lodash`'s case, you can add
 [`babel-plugin-lodash`](https://github.com/lodash/babel-plugin-lodash#readme) to
 your Babel config to help Metro strip away some modules, but not all libraries
 will come with such helpers. For more details, see issues
-[#227](https://github.com/facebook/metro/issues/227) and
-[#632](https://github.com/facebook/metro/issues/632).
+[#227](https://github.com/react/metro/issues/227) and
+[#632](https://github.com/react/metro/issues/632).
 
 metro-serializer-esbuild addresses this by letting esbuild take over bundling.
 
 ## Requirements
 
 This plugin currently depends on some unstable features introduced in Metro
-[0.66.1](https://github.com/facebook/metro/releases/tag/v0.66.1). Breaking
+[0.66.1](https://github.com/react/metro/releases/tag/v0.66.1). Breaking
 changes were introduced in Metro 0.60, so this plugin will not work with React
 Native below 0.64.
 
@@ -303,7 +303,7 @@ can try adding `module` to
 [`resolver.resolverMainFields`](https://facebook.github.io/metro/docs/configuration#resolvermainfields)
 in `metro.config.js`. This will tell Metro to always pick ESM over CJS when
 possible. Note that this can lead to unexpected errors since you cannot import
-ESM from CJS. Until https://github.com/facebook/metro/issues/670 lands, you are
+ESM from CJS. Until https://github.com/react/metro/issues/670 lands, you are
 basically on your own to fix any issues that might come up.
 
 ## Known Limitations

@@ -7,7 +7,7 @@ import type { BundleArgs } from "./types.ts";
 
 export function ramBundle(args: BundleArgs, config: ConfigT): Promise<void> {
   warn(
-    "RAM bundle is deprecated and was removed in 0.75; for more details, see https://github.com/facebook/react-native/pull/43292"
+    "RAM bundle is deprecated and was removed in 0.75; for more details, see https://github.com/react/react-native/pull/43292"
   );
 
   const ramBundlePath = path.join(

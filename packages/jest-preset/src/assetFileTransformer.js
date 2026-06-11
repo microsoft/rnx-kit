@@ -1,7 +1,7 @@
 /**
  * This is a copy of `@react-native/jest-preset/jest/assetFileTransformer.js`
  * with modifications for monorepo support (source:
- * https://github.com/facebook/react-native/blob/v0.85.2/packages/jest-preset/jest/assetFileTransformer.js).
+ * https://github.com/react/react-native/blob/v0.85.2/packages/jest-preset/jest/assetFileTransformer.js).
  *
  * This file must be excluded from TypeScript otherwise it will crash:
  *
