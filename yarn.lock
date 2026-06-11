@@ -6040,6 +6040,11 @@ __metadata:
     metro-core: "npm:^0.84.0"
     metro-resolver: "npm:^0.84.0"
     metro-source-map: "npm:^0.84.0"
+  peerDependencies:
+    "@react-native-community/cli-types": "*"
+  peerDependenciesMeta:
+    "@react-native-community/cli-types":
+      optional: true
   languageName: unknown
   linkType: soft
 
