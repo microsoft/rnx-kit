@@ -217,12 +217,7 @@ describe("Node > Package", () => {
     const rootDir = path.join(testTempDir, "repo");
     const workspaceDir = path.join(rootDir, "packages", "app");
     const externalDir = path.join(testTempDir, "node_modules", "external");
-    const localDir = path.join(
-      rootDir,
-      "packages",
-      "node_modules",
-      "local"
-    );
+    const localDir = path.join(rootDir, "packages", "node_modules", "local");
     const blockedLocalDir = path.join(rootDir, "node_modules", "blocked");
 
     fs.mkdirSync(workspaceDir, { recursive: true });
