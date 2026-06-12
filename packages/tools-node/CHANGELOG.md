@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-node
 
+## 3.0.5
+
+### Patch Changes
+
+- 95cadcf: Add a `stopAt` option to limit `findPackageDependencyDir` searches.
+
 ## 3.0.4
 
 ### Patch Changes
