@@ -152,7 +152,7 @@ export const profile: Profile = {
 
   screens: {
     name: "react-native-screens",
-    version: "^4.25.0",
+    version: "^4.24.0",
   },
 
   svg: {
