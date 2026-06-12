@@ -5987,7 +5987,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-node@npm:*, @rnx-kit/tools-node@npm:^3.0.0, @rnx-kit/tools-node@npm:^3.0.3, @rnx-kit/tools-node@npm:^3.0.4, @rnx-kit/tools-node@workspace:packages/tools-node":
+"@rnx-kit/tools-node@npm:*, @rnx-kit/tools-node@npm:^3.0.0, @rnx-kit/tools-node@npm:^3.0.3, @rnx-kit/tools-node@npm:^3.0.4, @rnx-kit/tools-node@npm:^3.0.5, @rnx-kit/tools-node@workspace:packages/tools-node":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-node@workspace:packages/tools-node"
   dependencies:
@@ -6030,7 +6030,7 @@ __metadata:
     "@react-native-community/cli-types": "npm:^20.1.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-filesystem": "npm:^0.2.0"
-    "@rnx-kit/tools-node": "npm:^3.0.4"
+    "@rnx-kit/tools-node": "npm:^3.0.5"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^1.0.0"
     "@types/node": "npm:^24.0.0"
