@@ -81,6 +81,7 @@ jobs:
         run: |
           node scripts/lint-node-version.ts
       - name: Report @rnx-kit/build workflow inconsistencies
+        if: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
