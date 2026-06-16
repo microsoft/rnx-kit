@@ -37,5 +37,5 @@ export function getBaseCommit(
     targetBranch && verifyRef(targetBranch)
       ? targetBranch
       : getDefaultBranch(fallback);
-  return git("merge-base", "--fork-point", targetBranch) || undefined;
+  return git("merge-base", targetBranch, "HEAD") || undefined;
 }
