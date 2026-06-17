@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-git",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A collection of functions for common Git operations",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/tools-git#readme",
   "license": "MIT",

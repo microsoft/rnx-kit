@@ -1,5 +1,11 @@
 # @rnx-kit/types-metro-serializer-esbuild
 
+## 1.0.2
+
+### Patch Changes
+
+- 6c25284: Bumped esbuild to address GHSA-g7r4-m6w7-qqqr and GHSA-gv7w-rqvm-qjhr
+
 ## 1.0.1
 
 ### Patch Changes

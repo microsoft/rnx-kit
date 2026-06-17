@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-react-native",
-  "version": "2.3.7",
+  "version": "2.3.8",
   "description": "A collection of supplemental react-native functions and types",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-react-native#readme",
   "license": "MIT",
@@ -77,7 +77,7 @@
   },
   "dependencies": {
     "@rnx-kit/tools-filesystem": "^0.2.0",
-    "@rnx-kit/tools-node": "^3.0.4",
+    "@rnx-kit/tools-node": "^3.0.5",
     "@rnx-kit/types-bundle-config": "^1.0.0"
   },
   "devDependencies": {
