@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.3.8
+
+### Patch Changes
+
+- ccec803: Ensure `@react-native-community/cli-types` can be correctly picked up by TypeScript
+- Updated dependencies [95cadcf]
+  - @rnx-kit/tools-node@3.0.5
+
 ## 2.3.7
 
 ### Patch Changes

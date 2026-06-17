@@ -1,5 +1,11 @@
 # @rnx-kit/lint-lockfile
 
+## 0.2.1
+
+### Patch Changes
+
+- 6a98c12: Bumps `js-yaml` to address CVE-2026-53550
+
 ## 0.2.0
 
 ### Minor Changes
