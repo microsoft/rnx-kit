@@ -7,6 +7,7 @@ import * as path from "node:path";
  * @typedef {{
  *   scripts?: Record<string, string>;
  *   dependencies?: Record<string, string>;
+ *   peerDependencies?: Record<string, string>;
  *   jest?: unknown;
  * }} Manifest;
  */
@@ -27,14 +28,6 @@ function always() {
  */
 function hasOwn(obj, property) {
   return Object.hasOwn(obj, property);
-}
-
-/**
- * @param {string} filename
- * @returns {(cwd: string) => boolean}
- */
-function lookForFile(filename) {
-  return (cwd) => fs.existsSync(path.join(cwd, filename));
 }
 
 /**
@@ -61,11 +54,26 @@ function needsLint(_cwd, manifest) {
   );
 }
 
-const needsTypeScript = lookForFile("tsconfig.json");
+/**
+ * @param {string} cwd
+ * @param {Manifest} manifest
+ * @returns {boolean | string}
+ */
+function needsTypeScript(cwd, manifest) {
+  const compat = "catalog:compat";
+  const { dependencies, peerDependencies } = manifest;
+  if (dependencies && hasOwn(dependencies, "typescript-eslint")) {
+    return compat;
+  }
+  if (peerDependencies && hasOwn(peerDependencies, "typescript")) {
+    return compat;
+  }
+
+  return fs.existsSync(path.join(cwd, "tsconfig.json"));
+}
 
 const COMMON_DEPENDENCIES = /** @type {const} */ ([
   ["@types/jest", needsJest],
-  ["@typescript/native-preview", needsTypeScript],
   ["oxlint", needsLint],
   ["jest", needsJest],
   ["oxfmt", always],
@@ -80,9 +88,11 @@ export default function ({ cwd, manifest }) {
   let extensions = undefined;
 
   for (const [pkg, test] of COMMON_DEPENDENCIES) {
-    if (test(cwd, manifest)) {
+    const result = test(cwd, manifest);
+    if (result) {
       extensions ||= { dependencies: {} };
-      extensions.dependencies[pkg] = "catalog:";
+      extensions.dependencies[pkg] ??=
+        typeof result === "string" ? result : "catalog:";
     }
   }
 

@@ -18,7 +18,7 @@
   ],
   "main": "src/index.js",
   "scripts": {
-    "build": "rnx-kit-scripts build --with-tsc",
+    "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"

@@ -38,8 +38,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "//build": "We run `tsgo` directly because we don't want to output to `lib`",
-    "build": "yarn clean && tsgo",
+    "build": "yarn clean && rnx-kit-scripts build --emitDeclarationOnly",
     "clean": "git clean -dfqx -- src/ test/",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",

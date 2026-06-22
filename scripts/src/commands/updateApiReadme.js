@@ -5,7 +5,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 
 /**
- * @import { JSONOutput } from "typedoc";
+ * @import { JSONOutput } from "@rnx-kit/typedoc-tsc6";
  * @typedef {JSONOutput.Comment} Comment
  * @typedef {JSONOutput.CommentDisplayPart} CommentDisplayPart
  * @typedef {JSONOutput.ParameterReflection} ParameterReflection
@@ -61,15 +61,14 @@ function warnUndocumented(source, identifier) {
 }
 
 /**
- * @param {typeof import("typedoc")} typedoc
+ * @param {typeof import("@rnx-kit/typedoc-tsc6")} typedoc
  */
 async function parse(typedoc) {
-  const ts = await import("typescript");
   const app = await typedoc.Application.bootstrap(
     {
       compilerOptions: {
-        module: ts.server.protocol.ModuleKind.ES2022,
-        moduleResolution: ts.server.protocol.ModuleResolutionKind.Bundler,
+        module: "es2022",
+        moduleResolution: "bundler",
         customConditions: ["typescript"],
       },
       entryPoints: ["src/index.ts"],
@@ -188,7 +187,7 @@ async function updateReadme(exportedTypes, exportedFunctions) {
 }
 
 export async function updateApiReadme() {
-  const typedoc = await import("typedoc");
+  const typedoc = await import("@rnx-kit/typedoc-tsc6");
 
   const project = await parse(typedoc);
   const children = project?.children;

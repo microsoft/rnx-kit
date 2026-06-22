@@ -23,14 +23,13 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@typescript/native-preview": "catalog:",
+    "@rnx-kit/typedoc-tsc6": "workspace:*",
     "@yarnpkg/cli": "^4.6.0",
     "clipanion": "^4.0.0-rc.4",
     "esbuild": "^0.28.1",
     "jest": "^29.2.1",
     "markdown-table": "^3.0.0",
     "oxfmt": "catalog:",
-    "typedoc": "^0.28.0",
     "typescript": "catalog:"
   },
   "devDependencies": {

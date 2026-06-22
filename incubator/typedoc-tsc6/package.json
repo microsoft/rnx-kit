@@ -1,0 +1,27 @@
+{
+  "name": "@rnx-kit/typedoc-tsc6",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Forces TypeDoc to use TypeScript 6.0",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/typedoc-tsc6#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/typedoc-tsc6"
+  },
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "typedoc": "^0.28.0",
+    "typescript": "catalog:compat"
+  },
+  "engines": {
+    "node": ">=20.18"
+  },
+  "experimental": true
+}
