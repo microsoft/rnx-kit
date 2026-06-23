@@ -5451,7 +5451,7 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^1.0.0"
     "@rnx-kit/types-plugin-typescript": "npm:^1.0.0"
-    "@rnx-kit/typescript-service": "npm:^2.0.2"
+    "@rnx-kit/typescript-service": "npm:^2.0.3"
     "@types/node": "npm:^24.0.0"
     metro: "npm:^0.84.0"
     typescript: "npm:4.7 - 6.0"
@@ -6074,7 +6074,7 @@ __metadata:
     "@rnx-kit/types-bundle-config": "npm:^1.0.0"
     "@rnx-kit/types-kit-config": "npm:*"
     "@rnx-kit/types-node": "npm:*"
-    "@rnx-kit/typescript-service": "npm:^2.0.0"
+    "@rnx-kit/typescript-service": "npm:^2.0.3"
   peerDependencies:
     typescript: 4.7 - 6.0
   languageName: unknown
@@ -6197,7 +6197,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/typescript-service@npm:^2.0.0, @rnx-kit/typescript-service@npm:^2.0.2, @rnx-kit/typescript-service@workspace:packages/typescript-service":
+"@rnx-kit/typescript-service@npm:^2.0.3, @rnx-kit/typescript-service@workspace:packages/typescript-service":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/typescript-service@workspace:packages/typescript-service"
   dependencies:

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/typescript-service
 
+## 2.0.3
+
+### Patch Changes
+
+- 3ce51f7: Limit TypeScript to versions below 7.0 because a stable API will not be available until 7.1
+
 ## 2.0.2
 
 ### Patch Changes
