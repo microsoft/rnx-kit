@@ -122,14 +122,26 @@ after each successful sync.
 }
 ```
 
-| Field      | Description                                                                |
-| ---------- | -------------------------------------------------------------------------- |
-| `repo`     | Full HTTPS URL of the upstream repository                                  |
-| `branch`   | Upstream branch to track                                                   |
-| `commit`   | Last synced upstream commit hash (empty string for first sync)             |
-| `subDir`   | Subfolder within the upstream repo to sync (optional, omit for whole repo) |
-| `tag`      | Tag name if synced to a tag (empty string otherwise)                       |
-| `lastSync` | ISO timestamp of last sync (empty string if never synced)                  |
+| Field         | Description                                                                    |
+| ------------- | ------------------------------------------------------------------------------ |
+| `repo`        | Full HTTPS URL of the upstream repository                                      |
+| `branch`      | Upstream branch to track                                                       |
+| `commit`      | Last synced upstream commit hash (empty/absent for the first sync)             |
+| `subDir`      | Single subfolder within the upstream repo to sync, prefix-stripped (optional)  |
+| `sparsePaths` | Multiple upstream directories to vendor, identity-mapped (optional; see below) |
+| `cloneFilter` | Partial-clone filter, `git --filter=<value>` (optional; default `blob:none`)   |
+| `tag`         | Tag name if synced to a tag (empty string otherwise)                           |
+| `lastSync`    | ISO timestamp of last sync (empty string if never synced)                      |
+
+> `subDir` and `sparsePaths` are mutually exclusive. Omit both to sync the whole repo.
+
+#### First sync (initial import)
+
+To vendor a dependency for the first time, create its `sync-config.json` with an
+**empty (or absent) `commit`** and run `fork-sync --dep <name>` (optionally with
+`--tag`/`--commit`/`--branch`). fork-sync imports the upstream content directly —
+there is no base to merge against — and writes the resolved commit/tag back into
+`sync-config.json`. Subsequent syncs use the normal 3-way merge.
 
 #### Subfolder sync with `subDir`
 
@@ -159,6 +171,54 @@ When `subDir` is set:
 
 When `subDir` is omitted or empty, the entire upstream repo is synced (default
 behavior).
+
+#### Multiple directories with `sparsePaths`
+
+When you need to vendor **several top-level directories** from a large upstream
+repo (and `subDir`'s single prefix-stripped folder doesn't fit), set
+`sparsePaths` to a list of directories. For example, to vendor Chromium's `base`,
+`sandbox`, `build`, and `buildtools` into `deps/chromium/`:
+
+```json
+{
+  "repo": "https://chromium.googlesource.com/chromium/src",
+  "branch": "main",
+  "commit": "",
+  "tag": "149.0.7827.149",
+  "sparsePaths": ["base", "sandbox", "build", "buildtools"]
+}
+```
+
+When `sparsePaths` is set:
+
+- **Sparse checkout** materializes only the listed directories on disk, so the
+  rest of a huge upstream tree is never checked out.
+- **Identity path mapping** — unlike `subDir`, each path keeps its repo-relative
+  location under `localPath` (`base/` → `deps/chromium/base/`). This preserves the
+  upstream layout, which matters when vendored build files use absolute, repo-root
+  paths (e.g. GN's `//base`).
+- **`.syncignore` still applies** for fine-grained trimming _within_ the selected
+  directories (e.g. drop `base/test/`).
+- It is **mutually exclusive** with `subDir`.
+- The clone uses **`--no-checkout`** so the entire default branch is never
+  materialized before sparse-checkout narrows it; hydration happens once, at the
+  sparse target checkout.
+
+#### Treeless clones for very large repos (`cloneFilter`)
+
+By default fork-sync clones with `--filter=blob:none` (file contents fetched on
+demand). For a **huge** upstream where you only vendor a small subset, the trees
+themselves dominate the download. Set `cloneFilter` to `tree:0` to defer trees as
+well — combined with `sparsePaths`, only the trees/blobs along the selected paths
+are ever fetched, shrinking the initial clone by orders of magnitude:
+
+```json
+{ "cloneFilter": "tree:0", "sparsePaths": ["base", "sandbox"] }
+```
+
+Trade-off: `tree:0` makes later **history-walking** operations (the 3-way-merge
+re-sync, PR-note `git log`) fetch trees on demand, so they are slower. A **first
+sync** runs no merge, so `tree:0` is essentially free for the initial import.
 
 ### .syncignore
 

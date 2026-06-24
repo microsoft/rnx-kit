@@ -221,12 +221,13 @@ export class GitRepo {
   /** Run `git ls-tree -r` and return raw output. */
   async lsTree(
     ref: string,
-    opts?: { format?: string; pathspec?: string }
+    opts?: { format?: string; pathspec?: string | string[] }
   ): Promise<string> {
     const args = ["ls-tree", "-r"];
     if (opts?.format) args.push(`--format=${opts.format}`);
     args.push(ref);
-    if (opts?.pathspec) args.push("--", opts.pathspec);
+    const pathspecs = toPathspecList(opts?.pathspec);
+    if (pathspecs.length) args.push("--", ...pathspecs);
     return spawn("git", args, { cwd: this.dir });
   }
 
@@ -447,10 +448,14 @@ export async function discoverRepoRoot(cwd?: string): Promise<string | null> {
 export function clone(
   url: string,
   targetDir: string,
-  opts?: { filter?: string; cwd?: string }
+  opts?: { filter?: string; cwd?: string; noCheckout?: boolean }
 ): AsyncIterable<OutputChunk> {
   const args = ["clone"];
   if (opts?.filter) args.push(`--filter=${opts.filter}`);
+  // Skip the initial working-tree checkout. Used with sparse-checkout so the
+  // expensive hydration happens once, at the later sparse target checkout,
+  // instead of materializing the whole default branch first.
+  if (opts?.noCheckout) args.push("--no-checkout");
   args.push(url, targetDir);
   return spawn("git", args, {
     cwd: opts?.cwd ?? process.cwd(),
@@ -511,6 +516,19 @@ export async function validateCloneOrigin(
 // =============================================================================
 
 /**
+ * Normalize an optional pathspec argument (a single path or a list) into a
+ * clean list of non-empty paths, suitable for appending after a `--` separator.
+ * Returns `[]` for `undefined`, an empty string, or a list of only empties — so
+ * callers fall through to "no pathspec" (whole-repo) behavior, matching the
+ * prior single-string semantics.
+ */
+function toPathspecList(pathspec?: string | string[]): string[] {
+  if (!pathspec) return [];
+  const list = Array.isArray(pathspec) ? pathspec : [pathspec];
+  return list.filter((p) => p.length > 0);
+}
+
+/**
  * List files in a git directory, excluding patterns from an exclude file.
  *
  * Uses `--exclude-per-directory=.syncignore` so that patterns in the file are
@@ -519,15 +537,18 @@ export async function validateCloneOrigin(
  *
  * @param repo - Git repository to list files from
  * @param excludeFile - Path to a .syncignore file; used as existence check only
- * @param pathspec - Optional pathspec to scope listing to a subfolder
+ * @param pathspec - Optional pathspec(s) to scope listing to one or more
+ *   subfolders. Accepts a single path or a list (e.g. `sparsePaths`); empty
+ *   entries are ignored.
  * @returns Array of relative file paths
  */
 export async function listFilesWithExclusions(
   repo: GitRepo,
   excludeFile?: string,
-  pathspec?: string
+  pathspec?: string | string[]
 ): Promise<string[]> {
-  const pathspecArgs = pathspec ? ["--", pathspec] : [];
+  const pathspecs = toPathspecList(pathspec);
+  const pathspecArgs = pathspecs.length ? ["--", ...pathspecs] : [];
   const allFiles = await repo.lsFiles(pathspecArgs);
 
   if (!excludeFile || !(await exists(excludeFile))) {
@@ -556,7 +577,7 @@ export async function getAllowedRelativePaths(
   repo: GitRepo,
   excludeFile?: string,
   prefixToStrip?: string,
-  pathspec?: string
+  pathspec?: string | string[]
 ): Promise<string[]> {
   const files = await listFilesWithExclusions(repo, excludeFile, pathspec);
   const result: string[] = [];
@@ -589,7 +610,7 @@ export async function getGitTreeHashes(
   repo: GitRepo,
   allowedPaths: Set<string>,
   prefixToStrip?: string,
-  pathspec?: string
+  pathspec?: string | string[]
 ): Promise<Map<string, string>> {
   const output = await repo.lsTree("HEAD", {
     format: "%(objectname) %(path)",
