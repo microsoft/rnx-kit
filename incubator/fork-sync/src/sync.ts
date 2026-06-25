@@ -128,6 +128,9 @@ const SYNC_CHECKPOINT_FILE = ".sync-checkpoint.json";
 /** PR notes filename, written alongside sync-config.json */
 const SYNC_PR_NOTES_FILE = "sync-pr-notes.md";
 
+/** Merge result for paths that never run a merge (e.g. a first sync). */
+const EMPTY_MERGE_RESULT: MergeResult = { resolved: [], conflicts: [] };
+
 /** AI merge script filename */
 const AI_MERGE_SCRIPT = import.meta.url.endsWith(".ts")
   ? "ai-merge.ts"
@@ -268,8 +271,18 @@ export interface SyncManifest {
 interface SyncConfigFile {
   repo: string; // Full HTTPS URL, e.g., "https://github.com/nodejs/node"
   branch: string; // Target branch name
-  commit: string; // Last synced upstream commit hash (empty string for first sync)
+  commit?: string; // Last synced upstream commit hash (empty/absent = first sync)
   subDir?: string; // Subfolder within upstream repo (empty/absent = whole repo)
+  // Multiple upstream directories to vendor, identity-mapped (each keeps its
+  // repo-relative path under localPath). Materialized via sparse-checkout.
+  // Mutually exclusive with subDir. Empty/absent = not used.
+  sparsePaths?: string[];
+  // Partial-clone filter for the upstream clone (git --filter=<value>).
+  // Defaults to "blob:none". For very large repos vendored as a small subset,
+  // "tree:0" defers trees too (fetched on demand at the sparse checkout), which
+  // dramatically shrinks the initial clone — at the cost of on-demand fetches
+  // during later history-walking operations (merge re-syncs, PR-note logs).
+  cloneFilter?: string;
   tag: string; // Tag name if synced to a tag (empty string otherwise)
   lastSync: string; // ISO timestamp of last sync (empty string if never synced)
 }
@@ -291,10 +304,12 @@ interface SyncConfig {
   // From sync-config.json
   repo: string;
   branch: string;
-  baseCommit: string;
+  baseCommit: string; // Empty string = first sync (no prior vendored content)
   tag: string;
   lastSync: string;
   subDir: string; // Normalized subfolder path, empty string = whole repo
+  sparsePaths: string[]; // Normalized sparse-checkout paths, [] = not used
+  cloneFilter: string; // git partial-clone filter, defaults to "blob:none"
 }
 
 /**
@@ -350,6 +365,11 @@ class SyncSession {
   readonly depPathPrefix: string;
   readonly subDirPrefix: string;
   readonly syncSubPath: string;
+  /** Sparse-checkout paths (identity-mapped), empty when not used. */
+  readonly sparsePaths: string[];
+  /** Pathspec(s) scoping listing on the upstream (sync) side: the sparse paths
+   * when set, else the single subDir, else [] (whole repo). */
+  readonly syncPathspecs: string[];
 
   // === Git repo wrapper for the sync directory ===
   readonly syncRepo: GitRepo;
@@ -385,6 +405,20 @@ class SyncSession {
     this.syncSubPath = config.subDir
       ? path.join(this.syncPath, config.subDir)
       : this.syncPath;
+    // sparsePaths are identity-mapped: no prefix stripping (syncSubPath stays at
+    // the repo root), but the listing is scoped to the sparse paths.
+    this.sparsePaths = config.sparsePaths;
+    this.syncPathspecs =
+      this.sparsePaths.length > 0
+        ? this.sparsePaths
+        : this.subDirPrefix
+          ? [this.subDirPrefix]
+          : [];
+  }
+
+  /** True for the initial import of a dependency with no prior vendored content. */
+  get isFirstSync(): boolean {
+    return !this.config.baseCommit;
   }
 
   /**
@@ -429,22 +463,32 @@ class SyncSession {
 
       this.printHeader("new");
       await this.ensureUpstreamClone();
-      this.generateBranchNames();
-      await this.createTargetBranch();
-      await this.createWorkBranch();
-      await this.performMerge();
+
+      if (this.isFirstSync) {
+        // === FIRST SYNC: direct import, no base commit, no 3-way merge ===
+        await this.performFirstSync();
+        this.mergeResult = EMPTY_MERGE_RESULT;
+      } else {
+        this.generateBranchNames();
+        await this.createTargetBranch();
+        await this.createWorkBranch();
+        await this.performMerge();
+      }
     } else {
       // === CONTINUE: validate existing checkpoint ===
       await this.applySyncCheckpoint();
       this.printHeader("resume");
     }
 
-    if (!(await this.resolveConflictsOrPause())) {
-      await this.printStatus();
-      return;
+    // A first sync cannot produce conflicts and has no merge commit to make.
+    if (!this.isFirstSync) {
+      if (!(await this.resolveConflictsOrPause())) {
+        await this.printStatus();
+        return;
+      }
+      await this.commitMergeIfNeeded();
     }
 
-    await this.commitMergeIfNeeded();
     await this.applyChanges();
     this.printSummary();
 
@@ -629,6 +673,14 @@ ${style.line()}
         ? `Use ${style.command(`git diff ${localPath}/`)} to review changes.`
         : style.success("Already up to date.");
 
+    // A first sync runs no 3-way merge, so there are no merge branches to keep.
+    const mergeBranchesSection = () =>
+      this.isFirstSync
+        ? ""
+        : `\nMerge branches preserved in .sync/${depName}/:\n` +
+          `  - ${this.workBranch} (work branch — merge result)\n` +
+          `  - ${this.targetMergeBranch} (target branch)\n`;
+
     print(
       () => `
 ${style.line()}
@@ -639,11 +691,7 @@ Upstream: ${this.config.repo}
   Commit: ${style.command(shortCommit)} (${refName})
 
 ${changesSection()}${resolvedSection()}
-
-Merge branches preserved in .sync/${depName}/:
-  - ${this.workBranch} (work branch — merge result)
-  - ${this.targetMergeBranch} (target branch)
-
+${mergeBranchesSection()}
 ${style.line()}
 ${footerMessage()}
 ${style.line()}
@@ -991,11 +1039,11 @@ ${style.line()}
       job.step("Fetching latest from upstream...");
       await this.syncRepo.fetch();
 
-      // Configure sparse checkout for subDir (if applicable)
-      if (this.subDirPrefix) {
+      // Configure sparse checkout for subDir / sparsePaths (if applicable)
+      if (this.syncPathspecs.length > 0) {
         job.step("Configuring sparse checkout...");
         await this.syncRepo.sparseCheckoutInit();
-        await this.syncRepo.sparseCheckoutSet(this.subDirPrefix);
+        await this.syncRepo.sparseCheckoutSet(...this.syncPathspecs);
       }
 
       job.done(() => `${label()} fetched latest from ${this.config.repo}`);
@@ -1006,20 +1054,27 @@ ${style.line()}
         : `${this.config.repo}.git`;
 
       await ensureDir(path.dirname(this.syncPath));
-      // Clone without blobs to reduce initial download. Show progress via interactive mode.
+      // Partial clone to reduce initial download (default blob:none; "tree:0"
+      // for huge repos vendored as a small subset). When sparse paths are
+      // configured, skip the initial checkout so the whole default branch isn't
+      // materialized before sparse-checkout narrows it — the hydration then
+      // happens once, at the later sparse target checkout. Show progress via
+      // interactive mode.
+      const useSparse = this.syncPathspecs.length > 0;
       const cloneStep = job.step("Cloning repository...");
       for await (const chunk of clone(cloneUrl, this.syncPath, {
-        filter: "blob:none",
+        filter: this.config.cloneFilter,
+        noCheckout: useSparse,
         cwd: this.repoRoot,
       })) {
         cloneStep.update(chunk.text.trim());
       }
 
-      // Configure sparse checkout for subDir (if applicable)
-      if (this.subDirPrefix) {
+      // Configure sparse checkout for subDir / sparsePaths (if applicable)
+      if (this.syncPathspecs.length > 0) {
         job.step("Configuring sparse checkout...");
         await this.syncRepo.sparseCheckoutInit();
-        await this.syncRepo.sparseCheckoutSet(this.subDirPrefix);
+        await this.syncRepo.sparseCheckoutSet(...this.syncPathspecs);
       }
 
       job.done(() => `${label()} cloned ${this.config.repo}`);
@@ -1035,6 +1090,34 @@ ${style.line()}
     this.targetMergeBranch = `target_${syncId}`;
     debug(`Work branch:   ${this.workBranch}`);
     debug(`Target branch: ${this.targetMergeBranch}`);
+  }
+
+  /**
+   * Perform a first sync: the initial import of a dependency with no prior
+   * vendored content (empty base commit). There is no base to diff against and
+   * no 3-way merge — we just resolve the target, check it out (the sparse cone,
+   * if any, is already configured), and let {@link applyChanges} copy the
+   * selected files into the local path. `.syncignore` still applies.
+   */
+  private async performFirstSync(): Promise<void> {
+    const label = () => style.label("First sync:");
+    using job = jobs.addJob("first-sync", () => `${label()} importing...`);
+
+    await this.resolveTarget(job);
+
+    job.step(`Checking out target commit ${this.targetCommit.slice(0, 8)}...`);
+    await this.syncRepo.checkout(this.targetCommit);
+
+    // Make .syncignore visible inside the sync repo so applyChanges' listing
+    // honors exclusions (matches createWorkBranch for the merge path).
+    await this.copySyncIgnoreToSyncRepo();
+
+    job.done(
+      () =>
+        `${label()} imported upstream at ${this.targetCommit.slice(0, 8)}${
+          this.targetTag ? ` (${this.targetTag})` : ""
+        }`
+    );
   }
 
   /**
@@ -1331,7 +1414,7 @@ ${style.line()}
         this.syncRepo,
         this.syncIgnorePath,
         this.subDirPrefix,
-        this.subDirPrefix
+        this.syncPathspecs
       )
     );
     const localFiles = await getAllowedRelativePaths(
@@ -1398,6 +1481,12 @@ ${style.line()}
       branch: this.args.branch ?? this.config.branch,
       commit: this.targetCommit,
       ...(this.config.subDir ? { subDir: this.config.subDir } : {}),
+      ...(this.config.sparsePaths.length
+        ? { sparsePaths: this.config.sparsePaths }
+        : {}),
+      ...(this.config.cloneFilter !== "blob:none"
+        ? { cloneFilter: this.config.cloneFilter }
+        : {}),
       tag: newTag,
       lastSync: new Date().toISOString(),
     });
@@ -1425,6 +1514,9 @@ ${style.line()}
    * Parses `git log --format="%H%x09%an%x09%s"` output into structured data.
    */
   private async getUpstreamCommits(): Promise<UpstreamCommit[]> {
+    // First sync has no base commit, so `base..target` is not a valid range.
+    if (this.isFirstSync) return [];
+
     const range = `${this.config.baseCommit}..${this.targetCommit}`;
     const output = await this.syncRepo.log({
       format: "%H%x09%an%x09%s",
@@ -1753,7 +1845,7 @@ ${style.line()}
         this.syncRepo,
         this.syncIgnorePath,
         this.subDirPrefix,
-        this.subDirPrefix
+        this.syncPathspecs
       )
     );
     return {
@@ -1767,7 +1859,7 @@ ${style.line()}
         this.syncRepo,
         allowedSync,
         this.subDirPrefix,
-        this.subDirPrefix
+        this.syncPathspecs
       ),
     };
   }
@@ -1951,11 +2043,8 @@ async function loadSyncConfig(
     );
   }
 
-  if (!configFile.commit) {
-    return fatal(
-      `Missing 'commit' in ${configPath}. Please set the last synced upstream commit hash.`
-    );
-  }
+  // 'commit' is intentionally optional: an empty/absent commit marks a first
+  // sync (initial import of a dependency with no prior vendored content).
 
   if (configFile.subDir) {
     const normalized = normalizePath(configFile.subDir);
@@ -1963,6 +2052,37 @@ async function loadSyncConfig(
       return fatal(
         `Invalid 'subDir' in ${configPath}: must be a relative path within the upstream repo (got "${configFile.subDir}").`
       );
+    }
+  }
+
+  if (configFile.subDir && configFile.sparsePaths?.length) {
+    return fatal(
+      `Invalid sync config at ${configPath}: 'subDir' and 'sparsePaths' are mutually exclusive. ` +
+        `Use 'subDir' for a single prefix-stripped subfolder, or 'sparsePaths' for multiple ` +
+        `identity-mapped directories.`
+    );
+  }
+
+  const sparsePaths: string[] = [];
+  if (configFile.sparsePaths) {
+    if (!Array.isArray(configFile.sparsePaths)) {
+      return fatal(
+        `Invalid 'sparsePaths' in ${configPath}: must be an array of relative paths.`
+      );
+    }
+    for (const raw of configFile.sparsePaths) {
+      const normalized = normalizePath(raw).replace(/\/+$/, "");
+      if (
+        !normalized ||
+        normalized.startsWith("/") ||
+        normalized.includes("..")
+      ) {
+        return fatal(
+          `Invalid entry in 'sparsePaths' at ${configPath}: each must be a non-empty ` +
+            `relative path within the upstream repo (got "${raw}").`
+        );
+      }
+      sparsePaths.push(normalized);
     }
   }
 
@@ -1979,12 +2099,14 @@ async function loadSyncConfig(
     // From sync-config.json
     repo: configFile.repo,
     branch: configFile.branch,
-    baseCommit: configFile.commit,
+    baseCommit: configFile.commit ?? "",
     tag: configFile.tag,
     lastSync: configFile.lastSync,
     subDir: configFile.subDir
       ? normalizePath(configFile.subDir).replace(/\/+$/, "")
       : "",
+    sparsePaths,
+    cloneFilter: configFile.cloneFilter?.trim() || "blob:none",
   };
 }
 

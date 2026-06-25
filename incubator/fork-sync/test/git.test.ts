@@ -166,6 +166,47 @@ describe("listFilesWithExclusions", () => {
     const files = await listFilesWithExclusions(repo, syncIgnorePath, "sub");
     assert.deepStrictEqual(files.sort(), ["sub/deep/top.txt", "sub/other.txt"]);
   });
+
+  it("scopes listing to multiple pathspecs (sparsePaths)", async () => {
+    repo = await initRepoWithFiles(tempDir, {
+      "base/a.cc": "a",
+      "base/deep/b.cc": "b",
+      "sandbox/c.cc": "c",
+      "build/d.gn": "d",
+      "other/e.txt": "e",
+      "root.txt": "root",
+    });
+
+    const files = await listFilesWithExclusions(repo, undefined, [
+      "base",
+      "sandbox",
+    ]);
+    assert.deepStrictEqual(files.sort(), [
+      "base/a.cc",
+      "base/deep/b.cc",
+      "sandbox/c.cc",
+    ]);
+  });
+
+  it("ignores empty pathspec entries", async () => {
+    repo = await initRepoWithFiles(tempDir, {
+      "sub/a.txt": "a",
+      "other/b.txt": "b",
+    });
+
+    const files = await listFilesWithExclusions(repo, undefined, ["", "sub"]);
+    assert.deepStrictEqual(files.sort(), ["sub/a.txt"]);
+  });
+
+  it("treats an all-empty pathspec list as whole-repo", async () => {
+    repo = await initRepoWithFiles(tempDir, {
+      "a.txt": "a",
+      "sub/b.txt": "b",
+    });
+
+    const files = await listFilesWithExclusions(repo, undefined, [""]);
+    assert.deepStrictEqual(files.sort(), ["a.txt", "sub/b.txt"]);
+  });
 });
 
 describe("getAllowedRelativePaths", () => {
@@ -221,6 +262,46 @@ describe("getAllowedRelativePaths", () => {
     );
     assert.deepStrictEqual(paths.sort(), ["a.txt", "deep/c.txt"]);
   });
+
+  it("multiple pathspecs with no prefix stripping (identity-mapped sparsePaths)", async () => {
+    repo = await initRepoWithFiles(tempDir, {
+      "base/a.cc": "a",
+      "base/deep/b.cc": "b",
+      "sandbox/c.cc": "c",
+      "other/d.txt": "d",
+    });
+
+    // sparsePaths semantics: prefixToStrip = "" (identity), pathspecs = the dirs.
+    const paths = await getAllowedRelativePaths(repo, undefined, "", [
+      "base",
+      "sandbox",
+    ]);
+    assert.deepStrictEqual(paths.sort(), [
+      "base/a.cc",
+      "base/deep/b.cc",
+      "sandbox/c.cc",
+    ]);
+  });
+
+  it("multiple pathspecs honor .syncignore within the selected dirs", async () => {
+    repo = await initRepoWithFiles(tempDir, {
+      "base/a.cc": "a",
+      "base/test/skip.cc": "skip",
+      "sandbox/c.cc": "c",
+      "other/d.txt": "d",
+    });
+
+    // .syncignore at repo root (identity mapping) trims within the selection.
+    writeFile(path.join(tempDir, ".syncignore"), "base/test/\n");
+
+    const paths = await getAllowedRelativePaths(
+      repo,
+      path.join(tempDir, ".syncignore"),
+      "",
+      ["base", "sandbox"]
+    );
+    assert.deepStrictEqual(paths.sort(), ["base/a.cc", "sandbox/c.cc"]);
+  });
 });
 
 describe("GitRepo sparse checkout", () => {
@@ -258,6 +339,33 @@ describe("GitRepo sparse checkout", () => {
 
     // Now other/c.txt should be back
     assert.ok(fs.existsSync(path.join(tempDir, "other", "c.txt")));
+  });
+
+  it("multi-path sparse checkout materializes only the listed dirs, and pathspec-scoped listing matches (sparsePaths flow)", async () => {
+    repo = await initRepoWithFiles(tempDir, {
+      "base/a.cc": "a",
+      "sandbox/b.cc": "b",
+      "build/c.gn": "c",
+      "other/d.txt": "d",
+    });
+
+    await repo.sparseCheckoutInit();
+    await repo.sparseCheckoutSet("base", "sandbox");
+
+    // Only base/ and sandbox/ materialize on disk.
+    assert.ok(fs.existsSync(path.join(tempDir, "base", "a.cc")));
+    assert.ok(fs.existsSync(path.join(tempDir, "sandbox", "b.cc")));
+    assert.ok(!fs.existsSync(path.join(tempDir, "build", "c.gn")));
+    assert.ok(!fs.existsSync(path.join(tempDir, "other", "d.txt")));
+
+    // git ls-files still reports the whole index (skip-worktree entries), so
+    // scoping the listing to the same pathspecs keeps the copy set within what
+    // was actually materialized.
+    const files = await listFilesWithExclusions(repo, undefined, [
+      "base",
+      "sandbox",
+    ]);
+    assert.deepStrictEqual(files.sort(), ["base/a.cc", "sandbox/b.cc"]);
   });
 });
 
