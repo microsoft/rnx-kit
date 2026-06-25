@@ -84,8 +84,7 @@ export type BundleParameters = BundlerPlugins &
      *
      * @default [
      *   "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-     *   "@rnx-kit/metro-plugin-duplicates-checker",
-     *   "@rnx-kit/metro-plugin-typescript"
+     *   "@rnx-kit/metro-plugin-duplicates-checker"
      * ]
      */
     plugins?: Plugin[];

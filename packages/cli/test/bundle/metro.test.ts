@@ -29,7 +29,6 @@ describe("bundle/metro/metroBundle()", () => {
     plugins: [
       "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
       "@rnx-kit/metro-plugin-duplicates-checker",
-      "@rnx-kit/metro-plugin-typescript",
     ],
   };
 
