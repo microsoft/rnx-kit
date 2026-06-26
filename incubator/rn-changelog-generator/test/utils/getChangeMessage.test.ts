@@ -19,7 +19,7 @@ describe(getChangeMessage, () => {
         author: { login: "alloy" },
       })
     ).toEqual(
-      "- Some great fixes! ([abcde12345](https://github.com/facebook/react-native/commit/abcde123456789) by [@alloy](https://github.com/alloy))"
+      "- Some great fixes! ([abcde12345](https://github.com/react/react-native/commit/abcde123456789) by [@alloy](https://github.com/alloy))"
     );
   });
   it("formats a changelog entry with author name", () => {
@@ -36,7 +36,7 @@ describe(getChangeMessage, () => {
         author: undefined,
       })
     ).toEqual(
-      "- Some great fixes! ([abcde12345](https://github.com/facebook/react-native/commit/abcde123456789) by First Last)"
+      "- Some great fixes! ([abcde12345](https://github.com/react/react-native/commit/abcde123456789) by First Last)"
     );
   });
   it("formats a changelog entry without author", () => {
@@ -50,7 +50,7 @@ describe(getChangeMessage, () => {
         author: undefined,
       })
     ).toEqual(
-      "- Some great fixes! ([abcde12345](https://github.com/facebook/react-native/commit/abcde123456789))"
+      "- Some great fixes! ([abcde12345](https://github.com/react/react-native/commit/abcde123456789))"
     );
   });
 });

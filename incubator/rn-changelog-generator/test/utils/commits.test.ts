@@ -42,16 +42,16 @@ describe("functions that hit GitHub's commits API", () => {
     const getMock = jest.fn((uri) => {
       if (
         uri.path ===
-        `/repos/facebook/react-native/commits?sha=${compare}&page=1`
+        `/repos/react/react-native/commits?sha=${compare}&page=1`
       ) {
         return requestWithFixtureResponse("commits-v0.60.5-page-1.json");
       } else if (
         uri.path ===
-        `/repos/facebook/react-native/commits?sha=${compare}&page=2`
+        `/repos/react/react-native/commits?sha=${compare}&page=2`
       ) {
         return requestWithFixtureResponse("commits-v0.60.5-page-2.json");
       } else if (
-        uri.path === `/repos/facebook/react-native/commits/${internalCommit}`
+        uri.path === `/repos/react/react-native/commits/${internalCommit}`
       ) {
         return requestWithFixtureResponse("commit-internal.json");
       } else {

@@ -70,7 +70,7 @@ export function fetchCommits(
     const fetchPage = () => {
       fetchJSON<Commit[]>(
         token,
-        `/repos/facebook/react-native/commits?sha=${compare}&page=${page++}`
+        `/repos/react/react-native/commits?sha=${compare}&page=${page++}`
       )
         .then(({ json, headers }) => {
           for (const commit of json) {
@@ -98,7 +98,7 @@ export function fetchCommits(
 
 export function fetchCommit(token: string | null, sha: string) {
   return new Promise<Commit>((resolve, reject) => {
-    fetchJSON<Commit>(token, `/repos/facebook/react-native/commits/${sha}`)
+    fetchJSON<Commit>(token, `/repos/react/react-native/commits/${sha}`)
       .then(({ json }) => {
         resolve(json);
       })
