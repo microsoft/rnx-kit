@@ -66,9 +66,7 @@ describe("cli/metro-config/customizeMetroConfig()", () => {
       transformer: {},
     });
     expect(typeof inputConfig.serializer.customSerializer).toBe("function");
-    expect(typeof inputConfig.serializer.experimentalSerializerHook).toBe(
-      "function"
-    );
+    expect(inputConfig.serializer.experimentalSerializerHook).toBe(false);
     expect(toMock(CyclicDependencies).__context).toEqual({ timesCalled: 1 });
     expect(toMock(DuplicateDependencies).__context).toEqual({ timesCalled: 1 });
   });
@@ -96,23 +94,18 @@ describe("cli/metro-config/customizeMetroConfig()", () => {
   test("returns a config with only duplicates plugin", () => {
     const inputConfig = makeMockConfig();
     customizeMetroConfig(inputConfig, {
-      plugins: [
-        "@rnx-kit/metro-plugin-duplicates-checker",
-        "@rnx-kit/metro-plugin-typescript",
-      ],
+      plugins: ["@rnx-kit/metro-plugin-duplicates-checker"],
     });
 
     expect(inputConfig).toEqual({
       serializer: {
         customSerializer: expect.anything(),
-        experimentalSerializerHook: expect.anything(),
+        experimentalSerializerHook: false,
       },
       transformer: {},
     });
     expect(typeof inputConfig.serializer.customSerializer).toBe("function");
-    expect(typeof inputConfig.serializer.experimentalSerializerHook).toBe(
-      "function"
-    );
+    expect(inputConfig.serializer.experimentalSerializerHook).toBe(false);
     expect(toMock(CyclicDependencies).__context).toEqual({ timesCalled: 0 });
     expect(toMock(DuplicateDependencies).__context).toEqual({ timesCalled: 1 });
   });
@@ -120,23 +113,18 @@ describe("cli/metro-config/customizeMetroConfig()", () => {
   test("returns a config with only cyclic dependencies plugin", () => {
     const inputConfig = makeMockConfig();
     customizeMetroConfig(inputConfig, {
-      plugins: [
-        "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-        "@rnx-kit/metro-plugin-typescript",
-      ],
+      plugins: ["@rnx-kit/metro-plugin-cyclic-dependencies-detector"],
     });
 
     expect(inputConfig).toEqual({
       serializer: {
         customSerializer: expect.anything(),
-        experimentalSerializerHook: expect.anything(),
+        experimentalSerializerHook: false,
       },
       transformer: {},
     });
     expect(typeof inputConfig.serializer.customSerializer).toBe("function");
-    expect(typeof inputConfig.serializer.experimentalSerializerHook).toBe(
-      "function"
-    );
+    expect(inputConfig.serializer.experimentalSerializerHook).toBe(false);
     expect(toMock(CyclicDependencies).__context).toEqual({ timesCalled: 1 });
     expect(toMock(DuplicateDependencies).__context).toEqual({ timesCalled: 0 });
   });

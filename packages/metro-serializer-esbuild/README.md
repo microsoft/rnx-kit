@@ -179,7 +179,9 @@ See the full documentation at https://esbuild.github.io/api/#target.
 Values: Any JS language version string such as `es6` or `esnext`. You can also
 use environment names. See the full documentation for a list of supported names.
 
-Defaults to `hermes0.7.0`.
+By default, the target is inferred using React Native version
+([see code](https://github.com/microsoft/rnx-kit/blob/main/packages/metro-serializer-esbuild/src/targets.ts)).
+Failing that, it falls back to `hermes0.7`.
 
 ### `fabric`
 

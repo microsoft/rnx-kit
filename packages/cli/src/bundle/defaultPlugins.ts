@@ -6,7 +6,6 @@ const defaultPlugins: DefaultPlugins = {
   plugins: [
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
     "@rnx-kit/metro-plugin-duplicates-checker",
-    "@rnx-kit/metro-plugin-typescript",
   ],
   treeShake: false,
 };

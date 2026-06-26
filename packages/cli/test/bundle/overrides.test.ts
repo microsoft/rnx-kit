@@ -13,7 +13,6 @@ describe("bundle/overrides/applyCommandLineOverrides()", () => {
     plugins: [
       "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
       "@rnx-kit/metro-plugin-duplicates-checker",
-      "@rnx-kit/metro-plugin-typescript",
     ],
     indexedRamBundle: false,
     platform: "ios",
