@@ -46,6 +46,7 @@ async function initRepoWithFiles(
   await spawn("git", ["init"], { cwd: dir });
   await spawn("git", ["config", "user.email", "test@test.com"], { cwd: dir });
   await spawn("git", ["config", "user.name", "Test"], { cwd: dir });
+  await spawn("git", ["config", "commit.gpgsign", "false"], { cwd: dir });
 
   for (const [filePath, content] of Object.entries(files)) {
     writeFile(path.join(dir, filePath), content);
