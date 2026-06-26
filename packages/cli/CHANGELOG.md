@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 2.0.2
+
+### Patch Changes
+
+- 67a9731: TypeScript plugin is now disabled by default because 1) it degrades performance during bundling and 2) the new TypeScript 7.0 is now fast enough that running it beforehand is better.
+
 ## 2.0.1
 
 ### Patch Changes
