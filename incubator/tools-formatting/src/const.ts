@@ -1,10 +1,24 @@
 import type { TableViewParts, TreeViewParts } from "./types.ts";
 
+export const FORMATTER_ENV_KEY = "RNX_TARGET_FORMATTER";
 export const ELLIPSIS = "...";
 export const SRC_DIRS = ["src", "lib", "dist", "bin"];
 export const SEPARATORS = ["/", "\\"];
 
 type StyleKeys = "default" | "ascii";
+
+export const SEVERITY_LEVELS = {
+  info: 0,
+  warn: 1,
+  error: 2,
+} as const;
+
+export const BUILTIN_FORMATTERS = [
+  "github",
+  "azure",
+  "console",
+  "file",
+] as const;
 
 export const TREE_STYLES: Record<StyleKeys, TreeViewParts> = {
   default: {

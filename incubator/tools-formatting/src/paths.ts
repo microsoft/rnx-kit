@@ -1,3 +1,4 @@
+import path from "node:path";
 import { ELLIPSIS, SEPARATORS, SRC_DIRS } from "./const.ts";
 
 /**
@@ -35,4 +36,19 @@ export function shortenPath(path: string, segments = 3): string {
     }
   }
   return path;
+}
+
+/**
+ * Normalize a path for display in messages so that links work correctly in GitHub and Azure DevOpts. This
+ * also makes them readable in normal logs as well as it normalizes them to forward slashes and makes them
+ * relative to the repo root if a root is provided.
+ * @param file The file path to normalize
+ * @param root The root directory to make the file path relative to, will default to process.cwd which may be less correct
+ * @returns The normalized file path
+ */
+export function normalizePath(file: string, root?: string): string {
+  if (root) {
+    file = path.relative(root, file);
+  }
+  return file.replaceAll("\\", "/");
 }

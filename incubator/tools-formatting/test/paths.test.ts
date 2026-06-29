@@ -1,6 +1,7 @@
 import { equal } from "node:assert/strict";
+import path from "node:path";
 import { describe, it } from "node:test";
-import { shortenPath } from "../src/paths.ts";
+import { normalizePath, shortenPath } from "../src/paths.ts";
 
 describe("shortenPath", () => {
   it("shortens a long unix path to 3 segments", () => {
@@ -103,5 +104,42 @@ describe("shortenPath", () => {
       shortenPath("/a/lib/src/utils/helpers.ts"),
       "/a/lib/src/utils/helpers.ts"
     );
+  });
+});
+
+describe("normalizePath", () => {
+  function expected(file: string, root?: string): string {
+    return path.posix.normalize(
+      path.relative(root ?? process.cwd(), file).replaceAll("\\", "/")
+    );
+  }
+
+  it("normalizes a POSIX path with a root", () => {
+    equal(normalizePath("/repo/src/file.ts", "/repo"), "src/file.ts");
+  });
+
+  it("normalizes a POSIX path that is already relative", () => {
+    equal(normalizePath("src/file.ts", ""), "src/file.ts");
+  });
+
+  it("normalizes paths with dot-dot segments", () => {
+    equal(normalizePath("/repo/src/../test/file.ts", "/repo"), "test/file.ts");
+  });
+
+  it("normalizes Windows backslash paths without a root", () => {
+    const file = path.win32.join("src", "nested", "file.ts");
+    equal(normalizePath(file, ""), expected(file, ""));
+  });
+
+  it("normalizes Windows backslash paths with a root", () => {
+    const root = path.win32.join("C:\\repo");
+    const file = path.win32.join(root, "src", "file.ts");
+    equal(normalizePath(file, root), expected(file, root));
+  });
+
+  it("normalizes drive-letter paths", () => {
+    const root = path.win32.join("D:\\dev", "rnx-kit");
+    const file = path.win32.join(root, "packages", "pkg", "src", "index.ts");
+    equal(normalizePath(file, root), expected(file, root));
   });
 });
