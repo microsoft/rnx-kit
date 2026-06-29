@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/rn-changelog-generator
 
+## 0.5.1
+
+### Patch Changes
+
+- 8f1359a: Update `facebook/react-native` references to point to the new `react` org
+
 ## 0.5.0
 
 ### Minor Changes
