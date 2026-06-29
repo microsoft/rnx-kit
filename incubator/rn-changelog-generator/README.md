@@ -27,7 +27,7 @@ reasons:
   react-native repo.
 
 - Due to how react-native’s
-  [release process](https://github.com/facebook/react-native/wiki/Release-Process)
+  [release process](https://github.com/react/react-native/wiki/Release-Process)
   works, we want to be able to exclude previously cherry-picked commits from the
   changelog entry of the next version.
 
@@ -55,7 +55,7 @@ If you don’t already have a checkout of the react-native repo in a nearby
 folder:
 
 ```bash
-git clone https://github.com/facebook/react-native.git
+git clone https://github.com/react/react-native.git
 ```
 
 Ensure the repo is up-to-date:

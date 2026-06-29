@@ -102,13 +102,11 @@ describe("functions that hit GitHub's commits API", () => {
   beforeAll(() => {
     const getMock = jest.fn((uri) => {
       if (
-        uri.path ===
-        `/repos/facebook/react-native/commits?sha=${compare}&page=1`
+        uri.path === `/repos/react/react-native/commits?sha=${compare}&page=1`
       ) {
         return requestWithFixtureResponse("commits-v0.60.5-page-1.json");
       } else if (
-        uri.path ===
-        `/repos/facebook/react-native/commits?sha=${compare}&page=2`
+        uri.path === `/repos/react/react-native/commits?sha=${compare}&page=2`
       ) {
         return requestWithFixtureResponse("commits-v0.60.5-page-2.json");
       } else {
@@ -127,7 +125,7 @@ describe("functions that hit GitHub's commits API", () => {
         gitDir: RN_REPO,
         maxWorkers: 10,
         existingChangelogData:
-          "- Bla bla bla ([ffdf3f2](https://github.com/facebook/react-native/commit/ffdf3f2)",
+          "- Bla bla bla ([ffdf3f2](https://github.com/react/react-native/commit/ffdf3f2)",
       }).then((changelog) => {
         expect(changelog).toMatchSnapshot();
       });
@@ -166,7 +164,7 @@ describe("commit resolving,formatting and attribution regression tests", () => {
       {
         fixed: {
           android: [
-            "- View.getGlobalVisibleRect() clips result rect properly when overflow is 'hidden' ([df9abf7983](https://github.com/facebook/react-native/commit/df9abf798351c43253c449fe2c83c2cca0479d80))",
+            "- View.getGlobalVisibleRect() clips result rect properly when overflow is 'hidden' ([df9abf7983](https://github.com/react/react-native/commit/df9abf798351c43253c449fe2c83c2cca0479d80))",
           ],
         },
       },

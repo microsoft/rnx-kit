@@ -1,3 +1,3 @@
 export function formatCommitLink(sha: string) {
-  return `https://github.com/facebook/react-native/commit/${sha}`;
+  return `https://github.com/react/react-native/commit/${sha}`;
 }
