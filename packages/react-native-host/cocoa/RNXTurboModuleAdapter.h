@@ -8,6 +8,7 @@
 #endif  // USE_FABRIC
 
 @class RCTBridge;
+@protocol RNXHostConfig;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,6 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 #else
 @interface RNXTurboModuleAdapter : NSObject
 #endif  // USE_FABRIC
+
+/// Weak reference to the host's config; powers consultation of
+/// ``RNXHostConfig.turboModuleManagerDelegate``.
+@property (nonatomic, weak, nullable) id<RNXHostConfig> hostConfig;
 
 - (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:
     (RCTBridge *)bridge;
