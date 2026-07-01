@@ -2,8 +2,8 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { fileURLToPath, URL } from "node:url";
 import { parseArgs } from "node:util";
+import manifest from "./package.json" with { type: "json" };
 import suggest from "./src/index.js";
 
 function printHelp() {
@@ -61,9 +61,7 @@ const { values, positionals } = parseArgs({
 if (values.help) {
   printHelp();
 } else if (values.version) {
-  const p = fileURLToPath(new URL("package.json", import.meta.url));
-  const manifest = fs.readFileSync(p, { encoding: "utf-8" });
-  const { name, version } = JSON.parse(manifest);
+  const { name, version } = manifest;
   console.log(name, version);
 } else {
   if (positionals.length > 0) {

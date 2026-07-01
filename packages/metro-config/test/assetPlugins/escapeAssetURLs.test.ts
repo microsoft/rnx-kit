@@ -1,12 +1,11 @@
 import type { AssetData } from "metro";
 import { equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import {
-  default as escapeAssetURL,
-  restoreAssetURL,
-} from "../../src/assetPlugins/escapeAssetURLs.js";
+import escapeAssetURL from "../../src/assetPlugins/escapeAssetURLs.js";
 
 describe("assetPlugins/escapeRelativePaths", () => {
+  const { restoreAssetURL } = escapeAssetURL;
+
   const cases = [
     ["/assets/./node_modules", "/assets/./node_modules"],
     ["/assets/../node_modules", "/assets/@@/node_modules"],

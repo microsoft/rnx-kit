@@ -1,5 +1,6 @@
 /**
- * @typedef {import("metro").AssetData} AssetData;
+ * @typedef {import("metro").AssetData} ReadOnlyAssetData;
+ * @typedef {import("type-fest").Writable<ReadOnlyAssetData>} AssetData;
  */
 
 /**
@@ -24,8 +25,8 @@ function replaceString(str, searchValue, replaceValue) {
  *
  * For more details, see https://github.com/react/metro/issues/290.
  *
- * @param {import("type-fest").Writable<AssetData>} assetData
- * @returns {AssetData}
+ * @param {AssetData} assetData
+ * @returns {ReadOnlyAssetData}
  */
 function assetPlugin(assetData) {
   const url = assetData.httpServerLocation;
@@ -42,5 +43,6 @@ function restoreAssetURL(url) {
   return replaceString(url, "@@/", "../");
 }
 
+assetPlugin.restoreAssetURL = restoreAssetURL;
+
 module.exports = assetPlugin;
-module.exports.restoreAssetURL = restoreAssetURL;

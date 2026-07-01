@@ -22,8 +22,8 @@ export class BuildCommand extends Command {
     description: "Also build the package's dependencies",
   });
 
-  withTsc = Option.Boolean("--with-tsc", false, {
-    description: "Use `tsc` instead of `tsgo` to build the package",
+  emitDeclarationOnly = Option.Boolean("--emitDeclarationOnly", false, {
+    description: "Only output d.ts files",
   });
 
   args = Option.Rest();
@@ -35,12 +35,10 @@ export class BuildCommand extends Command {
       return await runScript("nx", "build", name);
     }
 
-    if (this.withTsc) {
-      return await runScript("tsc", "--outDir", "lib", ...this.args);
-    }
-
     const tsc = await this.getNativeBinaryPath();
-    return await execute(tsc, "--outDir", "lib", ...this.args);
+    return this.emitDeclarationOnly
+      ? await execute(tsc, "--emitDeclarationOnly", ...this.args)
+      : await execute(tsc, "--outDir", "lib", ...this.args);
   }
 
   async getNativeBinaryPath() {
@@ -48,23 +46,22 @@ export class BuildCommand extends Command {
       workspaceRoot(),
       "node_modules",
       ".cache",
-      "tsgo"
+      "tsc"
     );
 
     if (fs.existsSync(cachePath)) {
-      const tsgo = fs.readFileSync(cachePath, { encoding: "utf-8" });
-      if (fs.existsSync(tsgo)) {
-        return tsgo;
+      const tsc = fs.readFileSync(cachePath, { encoding: "utf-8" });
+      if (fs.existsSync(tsc)) {
+        return tsc;
       }
     }
 
-    // If we haven't cached the location of `tsgo` yet, we can find it by
-    // calling `getExePath` from `@typescript/native-preview`. This is what
-    // `tsgo.js` does internally, but it does not cache the location and does
-    // this lookup every time it is executed.
+    // If we haven't cached the location of `tsc` yet, we can find it by calling
+    // `getExePath` from `typescript`. This is what `tsc.js` does internally,
+    // but it does not cache the location and does this lookup every time it is
+    // executed.
 
-    const manifestPath = import.meta
-      .resolve("@typescript/native-preview/package.json");
+    const manifestPath = import.meta.resolve("typescript/package.json");
     const manifest = JSON.parse(
       fs.readFileSync(fileURLToPath(manifestPath), { encoding: "utf-8" })
     );
@@ -75,13 +72,13 @@ export class BuildCommand extends Command {
       manifestPath
     );
     const getExePath = await import(getExePathPath.href);
-    const tsgo = getExePath.default();
+    const tsc = getExePath.default();
 
     // Save the location of the native binary so that we don't have to do the
     // lookup again next time.
     fs.mkdirSync(path.dirname(cachePath), { recursive: true });
-    fs.writeFile(cachePath, tsgo, { encoding: "utf-8" }, () => undefined);
+    fs.writeFile(cachePath, tsc, { encoding: "utf-8" }, () => undefined);
 
-    return tsgo;
+    return tsc;
   }
 }
