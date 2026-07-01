@@ -3,6 +3,12 @@
 #import <React/RCTBridgeDelegate.h>
 #import <React/RCTLog.h>
 
+#ifdef __cplusplus
+#include <jsi/jsi.h>
+#endif
+
+@class ReactNativeHost;
+
 NS_ASSUME_NONNULL_BEGIN
 
 /// Configuration object for ``ReactNativeHost``.
@@ -29,6 +35,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Handles a fatal error.
 - (void)onFatalError:(NSError *)error;
+
+/// Called after the JS instance has finished loading. ``error`` is ``nil``
+/// on success.
+- (void)host:(ReactNativeHost *)host didLoadInstanceWithError:(nullable NSError *)error
+    __attribute__((__swift_name__("host(_:didLoadInstanceWithError:)")));
+
+/// Called when the instance is about to be unloaded.
+- (void)hostWillUnloadInstance:(ReactNativeHost *)host;
+
+#ifdef __cplusplus
+/// Called after host bindings install but before the user JS bundle loads.
+/// Use to evaluate pre-user JS on the runtime. Bridgeless mode only.
+- (void)host:(ReactNativeHost *)host didInitializeRuntime:(facebook::jsi::Runtime &)runtime;
+#endif  // __cplusplus
 
 // MARK: - RCTBridgeDelegate deprecated details (for backwards compatibility) [>=0.84]
 
