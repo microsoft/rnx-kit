@@ -90,8 +90,8 @@ export function getFinderFromJsonConfig(
       `Unable to find external workspaces definition file ${jsonPath}`
     );
   }
-  const parsedJson: WorkspaceOutputJson =
-    JSON.parse(fs.readFileSync(jsonPath, "utf8"))?.generated || {};
+  const parsedJson: Partial<WorkspaceOutputJson> =
+    JSON.parse(fs.readFileSync(jsonPath, "utf8")) || {};
   const generated: Partial<WorkspaceOutputGeneratedContent> =
     typeof parsedJson.generated === "object" ? parsedJson.generated : {};
 
