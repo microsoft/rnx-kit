@@ -1,7 +1,8 @@
 {
   "extends": "@rnx-kit/tsconfig/tsconfig.node.json",
   "compilerOptions": {
-    "rootDir": "src"
+    "rootDir": "src",
+    "outDir": "lib"
   },
   "include": ["src"],
   "exclude": ["src/__fixtures__/**/*", "src/__snapshots__/**/*"]
