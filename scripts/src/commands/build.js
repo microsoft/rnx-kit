@@ -22,10 +22,6 @@ export class BuildCommand extends Command {
     description: "Also build the package's dependencies",
   });
 
-  emitDeclarationOnly = Option.Boolean("--emitDeclarationOnly", false, {
-    description: "Only output d.ts files",
-  });
-
   args = Option.Rest();
 
   async execute() {
@@ -36,9 +32,7 @@ export class BuildCommand extends Command {
     }
 
     const tsc = await this.getNativeBinaryPath();
-    return this.emitDeclarationOnly
-      ? await execute(tsc, "--emitDeclarationOnly", ...this.args)
-      : await execute(tsc, "--outDir", "lib", ...this.args);
+    return await execute(tsc, ...this.args);
   }
 
   async getNativeBinaryPath() {

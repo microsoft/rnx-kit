@@ -2,6 +2,7 @@
   "extends": "@rnx-kit/tsconfig/tsconfig.node.json",
   "compilerOptions": {
     "rootDir": "src",
+    "outDir": "lib",
     "lib": ["ES2021", "DOM"]
   },
   "include": ["src"]
