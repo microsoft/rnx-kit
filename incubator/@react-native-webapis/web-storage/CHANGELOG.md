@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.4.6
+
+### Patch Changes
+
+- f1c5daa: Only apply Kotlin plugin if not using built-in
+
 ## 0.4.5
 
 ### Patch Changes
