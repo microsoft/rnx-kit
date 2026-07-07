@@ -51,7 +51,15 @@ buildscript {
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.android") apply false
+}
+
+// Only apply Kotlin plugin if `android.builtInKotlin=false`
+// https://developer.android.com/build/migrate-to-built-in-kotlin#enable-built-in-kotlin
+def useBuiltInKotlin = parseVersion(gradle.gradleVersion) >= 9004000 &&
+                       project.findProperty("android.builtInKotlin") != "false"
+if (!useBuiltInKotlin) {
+    apply(plugin: "org.jetbrains.kotlin.android")
 }
 
 def reactNativePath = findNodeModulesPath("react-native")
