@@ -21,8 +21,11 @@
 #endif  // USE_REACT_NATIVE_CONFIG
 
 #ifdef USE_FEATURE_FLAGS
-#import <react/featureflags/ReactNativeFeatureFlags.h>
+#ifdef USE_FEATURE_FLAGS_OSS_OVERRIDES
+#include <react/featureflags/ReactNativeFeatureFlagsOverridesOSSStable.h>
+#else  //  USE_FEATURE_FLAGS_OSS_OVERRIDES
 #import <react/featureflags/ReactNativeFeatureFlagsDefaults.h>
+#endif  // USE_FEATURE_FLAGS_OSS_OVERRIDES
 #endif  // USE_FEATURE_FLAGS
 
 #ifdef USE_CODEGEN_PROVIDER
@@ -61,6 +64,11 @@ using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSRuntimeFactory
 @end
 
 #ifdef USE_FEATURE_FLAGS
+#ifdef USE_FEATURE_FLAGS_OSS_OVERRIDES
+
+using RNXBridgelessFeatureFlags = facebook::react::ReactNativeFeatureFlagsOverridesOSSStable;
+
+#else                             // USE_FEATURE_FLAGS_OSS_OVERRIDES
 
 // https://github.com/react/react-native/blob/0.80-stable/packages/react-native/ReactCommon/react/featureflags/ReactNativeFeatureFlagsOverridesOSSStable.h
 class RNXBridgelessFeatureFlags : public facebook::react::ReactNativeFeatureFlagsDefaults
@@ -72,7 +80,6 @@ public:
         return true;
     }
 
-#ifndef RCT_REMOVE_LEGACY_ARCH
     bool enableFabricRenderer() override
     {
         return true;
@@ -82,7 +89,6 @@ public:
     {
         return true;
     }
-#endif  // !RCT_REMOVE_LEGACY_ARCH
 
     bool useNativeViewConfigsInBridgelessMode() override
     {
@@ -94,15 +100,15 @@ public:
     {
         return true;
     }
-#endif  // USE_VIEW_COMMAND_RACE_FIX
+#endif                         // USE_VIEW_COMMAND_RACE_FIX
 
 #if USE_UPDATE_RUNTIME_SHADOW_NODE_REFS_ON_COMMIT  // >= 0.79
     bool useShadowNodeStateOnClone() override
     {
         return true;
     }
-#endif  // USE_UPDATE_RUNTIME_SHADOW_NODE_REFS_ON_COMMIT
-#else   // < 0.77
+#endif                                             // USE_UPDATE_RUNTIME_SHADOW_NODE_REFS_ON_COMMIT
+#else                                              // < 0.77
     bool useModernRuntimeScheduler() override
     {
         return true;
@@ -117,9 +123,10 @@ public:
     {
         return true;
     }
-#endif  // USE_UNIFIED_FEATURE_FLAGS
+#endif                                             // USE_UNIFIED_FEATURE_FLAGS
 };
-#endif  // USE_FEATURE_FLAGS
+#endif                                             // USE_FEATURE_FLAGS_OSS_OVERRIDES
+#endif                                             // USE_FEATURE_FLAGS
 
 #elif USE_FABRIC
 

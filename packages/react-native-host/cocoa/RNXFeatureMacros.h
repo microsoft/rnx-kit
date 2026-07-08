@@ -39,10 +39,12 @@
 
 #ifdef USE_FEATURE_FLAGS
 
-// TODO: `RCTArchConfiguratorProtocol.h` was removed in 0.87
-#if __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>) || __has_include(<React_RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
+#if __has_include(<react/featureflags/ReactNativeFeatureFlagsOverridesOSSStable.h>)  // >= 0.80
+#define USE_FEATURE_FLAGS_OSS_OVERRIDES 1
 #define USE_UNIFIED_FEATURE_FLAGS 1
-#endif  // __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
+#elif __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>) || __has_include(<React_RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
+#define USE_UNIFIED_FEATURE_FLAGS 1
+#endif  // __has_include(<react/featureflags/ReactNativeFeatureFlagsOverridesOSSStable.h>)
 
 #if !__has_include(<React-RCTAppDelegate/RCTReactNativeFactory.h>) && !__has_include(<React_RCTAppDelegate/RCTReactNativeFactory.h>)
 #define USE_VIEW_COMMAND_RACE_FIX 1
@@ -55,9 +57,6 @@
 
 #if REACT_NATIVE_VERSION >= 87000
 #define RCT_REMOVE_LEGACY_ARCH 1
-#ifndef USE_UNIFIED_FEATURE_FLAGS
-#define USE_UNIFIED_FEATURE_FLAGS 1
-#endif
 #endif  // REACT_NATIVE_VERSION >= 87000
 
 #endif  // USE_FEATURE_FLAGS
