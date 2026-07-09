@@ -2292,7 +2292,7 @@ PODS:
   - ReactTestApp-MSAL (5.1.0):
     - MSAL
   - ReactTestApp-Resources (1.0.0-dev)
-  - RNWWebStorage (0.4.5):
+  - RNWWebStorage (0.4.6):
     - boost
     - DoubleConversion
     - fast_float
@@ -2645,7 +2645,7 @@ SPEC CHECKSUMS:
   ReactTestApp-DevSupport: d9358fe3b2dc09399c15731ed8c17bd8388cf512
   ReactTestApp-MSAL: 431747d2fa56b5f59c8ecf3778a2f97715aff617
   ReactTestApp-Resources: 73ed16e66e4d7bcb2d98d5c81619e2bc7563d37d
-  RNWWebStorage: 8ec03f8288c1e212518f662f44ec223603bbe74c
+  RNWWebStorage: 8bc155b048a2d1ee1db5f63b1b9c5705434d48db
   RNXAuth: a54c1a2349766f9d0876d23d90a206a73ddd7d87
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 9f9bacf26f441fa32d25c32e5583ff72f6d2806d
