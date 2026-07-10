@@ -21,6 +21,7 @@
 #endif  // USE_REACT_NATIVE_CONFIG
 
 #ifdef USE_FEATURE_FLAGS
+#import <react/featureflags/ReactNativeFeatureFlags.h>
 #ifdef USE_FEATURE_FLAGS_OSS_OVERRIDES
 #include <react/featureflags/ReactNativeFeatureFlagsOverridesOSSStable.h>
 #else  //  USE_FEATURE_FLAGS_OSS_OVERRIDES
