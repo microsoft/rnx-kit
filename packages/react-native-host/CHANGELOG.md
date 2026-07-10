@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.20
+
+### Patch Changes
+
+- bcc44be: Use `ReactNativeFeatureFlagsOverridesOSSStable` when available
+
 ## 0.5.19
 
 ### Patch Changes
