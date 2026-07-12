@@ -15904,15 +15904,15 @@ __metadata:
   linkType: hard
 
 "recast@npm:^0.23.0":
-  version: 0.23.11
-  resolution: "recast@npm:0.23.11"
+  version: 0.23.12
+  resolution: "recast@npm:0.23.12"
   dependencies:
     ast-types: "npm:^0.16.1"
     esprima: "npm:~4.0.0"
     source-map: "npm:~0.6.1"
     tiny-invariant: "npm:^1.3.3"
     tslib: "npm:^2.0.1"
-  checksum: 10c0/45b520a8f0868a5a24ecde495be9de3c48e69a54295d82a7331106554b75cfba75d16c909959d056e9ceed47a1be5e061e2db8b9ecbcd6ba44c2f3ef9a47bd18
+  checksum: 10c0/6abedaca3ce696b1f3d4e0a9c458319d5e24a8dc2666e91ae9729882f523c144558f4d415b40d398eed6a3956500656299df44ca8c4dba8e35a75bb454a067fc
   languageName: node
   linkType: hard
 
