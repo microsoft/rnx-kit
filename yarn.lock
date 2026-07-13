@@ -5267,8 +5267,6 @@ __metadata:
     "@react-native/eslint-plugin": "npm:^0.84.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/eslint": "npm:^9.0.0"
-    "@types/estree": "npm:^1.0.6"
     "@types/node": "npm:^24.0.0"
     "@typescript-eslint/parser": "npm:^8.0.0"
     "@typescript-eslint/types": "npm:^8.0.0"
@@ -5387,7 +5385,6 @@ __metadata:
     "@rnx-kit/tools-react-native": "npm:^2.3.1"
     "@rnx-kit/tools-workspaces": "npm:^0.2.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/babel__core": "npm:^7.0.0"
     "@types/connect": "npm:^3.4.36"
     metro: "npm:^0.84.0"
     metro-config: "npm:^0.84.0"
@@ -5751,7 +5748,6 @@ __metadata:
     "@rnx-kit/build": "workspace:*"
     "@rnx-kit/cli": "workspace:*"
     "@rnx-kit/eslint-config": "workspace:*"
-    "@rnx-kit/jest-preset": "workspace:*"
     "@rnx-kit/metro-config": "workspace:*"
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "workspace:*"
     "@rnx-kit/metro-plugin-duplicates-checker": "workspace:*"
@@ -5764,7 +5760,6 @@ __metadata:
     "@rnx-kit/react-native-test-app-msal": "workspace:*"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/third-party-notices": "workspace:*"
-    "@rnx-kit/tsconfig": "workspace:*"
     "@types/react": "npm:^19.0.0"
     react: "npm:19.1.4"
     react-native: "npm:^0.81.6"
@@ -5806,7 +5801,6 @@ __metadata:
     "@rnx-kit/react-native-host": "workspace:*"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/third-party-notices": "workspace:*"
-    "@rnx-kit/tsconfig": "workspace:*"
     "@types/react": "npm:^19.0.0"
     react: "npm:19.1.1"
     react-native: "npm:^0.82.0"
@@ -6236,7 +6230,6 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
-    "@types/semver": "npm:^7.0.0"
     "@yarnpkg/cli": "npm:^4.6.0"
     "@yarnpkg/core": "npm:^4.2.0"
     "@yarnpkg/fslib": "npm:^3.1.1"
@@ -6264,7 +6257,6 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
-    "@types/semver": "npm:^7.0.0"
     "@yarnpkg/cli": "npm:^4.6.0"
     "@yarnpkg/core": "npm:^4.2.0"
     clipanion: "npm:^4.0.0-rc.4"
@@ -6736,17 +6728,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:^9.0.0":
-  version: 9.6.1
-  resolution: "@types/eslint@npm:9.6.1"
-  dependencies:
-    "@types/estree": "npm:*"
-    "@types/json-schema": "npm:*"
-  checksum: 10c0/69ba24fee600d1e4c5abe0df086c1a4d798abf13792d8cfab912d76817fe1a894359a1518557d21237fbaf6eda93c5ab9309143dee4c59ef54336d1b3570420e
-  languageName: node
-  linkType: hard
-
-"@types/estree@npm:*, @types/estree@npm:^1.0.6":
+"@types/estree@npm:^1.0.6":
   version: 1.0.9
   resolution: "@types/estree@npm:1.0.9"
   checksum: 10c0/3ad3286ca2988cd550dafb8f2ad599c8474868e954fa601a36655bdfefd8039f7c714b8c1c7f2ae219ffbd58bd4660e66fa7479a0120fc02d4777057d4865387
@@ -6827,7 +6809,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.15":
+"@types/json-schema@npm:^7.0.15":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
   checksum: 10c0/a996a745e6c5d60292f36731dd41341339d4eeed8180bb09226e5c8d23759067692b1d88e5d91d72ee83dfc00d3aca8e7bd43ea120516c17922cbcb7c3e252db

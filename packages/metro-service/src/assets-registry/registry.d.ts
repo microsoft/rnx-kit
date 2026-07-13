@@ -9,5 +9,3 @@ export type PackagerAsset = {
   readonly name: string;
   readonly type: string;
 };
-export declare function registerAsset(asset: PackagerAsset): number;
-export declare function getAssetByID(assetId: number): PackagerAsset;
