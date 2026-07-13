@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.21
+
+### Patch Changes
+
+- 361155b: Fixed `ReactNativeHost.mm` not compiling due to missing header
+
 ## 0.5.20
 
 ### Patch Changes
