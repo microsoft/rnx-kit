@@ -33,7 +33,6 @@
     "@babel/preset-env": "^7.20.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/babel__core": "^7.0.0",
     "@types/connect": "^3.4.36",
     "metro": "^0.84.0",
     "metro-config": "^0.84.0",

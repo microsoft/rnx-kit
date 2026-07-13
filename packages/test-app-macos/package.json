@@ -48,7 +48,6 @@
     "@rnx-kit/build": "workspace:*",
     "@rnx-kit/cli": "workspace:*",
     "@rnx-kit/eslint-config": "workspace:*",
-    "@rnx-kit/jest-preset": "workspace:*",
     "@rnx-kit/metro-config": "workspace:*",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "workspace:*",
     "@rnx-kit/metro-plugin-duplicates-checker": "workspace:*",
@@ -61,7 +60,6 @@
     "@rnx-kit/react-native-test-app-msal": "workspace:*",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/third-party-notices": "workspace:*",
-    "@rnx-kit/tsconfig": "workspace:*",
     "@types/react": "^19.0.0",
     "react-native-test-app": "^5.0.9"
   },

@@ -55,7 +55,6 @@
     "@rnx-kit/react-native-host": "workspace:*",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/third-party-notices": "workspace:*",
-    "@rnx-kit/tsconfig": "workspace:*",
     "@types/react": "^19.0.0",
     "react-native-test-app": "^5.1.2"
   },
