@@ -236,8 +236,12 @@ function transformRules(targetPlatform) {
   return { [key]: require.resolve("./assetFileTransformer.js") };
 }
 
-/** @type {(defaultPlatform?: string, userOptions?: InitialOptions) => InitialOptions} */
-module.exports = (
+/**
+ * @param {string=} defaultPlatform
+ * @param {InitialOptions=} userOptions
+ * @returns {InitialOptions}
+ */
+function getPreset(
   defaultPlatform,
   {
     moduleNameMapper: userModuleNameMapper,
@@ -245,7 +249,7 @@ module.exports = (
     transformIgnorePatterns: userTransformIgnorePatterns,
     ...userOptions
   } = {}
-) => {
+) {
   const searchPaths = { paths: [process.cwd()] };
   const [targetPlatform, platformPath] = getTargetPlatform(
     defaultPlatform,
@@ -280,4 +284,6 @@ module.exports = (
     ],
     ...userOptions,
   };
-};
+}
+
+module.exports = getPreset;
