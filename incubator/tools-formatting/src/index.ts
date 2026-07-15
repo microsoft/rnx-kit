@@ -2,7 +2,6 @@ export { shortenPath } from "./paths.ts";
 
 export type { WrapOptions } from "./strings.ts";
 export {
-  isMultilineString,
   parseMultilineString,
   sliceByVisibleWidth,
   visibleWidth,
@@ -14,7 +13,6 @@ export { formatAsTable } from "./table.ts";
 
 export type {
   ColorOptions,
-  MultilineString,
   ParsedString,
   StyleValue,
   TableViewParts,

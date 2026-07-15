@@ -52,16 +52,14 @@ export type ParsedString = {
   text: string;
   /** The visible width of the string, excluding control codes */
   width: number;
-  /** The individual lines of the string, control codes valid for each line if the string is multiline */
-  lines?: string[];
-  /** The visible width of each line, excluding control codes */
-  lineWidths?: number[];
+  /** If the string is multiline, create an object containing the individual lines and their widths */
+  multiline?: {
+    /** The individual lines of the string, control codes included */
+    lines: string[];
+    /** The visible width of each line, excluding control codes */
+    widths: number[];
+  };
 };
-
-/**
- * A ParsedString is a MultilineString if it has both the lines and lineWidth properties
- */
-export type MultilineString = Required<ParsedString>;
 
 /**
  * Parts of a tree view.

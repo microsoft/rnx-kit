@@ -1,10 +1,16 @@
 import {
+  type BreakStrategy,
   type CharacterType,
-  type ScanState,
+  type SgrState,
   SGR_RESET,
+  applySgrSequence,
+  createScanState,
+  createSgrState,
   getNextCharType,
+  isSgrStateEmpty,
+  renderSgrState,
 } from "./characters.ts";
-import type { ParsedString, MultilineString } from "./types.ts";
+import type { ParsedString } from "./types.ts";
 
 /**
  * Get the visible width of a string, accounting for ANSI escape sequences,
@@ -20,7 +26,7 @@ export function visibleWidth(s: string): number {
   }
   let lineMax = 0;
   let width = 0;
-  const state: ScanState = { index: 0, width: 0, charType: "other" };
+  const state = createScanState();
   while (getNextCharType(s, state)) {
     if (state.charType === "line-break") {
       if (width > lineMax) lineMax = width;
@@ -31,15 +37,6 @@ export function visibleWidth(s: string): number {
     // sgr-open / sgr-close / control contribute nothing
   }
   return Math.max(lineMax, width);
-}
-
-/**
- * Type assertion helper to check if a ParsedString is multiline
- * @param s the ParsedString to check
- * @returns true if `s` is a MultilineString, false otherwise
- */
-export function isMultilineString(s: ParsedString): s is MultilineString {
-  return s.lines !== undefined && s.lineWidths !== undefined;
 }
 
 /**
@@ -78,10 +75,10 @@ export function sliceByVisibleWidth(
 
   let result = "";
   let col = 0;
-  let activeOpens = "";
   let prefixEmitted = false;
   let prevIndex = 0;
-  const state: ScanState = { index: 0, width: 0, charType: "other" };
+  const state = createScanState();
+  const sgrState = createSgrState();
 
   while (getNextCharType(s, state)) {
     const charStart = col;
@@ -92,17 +89,21 @@ export function sliceByVisibleWidth(
       break;
     }
 
-    const raw = s.slice(prevIndex, state.index);
-    const opensBefore = activeOpens;
-    if (state.charType === "sgr-open") {
-      activeOpens += raw;
-    } else if (state.charType === "sgr-close") {
-      activeOpens = "";
-    }
+    const inWindow = charStart >= startCol;
+    const isSgr =
+      state.charType === "sgr-open" || state.charType === "sgr-close";
+    // Only slice when raw is actually consumed: SGR steps need it to update
+    // sgrState, in-window steps emit it. Pre-window non-SGR steps skip.
+    const raw = isSgr || inWindow ? s.slice(prevIndex, state.index) : "";
 
-    if (charStart >= startCol) {
+    // Snapshot the opens that were active strictly before this step — used
+    // as the prefix if this is the first in-window step. Cheap because
+    // sgrState.opens is a primitive string.
+    const opensBefore = sgrState.opens;
+    if (isSgr) applySgrSequence(sgrState, raw);
+
+    if (inWindow) {
       if (!prefixEmitted) {
-        // Reapply the opens that were active strictly before this step.
         result += opensBefore;
         prefixEmitted = true;
       }
@@ -115,8 +116,19 @@ export function sliceByVisibleWidth(
     prevIndex = state.index;
   }
 
-  if (prefixEmitted && activeOpens) {
+  if (prefixEmitted && !isSgrStateEmpty(sgrState)) {
     result += SGR_RESET;
+  }
+  return result;
+}
+
+function finalizeParsedString(result: ParsedString): ParsedString {
+  if (result.multiline) {
+    let maxWidth = 0;
+    for (const w of result.multiline.widths) {
+      if (w > maxWidth) maxWidth = w;
+    }
+    result.width = maxWidth;
   }
   return result;
 }
@@ -139,66 +151,58 @@ export function sliceByVisibleWidth(
  * @param text the string to parse
  */
 export function parseMultilineString(text: string): ParsedString {
+  const result: ParsedString = { text, width: 0 };
   if (text.length === 0) {
-    return { text: "", width: 0 };
+    return result;
   }
 
   let lineWidth = 0;
-  let maxWidth = 0;
-  let activeOpens = "";
   // Allocated lazily on the first line break — single-line inputs never
   // allocate these arrays, and the per-token concat into `lineBuf` only
   // happens for the second line onward.
-  let lines: string[] | undefined;
-  let lineWidths: number[] | undefined;
+  let multi: ParsedString["multiline"] = undefined;
   let lineBuf = "";
   let prevIndex = 0;
-  const state: ScanState = { index: 0, width: 0, charType: "other" };
+  const state = createScanState();
+  const sgrState = createSgrState();
 
-  while (getNextCharType(text, state)) {
+  while (getNextCharType(text, state, sgrState)) {
     if (state.charType === "line-break") {
-      if (!lines) {
+      if (!multi) {
         // First line break: reconstruct the first line from the raw input
         // (avoiding the per-token concat that would otherwise be wasted on
         // single-line inputs) and lazily initialize the arrays.
         let firstLine = text.slice(0, prevIndex);
-        if (activeOpens) firstLine += SGR_RESET;
-        lines = [firstLine];
-        lineWidths = [lineWidth];
+        if (!isSgrStateEmpty(sgrState)) firstLine += SGR_RESET;
+        multi = result.multiline = { lines: [firstLine], widths: [lineWidth] };
       } else {
-        if (activeOpens) lineBuf += SGR_RESET;
-        lines.push(lineBuf);
-        lineWidths!.push(lineWidth);
+        if (!isSgrStateEmpty(sgrState)) lineBuf += SGR_RESET;
+        multi.lines.push(lineBuf);
+        multi.widths.push(lineWidth);
       }
-      if (lineWidth > maxWidth) maxWidth = lineWidth;
-      lineBuf = activeOpens;
+      lineBuf = renderSgrState(sgrState);
       lineWidth = 0;
     } else {
-      const raw = text.slice(prevIndex, state.index);
-      if (lines) {
-        lineBuf += raw;
+      if (multi) {
+        lineBuf += text.slice(prevIndex, state.index);
       }
-      if (state.charType === "sgr-open") {
-        activeOpens += raw;
-      } else if (state.charType === "sgr-close") {
-        activeOpens = "";
-      } else if (state.charType === "other") {
+      if (state.charType === "other") {
         lineWidth += state.width;
       }
     }
     prevIndex = state.index;
   }
-  if (lineWidth > maxWidth) maxWidth = lineWidth;
 
-  if (!lines) {
-    return { text, width: maxWidth };
+  if (!multi) {
+    result.width = lineWidth;
+    return result;
   }
 
-  if (activeOpens) lineBuf += SGR_RESET;
-  lines.push(lineBuf);
-  lineWidths!.push(lineWidth);
+  if (!isSgrStateEmpty(sgrState)) lineBuf += SGR_RESET;
+  multi.lines.push(lineBuf);
+  multi.widths.push(lineWidth);
 
-  return { text, width: maxWidth, lines, lineWidths };
+  return finalizeParsedString(result);
 }
 
 export type WrapOptions = {
@@ -215,7 +219,7 @@ type WrapToken = {
   raw: string;
   width: number;
   charType: CharacterType;
-  isWhitespace: boolean;
+  breakStrategy: BreakStrategy;
 };
 
 /**
@@ -245,36 +249,38 @@ export function wrapStringByVisibleWidth(
     options.maxBacktrack ?? Math.max(8, Math.floor(maxWidth * 0.2));
 
   // Allocated lazily on the first emitLine call — when the input fits in one
-  // line with no embedded breaks, these never get created and the result has
+  // line with no embedded breaks, this stays undefined and the result has
   // just {text, width}.
-  let outLines: string[] | undefined;
-  let outWidths: number[] | undefined;
+  let multi: { lines: string[]; widths: number[] } | undefined;
   let outMaxWidth = 0;
   let lineTokens: WrapToken[] = [];
   let lineWidth = 0;
-  let lineOpens = "";
+  // SGR state at the start of the current line. Replayed through buffered
+  // tokens at emit time so a soft-break split doesn't desync from the state
+  // of tokens that get carried into the next line's buffer.
+  let lineStartSgr = createSgrState();
   let prevIndex = 0;
-  const state: ScanState = { index: 0, width: 0, charType: "other" };
+  const state = createScanState();
 
   const emitLine = () => {
-    let str = lineOpens;
-    let endOpens = lineOpens;
+    const endSgr: SgrState = { ...lineStartSgr };
+    let str = renderSgrState(lineStartSgr);
     for (const tok of lineTokens) {
       str += tok.raw;
-      if (tok.charType === "sgr-open") endOpens += tok.raw;
-      else if (tok.charType === "sgr-close") endOpens = "";
+      if (tok.charType === "sgr-open" || tok.charType === "sgr-close") {
+        applySgrSequence(endSgr, tok.raw);
+      }
     }
-    if (endOpens) str += SGR_RESET;
-    if (!outLines) {
-      outLines = [];
-      outWidths = [];
+    if (!isSgrStateEmpty(endSgr)) str += SGR_RESET;
+    if (!multi) {
+      multi = { lines: [], widths: [] };
     }
-    outLines.push(str);
-    outWidths!.push(lineWidth);
+    multi.lines.push(str);
+    multi.widths.push(lineWidth);
     if (lineWidth > outMaxWidth) outMaxWidth = lineWidth;
     lineTokens = [];
     lineWidth = 0;
-    lineOpens = endOpens;
+    lineStartSgr = endSgr;
   };
 
   while (getNextCharType(text, state)) {
@@ -283,7 +289,7 @@ export function wrapStringByVisibleWidth(
       raw,
       width: state.charType === "other" ? state.width : 0,
       charType: state.charType,
-      isWhitespace: state.charType === "other" && /^[ \t]$/.test(raw),
+      breakStrategy: state.breakStrategy,
     };
     prevIndex = state.index;
 
@@ -302,33 +308,45 @@ export function wrapStringByVisibleWidth(
       continue;
     }
 
-    // Overflow.
-    if (tok.isWhitespace) {
+    // Overflow. A "replace"-strategy token at the boundary (typically an
+    // ASCII space) is consumed by the wrap — emit the current line and drop
+    // the token. Other overflowing tokens (visible content, including CJK
+    // chars) need to fall through to the backtrack so they end up on the
+    // next line.
+    if (tok.breakStrategy === "replace") {
       emitLine();
       continue;
     }
 
-    // Try to backtrack to a whitespace token in the last maxBacktrack columns.
-    // `rightCol` tracks the column at the right edge of `lineTokens[j..end-1]`
-    // as `j` decreases — so at the moment we find a whitespace, `rightCol` is
-    // exactly the visible width of the head we'll emit (tokens 0..breakIdx-1).
+    // Try to backtrack to a break-point token in the last maxBacktrack
+    // columns. `rightCol` tracks the column at the right edge of
+    // `lineTokens[j..end-1]` as `j` decreases — so at the moment we find a
+    // break point, `rightCol` is exactly the visible width of tokens
+    // strictly before the break point.
     let breakIdx = -1;
     let rightCol = lineWidth;
     for (let j = lineTokens.length - 1; j >= 0; j--) {
       const lt = lineTokens[j];
       rightCol -= lt.width;
       if (lineWidth - rightCol > maxBacktrack) break;
-      if (lt.isWhitespace) {
+      if (lt.breakStrategy !== "none") {
         breakIdx = j;
         break;
       }
     }
 
     if (breakIdx >= 0) {
-      const headWidth = rightCol;
+      const breakPoint = lineTokens[breakIdx];
+      // "replace": the break-point token is the boundary itself, so the
+      // head ends BEFORE it and the token is dropped.
+      // "after": the break sits to the right of the token, so the head
+      // ends WITH it.
+      const dropBreak = breakPoint.breakStrategy === "replace";
+      const headEnd = dropBreak ? breakIdx : breakIdx + 1;
+      const headWidth = dropBreak ? rightCol : rightCol + breakPoint.width;
       const tail = lineTokens.slice(breakIdx + 1);
-      const tailWidth = lineWidth - headWidth - lineTokens[breakIdx].width;
-      lineTokens.length = breakIdx;
+      const tailWidth = lineWidth - rightCol - breakPoint.width;
+      lineTokens.length = headEnd;
       lineWidth = headWidth;
       emitLine();
       lineTokens = tail;
@@ -340,14 +358,18 @@ export function wrapStringByVisibleWidth(
     lineWidth += tok.width;
   }
 
-  if (!outLines) {
+  if (!multi) {
     // No emitLine call happened — the input had no line breaks and never
     // exceeded maxWidth, so the original string is also the result.
     return { text, width: lineWidth };
   }
 
   emitLine();
-  return { text, width: outMaxWidth, lines: outLines, lineWidths: outWidths! };
+  return {
+    text,
+    width: outMaxWidth,
+    multiline: multi,
+  };
 }
 
 /**
@@ -357,7 +379,7 @@ export function wrapStringByVisibleWidth(
  */
 function totalVisibleColumns(s: string): number {
   let total = 0;
-  const state: ScanState = { index: 0, width: 0, charType: "other" };
+  const state = createScanState();
   while (getNextCharType(s, state)) {
     if (state.charType === "other") {
       total += state.width;

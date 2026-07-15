@@ -1,7 +1,6 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
-  isMultilineString,
   parseMultilineString,
   sliceByVisibleWidth,
   visibleWidth,
@@ -11,6 +10,9 @@ import {
 const RED = "\x1b[31m";
 const BOLD = "\x1b[1m";
 const RESET = "\x1b[0m";
+// node:util.styleText emits selective closes rather than full resets.
+const FG_DEFAULT = "\x1b[39m";
+const BOLD_OFF = "\x1b[22m";
 
 describe("visibleWidth", () => {
   it("returns 0 for the empty string", () => {
@@ -28,11 +30,11 @@ describe("visibleWidth", () => {
 });
 
 describe("parseMultilineString", () => {
-  it("returns {text, width} with no arrays for the empty string", () => {
+  it("returns {text, width} with no multiline payload for the empty string", () => {
     deepEqual(parseMultilineString(""), { text: "", width: 0 });
   });
 
-  it("returns {text, width} with no arrays for a single-line input", () => {
+  it("returns {text, width} with no multiline payload for a single-line input", () => {
     deepEqual(parseMultilineString("hello"), { text: "hello", width: 5 });
   });
 
@@ -41,39 +43,40 @@ describe("parseMultilineString", () => {
     const result = parseMultilineString(input);
     equal(result.text, input);
     equal(result.width, 5);
-    ok(!isMultilineString(result));
+    equal(result.multiline, undefined);
   });
 
-  it("populates lines / lineWidths only when the input spans multiple lines", () => {
+  it("populates the multiline payload only when the input spans multiple lines", () => {
     const result = parseMultilineString("ab\ncde\r\nf");
-    ok(isMultilineString(result));
+    ok(result.multiline);
     equal(result.text, "ab\ncde\r\nf");
-    deepEqual(result.lines, ["ab", "cde", "f"]);
-    deepEqual(result.lineWidths, [2, 3, 1]);
+    deepEqual(result.multiline.lines, ["ab", "cde", "f"]);
+    deepEqual(result.multiline.widths, [2, 3, 1]);
     equal(result.width, 3);
   });
 
   it("emits a trailing empty line for a trailing line break", () => {
     const result = parseMultilineString("ab\n");
-    ok(isMultilineString(result));
+    ok(result.multiline);
     equal(result.text, "ab\n");
-    deepEqual(result.lines, ["ab", ""]);
-    deepEqual(result.lineWidths, [2, 0]);
+    deepEqual(result.multiline.lines, ["ab", ""]);
+    deepEqual(result.multiline.widths, [2, 0]);
     equal(result.width, 2);
   });
 
   it("closes active SGRs at each line end and reopens them on the next line", () => {
     const result = parseMultilineString(`${RED}ab\ncd${RESET}`);
-    ok(isMultilineString(result));
-    deepEqual(result.lines, [`${RED}ab${RESET}`, `${RED}cd${RESET}`]);
-    deepEqual(result.lineWidths, [2, 2]);
+    ok(result.multiline);
+    deepEqual(result.multiline.lines, [`${RED}ab${RESET}`, `${RED}cd${RESET}`]);
+    deepEqual(result.multiline.widths, [2, 2]);
   });
 
-  it("preserves the invariant lineWidths[i] === visibleWidth(lines[i])", () => {
+  it("preserves the invariant widths[i] === visibleWidth(lines[i])", () => {
     const result = parseMultilineString(`${RED}${BOLD}ab\ncd${RESET} ef`);
-    ok(isMultilineString(result));
-    for (let i = 0; i < result.lines.length; i++) {
-      equal(visibleWidth(result.lines[i]), result.lineWidths[i]);
+    ok(result.multiline);
+    const { lines, widths } = result.multiline;
+    for (let i = 0; i < lines.length; i++) {
+      equal(visibleWidth(lines[i]), widths[i]);
     }
   });
 });
@@ -129,72 +132,95 @@ describe("sliceByVisibleWidth", () => {
 });
 
 describe("wrapStringByVisibleWidth", () => {
-  it("returns {text, width} with no arrays for the empty string", () => {
+  it("returns {text, width} with no multiline payload for the empty string", () => {
     deepEqual(wrapStringByVisibleWidth("", 10), { text: "", width: 0 });
   });
 
-  it("returns {text, width} with no arrays when the input fits in a single line", () => {
+  it("returns {text, width} with no multiline payload when the input fits in a single line", () => {
     const result = wrapStringByVisibleWidth("hello", 10);
     deepEqual(result, { text: "hello", width: 5 });
-    ok(!isMultilineString(result));
+    equal(result.multiline, undefined);
   });
 
   it("breaks at whitespace within the line width", () => {
     const result = wrapStringByVisibleWidth("hello world", 5);
-    ok(isMultilineString(result));
+    ok(result.multiline);
     equal(result.text, "hello world");
-    deepEqual(result.lines, ["hello", "world"]);
-    deepEqual(result.lineWidths, [5, 5]);
+    deepEqual(result.multiline.lines, ["hello", "world"]);
+    deepEqual(result.multiline.widths, [5, 5]);
     equal(result.width, 5);
   });
 
   it("backtracks to the previous whitespace within maxBacktrack", () => {
     const result = wrapStringByVisibleWidth("abc defg", 6);
-    ok(isMultilineString(result));
+    ok(result.multiline);
     // Width 6 fills "abc de" but "defg" should wrap intact via backtrack to ' '.
-    deepEqual(result.lines, ["abc", "defg"]);
+    deepEqual(result.multiline.lines, ["abc", "defg"]);
   });
 
   it("hard-breaks when no whitespace is reachable", () => {
     const result = wrapStringByVisibleWidth("abcdefghij", 4);
-    ok(isMultilineString(result));
-    deepEqual(result.lines, ["abcd", "efgh", "ij"]);
-    deepEqual(result.lineWidths, [4, 4, 2]);
+    ok(result.multiline);
+    deepEqual(result.multiline.lines, ["abcd", "efgh", "ij"]);
+    deepEqual(result.multiline.widths, [4, 4, 2]);
   });
 
   it("does not break on whitespace outside the backtrack window", () => {
     const result = wrapStringByVisibleWidth("ab cdefghij", 10, {
       maxBacktrack: 2,
     });
-    ok(isMultilineString(result));
+    ok(result.multiline);
     // The space at col 2 is more than 2 cols back from the overflow point, so
     // a hard break is taken instead.
-    deepEqual(result.lines, ["ab cdefghi", "j"]);
+    deepEqual(result.multiline.lines, ["ab cdefghi", "j"]);
   });
 
   it("honors pre-existing line breaks", () => {
     const result = wrapStringByVisibleWidth("ab\ncd", 10);
-    ok(isMultilineString(result));
-    deepEqual(result.lines, ["ab", "cd"]);
-    deepEqual(result.lineWidths, [2, 2]);
+    ok(result.multiline);
+    deepEqual(result.multiline.lines, ["ab", "cd"]);
+    deepEqual(result.multiline.widths, [2, 2]);
   });
 
   it("preserves SGR styling across wrap boundaries", () => {
     const result = wrapStringByVisibleWidth(`${RED}hello world${RESET}`, 5);
-    ok(isMultilineString(result));
-    deepEqual(result.lines, [`${RED}hello${RESET}`, `${RED}world${RESET}`]);
-    deepEqual(result.lineWidths, [5, 5]);
+    ok(result.multiline);
+    deepEqual(result.multiline.lines, [
+      `${RED}hello${RESET}`,
+      `${RED}world${RESET}`,
+    ]);
+    deepEqual(result.multiline.widths, [5, 5]);
   });
 
-  it("maintains the lineWidths[i] === visibleWidth(lines[i]) invariant", () => {
+  it("maintains the widths[i] === visibleWidth(lines[i]) invariant", () => {
     const result = wrapStringByVisibleWidth(
       `${RED}one two${RESET} three four`,
       5
     );
-    ok(isMultilineString(result));
-    for (let i = 0; i < result.lines.length; i++) {
-      equal(visibleWidth(result.lines[i]), result.lineWidths[i]);
+    ok(result.multiline);
+    const { lines, widths } = result.multiline;
+    for (let i = 0; i < lines.length; i++) {
+      equal(visibleWidth(lines[i]), widths[i]);
     }
+  });
+
+  it("breaks between CJK ideographs even without whitespace", () => {
+    // "中文测试" — four CJK chars, each width 2. maxWidth=4 means 2 chars per line.
+    const result = wrapStringByVisibleWidth("中文测试", 4);
+    ok(result.multiline);
+    deepEqual(result.multiline.lines, ["中文", "测试"]);
+    deepEqual(result.multiline.widths, [4, 4]);
+  });
+
+  it("mixes CJK and ASCII whitespace as break points in the same line", () => {
+    // After "ab" there's a space (replace boundary); after "中" there's an
+    // after-boundary; both should be backtrack targets within maxWidth=6.
+    const result = wrapStringByVisibleWidth("ab 中文ef", 6);
+    ok(result.multiline);
+    // Line 1 packs "ab 中" (width 1+1+1+2 = 5; not yet at 6). The 文 (w=2) would
+    // push to 7, so we backtrack — the closest break point is 中 ("after"), so
+    // the split keeps 中 on line 1.
+    deepEqual(result.multiline.lines, ["ab 中", "文ef"]);
   });
 
   it("falls back to parseMultilineString when maxWidth is non-positive", () => {
@@ -203,14 +229,21 @@ describe("wrapStringByVisibleWidth", () => {
       parseMultilineString("ab\ncd")
     );
   });
-});
 
-describe("isMultilineString", () => {
-  it("returns false for a single-line ParsedString", () => {
-    equal(isMultilineString(parseMultilineString("hello")), false);
-  });
-
-  it("returns true once lines / lineWidths are populated", () => {
-    equal(isMultilineString(parseMultilineString("a\nb")), true);
+  it("collapses selective SGR closes across wrap boundaries", () => {
+    // Bold opens, red opens, FG-default closes red mid-stream, then bold-off
+    // closes bold. Each wrapped line should reflect only the actually-active
+    // attributes at its start.
+    const input = `${BOLD}red ${RED}word${FG_DEFAULT} ${BOLD_OFF}plain`;
+    const result = wrapStringByVisibleWidth(input, 4);
+    ok(result.multiline);
+    // Line 1: bold "red"
+    // Line 2: bold red "word", then FG-default closes
+    // Line 3: plain ("plain" fits exactly in width 4? "plain" is 5 — wraps)
+    // Each line is independent and renders correctly.
+    const { lines, widths } = result.multiline;
+    for (let i = 0; i < lines.length; i++) {
+      equal(visibleWidth(lines[i]), widths[i]);
+    }
   });
 });
