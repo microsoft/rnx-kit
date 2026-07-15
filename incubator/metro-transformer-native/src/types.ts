@@ -19,6 +19,10 @@ export type TransformerNativeOptions = {
   handleTs?: boolean;
 
   /**
+   * 
+   */
+
+  /**
    * Do selective preprocessing of JS files with the native engine before handing off to babel
    */
   handleJs?: boolean;

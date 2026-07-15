@@ -13,8 +13,8 @@ export type OutputWriter = Partial<Record<LogLevel, OutputFunction>>;
 
 export type OperationTotals = {
   elapsed: number; // total elapsed time for this operation
-  calls: number; // number of times this operation was called
-  errors: number; // number of errors that occurred during this operation
+  start: number; // number of times this operation was started
+  stop: number; // number of times this operation was completed (errors = start - stop)
 };
 
 export type ErrorResult = { error: unknown };
@@ -110,8 +110,7 @@ export type Reporter = Logger & {
    * @param label label to use for this operation
    * @param fn function to execute as an operation
    */
-  measure<T>(label: string, fn: () => T): T;
-  measure<T>(label: string, fn: () => Promise<T>): Promise<T>;
+  measure: TraceFunction;
 
   /**
    * Start a new reporter or task, based off of this reporter or task. If role is not set this will default to "task".
@@ -132,6 +131,42 @@ export type Reporter = Logger & {
    */
   readonly data: CustomData;
 };
+
+/**
+ * Signature for a trace function that will record information about a call and its duration. This is overloaded to
+ * support both sync and async functions and will forward the trailing args to the function being measured.
+ *
+ * This allows use with and without closures, e.g. both of these work:
+ *  trace("myFunction", () => myFunction(arg1, arg2));
+ *  trace("myFunction", myFunction, arg1, arg2);
+ *
+ * The signature will pick up the correct return type and parameter type based on the function passed in. The use of
+ * the non-closure based signature is slightly more efficient for high frequency operations, avoiding the need to create
+ * a new closure on each call.
+ *
+ * The generic type parameter T can be used to specify a custom type for the operation name, allowing for more structured
+ * tracing information. By default, it is a string, but it can be set to an enum or other type as needed.
+ */
+export type TraceFunction<T = string> = {
+  // oxlint-disable-next-line typescript/no-explicit-any
+  <TFunc extends (...args: any[]) => Promise<any>>(
+    name: T,
+    fn: TFunc,
+    ...args: Parameters<TFunc>
+  ): ReturnType<TFunc>;
+  // oxlint-disable-next-line typescript/no-explicit-any
+  <TFunc extends (...args: any[]) => any>(
+    name: T,
+    fn: TFunc,
+    ...args: Parameters<TFunc>
+  ): ReturnType<TFunc>;
+};
+
+/**
+ * Function used to record trace information. Called with an undefined endTime on start, and with the elapsed time
+ * when the operation finishes.
+ */
+export type RecordFunction<T = string> = (op: T, elapsed?: number) => void;
 
 export type ReporterData = {
   // name of the reporter, ideally unique as it will be routed to session data

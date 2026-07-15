@@ -42,6 +42,10 @@ export type { Formatter, FormattingOptions } from "./formatting.ts";
 export { createSession } from "./session.ts";
 export type { Session } from "./session.ts";
 
+// table formatting
+export { formatTable } from "./tables.ts";
+export type { ColumnConfig, ColumnConfigObject, TableConfig } from "./tables.ts";
+
 // common types
 export type {
   ErrorEvent,
@@ -57,4 +61,5 @@ export type {
   ReporterOptions,
   SessionData,
   TextTransform,
+  TraceFunction,
 } from "./types.ts";

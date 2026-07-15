@@ -2,13 +2,13 @@ import { errorEvent, finishEvent, onExit, startEvent } from "./events.ts";
 import type {
   FinishResult,
   LogFunction,
-  OperationTotals,
   Reporter,
   ReporterInfo,
   ReporterOptions,
   SessionData,
 } from "./types.ts";
 import {
+  createTraceFunction,
   finalizeResult,
   isErrorResult,
   isPromiseLike,
@@ -47,6 +47,7 @@ export function createSession(
     errors: [],
     operations: {},
   };
+  const ops = session.operations;
 
   if (startEvent().hasSubscribers()) {
     startEvent().publish(session);
@@ -81,19 +82,24 @@ export function createSession(
   // call finish on process exit with an undefined result
   unregisterOnExit = onExit(finish);
 
+  function recordMeasure(op: string, elapsed?: number) {
+    const operation = (ops[op] ??= { elapsed: 0, start: 0, stop: 0 });
+    if (elapsed === undefined) {
+      operation.start++;
+      report?.(`⌚ Starting: ${op}`);
+    } else {
+      operation.elapsed += elapsed;
+      operation.stop++;
+      report?.(`⌚ Finished: ${op} in ${elapsed.toFixed()}ms`);
+    }
+  }
+
   return {
     session,
     onError,
     start: (info: string | ReporterInfo) => createSubReporter(info, "reporter"),
     finish,
-    measure: <T>(name: string, fn: () => T | Promise<T>) => {
-      const start = startTimer(name, report);
-      const op = (session.operations[name] ??= initOperation());
-      const result = resolveFunction(fn, (result: FinishResult<T>) =>
-        finishOperation(op, finishTimer(name, start, report), result)
-      );
-      return isPromiseLike(result) ? result : Promise.resolve(result);
-    },
+    measure: createTraceFunction(recordMeasure),
     task: <T>(
       info: string | ReporterInfo,
       fn: (reporter: Reporter) => T | Promise<T>
@@ -123,21 +129,6 @@ function finishTimer(
   const elapsed = performance.now() - start;
   report?.(`⌚ Finished: ${label} in ${elapsed.toFixed()}ms`);
   return elapsed;
-}
-
-function initOperation() {
-  return { elapsed: 0, calls: 0, errors: 0 };
-}
-
-function finishOperation<T>(
-  op: OperationTotals,
-  elapsed: number,
-  result: FinishResult<T>
-) {
-  op.elapsed += elapsed;
-  op.calls++;
-  op.errors += isErrorResult(result) ? 1 : 0;
-  return finalizeResult(result);
 }
 
 function onErrorImpl(session: SessionData, args: unknown[]) {

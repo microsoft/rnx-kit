@@ -217,8 +217,8 @@ describe("session", () => {
 
       assert.strictEqual(result, "sync-result");
       assert.ok(session.session.operations["sync-op"]);
-      assert.strictEqual(session.session.operations["sync-op"].calls, 1);
-      assert.strictEqual(session.session.operations["sync-op"].errors, 0);
+      assert.strictEqual(session.session.operations["sync-op"].start, 1);
+      assert.strictEqual(session.session.operations["sync-op"].stop, 1);
       assert.ok(session.session.operations["sync-op"].elapsed > 0);
     });
 
@@ -233,8 +233,8 @@ describe("session", () => {
 
       assert.strictEqual(result, "async-result");
       assert.ok(session.session.operations["async-op"]);
-      assert.strictEqual(session.session.operations["async-op"].calls, 1);
-      assert.strictEqual(session.session.operations["async-op"].errors, 0);
+      assert.strictEqual(session.session.operations["async-op"].start, 1);
+      assert.strictEqual(session.session.operations["async-op"].stop, 1);
       assert.ok(session.session.operations["async-op"].elapsed > 0);
     });
 
@@ -249,8 +249,8 @@ describe("session", () => {
       }, /Operation failed/);
 
       assert.ok(session.session.operations["error-op"]);
-      assert.strictEqual(session.session.operations["error-op"].calls, 1);
-      assert.strictEqual(session.session.operations["error-op"].errors, 1);
+      assert.strictEqual(session.session.operations["error-op"].start, 1);
+      assert.strictEqual(session.session.operations["error-op"].stop, 0);
     });
 
     it("should aggregate multiple calls to same operation", async () => {
@@ -261,8 +261,8 @@ describe("session", () => {
       await session.measure("repeated-op", () => "second");
 
       assert.ok(session.session.operations["repeated-op"]);
-      assert.strictEqual(session.session.operations["repeated-op"].calls, 2);
-      assert.strictEqual(session.session.operations["repeated-op"].errors, 0);
+      assert.strictEqual(session.session.operations["repeated-op"].start, 2);
+      assert.strictEqual(session.session.operations["repeated-op"].stop, 2);
     });
 
     it("should call report function with timer messages", async () => {
@@ -477,7 +477,8 @@ describe("session", () => {
       await session.measure(opName, () => "result");
 
       assert.ok(session.session.operations[opName]);
-      assert.strictEqual(session.session.operations[opName].calls, 1);
+      assert.strictEqual(session.session.operations[opName].start, 1);
+      assert.strictEqual(session.session.operations[opName].stop, 1);
     });
   });
 });

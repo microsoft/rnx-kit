@@ -1,5 +1,10 @@
 import { inspect } from "node:util";
-import type { ErrorResult, FinishResult } from "./types.ts";
+import type {
+  ErrorResult,
+  FinishResult,
+  RecordFunction,
+  TraceFunction,
+} from "./types.ts";
 
 /**
  * Lazily initializes a value using an IIFE (Immediately Invoked Function Expression)
@@ -122,4 +127,27 @@ export function resolveFunction<T>(
   } catch (error) {
     return final({ error });
   }
+}
+
+export function createTraceFunction<TOp = string>(
+  record: RecordFunction<TOp>
+): TraceFunction<TOp> {
+  return <T>(op: TOp, fn: (...args: unknown[]) => T, ...args: unknown[]) => {
+    // add the entry to make the report appear in call order
+    record(op);
+    // now start the timing and execute the passed in function
+    const start = performance.now();
+    const result = fn(...args);
+
+    // now process the result sync or async
+    if (isPromiseLike(result)) {
+      return result.then((res) => {
+        record(op, performance.now() - start);
+        return res;
+      });
+    } else {
+      record(op, performance.now() - start);
+      return result;
+    }
+  };
 }

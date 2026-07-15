@@ -4,7 +4,7 @@ import { ansiColor, encodeAnsi256, fontStyle } from "./colors.ts";
 import type { TextTransform } from "./types.ts";
 import { identity, lazyInit } from "./utils.ts";
 
-type Alignment = "left" | "right" | "center";
+export type Alignment = "left" | "right" | "center";
 
 /**
  * Static formatting functions, these do not depend on each other
