@@ -1,13 +1,15 @@
 // @ts-check
 
 /**
- * @import { Descriptor, Hooks, Ident, Plugin } from "@yarnpkg/core";
+ * @import { Descriptor, Hooks, Ident, Plugin, Project } from "@yarnpkg/core";
  *
  * @typedef {Ident & { specifier: string; }} ExtendedIdent
  */
 
 const DEFAULT_SPECIFIER = "^";
 const DYNAMIC_OVERRIDES_KEY = "dynamicPackageOverrides";
+const DEFAULT_SPECIFIER_KEY = "defaultSpecifier";
+const OVERRIDES_KEY = "overrides";
 
 /**
  * @param {Descriptor} dependency
@@ -41,22 +43,47 @@ exports.factory = (require) => {
   const { SettingsType, structUtils } = require("@yarnpkg/core");
 
   /**
-   * @param {Map<string, string>} entry
-   * @returns {[string, ExtendedIdent]}
+   * @param {Project} project
+   * @returns {Map<string, ExtendedIdent>}
    */
-  function toKeyValuePair(entry) {
-    const id = entry.get("id");
-    if (!id) {
-      throw new Error(`"${DYNAMIC_OVERRIDES_KEY}" expects an id`);
+  function parseConfig(project) {
+    const config = project.configuration.get(DYNAMIC_OVERRIDES_KEY);
+    if (!(config instanceof Map)) {
+      throw new Error(`Expected "${DYNAMIC_OVERRIDES_KEY}" to be a map`);
     }
-    const ident = structUtils.parseIdent(id);
-    return [
-      ident.identHash,
-      {
-        ...ident,
-        specifier: entry.get("specifier") ?? DEFAULT_SPECIFIER,
-      },
-    ];
+
+    const defaultSpecifier = config.get(DEFAULT_SPECIFIER_KEY);
+    if (typeof defaultSpecifier !== "string") {
+      throw new Error(
+        `Expected "${DYNAMIC_OVERRIDES_KEY}.${DEFAULT_SPECIFIER_KEY}" to be a string`
+      );
+    }
+
+    const overrides = config.get(OVERRIDES_KEY);
+    if (!Array.isArray(overrides)) {
+      throw new Error(
+        `Expected "${DYNAMIC_OVERRIDES_KEY}.${OVERRIDES_KEY}" to be an array`
+      );
+    }
+
+    return new Map(
+      overrides.map((entry) => {
+        const id = entry.get("id");
+        if (!id) {
+          throw new Error(
+            `"${DYNAMIC_OVERRIDES_KEY}.${OVERRIDES_KEY}" expects an id`
+          );
+        }
+        const ident = structUtils.parseIdent(id);
+        return [
+          ident.identHash,
+          {
+            ...ident,
+            specifier: entry.get("specifier") ?? defaultSpecifier,
+          },
+        ];
+      })
+    );
   }
 
   /** @type {Plugin<Hooks>["configuration"] & Record<string, unknown>} */
@@ -64,14 +91,22 @@ exports.factory = (require) => {
   configuration[DYNAMIC_OVERRIDES_KEY] = {
     description: "Packages whose dependencies are overridden",
     type: SettingsType.SHAPE,
-    isArray: true,
     properties: {
-      id: {
-        type: SettingsType.STRING,
-      },
-      specifier: {
+      defaultSpecifier: {
         type: SettingsType.STRING,
         default: DEFAULT_SPECIFIER,
+      },
+      overrides: {
+        type: SettingsType.SHAPE,
+        isArray: true,
+        properties: {
+          id: {
+            type: SettingsType.STRING,
+          },
+          specifier: {
+            type: SettingsType.STRING,
+          },
+        },
       },
     },
   };
@@ -90,13 +125,7 @@ exports.factory = (require) => {
         _extra
       ) => {
         if (!overrides) {
-          const config = project.configuration.get(DYNAMIC_OVERRIDES_KEY);
-          if (!Array.isArray(config)) {
-            throw new Error(
-              `Expected "${DYNAMIC_OVERRIDES_KEY}" to be an array`
-            );
-          }
-          overrides = new Map(config.map(toKeyValuePair));
+          overrides = parseConfig(project);
         }
 
         const ident = overrides.get(locator.identHash);
