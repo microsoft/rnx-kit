@@ -18,7 +18,7 @@ A number of packages use explicit version numbers instead of version ranges,
 forcing package managers to install multiple copies of a dependency even though
 a more recent version is still compatible.
 
-This plugin attempts to address to by replacing the explicit version with a
+The plugin attempts to address this by replacing the explicit version with a
 version range. This is useful for deduping and allows for updating dependencies
 to a more recent version.
 
@@ -35,7 +35,8 @@ override dependencies of `@appium/base-driver`:
 
 ```yml
 dynamicPackageOverrides:
-  - id: "@appium/base-driver"
+  overrides:
+    - id: "@appium/base-driver"
 ```
 
 Next time you run `yarn install`, its dependencies will be overridden:
@@ -56,6 +57,16 @@ below:
 
 ```yml
 dynamicPackageOverrides:
-  - id: "@appium/base-driver"
-    specifier: "~"
+  overrides:
+    - id: "@appium/base-driver"
+      specifier: "~"
+```
+
+Or you can change the default specifier:
+
+```yml
+dynamicPackageOverrides:
+  defaultSpecifier: "~"
+  overrides:
+    - id: "@appium/base-driver"
 ```
