@@ -10,7 +10,9 @@ env:
 jobs:
   update:
     name: "Update `microsoft/react-native` preset"
-    permissions: {}
+    permissions:
+      contents: read
+      copilot-requests: write
     if: ${{ github.repository == 'microsoft/rnx-kit' }}
     runs-on: ubuntu-24.04
     steps:
@@ -72,8 +74,9 @@ jobs:
           permission-contents: write
           permission-pull-requests: write
       - name: Create or update pull request
+        id: create-pull-request
         if: ${{ steps.find-release-candidate.outputs.found != '' }}
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ steps.app-token.outputs.token }}
           commit-message: "fix(align-deps): ${{ steps.changeset.outputs.message }}"
@@ -81,4 +84,22 @@ jobs:
           sign-commits: true
           title: "fix(align-deps): ${{ steps.changeset.outputs.message }}"
           body-path: packages/align-deps/update-profile.output.txt
-    timeout-minutes: 15
+      - name: Generate summary
+        id: summary
+        if: ${{ steps.create-pull-request.outputs.pull-request-number != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          scripts/github-comment.sh summary
+        working-directory: packages/align-deps
+        continue-on-error: true
+      - name: Create or update summary comment
+        if: ${{ steps.create-pull-request.outputs.pull-request-number != '' }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_NUMBER: ${{ steps.create-pull-request.outputs.pull-request-number }}
+        run: |
+          scripts/github-comment.sh post
+        working-directory: packages/align-deps
+        continue-on-error: true
+    timeout-minutes: 20
