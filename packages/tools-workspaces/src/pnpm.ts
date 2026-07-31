@@ -1,8 +1,5 @@
+import * as yaml from "js-yaml";
 import * as path from "node:path";
-import {
-  default as readYamlFile,
-  sync as readYamlFileSync,
-} from "read-yaml-file";
 import { findPackages, findPackagesSync } from "./common.ts";
 
 type Workspace = {
@@ -13,7 +10,7 @@ type Workspace = {
 export async function findWorkspacePackages(
   workspaceYaml: string
 ): Promise<string[]> {
-  const { packages } = await readYamlFile<Workspace>(workspaceYaml);
+  const { packages } = yaml.load(workspaceYaml) as Workspace;
   return await findPackages(packages, path.dirname(workspaceYaml));
 }
 
@@ -25,5 +22,5 @@ export function findWorkspacePackagesSync(workspaceYaml: string): string[] {
 }
 
 export function getPackageFilters(workspaceYaml: string): string[] | undefined {
-  return readYamlFileSync<Workspace>(workspaceYaml).packages;
+  return (yaml.load(workspaceYaml) as Workspace).packages;
 }
