@@ -5,7 +5,6 @@ import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
 import { RequestError } from "@octokit/request-error";
 import { idle, once, withRetry } from "@rnx-kit/tools-shell/async";
 import parseGitURL from "git-url-parse";
-import fetch from "node-fetch";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as readline from "node:readline";
@@ -42,12 +41,7 @@ function createOctokitClient(auth?: unknown) {
   }
 
   const RestClient = Octokit.plugin(restEndpointMethods);
-  return new RestClient({
-    auth,
-    // Use `node-fetch` only if Node doesn't implement Fetch API:
-    // https://github.com/octokit/request.js/blob/v8.1.1/src/fetch-wrapper.ts#L28-L31
-    request: "fetch" in globalThis ? undefined : { fetch },
-  });
+  return new RestClient({ auth });
 }
 
 let octokit = once(createOctokitClient);
