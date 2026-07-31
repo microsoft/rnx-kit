@@ -1,3 +1,4 @@
+import types from "node:util/types";
 import { errorEvent, finishEvent, onExit, startEvent } from "./events.ts";
 import type {
   FinishResult,
@@ -8,12 +9,7 @@ import type {
   ReporterOptions,
   SessionData,
 } from "./types.ts";
-import {
-  finalizeResult,
-  isErrorResult,
-  isPromiseLike,
-  resolveFunction,
-} from "./utils.ts";
+import { finalizeResult, isErrorResult, resolveFunction } from "./utils.ts";
 
 export type Session = Pick<
   Reporter,
@@ -92,7 +88,7 @@ export function createSession(
       const result = resolveFunction(fn, (result: FinishResult<T>) =>
         finishOperation(op, finishTimer(name, start, report), result)
       );
-      return isPromiseLike(result) ? result : Promise.resolve(result);
+      return types.isPromise(result) ? result : Promise.resolve(result);
     },
     task: <T>(
       info: string | ReporterInfo,
@@ -105,7 +101,7 @@ export function createSession(
           return task.finish(result);
         }
       );
-      return isPromiseLike(result) ? result : Promise.resolve(result);
+      return types.isPromise(result) ? result : Promise.resolve(result);
     },
   };
 }

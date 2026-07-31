@@ -1,17 +1,14 @@
 import type { Graph, SerializerOptions } from "metro";
 import { deepEqual, equal } from "node:assert/strict";
 import { describe, it } from "node:test";
+import types from "node:util/types";
 import type { CustomSerializerResult, MetroPlugin } from "../src/index.ts";
 import { MetroSerializer as MetroSerializerActual } from "../src/index.ts";
-
-function isPromise<T>(obj: T | Promise<T>): obj is Promise<T> {
-  return obj && typeof obj === "object" && typeof obj["then"] === "function";
-}
 
 async function getBundleCode(
   bundle: CustomSerializerResult | Promise<CustomSerializerResult>
 ): Promise<string> {
-  if (isPromise(bundle)) {
+  if (types.isPromise(bundle)) {
     return getBundleCode(await bundle);
   }
 

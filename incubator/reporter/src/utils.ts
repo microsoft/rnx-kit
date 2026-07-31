@@ -1,4 +1,4 @@
-import { inspect } from "node:util";
+import { inspect, types } from "node:util";
 import type { ErrorResult, FinishResult } from "./types.ts";
 
 /**
@@ -63,15 +63,6 @@ export function serialize(...args: unknown[]): string {
 }
 
 /**
- * Checks if a value is a Promise-like object.
- * @param v value to test
- * @returns true if the value is Promise-like, false otherwise
- */
-export function isPromiseLike<T>(v: unknown): v is Promise<T> {
-  return Boolean(v && typeof (v as Promise<T>).then === "function");
-}
-
-/**
  * Checks if the final result of an operation is an error.
  * @param final the final result of an operation, either success or failure
  * @returns true if the final result is an error, false otherwise
@@ -111,7 +102,7 @@ export function resolveFunction<T>(
 ): T | Promise<T> {
   try {
     const result = fn();
-    if (isPromiseLike(result)) {
+    if (types.isPromise(result)) {
       return result.then(
         (value: T) => final({ value }),
         (error: unknown) => final({ error })

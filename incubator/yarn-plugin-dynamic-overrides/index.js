@@ -41,6 +41,7 @@ exports.name = "@rnx-kit/yarn-plugin-dynamic-overrides";
 /** @type {(require: NodeJS.Require) => Plugin<Hooks>} */
 exports.factory = (require) => {
   const { SettingsType, structUtils } = require("@yarnpkg/core");
+  const types = require("node:util/types");
 
   /**
    * @param {Project} project
@@ -48,7 +49,7 @@ exports.factory = (require) => {
    */
   function parseConfig(project) {
     const config = project.configuration.get(DYNAMIC_OVERRIDES_KEY);
-    if (!(config instanceof Map)) {
+    if (!types.isMap(config)) {
       throw new Error(`Expected "${DYNAMIC_OVERRIDES_KEY}" to be a map`);
     }
 
