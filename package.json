@@ -47,7 +47,7 @@
     "@yarnpkg/types": "^4.0.0",
     "eslint": "catalog:",
     "knip": "^6.0.0",
-    "nx": "patch:nx@npm%3A22.5.4#~/.yarn/patches/nx-npm-22.5.4-3d43ac9c10.patch",
+    "nx": "patch:nx@npm%3A22.7.8#~/.yarn/patches/nx-npm-22.7.2-0fb0af5a48.patch",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "suggestion-bot": "workspace:*",
