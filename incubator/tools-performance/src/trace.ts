@@ -1,3 +1,4 @@
+import types from "node:util/types";
 import type { AcceptAnyFn, TraceFunction } from "./types.ts";
 
 /**
@@ -10,21 +11,6 @@ export type TraceRecorder<THandoff = any> = (
   operation: string,
   handoff?: THandoff
 ) => THandoff;
-
-/**
- * Check if the provided value is a Promise-like object by checking if it is an object and has a "then" method that
- * is a function. Slightly more robust than just checking for instanceof Promise, as it can handle cases where the promise is
- * from a different realm.
- * @param value The value to be checked
- * @returns True if the value is Promise-like, false otherwise
- */
-function isPromiseLike(value: unknown): value is Promise<unknown> {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    typeof (value as Promise<unknown>).then === "function"
-  );
-}
 
 /** simple identity function */
 export function nullPassthrough<T>(value: T): T {
@@ -75,7 +61,7 @@ export function createTrace(record: TraceRecorder): TraceFunction {
   ): ReturnType<TFunc> => {
     const handoff = record(tag);
     const result = callFunction<TFunc>(fn, args);
-    if (isPromiseLike(result)) {
+    if (types.isPromise(result)) {
       return result.then((res: Awaited<ReturnType<TFunc>>) => {
         record(tag, handoff);
         return res;

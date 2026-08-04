@@ -21,12 +21,7 @@ export { createOutput, mergeOutput } from "./output.ts";
 export { createReporter } from "./reporter.ts";
 
 // utilities
-export {
-  isErrorResult,
-  isPromiseLike,
-  lazyInit,
-  resolveFunction,
-} from "./utils.ts";
+export { isErrorResult, lazyInit, resolveFunction } from "./utils.ts";
 
 // formatting
 export {
