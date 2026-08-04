@@ -1,0 +1,43 @@
+{
+  "name": "@rnx-kit/prettier-oxfmt",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - Prettier-compatible CLI shim over oxfmt",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/prettier-oxfmt#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/prettier-oxfmt"
+  },
+  "bin": {
+    "prettier": "lib/cli.js"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "oxfmt": "^0.1.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0"
+  },
+  "engines": {
+    "node": ">=20.12"
+  },
+  "experimental": true
+}
