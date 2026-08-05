@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 3.0.1
+
+### Patch Changes
+
+- f31349a: Bump `yargs` to v17
+
 ## 3.0.0
 
 ### Major Changes

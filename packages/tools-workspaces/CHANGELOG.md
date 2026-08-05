@@ -1,5 +1,11 @@
 # @rnx-kit/tools-workspaces
 
+## 0.2.4
+
+### Patch Changes
+
+- 1658f64: Use Yaml parser directly
+
 ## 0.2.3
 
 ### Patch Changes

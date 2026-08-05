@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/rn-changelog-generator
 
+## 0.5.2
+
+### Patch Changes
+
+- f31349a: Bump `yargs` to v17
+
 ## 0.5.1
 
 ### Patch Changes
