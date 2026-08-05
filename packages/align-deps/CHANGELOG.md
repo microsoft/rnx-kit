@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 4.0.3
+
+### Patch Changes
+
+- f31349a: Bump `yargs` to v17
+
 ## 4.0.2
 
 ### Patch Changes

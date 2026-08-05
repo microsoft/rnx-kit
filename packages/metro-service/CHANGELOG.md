@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 5.0.1
+
+### Patch Changes
+
+- ef62df7: `node-fetch` is no longer required
+
 ## 5.0.0
 
 ### Major Changes

@@ -1,5 +1,13 @@
 # @rnx-kit/build
 
+## 0.9.1
+
+### Patch Changes
+
+- 639d378: Inline config paths
+- ef62df7: `node-fetch` is no longer required
+- f31349a: Bump `yargs` to v17
+
 ## 0.9.0
 
 ### Minor Changes
