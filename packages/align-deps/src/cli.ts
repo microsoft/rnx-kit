@@ -291,8 +291,8 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
 }
 
 if (require.main === module) {
-  const yargs = require("yargs");
-  yargs
+  require("yargs")
     .parserConfiguration({ "boolean-negation": false })
-    .usage("$0 [packages...]", description, cliOptions, cli).argv;
+    .usage("$0 [packages...]", description, cliOptions, cli)
+    .parse();
 }

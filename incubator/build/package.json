@@ -86,14 +86,14 @@
     "git-url-parse": "^16.0.0",
     "ora": "^8.0.0",
     "qrcode": "^1.5.0",
-    "yargs": "^16.0.0"
+    "yargs": "^17.0.0"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
     "@types/qrcode": "^1.4.2",
-    "@types/yargs": "^16.0.0"
+    "@types/yargs": "^17.0.0"
   },
   "engines": {
     "node": ">=20.18"
