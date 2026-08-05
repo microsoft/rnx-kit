@@ -5065,7 +5065,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
   peerDependencies:
-    "@rnx-kit/build": ">=0.9.0"
+    "@rnx-kit/build": ">=0.9.1"
   languageName: unknown
   linkType: soft
 
