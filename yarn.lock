@@ -5002,7 +5002,7 @@ __metadata:
     "@types/js-yaml": "npm:^4.0.5"
     "@types/prompts": "npm:^2.0.0"
     "@types/semver": "npm:^7.0.0"
-    "@types/yargs": "npm:^16.0.0"
+    "@types/yargs": "npm:^17.0.0"
     detect-indent: "npm:^6.0.0"
     js-yaml: "npm:^4.1.1"
     markdown-table: "npm:^3.0.0"
@@ -5010,7 +5010,7 @@ __metadata:
     prompts: "npm:^2.4.0"
     recast: "npm:^0.23.0"
     semver: "npm:^7.0.0"
-    yargs: "npm:^16.0.0"
+    yargs: "npm:^17.0.0"
   bin:
     rnx-align-deps: lib/index.js
   languageName: unknown
@@ -5087,11 +5087,11 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
     "@types/qrcode": "npm:^1.4.2"
-    "@types/yargs": "npm:^16.0.0"
+    "@types/yargs": "npm:^17.0.0"
     git-url-parse: "npm:^16.0.0"
     ora: "npm:^8.0.0"
     qrcode: "npm:^1.5.0"
-    yargs: "npm:^16.0.0"
+    yargs: "npm:^17.0.0"
   bin:
     rnx-build: lib/cli.js
     rnx-build-apple: scripts/build-apple.sh
@@ -5667,7 +5667,7 @@ __metadata:
     deepmerge: "npm:^4.2.2"
     fast-levenshtein: "npm:^3.0.0"
     p-limit: "npm:^3.1.0"
-    yargs: "npm:^16.0.0"
+    yargs: "npm:^17.0.0"
   bin:
     rn-changelog-generator: lib/index.js
   languageName: unknown
@@ -5852,10 +5852,10 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
-    "@types/yargs": "npm:^16.0.0"
+    "@types/yargs": "npm:^17.0.0"
     metro-source-map: "npm:^0.84.0"
     spdx-expression-parse: "npm:^4.0.0"
-    yargs: "npm:^16.0.0"
+    yargs: "npm:^17.0.0"
   bin:
     build-tpn: ./lib/build-tpn.js
   languageName: unknown
@@ -6955,16 +6955,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^16.0.0":
-  version: 16.0.11
-  resolution: "@types/yargs@npm:16.0.11"
-  dependencies:
-    "@types/yargs-parser": "npm:*"
-  checksum: 10c0/c41bcb718e35b35561646e4297863628ec7dc745ea4e09a15ec787ad3b94f6c5a038322a36c30a958e348931f5e8be6ce220683040522bab2e2844a3b4eb7988
-  languageName: node
-  linkType: hard
-
-"@types/yargs@npm:^17.0.8":
+"@types/yargs@npm:^17.0.0, @types/yargs@npm:^17.0.8":
   version: 17.0.35
   resolution: "@types/yargs@npm:17.0.35"
   dependencies:
@@ -17928,7 +17919,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^16.0.0, yargs@npm:^16.2.0":
+"yargs@npm:^16.2.0":
   version: 16.2.2
   resolution: "yargs@npm:16.2.2"
   dependencies:
@@ -17943,7 +17934,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^17.3.1, yargs@npm:^17.6.2, yargs@npm:^17.7.2":
+"yargs@npm:^17.0.0, yargs@npm:^17.3.1, yargs@npm:^17.6.2, yargs@npm:^17.7.2":
   version: 17.7.3
   resolution: "yargs@npm:17.7.3"
   dependencies:

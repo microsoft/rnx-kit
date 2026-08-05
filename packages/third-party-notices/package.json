@@ -41,7 +41,7 @@
     "@rnx-kit/console": "^3.0.0",
     "@rnx-kit/tools-node": "^3.0.0",
     "spdx-expression-parse": "^4.0.0",
-    "yargs": "^16.0.0"
+    "yargs": "^17.0.0"
   },
   "devDependencies": {
     "@react-native-community/cli-types": "^20.1.0",
@@ -49,7 +49,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
-    "@types/yargs": "^16.0.0",
+    "@types/yargs": "^17.0.0",
     "metro-source-map": "^0.84.0"
   },
   "engines": {

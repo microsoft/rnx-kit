@@ -2,6 +2,7 @@ import { findPackageDir } from "@rnx-kit/tools-node/package";
 import * as path from "node:path";
 import type { Options } from "yargs";
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 import { startBuild } from "./build.ts";
 import {
   DEPLOYMENT,
@@ -34,7 +35,7 @@ async function main(): Promise<void> {
     default: findPackageDir() || process.cwd(),
   } as const;
 
-  const argv = yargs(process.argv.slice(2))
+  const argv = yargs(hideBin(process.argv))
     .command("$0 [project-root]", "Build your app in the cloud", (yargs) => {
       yargs.positional("project-root", projectRootOption);
     })
@@ -76,7 +77,8 @@ async function main(): Promise<void> {
       description: "The workspace scheme to build (iOS and macOS only)",
       default: "ReactTestApp",
     })
-    .strict().argv;
+    .strict()
+    .parseSync();
 
   const {
     architecture,

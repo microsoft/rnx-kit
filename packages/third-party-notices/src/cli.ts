@@ -78,7 +78,7 @@ function parseArgs(): WriteThirdPartyNoticesOptions {
     "preamble-text": preambleText,
     "additional-text": additionalText,
     "full-license-text": fullLicenseText,
-  } = yargs.options(cliOptions).argv;
+  } = yargs.options(cliOptions).parseSync();
   return {
     rootPath,
     sourceMapFile,

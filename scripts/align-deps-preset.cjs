@@ -3,7 +3,7 @@
 const dependencies = {
   jest: "^29.2.1",
   node: "^24.0.0",
-  yargs: "^16.0.0",
+  yargs: "^17.0.0",
 };
 
 /**
