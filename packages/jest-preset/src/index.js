@@ -1,4 +1,4 @@
-const findUp = require("find-up");
+const { findUp } = require("@rnx-kit/tools-node/path");
 const path = require("node:path");
 
 /**
@@ -14,7 +14,7 @@ const path = require("node:path");
  * @returns {string | undefined}
  */
 function getPackageDirectory() {
-  const manifest = findUp.sync("package.json");
+  const manifest = findUp("package.json");
   return manifest ? path.dirname(manifest) : undefined;
 }
 

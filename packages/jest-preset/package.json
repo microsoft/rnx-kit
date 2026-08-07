@@ -29,8 +29,8 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-typescript": "^7.0.0",
     "@jest/create-cache-key-function": "^29.7.0",
-    "@rnx-kit/tools-react-native": "^2.3.2",
-    "find-up": "^5.0.0"
+    "@rnx-kit/tools-node": "^3.0.5",
+    "@rnx-kit/tools-react-native": "^2.3.2"
   },
   "devDependencies": {
     "@jest/types": "^29.2.1",
