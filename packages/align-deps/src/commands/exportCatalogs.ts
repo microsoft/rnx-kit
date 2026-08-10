@@ -1,4 +1,4 @@
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { isMetaPackage } from "../capabilities.ts";
@@ -53,7 +53,8 @@ function parseFile(filename: string, fs: typeof nodefs): Config {
       const data = content
         ? (yaml.load(content) as Record<string, unknown>)
         : {};
-      return { data, serialize: () => yaml.dump(data, { quotingType: '"' }) };
+      const options = { quoteStyle: "double" } as const;
+      return { data, serialize: () => yaml.dump(data, options) };
     }
   }
 

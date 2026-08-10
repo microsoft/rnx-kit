@@ -29,12 +29,11 @@
     "@rnx-kit/config": "^0.9.0",
     "@rnx-kit/tools-workspaces": "^0.2.3",
     "@rnx-kit/types-kit-config": "^1.0.0",
-    "js-yaml": "^4.2.0"
+    "js-yaml": "^5.2.3"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
-    "@types/js-yaml": "^4.0.9"
+    "@rnx-kit/tsconfig": "*"
   },
   "engines": {
     "node": ">=20.18"
