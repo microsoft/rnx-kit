@@ -4999,12 +4999,11 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-kit-config": "npm:^1.0.0"
     "@rnx-kit/types-node": "npm:^1.0.0"
-    "@types/js-yaml": "npm:^4.0.5"
     "@types/prompts": "npm:^2.0.0"
     "@types/semver": "npm:^7.0.0"
     "@types/yargs": "npm:^17.0.0"
     detect-indent: "npm:^6.0.0"
-    js-yaml: "npm:^4.1.1"
+    js-yaml: "npm:^5.2.3"
     markdown-table: "npm:^3.0.0"
     package-json: "npm:^10.0.0"
     prompts: "npm:^2.4.0"
@@ -5321,8 +5320,7 @@ __metadata:
     "@rnx-kit/tools-workspaces": "npm:^0.2.3"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-kit-config": "npm:^1.0.0"
-    "@types/js-yaml": "npm:^4.0.9"
-    js-yaml: "npm:^4.2.0"
+    js-yaml: "npm:^5.2.3"
   bin:
     lint-lockfile: lib/cli.js
   languageName: unknown
@@ -6068,7 +6066,7 @@ __metadata:
     "@types/node": "npm:^24.0.0"
     fast-glob: "npm:^3.2.7"
     find-up: "npm:^5.0.0"
-    js-yaml: "npm:^5.2.2"
+    js-yaml: "npm:^5.2.3"
     micromatch: "npm:^4.0.0"
     strip-json-comments: "npm:^3.1.1"
   languageName: unknown
@@ -6775,13 +6773,6 @@ __metadata:
     expect: "npm:^29.0.0"
     pretty-format: "npm:^29.0.0"
   checksum: 10c0/18e0712d818890db8a8dab3d91e9ea9f7f19e3f83c2e50b312f557017dc81466207a71f3ed79cf4428e813ba939954fa26ffa0a9a7f153181ba174581b1c2aed
-  languageName: node
-  linkType: hard
-
-"@types/js-yaml@npm:^4.0.5, @types/js-yaml@npm:^4.0.9":
-  version: 4.0.9
-  resolution: "@types/js-yaml@npm:4.0.9"
-  checksum: 10c0/24de857aa8d61526bbfbbaa383aa538283ad17363fcd5bb5148e2c7f604547db36646440e739d78241ed008702a8920665d1add5618687b6743858fae00da211
   languageName: node
   linkType: hard
 
@@ -12425,7 +12416,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.1.0, js-yaml@npm:^4.1.1, js-yaml@npm:^4.2.0, js-yaml@npm:^4.3.0":
+"js-yaml@npm:^4.1.0, js-yaml@npm:^4.1.1, js-yaml@npm:^4.3.0":
   version: 4.3.1
   resolution: "js-yaml@npm:4.3.1"
   dependencies:
@@ -12436,14 +12427,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^5.2.2":
-  version: 5.2.2
-  resolution: "js-yaml@npm:5.2.2"
+"js-yaml@npm:^5.2.3":
+  version: 5.2.3
+  resolution: "js-yaml@npm:5.2.3"
   dependencies:
     argparse: "npm:^2.0.1"
   bin:
     js-yaml: bin/js-yaml.mjs
-  checksum: 10c0/e8ded203b235b3d562818c67bf362122abbcee89e507b62bddcdd3085b2f2dd866071e5e78f8e617d41d1a0c0baa1cec12a8fdec5859c571bf862adf585e2684
+  checksum: 10c0/55cd6310c8eee88d432ae038d451ac9d6aa0eb9e5d38a94df3d6c4a4015d08c9dad7c18669e0e8854e4173a615d6b6b7448bd0aac408773f8a46122ffd863c69
   languageName: node
   linkType: hard
 

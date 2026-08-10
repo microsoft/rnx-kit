@@ -71,6 +71,10 @@ function makePreset() {
       name: "find-up",
       version: "^5.0.0",
     },
+    "js-yaml": {
+      name: "js-yaml",
+      version: "^5.2.3",
+    },
     "oxc-resolver": {
       name: "oxc-resolver",
       version: "^11.0.0",
