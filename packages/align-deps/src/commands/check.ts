@@ -126,18 +126,24 @@ export function makeCheckCommand(options: Options): Command {
     return (manifest: string) => checkPackageManifest(manifest, options);
   }
 
-  return (manifest: string) => {
-    const inputConfig = loadConfig(manifest, options);
+  return (manifestPath: string) => {
+    const manifest = readPackage(manifestPath);
+    const inputConfig = loadConfig({ path: manifestPath, manifest }, options);
     const config = isError(inputConfig)
       ? inputConfig
-      : migrateConfig(inputConfig, manifest, options);
+      : migrateConfig(inputConfig, manifestPath, options);
 
     // If the package is configured, run the normal check first.
     if (!isError(config)) {
-      return withGroupReporter(manifest, (reporter) => {
-        const res1 = checkPackageManifest(manifest, options, config, reporter);
+      return withGroupReporter(manifestPath, (reporter) => {
+        const res1 = checkPackageManifest(
+          manifestPath,
+          options,
+          config,
+          reporter
+        );
         const res2 = checkPackageManifestUnconfigured(
-          manifest,
+          manifestPath,
           options,
           config,
           reporter
@@ -150,9 +156,9 @@ export function makeCheckCommand(options: Options): Command {
     if (config === "invalid-configuration" || config === "not-configured") {
       // In "vigilant" mode, we allow packages to declare which presets should
       // be used in config, overriding the `--presets` flag.
-      return withGroupReporter(manifest, (reporter) => {
+      return withGroupReporter(manifestPath, (reporter) => {
         return checkPackageManifestUnconfigured(
-          manifest,
+          manifestPath,
           options,
           {
             kitType: "library",
@@ -161,7 +167,7 @@ export function makeCheckCommand(options: Options): Command {
               requirements,
               capabilities: [],
             },
-            manifest: readPackage(manifest),
+            manifest,
           },
           reporter
         );

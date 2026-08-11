@@ -77,16 +77,22 @@ export function sanitizeCapabilities(
 
 /**
  * Loads configuration from the specified package manifest.
- * @param manifestPath The path to the package manifest to load configuration from
+ * @param manifestOrPath The path to the package manifest to load configuration
+ *                       from or an already parsed manifest object
  * @param options Command line options
  * @returns The configuration; otherwise an error code
  */
 export function loadConfig(
-  manifestPath: string,
+  manifestOrPath: string | { path: string; manifest: PackageManifest },
   { excludePackages }: Pick<Options, "excludePackages">,
   /** @internal */ fs = nodefs
 ): ConfigResult {
-  const manifest = readPackage(manifestPath, fs);
+  const manifestPath =
+    typeof manifestOrPath === "string" ? manifestOrPath : manifestOrPath.path;
+  const manifest =
+    typeof manifestOrPath === "string"
+      ? readPackage(manifestPath, fs)
+      : manifestOrPath.manifest;
   if (!isPackageManifest(manifest)) {
     return "invalid-manifest";
   }
