@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.3.3
+
+### Patch Changes
+
+- 57d86ad: Replaced `find-up` with the implementation in a transitive dependency
+
 ## 0.3.2
 
 ### Patch Changes
