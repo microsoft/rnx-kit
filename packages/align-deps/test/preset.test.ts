@@ -1,7 +1,13 @@
-import { deepEqual, ok, throws } from "node:assert/strict";
-import { describe, it } from "node:test";
-import { filterPreset, parseRequirements } from "../src/preset.ts";
+import { deepEqual, equal, notEqual, ok, throws } from "node:assert/strict";
+import { after, before, describe, it } from "node:test";
+import { fileURLToPath } from "node:url";
+import {
+  filterPreset,
+  mergePresets,
+  parseRequirements,
+} from "../src/preset.ts";
 import { preset as defaultPreset } from "../src/presets/microsoft/react-native.ts";
+import { defineRequire, undefineRequire } from "./helpers.ts";
 
 describe("filterPreset()", () => {
   function presetWith(...versions: string[]) {
@@ -71,6 +77,52 @@ describe("filterPreset()", () => {
       "react-native@0.69",
     ]);
     deepEqual(profiles, presetWith("0.69"));
+  });
+});
+
+describe("mergePresets()", () => {
+  before(() => {
+    defineRequire("preset.test.ts", import.meta.url);
+  });
+
+  after(() => {
+    undefineRequire();
+  });
+
+  it("returns the same object across different project roots for the same preset", () => {
+    const customPreset = fileURLToPath(
+      new URL("__fixtures__/custom-profiles/valid-profiles.js", import.meta.url)
+    );
+    const resolver = (() => customPreset) as unknown as typeof require.resolve;
+    const presets = ["microsoft/react-native", "custom-preset"];
+
+    const result1 = mergePresets(presets, "/packages/a", resolver);
+    const result2 = mergePresets(presets, "/packages/b", resolver);
+
+    equal(result1, result2);
+  });
+
+  it("returns different objects for different presets", () => {
+    const presets = ["microsoft/react-native", "custom-preset"];
+    const resolverA = (() =>
+      fileURLToPath(
+        new URL(
+          "__fixtures__/custom-profiles/valid-profiles.js",
+          import.meta.url
+        )
+      )) as unknown as typeof require.resolve;
+    const resolverB = (() =>
+      fileURLToPath(
+        new URL(
+          "__fixtures__/custom-profiles/root-level-profiles.js",
+          import.meta.url
+        )
+      )) as unknown as typeof require.resolve;
+
+    const result1 = mergePresets(presets, "/packages/a", resolverA);
+    const result2 = mergePresets(presets, "/packages/b", resolverB);
+
+    notEqual(result1, result2);
   });
 });
 

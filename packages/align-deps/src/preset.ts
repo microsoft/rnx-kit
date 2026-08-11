@@ -12,16 +12,27 @@ type Resolution = {
   capabilities: Capability[];
 };
 
-function loadPreset(
+const mergedPresetsCache = new Map<string, Preset>();
+
+function resolvePreset(
   preset: string,
   projectRoot: string,
   resolve = require.resolve
-): Preset {
+): string {
+  switch (preset) {
+    case "microsoft/react-native":
+      return preset;
+    default:
+      return resolve(preset, { paths: [projectRoot] });
+  }
+}
+
+function loadPreset(preset: string): Preset {
   switch (preset) {
     case "microsoft/react-native":
       return reactNativePreset;
     default:
-      return require(resolve(preset, { paths: [projectRoot] }));
+      return require(preset);
   }
 }
 
@@ -92,12 +103,36 @@ export function filterPreset(preset: Preset, requirements: string[]): Preset {
 }
 
 /**
- * Loads and merges specified presets.
+ * Performs the actual loading and merging of presets.
  *
  * The order of presets is significant. The profiles from each preset are merged
  * when the names overlap. If there are overlaps within the profiles, i.e. when
  * multiple profiles declare the same capability, the last profile wins. This
  * allows users to both extend and override profiles as needed.
+ *
+ * @param presets List of preset paths to load and merge
+ * @returns Merged preset
+ */
+function mergePresetsUncached(presets: string[]): Preset {
+  const mergedPreset: Preset = {};
+  for (const presetPath of presets) {
+    const preset = loadPreset(presetPath);
+    for (const [profileName, profile] of Object.entries(preset)) {
+      mergedPreset[profileName] = {
+        ...mergedPreset[profileName],
+        ...profile,
+      };
+    }
+  }
+
+  return mergedPreset;
+}
+
+/**
+ * Loads and merges specified presets.
+ *
+ * @note This is the cached version. For the actual implementation, see
+ * {@link mergePresetsUncached}.
  *
  * @param presets The presets to load and merge
  * @param projectRoot The project root from which presets should be resolved
@@ -108,17 +143,17 @@ export function mergePresets(
   projectRoot: string,
   resolve = require.resolve
 ): Preset {
-  const mergedPreset: Preset = {};
-  for (const presetName of presets) {
-    const preset = loadPreset(presetName, projectRoot, resolve);
-    for (const [profileName, profile] of Object.entries(preset)) {
-      mergedPreset[profileName] = {
-        ...mergedPreset[profileName],
-        ...profile,
-      };
-    }
+  const resolvedPresets = presets.map((preset) =>
+    resolvePreset(preset, projectRoot, resolve)
+  );
+  const key = resolvedPresets.join(";");
+  const cachedPreset = mergedPresetsCache.get(key);
+  if (cachedPreset) {
+    return cachedPreset;
   }
 
+  const mergedPreset = mergePresetsUncached(resolvedPresets);
+  mergedPresetsCache.set(key, mergedPreset);
   return mergedPreset;
 }
 
