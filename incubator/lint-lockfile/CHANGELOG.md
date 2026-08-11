@@ -1,5 +1,11 @@
 # @rnx-kit/lint-lockfile
 
+## 0.2.2
+
+### Patch Changes
+
+- f65b474: Bumped `js-yaml` to v5
+
 ## 0.2.1
 
 ### Patch Changes

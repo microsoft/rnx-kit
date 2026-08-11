@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/align-deps
 
+## 4.0.4
+
+### Patch Changes
+
+- 938ad46: Cache merged presets
+- f65b474: Bumped `js-yaml` to v5
+- cd38d87: Add profile for 0.87
+- 53498db: Avoid parsing package manifest a second time when an `align-deps` config is not found the first time
+- 53498db: Avoid parsing package manifest twice while gathering requirements from transitive dependencies
+
 ## 4.0.3
 
 ### Patch Changes
