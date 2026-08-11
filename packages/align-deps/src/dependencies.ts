@@ -1,4 +1,4 @@
-import { getKitConfig } from "@rnx-kit/config";
+import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
 import {
   findPackageDependencyDir,
@@ -29,7 +29,11 @@ function isDevOnlyCapability(
 export function visitDependencies(
   { dependencies }: PackageManifest,
   projectRoot: string,
-  visitor: (module: string, modulePath: string) => void,
+  visitor: (
+    module: string,
+    modulePath: string,
+    manifest: PackageManifest
+  ) => void,
   visited: Set<string> = new Set<string>()
 ): void {
   if (!dependencies) {
@@ -52,9 +56,8 @@ export function visitDependencies(
       continue;
     }
 
-    visitor(dependency, packageDir);
-
     const manifest = readPackage(packageDir);
+    visitor(dependency, packageDir, manifest);
     visitDependencies(manifest, packageDir, visitor, visited);
   }
 }
@@ -86,8 +89,8 @@ export function gatherRequirements(
     },
   ];
 
-  visitDependencies(manifest, projectRoot, (module, modulePath) => {
-    const kitConfig = getKitConfig({ cwd: modulePath });
+  visitDependencies(manifest, projectRoot, (module, modulePath, manifest) => {
+    const kitConfig = getKitConfigFromPackageManifest(manifest, modulePath);
     if (!kitConfig) {
       return;
     }
