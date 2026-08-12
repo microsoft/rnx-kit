@@ -23,7 +23,7 @@ type Options = {
 };
 
 const COMMAND_NAMES = ["rnx-test", "test"];
-const JEST_CLI = ["jest", "jest-cli"];
+const JEST_CLI = ["jest", "jest-cli"] as const;
 
 export function rnxTest(
   _argv: string[],
@@ -131,12 +131,14 @@ export const rnxTestCommand = {
   name: COMMAND_NAMES[0],
   description: "Test runner for React Native apps",
   func: rnxTest,
-  options: [
-    {
-      name: "--platform <android|ios|macos|windows|win32>",
-      description: "Platform to target",
-      parse: parsePlatform,
-    },
-    ...jestOptions(),
-  ],
+  get options() {
+    return [
+      {
+        name: "--platform <android|ios|macos|windows|win32>",
+        description: "Platform to target",
+        parse: parsePlatform,
+      },
+      ...jestOptions(),
+    ];
+  },
 };
