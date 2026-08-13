@@ -231,7 +231,7 @@ export function findPackageDependencyDir(
  * @returns Path to the final dependency's directory.
  */
 export function resolveDependencyChain(
-  chain: string[],
+  chain: readonly string[],
   startDir = process.cwd()
 ) {
   return chain.reduce((startDir, module) => {

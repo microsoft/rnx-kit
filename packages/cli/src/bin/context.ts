@@ -41,6 +41,17 @@ function findReactNativePath(root: string, resolveSymlinks = false) {
   return dir;
 }
 
+export function renameCommand<T extends Command>(command: T, name: string): T {
+  // The spread operator would eagerly evaluate every getter on `command`. We
+  // want to avoid fields that may be expensive to compute (e.g., `options`).
+  const renamed = Object.create(
+    Object.getPrototypeOf(command),
+    Object.getOwnPropertyDescriptors(command)
+  );
+  renamed.name = name;
+  return renamed;
+}
+
 export function uniquify(commands: Command[]): Command[] {
   const uniqueCommands: Commands = {};
   for (const command of commands) {
@@ -99,10 +110,9 @@ export async function loadContextForCommand(
       assets: [],
       get commands(): Config["commands"] {
         const start = RNX_PREFIX.length;
-        return reactNativeConfig.commands.map((command) => ({
-          ...command,
-          name: command.name.substring(start),
-        }));
+        return reactNativeConfig.commands.map((command) =>
+          renameCommand(command, command.name.substring(start))
+        );
       },
       get healthChecks(): Config["healthChecks"] {
         throw new Error("Unexpected access to `healthChecks`");

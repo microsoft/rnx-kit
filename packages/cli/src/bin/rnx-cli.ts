@@ -22,13 +22,9 @@ export async function main() {
   const allCommands = context.commands.concat(findExternalCommands(context));
   const program = new Command(path.basename(__filename, ".js"));
 
-  for (const {
-    name,
-    description,
-    detached,
-    options = [],
-    func,
-  } of allCommands) {
+  for (const info of allCommands) {
+    const { name, description, detached, func } = info;
+
     const command = program.command(name).description(description ?? name);
 
     if (detached) {
@@ -37,6 +33,15 @@ export async function main() {
       command.action((args, command) => func(command.args, context, args));
     }
 
+    // Accessing `options` may be expensive for some commands (e.g., it may
+    // resolve and load other packages). Since only the invoked command's
+    // options are needed to correctly parse `process.argv`, skip this step
+    // for all other commands.
+    if (name !== userCommand) {
+      continue;
+    }
+
+    const options = info.options ?? [];
     for (const { name, description, parse, default: defaultValue } of options) {
       const value = parseDefaultValue(defaultValue, context);
       if (parse) {

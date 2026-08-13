@@ -1,16 +1,12 @@
 import type { Config } from "@react-native-community/cli-types";
 import { InvalidArgumentError } from "commander";
 import { RNX_FAST_PATH } from "./bin/constants.ts";
-import { buildAndroid } from "./build/android.ts";
 import { setCcacheDir, setCcacheHome } from "./build/ccache.ts";
-import { buildIOS } from "./build/ios.ts";
-import { buildMacOS } from "./build/macos.ts";
 import type {
   BuildConfiguration,
   DeviceType,
   InputParams,
 } from "./build/types.ts";
-import { buildWindows } from "./build/windows.ts";
 
 function asConfiguration(configuration: string): BuildConfiguration {
   switch (configuration) {
@@ -52,24 +48,32 @@ function asSupportedPlatform(platform: string): InputParams["platform"] {
   }
 }
 
-export function rnxBuild(
+export async function rnxBuild(
   argv: string[],
   config: Config,
   buildParams: InputParams
 ) {
   switch (buildParams.platform) {
-    case "android":
+    case "android": {
+      const { buildAndroid } = await import("./build/android.ts");
       return buildAndroid(config, buildParams, argv);
+    }
 
     case "ios":
-    case "visionos":
+    case "visionos": {
+      const { buildIOS } = await import("./build/ios.ts");
       return buildIOS(config, buildParams);
+    }
 
-    case "macos":
+    case "macos": {
+      const { buildMacOS } = await import("./build/macos.ts");
       return buildMacOS(config, buildParams);
+    }
 
-    case "windows":
+    case "windows": {
+      const { buildWindows } = await import("./build/windows.ts");
       return buildWindows(config, buildParams, argv);
+    }
   }
 }
 

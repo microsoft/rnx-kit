@@ -2,29 +2,33 @@ import type { Config } from "@react-native-community/cli-types";
 import { RNX_FAST_PATH } from "./bin/constants.ts";
 import { rnxBuildCommand } from "./build.ts";
 import type { InputParams } from "./build/types.ts";
-import { runAndroid } from "./run/android.ts";
-import { runIOS } from "./run/ios.ts";
-import { runMacOS } from "./run/macos.ts";
-import { runWindows } from "./run/windows.ts";
 
-export function rnxRun(
+export async function rnxRun(
   argv: string[],
   config: Config,
   buildParams: InputParams
 ) {
   switch (buildParams.platform) {
-    case "android":
+    case "android": {
+      const { runAndroid } = await import("./run/android.ts");
       return runAndroid(config, buildParams, argv);
+    }
 
     case "ios":
-    case "visionos":
+    case "visionos": {
+      const { runIOS } = await import("./run/ios.ts");
       return runIOS(config, buildParams);
+    }
 
-    case "macos":
+    case "macos": {
+      const { runMacOS } = await import("./run/macos.ts");
       return runMacOS(config, buildParams);
+    }
 
-    case "windows":
+    case "windows": {
+      const { runWindows } = await import("./run/windows.ts");
       return runWindows(config, buildParams, argv);
+    }
   }
 }
 

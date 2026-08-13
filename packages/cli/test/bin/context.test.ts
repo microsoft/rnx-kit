@@ -1,6 +1,10 @@
 import type { Command } from "@react-native-community/cli-types";
 import { RNX_PREFIX } from "../../src/bin/constants.ts";
-import { loadContextForCommand, uniquify } from "../../src/bin/context.ts";
+import {
+  loadContextForCommand,
+  renameCommand,
+  uniquify,
+} from "../../src/bin/context.ts";
 import { reactNativeConfig } from "../../src/index.ts";
 
 jest.mock("@rnx-kit/tools-react-native/context", () => ({
@@ -30,6 +34,58 @@ describe("bin/context/uniquify()", () => {
       { name: "start", description: "rnx-start command" },
       { name: "bundle", description: "rnx-bundle command" },
     ]);
+  });
+});
+
+describe("bin/context/renameCommand()", () => {
+  const noop = () => undefined;
+
+  it("renames a command without modifying the original", () => {
+    const command = {
+      name: "rnx-start",
+      description: "start command",
+      func: noop,
+    };
+
+    const renamed = renameCommand(command, "start");
+
+    expect(renamed).not.toBe(command);
+    expect(renamed.name).toBe("start");
+    expect(renamed.description).toBe(command.description);
+    expect(command.name).toBe("rnx-start");
+  });
+
+  it("does not evaluate getters eagerly", () => {
+    const optionsGetter = jest.fn(() => ["--platform"]);
+    const command = {
+      name: "rnx-test",
+      func: noop,
+      get options() {
+        return optionsGetter();
+      },
+    } as unknown as Command;
+
+    const renamed = renameCommand(command, "test");
+
+    expect(optionsGetter).not.toHaveBeenCalled();
+
+    expect(renamed.options).toEqual(["--platform"]);
+    expect(optionsGetter).toHaveBeenCalledTimes(1);
+  });
+
+  it("preserves getters as getters on the renamed command", () => {
+    const command = {
+      name: "rnx-test",
+      func: noop,
+      get options() {
+        return ["--platform"];
+      },
+    } as unknown as Command;
+
+    const renamed = renameCommand(command, "test");
+
+    const descriptor = Object.getOwnPropertyDescriptor(renamed, "options");
+    expect(typeof descriptor?.get).toBe("function");
   });
 });
 
