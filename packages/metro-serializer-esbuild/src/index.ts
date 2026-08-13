@@ -99,6 +99,10 @@ export function MetroSerializer(
           });
         }
 
+        const preModulesByPath = new Map(
+          preModules.map((preModule) => [preModule.path, preModule])
+        );
+
         build.onResolve(pluginOptions, (args) => {
           if (dependencies.has(args.path)) {
             return {
@@ -118,7 +122,7 @@ export function MetroSerializer(
             };
           }
 
-          if (preModules.find(({ path }) => path === args.path)) {
+          if (preModulesByPath.has(args.path)) {
             // In certain setups, such as when using external bundles, we may
             // pass virtual files here. If so, we'll need to inherit the
             // namespace of the top-level prelude.
@@ -161,7 +165,7 @@ export function MetroSerializer(
             };
           }
 
-          const polyfill = preModules.find(({ path }) => path === args.path);
+          const polyfill = preModulesByPath.get(args.path);
           if (polyfill) {
             return {
               contents: outputOf(polyfill, buildOptions?.logLevel) ?? "",
