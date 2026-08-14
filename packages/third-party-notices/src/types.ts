@@ -41,3 +41,10 @@ export type WriteThirdPartyNoticesOptions = {
   additionalText?: string[];
   fullLicenseText?: boolean;
 };
+
+export type TransformedOptions = Omit<
+  WriteThirdPartyNoticesOptions,
+  "ignoreModules"
+> & {
+  ignoreModules?: Set<string>;
+};
