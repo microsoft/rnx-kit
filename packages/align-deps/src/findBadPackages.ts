@@ -4,7 +4,7 @@ import { bannedPackages } from "./presets/banned.ts";
 import type { ExcludedPackage } from "./types.ts";
 
 function isBanned(name: string, version: string): ExcludedPackage | undefined {
-  const info = bannedPackages.find((pkg) => pkg.name === name);
+  const info = bannedPackages[name];
   return info && semverSubset(version, info.version) ? info : undefined;
 }
 
