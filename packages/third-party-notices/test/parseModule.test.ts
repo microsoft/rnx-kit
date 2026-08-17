@@ -1,7 +1,7 @@
 import { equal } from "node:assert/strict";
 import * as nodefs from "node:fs";
 import { describe, it } from "node:test";
-import type { WriteThirdPartyNoticesOptions } from "../src/types.ts";
+import type { TransformedOptions } from "../src/types.ts";
 import { parseModule as parseModuleActual } from "../src/write-third-party-notices.ts";
 import { absolutePathRoot } from "./pathHelper.ts";
 
@@ -11,22 +11,22 @@ describe("parseModule", () => {
     existsSync: (p: nodefs.PathLike) => !p.toString().includes("missing"),
   };
 
-  const options: WriteThirdPartyNoticesOptions = {
+  const options: TransformedOptions = {
     rootPath: `${absolutePathRoot}src`,
     sourceMapFile: "",
     json: false,
   };
 
-  const optionsWithIgnores: WriteThirdPartyNoticesOptions = {
+  const optionsWithIgnores: TransformedOptions = {
     rootPath: `${absolutePathRoot}src`,
     sourceMapFile: "",
     json: false,
-    ignoreModules: ["ignoredModule"],
+    ignoreModules: new Set(["ignoredModule"]),
     ignoreScopes: ["@ignoredScope"],
   };
 
   function parseModule(
-    options: WriteThirdPartyNoticesOptions,
+    options: TransformedOptions,
     moduleNameToPath: Map<string, string>,
     p: string
   ) {

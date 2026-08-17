@@ -13,6 +13,7 @@ import type {
   License,
   ModuleNamePathPair,
   SourceMap,
+  TransformedOptions,
   WriteThirdPartyNoticesOptions,
 } from "./types.ts";
 
@@ -190,20 +191,28 @@ export function splitSourcePath(rootPath: string, p: string): string[] {
   throw new Error(`Could not parse module: ${p}`);
 }
 
+export function transformOptions({
+  ignoreModules,
+  ...options
+}: WriteThirdPartyNoticesOptions): TransformedOptions {
+  return {
+    ...options,
+    ignoreModules: ignoreModules && new Set<string>(ignoreModules),
+  };
+}
+
 export function parseModule(
-  options: WriteThirdPartyNoticesOptions,
+  options: TransformedOptions,
   moduleNameToPath: Map<string, string>,
   p: string,
   /** @internal */ fs = nodefs
 ): void {
   const [moduleName, modulePath] = splitSourcePath(options.rootPath, p);
   if (
-    (options.ignoreScopes &&
-      options.ignoreScopes.some((scope: string) =>
-        moduleName.startsWith(scope + "/")
-      )) ||
-    (options.ignoreModules &&
-      options.ignoreModules.indexOf(moduleName) !== -1) ||
+    options.ignoreModules?.has(moduleName) ||
+    options.ignoreScopes?.some((scope: string) =>
+      moduleName.startsWith(scope + "/")
+    ) ||
     !fs.existsSync(modulePath)
   ) {
     return;
@@ -219,10 +228,11 @@ export function parseSourceMap(
   sourceMap: SourceMap,
   /** @internal */ fs = nodefs
 ): void {
+  const transformedOptions = transformOptions(options);
   for (const src of sourceMap.sources) {
     const source = normalizePath(src, currentPackageId);
     if (source.includes(modulesRoot)) {
-      parseModule(options, moduleNameToPath, source, fs);
+      parseModule(transformedOptions, moduleNameToPath, source, fs);
     }
   }
 }
@@ -295,10 +305,16 @@ export function gatherModulesFromSources(
   /** @internal */ fs = nodefs
 ): Map<string, string> {
   const moduleNameToPath = new Map<string, string>();
+  const transformedOptions = transformOptions(options);
 
   for (const source of sources) {
     if (source.includes("node_modules")) {
-      parseModule(options, moduleNameToPath, normalizePath(source), fs);
+      parseModule(
+        transformedOptions,
+        moduleNameToPath,
+        normalizePath(source),
+        fs
+      );
     }
   }
 
