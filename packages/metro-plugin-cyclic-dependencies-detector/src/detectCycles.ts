@@ -37,18 +37,18 @@ export function traverseDependencies(
   dependencies: ReadOnlyDependencies,
   options: CyclicDependencyPluginOptions,
   cyclicDependencies: CyclicDependencies = {},
-  stack: string[] = []
+  stack: Set<string> = new Set<string>()
 ): CyclicDependencies {
   if (!options.includeNodeModules && currentModule.includes("node_modules")) {
     return cyclicDependencies;
   }
 
-  if (stack.includes(currentModule)) {
-    cyclicDependencies[currentModule] = stack.slice();
+  if (stack.has(currentModule)) {
+    cyclicDependencies[currentModule] = Array.from(stack);
     return cyclicDependencies;
   }
 
-  stack.push(currentModule);
+  stack.add(currentModule);
 
   const moduleDependencies: ResolvedDependencyMap =
     dependencies.get(currentModule)?.dependencies;
@@ -76,7 +76,7 @@ export function traverseDependencies(
     }
   }
 
-  stack.pop();
+  stack.delete(currentModule);
   return cyclicDependencies;
 }
 
