@@ -1,4 +1,4 @@
-import type { Capability } from "@rnx-kit/config";
+import type { Capability } from "@rnx-kit/types-kit-config";
 import { createRequire } from "node:module";
 import { URL } from "node:url";
 import type { Package, Profile } from "../src/types.ts";

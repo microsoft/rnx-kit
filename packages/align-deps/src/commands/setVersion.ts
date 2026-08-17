@@ -1,7 +1,7 @@
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/types-node";
 import * as nodefs from "node:fs";
-import prompts from "prompts";
+import type prompts from "prompts";
 import semverCoerce from "semver/functions/coerce.js";
 import { transformConfig } from "../compatibility/config.ts";
 import { defaultConfig, loadConfig } from "../config.ts";
@@ -51,6 +51,7 @@ async function parseInput(versions: string | number): Promise<{
     return { supportedVersions: supportedVersions.sort(), targetVersion };
   }
 
+  const prompts = require("prompts");
   const { supportedVersions } = await prompts({
     type: "multiselect",
     name: "supportedVersions",

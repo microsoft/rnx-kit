@@ -1,4 +1,3 @@
-import * as yaml from "js-yaml";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { isMetaPackage } from "../capabilities.ts";
@@ -50,6 +49,7 @@ function parseFile(filename: string, fs: typeof nodefs): Config {
     // pnpm v9.5.0+ and Yarn v4.10.0+
     case ".yaml":
     case ".yml": {
+      const yaml = require("js-yaml");
       const data = content
         ? (yaml.load(content) as Record<string, unknown>)
         : {};
