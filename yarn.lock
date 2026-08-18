@@ -5005,6 +5005,7 @@ __metadata:
     detect-indent: "npm:^6.0.0"
     js-yaml: "npm:^5.2.3"
     markdown-table: "npm:^3.0.0"
+    oxc-resolver: "npm:^11.0.0"
     package-json: "npm:^10.0.0"
     prompts: "npm:^2.4.0"
     recast: "npm:^0.23.0"
