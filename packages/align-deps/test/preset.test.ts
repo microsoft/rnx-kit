@@ -6,6 +6,7 @@ import {
   mergePresets,
   parseRequirements,
 } from "../src/preset.ts";
+import { bannedPackages } from "../src/presets/banned.ts";
 import { preset as defaultPreset } from "../src/presets/microsoft/react-native.ts";
 import { defineRequire, undefineRequire } from "./helpers.ts";
 
@@ -172,4 +173,12 @@ describe("presets should not have duplicate packages", () => {
       }
     });
   }
+});
+
+describe("banned packages", () => {
+  it("should use package name for key", () => {
+    for (const [key, info] of Object.entries(bannedPackages)) {
+      equal(key, info.name);
+    }
+  });
 });
