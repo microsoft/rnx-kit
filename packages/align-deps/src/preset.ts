@@ -6,6 +6,12 @@ import { gatherRequirements } from "./dependencies.ts";
 import { preset as reactNativePreset } from "./presets/microsoft/react-native.ts";
 import type { AlignDepsOptions, Options, Preset } from "./types.ts";
 
+const FILTERED_PRESET_CACHE = Symbol("filtered-preset-cache");
+
+type PresetWithCache = Preset & {
+  [FILTERED_PRESET_CACHE]?: Map<string, Preset>;
+};
+
 type Resolution = {
   devPreset: Preset;
   prodPreset: Preset;
@@ -13,6 +19,17 @@ type Resolution = {
 };
 
 const mergedPresetsCache = new Map<string, Preset>();
+
+function getFilteredPresetCache(preset: PresetWithCache): Map<string, Preset> {
+  const filteredCache = preset[FILTERED_PRESET_CACHE];
+  if (filteredCache) {
+    return filteredCache;
+  }
+
+  const cache = new Map<string, Preset>();
+  preset[FILTERED_PRESET_CACHE] = cache;
+  return cache;
+}
 
 function resolvePreset(
   preset: string,
@@ -68,6 +85,13 @@ export function parseRequirements(requirements: string[]): [string, string][] {
  * @returns Preset with only profiles that satisfy the requirements
  */
 export function filterPreset(preset: Preset, requirements: string[]): Preset {
+  const cache = getFilteredPresetCache(preset);
+  const key = JSON.stringify(requirements);
+  const cachedFilteredPreset = cache.get(key);
+  if (cachedFilteredPreset) {
+    return cachedFilteredPreset;
+  }
+
   const filteredPreset: Preset = {};
 
   const includePrerelease = { includePrerelease: true };
@@ -99,6 +123,7 @@ export function filterPreset(preset: Preset, requirements: string[]): Preset {
     }
   }
 
+  cache.set(key, filteredPreset);
   return filteredPreset;
 }
 
