@@ -42,7 +42,8 @@
   },
   "dependencies": {
     "@rnx-kit/types-kit-config": "^1.0.0",
-    "@rnx-kit/types-node": "^1.0.0"
+    "@rnx-kit/types-node": "^1.0.0",
+    "oxc-resolver": "^11.0.0"
   },
   "devDependencies": {
     "@octokit/core": "^7.0.0",
