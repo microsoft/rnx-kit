@@ -1,11 +1,11 @@
 import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
-import {
-  findPackageDependencyDir,
-  readPackage,
-} from "@rnx-kit/tools-node/package";
+import { readPackage } from "@rnx-kit/tools-node/package";
 import type { Capability } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
+import * as fs from "node:fs";
+import type { NapiResolveOptions } from "oxc-resolver";
+import { ResolverFactory } from "oxc-resolver";
 import { filterPreset } from "./preset.ts";
 import type { Options, Preset, Profile } from "./types.ts";
 
@@ -14,6 +14,23 @@ type Trace = {
   requirements: string[];
   profiles: string[];
 };
+
+const resolverOptions: NapiResolveOptions = {
+  exportsFields: [],
+  resolveToContext: true,
+  symlinks: true,
+};
+
+const resolver = new ResolverFactory(resolverOptions);
+
+function resolveDependency(dependency: string, projectRoot: string) {
+  const { error, path } = resolver.sync(projectRoot, dependency);
+  if (error || !path) {
+    return undefined;
+  }
+
+  return fs.realpathSync(path);
+}
 
 function isCoreCapability(capability: Capability): boolean {
   return capability.startsWith("core-");
@@ -47,10 +64,7 @@ export function visitDependencies(
 
     visited.add(dependency);
 
-    const packageDir = findPackageDependencyDir(dependency, {
-      startDir: projectRoot,
-      resolveSymlinks: true,
-    });
+    const packageDir = resolveDependency(dependency, projectRoot);
     if (!packageDir) {
       warn(`Unable to resolve module '${dependency}' from '${projectRoot}'`);
       continue;

@@ -1,6 +1,8 @@
 import { readPackage } from "@rnx-kit/tools-node/package";
 import type { PackageManifest } from "@rnx-kit/types-node";
 import { deepEqual, equal, match, throws } from "node:assert/strict";
+import * as fs from "node:fs";
+import * as os from "node:os";
 import * as path from "node:path";
 import { afterEach, describe, it } from "node:test";
 import { gatherRequirements, visitDependencies } from "../src/dependencies.ts";
@@ -82,6 +84,46 @@ describe("visitDependencies()", () => {
     equal(warnSpy.mock.callCount(), 0);
   });
 
+  it("resolves symlinked packages to their real path", (t) => {
+    const warnSpy = t.mock.method(console, "warn", () => undefined);
+    const fixture = fs.mkdtempSync(path.join(os.tmpdir(), "align-deps-"));
+    t.after(() => fs.rmSync(fixture, { recursive: true, force: true }));
+
+    const realPackage = path.join(fixture, "packages", "linked-package");
+    const nodeModules = path.join(fixture, "app", "node_modules");
+    const linkedPackage = path.join(nodeModules, "linked-package");
+
+    fs.mkdirSync(realPackage, { recursive: true });
+    fs.mkdirSync(nodeModules, { recursive: true });
+    fs.writeFileSync(
+      path.join(realPackage, "package.json"),
+      JSON.stringify({ name: "linked-package", version: "1.0.0", exports: {} })
+    );
+    fs.symlinkSync(
+      realPackage,
+      linkedPackage,
+      process.platform === "win32" ? "junction" : "dir"
+    );
+
+    const visited: string[] = [];
+    visitDependencies(
+      {
+        name: "test-app",
+        version: "1.0.0",
+        dependencies: {
+          "linked-package": "1.0.0",
+        },
+      },
+      path.join(fixture, "app"),
+      (_module, modulePath) => {
+        visited.push(modulePath);
+      }
+    );
+
+    deepEqual(visited, [fs.realpathSync(realPackage)]);
+    equal(warnSpy.mock.callCount(), 0);
+  });
+
   it("skips unresolved packages", (t) => {
     const warnSpy = t.mock.method(console, "warn", () => undefined);
 
@@ -100,6 +142,10 @@ describe("visitDependencies()", () => {
 
     equal(visited.length, 0);
     equal(warnSpy.mock.callCount(), 1);
+    match(
+      warnSpy.mock.calls[0].arguments[1],
+      /Unable to resolve module 'this-does-not-exist'/
+    );
   });
 });
 
