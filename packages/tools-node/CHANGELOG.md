@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-node
 
+## 3.0.6
+
+### Patch Changes
+
+- a4e4949: Allow a read-only array to be passed to `resolveDependencyChain`
+
 ## 3.0.5
 
 ### Patch Changes

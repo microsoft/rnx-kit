@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/config
 
+## 0.9.1
+
+### Patch Changes
+
+- 1e3d899: Narrow the argument type to `getKitConfigFromPackageManifest()` to allow anything that looks like a package manifest
+- Updated dependencies [a4e4949]
+  - @rnx-kit/tools-node@3.0.6
+
 ## 0.9.0
 
 ### Minor Changes
@@ -171,17 +179,14 @@
   be updated (which seems better than silently ignoring it).
 
   Add:
-
   - bundleOutput
   - sourcemapUseAbsolutePath
 
   Remove:
-
   - bundlePrefix
   - distPath
 
   Rename:
-
   - entryPath -> entryFile
   - sourceMapPath -> sourcemapOutput
   - sourceMapSourcesRootPath -> sourcemapSourcesRoot

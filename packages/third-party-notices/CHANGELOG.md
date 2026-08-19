@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 3.0.2
+
+### Patch Changes
+
+- 5939fe0: Improved ignored modules check
+- Updated dependencies [a4e4949]
+  - @rnx-kit/tools-node@3.0.6
+
 ## 3.0.1
 
 ### Patch Changes
