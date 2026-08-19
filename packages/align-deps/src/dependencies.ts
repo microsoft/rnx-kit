@@ -1,13 +1,14 @@
 import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
 import { readPackage } from "@rnx-kit/tools-node/package";
-import type { Capability } from "@rnx-kit/types-kit-config";
+import type { Capability, KitConfig } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
 import * as path from "node:path";
 import { ResolverFactory } from "oxc-resolver";
-import { BoundedCache } from "./cache.ts";
 import { filterPreset } from "./preset.ts";
 import type { Options, Preset, Profile } from "./types.ts";
+
+type PackageManifestMin = Pick<PackageManifest, "dependencies" | "rnx-kit">;
 
 type Trace = {
   module: string;
@@ -15,8 +16,21 @@ type Trace = {
   profiles: string[];
 };
 
-const manifestCache = new BoundedCache<string, PackageManifest>();
+const manifestCache = new Map<string, PackageManifestMin>();
 const resolver = new ResolverFactory({ exportsFields: [] });
+
+function getRequirements(kitConfig: KitConfig): string[] | null {
+  const requirements = kitConfig.alignDeps?.requirements;
+  if (requirements) {
+    return Array.isArray(requirements) ? requirements : requirements.production;
+  }
+
+  if (kitConfig.reactNativeVersion) {
+    return [`react-native@${kitConfig.reactNativeVersion}`];
+  }
+
+  return null;
+}
 
 function isCoreCapability(capability: Capability): boolean {
   return capability.startsWith("core-");
@@ -29,24 +43,25 @@ function isDevOnlyCapability(
   return profiles.some((profile) => profile[capability]?.devOnly);
 }
 
-function readManifestFromDir(packageDir: string): PackageManifest {
+function readManifestFromDir(packageDir: string): PackageManifestMin {
   const cached = manifestCache.get(packageDir);
   if (cached) {
     return cached;
   }
 
-  const manifest = readPackage(packageDir);
+  const { dependencies, "rnx-kit": rnxKit } = readPackage(packageDir);
+  const manifest = { dependencies, "rnx-kit": rnxKit };
   manifestCache.set(packageDir, manifest);
   return manifest;
 }
 
 export function visitDependencies(
-  { dependencies }: PackageManifest,
+  { dependencies }: PackageManifestMin,
   projectRoot: string,
   visitor: (
     module: string,
     modulePath: string,
-    manifest: PackageManifest
+    manifest: PackageManifestMin
   ) => void,
   visited: Set<string> = new Set<string>()
 ): void {
@@ -108,20 +123,7 @@ export function gatherRequirements(
       return;
     }
 
-    const requirements = (() => {
-      const requirements = kitConfig.alignDeps?.requirements;
-      if (requirements) {
-        return Array.isArray(requirements)
-          ? requirements
-          : requirements.production;
-      }
-
-      if (kitConfig.reactNativeVersion) {
-        return [`react-native@${kitConfig.reactNativeVersion}`];
-      }
-
-      return null;
-    })();
+    const requirements = getRequirements(kitConfig);
     if (!requirements) {
       return;
     }
