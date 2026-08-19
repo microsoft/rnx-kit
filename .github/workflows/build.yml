@@ -40,12 +40,11 @@ jobs:
       - name: Create release PR or publish to npm
         uses: changesets/action@22ccf9aa43179fe9e27dc62e575971d28cce197c # v2.0.0
         with:
-          publish: yarn publish:changesets
-          version: yarn version:changesets
-        env:
           # We cannot use the GHA generated tokens because we've disabled
           # creation of pull requests at the org level.
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          github-token: ${{ steps.app-token.outputs.token }}
+          publish-script: yarn publish:changesets
+          version-script: yarn version:changesets
   website:
     name: "Publish website"
     permissions:
