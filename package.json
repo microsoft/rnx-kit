@@ -42,7 +42,7 @@
     "version:changesets": "changeset version && yarn install --mode update-lockfile"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.22.0",
+    "@changesets/cli": "^3.0.0",
     "@types/node": "^24.0.0",
     "@yarnpkg/types": "^4.0.0",
     "eslint": "catalog:",
