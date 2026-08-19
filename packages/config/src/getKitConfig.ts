@@ -110,7 +110,7 @@ export function getKitConfig(
  * @returns The rnx-kit configuration for this package, merged with any base configuration.
  */
 export function getKitConfigFromPackageManifest(
-  packageJson: PackageManifest,
+  packageJson: Pick<PackageManifest, "rnx-kit">,
   packageDir: string
 ): KitConfig | undefined {
   return loadBaseConfig(packageJson["rnx-kit"], packageDir);
