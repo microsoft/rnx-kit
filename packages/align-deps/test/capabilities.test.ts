@@ -1,4 +1,4 @@
-import type { Capability } from "@rnx-kit/config";
+import type { Capability } from "@rnx-kit/types-kit-config";
 import { deepEqual, equal } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { capabilitiesFor, resolveCapabilities } from "../src/capabilities.ts";

@@ -6,6 +6,7 @@ import {
 } from "@rnx-kit/tools-node/package";
 import type { Capability } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
+import { BoundedCache } from "./cache.ts";
 import { filterPreset } from "./preset.ts";
 import type { Options, Preset, Profile } from "./types.ts";
 
@@ -14,6 +15,8 @@ type Trace = {
   requirements: string[];
   profiles: string[];
 };
+
+const manifestCache = new BoundedCache<string, PackageManifest>();
 
 function isCoreCapability(capability: Capability): boolean {
   return capability.startsWith("core-");
@@ -24,6 +27,17 @@ function isDevOnlyCapability(
   profiles: Partial<Profile>[]
 ): boolean {
   return profiles.some((profile) => profile[capability]?.devOnly);
+}
+
+function readManifestFromDir(packageDir: string): PackageManifest {
+  const cached = manifestCache.get(packageDir);
+  if (cached) {
+    return cached;
+  }
+
+  const manifest = readPackage(packageDir);
+  manifestCache.set(packageDir, manifest);
+  return manifest;
 }
 
 export function visitDependencies(
@@ -56,7 +70,7 @@ export function visitDependencies(
       continue;
     }
 
-    const manifest = readPackage(packageDir);
+    const manifest = readManifestFromDir(packageDir);
     visitor(dependency, packageDir, manifest);
     visitDependencies(manifest, packageDir, visitor, visited);
   }
