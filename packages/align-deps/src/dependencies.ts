@@ -1,11 +1,10 @@
 import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
-import {
-  findPackageDependencyDir,
-  readPackage,
-} from "@rnx-kit/tools-node/package";
+import { readPackage } from "@rnx-kit/tools-node/package";
 import type { Capability } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
+import * as path from "node:path";
+import { ResolverFactory } from "oxc-resolver";
 import { BoundedCache } from "./cache.ts";
 import { filterPreset } from "./preset.ts";
 import type { Options, Preset, Profile } from "./types.ts";
@@ -17,6 +16,7 @@ type Trace = {
 };
 
 const manifestCache = new BoundedCache<string, PackageManifest>();
+const resolver = new ResolverFactory({ exportsFields: [] });
 
 function isCoreCapability(capability: Capability): boolean {
   return capability.startsWith("core-");
@@ -61,15 +61,13 @@ export function visitDependencies(
 
     visited.add(dependency);
 
-    const packageDir = findPackageDependencyDir(dependency, {
-      startDir: projectRoot,
-      resolveSymlinks: true,
-    });
-    if (!packageDir) {
+    const result = resolver.sync(projectRoot, dependency + "/package.json");
+    if (!result.path) {
       warn(`Unable to resolve module '${dependency}' from '${projectRoot}'`);
       continue;
     }
 
+    const packageDir = path.dirname(result.path);
     const manifest = readManifestFromDir(packageDir);
     visitor(dependency, packageDir, manifest);
     visitDependencies(manifest, packageDir, visitor, visited);
@@ -103,7 +101,8 @@ export function gatherRequirements(
     },
   ];
 
-  visitDependencies(manifest, projectRoot, (module, modulePath, manifest) => {
+  const root = path.resolve(projectRoot);
+  visitDependencies(manifest, root, (module, modulePath, manifest) => {
     const kitConfig = getKitConfigFromPackageManifest(manifest, modulePath);
     if (!kitConfig) {
       return;
