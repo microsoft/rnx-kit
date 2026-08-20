@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.4.2
+
+### Patch Changes
+
+- d5b5151: Improve pre-module lookups
+- Updated dependencies [a4e4949]
+  - @rnx-kit/tools-node@3.0.6
+
 ## 0.4.1
 
 ### Patch Changes

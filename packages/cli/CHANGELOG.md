@@ -1,5 +1,28 @@
 # Change Log - @rnx-kit/cli
 
+## 2.0.3
+
+### Patch Changes
+
+- a4e4949: Improve start-up performance
+- Updated dependencies [a4e4949]
+- Updated dependencies [1e3d899]
+- Updated dependencies [5939fe0]
+- Updated dependencies [a0b82c6]
+- Updated dependencies [c4b8d3e]
+- Updated dependencies [220f6f2]
+- Updated dependencies [5319ac1]
+- Updated dependencies [afe950d]
+- Updated dependencies [1e3d899]
+- Updated dependencies [d5b5151]
+  - @rnx-kit/tools-node@3.0.6
+  - @rnx-kit/config@0.9.1
+  - @rnx-kit/third-party-notices@3.0.2
+  - @rnx-kit/align-deps@4.0.5
+  - @rnx-kit/metro-plugin-cyclic-dependencies-detector@3.0.1
+  - @rnx-kit/metro-plugin-duplicates-checker@4.0.1
+  - @rnx-kit/metro-serializer-esbuild@0.4.2
+
 ## 2.0.2
 
 ### Patch Changes
@@ -804,25 +827,21 @@
   ### `rnx-bundle` parameteters
 
   Add:
-
   - --bundle-output
   - --sourcemap-use-absolute-path
   - --unstable-transform-profile
 
   Remove:
-
   - --bundle-prefix
   - --dist-path
 
   Rename:
-
   - --entry-path -> --entry-file
   - --assets-path -> --assets-dest
 
   ### `rnx-start` parameters
 
   Rename:
-
   - --project-root -> --projectRoot
   - --watch-folders -> --watchFolders
   - --asset-plugins -> --assetPlugins
@@ -833,7 +852,6 @@
   The bundler and bundle-server no longer require rnx-kit configuration to run.
   This makes it possible to "upgrade" to @rnx-kit/cli by only changing the
   command name:
-
   - `react-native bundle` -> `react-native rnx-bundle`
   - `react-native start` -> `react-native rnx-start`
 
@@ -843,7 +861,6 @@
   CLI expresses our opinionated view of how config should be interpreted.
 
   The following defaults now apply when running `rnx-bundle` and `rnx-start`:
-
   - --entry-file / entryFile: "index.js"
   - --bundle-output / bundleOutput: "index.<`platform`>.bundle" (Windows,
     Android), or "index.<`platform`>.jsbundle" (iOS, MacOS)

@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-plugin-cyclic-dependencies-detector
 
+## 3.0.1
+
+### Patch Changes
+
+- c4b8d3e: Improved performance on deep dependency graphs
+- Updated dependencies [a4e4949]
+  - @rnx-kit/tools-node@3.0.6
+
 ## 3.0.0
 
 ### Major Changes

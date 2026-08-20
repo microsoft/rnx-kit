@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-plugin-duplicates-checker
 
+## 4.0.1
+
+### Patch Changes
+
+- 220f6f2: Improved banned/ignored packages checks
+- Updated dependencies [a4e4949]
+  - @rnx-kit/tools-node@3.0.6
+
 ## 4.0.0
 
 ### Major Changes

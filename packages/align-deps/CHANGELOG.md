@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/align-deps
 
+## 4.0.5
+
+### Patch Changes
+
+- a0b82c6: Improved banned packages check
+- 5319ac1: Cache read package manifests to avoid re-reading and parsing the same `package.json` files while iterating over dependencies
+- afe950d: Use `oxc-resolver` to crawl transitive dependencies
+- 1e3d899: Reduce cache overhead and replace `BoundedCache` with a `Map`
+
 ## 4.0.4
 
 ### Patch Changes
@@ -467,13 +476,11 @@
 - fbff74c8: `dep-check` has been renamed to `align-deps`
 
   ### Bug Fixes
-
   - Improved error messages: Messages should now contain the offending
     `package.json` and/or the profile causing issues.
   - Diff output has been reduced to only include the relevant sections.
 
   ### BREAKING CHANGES
-
   - A new config schema was introduced in this release
     - The old config will still work, but you are advised to migrate as soon as
       possible
