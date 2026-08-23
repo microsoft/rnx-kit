@@ -108,14 +108,20 @@ export function remapImportPath(pluginOptions: Options): ModuleResolver {
 
   const getResolver = (() => {
     const { extensions, mainFields } = resolverOptions;
-    let resolve: Resolver;
+    // The extension list is platform specific, so resolvers cannot be shared
+    // across platforms. Keep one per platform instead.
+    const resolvers = new Map<string, Resolver>();
     return (platform: string) => {
-      if (!resolve) {
-        resolve = require("enhanced-resolve").create.sync({
-          extensions: expandPlatformExtensions(platform, extensions),
-          mainFields,
-        });
+      const cached = resolvers.get(platform);
+      if (cached) {
+        return cached;
       }
+
+      const resolve: Resolver = require("enhanced-resolve").create.sync({
+        extensions: expandPlatformExtensions(platform, extensions),
+        mainFields,
+      });
+      resolvers.set(platform, resolve);
       return resolve;
     };
   })();

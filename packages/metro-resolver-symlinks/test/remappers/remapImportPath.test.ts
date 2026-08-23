@@ -1,5 +1,19 @@
+import { create } from "enhanced-resolve";
 import * as path from "node:path";
 import { remapImportPath } from "../../src/remappers/remapImportPath.ts";
+
+// `create.sync` is a non-configurable getter, so it cannot be spied on
+// directly. Wrap it in a mock that still delegates to the real implementation.
+jest.mock("enhanced-resolve", () => {
+  const actual =
+    jest.requireActual<typeof import("enhanced-resolve")>("enhanced-resolve");
+  const create = (...args: Parameters<typeof actual.create>) =>
+    actual.create(...args);
+  create.sync = jest.fn((...args: Parameters<typeof actual.create.sync>) =>
+    actual.create.sync(...args)
+  );
+  return { ...actual, create };
+});
 
 describe("remap-import-path", () => {
   const mockContext = {
@@ -69,10 +83,14 @@ describe("remap-import-path", () => {
       ["win32", "win"],
       ["windows", "windows"],
     ] as const;
+
+    // A single plugin instance serves every platform that a Metro server is
+    // asked to bundle for, so exercise all of them through one instance.
+    const plugin = remapImportPath({
+      test: (source) => source.startsWith("@contoso/"),
+    });
+
     for (const [platform, expected] of cases) {
-      const plugin = remapImportPath({
-        test: (source) => source.startsWith("@contoso/"),
-      });
       const result = plugin(
         mockContext,
         "@contoso/platform/lib/index",
@@ -90,6 +108,25 @@ describe("remap-import-path", () => {
         )
       );
     }
+  });
+
+  test("reuses the resolver when the platform is unchanged", () => {
+    const createSync = jest.mocked(create.sync);
+    createSync.mockClear();
+
+    const plugin = remapImportPath({
+      test: (source) => source.startsWith("@contoso/"),
+    });
+
+    plugin(mockContext, "@contoso/platform/lib/index", "ios");
+    plugin(mockContext, "@contoso/platform/lib/index", "ios");
+    expect(createSync).toHaveBeenCalledTimes(1);
+
+    plugin(mockContext, "@contoso/platform/lib/index", "android");
+    expect(createSync).toHaveBeenCalledTimes(2);
+
+    plugin(mockContext, "@contoso/platform/lib/index", "android");
+    expect(createSync).toHaveBeenCalledTimes(2);
   });
 
   test("resolves with custom main fields", () => {
