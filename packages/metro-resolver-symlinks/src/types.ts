@@ -17,6 +17,8 @@ export type CallResolver = (
 
 export type MetroResolver = typeof import("metro-resolver").resolve;
 
+export type ModuleHash = { content?: Buffer; sha1: string };
+
 export type ResolutionContextCompat = CustomResolutionContext & {
   /**
    * Introduced in 0.76
