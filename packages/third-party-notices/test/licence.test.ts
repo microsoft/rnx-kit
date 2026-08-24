@@ -3,7 +3,7 @@ import * as fs from "node:fs";
 import { createRequire } from "node:module";
 import * as path from "node:path";
 import { after, before, describe, it } from "node:test";
-import { URL } from "node:url";
+import { URL, fileURLToPath } from "node:url";
 import { createLicenseJSON } from "../src/output/json.ts";
 import { createLicenseFileContents } from "../src/output/text.ts";
 import type { License } from "../src/types.ts";
@@ -20,16 +20,17 @@ describe("license", () => {
 
   const rnxConsoleDir = resolveModule("@rnx-kit/console");
   const metroSourceMapDir = resolveModule("metro-source-map");
+  const unicodeSegmenterDir = fileURLToPath(
+    new URL("./__fixtures__/unicode-segmenter/", import.meta.url)
+  );
   const yargsDir = resolveModule("yargs");
 
   async function getSampleLicenseData(): Promise<License[]> {
     const map = new Map([
-      // License data in package.json
-      ["@rnx-kit/console", rnxConsoleDir],
-      // License data package.json and LICENCE file
-      ["yargs", yargsDir],
-      // No license data
-      ["metro-source-map", metroSourceMapDir],
+      ["@rnx-kit/console", rnxConsoleDir], // License data in package.json
+      ["metro-source-map", metroSourceMapDir], // No license data
+      ["unicode-segmenter", unicodeSegmenterDir], // `licenses` directory
+      ["yargs", yargsDir], // License data package.json and LICENCE file
     ]);
 
     const licenses = await extractLicenses(map);
@@ -56,6 +57,7 @@ describe("license", () => {
   });
 
   after(() => {
+    // @ts-expect-error Tests are run in ESM mode where `require` is not defined
     global.require = undefined;
   });
 
@@ -76,6 +78,19 @@ describe("license", () => {
         version: "1.2.3-fixedVersionForTesting",
         licenseURLs: ["https://spdx.org/licenses/MIT.html"],
         license: "MIT",
+      },
+      {
+        license: "Fair",
+        licenseFile: "LICENSE",
+        licenseText: fs
+          .readFileSync(path.join(unicodeSegmenterDir, "LICENSE"), {
+            encoding: "utf-8",
+          })
+          .replaceAll("\r\n", "\n"),
+        licenseURLs: ["https://spdx.org/licenses/Fair.html"],
+        name: "unicode-segmenter",
+        path: unicodeSegmenterDir,
+        version: "1.2.3-fixedVersionForTesting",
       },
       {
         license: "MIT",
@@ -131,10 +146,16 @@ describe("license", () => {
           version: "1.2.3-fixedVersionForTesting",
         },
         {
+          copyright: "MIT (https://spdx.org/licenses/MIT.html)",
+          license: "MIT",
           name: "metro-source-map",
           version: "1.2.3-fixedVersionForTesting",
-          license: "MIT",
-          copyright: "MIT (https://spdx.org/licenses/MIT.html)",
+        },
+        {
+          copyright: "Copyright (c) Microsoft Corporation.",
+          license: "Fair",
+          name: "unicode-segmenter",
+          version: "1.2.3-fixedVersionForTesting",
         },
         {
           copyright:
@@ -170,18 +191,25 @@ describe("license", () => {
           version: "1.2.3-fixedVersionForTesting",
         },
         {
+          copyright: "MIT (https://spdx.org/licenses/MIT.html)",
+          license: "MIT",
           name: "metro-source-map",
           version: "1.2.3-fixedVersionForTesting",
-          license: "MIT",
-          copyright: "MIT (https://spdx.org/licenses/MIT.html)",
+        },
+        {
+          copyright: "Copyright (c) Microsoft Corporation.",
+          license: "Fair",
+          name: "unicode-segmenter",
+          text: "Copyright (c) Microsoft Corporation.\\n\\nUsage of the works is permitted provided that this instrument is retained with\\nthe works, so that any entity that uses the works is notified of this\\ninstrument.\\n\\nDISCLAIMER: THE WORKS ARE WITHOUT WARRANTY.",
+          version: "1.2.3-fixedVersionForTesting",
         },
         {
           copyright:
             "Copyright 2010 James Halliday (mail@substack.net); Modified work Copyright 2014 Contributors (ben@npmjs.com)",
           license: "MIT",
           name: "yargs",
-          version: "1.2.3-fixedVersionForTesting",
           text: 'MIT License\\n\\nCopyright 2010 James Halliday (mail@substack.net); Modified work Copyright 2014 Contributors (ben@npmjs.com)\\n\\nPermission is hereby granted, free of charge, to any person obtaining a copy\\nof this software and associated documentation files (the "Software"), to deal\\nin the Software without restriction, including without limitation the rights\\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\\ncopies of the Software, and to permit persons to whom the Software is\\nfurnished to do so, subject to the following conditions:\\n\\nThe above copyright notice and this permission notice shall be included in\\nall copies or substantial portions of the Software.\\n\\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\\nTHE SOFTWARE.',
+          version: "1.2.3-fixedVersionForTesting",
         },
         {
           copyright: "Microsoft Open Source",

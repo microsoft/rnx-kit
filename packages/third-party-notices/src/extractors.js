@@ -91,15 +91,18 @@ function _getPackageJsonInformations(modules) {
 }
 
 function _findLicenseFiles(modules) {
+  const withFileTypes = { withFileTypes: true };
   for (const module of modules) {
-    var files = fs.readdirSync(module.path);
+    const files = fs.readdirSync(module.path, withFileTypes);
 
     for (const file of files) {
-      if (file.match(/(LICENSE|LICENCE|COPYING)/i)) {
-        module.licenseFile = file;
+      if (file.isDirectory()) continue;
+      const filename = file.name;
+      if (filename.match(/(LICENSE|LICENCE|COPYING)/i)) {
+        module.licenseFile = filename;
         if (module.noticeFile) break;
-      } else if (file.match(/NOTICE/i)) {
-        module.noticeFile = file;
+      } else if (filename.match(/NOTICE/i)) {
+        module.noticeFile = filename;
         if (module.licenseFile) break;
       }
     }
