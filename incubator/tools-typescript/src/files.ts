@@ -177,8 +177,11 @@ class BatchWriter implements AsyncWriter {
       }
     });
 
-    // if the queue never started write emit the done event so that we don't wait forever
-    if (this.queued === 0) {
+    // The done event is emitted as soon as the last write settles, which may
+    // have happened before anyone started listening for it. Re-emit it if the
+    // batch has already drained so that we don't wait forever. This also covers
+    // the case where the queue never started.
+    if (this.queued === this.written) {
       this.emitter.emit("done");
     }
     // now wait on the done event

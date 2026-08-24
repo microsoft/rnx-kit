@@ -92,6 +92,19 @@ describe("BatchWriter", () => {
     expect(fileStats.maxActive).toBe(2);
   });
 
+  it("should return when all writes finished before finish was called", async () => {
+    const writer = createAsyncWriter("rootDir", throttler);
+    writer.writeFile("file1.txt", "content1");
+    writer.writeFile("file2.txt", "content2");
+    await awaitableTimeout(30);
+    expect(fileStats.written).toBe(2);
+
+    await writer.finish();
+
+    expect(fileStats.active).toBe(0);
+    expect(fileStats.written).toBe(2);
+  });
+
   it("should return when nothing is written", async () => {
     const writer = createAsyncWriter("rootDir", throttler);
     await writer.finish();
