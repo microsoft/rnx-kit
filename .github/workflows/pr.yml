@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@8aa1599f60e612a36bb7fea5372e214cbaeb82df # 5.4.8
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2bd913d4bd2344039eec5500b9be0079fafd5b06 # 5.4.9
         with:
           node-version: 24
       - name: Deduplicate packages
@@ -106,7 +106,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@8aa1599f60e612a36bb7fea5372e214cbaeb82df # 5.4.8
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2bd913d4bd2344039eec5500b9be0079fafd5b06 # 5.4.9
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install package dependencies
@@ -134,7 +134,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@8aa1599f60e612a36bb7fea5372e214cbaeb82df # 5.4.8
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2bd913d4bd2344039eec5500b9be0079fafd5b06 # 5.4.9
         with:
           platform: android
       - name: Install package dependencies
@@ -168,7 +168,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@8aa1599f60e612a36bb7fea5372e214cbaeb82df # 5.4.8
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2bd913d4bd2344039eec5500b9be0079fafd5b06 # 5.4.9
         with:
           platform: ios
       - name: Install package dependencies
@@ -186,7 +186,7 @@ jobs:
           cp .github/nx.min.json nx.json
           yarn nx build @rnx-kit/cli
       - name: Install Pods
-        uses: microsoft/react-native-test-app/.github/actions/cocoapods@8aa1599f60e612a36bb7fea5372e214cbaeb82df # 5.4.8
+        uses: microsoft/react-native-test-app/.github/actions/cocoapods@2bd913d4bd2344039eec5500b9be0079fafd5b06 # 5.4.9
         if: ${{ steps.affected-projects.outputs.ios != '' }}
         env:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
@@ -212,7 +212,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@8aa1599f60e612a36bb7fea5372e214cbaeb82df # 5.4.8
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2bd913d4bd2344039eec5500b9be0079fafd5b06 # 5.4.9
         with:
           platform: macos
       - name: Install package dependencies
@@ -230,7 +230,7 @@ jobs:
           cp .github/nx.min.json nx.json
           yarn nx build @rnx-kit/cli
       - name: Install Pods
-        uses: microsoft/react-native-test-app/.github/actions/cocoapods@8aa1599f60e612a36bb7fea5372e214cbaeb82df # 5.4.8
+        uses: microsoft/react-native-test-app/.github/actions/cocoapods@2bd913d4bd2344039eec5500b9be0079fafd5b06 # 5.4.9
         if: ${{ steps.affected-projects.outputs.macos != '' }}
         env:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
@@ -256,7 +256,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@8aa1599f60e612a36bb7fea5372e214cbaeb82df # 5.4.8
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2bd913d4bd2344039eec5500b9be0079fafd5b06 # 5.4.9
         with:
           platform: windows
       - name: Install package dependencies
@@ -294,7 +294,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@8aa1599f60e612a36bb7fea5372e214cbaeb82df # 5.4.8
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2bd913d4bd2344039eec5500b9be0079fafd5b06 # 5.4.9
         with:
           cache-npm-dependencies: ""
       - name: Deduplicate packages
