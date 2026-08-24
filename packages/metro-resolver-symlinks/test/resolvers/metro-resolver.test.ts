@@ -1,10 +1,19 @@
 import * as path from "node:path";
-import { resolveModulePath } from "../../src/resolvers/metro-resolver.ts";
+import {
+  applyMetroResolver,
+  resolveModulePath,
+} from "../../src/resolvers/metro-resolver.ts";
+import type { ResolutionContextCompat } from "../../src/types.ts";
 import { useFixture } from "../fixtures.ts";
+import { makeResolverTest } from "./helper.ts";
+
+makeResolverTest("applyMetroResolver", applyMetroResolver, {
+  failed: "The module could not be resolved",
+});
 
 describe("resolveModulePath", () => {
-  function makeContext(originModulePath: string) {
-    return { originModulePath };
+  function makeContext(originModulePath: string): ResolutionContextCompat {
+    return { originModulePath } as ResolutionContextCompat;
   }
 
   test("returns absolute/relative modules as is", () => {

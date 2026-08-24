@@ -1,4 +1,5 @@
 import { remapReactNativeModule } from "../../src/remappers/remapReactNative.ts";
+import type { ResolutionContextCompat } from "../../src/types.ts";
 import { useFixture } from "../fixtures.ts";
 
 const AVAILABLE_PLATFORMS = {
@@ -10,7 +11,7 @@ const AVAILABLE_PLATFORMS = {
 describe("remapReactNativeModule", () => {
   const context = {
     originModulePath: "",
-  };
+  } as ResolutionContextCompat;
 
   const currentDir = process.cwd();
 

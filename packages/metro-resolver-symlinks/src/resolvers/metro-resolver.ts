@@ -5,6 +5,7 @@ import * as path from "node:path";
 import type { ModuleResolver, ResolutionContextCompat } from "../types.ts";
 import { supportsSymlinks } from "../utils/metro.ts";
 import { resolveFrom } from "../utils/package.ts";
+import { EMPTY_MODULE } from "./empty-module.ts";
 
 export const resolveModulePath: ModuleResolver = (
   { extraNodeModules, originModulePath },
@@ -41,7 +42,7 @@ function applyMetroResolverLegacy(
   // https://github.com/react/metro/blob/v0.76.7/docs/Resolution.md#redirectmodulepath-string--string--false
   const realModuleName = ctx.redirectModulePath(moduleName);
   if (realModuleName === false) {
-    return { type: "empty" };
+    return EMPTY_MODULE;
   }
 
   const modifiedModuleName = resolveModulePath(ctx, realModuleName, platform);
@@ -59,7 +60,7 @@ function applyMetroResolver_0_81(
   // https://github.com/react/metro/blob/v0.76.7/docs/Resolution.md#redirectmodulepath-string--string--false
   const realModuleName = ctx.redirectModulePath(moduleName);
   if (realModuleName === false) {
-    return { type: "empty" };
+    return EMPTY_MODULE;
   }
 
   return resolve(ctx, realModuleName, platform);

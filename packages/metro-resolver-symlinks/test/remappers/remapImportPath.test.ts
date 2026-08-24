@@ -1,6 +1,7 @@
 import { create } from "enhanced-resolve";
 import * as path from "node:path";
 import { remapImportPath } from "../../src/remappers/remapImportPath.ts";
+import type { ResolutionContextCompat } from "../../src/types.ts";
 
 // `create.sync` is a non-configurable getter, so it cannot be spied on
 // directly. Wrap it in a mock that still delegates to the real implementation.
@@ -18,7 +19,7 @@ jest.mock("enhanced-resolve", () => {
 describe("remap-import-path", () => {
   const mockContext = {
     originModulePath: "",
-  };
+  } as ResolutionContextCompat;
 
   const plugin = remapImportPath({
     test: (source) => source.startsWith("@contoso/"),

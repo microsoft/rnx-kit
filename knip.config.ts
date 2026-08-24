@@ -93,7 +93,7 @@ export default {
       ignoreDependencies: jestDependencies,
     },
     "packages/metro-resolver-symlinks": {
-      entry: ["jest.config.js", allTests],
+      entry: ["jest.config.js", allFixtures, allTests],
       ignoreDependencies: jestDependencies,
     },
     "packages/metro-serializer-esbuild": {

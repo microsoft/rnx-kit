@@ -1,6 +1,7 @@
 {
   "name": "@rnx-kit/metro-resolver-symlinks/remap-tests",
   "version": "0.0.0-dev",
+  "private": true,
   "dependencies": {
     "@office-iss/react-native-win32": "0.0.0-dev",
     "react-native": "0.0.0-dev",

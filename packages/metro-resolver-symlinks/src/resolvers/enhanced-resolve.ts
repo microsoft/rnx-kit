@@ -7,6 +7,7 @@ import {
   makeEnhancedResolveOptions,
 } from "../utils/enhancedResolveHelpers.ts";
 import { importResolver } from "../utils/package.ts";
+import { EMPTY_MODULE } from "./empty-module.ts";
 
 const getEnhancedResolver = (() => {
   const resolvers: Record<string, ResolveFunction> = {};
@@ -27,13 +28,13 @@ export function applyEnhancedResolver(
   platform: string
 ): Resolution {
   if (!platform) {
-    return { type: "empty" };
+    return EMPTY_MODULE;
   }
 
   const enhancedResolve = getEnhancedResolver(context, platform);
   const filePath = enhancedResolve(getFromDir(context), moduleName);
   if (filePath === false) {
-    return { type: "empty" };
+    return EMPTY_MODULE;
   }
 
   if (isAssetFile(context, moduleName)) {
