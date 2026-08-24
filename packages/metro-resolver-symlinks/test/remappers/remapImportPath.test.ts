@@ -1,10 +1,11 @@
 import * as path from "node:path";
 import { remapImportPath } from "../../src/remappers/remapImportPath.ts";
+import type { ResolutionContextCompat } from "../../src/types.ts";
 
 describe("remap-import-path", () => {
   const mockContext = {
     originModulePath: "",
-  };
+  } as ResolutionContextCompat;
 
   const plugin = remapImportPath({
     test: (source) => source.startsWith("@contoso/"),

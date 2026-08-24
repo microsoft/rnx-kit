@@ -8,6 +8,7 @@ import {
   makeEnhancedResolveOptions,
 } from "../utils/enhancedResolveHelpers.ts";
 import { importResolver } from "../utils/package.ts";
+import { EMPTY_MODULE } from "./empty-module.ts";
 
 function makeOxcResolverOptions(
   context: ResolutionContextCompat,
@@ -59,13 +60,21 @@ export function applyOxcResolver(
   platform: string
 ): Resolution {
   if (!platform) {
-    return { type: "empty" };
+    return EMPTY_MODULE;
   }
 
   const oxcResolve = getOxcResolver(context, platform);
   const fromDir = getFromDir(context);
   const { error, path: filePath } = oxcResolve.sync(fromDir, moduleName);
   if (error) {
+    // A module is ignored when it is mapped to `false` in the `browser`
+    // field of `package.json`. This is not an error; Metro expects an empty
+    // module in this case.
+    // https://github.com/defunctzombie/package-browser-field-spec#ignore-a-module
+    if (error.startsWith("Path is ignored")) {
+      return EMPTY_MODULE;
+    }
+
     const { originModulePath } = context;
     const origin = originModulePath
       ? path.relative(process.cwd(), originModulePath)
@@ -74,7 +83,7 @@ export function applyOxcResolver(
   }
 
   if (!filePath) {
-    return { type: "empty" };
+    return EMPTY_MODULE;
   }
 
   if (isAssetFile(context, moduleName)) {
