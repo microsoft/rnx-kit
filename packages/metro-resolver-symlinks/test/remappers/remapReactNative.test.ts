@@ -1,3 +1,5 @@
+import { equal } from "node:assert/strict";
+import { after, before, describe, it } from "node:test";
 import { remapReactNativeModule } from "../../src/remappers/remapReactNative.ts";
 import type { ResolutionContextCompat } from "../../src/types.ts";
 import { useFixture } from "../fixtures.ts";
@@ -15,37 +17,38 @@ describe("remapReactNativeModule", () => {
 
   const currentDir = process.cwd();
 
-  beforeAll(() => {
+  before(() => {
     process.chdir(useFixture("remap-platforms"));
   });
 
-  afterAll(() => {
+  after(() => {
     process.chdir(currentDir);
   });
 
-  test("remaps `react-native` if platform is supported", () => {
-    expect(remapReactNativeModule(context, "terminator", "macos")).toBe(
-      "terminator"
-    );
+  it("remaps `react-native` if platform is supported", () => {
+    equal(remapReactNativeModule(context, "terminator", "macos"), "terminator");
 
-    expect(remapReactNativeModule(context, "react-native", "nextstep")).toBe(
+    equal(
+      remapReactNativeModule(context, "react-native", "nextstep"),
       "react-native"
     );
 
     for (const [platform, npmPackage] of Object.entries(AVAILABLE_PLATFORMS)) {
-      expect(remapReactNativeModule(context, "react-native", platform)).toBe(
+      equal(
+        remapReactNativeModule(context, "react-native", platform),
         npmPackage
       );
     }
   });
 
-  test("remaps paths under `react-native` if platform is supported", () => {
+  it("remaps paths under `react-native` if platform is supported", () => {
     const target = "react-native/index";
 
-    expect(remapReactNativeModule(context, target, "nextstep")).toBe(target);
+    equal(remapReactNativeModule(context, target, "nextstep"), target);
 
     for (const [platform, npmPackage] of Object.entries(AVAILABLE_PLATFORMS)) {
-      expect(remapReactNativeModule(context, target, platform)).toBe(
+      equal(
+        remapReactNativeModule(context, target, platform),
         `${npmPackage}/index`
       );
     }

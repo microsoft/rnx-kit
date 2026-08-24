@@ -5400,7 +5400,6 @@ __metadata:
   resolution: "@rnx-kit/metro-resolver-symlinks@workspace:packages/metro-resolver-symlinks"
   dependencies:
     "@rnx-kit/console": "npm:^3.0.0"
-    "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.3"
     "@rnx-kit/tools-react-native": "npm:^2.3.2"

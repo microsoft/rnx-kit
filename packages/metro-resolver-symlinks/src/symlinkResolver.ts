@@ -9,9 +9,10 @@ import type {
   ResolutionContextCompat,
 } from "./types.ts";
 
-export function makeResolver(options: Options = {}): MetroResolver {
-  const { resolve: metroResolver } = requireModuleFromMetro("metro-resolver");
-
+export function makeResolver(
+  options: Options = {},
+  metroResolver = requireModuleFromMetro("metro-resolver").resolve
+): MetroResolver {
   const { remapModule = (_, moduleName, __) => moduleName } = options;
   const remappers = [remapModule, remapReactNativeModule];
 

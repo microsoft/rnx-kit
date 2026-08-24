@@ -1,27 +1,29 @@
+import { equal } from "node:assert/strict";
+import { describe, it } from "node:test";
 import type { ResolutionContextCompat } from "../../src/types.ts";
 import { isAssetFile } from "../../src/utils/assets.ts";
 
 describe("isAssetFile", () => {
-  test("uses `isAssetFile` if it exists", () => {
+  it("uses `isAssetFile` if it exists", () => {
     const context = {
       isAssetFile: () => true,
     } as unknown as ResolutionContextCompat;
-    expect(isAssetFile(context, "test.png")).toBe(true);
+    equal(isAssetFile(context, "test.png"), true);
   });
 
-  test("uses `assetExts` if it exists", () => {
+  it("uses `assetExts` if it exists", () => {
     const context = {
       assetExts: new Set(["png"]),
       isAssetFile: () => false,
     } as unknown as ResolutionContextCompat;
-    expect(isAssetFile(context, "test.png")).toBe(true);
+    equal(isAssetFile(context, "test.png"), true);
   });
 
-  test("resolves multipart extensions", () => {
+  it("resolves multipart extensions", () => {
     const context = {
       assetExts: new Set(["android.png"]),
     } as unknown as ResolutionContextCompat;
-    expect(isAssetFile(context, "android.png")).toBe(false);
-    expect(isAssetFile(context, "test.android.png")).toBe(true);
+    equal(isAssetFile(context, "android.png"), false);
+    equal(isAssetFile(context, "test.android.png"), true);
   });
 });
