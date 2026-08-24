@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.3.2
+
+### Patch Changes
+
+- 595b067: Fixed cache misses when `experimental_retryResolvingFromDisk` is enabled
+- eb0b87c: Fixed ignored packages not being handled correctly
+- e3db308: Fixed `remapImportPath` reusing the resolver of the first platform it saw for every other platform
+
 ## 0.3.1
 
 ### Patch Changes

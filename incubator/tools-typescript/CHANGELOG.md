@@ -1,5 +1,11 @@
 # @rnx-kit/tools-typescript
 
+## 0.2.2
+
+### Patch Changes
+
+- e99e39e: Fixed `BatchWriter.finish()` hanging when every queued write had already completed
+
 ## 0.2.1
 
 ### Patch Changes
