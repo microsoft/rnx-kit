@@ -50,13 +50,9 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "devDependencies": {
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0"
-  },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
   },
   "engines": {
     "node": ">=16.17"

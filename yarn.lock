@@ -5982,7 +5982,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-shell@workspace:packages/tools-shell"
   dependencies:
-    "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
