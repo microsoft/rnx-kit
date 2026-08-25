@@ -1,7 +1,9 @@
 import type { CustomResolver, ResolutionContext } from "metro-resolver";
 import { resolve } from "metro-resolver";
+import { deepEqual } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { afterEach, describe, it } from "node:test";
 import { makeResolver } from "../src/symlinkResolver.ts";
 import { useFixture } from "./fixtures.ts";
 
@@ -50,27 +52,27 @@ describe("makeResolver", () => {
     process.chdir(currentWorkingDirectory);
   });
 
-  test("returns `react-native` with Metro <0.68", () => {
+  it("returns `react-native` with Metro <0.68", () => {
     const fixture = useFixture("duplicates");
     process.chdir(fixture);
 
-    const resolveRequest = makeResolver();
+    const resolveRequest = makeResolver(undefined, resolve);
     const context = makeContext(resolveRequest);
 
-    expect(resolveRequest(context, "react-native", "ios")).toEqual({
+    deepEqual(resolveRequest(context, "react-native", "ios"), {
       filePath: path.join(fixture, "node_modules", "react-native", "index.js"),
       type: "sourceFile",
     });
   });
 
-  test("returns `react-native` with Metro >=0.68", () => {
+  it("returns `react-native` with Metro >=0.68", () => {
     const fixture = useFixture("duplicates");
     process.chdir(fixture);
 
-    const resolveRequest = makeResolver();
+    const resolveRequest = makeResolver(undefined, resolve);
     const context = makeContext(resolve, true);
 
-    expect(resolveRequest(context, "react-native", "ios")).toEqual({
+    deepEqual(resolveRequest(context, "react-native", "ios"), {
       filePath: path.join(fixture, "node_modules", "react-native", "index.js"),
       type: "sourceFile",
     });

@@ -1,6 +1,5 @@
-// istanbul ignore file
-import * as path from "node:path";
+import { URL, fileURLToPath } from "node:url";
 
 export function useFixture(name: string): string {
-  return path.join(__dirname, "__fixtures__", name);
+  return fileURLToPath(new URL(`__fixtures__/${name}`, import.meta.url));
 }

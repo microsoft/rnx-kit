@@ -1,6 +1,9 @@
 import { resolve as metroResolver } from "metro-resolver";
+import { deepEqual, throws } from "node:assert/strict";
 import * as fs from "node:fs";
+import { createRequire } from "node:module";
 import * as path from "node:path";
+import { after, before, describe, it } from "node:test";
 import type { CallResolver, ResolutionContextCompat } from "../../src/types.ts";
 import { useFixture } from "../fixtures.ts";
 
@@ -42,16 +45,27 @@ export function makeResolverTest(
   }
 
   describe(name, () => {
-    test("throws when a module cannot be found", () => {
-      const context = makeContext(ignoredFixture);
-
-      expect(() => resolve(context, "./does-not-exist")).toThrow(errors.failed);
+    before(() => {
+      global.require = createRequire(
+        new URL("../../src/resolvers/metro-resolver.ts", import.meta.url)
+      );
     });
 
-    test("returns an empty module for paths ignored by the `browser` field", () => {
+    after(() => {
+      // @ts-expect-error Tests are run in ESM mode where `require` is not defined
+      global.require = undefined;
+    });
+
+    it("throws when a module cannot be found", () => {
       const context = makeContext(ignoredFixture);
 
-      expect(resolve(context, "./ignored")).toEqual({ type: "empty" });
+      throws(() => resolve(context, "./does-not-exist"), errors.failed);
+    });
+
+    it("returns an empty module for paths ignored by the `browser` field", () => {
+      const context = makeContext(ignoredFixture);
+
+      deepEqual(resolve(context, "./ignored"), { type: "empty" });
     });
   });
 }
