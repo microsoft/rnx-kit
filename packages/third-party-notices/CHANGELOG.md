@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 3.0.3
+
+### Patch Changes
+
+- 7bac989: Fixed license finder mistaking a directory for a license file
+
 ## 3.0.2
 
 ### Patch Changes
