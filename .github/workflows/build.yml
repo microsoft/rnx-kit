@@ -19,7 +19,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@8aa1599f60e612a36bb7fea5372e214cbaeb82df # 5.4.8
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2bd913d4bd2344039eec5500b9be0079fafd5b06 # 5.4.9
       - name: Install package dependencies
         run: |
           yarn
@@ -38,7 +38,7 @@ jobs:
           permission-contents: write # for GH releases and Git tags (Changesets)
           permission-pull-requests: write # version PRs (Changesets)
       - name: Create release PR or publish to npm
-        uses: changesets/action@22ccf9aa43179fe9e27dc62e575971d28cce197c # v2.0.0
+        uses: changesets/action@198f833dd7d863100ea6e28967bc9a9fdefadb0a # v2.1.0
         with:
           # We cannot use the GHA generated tokens because we've disabled
           # creation of pull requests at the org level.
