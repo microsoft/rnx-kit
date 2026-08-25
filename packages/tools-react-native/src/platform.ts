@@ -1,4 +1,7 @@
-import { findPackageDependencyDir } from "@rnx-kit/tools-node/package";
+import {
+  findPackageDependencyDir,
+  readPackage,
+} from "@rnx-kit/tools-node/package";
 import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
 import { ALL_PLATFORM_VALUES } from "@rnx-kit/types-bundle-config";
 import * as fs from "node:fs";
@@ -98,9 +101,8 @@ export function getAvailablePlatformsUncached(
       : getAvailablePlatformsUncached(path.dirname(startDir), platformMap);
   }
 
-  const { dependencies, peerDependencies, devDependencies } = JSON.parse(
-    fs.readFileSync(packageJson, { encoding: "utf-8" })
-  );
+  const { dependencies, peerDependencies, devDependencies } =
+    readPackage(packageJson);
 
   const packages = new Set<string>(
     dependencies ? Object.keys(dependencies) : []
