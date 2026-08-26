@@ -1,4 +1,3 @@
-import type { Config } from "@react-native-community/cli-types";
 import { ensureDirSync } from "@rnx-kit/tools-filesystem";
 import { findUp } from "@rnx-kit/tools-node/path";
 import * as crypto from "node:crypto";
@@ -6,6 +5,7 @@ import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { REACT_NATIVE_CONFIG_FILES } from "./context.ts";
 
+export const CONFIG_CACHE_KEY = "config";
 const HASH_ALGO = "sha256";
 const UTF8 = { encoding: "utf-8" as const };
 
@@ -13,12 +13,12 @@ function makeCachePath(projectRoot: string, filename: string): string {
   return path.join(projectRoot, "node_modules", ".cache", "rnx-kit", filename);
 }
 
-function cacheStatePath(projectRoot: string): string {
-  return makeCachePath(projectRoot, `config.${HASH_ALGO}`);
+function cacheStatePath(projectRoot: string, key: string): string {
+  return makeCachePath(projectRoot, `${key}.${HASH_ALGO}`);
 }
 
-function configCachePath(projectRoot: string): string {
-  return makeCachePath(projectRoot, "config.json");
+function configCachePath(projectRoot: string, key: string): string {
+  return makeCachePath(projectRoot, `${key}.json`);
 }
 
 function updateHash(
@@ -60,25 +60,28 @@ export function getCurrentState(projectRoot: string): string {
 
 export function getSavedState(
   projectRoot: string,
+  key = CONFIG_CACHE_KEY,
   /** @internal */ fs = nodefs
 ): string | false {
-  const stateFile = cacheStatePath(projectRoot);
+  const stateFile = cacheStatePath(projectRoot, key);
   return fs.existsSync(stateFile) && fs.readFileSync(stateFile, UTF8);
 }
 
 export function invalidateState(
   projectRoot = process.cwd(),
+  key = CONFIG_CACHE_KEY,
   /** @internal */ fs = nodefs
 ) {
-  fs.rmSync(configCachePath(projectRoot));
-  fs.rmSync(cacheStatePath(projectRoot));
+  fs.rmSync(configCachePath(projectRoot, key));
+  fs.rmSync(cacheStatePath(projectRoot, key));
 }
 
-export function loadConfigFromCache(
+export function loadConfigFromCache<T>(
   projectRoot: string,
+  key = CONFIG_CACHE_KEY,
   /** @internal */ fs = nodefs
-): Config | null {
-  const cacheFile = configCachePath(projectRoot);
+): T | null {
+  const cacheFile = configCachePath(projectRoot, key);
   if (!fs.existsSync(cacheFile)) {
     return null;
   }
@@ -87,17 +90,18 @@ export function loadConfigFromCache(
   return JSON.parse(config);
 }
 
-export function saveConfigToCache(
+export function saveConfigToCache<T>(
   projectRoot: string,
   state: string,
-  config: Config,
+  config: T,
+  key = CONFIG_CACHE_KEY,
   /** @internal */ fs = nodefs
 ): void {
   const data = JSON.stringify(config);
 
-  const configPath = configCachePath(projectRoot);
+  const configPath = configCachePath(projectRoot, key);
   ensureDirSync(path.dirname(configPath), fs);
 
   fs.writeFileSync(configPath, data, UTF8);
-  fs.writeFileSync(cacheStatePath(projectRoot), state, UTF8);
+  fs.writeFileSync(cacheStatePath(projectRoot, key), state, UTF8);
 }

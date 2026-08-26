@@ -5,6 +5,7 @@ import { deepEqual, equal, ok } from "node:assert/strict";
 import * as path from "node:path";
 import { describe, it } from "node:test";
 import {
+  CONFIG_CACHE_KEY,
   getSavedState,
   loadConfigFromCache,
   saveConfigToCache,
@@ -25,25 +26,25 @@ const stateFile = path.join(
 
 describe("getSavedState()", () => {
   it("returns false if there is no saved state", () => {
-    ok(!getSavedState("."));
+    ok(!getSavedState(".", CONFIG_CACHE_KEY));
   });
 
   it("returns saved state", () => {
     const fsMock = mockFS({ [stateFile]: stateHash });
 
-    equal(getSavedState(".", fsMock), stateHash);
+    equal(getSavedState(".", CONFIG_CACHE_KEY, fsMock), stateHash);
   });
 });
 
 describe("loadConfigFromCache()", () => {
   it("returns null if cache cannot be found", () => {
-    equal(loadConfigFromCache("."), null);
+    equal(loadConfigFromCache(".", CONFIG_CACHE_KEY), null);
   });
 
   it("returns cached config", () => {
     const fsMock = mockFS({ [cacheFile]: JSON.stringify(config) });
 
-    deepEqual(loadConfigFromCache(".", fsMock), config);
+    deepEqual(loadConfigFromCache(".", CONFIG_CACHE_KEY, fsMock), config);
   });
 });
 
@@ -51,7 +52,7 @@ describe("saveConfigToCache()", () => {
   it("writes the config and its state to disk", () => {
     const fs = mockFS();
 
-    saveConfigToCache(".", stateHash, config, fs);
+    saveConfigToCache(".", stateHash, config, CONFIG_CACHE_KEY, fs);
 
     equal(readText(stateFile, fs), stateHash);
     equal(readText(cacheFile, fs), JSON.stringify(config));

@@ -8,6 +8,7 @@ import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import {
+  CONFIG_CACHE_KEY,
   getCurrentState,
   getSavedState,
   loadConfigFromCache,
@@ -45,10 +46,13 @@ function findStartDir(root: string, reactNativePath = ""): string {
   return toNumber(version) < RN_CLI_DECOUPLED ? reactNative : root;
 }
 
-function getConfigOrState(projectRoot: string): Config | string {
+function getConfigOrState<T = Config>(
+  projectRoot: string,
+  key = CONFIG_CACHE_KEY
+): T | string {
   const state = getCurrentState(projectRoot);
-  if (state === getSavedState(projectRoot)) {
-    const config = loadConfigFromCache(projectRoot);
+  if (state === getSavedState(projectRoot, key)) {
+    const config = loadConfigFromCache<T>(projectRoot, key);
     if (config) {
       return config;
     }
@@ -130,6 +134,16 @@ export function readReactNativeConfig(
   packageDir: string,
   cwd = process.cwd()
 ): Record<string, unknown> | undefined {
+  const configCacheKey = "react-native.config";
+
+  const state = getConfigOrState<Record<string, unknown>>(
+    packageDir,
+    configCacheKey
+  );
+  if (typeof state !== "string") {
+    return state;
+  }
+
   for (const configFile of REACT_NATIVE_CONFIG_FILES) {
     const configPath = path.join(packageDir, configFile);
     if (fs.existsSync(configPath)) {
@@ -151,7 +165,13 @@ export function readReactNativeConfig(
       }
 
       const json = stdout?.toString().trim();
-      return json ? JSON.parse(json) : undefined;
+      if (!json) {
+        return undefined;
+      }
+
+      const config = JSON.parse(json);
+      saveConfigToCache(packageDir, state, config, configCacheKey);
+      return config;
     }
   }
 
