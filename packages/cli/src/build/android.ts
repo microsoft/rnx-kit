@@ -22,6 +22,6 @@ export function buildAndroid(
 
   return import("@rnx-kit/tools-android").then(({ assemble }) => {
     const gradle = assemble(sourceDir, buildParams, additionalArgs);
-    return watch(gradle, logger, () => sourceDir);
+    return watch(gradle, logger, buildParams.verbose, () => sourceDir);
   });
 }

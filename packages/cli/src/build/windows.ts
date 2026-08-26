@@ -5,6 +5,7 @@ import * as os from "node:os";
 import * as path from "node:path";
 import ora from "ora";
 import type { WindowsBuildParams, WindowsInputParams } from "./types.ts";
+import type { Logger } from "./watcher.ts";
 
 export type BuildArgs = {
   solution: string;
@@ -33,7 +34,7 @@ function findRunCommand(startDir: string): Command | undefined {
   return undefined;
 }
 
-function findSolution(searchDir: string, logger: ora.Ora): string | undefined {
+function findSolution(searchDir: string, logger: Logger): string | undefined {
   const solutions = fs.existsSync(searchDir)
     ? fs.readdirSync(searchDir).filter((file) => file.endsWith(".sln"))
     : [];
@@ -60,12 +61,13 @@ function findSolution(searchDir: string, logger: ora.Ora): string | undefined {
 function toRunWindowsOptions(
   sln: string,
   { root }: Config,
-  { configuration, architecture, launch, deploy }: WindowsBuildParams
+  { configuration, architecture, launch, deploy, verbose }: WindowsBuildParams
 ) {
   return {
     release: configuration === "Release",
     root,
     arch: architecture ?? os.arch(),
+    logging: Boolean(verbose),
     packager: false,
     bundle: false,
     launch: Boolean(launch),
@@ -79,7 +81,7 @@ function toRunWindowsOptions(
 export function runWindowsCommand(
   config: Config,
   params: WindowsInputParams,
-  logger: ora.Ora,
+  logger: Logger,
   callback: (
     solution: string,
     run: Command["func"],

@@ -6,10 +6,11 @@ import ora from "ora";
 import type { BuildResult } from "./apple.ts";
 import { runBuild } from "./apple.ts";
 import type { AppleInputParams } from "./types.ts";
+import type { Logger } from "./watcher.ts";
 
 function findXcodeWorkspaces(
   searchDir: string,
-  logger: ora.Ora
+  logger: Logger
 ): string | undefined {
   const workspaces = fs.existsSync(searchDir)
     ? fs.readdirSync(searchDir).filter((file) => file.endsWith(".xcworkspace"))

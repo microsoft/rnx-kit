@@ -92,6 +92,10 @@ export const rnxBuildCommand = {
       parse: asSupportedPlatform,
     },
     {
+      name: "--verbose",
+      description: "Stream the underlying build tool's output as-is",
+    },
+    {
       name: "--solution <string>",
       description:
         "Path, relative to project root, of the Visual Studio solution to build (Windows only)",

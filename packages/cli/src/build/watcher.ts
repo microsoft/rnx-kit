@@ -1,21 +1,35 @@
 import type { ChildProcessWithoutNullStreams } from "node:child_process";
-import type { Ora } from "ora";
 
 export type ExitCode = number | null;
 
+export type Logger = {
+  text: string;
+  fail(text?: string): void;
+  info(text?: string): void;
+  start(text?: string): void;
+  stop(text?: string): void;
+  succeed(text?: string): void;
+};
+
 export function watch<T>(
   subproc: ChildProcessWithoutNullStreams,
-  logger: Ora,
+  logger: Logger,
+  verbose = Boolean(process.env.CI),
   onSuccess: () => T
 ) {
   return new Promise<T | ExitCode>((resolve) => {
     const step = "Building";
     const errors: Buffer[] = [];
 
-    const isCI = Boolean(process.env.CI);
-    if (isCI) {
-      subproc.stdout.on("data", (chunk) => process.stdout.write(chunk));
-      subproc.stderr.on("data", (chunk) => process.stderr.write(chunk));
+    if (verbose) {
+      subproc.stdout.on("data", (chunk) => {
+        logger.stop();
+        process.stdout.write(chunk);
+      });
+      subproc.stderr.on("data", (chunk) => {
+        logger.stop();
+        process.stderr.write(chunk);
+      });
     } else {
       let i = 0;
       subproc.stdout.on("data", () => {

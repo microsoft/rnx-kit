@@ -1,5 +1,5 @@
-import type { Ora } from "ora";
 import type { AppleBuildParams } from "./types.ts";
+import type { Logger } from "./watcher.ts";
 import { watch } from "./watcher.ts";
 
 export type BuildArgs = {
@@ -12,7 +12,7 @@ export type BuildResult = BuildArgs | number | null;
 export function runBuild(
   xcworkspace: string,
   buildParams: AppleBuildParams,
-  logger: Ora
+  logger: Logger
 ): Promise<BuildResult> {
   return import("@rnx-kit/tools-apple").then(
     ({ checkPodsManifestLock, xcodebuild }) => {
@@ -25,7 +25,7 @@ export function runBuild(
 
       const log = (message: string) => logger.info(message);
       const build = xcodebuild(xcworkspace, buildParams, log);
-      return watch(build, logger, () => ({
+      return watch(build, logger, buildParams.verbose, () => ({
         xcworkspace,
         args: build.spawnargs,
       }));
