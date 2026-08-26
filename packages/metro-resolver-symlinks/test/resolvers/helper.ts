@@ -40,8 +40,12 @@ export function makeResolverTest(
     } as unknown as ResolutionContextCompat;
   }
 
-  function resolve(context: ResolutionContextCompat, moduleName: string) {
-    return resolver(metroResolver, context, moduleName, "ios");
+  function resolve(
+    context: ResolutionContextCompat,
+    moduleName: string,
+    platform = "ios"
+  ) {
+    return resolver(metroResolver, context, moduleName, platform);
   }
 
   describe(name, () => {
@@ -66,6 +70,18 @@ export function makeResolverTest(
       const context = makeContext(ignoredFixture);
 
       deepEqual(resolve(context, "./ignored"), { type: "empty" });
+    });
+
+    it("resolves platform-forked files", () => {
+      const platformFixture = useFixture("platform-forked");
+      const context = makeContext(path.join(platformFixture, "index.js"));
+
+      for (const platform of ["android", "ios"]) {
+        deepEqual(resolve(context, "./module", platform), {
+          type: "sourceFile",
+          filePath: path.join(platformFixture, `module.${platform}.js`),
+        });
+      }
     });
   });
 }
