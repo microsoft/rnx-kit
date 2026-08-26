@@ -152,7 +152,7 @@ describe("license", () => {
           version: "1.2.3-fixedVersionForTesting",
         },
         {
-          copyright: "Copyright (c) Microsoft Corporation.",
+          copyright: "Copyright (c) Contoso Corporation.",
           license: "Fair",
           name: "unicode-segmenter",
           version: "1.2.3-fixedVersionForTesting",
@@ -197,10 +197,10 @@ describe("license", () => {
           version: "1.2.3-fixedVersionForTesting",
         },
         {
-          copyright: "Copyright (c) Microsoft Corporation.",
+          copyright: "Copyright (c) Contoso Corporation.",
           license: "Fair",
           name: "unicode-segmenter",
-          text: "Copyright (c) Microsoft Corporation.\\n\\nUsage of the works is permitted provided that this instrument is retained with\\nthe works, so that any entity that uses the works is notified of this\\ninstrument.\\n\\nDISCLAIMER: THE WORKS ARE WITHOUT WARRANTY.",
+          text: "Copyright (c) Contoso Corporation.\\n\\nUsage of the works is permitted provided that this instrument is retained with\\nthe works, so that any entity that uses the works is notified of this\\ninstrument.\\n\\nDISCLAIMER: THE WORKS ARE WITHOUT WARRANTY.",
           version: "1.2.3-fixedVersionForTesting",
         },
         {

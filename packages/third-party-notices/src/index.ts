@@ -1,4 +1,5 @@
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
+import * as nodefs from "node:fs";
 import type { WriteThirdPartyNoticesOptions } from "./types.ts";
 import {
   gatherModulesFromSources,
@@ -9,7 +10,8 @@ export { writeThirdPartyNoticesCommand } from "./commander.ts";
 export { writeThirdPartyNotices } from "./write-third-party-notices.ts";
 
 export function ThirdPartyNotices(
-  inputOptions: Partial<WriteThirdPartyNoticesOptions>
+  inputOptions: Partial<WriteThirdPartyNoticesOptions>,
+  /** @internal */ fs = nodefs
 ): MetroPlugin {
   return (_entryPoint, _preModules, graph, serializerOptions) => {
     if (serializerOptions.dev) {
@@ -24,8 +26,8 @@ export function ThirdPartyNotices(
     };
 
     const sources = Array.from(graph.dependencies.keys());
-    const moduleNameToPath = gatherModulesFromSources(sources, options);
-    writeThirdPartyNoticesFromMap(options, moduleNameToPath);
+    const moduleNameToPath = gatherModulesFromSources(sources, options, fs);
+    writeThirdPartyNoticesFromMap(options, moduleNameToPath, fs);
   };
 }
 

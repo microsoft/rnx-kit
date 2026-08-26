@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "sources": [
+    "node_modules/@contoso/module/index.ts",
+    "node_modules/@contoso/module-2/index.ts",
+    "src/index.ts",
+    "virtual:metro:__rnx_prelude__"
+  ]
+}
