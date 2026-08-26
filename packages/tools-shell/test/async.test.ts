@@ -1,21 +1,39 @@
+import { equal } from "node:assert/strict";
+import { describe, it } from "node:test";
 import { idle, once, retry, withRetry } from "../src/async.ts";
 
 describe("async", () => {
-  beforeEach(() => {
-    jest.useFakeTimers({ now: 0 });
-  });
+  const mockTimersOpts = { apis: ["Date", "setTimeout"] } as const;
 
-  afterAll(() => {
-    jest.useRealTimers();
-  });
+  async function tick(
+    t: it.TestContext,
+    milliseconds: number,
+    increment = 1000
+  ) {
+    // `tick()` advances the timer but does not execute callbacks until after
+    // the specified time, leading to timeouts being executed too late. The
+    // workaround is to advance time in increments. Additionally, we need to
+    // manually flush the promise queue because this does not happen
+    // automatically.
+    const iterations = Math.ceil(milliseconds / increment);
+    for (let i = 0; i < iterations; ++i) {
+      // force flush the promise queue
+      await Promise.resolve();
+      // force flush the promise queue a second time for chained promises
+      await Promise.resolve();
+      t.mock.timers.tick(increment);
+    }
+  }
 
-  it("idle() does not return until specified time has elapsed", async () => {
+  it("idle() does not return until specified time has elapsed", async (t) => {
+    t.mock.timers.enable(mockTimersOpts);
+
     const start = Date.now();
-    idle(1000);
+    const p = idle(1000).then(() => Date.now() - start);
 
-    await jest.runAllTimersAsync();
+    await tick(t, 2000);
 
-    expect(Date.now() - start).toBe(1000);
+    equal(await p, 1000);
   });
 
   it("once() functions are only called once", () => {
@@ -25,10 +43,13 @@ describe("async", () => {
     incrementOnce();
     incrementOnce();
 
-    expect(count).toBe(1);
+    equal(count, 1);
   });
 
-  it("retry() with exponential backoff", async () => {
+  it("retry() with exponential backoff", async (t) => {
+    t.mock.timers.enable(mockTimersOpts);
+
+    const retries = 4;
     const times: number[] = [];
     let start = Date.now();
 
@@ -36,31 +57,36 @@ describe("async", () => {
       times.push(Date.now() - start);
       start = Date.now();
       return null;
-    }, 4);
+    }, retries);
 
-    await jest.runAllTimersAsync();
+    await tick(t, 16000);
 
-    expect(times.length).toBe(4);
-    expect(times[0]).toBe(0);
-    expect(times[1]).toBe(1000);
-    expect(times[2]).toBe(2000);
-    expect(times[3]).toBe(4000);
+    equal(times.length, retries);
+    equal(times[0], 0);
+    equal(times[1], 1000);
+    equal(times[2], 2000);
+    equal(times[3], 4000);
   });
 
-  it("retry() returns early with result", async () => {
+  it("retry() returns early with result", async (t) => {
+    t.mock.timers.enable(mockTimersOpts);
+
     let count = 0;
 
     const result = retry(async () => {
       return ++count === 2 ? "done" : null;
     }, 5);
 
-    await jest.runAllTimersAsync();
+    await tick(t, 4000);
 
-    expect(count).toBe(2);
-    expect(await result).toBe("done");
+    equal(count, 2);
+    equal(await result, "done");
   });
 
-  it("withRetry() with exponential backoff", async () => {
+  it("withRetry() with exponential backoff", async (t) => {
+    t.mock.timers.enable(mockTimersOpts);
+
+    const retries = 4;
     const times: number[] = [];
 
     let start = Date.now();
@@ -68,18 +94,20 @@ describe("async", () => {
       times.push(Date.now() - start);
       start = Date.now();
       throw new Error();
-    }, 4).catch(() => null);
+    }, retries).catch(() => null);
 
-    await jest.runAllTimersAsync();
+    await tick(t, 16000);
 
-    expect(times.length).toBe(4);
-    expect(times[0]).toBe(0);
-    expect(times[1]).toBe(1000);
-    expect(times[2]).toBe(2000);
-    expect(times[3]).toBe(4000);
+    equal(times.length, retries);
+    equal(times[0], 0);
+    equal(times[1], 1000);
+    equal(times[2], 2000);
+    equal(times[3], 4000);
   });
 
-  it("withRetry() returns early with result", async () => {
+  it("withRetry() returns early with result", async (t) => {
+    t.mock.timers.enable(mockTimersOpts);
+
     let count = 0;
 
     const result = withRetry(async () => {
@@ -89,9 +117,9 @@ describe("async", () => {
       throw new Error();
     }, 5);
 
-    await jest.runAllTimersAsync();
+    await tick(t, 4000);
 
-    expect(count).toBe(2);
-    expect(await result).toBe("done");
+    equal(count, 2);
+    equal(await result, "done");
   });
 });
