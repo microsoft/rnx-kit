@@ -2,7 +2,7 @@
 // https://github.com/react-native-community/cli/blob/716555851b442a83a1bf5e0db27b6226318c9a69/packages/cli-plugin-metro/src/commands/bundle/getAssetDestPathIOS.ts
 
 import { error, info } from "@rnx-kit/console";
-import * as fs from "node:fs";
+import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { getAndroidResourceIdentifier } from "../assets-registry/path-support.js";
 import { getAssetDestPath } from "./default.ts";
@@ -14,12 +14,17 @@ type ImageSet = {
   files: { name: string; src: string; scale: number }[];
 };
 
-export function cleanAssetCatalog(catalogDir: string): void {
+const RM_OPTS = { recursive: true } as const;
+
+export function cleanAssetCatalog(
+  catalogDir: string,
+  /** @internal */ fs = nodefs
+): void {
   const files = fs
     .readdirSync(catalogDir)
     .filter((file) => file.endsWith(".imageset"));
   for (const file of files) {
-    fs.rmSync(path.join(catalogDir, file));
+    fs.rmSync(path.join(catalogDir, file), RM_OPTS);
   }
 }
 
@@ -46,7 +51,10 @@ export function isCatalogAsset(asset: AssetData): boolean {
   return asset.type === "png" || asset.type === "jpg" || asset.type === "jpeg";
 }
 
-export function writeImageSet(imageSet: ImageSet): void {
+export function writeImageSet(
+  imageSet: ImageSet,
+  /** @internal */ fs = nodefs
+): void {
   fs.mkdirSync(imageSet.basePath, { recursive: true });
 
   for (const file of imageSet.files) {
@@ -77,7 +85,8 @@ export const saveAssetsIOS: SaveAssetsPlugin = (
   _platform,
   _assetsDest,
   assetCatalogDest,
-  addAssetToCopy
+  addAssetToCopy,
+  /** @internal */ fs = nodefs
 ) => {
   if (assetCatalogDest != null) {
     // Use iOS Asset Catalog for images. This will allow Apple app thinning to

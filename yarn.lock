@@ -5468,6 +5468,7 @@ __metadata:
     "@react-native-community/cli-types": "npm:^20.1.0"
     "@rnx-kit/console": "npm:^3.0.0"
     "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-filesystem": "npm:^0.2.0"
     "@rnx-kit/tools-node": "npm:^3.0.3"
     "@rnx-kit/tools-react-native": "npm:^2.3.5"
     "@rnx-kit/tsconfig": "npm:*"
