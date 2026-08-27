@@ -1,7 +1,7 @@
 import type { Config } from "@react-native-community/cli-types";
 import { InvalidArgumentError } from "commander";
 import { RNX_FAST_PATH } from "./bin/constants.ts";
-import { setCcacheDir, setCcacheHome } from "./build/ccache.ts";
+import { setCCacheDir, setCCacheHome } from "./build/ccache.ts";
 import type {
   BuildConfiguration,
   DeviceType,
@@ -125,13 +125,13 @@ export const rnxBuildCommand = {
     },
     {
       name: "--ccache-dir <string>",
-      description: "Path to Ccache config",
-      parse: setCcacheDir,
+      description: "Path to CCache config",
+      parse: setCCacheDir,
     },
     {
       name: "--ccache-home <string>",
-      description: "Path to Ccache installation",
-      parse: setCcacheHome,
+      description: "Path to CCache installation",
+      parse: setCCacheHome,
     },
   ],
 };

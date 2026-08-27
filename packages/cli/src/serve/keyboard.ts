@@ -11,13 +11,18 @@ type HttpServer = Server & {
   httpServer?: Server; // Introduced in Metro 0.83
 };
 
+export type KeyPress = {
+  ctrl: boolean;
+  name: string;
+};
+
 type OpenDebuggerKeyboardHandler = {
   handleOpenDebugger: () => Promise<void>;
   maybeHandleTargetSelection: (key: string) => boolean;
   dismiss: () => void;
 };
 
-type Params = {
+export type Params = {
   devServerUrl: string;
   help: () => void;
   messageSocketEndpoint: DevServerMiddleware["messageSocketEndpoint"];
@@ -54,14 +59,62 @@ function createOpenDebuggerKeyboardHandler({
   }
 }
 
+export function handleKeyPress(
+  { ctrl, name }: KeyPress,
+  openDebuggerKeyboardHandler: OpenDebuggerKeyboardHandler,
+  params: Params
+): void {
+  if (openDebuggerKeyboardHandler.maybeHandleTargetSelection(name)) {
+    return;
+  }
+
+  if (ctrl === true) {
+    switch (name) {
+      case "c":
+      case "d":
+        process.emit("SIGINT");
+        break;
+    }
+  } else {
+    switch (name) {
+      case "d":
+        info("Opening developer menu...");
+        params.messageSocketEndpoint.broadcast("devMenu", undefined);
+        break;
+
+      case "h":
+        params.help();
+        break;
+
+      case "j":
+        openDebuggerKeyboardHandler.handleOpenDebugger();
+        break;
+
+      case "q": {
+        const url = `${params.devServerUrl}/index.bundle`;
+        const terminal = params.metroTerminal.terminal;
+        qrcode.toString(url, { type: "terminal" }, (_err, qr) => {
+          terminal.log("");
+          terminal.log(url + ":");
+          terminal.log(qr);
+        });
+        break;
+      }
+
+      case "r":
+        info("Reloading app...");
+        params.messageSocketEndpoint.broadcast("reload", undefined);
+        break;
+
+      case "return":
+        params.metroTerminal.terminal.log("");
+        break;
+    }
+  }
+}
+
 export function attachKeyHandlers(server: HttpServer, params: Params) {
   const openDebuggerKeyboardHandler = createOpenDebuggerKeyboardHandler(params);
-  const {
-    devServerUrl,
-    help,
-    messageSocketEndpoint,
-    metroTerminal: { terminal },
-  } = params;
 
   process.on("SIGINT", () => {
     openDebuggerKeyboardHandler.dismiss();
@@ -79,53 +132,7 @@ export function attachKeyHandlers(server: HttpServer, params: Params) {
 
   process.stdin.setRawMode(true);
   process.stdin.on("keypress", (_key, data) => {
-    const { ctrl, name } = data;
-    if (openDebuggerKeyboardHandler.maybeHandleTargetSelection(name)) {
-      return;
-    }
-
-    if (ctrl === true) {
-      switch (name) {
-        case "c":
-        case "d":
-          process.emit("SIGINT");
-          break;
-      }
-    } else {
-      switch (name) {
-        case "d":
-          info("Opening developer menu...");
-          messageSocketEndpoint.broadcast("devMenu", undefined);
-          break;
-
-        case "h":
-          help();
-          break;
-
-        case "j":
-          openDebuggerKeyboardHandler.handleOpenDebugger();
-          break;
-
-        case "q": {
-          const url = `${devServerUrl}/index.bundle`;
-          qrcode.toString(url, { type: "terminal" }, (_err, qr) => {
-            terminal.log("");
-            terminal.log(url + ":");
-            terminal.log(qr);
-          });
-          break;
-        }
-
-        case "r":
-          info("Reloading app...");
-          messageSocketEndpoint.broadcast("reload", undefined);
-          break;
-
-        case "return":
-          terminal.log("");
-          break;
-      }
-    }
+    handleKeyPress(data, openDebuggerKeyboardHandler, params);
   });
 
   readline.emitKeypressEvents(process.stdin);

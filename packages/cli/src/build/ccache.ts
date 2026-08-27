@@ -1,7 +1,10 @@
-import * as fs from "node:fs";
+import * as nodefs from "node:fs";
 import * as path from "node:path";
 
-export function setCcacheDir(dir: string): string | undefined {
+export function setCCacheDir(
+  dir: string,
+  /** @internal */ fs = nodefs
+): string | undefined {
   if (!fs.existsSync(dir)) {
     return undefined;
   }
@@ -10,7 +13,10 @@ export function setCcacheDir(dir: string): string | undefined {
   return dir;
 }
 
-export function setCcacheHome(dir: string): string | undefined {
+export function setCCacheHome(
+  dir: string,
+  /** @internal */ fs = nodefs
+): string | undefined {
   if (!fs.existsSync(dir)) {
     return undefined;
   }

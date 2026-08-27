@@ -209,8 +209,8 @@ yarn rnx-cli build [options]
 | --scheme &lt;string&gt;        | Name of scheme to build (Apple platforms only)                                        |
 | --configuration &lt;string&gt; | Build configuration for building the app; 'Debug' or 'Release'                        |
 | --destination &lt;string&gt;   | Destination of the built app; 'device', 'emulator', or 'simulator'                    |
-| --ccache-dir &lt;string&gt;    | Path to Ccache config                                                                 |
-| --ccache-home &lt;string&gt;   | Path to Ccache installation                                                           |
+| --ccache-dir &lt;string&gt;    | Path to CCache config                                                                 |
+| --ccache-home &lt;string&gt;   | Path to CCache installation                                                           |
 
 <!-- @rnx-kit/cli/build end -->
 
@@ -239,8 +239,8 @@ yarn rnx-cli run [options]
 | --scheme &lt;string&gt;        | Name of scheme to build (Apple platforms only)                                        |
 | --configuration &lt;string&gt; | Build configuration for building the app; 'Debug' or 'Release'                        |
 | --destination &lt;string&gt;   | Destination of the built app; 'device', 'emulator', or 'simulator'                    |
-| --ccache-dir &lt;string&gt;    | Path to Ccache config                                                                 |
-| --ccache-home &lt;string&gt;   | Path to Ccache installation                                                           |
+| --ccache-dir &lt;string&gt;    | Path to CCache config                                                                 |
+| --ccache-home &lt;string&gt;   | Path to CCache installation                                                           |
 | -d, --device &lt;string&gt;    | The name of the device to launch the app in                                           |
 
 <!-- @rnx-kit/cli/run end -->

@@ -274,7 +274,7 @@
 
 ### Patch Changes
 
-- 4b6ba94: Add Ccache support
+- 4b6ba94: Add CCache support
 - cc857ea: Check Pods Manifest.lock earlier
 - Updated dependencies [cc857ea]
   - @rnx-kit/tools-apple@0.2.1

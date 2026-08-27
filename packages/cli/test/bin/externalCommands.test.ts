@@ -6,11 +6,11 @@ jest.mock("@rnx-kit/tools-react-native/context", () => ({
   resolveCommunityCLI: () => "/",
 }));
 
-function mockContext(context: unknown = {}): Config {
-  return context as Config;
-}
+describe("findExternalCommands", () => {
+  function mockContext(context: unknown = {}): Config {
+    return context as Config;
+  }
 
-describe("bin/externalCommands/findExternalCommands()", () => {
   afterAll(() => {
     jest.resetAllMocks();
   });
