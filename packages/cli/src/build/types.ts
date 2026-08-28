@@ -17,6 +17,7 @@ export type BuildConfiguration = "Debug" | "Release";
 
 export type AndroidBuildParams = {
   platform: "android";
+  verbose?: boolean;
   destination?: DeviceType;
   configuration?: BuildConfiguration;
   archs?: string;
@@ -25,6 +26,7 @@ export type AndroidBuildParams = {
 export type AppleBuildParams =
   | {
       platform: "ios" | "visionos";
+      verbose?: boolean;
       scheme?: string;
       destination?: DeviceType;
       configuration?: BuildConfiguration;
@@ -33,6 +35,7 @@ export type AppleBuildParams =
     }
   | {
       platform: "macos";
+      verbose?: boolean;
       scheme?: string;
       configuration?: BuildConfiguration;
       isBuiltRemotely?: boolean;
@@ -49,6 +52,7 @@ export type AppleInputParams = AppleBuildParams & {
 
 export type WindowsBuildParams = {
   platform: "windows";
+  verbose?: boolean;
   configuration?: BuildConfiguration;
   architecture?: "arm64" | "x64";
   launch?: boolean;

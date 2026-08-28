@@ -203,6 +203,7 @@ yarn rnx-cli build [options]
 | Option                         | Description                                                                           |
 | ------------------------------ | ------------------------------------------------------------------------------------- |
 | -p, --platform &lt;string&gt;  | Target platform                                                                       |
+| --verbose                      | Stream the underlying build tool's output as-is                                       |
 | --solution &lt;string&gt;      | Path, relative to project root, of the Visual Studio solution to build (Windows only) |
 | --workspace &lt;string&gt;     | Path, relative to project root, of the Xcode workspace to build (macOS only)          |
 | --scheme &lt;string&gt;        | Name of scheme to build (Apple platforms only)                                        |
@@ -232,6 +233,7 @@ yarn rnx-cli run [options]
 | Option                         | Description                                                                           |
 | ------------------------------ | ------------------------------------------------------------------------------------- |
 | -p, --platform &lt;string&gt;  | Target platform                                                                       |
+| --verbose                      | Stream the underlying build tool's output as-is                                       |
 | --solution &lt;string&gt;      | Path, relative to project root, of the Visual Studio solution to build (Windows only) |
 | --workspace &lt;string&gt;     | Path, relative to project root, of the Xcode workspace to build (macOS only)          |
 | --scheme &lt;string&gt;        | Name of scheme to build (Apple platforms only)                                        |
