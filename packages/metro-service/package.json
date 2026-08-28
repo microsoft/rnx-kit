@@ -41,6 +41,7 @@
   "devDependencies": {
     "@react-native-community/cli-types": "^20.1.0",
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/tools-filesystem": "^0.2.0",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
     "metro": "^0.84.0",

@@ -1,9 +1,12 @@
 import { warn } from "@rnx-kit/console";
 import type { ConfigT } from "metro-config";
-import * as fs from "node:fs";
+import * as nodefs from "node:fs";
 import * as path from "node:path";
 
-export function ensureBabelConfig({ projectRoot }: ConfigT): void {
+export function ensureBabelConfig(
+  { projectRoot }: Pick<ConfigT, "projectRoot">,
+  /** @internal */ fs = nodefs
+): void {
   // Even though Babel supports more file extensions
   // (https://babeljs.io/docs/config-files#supported-file-extensions),
   // `@react-native/metro-babel-transformer` only supports the following. See
