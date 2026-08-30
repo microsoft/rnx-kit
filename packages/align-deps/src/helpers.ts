@@ -33,8 +33,11 @@ export function dropPatchFromVersion(version: string): string {
         return "*";
       }
 
+      // `>= 1.0.0` is equivalent to `>=1.0.0`, but only the latter survives
+      // being split into comparators below
       return versionRange
-        .split(" ")
+        .replace(/([<>=~^]+)\s+/g, "$1")
+        .split(/\s+/)
         .map((v) => {
           if (v === "*" || v === "-") {
             // No need to manipulate `*` or hyphen ranges, e.g. `1.0 - 2.0`
