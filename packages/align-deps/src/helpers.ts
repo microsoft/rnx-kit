@@ -34,9 +34,11 @@ export function dropPatchFromVersion(version: string): string {
       }
 
       // `>= 1.0.0` is equivalent to `>=1.0.0`, but only the latter survives
-      // being split into comparators below
+      // being split into comparators below. We limit the number of comparator
+      // characters to avoid quadratic backtracking on inputs such as `<<<<…`
+      // https://github.com/microsoft/rnx-kit/security/code-scanning/37
       return versionRange
-        .replace(/([<>=~^]+)\s+/g, "$1")
+        .replace(/([<>=~^]{1,2})\s+/g, "$1")
         .split(/\s+/)
         .map((v) => {
           if (v === "*" || v === "-") {
