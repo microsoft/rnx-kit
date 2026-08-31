@@ -1,3 +1,14 @@
+> [!CAUTION]
+>
+> `@rnx-kit/metro-plugin-typescript` has been deprecated
+>
+> This plugin was meant to allow users to perform both type checking and
+> bundling at the same time. However, users experience
+> [slowdowns](https://github.com/microsoft/rnx-kit/issues/3617) and inconsistent
+> errors when this plugin is enabled. We are now recommending you to upgrade to
+> [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/)
+> and run type checking first instead.
+
 # @rnx-kit/metro-plugin-typescript
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)

@@ -108,8 +108,7 @@
                 "react-is"
               ]
             }
-          ],
-          "@rnx-kit/metro-plugin-typescript"
+          ]
         ],
         "targets": [
           "android",
@@ -142,7 +141,6 @@
               ]
             }
           ],
-          "@rnx-kit/metro-plugin-typescript",
           "@rnx-kit/third-party-notices"
         ],
         "targets": [
@@ -172,8 +170,7 @@
               "react-is"
             ]
           }
-        ],
-        "@rnx-kit/metro-plugin-typescript"
+        ]
       ]
     },
     "alignDeps": {

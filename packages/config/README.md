@@ -58,7 +58,7 @@ Parameters controlling how a bundle is constructed.
 | sourcemapUseAbsolutePath | `boolean \| undefined`        | Controls whether or not SourceMapURL is reported as a full path or just a file name.                                                                                                                   |
 | assetsDest               | `string \| undefined`         | Path where all bundle assets (strings, images, fonts, sounds, ...) are written. Either absolute, or relative to the package.                                                                           |
 | indexedBundleFormat      | `boolean \| undefined`        | Force the "Indexed RAM" bundle file format, even when targeting Android. Only applies to the `rnx-ram-bundle` command.                                                                                 |
-| plugins                  | `(string \| [string, any])[]` | List of plugins to apply. If unset, it falls back to `["@rnx-kit/metro-plugin-cyclic-dependencies-detector", "@rnx-kit/metro-plugin-duplicates-checker", "@rnx-kit/metro-plugin-typescript"]`.         |
+| plugins                  | `(string \| [string, any])[]` | List of plugins to apply. If unset, it falls back to `["@rnx-kit/metro-plugin-cyclic-dependencies-detector", "@rnx-kit/metro-plugin-duplicates-checker"]`.                                             |
 | treeShake                | `boolean \| undefined`        | Choose whether to enable tree shaking.                                                                                                                                                                 |
 
 ### `CyclicDependencyPluginOptions`

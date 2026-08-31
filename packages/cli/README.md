@@ -52,8 +52,7 @@ yarn rnx-cli bundle                \
         [
           "@rnx-kit/metro-plugin-duplicates-checker",
           { "ignoredModules": ["react-is"] }
-        ],
-        "@rnx-kit/metro-plugin-typescript"
+        ]
       ],
       "targets": ["android", "ios", "macos", "windows"],
       "platforms": {
@@ -80,13 +79,13 @@ yarn rnx-cli bundle                \
 When certain parameters aren't specified in configuration or on the
 command-line, they are explicitly set to default values.
 
-| Parameter    | Default Value                                                                                                                            |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| entryFile    | `"index.js"`                                                                                                                             |
-| bundleOutput | `"index.<platform>.bundle"` (Windows, Android) or `"index.<platform>.jsbundle"` (iOS, macOS)                                             |
-| hermes       | `false`                                                                                                                                  |
-| treeShake    | `false`                                                                                                                                  |
-| plugins      | `["@rnx-kit/metro-plugin-cyclic-dependencies-detector", "@rnx-kit/metro-plugin-duplicates-checker", "@rnx-kit/metro-plugin-typescript"]` |
+| Parameter    | Default Value                                                                                        |
+| ------------ | ---------------------------------------------------------------------------------------------------- |
+| entryFile    | `"index.js"`                                                                                         |
+| bundleOutput | `"index.<platform>.bundle"` (Windows, Android) or `"index.<platform>.jsbundle"` (iOS, macOS)         |
+| hermes       | `false`                                                                                              |
+| treeShake    | `false`                                                                                              |
+| plugins      | `["@rnx-kit/metro-plugin-cyclic-dependencies-detector", "@rnx-kit/metro-plugin-duplicates-checker"]` |
 
 Other parameters have implicit defaults, buried deep in Metro or its
 dependencies.
@@ -153,8 +152,7 @@ yarn rnx-cli start --host 127.0.0.1 --port 8812
             "ignoredModules": ["react-is"],
             "throwOnError": false
           }
-        ],
-        "@rnx-kit/metro-plugin-typescript"
+        ]
       ]
     }
   }

@@ -227,38 +227,6 @@ This section of the guide will introduce you to a number of features and explain
 why they are important. Most of them are on by default. You can explicitly
 control each one through app configuration.
 
-### Type Safety with TypeScript
-
-TypeScript validation with Metro. :sunglasses:
-
-When you bundle or serve your app, TypeScript will validate your code and tell
-you about any type safety issues. You'll see the familiar, colorful TS messages
-you're used to, right in the Metro output:
-
-<img
-  src={useBaseUrl("/img/type-safe-bundling-output.png")}
-  alt="Image showing TypeScript errors. Foo is declared but never used. Parameter x implicitly has an 'any' type."
-  width="700"
-/>
-
-TypeScript validation is **on** by default. You can configure it by passing
-options with the `@rnx-kit/metro-plugin-typescript` entry in
-[plugins](/docs/tools/config#bundleparameters) configuration property.
-
-```diff title=package.json
- {
-   "rnx-kit": {
-     "bundle": {
-       "plugins": [
-         "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-         "@rnx-kit/metro-plugin-duplicates-checker",
-+        ["@rnx-kit/metro-plugin-typescript", { "throwOnError": true }]
-       ]
-     }
-   }
- }
-```
-
 ### Tree Shaking
 
 Tree shaking makes your app bundle smaller by eliminating unused code.
@@ -306,8 +274,7 @@ options with the `@rnx-kit/metro-plugin-duplicates-checker` entry in
      "bundle": {
        "plugins": [
          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-+        ["@rnx-kit/metro-plugin-duplicates-checker", { "throwOnError": true }],
-         "@rnx-kit/metro-plugin-typescript"
++        ["@rnx-kit/metro-plugin-duplicates-checker", { "throwOnError": true }]
        ]
      }
    }
@@ -342,8 +309,7 @@ it by passing options with the
 +          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
 +          { "throwOnError": true }
 +        ],
-         "@rnx-kit/metro-plugin-duplicates-checker",
-         "@rnx-kit/metro-plugin-typescript"
+         "@rnx-kit/metro-plugin-duplicates-checker"
        ]
      }
    }
@@ -367,33 +333,6 @@ app:
 
 Did both commands succeed? If so, great! Skip to the
 [next section](#integrating-with-prs-and-builds).
-
-**Are you seeing TypeScript errors?**
-
-Type safety matters. It lets you reason about your app without running it to
-find flaws, see patterns, and do automated transformations.
-
-You should fix these now, or plan on fixing them soon. To defer until later,
-configure the bundler so it reports the errors without failing. Set
-`throwOnError` to `false`:
-
-```diff title=package.json
- {
-   "rnx-kit": {
-     "bundle": {
-       "plugins": [
-         "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-         "@rnx-kit/metro-plugin-duplicates-checker",
-+        ["@rnx-kit/metro-plugin-typescript", { "throwOnError": false }]
-       ]
-     }
-   }
- }
-```
-
-It's also a good idea to open a new issue for tracking the type errors, and to
-remind you to re-enable `throwOnError`. In the meantime, keeping the errors
-visible in the Metro output helps everyone be aware of danger-areas in the app.
 
 **Are you running into duplicate package errors?**
 
@@ -443,8 +382,7 @@ you can choose to live with it. Add the duplicate package name to the
 +        [
 +          "@rnx-kit/metro-plugin-duplicates-checker",
 +          { "ignoredModules": ["react-is"] }
-+        ],
-         "@rnx-kit/metro-plugin-typescript"
++        ]
        ]
      }
    }
@@ -482,8 +420,7 @@ to `false`:
 +          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
 +          { "throwOnError": false }
 +        ],
-         "@rnx-kit/metro-plugin-duplicates-checker",
-         "@rnx-kit/metro-plugin-typescript"
+         "@rnx-kit/metro-plugin-duplicates-checker"
        ]
      }
    }
