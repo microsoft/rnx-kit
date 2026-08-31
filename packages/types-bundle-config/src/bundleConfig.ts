@@ -51,6 +51,17 @@ export type BundleOutputOptions = {
 export type BundleParameters = BundlerPlugins &
   BundleOutputOptions & {
     /**
+     * Path to the root of your react-native experience project. The bundle server uses
+     * this root path to resolve all web requests. Either absolute, or relative to the
+     * package.
+     *
+     * Note that `projectRoot` should also contain your Babel config, otherwise
+     * Metro won't be able to find it. For details, see
+     * https://github.com/microsoft/rnx-kit/issues/706.
+     */
+    projectRoot?: string;
+
+    /**
      * Path to the .js file which is the entry-point for building the bundle.
      * Either absolute, or relative to the package.
      */
@@ -61,6 +72,18 @@ export type BundleParameters = BundlerPlugins &
      * Either absolute, or relative to the package. If not given, assets are ignored.
      */
     assetsDest?: string;
+
+    /**
+     * Additional asset plugins to be used by the Metro Babel transformer. Comma-separated
+     * list containing plugin modules and/or absolute paths to plugin packages.
+     */
+    assetPlugins?: string[];
+
+    /**
+     * Additional source-file extensions to include when generating bundles. Comma-separated
+     * list, excluding the leading dot.
+     */
+    sourceExts?: string[];
 
     /**
      * Choose whether to enable tree shaking.

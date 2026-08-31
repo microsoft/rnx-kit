@@ -35,6 +35,22 @@ import type {
 
 ### Bundle Configuration
 
+#### `BundleParameters`
+
+Parameters controlling how a bundle is constructed. Extends `BundlerPlugins` and
+`BundleOutputOptions`.
+
+| Name         | Type                                  | Description                                                               |
+| ------------ | ------------------------------------- | ------------------------------------------------------------------------- |
+| entryFile    | `string \| undefined`                 | Path to the entry-point .js file. Either absolute or relative to package. |
+| assetsDest   | `string \| undefined`                 | Path where bundle assets are written.                                     |
+| projectRoot  | `string \| undefined`                 | Path to the root of the react-native project.                             |
+| assetPlugins | `string[] \| undefined`               | Additional asset plugins for the Metro Babel transformer.                 |
+| sourceExts   | `string[] \| undefined`               | Additional source-file extensions to include when generating bundles.     |
+| treeShake    | `boolean \| SerializerEsbuildOptions` | Enable tree shaking via esbuild.                                          |
+| hermes       | `boolean \| HermesOptions`            | Whether to run the Hermes compiler on the output bundle.                  |
+| plugins      | `Plugin[]`                            | List of plugins to add to the bundling process.                           |
+
 #### `BundleConfig`
 
 Defines how a package is bundled. Extends `BundleParameters` with
@@ -45,19 +61,6 @@ platform-specific overrides.
 | id        | `string \| undefined`                             | Unique identifier for this bundle configuration.       |
 | targets   | `AllPlatforms[] \| undefined`                     | The platform(s) for which this package may be bundled. |
 | platforms | `Partial<Record<AllPlatforms, BundleParameters>>` | Platform-specific overrides for bundling parameters.   |
-
-#### `BundleParameters`
-
-Parameters controlling how a bundle is constructed. Extends `BundlerPlugins` and
-`BundleOutputOptions`.
-
-| Name       | Type                                  | Description                                                               |
-| ---------- | ------------------------------------- | ------------------------------------------------------------------------- |
-| entryFile  | `string \| undefined`                 | Path to the entry-point .js file. Either absolute or relative to package. |
-| assetsDest | `string \| undefined`                 | Path where bundle assets are written.                                     |
-| treeShake  | `boolean \| SerializerEsbuildOptions` | Enable tree shaking via esbuild.                                          |
-| hermes     | `boolean \| HermesOptions`            | Whether to run the Hermes compiler on the output bundle.                  |
-| plugins    | `Plugin[]`                            | List of plugins to add to the bundling process.                           |
 
 #### `BundleOutputOptions`
 
@@ -85,14 +88,7 @@ Options for the Hermes bytecode compiler.
 
 #### `ServerConfig`
 
-Configuration for the Metro bundle server. Extends `BundlerPlugins`.
-
-| Name         | Type                    | Description                                                           |
-| ------------ | ----------------------- | --------------------------------------------------------------------- |
-| projectRoot  | `string \| undefined`   | Path to the root of the react-native project.                         |
-| assetPlugins | `string[] \| undefined` | Additional asset plugins for the Metro Babel transformer.             |
-| sourceExts   | `string[] \| undefined` | Additional source-file extensions to include when generating bundles. |
-| plugins      | `Plugin[]`              | List of plugins to add to the bundling process.                       |
+An alias for [`BundleParameters`](#bundleparameters).
 
 ### Bundler Plugin Types
 
