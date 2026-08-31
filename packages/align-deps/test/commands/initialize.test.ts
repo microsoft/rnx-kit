@@ -129,6 +129,36 @@ describe("initializeConfig()", () => {
     });
   });
 
+  it("adds config with a spaced version range", () => {
+    const result = initializeConfig(
+      {
+        name: "@rnx-kit/align-deps",
+        version: "0.0.0-test",
+        dependencies: {
+          "react-native": ">= 0.64.1",
+        },
+        peerDependencies: {
+          "@react-native-community/netinfo": "^5.9.10",
+          "react-native-webview": "^10.10.2",
+        },
+      },
+      ".",
+      "app",
+      defaultOptions
+    );
+
+    const kitConfig = result?.["rnx-kit"];
+    if (!kitConfig) {
+      fail();
+    }
+
+    deepEqual(kitConfig.alignDeps, {
+      presets: undefined,
+      requirements: ["react-native@>=0.64"],
+      capabilities: ["core", "core-android", "core-ios", "netinfo", "webview"],
+    });
+  });
+
   it('adds config with type "library"', () => {
     const result = initializeConfig(
       {
