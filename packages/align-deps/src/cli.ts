@@ -12,11 +12,12 @@ import * as path from "node:path";
 import { makeCheckCommand } from "./commands/check.ts";
 import { makeExportCatalogsCommand } from "./commands/exportCatalogs.ts";
 import { makeInitializeCommand } from "./commands/initialize.ts";
+import { checkOverrides } from "./commands/overrides.ts";
 import { makeSetVersionCommand } from "./commands/setVersion.ts";
 import { defaultConfig } from "./config.ts";
 import { printError, printInfo } from "./errors.ts";
 import { isString } from "./helpers.ts";
-import type { Args, Command, DiffMode } from "./types.ts";
+import type { Args, Command, DiffMode, Options } from "./types.ts";
 
 export const description =
   "Manage dependencies within a repository and across many repositories";
@@ -93,6 +94,12 @@ export const cliOptions = {
   write: {
     default: false,
     description: "Writes changes to the specified 'package.json'.",
+    type: "boolean",
+  },
+  "check-overrides": {
+    default: false,
+    description:
+      "Additionally warns when a 'resolutions' (Yarn) or 'overrides' (npm) entry pins a managed dependency to a version outside the active profile. This check is read-only and never modifies overrides, even with '--write'.",
     type: "boolean",
   },
 };
@@ -183,6 +190,34 @@ function validateDiffMode(mode: string | undefined): DiffMode {
   }
 }
 
+function makeOptions(args: Args): Options {
+  const {
+    "diff-mode": diffMode,
+    "exclude-packages": excludePackages,
+    loose,
+    "migrate-config": migrateConfig,
+    "no-unmanaged": noUnmanaged,
+    presets,
+    requirements,
+    verbose,
+    write,
+    "check-overrides": checkOverrides,
+  } = args;
+
+  return {
+    presets: presets?.toString()?.split(",") ?? defaultConfig.presets,
+    loose,
+    migrateConfig,
+    noUnmanaged,
+    verbose,
+    write,
+    checkOverrides,
+    diffMode: validateDiffMode(diffMode),
+    excludePackages: excludePackages?.toString()?.split(","),
+    requirements: requirements?.toString()?.split(","),
+  };
+}
+
 async function makeCommand(args: Args): Promise<Command | undefined> {
   const conflicts: [string, string][] = [
     ["export-catalogs", "init"],
@@ -196,31 +231,12 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
   }
 
   const {
-    "diff-mode": diffMode,
-    "exclude-packages": excludePackages,
     "export-catalogs": exportCatalogs,
     init,
-    loose,
-    "migrate-config": migrateConfig,
-    "no-unmanaged": noUnmanaged,
-    presets,
-    requirements,
     "set-version": setVersion,
-    verbose,
-    write,
   } = args;
 
-  const options = {
-    presets: presets?.toString()?.split(",") ?? defaultConfig.presets,
-    loose,
-    migrateConfig,
-    noUnmanaged,
-    verbose,
-    write,
-    diffMode: validateDiffMode(diffMode),
-    excludePackages: excludePackages?.toString()?.split(","),
-    requirements: requirements?.toString()?.split(","),
-  };
+  const options = makeOptions(args);
 
   if (typeof exportCatalogs === "string") {
     return makeExportCatalogsCommand({
@@ -282,6 +298,13 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
     }
     return errors;
   }, 0);
+
+  // `--check-overrides` is an opt-in, read-only check that only emits warnings.
+  // It must never affect the exit code, so run it after tallying errors.
+  const options = makeOptions(args);
+  if (options.checkOverrides) {
+    checkOverrides(manifests, options);
+  }
 
   process.exitCode = errors;
 

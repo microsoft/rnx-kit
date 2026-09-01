@@ -23,6 +23,14 @@ export type PackageContributor = string | ContributorEntry;
 export type FundingEntry = string | { type: string; url: string };
 
 /**
+ * npm `overrides` field. A value is either a version string or a nested object
+ * of child overrides. The special `"."` key pins the parent package itself.
+ */
+export type PackageOverrides = {
+  [key: string]: string | PackageOverrides;
+};
+
+/**
  * Type definitions for package.json manifest files.
  */
 export type PackageManifest = {
@@ -107,8 +115,10 @@ export type PackageManifest = {
 
   /** workspace configuration for monorepos */
   workspaces?: string[] | { packages: string[] };
-  /** dependency version overrides via resolutions */
+  /** dependency version overrides via resolutions (Yarn) */
   resolutions?: Record<string, string>;
+  /** dependency version overrides via overrides (npm) */
+  overrides?: PackageOverrides;
 
   /** rnx-kit configuration */
   "rnx-kit"?: KitConfig;

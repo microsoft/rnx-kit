@@ -6,4 +6,5 @@ export type {
   PackageData,
   PackageExports,
   PackageManifest,
+  PackageOverrides,
 } from "./manifest.ts";

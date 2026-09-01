@@ -32,12 +32,14 @@ export type Options = {
   noUnmanaged?: boolean;
   verbose?: boolean;
   write?: boolean;
+  checkOverrides?: boolean;
   diffMode?: DiffMode;
   excludePackages?: string[];
   requirements?: string[];
 };
 
 export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
+  "check-overrides"?: boolean;
   "diff-mode"?: string;
   "exclude-packages"?: string | number;
   "export-catalogs"?: string;

@@ -84,6 +84,40 @@ Examples:
   yarn rnx-align-deps --set-version
   ```
 
+### `--check-overrides`
+
+Additionally warns when a `resolutions` (Yarn) or `overrides` (npm) entry pins a
+managed dependency (a capability package) to a version outside the active
+profile. Package managers let you pin dependency versions via these fields, and
+such pins can silently force a managed dependency to a version that disagrees
+with the profile `align-deps` enforces.
+
+This check is **opt-in**, **read-only**, and **non-fatal**:
+
+- It only emits warnings — it never modifies overrides (not even with
+  `--write`), and it does not change the exit code.
+- Only entries that map to a managed capability produce output; unrelated pins
+  are ignored.
+- Because overrides are often used to deliberately pin a specific concrete
+  version, an entry is considered fine as long as it stays _within_ the
+  profile's expected range (subset semantics), even under `--diff-mode strict`.
+  Only pins that fall outside, or are broader than, the managed range are
+  flagged. Both the production and development profiles are considered.
+
+In a monorepo, `resolutions`/`overrides` are typically only declared in the
+workspace-root `package.json`, which often has no `align-deps` config of its
+own. The root's overrides are still checked — they are validated against the
+managed dependencies resolved across the configured packages in the workspace.
+
+> [!NOTE]
+>
+> Yarn `resolutions` and npm `overrides` are supported. For npm `overrides`,
+> nested entries (including the `"."` self-reference) are inspected, but entries
+> that _reference_ another dependency (npm's `$name` syntax) are skipped since
+> they do not pin a concrete version.
+
+Default: `false`
+
 ### `--diff-mode`
 
 Sets the algorithm used to determine if versions differ.
