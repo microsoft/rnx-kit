@@ -201,7 +201,7 @@ function makeOptions(args: Args): Options {
     requirements,
     verbose,
     write,
-    "check-overrides": checkOverrides,
+    "check-overrides": checkOverridesFlag,
   } = args;
 
   return {
@@ -211,7 +211,7 @@ function makeOptions(args: Args): Options {
     noUnmanaged,
     verbose,
     write,
-    checkOverrides,
+    checkOverrides: checkOverridesFlag,
     diffMode: validateDiffMode(diffMode),
     excludePackages: excludePackages?.toString()?.split(","),
     requirements: requirements?.toString()?.split(","),
