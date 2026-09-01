@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.3.9
+
+### Patch Changes
+
+- 09a545c: Cache `readReactNativeConfig` calls to speed up subsequent calls
+- Updated dependencies [d2c22b2]
+  - @rnx-kit/types-bundle-config@1.0.1
+
 ## 2.3.8
 
 ### Patch Changes

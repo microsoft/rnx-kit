@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli#readme",
   "license": "MIT",
@@ -40,7 +40,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/align-deps": "^4.0.5",
+    "@rnx-kit/align-deps": "^4.0.6",
     "@rnx-kit/config": "^0.9.1",
     "@rnx-kit/console": "^3.0.0",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "^3.0.1",
@@ -55,9 +55,9 @@
     "@rnx-kit/tools-filesystem": "^0.2.0",
     "@rnx-kit/tools-language": "^3.0.1",
     "@rnx-kit/tools-node": "^3.0.6",
-    "@rnx-kit/tools-react-native": "^2.3.7",
-    "@rnx-kit/types-bundle-config": "^1.0.0",
-    "@rnx-kit/types-kit-config": "^1.0.0",
+    "@rnx-kit/tools-react-native": "^2.3.9",
+    "@rnx-kit/types-bundle-config": "^1.0.1",
+    "@rnx-kit/types-kit-config": "^1.0.1",
     "@rnx-kit/types-node": "^1.0.0",
     "commander": "^11.1.0",
     "ora": "^5.4.1",
