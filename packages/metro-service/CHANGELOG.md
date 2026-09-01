@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 5.0.2
+
+### Patch Changes
+
+- 54a7a3e: Fixed asset scales after an unsupported one being dropped when saving assets
+
 ## 5.0.1
 
 ### Patch Changes
