@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/align-deps",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "description": "Manage dependencies within a repository and across many repositories",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme",
   "license": "MIT",
@@ -41,7 +41,7 @@
     "update-readme": "node --no-warnings --conditions=typescript scripts/update-readme.ts"
   },
   "dependencies": {
-    "@rnx-kit/types-kit-config": "^1.0.0",
+    "@rnx-kit/types-kit-config": "^1.0.1",
     "@rnx-kit/types-node": "^1.0.0",
     "oxc-resolver": "^11.0.0"
   },

@@ -4948,7 +4948,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/align-deps@npm:^4.0.5, @rnx-kit/align-deps@workspace:packages/align-deps":
+"@rnx-kit/align-deps@npm:^4.0.6, @rnx-kit/align-deps@workspace:packages/align-deps":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
@@ -4963,7 +4963,7 @@ __metadata:
     "@rnx-kit/tools-shell": "npm:*"
     "@rnx-kit/tools-workspaces": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@rnx-kit/types-kit-config": "npm:^1.0.0"
+    "@rnx-kit/types-kit-config": "npm:^1.0.1"
     "@rnx-kit/types-node": "npm:^1.0.0"
     "@types/prompts": "npm:^2.0.0"
     "@types/semver": "npm:^7.0.0"
@@ -5084,7 +5084,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.20.0"
     "@react-native-community/cli-types": "npm:^20.1.0"
     "@react-native-windows/cli": "npm:^0.82.0"
-    "@rnx-kit/align-deps": "npm:^4.0.5"
+    "@rnx-kit/align-deps": "npm:^4.0.6"
     "@rnx-kit/config": "npm:^0.9.1"
     "@rnx-kit/console": "npm:^3.0.0"
     "@rnx-kit/jest-preset": "npm:*"
@@ -5101,10 +5101,10 @@ __metadata:
     "@rnx-kit/tools-filesystem": "npm:^0.2.0"
     "@rnx-kit/tools-language": "npm:^3.0.1"
     "@rnx-kit/tools-node": "npm:^3.0.6"
-    "@rnx-kit/tools-react-native": "npm:^2.3.7"
+    "@rnx-kit/tools-react-native": "npm:^2.3.9"
     "@rnx-kit/tsconfig": "npm:*"
-    "@rnx-kit/types-bundle-config": "npm:^1.0.0"
-    "@rnx-kit/types-kit-config": "npm:^1.0.0"
+    "@rnx-kit/types-bundle-config": "npm:^1.0.1"
+    "@rnx-kit/types-kit-config": "npm:^1.0.1"
     "@rnx-kit/types-node": "npm:^1.0.0"
     "@types/connect": "npm:^3.4.36"
     "@types/node": "npm:^24.0.0"
@@ -5953,7 +5953,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-react-native@npm:^2.1.0, @rnx-kit/tools-react-native@npm:^2.3.0, @rnx-kit/tools-react-native@npm:^2.3.1, @rnx-kit/tools-react-native@npm:^2.3.2, @rnx-kit/tools-react-native@npm:^2.3.3, @rnx-kit/tools-react-native@npm:^2.3.5, @rnx-kit/tools-react-native@npm:^2.3.7, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
+"@rnx-kit/tools-react-native@npm:^2.1.0, @rnx-kit/tools-react-native@npm:^2.3.0, @rnx-kit/tools-react-native@npm:^2.3.1, @rnx-kit/tools-react-native@npm:^2.3.2, @rnx-kit/tools-react-native@npm:^2.3.3, @rnx-kit/tools-react-native@npm:^2.3.5, @rnx-kit/tools-react-native@npm:^2.3.9, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-react-native@workspace:packages/tools-react-native"
   dependencies:
@@ -5963,7 +5963,7 @@ __metadata:
     "@rnx-kit/tools-filesystem": "npm:^0.2.0"
     "@rnx-kit/tools-node": "npm:^3.0.5"
     "@rnx-kit/tsconfig": "npm:*"
-    "@rnx-kit/types-bundle-config": "npm:^1.0.0"
+    "@rnx-kit/types-bundle-config": "npm:^1.0.1"
     "@types/node": "npm:^24.0.0"
     memfs: "npm:^4.56.10"
     metro: "npm:^0.84.0"
@@ -6053,7 +6053,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/types-bundle-config@npm:^1.0.0, @rnx-kit/types-bundle-config@workspace:packages/types-bundle-config":
+"@rnx-kit/types-bundle-config@npm:^1.0.0, @rnx-kit/types-bundle-config@npm:^1.0.1, @rnx-kit/types-bundle-config@workspace:packages/types-bundle-config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-bundle-config@workspace:packages/types-bundle-config"
   dependencies:
@@ -6073,14 +6073,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/types-kit-config@npm:*, @rnx-kit/types-kit-config@npm:^1.0.0, @rnx-kit/types-kit-config@workspace:packages/types-kit-config":
+"@rnx-kit/types-kit-config@npm:*, @rnx-kit/types-kit-config@npm:^1.0.0, @rnx-kit/types-kit-config@npm:^1.0.1, @rnx-kit/types-kit-config@workspace:packages/types-kit-config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-kit-config@workspace:packages/types-kit-config"
   dependencies:
     "@rnx-kit/oxlint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@rnx-kit/types-bundle-config": "npm:^1.0.0"
+    "@rnx-kit/types-bundle-config": "npm:^1.0.1"
   languageName: unknown
   linkType: soft
 

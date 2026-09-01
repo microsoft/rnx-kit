@@ -1,5 +1,20 @@
 # Change Log - @rnx-kit/cli
 
+## 2.0.4
+
+### Patch Changes
+
+- 5f68a28: Added `--verbose` flag
+- 4a9a55b: Enable Node's compile cache to speed up startup on subsequent runs
+- Updated dependencies [b18ab02]
+- Updated dependencies [09a545c]
+- Updated dependencies [27a7b9b]
+- Updated dependencies [d2c22b2]
+  - @rnx-kit/align-deps@4.0.6
+  - @rnx-kit/tools-react-native@2.3.9
+  - @rnx-kit/types-bundle-config@1.0.1
+  - @rnx-kit/types-kit-config@1.0.1
+
 ## 2.0.3
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/align-deps
 
+## 4.0.6
+
+### Patch Changes
+
+- b18ab02: Address potential ReDoS vulnerability in `--init` command
+- 27a7b9b: Fixed `--init` failing when `react-native` is declared with whitespace in its version range, e.g. `>= 0.72.0`
+- Updated dependencies [d2c22b2]
+  - @rnx-kit/types-kit-config@1.0.1
+
 ## 4.0.5
 
 ### Patch Changes
