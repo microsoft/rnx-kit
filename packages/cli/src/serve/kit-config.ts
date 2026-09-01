@@ -1,17 +1,17 @@
 import { getBundleConfig, getKitConfig } from "@rnx-kit/config";
 import { pickValues } from "@rnx-kit/tools-language/properties";
-import type { ServerConfig } from "@rnx-kit/types-bundle-config";
+import type { BundleParameters } from "@rnx-kit/types-bundle-config";
 import { getDefaultBundlerPlugins } from "../bundle/defaultPlugins.ts";
 
 type ServerConfigOverrides = Pick<
-  ServerConfig,
+  BundleParameters,
   "projectRoot" | "assetPlugins" | "sourceExts"
 > & {
   id?: string;
 };
 
-type CliServerConfig = ServerConfig & {
-  plugins: Required<ServerConfig>["plugins"];
+type CliServerConfig = BundleParameters & {
+  plugins: Required<BundleParameters>["plugins"];
   treeShake: false;
 };
 

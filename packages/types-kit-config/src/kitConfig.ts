@@ -1,4 +1,7 @@
-import type { BundleConfig, ServerConfig } from "@rnx-kit/types-bundle-config";
+import type {
+  BundleConfig,
+  BundleParameters,
+} from "@rnx-kit/types-bundle-config";
 import type { AlignDepsConfig, Capability } from "./alignDeps.ts";
 import type {
   NoDuplicatesRuleOptions,
@@ -39,7 +42,7 @@ export type KitConfig = {
   /**
    * Specifies how the package's bundle server is configured.
    */
-  server?: ServerConfig;
+  server?: BundleParameters;
 
   /**
    * Supported versions of React Native. Must be parseable by
