@@ -38,6 +38,11 @@ type OverrideViolation = Override & {
 type ManagedPackages = Map<string, string[]>;
 
 /**
+ * A package manifest together with the path it was read from.
+ */
+type LoadedManifest = { path: string; manifest: PackageManifest };
+
+/**
  * Extracts the package name from a package descriptor, dropping any version
  * range suffix.
  *
@@ -168,20 +173,19 @@ function addManagedPackages(
  * matching either is left alone. Packages without a valid align-deps
  * configuration contribute nothing.
  *
- * @param manifests Paths to the package manifests to inspect
+ * @param manifests The already-parsed package manifests to inspect
  * @param options Command line options
  * @returns A map of managed package name to the version range(s) it may take
  */
 export function collectManagedPackages(
-  manifests: string[],
-  options: Options,
-  /** @internal */ fs = nodefs
+  manifests: LoadedManifest[],
+  options: Options
 ): ManagedPackages {
   const managed: ManagedPackages = new Map();
 
-  for (const manifestPath of manifests) {
+  for (const { path: manifestPath, manifest } of manifests) {
     try {
-      const inputConfig = loadConfig(manifestPath, options, fs);
+      const inputConfig = loadConfig({ path: manifestPath, manifest }, options);
       if (isError(inputConfig)) {
         continue;
       }
@@ -201,8 +205,8 @@ export function collectManagedPackages(
       addManagedPackages(managed, config, prodPreset);
       addManagedPackages(managed, config, devPreset);
     } catch (_) {
-      // A package may be unreadable or unresolvable (e.g. no profile satisfies
-      // its requirements). Skip it; the override check is best-effort.
+      // A package may be unresolvable (e.g. no profile satisfies its
+      // requirements). Skip it; the override check is best-effort.
       continue;
     }
   }
@@ -289,19 +293,26 @@ export function checkOverrides(
     title: string
   ) => Reporter = makeGroupedReporter
 ): void {
-  const managed = collectManagedPackages(manifests, options, fs);
+  // Read each manifest exactly once and reuse the parsed result for both
+  // managed-package resolution and override checking.
+  const loaded: LoadedManifest[] = [];
+  for (const manifestPath of manifests) {
+    try {
+      loaded.push({
+        path: manifestPath,
+        manifest: readPackage(manifestPath, fs),
+      });
+    } catch (_) {
+      continue;
+    }
+  }
+
+  const managed = collectManagedPackages(loaded, options);
   if (managed.size === 0) {
     return;
   }
 
-  for (const manifestPath of manifests) {
-    let manifest: PackageManifest;
-    try {
-      manifest = readPackage(manifestPath, fs);
-    } catch (_) {
-      continue;
-    }
-
+  for (const { path: manifestPath, manifest } of loaded) {
     const violations = findOverrideViolations(managed, manifest);
     if (violations.length > 0) {
       const reporter = makeReporter(manifestPath);

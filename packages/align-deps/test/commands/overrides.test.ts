@@ -173,14 +173,9 @@ describe("collectManagedPackages()", () => {
   });
 
   it("resolves managed packages across configured packages", () => {
-    const fs = mockFS({
-      "packages/app/package.json": appManifest("app"),
-    });
-
     const managed = collectManagedPackages(
-      ["packages/app/package.json"],
-      defaultOptions,
-      fs
+      [{ path: "packages/app/package.json", manifest: appManifest("app") }],
+      defaultOptions
     );
 
     equal(managed.get("react-native")?.join(" || "), "^0.74.0");
@@ -188,65 +183,60 @@ describe("collectManagedPackages()", () => {
   });
 
   it("considers both production and development profiles", () => {
-    const fs = mockFS({
-      "packages/lib/package.json": {
-        name: "lib",
-        version: "1.0.0",
-        "rnx-kit": {
-          kitType: "library",
-          alignDeps: {
-            requirements: {
-              development: ["react-native@0.74"],
-              production: ["react-native@0.73"],
+    const managed = collectManagedPackages(
+      [
+        {
+          path: "packages/lib/package.json",
+          manifest: {
+            name: "lib",
+            version: "1.0.0",
+            "rnx-kit": {
+              kitType: "library",
+              alignDeps: {
+                requirements: {
+                  development: ["react-native@0.74"],
+                  production: ["react-native@0.73"],
+                },
+                capabilities: ["core"],
+              },
             },
-            capabilities: ["core"],
           },
         },
-      },
-    });
-
-    const managed = collectManagedPackages(
-      ["packages/lib/package.json"],
-      defaultOptions,
-      fs
+      ],
+      defaultOptions
     );
 
     deepEqual(managed.get("react-native")?.sort(), ["^0.73.0", "^0.74.0"]);
   });
 
   it("returns an empty map when nothing is configured", () => {
-    const fs = mockFS({
-      "package.json": { name: "root", version: "1.0.0" },
-    });
-
     const managed = collectManagedPackages(
-      ["package.json"],
-      defaultOptions,
-      fs
+      [{ path: "package.json", manifest: { name: "root", version: "1.0.0" } }],
+      defaultOptions
     );
 
     equal(managed.size, 0);
   });
 
   it("skips packages whose requirements cannot be resolved", () => {
-    const fs = mockFS({
-      "packages/app/package.json": {
-        name: "app",
-        version: "1.0.0",
-        "rnx-kit": {
-          kitType: "app",
-          alignDeps: {
-            requirements: ["react-native@99.0"],
-            capabilities: ["core-ios"],
+    const managed = collectManagedPackages(
+      [
+        {
+          path: "packages/app/package.json",
+          manifest: {
+            name: "app",
+            version: "1.0.0",
+            "rnx-kit": {
+              kitType: "app",
+              alignDeps: {
+                requirements: ["react-native@99.0"],
+                capabilities: ["core-ios"],
+              },
+            },
           },
         },
-      },
-    });
-
-    const managed = collectManagedPackages(
-      ["packages/app/package.json"],
-      defaultOptions,
-      fs
+      ],
+      defaultOptions
     );
 
     equal(managed.size, 0);
