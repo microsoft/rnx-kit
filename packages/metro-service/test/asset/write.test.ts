@@ -3,6 +3,7 @@ import { deepEqual, equal } from "node:assert/strict";
 import * as path from "node:path";
 import { describe, it } from "node:test";
 import { saveAssetsDefault } from "../../src/asset/default.ts";
+import { saveAssetsIOS } from "../../src/asset/ios.ts";
 import { saveAssets } from "../../src/asset/write.ts";
 import { makeAssetData, mockPath } from "./helper.ts";
 
@@ -91,5 +92,39 @@ describe("saveAssets", () => {
 
     equal(files[path.posix.join(dest, "icon.png")], "one");
     equal(files[path.posix.join(dest, "icon@2x.png")], undefined);
+  });
+
+  it("copies remaining scales after an unsupported one", async () => {
+    const fs = mockFS({
+      "icon.png": "one",
+      "icon@1.5x.png": "one and a half",
+      "icon@2x.png": "two",
+      "icon@3x.png": "three",
+    });
+
+    await saveAssets(
+      [
+        makeAssetData({
+          name: "icon",
+          type: "png",
+          httpServerLocation: "/assets/test",
+          scales: [1, 1.5, 2, 3],
+          files: ["icon.png", "icon@1.5x.png", "icon@2x.png", "icon@3x.png"],
+        }),
+      ],
+      "ios",
+      "dist",
+      undefined,
+      saveAssetsIOS,
+      fs
+    );
+
+    const files = getMockFSFiles(fs);
+    const dest = mockPath("dist", "assets", "test");
+
+    equal(files[path.posix.join(dest, "icon.png")], "one");
+    equal(files[path.posix.join(dest, "icon@1.5x.png")], undefined);
+    equal(files[path.posix.join(dest, "icon@2x.png")], "two");
+    equal(files[path.posix.join(dest, "icon@3x.png")], "three");
   });
 });
