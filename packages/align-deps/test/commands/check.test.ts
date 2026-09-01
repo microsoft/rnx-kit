@@ -313,6 +313,52 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     equal(errorSpy.mock.callCount(), 0);
   });
 
+  it("explains why dependencies are managed when 'why' is set", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
+      ...mockManifest,
+      "rnx-kit": {
+        alignDeps: {
+          requirements: ["react-native@0.70"],
+          capabilities: ["core-ios"],
+        },
+      },
+    });
+
+    const result = checkPackageManifest(
+      "package.json",
+      { ...defaultOptions, why: true },
+      undefined,
+      {
+        info: fail,
+        warn: fail,
+        error: (message) => {
+          equal(
+            message,
+            `package.json
+      ├── peerDependencies["react"]: dependency is missing, expected "18.1.0"
+      │     └── required by '@rnx-kit/align-deps'
+      ├── peerDependencies["react-native"]: dependency is missing, expected "^0.70.0"
+      │     └── required by '@rnx-kit/align-deps'
+      ├── devDependencies["react"]: dependency is missing, expected "18.1.0"
+      │     └── required by '@rnx-kit/align-deps'
+      ├── devDependencies["react-native"]: dependency is missing, expected "^0.70.0"
+      │     └── required by '@rnx-kit/align-deps'
+      └── Re-run with '--write' to fix them
+`
+          );
+        },
+        close: fail,
+      }
+    );
+
+    notEqual(result, "success");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
+  });
+
   it("writes changes back to 'package.json'", (t) => {
     const { logSpy, warnSpy, errorSpy } = mockConsole(t);
 

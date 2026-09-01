@@ -29,12 +29,12 @@ import { checkPackageManifestUnconfigured } from "./vigilant.ts";
  * dependencies, then attributes the requiring packages to those dependencies.
  *
  * @param capabilityRequirements Map of capability to the packages requiring it
- * @param preset The preset used to resolve capabilities to dependencies
+ * @param presets The presets used to resolve capabilities to dependencies
  * @returns A map of dependency name to the packages that required it
  */
 function dependencyReasons(
   capabilityRequirements: CapabilityRequirements,
-  preset: Preset
+  presets: Preset[]
 ): Record<string, string[]> {
   const reasons: Record<string, Set<string>> = {};
   for (const capability of keysOf(capabilityRequirements)) {
@@ -42,11 +42,16 @@ function dependencyReasons(
     if (!packages) {
       continue;
     }
-    const { dependencies } = resolveCapabilitiesUnchecked([capability], preset);
-    for (const dependency of Object.keys(dependencies)) {
-      const set = (reasons[dependency] ??= new Set<string>());
-      for (const pkg of packages) {
-        set.add(pkg);
+    for (const preset of presets) {
+      const { dependencies } = resolveCapabilitiesUnchecked(
+        [capability],
+        preset
+      );
+      for (const dependency of Object.keys(dependencies)) {
+        const set = (reasons[dependency] ??= new Set<string>());
+        for (const pkg of packages) {
+          set.add(pkg);
+        }
       }
     }
   }
@@ -138,7 +143,7 @@ export function checkPackageManifest(
       modifyManifest(manifestPath, updatedManifest, fs);
     } else {
       const reasons = options.why
-        ? dependencyReasons(capabilityRequirements, prodPreset)
+        ? dependencyReasons(capabilityRequirements, [prodPreset, devPreset])
         : undefined;
       const violations = stringify(allChanges, [manifestPath], reasons);
       reporter.error(violations);
