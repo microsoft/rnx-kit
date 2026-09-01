@@ -148,7 +148,6 @@ export default {
     },
     "packages/tools-shell": {
       entry: [allTests],
-      ignoreDependencies: jestDependencies,
     },
     "packages/tools-react-native": {
       entry: ["*.{d.ts,js}", allTests],

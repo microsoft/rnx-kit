@@ -43,8 +43,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@babel/plugin-transform-react-jsx": "^7.20.0",
-    "@babel/plugin-transform-react-jsx-source": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@jridgewell/trace-mapping": "^0.3.18",
