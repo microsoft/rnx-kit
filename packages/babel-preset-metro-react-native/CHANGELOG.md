@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 4.0.1
+
+### Patch Changes
+
+- 14f89d7: Disable `useTransformReactJSXExperimental` by default. While esbuild may be able to parse it, Metro/Babel will fail if no runtime is configured.
+
 ## 4.0.0
 
 ### Major Changes
