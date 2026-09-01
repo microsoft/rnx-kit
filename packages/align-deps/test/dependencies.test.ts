@@ -113,7 +113,7 @@ describe("gatherRequirements()", () => {
     const [fixture, manifest] = useFixture("awesome-repo");
     const initialPreset = { "0.69": profile_0_69, "0.70": profile_0_70 };
     const initialCapabilities = manifest["rnx-kit"]?.capabilities;
-    const { preset, capabilities } = gatherRequirements(
+    const { preset, capabilities, capabilityRequirements } = gatherRequirements(
       fixture,
       manifest,
       initialPreset,
@@ -132,6 +132,14 @@ describe("gatherRequirements()", () => {
       "storage",
       "webview",
     ]);
+    // Each managed capability must be traceable to at least one package.
+    deepEqual(capabilityRequirements["netinfo"], ["dutch"]);
+    deepEqual(capabilityRequirements["storage"], ["john"]);
+    deepEqual(capabilityRequirements["animation"], ["t-800"]);
+    deepEqual(capabilityRequirements["webview"], ["quaid"]);
+    // Capabilities declared by the app itself are attributed to the app.
+    deepEqual(capabilityRequirements["hermes"], ["awesome-repo"]);
+    deepEqual(capabilityRequirements["lazy-index"], ["awesome-repo"]);
     equal(errorSpy.mock.callCount(), 0);
     equal(warnSpy.mock.callCount(), 0);
   });

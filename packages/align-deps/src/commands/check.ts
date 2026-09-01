@@ -1,6 +1,8 @@
+import { keysOf } from "@rnx-kit/tools-language/properties";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
+import { resolveCapabilitiesUnchecked } from "../capabilities.ts";
 import { migrateConfig } from "../compatibility/config.ts";
 import { loadConfig } from "../config.ts";
 import { diff, stringify } from "../diff.ts";
@@ -9,8 +11,53 @@ import { modifyManifest } from "../helpers.ts";
 import { updatePackageManifest } from "../manifest.ts";
 import { resolve } from "../preset.ts";
 import { makeDefaultReporter, withGroupReporter } from "../reporter.ts";
-import type { Command, ErrorCode, Options } from "../types.ts";
+import type {
+  CapabilityRequirements,
+  Command,
+  ErrorCode,
+  Options,
+  Preset,
+} from "../types.ts";
 import { checkPackageManifestUnconfigured } from "./vigilant.ts";
+
+/**
+ * Maps each resolved dependency to the list of packages that required it.
+ *
+ * A dependency is added because it satisfies one or more capabilities, and each
+ * capability is required by one or more packages. This resolves each required
+ * capability (including nested capabilities provided by meta packages) to real
+ * dependencies, then attributes the requiring packages to those dependencies.
+ *
+ * @param capabilityRequirements Map of capability to the packages requiring it
+ * @param preset The preset used to resolve capabilities to dependencies
+ * @returns A map of dependency name to the packages that required it
+ */
+function dependencyReasons(
+  capabilityRequirements: CapabilityRequirements,
+  preset: Preset
+): Record<string, string[]> {
+  const reasons: Record<string, Set<string>> = {};
+  for (const capability of keysOf(capabilityRequirements)) {
+    const packages = capabilityRequirements[capability];
+    if (!packages) {
+      continue;
+    }
+    const { dependencies } = resolveCapabilitiesUnchecked([capability], preset);
+    for (const dependency of Object.keys(dependencies)) {
+      const set = (reasons[dependency] ??= new Set<string>());
+      for (const pkg of packages) {
+        set.add(pkg);
+      }
+    }
+  }
+
+  return Object.fromEntries(
+    Object.entries(reasons).map(([dependency, packages]) => [
+      dependency,
+      Array.from(packages).sort(),
+    ])
+  );
+}
 
 /**
  * Checks the specified package manifest for misaligned dependencies.
@@ -49,11 +96,8 @@ export function checkPackageManifest(
   }
 
   const config = migrateConfig(inputConfig, manifestPath, options);
-  const { devPreset, prodPreset, capabilities } = resolve(
-    config,
-    path.dirname(manifestPath),
-    options
-  );
+  const { devPreset, prodPreset, capabilities, capabilityRequirements } =
+    resolve(config, path.dirname(manifestPath), options);
   const { kitType, manifest } = config;
 
   if (kitType === "app" && Object.keys(prodPreset).length !== 1) {
@@ -93,7 +137,10 @@ export function checkPackageManifest(
       inputConfig.manifest = updatedManifest;
       modifyManifest(manifestPath, updatedManifest, fs);
     } else {
-      const violations = stringify(allChanges, [manifestPath]);
+      const reasons = options.why
+        ? dependencyReasons(capabilityRequirements, prodPreset)
+        : undefined;
+      const violations = stringify(allChanges, [manifestPath], reasons);
       reporter.error(violations);
       return "unsatisfied";
     }

@@ -4,12 +4,18 @@ import semverSatisfies from "semver/functions/satisfies.js";
 import semverValidRange from "semver/ranges/valid.js";
 import { gatherRequirements } from "./dependencies.ts";
 import { preset as reactNativePreset } from "./presets/microsoft/react-native.ts";
-import type { AlignDepsOptions, Options, Preset } from "./types.ts";
+import type {
+  AlignDepsOptions,
+  CapabilityRequirements,
+  Options,
+  Preset,
+} from "./types.ts";
 
 type Resolution = {
   devPreset: Preset;
   prodPreset: Preset;
   capabilities: Capability[];
+  capabilityRequirements: CapabilityRequirements;
 };
 
 const mergedPresetsCache = new Map<string, Preset>();
@@ -195,21 +201,37 @@ export function resolve(
   })();
 
   if (kitType === "app") {
-    const { preset: prodMergedPreset, capabilities: mergedCapabilities } =
-      gatherRequirements(
-        projectRoot,
-        manifest,
-        initialProdPreset,
-        prodRequirements,
-        capabilities,
-        options
-      );
+    const {
+      preset: prodMergedPreset,
+      capabilities: mergedCapabilities,
+      capabilityRequirements,
+    } = gatherRequirements(
+      projectRoot,
+      manifest,
+      initialProdPreset,
+      prodRequirements,
+      capabilities,
+      options
+    );
     return {
       devPreset,
       prodPreset: prodMergedPreset,
       capabilities: mergedCapabilities,
+      capabilityRequirements,
     };
   }
 
-  return { devPreset, prodPreset: initialProdPreset, capabilities };
+  // For libraries, capabilities are declared directly in the package's own
+  // config, so the package itself is the source of every requirement.
+  const capabilityRequirements: CapabilityRequirements = {};
+  for (const capability of capabilities) {
+    capabilityRequirements[capability] = [manifest.name];
+  }
+
+  return {
+    devPreset,
+    prodPreset: initialProdPreset,
+    capabilities,
+    capabilityRequirements,
+  };
 }

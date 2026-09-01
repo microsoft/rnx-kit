@@ -223,6 +223,21 @@ Specify to increase logging verbosity.
 
 Default: `false`
 
+### `--why`
+
+Explains why a dependency is managed by listing the packages that required it.
+This only affects the output when there are changes to report, appending the
+list of packages that pulled in each added or changed dependency. For example:
+
+```
+error path/to/package.json
+      ├── dependencies["@react-native-community/netinfo"]: dependency is missing, expected "^9.0.0"
+      │     └── required by 'some-package', 'another-package'
+      └── Re-run with '--write' to fix them
+```
+
+Default: `false`
+
 ### `--write`
 
 Writes all proposed changes to the specified `package.json`.

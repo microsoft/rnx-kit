@@ -23,6 +23,7 @@ export const alignDepsCommand = {
       "migrate-config": Boolean(args.migrateConfig),
       "no-unmanaged": Boolean(args.noUnmanaged),
       verbose: Boolean(args.verbose),
+      why: Boolean(args.why),
       write: Boolean(args.write),
     });
   },

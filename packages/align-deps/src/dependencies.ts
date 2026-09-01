@@ -1,12 +1,18 @@
 import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
+import { keysOf } from "@rnx-kit/tools-language/properties";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import type { Capability, KitConfig } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
 import * as path from "node:path";
 import { ResolverFactory } from "oxc-resolver";
 import { filterPreset } from "./preset.ts";
-import type { Options, Preset, Profile } from "./types.ts";
+import type {
+  CapabilityRequirements,
+  Options,
+  Preset,
+  Profile,
+} from "./types.ts";
 
 type PackageManifestMin = Pick<PackageManifest, "dependencies" | "rnx-kit">;
 
@@ -106,8 +112,13 @@ export function gatherRequirements(
   requirements: string[],
   appCapabilities: Capability[],
   { loose }: Pick<Options, "loose">
-): { preset: Preset; capabilities: Capability[] } {
+): {
+  preset: Preset;
+  capabilities: Capability[];
+  capabilityRequirements: CapabilityRequirements;
+} {
   const allCapabilities = new Set<Capability>();
+  const requiredBy: Partial<Record<Capability, Set<string>>> = {};
   const trace: Trace[] = [
     {
       module: manifest.name,
@@ -133,6 +144,7 @@ export function gatherRequirements(
     if (Array.isArray(capabilities)) {
       for (const capability of capabilities) {
         allCapabilities.add(capability);
+        (requiredBy[capability] ??= new Set<string>()).add(module);
       }
     }
 
@@ -185,6 +197,7 @@ export function gatherRequirements(
       isDevOnlyCapability(capability, profiles)
     ) {
       allCapabilities.delete(capability);
+      delete requiredBy[capability];
     }
   }
 
@@ -192,7 +205,20 @@ export function gatherRequirements(
   // capabilities.
   for (const capability of appCapabilities) {
     allCapabilities.add(capability);
+    (requiredBy[capability] ??= new Set<string>()).add(manifest.name);
   }
 
-  return { preset, capabilities: Array.from(allCapabilities) };
+  const capabilityRequirements: CapabilityRequirements = {};
+  for (const capability of keysOf(requiredBy)) {
+    const packages = requiredBy[capability];
+    if (packages) {
+      capabilityRequirements[capability] = Array.from(packages).sort();
+    }
+  }
+
+  return {
+    preset,
+    capabilities: Array.from(allCapabilities),
+    capabilityRequirements,
+  };
 }

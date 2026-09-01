@@ -90,6 +90,12 @@ export const cliOptions = {
     description: "Increase logging verbosity",
     type: "boolean",
   },
+  why: {
+    default: false,
+    description:
+      "Explains why a dependency is managed by listing the packages that required it. Only affects output when there are changes to report.",
+    type: "boolean",
+  },
   write: {
     default: false,
     description: "Writes changes to the specified 'package.json'.",
@@ -207,6 +213,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     requirements,
     "set-version": setVersion,
     verbose,
+    why,
     write,
   } = args;
 
@@ -216,6 +223,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     migrateConfig,
     noUnmanaged,
     verbose,
+    why,
     write,
     diffMode: validateDiffMode(diffMode),
     excludePackages: excludePackages?.toString()?.split(","),

@@ -1,4 +1,4 @@
-import { equal } from "node:assert/strict";
+import { equal, ok } from "node:assert/strict";
 import * as path from "node:path";
 import { after, before, describe, it } from "node:test";
 import { URL, fileURLToPath } from "node:url";
@@ -73,5 +73,80 @@ describe("checkPackageManifest({ kitType: 'app' }) (backwards compatibility)", (
     equal(checkPackageManifest(manifestPath), "success");
     equal(destination, manifestPath);
     t.assert.snapshot?.(updatedManifest);
+  });
+});
+
+describe("checkPackageManifest({ kitType: 'app', why: true })", () => {
+  before(() => {
+    defineRequire("../../src/preset.ts", import.meta.url);
+  });
+
+  after(() => {
+    undefineRequire();
+  });
+
+  it("explains which packages required each managed dependency", () => {
+    const manifestPath = path.join(fixturePath("awesome-repo"), "package.json");
+
+    const options = { ...defaultOptions, why: true, write: false };
+
+    let message = "";
+    const reporter = {
+      info: () => undefined,
+      warn: () => undefined,
+      error: (msg: string) => {
+        message = msg;
+      },
+      close: () => undefined,
+    };
+
+    const result = checkPackageManifestActual(
+      manifestPath,
+      options,
+      undefined,
+      reporter,
+      mockfs as unknown as typeof import("node:fs")
+    );
+
+    equal(result, "unsatisfied");
+    ok(
+      message.includes(
+        `      ├── dependencies["@react-native-community/netinfo"]: dependency is missing, expected "^9.0.0"\n` +
+          `      │     └── required by 'dutch'`
+      )
+    );
+    ok(
+      message.includes(
+        `      ├── dependencies["@react-native-async-storage/async-storage"]: dependency is missing, expected "^1.17.10"\n` +
+          `      │     └── required by 'john'`
+      )
+    );
+  });
+
+  it("omits reasons when 'why' is not set", () => {
+    const manifestPath = path.join(fixturePath("awesome-repo"), "package.json");
+
+    const options = { ...defaultOptions, why: false, write: false };
+
+    let message = "";
+    const reporter = {
+      info: () => undefined,
+      warn: () => undefined,
+      error: (msg: string) => {
+        message = msg;
+      },
+      close: () => undefined,
+    };
+
+    const result = checkPackageManifestActual(
+      manifestPath,
+      options,
+      undefined,
+      reporter,
+      mockfs as unknown as typeof import("node:fs")
+    );
+
+    equal(result, "unsatisfied");
+    equal(message.includes("required by"), false);
   });
 });

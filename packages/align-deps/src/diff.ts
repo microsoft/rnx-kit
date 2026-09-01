@@ -59,7 +59,8 @@ export function diff(
 
 export function stringify(
   allChanges: Partial<Changes>,
-  output: string[] = []
+  output: string[] = [],
+  reasons?: Record<string, string[]>
 ): string {
   let totalChanges = 0;
   for (const [section, changes] of Object.entries(allChanges)) {
@@ -73,11 +74,13 @@ export function stringify(
             output.push(
               `${prefix} dependency is missing, expected "${change.target}"`
             );
+            appendReason(output, reasons, dependency);
             break;
           case "changed":
             output.push(
               `${prefix} found "${change.current}", expected "${change.target}"`
             );
+            appendReason(output, reasons, dependency);
             break;
           case "removed":
             output.push(`${prefix} should be removed`);
@@ -95,4 +98,16 @@ export function stringify(
   }
 
   return output.join("\n");
+}
+
+function appendReason(
+  output: string[],
+  reasons: Record<string, string[]> | undefined,
+  dependency: string
+): void {
+  const packages = reasons?.[dependency];
+  if (packages && packages.length > 0) {
+    const names = packages.map((name) => `'${name}'`).join(", ");
+    output.push(`      │     └── required by ${names}`);
+  }
 }

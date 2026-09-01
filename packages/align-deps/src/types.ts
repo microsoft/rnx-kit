@@ -25,19 +25,25 @@ export type Changes = {
 
 export type DiffMode = "strict" | "allow-subset";
 
+/**
+ * Maps a capability to the list of packages that declared it as a requirement.
+ */
+export type CapabilityRequirements = Partial<Record<Capability, string[]>>;
+
 export type Options = {
   presets: string[];
   loose?: boolean;
   migrateConfig?: boolean;
   noUnmanaged?: boolean;
   verbose?: boolean;
+  why?: boolean;
   write?: boolean;
   diffMode?: DiffMode;
   excludePackages?: string[];
   requirements?: string[];
 };
 
-export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
+export type Args = Pick<Options, "loose" | "verbose" | "why" | "write"> & {
   "diff-mode"?: string;
   "exclude-packages"?: string | number;
   "export-catalogs"?: string;
