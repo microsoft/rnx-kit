@@ -84,7 +84,7 @@ export function saveAssets(
     for (let i = 0; i < length; ++i) {
       const scale = asset.scales[i];
       if (!validScales.has(scale)) {
-        return;
+        continue;
       }
       const src = asset.files[i];
       const dest = path.join(assetsDest, getAssetDestPath(asset, scale));
