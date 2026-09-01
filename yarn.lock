@@ -1248,7 +1248,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-react-jsx-source@npm:^7.20.0, @babel/plugin-transform-react-jsx-source@npm:^7.24.7":
+"@babel/plugin-transform-react-jsx-source@npm:^7.24.7":
   version: 7.29.7
   resolution: "@babel/plugin-transform-react-jsx-source@npm:7.29.7"
   dependencies:
@@ -1259,7 +1259,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-react-jsx@npm:^7.20.0, @babel/plugin-transform-react-jsx@npm:^7.25.2":
+"@babel/plugin-transform-react-jsx@npm:^7.25.2":
   version: 7.29.7
   resolution: "@babel/plugin-transform-react-jsx@npm:7.29.7"
   dependencies:
@@ -5672,8 +5672,6 @@ __metadata:
   resolution: "@rnx-kit/test-app-macos@workspace:packages/test-app-macos"
   dependencies:
     "@babel/core": "npm:^7.20.0"
-    "@babel/plugin-transform-react-jsx": "npm:^7.20.0"
-    "@babel/plugin-transform-react-jsx-source": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
     "@babel/runtime": "npm:^7.20.0"
     "@react-native-community/cli": "npm:^20.0.0"
@@ -5714,8 +5712,6 @@ __metadata:
   resolution: "@rnx-kit/test-app-windows@workspace:packages/test-app-windows"
   dependencies:
     "@babel/core": "npm:^7.20.0"
-    "@babel/plugin-transform-react-jsx": "npm:^7.20.0"
-    "@babel/plugin-transform-react-jsx-source": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
     "@babel/runtime": "npm:^7.20.0"
     "@react-native-community/cli": "npm:^20.0.0"
@@ -5752,8 +5748,6 @@ __metadata:
   resolution: "@rnx-kit/test-app@workspace:packages/test-app"
   dependencies:
     "@babel/core": "npm:^7.20.0"
-    "@babel/plugin-transform-react-jsx": "npm:^7.20.0"
-    "@babel/plugin-transform-react-jsx-source": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
     "@babel/runtime": "npm:^7.20.0"
     "@jridgewell/trace-mapping": "npm:^0.3.18"

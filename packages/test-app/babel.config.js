@@ -1,10 +1,5 @@
 module.exports = {
-  presets: [
-    [
-      "@rnx-kit/babel-preset-metro-react-native",
-      { useTransformReactJSXExperimental: true },
-    ],
-  ],
+  presets: [["@rnx-kit/babel-preset-metro-react-native"]],
   plugins: (() => {
     try {
       // Some plugins, like `@rnx-kit/polyfills`, may not have been built yet
@@ -14,15 +9,4 @@ module.exports = {
       return [];
     }
   })(),
-  overrides: [
-    {
-      plugins: [
-        [
-          require("@babel/plugin-transform-react-jsx"),
-          { runtime: "automatic" },
-        ],
-        [require("@babel/plugin-transform-react-jsx-source")],
-      ],
-    },
-  ],
 };

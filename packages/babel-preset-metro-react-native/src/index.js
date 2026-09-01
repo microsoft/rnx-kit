@@ -159,7 +159,6 @@ function overridesFor(transformProfile, env) {
       return {
         disableImportExportTransform: true,
         unstable_transformProfile: "hermes-stable",
-        useTransformReactJSXExperimental: true,
       };
 
     default:
