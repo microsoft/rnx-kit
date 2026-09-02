@@ -69,7 +69,7 @@ export function visitDependencies(
     return;
   }
 
-  for (const dependency of Object.keys(dependencies)) {
+  for (const dependency in dependencies) {
     if (visited.has(dependency)) {
       continue;
     }

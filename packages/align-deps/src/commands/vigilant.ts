@@ -219,7 +219,7 @@ export function inspect(
     const desiredDependencies = profile[section];
     const changes = errors[section];
 
-    for (const name of Object.keys(dependencies)) {
+    for (const name in dependencies) {
       if (name in desiredDependencies) {
         const from = dependencies[name];
         const to = desiredDependencies[name];

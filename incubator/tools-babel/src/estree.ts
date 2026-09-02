@@ -834,7 +834,7 @@ function postVisitorWalk(node: MutableNode, source: string | undefined): void {
     node.superTypeParameters = node.superTypeArguments;
     delete node.superTypeArguments;
   }
-  for (const key of Object.keys(node)) {
+  for (const key in node) {
     const val = node[key];
     if (val && typeof val === "object" && key !== "loc") {
       postVisitorWalk(val, source);
@@ -1043,7 +1043,7 @@ function attachComments(
 
     // Collect child fields in source order: [fieldName, value, startPos]
     const fields: [string, MutableNode | MutableNode[], number][] = [];
-    for (const key of Object.keys(node)) {
+    for (const key in node) {
       if (COMMENT_SKIP_KEYS.has(key)) continue;
       const val = node[key];
       if (!val || typeof val !== "object") continue;
@@ -1177,7 +1177,7 @@ function attachComments(
 function fixupParenthesizedLeading(parent: MutableNode): void {
   // Collect all positioned children sorted by start
   const children: { key: string; node: MutableNode }[] = [];
-  for (const key of Object.keys(parent)) {
+  for (const key in parent) {
     if (COMMENT_SKIP_KEYS.has(key)) continue;
     const val = parent[key];
     if (!val || typeof val !== "object") continue;

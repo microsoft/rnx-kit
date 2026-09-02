@@ -31,7 +31,7 @@ export function createProjectCache(
 
   function findProjectRoot(sourceFile: string): string {
     // Search known root directories to see if the source file is in one of them.
-    for (const root of Object.keys(projects)) {
+    for (const root in projects) {
       if (sourceFile.startsWith(root)) {
         return root;
       }

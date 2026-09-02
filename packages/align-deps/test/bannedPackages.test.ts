@@ -1,6 +1,9 @@
-import { equal } from "node:assert/strict";
+import { deepEqual, equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { findBadPackages } from "../src/findBadPackages.ts";
+import {
+  findBadPackages,
+  resolveBannedPackages,
+} from "../src/bannedPackages.ts";
 
 describe("findBadPackages()", () => {
   const dependenciesWithOneBadPackage = {
@@ -124,5 +127,29 @@ describe("findBadPackages()", () => {
       })?.length,
       2
     );
+  });
+});
+
+describe("resolveBannedPackages()", () => {
+  it("returns nothing when no capabilities are managed", () => {
+    deepEqual(resolveBannedPackages([]), []);
+  });
+
+  it("resolves stale packages only when the capability is managed", () => {
+    deepEqual(resolveBannedPackages(["storage"]), [
+      "@react-native-community/async-storage",
+    ]);
+    deepEqual(resolveBannedPackages(["clipboard"]), [
+      "@react-native-community/clipboard",
+    ]);
+    deepEqual(resolveBannedPackages(["storage", "hermes"]), [
+      "@react-native-community/async-storage",
+      "hermes-engine",
+    ]);
+  });
+
+  it("does not resolve banned packages without a capability", () => {
+    // `@types/react-native` is banned but has no superseding capability
+    deepEqual(resolveBannedPackages(["core"]), []);
   });
 });
