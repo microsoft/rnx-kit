@@ -11,7 +11,7 @@ function getDependencies({ projectRoot }: Context): string[] {
   for (const section of ["dependencies", "devDependencies"] as const) {
     const names = manifest[section];
     if (names) {
-      for (const name of Object.keys(names)) {
+      for (const name in names) {
         dependencies.add(name);
       }
     }

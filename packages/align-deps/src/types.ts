@@ -87,6 +87,13 @@ export type Preset = Record<string, Profile>;
 
 export type ExcludedPackage = Package & {
   reason: string;
+
+  /**
+   * The capability that supersedes this package, if any. When set, `align-deps`
+   * will remove this (stale/renamed) package, but only when the capability is
+   * being managed.
+   */
+  capability?: Capability;
 };
 
 export type ManifestProfile = Pick<

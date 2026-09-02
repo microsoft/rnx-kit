@@ -26,10 +26,10 @@ export function capabilitiesFor(
   preset: Preset
 ): Capability[] {
   const dependenciesSet = new Set<string>(Object.keys(dependencies));
-  for (const dep of Object.keys(peerDependencies)) {
+  for (const dep in peerDependencies) {
     dependenciesSet.add(dep);
   }
-  for (const dep of Object.keys(devDependencies)) {
+  for (const dep in devDependencies) {
     dependenciesSet.add(dep);
   }
 

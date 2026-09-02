@@ -45,7 +45,7 @@ export function diff(
       }
     }
 
-    for (const dependency of Object.keys(currentDeps)) {
+    for (const dependency in currentDeps) {
       if (!updatedDeps[dependency]) {
         changes.push({ type: "removed", dependency });
       }

@@ -44,7 +44,7 @@ export function detectDuplicatePackages(
   const bannedModulesSet = new Set(bannedModules);
   const ignoredModulesSet = new Set(ignoredModules);
 
-  for (const name of Object.keys(bundledModules)) {
+  for (const name in bundledModules) {
     if (bannedModulesSet.has(name)) {
       error(`${name} (banned)`);
       printModule(bundledModules[name]);
