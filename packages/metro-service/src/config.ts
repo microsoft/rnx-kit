@@ -213,11 +213,16 @@ export function loadMetroConfig(
   const getDefaultConfig = getDefaultConfigProvider(cliConfig.root);
   const defaultConfig = getDefaultConfig(cliConfig);
 
-  if (overrides.assetPlugins) {
-    // @ts-expect-error We want to assign to read-only `assetPlugins`
-    defaultConfig.transformer.assetPlugins = assetPlugins;
-  }
+  // Metro's `loadConfig` ignores `assetPlugins`, and `transformer` is missing
+  // when the default config comes from `@react-native/metro-config`.
+  const { assetPlugins } = overrides;
+  const inputConfig: InputConfigT = assetPlugins
+    ? {
+        ...defaultConfig,
+        transformer: { ...defaultConfig.transformer, assetPlugins },
+      }
+    : defaultConfig;
 
   const { loadConfig } = requireModuleFromMetro("metro-config", cliConfig.root);
-  return loadConfig({ cwd: cliConfig.root, ...overrides }, defaultConfig);
+  return loadConfig({ cwd: cliConfig.root, ...overrides }, inputConfig);
 }
