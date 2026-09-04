@@ -208,9 +208,9 @@ function getDefaultConfigProvider(
  */
 export function loadMetroConfig(
   cliConfig: CLIConfig,
-  overrides: MetroConfigOverrides
+  overrides: MetroConfigOverrides,
+  /** @internal */ getDefaultConfig = getDefaultConfigProvider(cliConfig.root)
 ): Promise<ConfigT> {
-  const getDefaultConfig = getDefaultConfigProvider(cliConfig.root);
   const defaultConfig = getDefaultConfig(cliConfig);
 
   // Metro's `loadConfig` ignores `assetPlugins`, and `transformer` is missing
