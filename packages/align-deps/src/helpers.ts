@@ -56,6 +56,10 @@ export function dropPatchFromVersion(version: string): string {
     .join(" || ");
 }
 
+export function isEmptyArray<T>(arr: T[] | undefined): arr is undefined {
+  return !Array.isArray(arr) || arr.length === 0;
+}
+
 export function isString(str: unknown): str is string {
   return typeof str?.valueOf() === "string";
 }

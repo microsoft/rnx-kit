@@ -18,6 +18,7 @@ export const alignDepsCommand = {
   func: (_argv: string[], _config: Config, args: InputArgs) => {
     cli({
       ...pickValues(args, Object.values(optionsMap), Object.keys(optionsMap)),
+      "check-overrides": Boolean(args.checkOverrides),
       "diff-mode": args.diffMode?.toString(),
       loose: Boolean(args.loose),
       "migrate-config": Boolean(args.migrateConfig),

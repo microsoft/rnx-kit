@@ -84,6 +84,49 @@ Examples:
   yarn rnx-align-deps --set-version
   ```
 
+### `--check-overrides`
+
+Warns when an entry in `resolutions` (Yarn) or `overrides` (npm) pins a
+dependency that is managed by `align-deps` to a version that is outside the
+profiles it is scoped to.
+
+The scope is defined by the `rnx-kit.alignDeps.requirements` field of the
+package declaring the overrides. If this configuration is missing, `align-deps`
+falls back to [`--requirements`](#--requirements):
+
+```sh
+yarn rnx-align-deps --check-overrides --requirements react-native@0.80
+```
+
+If there is neither, this check will be skipped and a warning will be emitted.
+The reason for this is `align-deps` would otherwise have to fall back to the
+union of the profiles of every package it checks. Libraries commonly support a
+wide range of versions, e.g. `react-native@>=0.62 <1.0`, so that union quickly
+grows wide enough that any pin is considered fine, at which point the check is
+no longer useful.
+
+Because overrides are commonly used to pin a dependency to a specific version,
+an entry is considered fine as long as it is within the expected range — even
+when `--diff-mode strict` is used. Only entries that fall outside, or are
+broader than, the managed range are flagged.
+
+Unlike the other checks, this one only checks the root `package.json` because
+that is the only file where you can declare overrides. Outside a monorepo, the
+package being checked acts as the root.
+
+> [!NOTE]
+>
+> This check is advisory only. It never modifies `resolutions`/`overrides` (not
+> even with `--write`), and it does not affect the exit code.
+>
+> Entries that don't resolve to a plain version range, e.g. `patch:` or
+> `workspace:` protocols, npm's `$` references, or aliases of other packages
+> such as `npm:preact@^10.0.0`, are skipped as `align-deps` cannot tell what
+> version they resolve to without involving the package manager. Since `npm:`
+> is the default protocol, `npm:^0.70.0` is treated the same as `^0.70.0`.
+
+Default: `false`
+
 ### `--diff-mode`
 
 Sets the algorithm used to determine if versions differ.

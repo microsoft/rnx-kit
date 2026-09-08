@@ -10,6 +10,7 @@ import { updatePackageManifest } from "../manifest.ts";
 import { resolve } from "../preset.ts";
 import { makeDefaultReporter, withGroupReporter } from "../reporter.ts";
 import type { Command, ErrorCode, Options } from "../types.ts";
+import { makeOverridesChecker } from "./overrides.ts";
 import { checkPackageManifestUnconfigured } from "./vigilant.ts";
 
 /**
@@ -102,25 +103,9 @@ export function checkPackageManifest(
   return "success";
 }
 
-/**
- * Creates the check command. This is the default command no other flags are
- * specified.
- *
- * In normal mode, `align-deps` will only check packages that have a
- * configuration, and only listed capabilities.
- *
- * In vigilant mode, `align-deps` will check all packages in the workspace,
- * regardless of whether they have a configuration. For packages that do have a
- * configuration, the listed capabilities will be checked first as usual. The
- * remaining capabilities will then be checked, but are treated as unconfigured.
- *
- * @see {@link checkPackageManifest}
- * @see {@link checkPackageManifestUnconfigured}
- *
- * @param options Command line options
- * @returns The check command
- */
-export function makeCheckCommand(options: Options): Command {
+function makeCheckCommandInternal(
+  options: Options
+): Extract<Command, { isRootCommand?: false }> {
   const { presets, requirements } = options;
   if (!requirements) {
     return (manifest: string) => checkPackageManifest(manifest, options);
@@ -176,4 +161,37 @@ export function makeCheckCommand(options: Options): Command {
 
     return config;
   };
+}
+
+/**
+ * Creates the check command. This is the default command no other flags are
+ * specified.
+ *
+ * In normal mode, `align-deps` will only check packages that have a
+ * configuration, and only listed capabilities.
+ *
+ * In vigilant mode, `align-deps` will check all packages in the workspace,
+ * regardless of whether they have a configuration. For packages that do have a
+ * configuration, the listed capabilities will be checked first as usual. The
+ * remaining capabilities will then be checked, but are treated as unconfigured.
+ *
+ * @see {@link checkPackageManifest}
+ * @see {@link checkPackageManifestUnconfigured}
+ *
+ * @param options Command line options
+ * @returns The check command
+ */
+export function makeCheckCommand(options: Options): Command {
+  const command = makeCheckCommandInternal(options);
+
+  const checkOverrides = makeOverridesChecker(options);
+  if (checkOverrides) {
+    command.finalize = (rootManifestPath: string) => {
+      withGroupReporter(rootManifestPath, (reporter) =>
+        checkOverrides(rootManifestPath, reporter)
+      );
+    };
+  }
+
+  return command;
 }
