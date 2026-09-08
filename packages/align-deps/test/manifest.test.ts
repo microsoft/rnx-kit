@@ -1,10 +1,17 @@
-import { deepEqual, notDeepEqual, notEqual, ok } from "node:assert/strict";
+import {
+  deepEqual,
+  equal,
+  notDeepEqual,
+  notEqual,
+  ok,
+} from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   removeKeys,
   updateDependencies,
   updatePackageManifest,
 } from "../src/manifest.ts";
+import { bannedPackages } from "../src/presets/banned.ts";
 import { profile as profile_0_63 } from "../src/presets/microsoft/react-native/profile-0.63.ts";
 import { profile as profile_0_64 } from "../src/presets/microsoft/react-native/profile-0.64.ts";
 import type { Package } from "../src/types.ts";
@@ -160,8 +167,6 @@ describe("updatePackageManifest()", () => {
           name: "Test",
           version: "0.0.1",
           dependencies: mockDependencies,
-          peerDependencies: {},
-          devDependencies: {},
         },
         ["core-android", "core-ios"],
         { "0.63": profile_0_63, "0.64": profile_0_64 },
@@ -185,8 +190,6 @@ describe("updatePackageManifest()", () => {
         {
           name: "Test",
           version: "0.0.1",
-          dependencies: {},
-          peerDependencies: {},
           devDependencies: mockDependencies,
         },
         ["core-android", "core-ios", "react"],
@@ -213,9 +216,7 @@ describe("updatePackageManifest()", () => {
         {
           name: "Test",
           version: "0.0.1",
-          dependencies: {},
           peerDependencies: mockDependencies,
-          devDependencies: {},
         },
         ["core-android", "core-ios", "react"],
         { "0.63": profile_0_63, "0.64": profile_0_64 },
@@ -280,7 +281,6 @@ describe("updatePackageManifest()", () => {
             "react-native": "0.0.0",
           },
           peerDependencies: mockDependencies,
-          devDependencies: {},
         },
         ["core-android", "core-ios"],
         { "0.64": profile_0_64 },
@@ -308,8 +308,6 @@ describe("updatePackageManifest()", () => {
           name: "Test",
           version: "0.0.1",
           dependencies: mockDependencies,
-          peerDependencies: {},
-          devDependencies: {},
         },
         ["core-android", "core-ios", "test-app"],
         { "0.63": profile_0_63, "0.64": profile_0_64 },
@@ -326,5 +324,133 @@ describe("updatePackageManifest()", () => {
     deepEqual(devDependencies, {
       "react-native-test-app": packageVersion(profile_0_64, "test-app"),
     });
+  });
+
+  it("removes stale/renamed packages when upgrading (app)", () => {
+    const oldAsyncStorage = "@react-native-community/async-storage";
+    const newAsyncStorage = "@react-native-async-storage/async-storage";
+    const capability = bannedPackages[oldAsyncStorage]?.capability;
+
+    ok(capability);
+
+    const { dependencies } = updatePackageManifest(
+      "package.json",
+      {
+        name: "Test",
+        version: "0.0.1",
+        dependencies: {
+          ...mockDependencies,
+          [oldAsyncStorage]: "^1.12.0",
+        },
+      },
+      ["core-android", "core-ios", capability],
+      { "0.64": profile_0_64 },
+      { "0.64": profile_0_64 },
+      "app"
+    );
+
+    // The renamed package is added...
+    equal(
+      dependencies?.[newAsyncStorage],
+      packageVersion(profile_0_64, capability)
+    );
+    // ...and the stale one is removed.
+    ok(!dependencies?.[oldAsyncStorage]);
+  });
+
+  it("removes stale/renamed packages when upgrading (library)", () => {
+    const oldAsyncStorage = "@react-native-community/async-storage";
+    const newAsyncStorage = "@react-native-async-storage/async-storage";
+    const capability = bannedPackages[oldAsyncStorage]?.capability;
+
+    ok(capability);
+
+    const { dependencies, peerDependencies, devDependencies } =
+      updatePackageManifest(
+        "package.json",
+        {
+          name: "Test",
+          version: "0.0.1",
+          dependencies: {
+            [oldAsyncStorage]: "^1.12.0",
+          },
+          peerDependencies: {
+            ...mockDependencies,
+            [oldAsyncStorage]: "^1.12.0",
+          },
+          devDependencies: {
+            [oldAsyncStorage]: "^1.12.0",
+          },
+        },
+        ["core-android", "core-ios", capability],
+        { "0.64": profile_0_64 },
+        { "0.64": profile_0_64 },
+        "library"
+      );
+
+    ok(!dependencies?.[oldAsyncStorage]);
+    ok(!peerDependencies?.[oldAsyncStorage]);
+    ok(!devDependencies?.[oldAsyncStorage]);
+
+    const version = packageVersion(profile_0_64, capability);
+
+    equal(peerDependencies?.[newAsyncStorage], version);
+    equal(devDependencies?.[newAsyncStorage], version);
+  });
+
+  it("does not remove stale packages when the capability is not managed", () => {
+    const oldAsyncStorage = "@react-native-community/async-storage";
+
+    const { dependencies } = updatePackageManifest(
+      "package.json",
+      {
+        name: "Test",
+        version: "0.0.1",
+        dependencies: {
+          ...mockDependencies,
+          [oldAsyncStorage]: "^1.12.0",
+        },
+      },
+      // `storage` is intentionally not declared here
+      ["core-android", "core-ios"],
+      { "0.64": profile_0_64 },
+      { "0.64": profile_0_64 },
+      "app"
+    );
+
+    // The stale package is left untouched since it is not managed.
+    equal(dependencies?.[oldAsyncStorage], "^1.12.0");
+  });
+
+  it("re-adds a stale package that a managed capability resolves to", () => {
+    // In `react-native` 0.64, the `babel-preset-react-native` capability still
+    // resolves to `metro-react-native-babel-preset`, which is itself a banned
+    // package. It should be removed and then re-added with the profile version.
+    const oldBabelPreset = "metro-react-native-babel-preset";
+    const capability = bannedPackages[oldBabelPreset]?.capability;
+
+    ok(bannedPackages[oldBabelPreset]);
+    ok(capability);
+
+    const { devDependencies } = updatePackageManifest(
+      "package.json",
+      {
+        name: "Test",
+        version: "0.0.1",
+        dependencies: mockDependencies,
+        devDependencies: {
+          [oldBabelPreset]: "^0.59.0",
+        },
+      },
+      ["core-android", "core-ios", capability],
+      { "0.64": profile_0_64 },
+      { "0.64": profile_0_64 },
+      "app"
+    );
+
+    equal(
+      devDependencies?.[oldBabelPreset],
+      packageVersion(profile_0_64, capability)
+    );
   });
 });

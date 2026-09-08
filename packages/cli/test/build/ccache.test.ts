@@ -22,7 +22,7 @@ describe("build/ccache", () => {
   }
 
   function saveEnvironment() {
-    for (const key of Object.keys(environment)) {
+    for (const key in environment) {
       environment[key] = process.env[key];
     }
   }

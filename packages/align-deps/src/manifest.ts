@@ -1,5 +1,6 @@
 import type { Capability, KitType } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
+import { resolveBannedPackages } from "./bannedPackages.ts";
 import { resolveCapabilities } from "./capabilities.ts";
 import { compare, omitEmptySections } from "./helpers.ts";
 import type { DependencyType, Package, Preset } from "./types.ts";
@@ -105,14 +106,27 @@ export function updatePackageManifest(
   const packages = resolveCapabilities(manifestPath, capabilities, prodPreset);
   const names = Object.keys(packages);
 
+  // The set of capabilities does not change between dependency sections, so the
+  // stale packages to remove can be resolved once. Packages that a capability
+  // currently resolves to are re-added by `updateDependencies` after removal.
+  const stale = resolveBannedPackages(capabilities);
+
+  // Merge (and dedupe) the managed and stale package names once, since a stale
+  // package may also be one that a capability currently resolves to.
+  const managedAndStale = Array.from(new Set([...names, ...stale]));
+
   switch (packageType) {
     case "app":
       return omitEmptySections({
         ...manifest,
-        dependencies: updateDependencies(dependencies, packages, "direct"),
-        peerDependencies: removeKeys(peerDependencies, names),
+        dependencies: updateDependencies(
+          removeKeys(dependencies, stale),
+          packages,
+          "direct"
+        ),
+        peerDependencies: removeKeys(peerDependencies, managedAndStale),
         devDependencies: updateDependencies(
-          removeKeys(devDependencies, names),
+          removeKeys(devDependencies, managedAndStale),
           devOnlyPackages(packages),
           "development"
         ),
@@ -120,14 +134,14 @@ export function updatePackageManifest(
     case "library":
       return omitEmptySections({
         ...manifest,
-        dependencies: removeKeys(dependencies, names),
+        dependencies: removeKeys(dependencies, managedAndStale),
         peerDependencies: updateDependencies(
-          peerDependencies,
+          removeKeys(peerDependencies, stale),
           packages,
           "peer"
         ),
         devDependencies: updateDependencies(
-          devDependencies,
+          removeKeys(devDependencies, stale),
           resolveCapabilities(manifestPath, capabilities, devPreset),
           "development"
         ),

@@ -100,7 +100,7 @@ describe("gatherModulesFromSourceMap()", () => {
       "whatwg-fetch",
     ]);
 
-    for (const name of Object.keys(modules)) {
+    for (const name in modules) {
       equal(Object.keys(modules[name]).length, 1);
     }
 

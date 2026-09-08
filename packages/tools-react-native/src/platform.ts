@@ -109,7 +109,7 @@ export function getAvailablePlatformsUncached(
   );
   for (const deps of [peerDependencies, devDependencies]) {
     if (deps) {
-      for (const pkg of Object.keys(deps)) {
+      for (const pkg in deps) {
         packages.add(pkg);
       }
     }

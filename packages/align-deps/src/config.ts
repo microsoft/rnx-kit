@@ -8,7 +8,7 @@ import type { Capability, KitConfig } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
-import { findBadPackages } from "./findBadPackages.ts";
+import { findBadPackages } from "./bannedPackages.ts";
 import type {
   AlignDepsOptions,
   ErrorCode,
