@@ -9,6 +9,7 @@ import type { PackageManifest } from "@rnx-kit/types-node";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { findBadPackages } from "./bannedPackages.ts";
+import { isEmptyArray } from "./helpers.ts";
 import type {
   AlignDepsOptions,
   ErrorCode,
@@ -28,7 +29,7 @@ export const defaultConfig: AlignDepsOptions["alignDeps"] = {
 
 export function containsValidPresets(config: KitConfig["alignDeps"]): boolean {
   const presets = config?.presets;
-  return !presets || (Array.isArray(presets) && presets.length > 0);
+  return !presets || !isEmptyArray(presets);
 }
 
 export function findEmptyRequirements(
@@ -42,10 +43,7 @@ export function findEmptyRequirements(
       }
     } else if (typeof requirements === "object") {
       const environments = ["development", "production"] as const;
-      const key = environments.find(
-        (env) =>
-          !Array.isArray(requirements[env]) || requirements[env].length === 0
-      );
+      const key = environments.find((env) => isEmptyArray(requirements[env]));
       return key && `requirements.${key}`;
     }
   }

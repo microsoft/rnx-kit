@@ -4,6 +4,7 @@ import type {
   KitType,
 } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
+import type { Reporter } from "./reporter.ts";
 
 export type AlignDepsOptions = {
   kitType: KitType;
@@ -27,6 +28,7 @@ export type DiffMode = "strict" | "allow-subset";
 
 export type Options = {
   presets: string[];
+  checkOverrides?: boolean;
   loose?: boolean;
   migrateConfig?: boolean;
   noUnmanaged?: boolean;
@@ -38,6 +40,7 @@ export type Options = {
 };
 
 export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
+  "check-overrides"?: boolean;
   "diff-mode"?: string;
   "exclude-packages"?: string | number;
   "export-catalogs"?: string;
@@ -62,8 +65,20 @@ export type ErrorCode =
   | "not-configured"
   | "unsatisfied";
 
+export type CommandFinalizer = (
+  manifestPath: string,
+  reporter?: Reporter
+) => void;
+
 export type Command =
-  | (((manifest: string) => ErrorCode) & { isRootCommand?: false })
+  | (((manifest: string) => ErrorCode) & {
+      isRootCommand?: false;
+      /**
+       * Called after all packages have been checked, with the path to the
+       * manifest of the workspace root.
+       */
+      finalize?: CommandFinalizer;
+    })
   | ((() => ErrorCode) & { isRootCommand: true });
 
 export type MetaPackage = {

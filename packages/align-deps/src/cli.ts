@@ -15,13 +15,19 @@ import { makeInitializeCommand } from "./commands/initialize.ts";
 import { makeSetVersionCommand } from "./commands/setVersion.ts";
 import { defaultConfig } from "./config.ts";
 import { printError, printInfo } from "./errors.ts";
-import { isString } from "./helpers.ts";
+import { isEmptyArray, isString } from "./helpers.ts";
 import type { Args, Command, DiffMode } from "./types.ts";
 
 export const description =
   "Manage dependencies within a repository and across many repositories";
 
 export const cliOptions = {
+  "check-overrides": {
+    default: false,
+    description:
+      "Warns when 'resolutions'/'overrides' pin a managed dependency to a version that is outside the profiles satisfying '--requirements', or the configuration of the package declaring them. This check never modifies the manifest.",
+    type: "boolean",
+  },
   "diff-mode": {
     default: "strict",
     description:
@@ -99,12 +105,12 @@ export const cliOptions = {
 
 async function getManifests(
   packages: (string | number)[] | undefined
-): Promise<string[] | undefined> {
+): Promise<[string[], string | undefined] | undefined> {
   const cwd = process.cwd();
   // When positional arguments are not provided, we will get `undefined` if
   // invoked directly, and an empty array if invoked via
   // `@react-native-community/cli`.
-  if (Array.isArray(packages) && packages.length > 0) {
+  if (!isEmptyArray(packages)) {
     const manifests = packages.reduce<string[]>((result, input) => {
       const pkg = input.toString();
       if (!fs.existsSync(pkg)) {
@@ -120,7 +126,10 @@ async function getManifests(
       }
       return result;
     }, []);
-    return manifests.length === 0 ? undefined : manifests;
+
+    // We ignore `--check-overrides` here otherwise we would have to try to
+    // resolve workspace root for each package.
+    return manifests.length === 0 ? undefined : [manifests, undefined];
   }
 
   const packageDir = findPackageDir();
@@ -134,11 +143,14 @@ async function getManifests(
   const currentPackageJson = path.join(packageDir, "package.json");
   const manifestPath = path.relative(cwd, currentPackageJson);
   try {
-    if ((await findWorkspaceRoot()) !== packageDir) {
-      return [manifestPath];
+    const root = await findWorkspaceRoot();
+    if (!root) {
+      return [[manifestPath], manifestPath];
+    } else if (root !== packageDir) {
+      return [[manifestPath], undefined];
     }
   } catch (_) {
-    return [manifestPath];
+    return [[manifestPath], manifestPath];
   }
 
   try {
@@ -149,7 +161,7 @@ async function getManifests(
     if (!allPackages.includes(manifestPath)) {
       allPackages.push(manifestPath);
     }
-    return allPackages;
+    return [allPackages, manifestPath];
   } catch (e) {
     if (hasProperty(e, "message")) {
       error(e.message);
@@ -196,6 +208,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
   }
 
   const {
+    "check-overrides": checkOverrides,
     "diff-mode": diffMode,
     "exclude-packages": excludePackages,
     "export-catalogs": exportCatalogs,
@@ -203,15 +216,20 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     loose,
     "migrate-config": migrateConfig,
     "no-unmanaged": noUnmanaged,
+    packages,
     presets,
     requirements,
     "set-version": setVersion,
     verbose,
     write,
   } = args;
+  if (checkOverrides && !isEmptyArray(packages)) {
+    warn("`--check-overrides` is ignored if packages are specified");
+  }
 
   const options = {
     presets: presets?.toString()?.split(",") ?? defaultConfig.presets,
+    checkOverrides,
     loose,
     migrateConfig,
     noUnmanaged,
@@ -243,7 +261,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
   return makeCheckCommand(options);
 }
 
-export async function cli({ packages, ...args }: Args): Promise<void> {
+export async function cli(args: Args): Promise<void> {
   const command = await makeCommand(args);
   if (!command) {
     process.exitCode = 1;
@@ -255,11 +273,13 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
     return;
   }
 
-  const manifests = await getManifests(packages);
-  if (!manifests) {
+  const result = await getManifests(args.packages);
+  if (!result) {
     process.exitCode = 1;
     return;
   }
+
+  const [manifests, rootManifest] = result;
 
   // We will optimistically run through all packages regardless of failures. In
   // most scenarios, this should be fine: Both init and check+write write to
@@ -282,6 +302,14 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
     }
     return errors;
   }, 0);
+
+  if (rootManifest && command.finalize) {
+    try {
+      command.finalize(rootManifest);
+    } catch (e) {
+      warn(`${rootManifest}: could not check overrides: ${e}`);
+    }
+  }
 
   process.exitCode = errors;
 
