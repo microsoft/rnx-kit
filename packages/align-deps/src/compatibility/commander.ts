@@ -6,17 +6,19 @@ type InputArgs = Record<string, string | number | boolean | undefined>;
 
 const optionsMap: Partial<Record<keyof typeof cliOptions, string>> = {
   "exclude-packages": "excludePackages",
+  "export-catalogs": "exportCatalogs",
   init: "init",
   presets: "presets",
   requirements: "requirements",
   "set-version": "setVersion",
+  why: "why",
 };
 
 export const alignDepsCommand = {
   name: "rnx-align-deps",
   description,
-  func: (_argv: string[], _config: Config, args: InputArgs) => {
-    cli({
+  func: (argv: string[], _config: Config, args: InputArgs) => {
+    return cli({
       ...pickValues(args, Object.values(optionsMap), Object.keys(optionsMap)),
       "check-overrides": Boolean(args.checkOverrides),
       "diff-mode": args.diffMode?.toString(),
@@ -25,6 +27,7 @@ export const alignDepsCommand = {
       "no-unmanaged": Boolean(args.noUnmanaged),
       verbose: Boolean(args.verbose),
       write: Boolean(args.write),
+      packages: argv,
     });
   },
   get options() {

@@ -276,9 +276,10 @@ yarn rnx-align-deps ./packages/my-app --why @react-native-community/netinfo
 ```
 
 ```text
-├─ some-package
+/path/to/my-app/package.json: Packages requiring '@react-native-community/netinfo' through capabilities:
+├─ another-package (/path/to/my-app/node_modules/another-package/package.json)
 │  └─ @react-native-community/netinfo (via 'netinfo')
-└─ another-package
+└─ some-package (/path/to/my-app/node_modules/some-package/package.json)
    └─ @react-native-community/netinfo (via 'netinfo')
 ```
 

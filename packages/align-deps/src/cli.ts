@@ -13,6 +13,7 @@ import { makeCheckCommand } from "./commands/check.ts";
 import { makeExportCatalogsCommand } from "./commands/exportCatalogs.ts";
 import { makeInitializeCommand } from "./commands/initialize.ts";
 import { makeSetVersionCommand } from "./commands/setVersion.ts";
+import { makeWhyCommand } from "./commands/why.ts";
 import { defaultConfig } from "./config.ts";
 import { printError, printInfo } from "./errors.ts";
 import { isEmptyArray, isString } from "./helpers.ts";
@@ -101,10 +102,19 @@ export const cliOptions = {
     description: "Writes changes to the specified 'package.json'.",
     type: "boolean",
   },
+  why: {
+    description:
+      "Explains which packages require a dependency through capabilities.",
+    type: "string",
+    requiresArg: true,
+    argsString: "<package>", // Used by Commander
+    conflicts: ["init", "export-catalogs", "set-version"],
+  },
 };
 
 async function getManifests(
-  packages: (string | number)[] | undefined
+  packages: (string | number)[] | undefined,
+  currentOnly = false
 ): Promise<[string[], string | undefined] | undefined> {
   const cwd = process.cwd();
   // When positional arguments are not provided, we will get `undefined` if
@@ -141,6 +151,9 @@ async function getManifests(
   // Make sure we don't return all packages when run inside a package that just
   // happens to be part of a workspace.
   const currentPackageJson = path.join(packageDir, "package.json");
+  if (currentOnly) {
+    return [[currentPackageJson], undefined];
+  }
   const manifestPath = path.relative(cwd, currentPackageJson);
   try {
     const root = await findWorkspaceRoot();
@@ -202,9 +215,23 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     ["init", "set-version"],
     ["init", args.write ? "write" : "no-write"],
     ["set-version", args.write ? "write" : "no-write"],
+    ["why", "init"],
+    ["why", "export-catalogs"],
+    ["why", "set-version"],
   ];
   if (reportConflicts(conflicts, args)) {
     return undefined;
+  }
+  if ("why" in args) {
+    if (typeof args.why !== "string" || !args.why.trim()) {
+      error("--why requires a non-empty package name.");
+      return undefined;
+    }
+    return makeWhyCommand(args.why, {
+      presets: defaultConfig.presets,
+      loose: args.loose,
+      excludePackages: args["exclude-packages"]?.toString().split(","),
+    });
   }
 
   const {
@@ -273,7 +300,7 @@ export async function cli(args: Args): Promise<void> {
     return;
   }
 
-  const result = await getManifests(args.packages);
+  const result = await getManifests(args.packages, args.why !== undefined);
   if (!result) {
     process.exitCode = 1;
     return;

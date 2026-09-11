@@ -97,6 +97,7 @@ export function visitDependencies(
  * @param requirements Requirements of the current package
  * @param appCapabilities Capabilities used by the current package
  * @param options Command line options
+ * @param onCapabilities Receives each dependency's capabilities before filtering
  * @returns Capabilities required by dependencies
  */
 export function gatherRequirements(
@@ -105,7 +106,12 @@ export function gatherRequirements(
   preset: Preset,
   requirements: string[],
   appCapabilities: Capability[],
-  { loose }: Pick<Options, "loose">
+  { loose }: Pick<Options, "loose">,
+  onCapabilities?: (
+    module: string,
+    modulePath: string,
+    capabilities: Capability[]
+  ) => void
 ): { preset: Preset; capabilities: Capability[] } {
   const allCapabilities = new Set<Capability>();
   const trace: Trace[] = [
@@ -131,6 +137,7 @@ export function gatherRequirements(
     const capabilities =
       kitConfig.alignDeps?.capabilities || kitConfig.capabilities;
     if (Array.isArray(capabilities)) {
+      onCapabilities?.(module, modulePath, capabilities);
       for (const capability of capabilities) {
         allCapabilities.add(capability);
       }

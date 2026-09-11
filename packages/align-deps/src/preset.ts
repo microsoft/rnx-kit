@@ -164,12 +164,14 @@ export function mergePresets(
  * @param config User input config
  * @param projectRoot Root of the project we're currently scanniing
  * @param options
+ * @param onCapabilities Receives capabilities gathered from app dependencies
  * @returns The resolved presets and capabilities
  */
 export function resolve(
   { kitType, alignDeps, manifest }: AlignDepsOptions,
   projectRoot: string,
-  options: Options
+  options: Options,
+  onCapabilities?: Parameters<typeof gatherRequirements>[6]
 ): Resolution {
   const { capabilities, presets, requirements } = alignDeps;
 
@@ -202,7 +204,8 @@ export function resolve(
         initialProdPreset,
         prodRequirements,
         capabilities,
-        options
+        options,
+        onCapabilities
       );
     return {
       devPreset,

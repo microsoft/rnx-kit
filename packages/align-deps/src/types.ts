@@ -51,6 +51,7 @@ export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
   packages?: (string | number)[];
   presets?: string | number | string[];
   requirements?: string | number | string[];
+  why?: string;
 };
 
 export type DependencyType = "direct" | "development" | "peer";
