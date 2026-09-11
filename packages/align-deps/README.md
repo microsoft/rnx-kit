@@ -266,6 +266,39 @@ Specify to increase logging verbosity.
 
 Default: `false`
 
+### `--why <package>`
+
+Explains which configured capabilities require a package:
+
+```sh
+yarn rnx-align-deps --why @react-native-community/netinfo
+yarn rnx-align-deps ./packages/my-app --why @react-native-community/netinfo
+```
+
+```text
+├─ some-package
+│  └─ @react-native-community/netinfo (via 'netinfo')
+└─ another-package
+   └─ @react-native-community/netinfo (via 'netinfo')
+```
+
+By default, only the current package is inspected, even at a workspace root.
+Positional package paths select other packages to inspect. The selected package
+must have an align-deps configuration; package exclusions are respected.
+
+For apps, explanations include capabilities declared by direct and transitive
+dependencies, following the same requirements and core/dev-only filtering as
+alignment. For libraries, explanations cover their own capabilities across
+development and production profiles. Nested capabilities are attributed to the
+declared capability that brings them in. No matches is a successful query.
+
+This is a read-only command, incompatible with `--init`, `--export-catalogs`, and
+`--set-version`. It does not run alignment or override checks, write manifests,
+or migrate configuration, even with `--write` or `--migrate-config`.
+
+Unlike `yarn why`, this explains capability-driven requirements, not every
+installed dependency relationship or the history of when a package was added.
+
 ### `--write`
 
 Writes all proposed changes to the specified `package.json`.
