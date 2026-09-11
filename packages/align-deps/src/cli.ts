@@ -45,6 +45,8 @@ export const cliOptions = {
   "export-catalogs": {
     description: "Exports catalogs for use with pnpm or Yarn.",
     type: "string",
+    requiresArg: true,
+    argsString: "<path>", // Used by Commander
     conflicts: ["init", "requirements", "set-version"],
   },
   init: {
@@ -115,31 +117,41 @@ export const cliOptions = {
 async function getManifests(
   packages: (string | number)[] | undefined,
   currentOnly = false
-): Promise<[string[], string | undefined] | undefined> {
+): Promise<[string[], string | undefined, number] | undefined> {
   const cwd = process.cwd();
   // When positional arguments are not provided, we will get `undefined` if
   // invoked directly, and an empty array if invoked via
   // `@react-native-community/cli`.
   if (!isEmptyArray(packages)) {
+    let failures = 0;
+    const seen = new Set<string>();
     const manifests = packages.reduce<string[]>((result, input) => {
       const pkg = input.toString();
       if (!fs.existsSync(pkg)) {
         error(`${pkg}: No such file or directory`);
+        ++failures;
         return result;
       }
 
       const dir = findPackageDir(pkg);
       if (dir) {
-        const pkgJson = path.join(dir, "package.json");
+        const pkgJson = fs.realpathSync(path.join(dir, "package.json"));
+        if (seen.has(pkgJson)) {
+          return result;
+        }
+        seen.add(pkgJson);
         const relativePath = path.relative(cwd, pkgJson);
         result.push(relativePath);
+      } else {
+        error(`${pkg}: Could not find package root`);
+        ++failures;
       }
       return result;
     }, []);
 
     // We ignore `--check-overrides` here otherwise we would have to try to
     // resolve workspace root for each package.
-    return manifests.length === 0 ? undefined : [manifests, undefined];
+    return [manifests, undefined, failures];
   }
 
   const packageDir = findPackageDir();
@@ -152,18 +164,18 @@ async function getManifests(
   // happens to be part of a workspace.
   const currentPackageJson = path.join(packageDir, "package.json");
   if (currentOnly) {
-    return [[currentPackageJson], undefined];
+    return [[currentPackageJson], undefined, 0];
   }
   const manifestPath = path.relative(cwd, currentPackageJson);
   try {
     const root = await findWorkspaceRoot();
     if (!root) {
-      return [[manifestPath], manifestPath];
+      return [[manifestPath], manifestPath, 0];
     } else if (root !== packageDir) {
-      return [[manifestPath], undefined];
+      return [[manifestPath], undefined, 0];
     }
   } catch (_) {
-    return [[manifestPath], manifestPath];
+    return [[manifestPath], manifestPath, 0];
   }
 
   try {
@@ -174,7 +186,7 @@ async function getManifests(
     if (!allPackages.includes(manifestPath)) {
       allPackages.push(manifestPath);
     }
-    return [allPackages, manifestPath];
+    return [allPackages, manifestPath, 0];
   } catch (e) {
     if (hasProperty(e, "message")) {
       error(e.message);
@@ -306,7 +318,11 @@ export async function cli(args: Args): Promise<void> {
     return;
   }
 
-  const [manifests, rootManifest] = result;
+  const [manifests, rootManifest, discoveryErrors] = result;
+  if (manifests.length === 0) {
+    process.exitCode = discoveryErrors || 1;
+    return;
+  }
 
   // We will optimistically run through all packages regardless of failures. In
   // most scenarios, this should be fine: Both init and check+write write to
@@ -328,7 +344,7 @@ export async function cli(args: Args): Promise<void> {
       throw e;
     }
     return errors;
-  }, 0);
+  }, discoveryErrors);
 
   if (rootManifest && command.finalize) {
     try {

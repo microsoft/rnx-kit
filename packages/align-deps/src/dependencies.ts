@@ -3,6 +3,7 @@ import { error, warn } from "@rnx-kit/console";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import type { Capability, KitConfig } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
+import { realpathSync } from "node:fs";
 import * as path from "node:path";
 import { ResolverFactory } from "oxc-resolver";
 import { filterPreset } from "./preset.ts";
@@ -32,15 +33,14 @@ function getRequirements(kitConfig: KitConfig): string[] | null {
   return null;
 }
 
-function isCoreCapability(capability: Capability): boolean {
-  return capability.startsWith("core-");
-}
-
-function isDevOnlyCapability(
+function isInheritedCapability(
   capability: Capability,
   profiles: Partial<Profile>[]
 ): boolean {
-  return profiles.some((profile) => profile[capability]?.devOnly);
+  return (
+    !capability.startsWith("core-") &&
+    !profiles.some((profile) => profile[capability]?.devOnly)
+  );
 }
 
 function readManifestFromDir(packageDir: string): PackageManifestMin {
@@ -69,20 +69,20 @@ export function visitDependencies(
     return;
   }
 
+  visited.add(realpathSync(path.join(projectRoot, "package.json")));
   for (const dependency in dependencies) {
-    if (visited.has(dependency)) {
-      continue;
-    }
-
-    visited.add(dependency);
-
     const result = resolver.sync(projectRoot, dependency + "/package.json");
     if (!result.path) {
       warn(`Unable to resolve module '${dependency}' from '${projectRoot}'`);
       continue;
     }
 
-    const packageDir = path.dirname(result.path);
+    const manifestPath = realpathSync(result.path);
+    if (visited.has(manifestPath)) {
+      continue;
+    }
+    visited.add(manifestPath);
+    const packageDir = path.dirname(manifestPath);
     const manifest = readManifestFromDir(packageDir);
     visitor(dependency, packageDir, manifest);
     visitDependencies(manifest, packageDir, visitor, visited);
@@ -97,7 +97,7 @@ export function visitDependencies(
  * @param requirements Requirements of the current package
  * @param appCapabilities Capabilities used by the current package
  * @param options Command line options
- * @param onCapabilities Receives each dependency's capabilities before filtering
+ * @param onCapabilities Receives each dependency's inheritable capabilities
  * @returns Capabilities required by dependencies
  */
 export function gatherRequirements(
@@ -114,6 +114,7 @@ export function gatherRequirements(
   ) => void
 ): { preset: Preset; capabilities: Capability[] } {
   const allCapabilities = new Set<Capability>();
+  const sources: [string, string, Capability[]][] = [];
   const trace: Trace[] = [
     {
       module: manifest.name,
@@ -137,7 +138,9 @@ export function gatherRequirements(
     const capabilities =
       kitConfig.alignDeps?.capabilities || kitConfig.capabilities;
     if (Array.isArray(capabilities)) {
-      onCapabilities?.(module, modulePath, capabilities);
+      if (onCapabilities) {
+        sources.push([module, modulePath, capabilities]);
+      }
       for (const capability of capabilities) {
         allCapabilities.add(capability);
       }
@@ -187,12 +190,18 @@ export function gatherRequirements(
      * This is to avoid forcing an app to install dependencies it does not
      * need, e.g. `react-native-windows` when the app only supports iOS.
      */
-    if (
-      isCoreCapability(capability) ||
-      isDevOnlyCapability(capability, profiles)
-    ) {
+    if (!isInheritedCapability(capability, profiles)) {
       allCapabilities.delete(capability);
     }
+  }
+  for (const [module, modulePath, capabilities] of sources) {
+    onCapabilities?.(
+      module,
+      modulePath,
+      capabilities.filter((capability) =>
+        isInheritedCapability(capability, profiles)
+      )
+    );
   }
 
   // Merge with app capabilities _after_ filtering out core and dev-only

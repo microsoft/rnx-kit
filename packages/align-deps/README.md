@@ -286,12 +286,16 @@ yarn rnx-align-deps ./packages/my-app --why @react-native-community/netinfo
 By default, only the current package is inspected, even at a workspace root.
 Positional package paths select other packages to inspect. The selected package
 must have an align-deps configuration; package exclusions are respected.
+Repeated paths to the same manifest are inspected once. Invalid paths make the
+command fail, but do not prevent other valid packages from being inspected.
 
 For apps, explanations include capabilities declared by direct and transitive
 dependencies, following the same requirements and core/dev-only filtering as
 alignment. For libraries, explanations cover their own capabilities across
 development and production profiles. Nested capabilities are attributed to the
 declared capability that brings them in. No matches is a successful query.
+Separately installed instances of a dependency are inspected independently;
+multiple paths resolving to the same instance are visited only once.
 
 This is a read-only command, incompatible with `--init`, `--export-catalogs`, and
 `--set-version`. It does not run alignment or override checks, write manifests,

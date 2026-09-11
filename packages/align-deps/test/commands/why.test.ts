@@ -502,6 +502,54 @@ describe("why", () => {
     equal(collect(manifestPath, "new-target").reasons.length, 2);
   });
 
+  it("reports both installed versions and filters inheritance using the final profile", () => {
+    const { preset, alignDeps } = configure(["target"]);
+    writeFileSync(
+      preset,
+      `module.exports = ${JSON.stringify({
+        old: {
+          core: { name: "react-native", version: "0.69.0" },
+          target: { name: "@scope/target", version: "1.0.0", devOnly: true },
+          alias: { name: "@scope/target", version: "1.0.0" },
+        },
+        current: {
+          core: { name: "react-native", version: "0.70.0" },
+          target: { name: "@scope/target", version: "1.0.0" },
+          alias: { name: "@scope/target", version: "1.0.0" },
+        },
+      })};`
+    );
+    const manifestPath = writeManifest("", {
+      dependencies: { shared: "1.0.0", parent: "1.0.0" },
+      "rnx-kit": {
+        kitType: "app",
+        alignDeps: {
+          ...alignDeps,
+          capabilities: [],
+          requirements: ["react-native@0.69 || 0.70"],
+        },
+      },
+    });
+    const first = writeManifest("shared", {
+      "rnx-kit": {
+        alignDeps: {
+          ...alignDeps,
+          requirements: ["react-native@0.69 || 0.70"],
+        },
+      },
+    });
+    writeManifest("parent", { dependencies: { shared: "2.0.0" } });
+    const second = writeManifest("parent/node_modules/shared", {
+      name: "shared",
+      version: "2.0.0",
+      "rnx-kit": { alignDeps: { ...alignDeps, capabilities: ["alias"] } },
+    });
+    deepEqual(collect(manifestPath).reasons, [
+      { name: "shared", manifestPath: second, capabilities: ["alias"] },
+      { name: "shared", manifestPath: first, capabilities: ["target"] },
+    ]);
+  });
+
   it("handles existing legacy app fixtures without migration or writes", (t) => {
     const manifestPath = path.join(fixture, "package.json");
     const before = readFileSync(manifestPath, "utf8");

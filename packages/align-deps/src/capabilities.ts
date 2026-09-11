@@ -9,6 +9,8 @@ type ResolvedDependencies = {
   unresolvedCapabilities: Record<string, string[]>;
 };
 
+type CapabilityVisitor = (pkg: Readonly<Package>, declared: Capability) => void;
+
 const PROVIDES_SYMKEY = "provides";
 
 /**
@@ -65,6 +67,9 @@ function resolveCapability(
   namedProfile: [string, Profile],
   dependencies: Record<string, Package[]>,
   unresolvedCapabilities: Record<string, string[]>,
+  packages: Map<MetaPackage | Package, MetaPackage | Package>,
+  declared: Capability,
+  onResolved?: CapabilityVisitor,
   /** @internal */ resolved = new Set<string>([
     "__proto__",
     "constructor",
@@ -79,8 +84,8 @@ function resolveCapability(
   resolved.add(capability);
 
   const [profileName, profile] = namedProfile;
-  const pkg = profile[capability];
-  if (!pkg) {
+  const original = profile[capability];
+  if (!original) {
     const profiles = unresolvedCapabilities[capability];
     if (!profiles) {
       unresolvedCapabilities[capability] = [profileName];
@@ -90,6 +95,11 @@ function resolveCapability(
     return;
   }
 
+  let pkg = packages.get(original);
+  if (!pkg) {
+    pkg = { ...original };
+    packages.set(original, pkg);
+  }
   pkg[Symbol.for(PROVIDES_SYMKEY)] = capability;
 
   if (pkg.capabilities) {
@@ -99,6 +109,9 @@ function resolveCapability(
         namedProfile,
         dependencies,
         unresolvedCapabilities,
+        packages,
+        declared,
+        onResolved,
         resolved
       );
     }
@@ -113,13 +126,19 @@ function resolveCapability(
       throw new Error(`Invalid capability '${capability}': missing version`);
     }
 
-    if (name in dependencies) {
+    onResolved?.(pkg, declared);
+    if (Object.hasOwn(dependencies, name)) {
       const versions = dependencies[name];
       if (!versions.find((current) => current.version === version)) {
         versions.push(pkg);
       }
     } else {
-      dependencies[name] = [pkg];
+      Object.defineProperty(dependencies, name, {
+        value: [pkg],
+        enumerable: true,
+        configurable: true,
+        writable: true,
+      });
     }
   }
 }
@@ -128,15 +147,18 @@ function resolveCapability(
  * Resolves specified capabilities to real dependencies.
  * @param capabilities The list of capabilities to resolve
  * @param preset The preset to use to resolve capabilities
+ * @param onResolved Optional visitor retaining the declared capability's provenance
  * @returns A tuple of resolved dependencies and unresolved capabilities
  */
 export function resolveCapabilitiesUnchecked(
   capabilities: Capability[],
-  preset: Preset
+  preset: Preset,
+  onResolved?: CapabilityVisitor
 ): ResolvedDependencies {
   const profiles = Object.entries(preset);
   const dependencies: Record<string, Package[]> = {};
   const unresolvedCapabilities: Record<string, string[]> = {};
+  const packages = new Map<MetaPackage | Package, MetaPackage | Package>();
 
   for (const capability of capabilities) {
     for (const profile of profiles) {
@@ -144,7 +166,10 @@ export function resolveCapabilitiesUnchecked(
         capability,
         profile,
         dependencies,
-        unresolvedCapabilities
+        unresolvedCapabilities,
+        packages,
+        capability,
+        onResolved
       );
     }
   }

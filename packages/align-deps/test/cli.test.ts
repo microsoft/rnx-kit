@@ -1,10 +1,12 @@
 import type { Config } from "@react-native-community/cli-types";
+import { Command } from "commander";
 import { deepEqual, equal, match, ok, rejects } from "node:assert/strict";
 import {
   mkdirSync,
   mkdtempSync,
   readFileSync,
   rmSync,
+  symlinkSync,
   writeFileSync,
 } from "node:fs";
 import * as path from "node:path";
@@ -24,6 +26,94 @@ describe("--why CLI", () => {
     global.module = {} as NodeModule;
     ({ cli, cliOptions } = await import("../src/cli.ts"));
     ({ alignDepsCommand } = await import("../src/compatibility/commander.ts"));
+  });
+
+  it("parses required Commander values and positional package paths", async (t) => {
+    const { log } = silence(t);
+    const first = writeManifest("first");
+    const second = writeManifest("second");
+    const command = await parseCommander([
+      "--why",
+      "react",
+      first,
+      path.dirname(second),
+    ]);
+    equal(command.opts().why, "react");
+    deepEqual(command.args, [first, path.dirname(second)]);
+    equal(process.exitCode, 0);
+    equal(log.mock.callCount(), 2);
+    ok(log.mock.calls[0].arguments.join(" ").includes(first));
+    ok(log.mock.calls[1].arguments.join(" ").includes(second));
+    await rejects(parseCommander(["--why"]), /argument missing/);
+  });
+
+  for (const conflict of ["init", "export-catalogs", "set-version"]) {
+    it(`rejects --${conflict} through the real Commander parser`, async (t) => {
+      const { log, error } = silence(t);
+      await parseCommander(["--why", "react", `--${conflict}`, "app"]);
+      equal(process.exitCode, 1);
+      equal(log.mock.callCount(), 0);
+      match(
+        error.mock.calls[0].arguments.join(" "),
+        /cannot both be specified/
+      );
+    });
+  }
+
+  it("requires and consumes the Commander catalog output path", async (t) => {
+    const { error } = silence(t);
+    const output = path.join(directory, "catalog.yaml");
+    const manifest = writeManifest();
+    const command = await parseCommander([
+      "--export-catalogs",
+      output,
+      "--why",
+      "react",
+      manifest,
+    ]);
+    equal(command.opts().exportCatalogs, output);
+    deepEqual(command.args, [manifest]);
+    equal(process.exitCode, 1);
+    match(error.mock.calls[0].arguments.join(" "), /cannot both be specified/);
+    equal(cliOptions["export-catalogs"].requiresArg, true);
+    await rejects(parseCommander(["--export-catalogs"]), /argument missing/);
+    await rejects(parse(["--export-catalogs"]), /Not enough arguments/);
+  });
+
+  it("deduplicates explicit directories, manifests, and symlinks", async (t) => {
+    const { log, error } = silence(t);
+    const manifest = writeManifest("selected");
+    const alias = path.join(directory, "alias");
+    symlinkSync(path.dirname(manifest), alias, "junction");
+    await cli({
+      why: "react",
+      packages: [
+        manifest,
+        path.dirname(manifest),
+        alias,
+        path.join(alias, "package.json"),
+      ],
+    });
+    equal(process.exitCode, 0);
+    equal(log.mock.callCount(), 1);
+    equal(error.mock.callCount(), 0);
+    ok(log.mock.calls[0].arguments.join(" ").includes(manifest));
+  });
+
+  it("retains discovery failures while inspecting valid explicit inputs", async (t) => {
+    const { log, error } = silence(t);
+    const valid = writeManifest("valid");
+    await cli({
+      why: "react",
+      packages: [
+        path.join(directory, "missing-first"),
+        valid,
+        path.join(directory, "missing-last"),
+      ],
+    });
+    equal(process.exitCode, 2);
+    equal(error.mock.callCount(), 2);
+    ok(log.mock.calls[0].arguments.join(" ").includes(valid));
   });
   after(() => {
     undefineRequire();
@@ -63,6 +153,23 @@ describe("--why CLI", () => {
     return manifest;
   }
 
+  async function parseCommander(args: string[]) {
+    const program = new Command("rnx-cli")
+      .exitOverride()
+      .configureOutput({ writeErr: () => undefined });
+    const command = program.command(alignDepsCommand.name);
+    for (const { name, description } of alignDepsCommand.options) {
+      command.option(name, description);
+    }
+    command.action((options, command) =>
+      alignDepsCommand.func(command.args, {} as Config, options)
+    );
+    await program.parseAsync([alignDepsCommand.name, ...args], {
+      from: "user",
+    });
+    return command;
+  }
+
   function silence(t: it.TestContext) {
     return {
       log: t.mock.method(console, "log", () => undefined),
@@ -96,7 +203,7 @@ describe("--why CLI", () => {
     equal(process.exitCode, 0);
     equal(log.mock.callCount(), 1);
     equal(error.mock.callCount(), 0);
-    match(log.mock.calls[0].arguments.join(" "), new RegExp(manifest));
+    ok(log.mock.calls[0].arguments.join(" ").includes(manifest));
   });
 
   it("finds the current package from a nested working directory", async (t) => {
@@ -107,7 +214,7 @@ describe("--why CLI", () => {
     process.chdir(nested);
     await cli({ why: "react", packages: [] });
     equal(process.exitCode, 0);
-    match(log.mock.calls[0].arguments.join(" "), new RegExp(manifest));
+    ok(log.mock.calls[0].arguments.join(" ").includes(manifest));
   });
 
   it("supports explicit directory and manifest paths and exclusions", async (t) => {

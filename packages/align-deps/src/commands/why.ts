@@ -1,7 +1,7 @@
 import { info, warn } from "@rnx-kit/console";
 import type { Capability } from "@rnx-kit/types-kit-config";
 import * as path from "node:path";
-import { isMetaPackage } from "../capabilities.ts";
+import { resolveCapabilitiesUnchecked } from "../capabilities.ts";
 import { transformConfig } from "../compatibility/config.ts";
 import { loadConfig } from "../config.ts";
 import { isError } from "../errors.ts";
@@ -31,43 +31,24 @@ function matchingCapabilities(
   for (const [preset, includeDevOnly] of presets) {
     const profileMatches = new Set<Capability>();
     let firstMatch: Package | undefined;
-    for (const declared of capabilities) {
-      for (const [profileName, profile] of Object.entries(preset)) {
-        const visited = new Set(["__proto__", "constructor", "prototype"]);
-        const visit = (capability: Capability): void => {
-          if (visited.has(capability)) {
-            return;
-          }
-          visited.add(capability);
-          const pkg = profile[capability];
-          if (!pkg) {
-            const profiles = unresolved.get(capability) ?? new Set<string>();
-            profiles.add(profileName);
-            unresolved.set(capability, profiles);
-            return;
-          }
-          for (const nested of pkg.capabilities ?? []) {
-            visit(nested);
-          }
-          if (!isMetaPackage(pkg)) {
-            if (!pkg.name) {
-              throw new Error(
-                `Invalid capability '${capability}': missing name`
-              );
-            }
-            if (!pkg.version) {
-              throw new Error(
-                `Invalid capability '${capability}': missing version`
-              );
-            }
-            if (pkg.name === dependency) {
-              firstMatch ??= pkg;
-              profileMatches.add(declared);
-            }
-          }
-        };
-        visit(declared);
+    const { unresolvedCapabilities } = resolveCapabilitiesUnchecked(
+      capabilities,
+      preset,
+      (pkg, declared) => {
+        if (pkg.name === dependency) {
+          firstMatch ??= pkg;
+          profileMatches.add(declared);
+        }
       }
+    );
+    for (const [capability, profiles] of Object.entries(
+      unresolvedCapabilities
+    )) {
+      const missing = unresolved.get(capability) ?? new Set<string>();
+      for (const profile of profiles) {
+        missing.add(profile);
+      }
+      unresolved.set(capability, missing);
     }
     // Peer dependencies use the first resolved package's devOnly flag.
     if (includeDevOnly || !firstMatch?.devOnly) {
@@ -148,17 +129,8 @@ export function collectWhy(
     }
   };
   addReason(config.manifest.name, manifestPath, config.alignDeps.capabilities);
-  const profiles = Object.values(prodPreset);
   for (const { name, manifestPath, capabilities } of sources) {
-    addReason(
-      name,
-      manifestPath,
-      capabilities.filter(
-        (capability) =>
-          !capability.startsWith("core-") &&
-          !profiles.some((profile) => profile[capability]?.devOnly)
-      )
-    );
+    addReason(name, manifestPath, capabilities);
   }
   const sortedReasons = Array.from(reasons.values()).sort((a, b) =>
     a.name < b.name

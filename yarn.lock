@@ -4971,6 +4971,7 @@ __metadata:
     "@types/prompts": "npm:^2.0.0"
     "@types/semver": "npm:^7.0.0"
     "@types/yargs": "npm:^17.0.0"
+    commander: "npm:^11.1.0"
     detect-indent: "npm:^6.0.0"
     js-yaml: "npm:^5.2.3"
     markdown-table: "npm:^3.0.0"

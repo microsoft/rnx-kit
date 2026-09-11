@@ -1,7 +1,12 @@
 import type { Capability } from "@rnx-kit/types-kit-config";
 import { deepEqual, equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { capabilitiesFor, resolveCapabilities } from "../src/capabilities.ts";
+import {
+  capabilitiesFor,
+  capabilityProvidedBy,
+  resolveCapabilities,
+  resolveCapabilitiesUnchecked,
+} from "../src/capabilities.ts";
 import { filterPreset } from "../src/preset.ts";
 import { preset as defaultPreset } from "../src/presets/microsoft/react-native.ts";
 import { profile as profile_0_62 } from "../src/presets/microsoft/react-native/profile-0.62.ts";
@@ -104,6 +109,72 @@ describe("capabilitiesFor()", () => {
 });
 
 describe("resolveCapabilities()", () => {
+  it("annotates copies of frozen packages while preserving shared-object metadata", () => {
+    const symbol = Symbol.for("provides");
+    const original = Object.freeze({
+      name: "shared",
+      version: "1.0.0",
+      [symbol]: "original",
+    });
+    const preset = { first: { first: original, second: original } };
+    const { dependencies, unresolvedCapabilities } =
+      resolveCapabilitiesUnchecked(["first", "second"] as Capability[], preset);
+    deepEqual(Object.keys(dependencies), ["shared"]);
+    equal(dependencies.shared.length, 1);
+    equal(capabilityProvidedBy(dependencies.shared[0]), "second");
+    equal(capabilityProvidedBy(original), "original");
+    deepEqual(unresolvedCapabilities, {});
+    const again = resolveCapabilitiesUnchecked(
+      ["first"] as Capability[],
+      preset
+    );
+    equal(capabilityProvidedBy(again.dependencies.shared[0]), "first");
+    equal(capabilityProvidedBy(dependencies.shared[0]), "second");
+  });
+
+  it("retains declared provenance before package-version deduplication", () => {
+    const preset = {
+      first: {
+        nested: { name: "shared", version: "1.0.0" },
+        bundle: { name: "#meta", capabilities: ["nested"] },
+        alias: { name: "shared", version: "1.0.0", devOnly: true },
+      },
+      second: { nested: { name: "shared", version: "2.0.0" } },
+    };
+    const provenance: string[] = [];
+    const { dependencies, unresolvedCapabilities } =
+      resolveCapabilitiesUnchecked(
+        ["bundle", "alias", "missing", "missing"] as Capability[],
+        preset,
+        (pkg, declared) => provenance.push(`${declared}:${pkg.version}`)
+      );
+    deepEqual(provenance, ["bundle:1.0.0", "alias:1.0.0"]);
+    deepEqual(
+      dependencies.shared.map(({ version, devOnly }) => [version, devOnly]),
+      [["1.0.0", undefined]]
+    );
+    deepEqual(unresolvedCapabilities, {
+      bundle: ["second"],
+      alias: ["second"],
+      missing: ["first", "second", "first", "second"],
+    });
+  });
+
+  it("safely resolves package names that shadow Object.prototype", () => {
+    const { dependencies } = resolveCapabilitiesUnchecked(
+      ["target", "other"] as Capability[],
+      {
+        first: {
+          target: { name: "__proto__", version: "1.0.0" },
+          other: { name: "constructor", version: "1.0.0" },
+        },
+      }
+    );
+    equal(Object.getPrototypeOf(dependencies), Object.prototype);
+    equal(dependencies.__proto__[0].name, "__proto__");
+    equal(dependencies.constructor[0].name, "constructor");
+  });
+
   it("ignores keywords pointing to `Object.prototype`", (t) => {
     const consoleWarnSpy = t.mock.method(console, "warn", () => undefined);
 
@@ -130,9 +201,9 @@ describe("resolveCapabilities()", () => {
     const { name: reactName } = profile_0_64["react"];
     const { name: testAppName } = profile_0_64["test-app"];
     deepEqual(packages, {
-      [name]: [profile_0_64["core"]],
-      [reactName]: [profile_0_64["react"]],
-      [testAppName]: [profile_0_64["test-app"]],
+      [name]: [pickPackage(profile_0_64, "core")],
+      [reactName]: [pickPackage(profile_0_64, "react")],
+      [testAppName]: [pickPackage(profile_0_64, "test-app")],
     });
 
     equal(consoleWarnSpy.mock.callCount(), 0);
@@ -149,7 +220,10 @@ describe("resolveCapabilities()", () => {
 
     const { name } = profile_0_64["webview"];
     deepEqual(packages, {
-      [name]: [profile_0_62["webview"], profile_0_64["webview"]],
+      [name]: [
+        pickPackage(profile_0_62, "webview"),
+        pickPackage(profile_0_64, "webview"),
+      ],
     });
 
     equal(consoleWarnSpy.mock.callCount(), 0);
@@ -169,7 +243,7 @@ describe("resolveCapabilities()", () => {
     );
 
     const { name } = profile_0_64["svg"];
-    deepEqual(packages, { [name]: [profile_0_64["svg"]] });
+    deepEqual(packages, { [name]: [pickPackage(profile_0_64, "svg")] });
     equal(consoleWarnSpy.mock.callCount(), 1);
   });
 
@@ -188,8 +262,8 @@ describe("resolveCapabilities()", () => {
 
     const { name } = profile_0_64["svg"];
     deepEqual(packages, {
-      [name]: [profile_0_64["svg"]],
-      [skynet.name]: [skynet],
+      [name]: [pickPackage(profile_0_64, "svg")],
+      [skynet.name]: [{ ...skynet, [Symbol.for("provides")]: "skynet" }],
     });
   });
 

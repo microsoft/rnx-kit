@@ -19,7 +19,7 @@ export function pickPackage(profile: Profile, capability: string): Package {
     throw new Error(`'${capability}' is a meta package`);
   }
 
-  return pkg;
+  return { ...pkg, [Symbol.for("provides")]: capability };
 }
 
 export function packageVersion(
