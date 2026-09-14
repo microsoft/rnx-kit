@@ -19,7 +19,7 @@ type Trace = {
 const manifestCache = new Map<string, PackageManifestMin>();
 const resolver = new ResolverFactory({ exportsFields: [] });
 
-function getRequirements(kitConfig: KitConfig): string[] | null {
+export function getRequirements(kitConfig: KitConfig): string[] | null {
   const requirements = kitConfig.alignDeps?.requirements;
   if (requirements) {
     return Array.isArray(requirements) ? requirements : requirements.production;
@@ -32,11 +32,11 @@ function getRequirements(kitConfig: KitConfig): string[] | null {
   return null;
 }
 
-function isCoreCapability(capability: Capability): boolean {
+export function isCoreCapability(capability: Capability): boolean {
   return capability.startsWith("core-");
 }
 
-function isDevOnlyCapability(
+export function isDevOnlyCapability(
   capability: Capability,
   profiles: Partial<Profile>[]
 ): boolean {

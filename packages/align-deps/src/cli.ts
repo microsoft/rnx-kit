@@ -13,6 +13,7 @@ import { makeCheckCommand } from "./commands/check.ts";
 import { makeExportCatalogsCommand } from "./commands/exportCatalogs.ts";
 import { makeInitializeCommand } from "./commands/initialize.ts";
 import { makeSetVersionCommand } from "./commands/setVersion.ts";
+import { makeWhyCommand } from "./commands/why.ts";
 import { defaultConfig } from "./config.ts";
 import { printError, printInfo } from "./errors.ts";
 import { isEmptyArray, isString } from "./helpers.ts";
@@ -45,6 +46,7 @@ export const cliOptions = {
     description: "Exports catalogs for use with pnpm or Yarn.",
     type: "string",
     conflicts: ["init", "requirements", "set-version"],
+    argsString: "<format>", // Used by Commander
   },
   init: {
     description:
@@ -95,6 +97,14 @@ export const cliOptions = {
     default: false,
     description: "Increase logging verbosity",
     type: "boolean",
+  },
+  why: {
+    description:
+      "Shows which packages require a dependency and via which capabilities.",
+    type: "string",
+    requiresArg: true,
+    argsString: "<package>", // Used by Commander
+    conflicts: ["init", "export-catalogs", "set-version"],
   },
   write: {
     default: false,
@@ -202,8 +212,15 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     ["init", "set-version"],
     ["init", args.write ? "write" : "no-write"],
     ["set-version", args.write ? "write" : "no-write"],
+    ["why", "init"],
+    ["why", "export-catalogs"],
+    ["why", "set-version"],
   ];
   if (reportConflicts(conflicts, args)) {
+    return undefined;
+  }
+  if (args.why !== undefined && !args.why.trim()) {
+    error("--why requires a package name.");
     return undefined;
   }
 
@@ -239,6 +256,10 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     excludePackages: excludePackages?.toString()?.split(","),
     requirements: requirements?.toString()?.split(","),
   };
+
+  if (args.why !== undefined) {
+    return makeWhyCommand(args.why, options);
+  }
 
   if (typeof exportCatalogs === "string") {
     return makeExportCatalogsCommand({
