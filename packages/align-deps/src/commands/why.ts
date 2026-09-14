@@ -1,14 +1,12 @@
-import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
 import type { Capability } from "@rnx-kit/types-kit-config";
 import * as path from "node:path";
 import { isMetaPackage } from "../capabilities.ts";
 import { transformConfig } from "../compatibility/config.ts";
 import { loadConfig, sanitizeCapabilities } from "../config.ts";
 import {
-  getRequirements,
+  gatherRequirements,
   isCoreCapability,
   isDevOnlyCapability,
-  visitDependencies,
 } from "../dependencies.ts";
 import { isError } from "../errors.ts";
 import { filterPreset, mergePresets } from "../preset.ts";
@@ -18,6 +16,7 @@ function requiresPackage(
   capability: Capability,
   profile: Profile,
   name: string,
+  includeDevOnly: boolean,
   visited = new Set<string>(["__proto__", "constructor", "prototype"])
 ): boolean {
   if (visited.has(capability)) {
@@ -28,27 +27,16 @@ function requiresPackage(
   const pkg = profile[capability];
   return Boolean(
     pkg &&
-    ((!isMetaPackage(pkg) && pkg.name === name) ||
+    ((!isMetaPackage(pkg) &&
+      pkg.name === name &&
+      (includeDevOnly || !pkg.devOnly)) ||
       pkg.capabilities?.some((child) =>
-        requiresPackage(child, profile, name, visited)
+        requiresPackage(child, profile, name, includeDevOnly, visited)
       ))
   );
 }
 
 export function makeWhyCommand(name: string, options: Options): Command {
-  const matchingCapabilities = new WeakMap<Profile, Map<Capability, boolean>>();
-  const matches = (capability: Capability, profile: Profile) => {
-    let matching = matchingCapabilities.get(profile);
-    if (!matching) {
-      matching = new Map();
-      matchingCapabilities.set(profile, matching);
-    }
-    const result =
-      matching.get(capability) ?? requiresPackage(capability, profile, name);
-    matching.set(capability, result);
-    return result;
-  };
-
   return (manifestPath) => {
     const inputConfig = loadConfig(manifestPath, options);
     if (isError(inputConfig)) {
@@ -62,64 +50,79 @@ export function makeWhyCommand(name: string, options: Options): Command {
     const projectRoot = path.resolve(path.dirname(manifestPath));
     const preset = mergePresets(alignDeps.presets, projectRoot);
     const { requirements, capabilities } = alignDeps;
-    const prodPreset = filterPreset(
-      preset,
-      Array.isArray(requirements) ? requirements : requirements.production
-    );
+    const prodRequirements = Array.isArray(requirements)
+      ? requirements
+      : requirements.production;
+    let prodPreset = filterPreset(preset, prodRequirements);
+    const devProfiles =
+      kitType === "app"
+        ? []
+        : Object.values(
+            Array.isArray(requirements)
+              ? prodPreset
+              : filterPreset(preset, requirements.development)
+          );
+    if (
+      ![...Object.values(prodPreset), ...devProfiles].some((profile) =>
+        Object.values(profile).some(
+          (pkg) => !isMetaPackage(pkg) && pkg.name === name
+        )
+      )
+    ) {
+      return "success";
+    }
+
+    const dependencies: [string, Capability[]][] = [];
+    if (kitType === "app") {
+      prodPreset = gatherRequirements(
+        projectRoot,
+        manifest,
+        prodPreset,
+        prodRequirements,
+        capabilities,
+        options,
+        (module, capabilities) => dependencies.push([module, capabilities])
+      ).preset;
+    }
     const prodProfiles = Object.values(prodPreset);
-    const ownProfiles =
-      kitType === "app" || Array.isArray(requirements)
-        ? prodProfiles
-        : [
-            ...prodProfiles,
-            ...Object.values(filterPreset(preset, requirements.development)),
-          ];
-    const reasons: [string, Capability[]][] = [];
+    const reasons = new Map<string, Set<Capability>>();
     const collect = (
       module: string,
       capabilities: Capability[],
-      profiles: Profile[]
+      profiles: Profile[],
+      includeDevOnly: boolean
     ) => {
       const found = sanitizeCapabilities(capabilities).filter((capability) =>
-        profiles.some((profile) => matches(capability, profile))
+        profiles.some((profile) =>
+          requiresPackage(capability, profile, name, includeDevOnly)
+        )
       );
       if (found.length > 0) {
-        reasons.push([module, [...new Set(found)]]);
+        reasons.set(
+          module,
+          new Set([...(reasons.get(module) ?? []), ...found])
+        );
       }
     };
 
-    collect(manifest.name, capabilities, ownProfiles);
-    if (kitType === "app") {
-      visitDependencies(
-        manifest,
-        projectRoot,
-        (module, modulePath, manifest) => {
-          const config = getKitConfigFromPackageManifest(manifest, modulePath);
-          if (!config || !getRequirements(config)) {
-            return;
-          }
-
-          const capabilities =
-            config.alignDeps?.capabilities || config.capabilities;
-          if (Array.isArray(capabilities)) {
-            collect(
-              module,
-              capabilities.filter(
-                (c) =>
-                  !isCoreCapability(c) && !isDevOnlyCapability(c, prodProfiles)
-              ),
-              prodProfiles
-            );
-          }
-        }
+    collect(manifest.name, capabilities, prodProfiles, kitType === "app");
+    collect(manifest.name, capabilities, devProfiles, true);
+    for (const [module, capabilities] of dependencies) {
+      collect(
+        module,
+        capabilities.filter(
+          (c) => !isCoreCapability(c) && !isDevOnlyCapability(c, prodProfiles)
+        ),
+        prodProfiles,
+        true
       );
     }
 
-    for (const [index, [module, capabilities]] of reasons.entries()) {
-      const last = index === reasons.length - 1;
+    for (const [index, [module, capabilities]] of [...reasons].entries()) {
+      const last = index === reasons.size - 1;
       console.log(`${last ? "└" : "├"}─ ${module}`);
       console.log(
-        `${last ? " " : "│"}  └─ ${name} (via ${capabilities.map((c) => `'${c}'`).join(", ")})`
+        `${last ? " " : "│"}  └─ ${name} (via ${[...capabilities].map((c) => `'${c}'`).join(", ")})`
       );
       if (!last) {
         console.log("│");

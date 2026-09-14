@@ -19,7 +19,7 @@ type Trace = {
 const manifestCache = new Map<string, PackageManifestMin>();
 const resolver = new ResolverFactory({ exportsFields: [] });
 
-export function getRequirements(kitConfig: KitConfig): string[] | null {
+function getRequirements(kitConfig: KitConfig): string[] | null {
   const requirements = kitConfig.alignDeps?.requirements;
   if (requirements) {
     return Array.isArray(requirements) ? requirements : requirements.production;
@@ -105,7 +105,8 @@ export function gatherRequirements(
   preset: Preset,
   requirements: string[],
   appCapabilities: Capability[],
-  { loose }: Pick<Options, "loose">
+  { loose }: Pick<Options, "loose">,
+  onCapabilities?: (module: string, capabilities: Capability[]) => void
 ): { preset: Preset; capabilities: Capability[] } {
   const allCapabilities = new Set<Capability>();
   const trace: Trace[] = [
@@ -131,6 +132,7 @@ export function gatherRequirements(
     const capabilities =
       kitConfig.alignDeps?.capabilities || kitConfig.capabilities;
     if (Array.isArray(capabilities)) {
+      onCapabilities?.(module, capabilities);
       for (const capability of capabilities) {
         allCapabilities.add(capability);
       }
