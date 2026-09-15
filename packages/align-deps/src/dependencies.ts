@@ -6,7 +6,7 @@ import type { PackageManifest } from "@rnx-kit/types-node";
 import * as path from "node:path";
 import { ResolverFactory } from "oxc-resolver";
 import { filterPreset } from "./preset.ts";
-import type { Options, Preset, Profile } from "./types.ts";
+import type { CapabilityObserver, Options, Preset, Profile } from "./types.ts";
 
 type PackageManifestMin = Pick<PackageManifest, "dependencies" | "rnx-kit">;
 
@@ -32,11 +32,11 @@ function getRequirements(kitConfig: KitConfig): string[] | null {
   return null;
 }
 
-export function isCoreCapability(capability: Capability): boolean {
+function isCoreCapability(capability: Capability): boolean {
   return capability.startsWith("core-");
 }
 
-export function isDevOnlyCapability(
+function isDevOnlyCapability(
   capability: Capability,
   profiles: Partial<Profile>[]
 ): boolean {
@@ -106,9 +106,10 @@ export function gatherRequirements(
   requirements: string[],
   appCapabilities: Capability[],
   { loose }: Pick<Options, "loose">,
-  onCapabilities?: (module: string, capabilities: Capability[]) => void
+  onCapabilities?: CapabilityObserver
 ): { preset: Preset; capabilities: Capability[] } {
   const allCapabilities = new Set<Capability>();
+  const declarations = onCapabilities && new Map<string, Capability[]>();
   const trace: Trace[] = [
     {
       module: manifest.name,
@@ -132,7 +133,7 @@ export function gatherRequirements(
     const capabilities =
       kitConfig.alignDeps?.capabilities || kitConfig.capabilities;
     if (Array.isArray(capabilities)) {
-      onCapabilities?.(module, capabilities);
+      declarations?.set(module, capabilities);
       for (const capability of capabilities) {
         allCapabilities.add(capability);
       }
@@ -187,6 +188,15 @@ export function gatherRequirements(
       isDevOnlyCapability(capability, profiles)
     ) {
       allCapabilities.delete(capability);
+    }
+  }
+
+  if (onCapabilities && declarations) {
+    for (const [module, capabilities] of declarations) {
+      onCapabilities(
+        module,
+        capabilities.filter((capability) => allCapabilities.has(capability))
+      );
     }
   }
 

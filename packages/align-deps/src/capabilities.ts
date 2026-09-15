@@ -60,68 +60,36 @@ export function isMetaPackage(pkg: MetaPackage | Package): pkg is MetaPackage {
   return pkg.name === "#meta" && Array.isArray(pkg.capabilities);
 }
 
-function resolveCapability(
+export function visitCapability(
   capability: Capability,
-  namedProfile: [string, Profile],
-  dependencies: Record<string, Package[]>,
-  unresolvedCapabilities: Record<string, string[]>,
+  profile: Profile,
+  visitor: (
+    pkg: MetaPackage | Package | undefined,
+    capability: Capability,
+    visitChildren: () => boolean
+  ) => boolean,
   /** @internal */ resolved = new Set<string>([
     "__proto__",
     "constructor",
     "prototype",
   ])
-): void {
+): boolean {
   if (resolved.has(capability)) {
-    return;
+    return false;
   }
 
   // Make sure we don't end in a loop
   resolved.add(capability);
 
-  const [profileName, profile] = namedProfile;
   const pkg = profile[capability];
-  if (!pkg) {
-    const profiles = unresolvedCapabilities[capability];
-    if (!profiles) {
-      unresolvedCapabilities[capability] = [profileName];
-    } else {
-      profiles.push(profileName);
-    }
-    return;
-  }
-
-  pkg[Symbol.for(PROVIDES_SYMKEY)] = capability;
-
-  if (pkg.capabilities) {
-    for (const capability of pkg.capabilities) {
-      resolveCapability(
-        capability,
-        namedProfile,
-        dependencies,
-        unresolvedCapabilities,
-        resolved
-      );
-    }
-  }
-
-  if (!isMetaPackage(pkg)) {
-    const { name, version } = pkg;
-    if (!name) {
-      throw new Error(`Invalid capability '${capability}': missing name`);
-    }
-    if (!version) {
-      throw new Error(`Invalid capability '${capability}': missing version`);
-    }
-
-    if (name in dependencies) {
-      const versions = dependencies[name];
-      if (!versions.find((current) => current.version === version)) {
-        versions.push(pkg);
-      }
-    } else {
-      dependencies[name] = [pkg];
-    }
-  }
+  return visitor(
+    pkg,
+    capability,
+    () =>
+      pkg?.capabilities?.some((child) =>
+        visitCapability(child, profile, visitor, resolved)
+      ) ?? false
+  );
 }
 
 /**
@@ -139,13 +107,43 @@ export function resolveCapabilitiesUnchecked(
   const unresolvedCapabilities: Record<string, string[]> = {};
 
   for (const capability of capabilities) {
-    for (const profile of profiles) {
-      resolveCapability(
-        capability,
-        profile,
-        dependencies,
-        unresolvedCapabilities
-      );
+    for (const [profileName, profile] of profiles) {
+      visitCapability(capability, profile, (pkg, capability, visitChildren) => {
+        if (!pkg) {
+          const profiles = unresolvedCapabilities[capability];
+          if (!profiles) {
+            unresolvedCapabilities[capability] = [profileName];
+          } else {
+            profiles.push(profileName);
+          }
+          return false;
+        }
+
+        pkg[Symbol.for(PROVIDES_SYMKEY)] = capability;
+        visitChildren();
+
+        if (!isMetaPackage(pkg)) {
+          const { name, version } = pkg;
+          if (!name) {
+            throw new Error(`Invalid capability '${capability}': missing name`);
+          }
+          if (!version) {
+            throw new Error(
+              `Invalid capability '${capability}': missing version`
+            );
+          }
+
+          if (name in dependencies) {
+            const versions = dependencies[name];
+            if (!versions.find((current) => current.version === version)) {
+              versions.push(pkg);
+            }
+          } else {
+            dependencies[name] = [pkg];
+          }
+        }
+        return false;
+      });
     }
   }
 

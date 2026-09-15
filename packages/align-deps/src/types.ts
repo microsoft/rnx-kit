@@ -12,6 +12,11 @@ export type AlignDepsOptions = {
   manifest: PackageManifest;
 };
 
+export type CapabilityObserver = (
+  module: string,
+  capabilities: Capability[]
+) => void;
+
 export type Change =
   | { type: "added"; dependency: string; target: string }
   | { type: "changed"; dependency: string; target: string; current: string }
