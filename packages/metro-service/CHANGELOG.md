@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 5.0.3
+
+### Patch Changes
+
+- 1766416: Fixed `loadMetroConfig` throwing when asset plugins are specified
+
 ## 5.0.2
 
 ### Patch Changes
