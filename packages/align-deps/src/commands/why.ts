@@ -1,11 +1,35 @@
+import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
+import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { Capability } from "@rnx-kit/types-kit-config";
 import * as path from "node:path";
-import { isMetaPackage, visitCapability } from "../capabilities.ts";
+import { isMetaPackage } from "../capabilities.ts";
 import { transformConfig } from "../compatibility/config.ts";
 import { loadConfig, sanitizeCapabilities } from "../config.ts";
+import { visitDependencies } from "../dependencies.ts";
 import { isError } from "../errors.ts";
-import { resolve } from "../preset.ts";
+import { filterPreset, mergePresets } from "../preset.ts";
 import type { Command, Options, Profile } from "../types.ts";
+
+function requiresPackage(
+  capability: Capability,
+  profile: Profile,
+  name: string,
+  visited = new Set<string>(["__proto__", "constructor", "prototype"])
+): boolean {
+  if (visited.has(capability)) {
+    return false;
+  }
+  visited.add(capability);
+
+  const pkg = profile[capability];
+  return Boolean(
+    pkg &&
+    ((!isMetaPackage(pkg) && pkg.name === name) ||
+      pkg.capabilities?.some((child) =>
+        requiresPackage(child, profile, name, visited)
+      ))
+  );
+}
 
 export function makeWhyCommand(name: string, options: Options): Command {
   return (manifestPath) => {
@@ -19,37 +43,35 @@ export function makeWhyCommand(name: string, options: Options): Command {
       "alignDeps" in inputConfig ? inputConfig : transformConfig(inputConfig);
     const { manifest, kitType, alignDeps } = config;
     const projectRoot = path.resolve(path.dirname(manifestPath));
-    const { capabilities } = alignDeps;
-    const dependencies: [string, Capability[]][] = [];
-    const { devPreset, prodPreset } = resolve(
-      config,
-      projectRoot,
-      options,
-      (module, capabilities) => dependencies.push([module, capabilities]),
-      name
+    const { capabilities, requirements } = alignDeps;
+    const preset = mergePresets(alignDeps.presets, projectRoot);
+    const profiles = Object.values(
+      filterPreset(
+        preset,
+        Array.isArray(requirements) ? requirements : requirements.production
+      )
     );
-    const prodProfiles = Object.values(prodPreset);
+    if (kitType !== "app" && !Array.isArray(requirements)) {
+      profiles.push(
+        ...Object.values(filterPreset(preset, requirements.development))
+      );
+    }
+    const matching = new Set<Capability>();
+    for (const profile of profiles) {
+      for (const capability of keysOf(profile)) {
+        if (requiresPackage(capability, profile, name)) {
+          matching.add(capability);
+        }
+      }
+    }
+    if (matching.size === 0) {
+      return "success";
+    }
+
     const reasons = new Map<string, Set<Capability>>();
-    const collect = (
-      module: string,
-      capabilities: Capability[],
-      profiles: Profile[],
-      includeDevOnly: boolean
-    ) => {
+    const collect = (module: string, capabilities?: Capability[]) => {
       const found = sanitizeCapabilities(capabilities).filter((capability) =>
-        profiles.some((profile) =>
-          visitCapability(
-            capability,
-            profile,
-            (pkg, _capability, visitChildren) =>
-              Boolean(
-                pkg &&
-                !isMetaPackage(pkg) &&
-                pkg.name === name &&
-                (includeDevOnly || !pkg.devOnly)
-              ) || visitChildren()
-          )
-        )
+        matching.has(capability)
       );
       if (found.length > 0) {
         reasons.set(
@@ -59,11 +81,11 @@ export function makeWhyCommand(name: string, options: Options): Command {
       }
     };
 
-    collect(manifest.name, capabilities, prodProfiles, kitType === "app");
-    collect(manifest.name, capabilities, Object.values(devPreset), true);
-    for (const [module, capabilities] of dependencies) {
-      collect(module, capabilities, prodProfiles, true);
-    }
+    collect(manifest.name, capabilities);
+    visitDependencies(manifest, projectRoot, (module, modulePath, manifest) => {
+      const config = getKitConfigFromPackageManifest(manifest, modulePath);
+      collect(module, config?.alignDeps?.capabilities ?? config?.capabilities);
+    });
 
     for (const [index, [module, capabilities]] of [...reasons].entries()) {
       const last = index === reasons.size - 1;

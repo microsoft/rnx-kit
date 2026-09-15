@@ -2,15 +2,9 @@ import type { Capability } from "@rnx-kit/types-kit-config";
 import semverCoerce from "semver/functions/coerce.js";
 import semverSatisfies from "semver/functions/satisfies.js";
 import semverValidRange from "semver/ranges/valid.js";
-import { isMetaPackage } from "./capabilities.ts";
 import { gatherRequirements } from "./dependencies.ts";
 import { preset as reactNativePreset } from "./presets/microsoft/react-native.ts";
-import type {
-  AlignDepsOptions,
-  CapabilityObserver,
-  Options,
-  Preset,
-} from "./types.ts";
+import type { AlignDepsOptions, Options, Preset } from "./types.ts";
 
 type Resolution = {
   devPreset: Preset;
@@ -175,9 +169,7 @@ export function mergePresets(
 export function resolve(
   { kitType, alignDeps, manifest }: AlignDepsOptions,
   projectRoot: string,
-  options: Options,
-  onCapabilities?: CapabilityObserver,
-  packageName?: string
+  options: Options
 ): Resolution {
   const { capabilities, presets, requirements } = alignDeps;
 
@@ -186,9 +178,7 @@ export function resolve(
     : requirements.production;
   const mergedPreset = mergePresets(presets, projectRoot);
   const initialProdPreset = filterPreset(mergedPreset, prodRequirements);
-  if (!packageName) {
-    ensurePreset(initialProdPreset, prodRequirements);
-  }
+  ensurePreset(initialProdPreset, prodRequirements);
 
   const devPreset = (() => {
     if (kitType === "app") {
@@ -199,24 +189,10 @@ export function resolve(
     } else {
       const devRequirements = requirements.development;
       const devPreset = filterPreset(mergedPreset, devRequirements);
-      if (!packageName) {
-        ensurePreset(devPreset, devRequirements);
-      }
+      ensurePreset(devPreset, devRequirements);
       return devPreset;
     }
   })();
-
-  if (
-    packageName &&
-    ![...Object.values(initialProdPreset), ...Object.values(devPreset)].some(
-      (profile) =>
-        Object.values(profile).some(
-          (pkg) => !isMetaPackage(pkg) && pkg.name === packageName
-        )
-    )
-  ) {
-    return { devPreset, prodPreset: initialProdPreset, capabilities: [] };
-  }
 
   if (kitType === "app") {
     const { preset: prodMergedPreset, capabilities: mergedCapabilities } =
@@ -226,8 +202,7 @@ export function resolve(
         initialProdPreset,
         prodRequirements,
         capabilities,
-        options,
-        onCapabilities
+        options
       );
     return {
       devPreset,
