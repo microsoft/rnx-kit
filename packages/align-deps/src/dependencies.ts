@@ -5,6 +5,7 @@ import type { Capability, KitConfig } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
 import * as path from "node:path";
 import { ResolverFactory } from "oxc-resolver";
+import { makeVisitorSet } from "./helpers.ts";
 import { filterPreset } from "./preset.ts";
 import type { Options, Preset, Profile } from "./types.ts";
 
@@ -63,24 +64,26 @@ export function visitDependencies(
     modulePath: string,
     manifest: PackageManifestMin
   ) => void,
-  visited: Set<string> = new Set<string>()
+  visited = makeVisitorSet()
 ): void {
   if (!dependencies) {
     return;
   }
 
   for (const dependency in dependencies) {
-    if (visited.has(dependency)) {
-      continue;
-    }
-
-    visited.add(dependency);
-
     const result = resolver.sync(projectRoot, dependency + "/package.json");
     if (!result.path) {
       warn(`Unable to resolve module '${dependency}' from '${projectRoot}'`);
       continue;
     }
+
+    // Two dependencies may pull in different versions of the same package,
+    // and they may not necessarily declare the same capabilities.
+    if (visited.has(result.path)) {
+      continue;
+    }
+
+    visited.add(result.path);
 
     const packageDir = path.dirname(result.path);
     const manifest = readManifestFromDir(packageDir);

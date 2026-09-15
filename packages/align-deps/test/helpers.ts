@@ -1,6 +1,6 @@
 import type { Capability } from "@rnx-kit/types-kit-config";
 import { createRequire } from "node:module";
-import { URL } from "node:url";
+import { URL, fileURLToPath } from "node:url";
 import type { Package, Profile } from "../src/types.ts";
 
 export function defineRequire(path: string, base: string | URL) {
@@ -9,6 +9,10 @@ export function defineRequire(path: string, base: string | URL) {
 
 export function undefineRequire() {
   global.require = undefined;
+}
+
+export function fixturePath(name: string) {
+  return fileURLToPath(new URL(`./__fixtures__/${name}`, import.meta.url));
 }
 
 export function pickPackage(profile: Profile, capability: string): Package {

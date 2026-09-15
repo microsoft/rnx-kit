@@ -4,6 +4,8 @@ import detectIndent from "detect-indent";
 import * as nodefs from "node:fs";
 import semverValidRange from "semver/ranges/valid.js";
 
+export const ILLEGAL_KEYS = ["__proto__", "constructor", "prototype"];
+
 export const dependencySections = [
   "dependencies",
   "peerDependencies",
@@ -62,6 +64,10 @@ export function isEmptyArray<T>(arr: T[] | undefined): arr is undefined {
 
 export function isString(str: unknown): str is string {
   return typeof str?.valueOf() === "string";
+}
+
+export function makeVisitorSet(): Set<string> {
+  return new Set<string>(ILLEGAL_KEYS);
 }
 
 export function modifyManifest(

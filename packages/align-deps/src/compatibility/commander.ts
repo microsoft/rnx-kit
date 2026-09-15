@@ -6,10 +6,12 @@ type InputArgs = Record<string, string | number | boolean | undefined>;
 
 const optionsMap: Partial<Record<keyof typeof cliOptions, string>> = {
   "exclude-packages": "excludePackages",
+  "export-catalogs": "exportCatalogs",
   init: "init",
   presets: "presets",
   requirements: "requirements",
   "set-version": "setVersion",
+  why: "why",
 };
 
 export const alignDepsCommand = {

@@ -1,4 +1,4 @@
-const allFixtures = "test/__fixtures__/**/*.{js,jsx,ts,tsx}";
+const allFixtures = "test/__fixtures__/**/*.{cjs,js,jsx,ts,tsx}";
 const allTests = "test/**/*.test.{js,mts,ts}";
 
 const jestDependencies = ["@rnx-kit/jest-preset"];

@@ -6,10 +6,7 @@ import { afterEach, describe, it } from "node:test";
 import { gatherRequirements, visitDependencies } from "../src/dependencies.ts";
 import { profile as profile_0_69 } from "../src/presets/microsoft/react-native/profile-0.69.ts";
 import { profile as profile_0_70 } from "../src/presets/microsoft/react-native/profile-0.70.ts";
-
-function fixturePath(name: string) {
-  return path.join(process.cwd(), "test", "__fixtures__", name);
-}
+import { fixturePath } from "./helpers.ts";
 
 function useFixture(name: string): [string, PackageManifest] {
   const fixture = fixturePath(name);
