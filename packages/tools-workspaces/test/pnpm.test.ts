@@ -1,4 +1,4 @@
-import { equal, match } from "node:assert/strict";
+import { deepEqual, equal, match } from "node:assert/strict";
 import { after, afterEach, before, describe, it } from "node:test";
 import { findSentinel, findSentinelSync } from "../src/common.ts";
 import {
@@ -51,6 +51,7 @@ describe("findWorkspacePackages", () => {
     setFixture("pnpm");
 
     const result = (await findWorkspacePackages()).sort();
+    equal(result.length, packages.length);
     for (let i = 0; i < result.length; ++i) {
       match(result[i], packages[i]);
     }
@@ -60,9 +61,22 @@ describe("findWorkspacePackages", () => {
     setFixture("pnpm");
 
     const result = findWorkspacePackagesSync().sort();
+    equal(result.length, packages.length);
     for (let i = 0; i < result.length; ++i) {
       match(result[i], packages[i]);
     }
+  });
+
+  it("returns no packages when `packages` is unset", async () => {
+    setFixture("pnpm-no-packages");
+
+    deepEqual(await findWorkspacePackages(), []);
+  });
+
+  it("returns no packages when `packages` is unset (sync)", () => {
+    setFixture("pnpm-no-packages");
+
+    deepEqual(findWorkspacePackagesSync(), []);
   });
 });
 
