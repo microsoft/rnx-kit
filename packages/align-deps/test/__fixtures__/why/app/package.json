@@ -1,0 +1,14 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "engines": {
+    "node": "Do not install; for testing purposes only"
+  },
+  "rnx-kit": {
+    "kitType": "app",
+    "alignDeps": {
+      "requirements": ["react-native@0.70"],
+      "capabilities": ["netinfo"]
+    }
+  }
+}

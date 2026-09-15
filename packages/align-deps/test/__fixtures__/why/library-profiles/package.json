@@ -1,0 +1,17 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "engines": {
+    "node": "Do not install; for testing purposes only"
+  },
+  "rnx-kit": {
+    "kitType": "library",
+    "alignDeps": {
+      "requirements": {
+        "production": ["react-native@0.72"],
+        "development": ["react-native@0.73"]
+      },
+      "capabilities": ["babel-preset-react-native"]
+    }
+  }
+}

@@ -1,13 +1,5 @@
-import type { KitConfig } from "@rnx-kit/types-kit-config";
 import { deepEqual, equal, match, throws } from "node:assert/strict";
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
-import { tmpdir } from "node:os";
+import { readFileSync } from "node:fs";
 import * as path from "node:path";
 import { after, afterEach, before, describe, it } from "node:test";
 import { makeWhyCommand } from "../../src/commands/why.ts";
@@ -17,32 +9,11 @@ import { defineRequire, undefineRequire } from "../helpers.ts";
 
 const options = { presets: ["microsoft/react-native"] };
 const fixture = path.resolve("test/__fixtures__/awesome-repo");
+const fixtures = path.resolve("test/__fixtures__/why");
 
-function project(
-  t: it.TestContext,
-  config: KitConfig = {
-    kitType: "app",
-    alignDeps: {
-      requirements: ["react-native@0.70"],
-      capabilities: ["netinfo"],
-    },
-  }
-) {
-  const root = mkdtempSync(path.join(tmpdir(), "align-deps-why-"));
-  t.after(() => rmSync(root, { recursive: true, force: true }));
-  const put = (file: string, value: unknown) => {
-    const target = path.join(root, file);
-    mkdirSync(path.dirname(target), { recursive: true });
-    writeFileSync(target, JSON.stringify(value));
-    return target;
-  };
-  const manifest = {
-    name: "my-app",
-    version: "1.0.0",
-    "rnx-kit": config,
-  };
-  const manifestPath = put("package.json", manifest);
-  return { root, put, manifest, manifestPath };
+function project(name = "app") {
+  const root = path.join(fixtures, name);
+  return { root, manifestPath: path.join(root, "package.json") };
 }
 
 function capture(t: it.TestContext) {
@@ -86,25 +57,7 @@ describe("makeWhyCommand()", () => {
 
   it("reports root and inherited dependency declarations without checking versions", (t) => {
     const { output, warn, error } = capture(t);
-    const { put, manifest, manifestPath } = project(t);
-    put("package.json", {
-      ...manifest,
-      dependencies: { library: "1.0.0", plain: "1.0.0" },
-      devDependencies: { "not-installed-dev": "*" },
-      peerDependencies: { "not-installed-peer": "*" },
-    });
-    put("node_modules/library/package.json", {
-      name: "library",
-      version: "1.0.0",
-      "rnx-kit": { extends: "./config.json" },
-    });
-    put("node_modules/library/config.json", {
-      alignDeps: {
-        requirements: ["react-native@0.69"],
-        capabilities: ["netinfo", "netinfo"],
-      },
-    });
-    put("node_modules/plain/package.json", { name: "plain", version: "1.0.0" });
+    const { manifestPath } = project("inherited");
     equal(why("@react-native-community/netinfo", manifestPath), "success");
     equal(
       output(),
@@ -122,18 +75,7 @@ describe("makeWhyCommand()", () => {
 
   it("scans library dependencies and retains core and dev-only declarations", (t) => {
     const { output } = capture(t);
-    const { put, manifest, manifestPath } = project(t, {
-      kitType: "library",
-      alignDeps: { requirements: ["react-native@0.70"], capabilities: [] },
-    });
-    put("package.json", { ...manifest, dependencies: { library: "1.0.0" } });
-    put("node_modules/library/package.json", {
-      name: "library",
-      version: "1.0.0",
-      "rnx-kit": {
-        alignDeps: { capabilities: ["core-ios", "babel-preset-react-native"] },
-      },
-    });
+    const { manifestPath } = project("library");
     equal(why("react-native", manifestPath), "success");
     match(output(), /library\n {3}└─ react-native \(via 'core-ios'\)/);
     equal(why("metro-react-native-babel-preset", manifestPath), "success");
@@ -146,16 +88,7 @@ describe("makeWhyCommand()", () => {
   ]) {
     it(`includes library production/development profiles for ${name}`, (t) => {
       const { output } = capture(t);
-      const { manifestPath } = project(t, {
-        kitType: "library",
-        alignDeps: {
-          requirements: {
-            production: ["react-native@0.72"],
-            development: ["react-native@0.73"],
-          },
-          capabilities: ["babel-preset-react-native"],
-        },
-      });
+      const { manifestPath } = project("library-profiles");
       equal(why(name, manifestPath), "success");
       equal(
         output(),
@@ -166,39 +99,8 @@ describe("makeWhyCommand()", () => {
 
   it("matches nested cyclic meta capabilities without mutating cached presets", (t) => {
     const { output } = capture(t);
-    const { root, put, manifest, manifestPath } = project(t);
+    const { root, manifestPath } = project("cyclic");
     const presetPath = path.join(root, "preset.cjs");
-    writeFileSync(
-      presetPath,
-      `module.exports = ${JSON.stringify({
-        test: {
-          core: { name: "react-native", version: "0.70.0" },
-          bundle: {
-            name: "#meta",
-            capabilities: ["loop", "missing", "target"],
-          },
-          loop: { name: "#meta", capabilities: ["bundle"] },
-          target: { name: "target-package", version: "1.0.0" },
-          constructor: { name: "target-package", version: "1.0.0" },
-        },
-      })};`
-    );
-    put("package.json", {
-      ...manifest,
-      "rnx-kit": {
-        alignDeps: {
-          presets: [presetPath],
-          requirements: ["react-native@0.70"],
-          capabilities: [
-            "bundle",
-            "bundle",
-            "constructor",
-            "prototype",
-            "__proto__",
-          ],
-        },
-      },
-    });
     const preset = mergePresets([presetPath], root);
     const original = structuredClone(preset);
     for (const profile of Object.values(preset)) {
@@ -216,11 +118,7 @@ describe("makeWhyCommand()", () => {
 
   it("skips dependency traversal for unknown targets", (t) => {
     const { output, warn } = capture(t);
-    const { put, manifest, manifestPath } = project(t);
-    put("package.json", {
-      ...manifest,
-      dependencies: { "not-installed": "*" },
-    });
+    const { manifestPath } = project("missing-dependency");
     equal(why("unknown-package", manifestPath), "success");
     equal(output(), "");
     equal(warn.mock.callCount(), 0);
@@ -228,18 +126,14 @@ describe("makeWhyCommand()", () => {
 
   it("succeeds silently for a known package with no matching declarations", (t) => {
     const { output } = capture(t);
-    const { manifestPath } = project(t);
+    const { manifestPath } = project();
     equal(why("react", manifestPath), "success");
     equal(output(), "");
   });
 
   it("warns about unresolved dependencies but keeps root matches", (t) => {
     const { output, warn } = capture(t);
-    const { put, manifest, manifestPath } = project(t);
-    put("package.json", {
-      ...manifest,
-      dependencies: { "not-installed": "*" },
-    });
+    const { manifestPath } = project("missing-dependency");
     equal(why("@react-native-community/netinfo", manifestPath), "success");
     match(output(), /my-app/);
     equal(warn.mock.callCount(), 1);
@@ -247,11 +141,7 @@ describe("makeWhyCommand()", () => {
 
   it("never writes or migrates legacy configuration", (t) => {
     capture(t);
-    const { manifestPath } = project(t, {
-      kitType: "app",
-      reactNativeVersion: "0.70",
-      capabilities: ["netinfo"],
-    });
+    const { manifestPath } = project("legacy");
     const before = readFileSync(manifestPath, "utf8");
     equal(
       why("@react-native-community/netinfo", manifestPath, {
@@ -265,15 +155,13 @@ describe("makeWhyCommand()", () => {
 
   it("preserves configuration errors and exclusions", (t) => {
     const { output } = capture(t);
-    const { put, manifestPath } = project(t);
+    const { manifestPath } = project();
     equal(
       why("react", manifestPath, { excludePackages: ["my-app"] }),
       "excluded"
     );
-    put("package.json", { name: "unconfigured", version: "1.0.0" });
-    equal(why("react", manifestPath), "not-configured");
-    put("package.json", {});
-    equal(why("react", manifestPath), "invalid-manifest");
+    equal(why("react", project("unconfigured").manifestPath), "not-configured");
+    equal(why("react", project("invalid").manifestPath), "invalid-manifest");
     equal(output(), "");
   });
 });
@@ -335,7 +223,7 @@ describe("cli --why", () => {
 
   it("parses --why with a package path and dispatches the command", async (t) => {
     const { output } = capture(t);
-    const { root } = project(t);
+    const { root } = project();
     const yargs = require("yargs/yargs");
     await yargs()
       .exitProcess(false)
@@ -352,7 +240,7 @@ describe("cli --why", () => {
   for (const explicit of [false, true]) {
     it(`uses ${explicit ? "an explicit path" : "the current package"} without running checks`, async (t) => {
       const { output, error } = capture(t);
-      const { root, manifestPath } = project(t);
+      const { root, manifestPath } = project();
       process.chdir(root);
       const args: Args = {
         why: "@react-native-community/netinfo",

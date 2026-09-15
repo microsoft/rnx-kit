@@ -1,0 +1,17 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "dependencies": {
+    "library": "1.0.0"
+  },
+  "engines": {
+    "node": "Do not install; for testing purposes only"
+  },
+  "rnx-kit": {
+    "kitType": "library",
+    "alignDeps": {
+      "requirements": ["react-native@0.70"],
+      "capabilities": []
+    }
+  }
+}
