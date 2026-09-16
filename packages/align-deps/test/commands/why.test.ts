@@ -9,9 +9,12 @@ import { defineRequire, undefineRequire } from "../helpers.ts";
 
 const options = { presets: ["microsoft/react-native"] };
 const fixture = path.resolve("test/__fixtures__/awesome-repo");
+const modernManifest = path.resolve(
+  "test/__fixtures__/misconfigured-app/package.json"
+);
 const fixtures = path.resolve("test/__fixtures__/why");
 
-function project(name = "app") {
+function project(name: string) {
   const root = path.join(fixtures, name);
   return { root, manifestPath: path.join(root, "package.json") };
 }
@@ -79,7 +82,10 @@ describe("makeWhyCommand()", () => {
     equal(why("react-native", manifestPath), "success");
     match(output(), /library\n {3}└─ react-native \(via 'core-ios'\)/);
     equal(why("metro-react-native-babel-preset", manifestPath), "success");
-    match(output(), /via 'babel-preset-react-native'/);
+    match(
+      output(),
+      /library\n {3}└─ metro-react-native-babel-preset \(via 'babel-preset-react-native'\)/
+    );
   });
 
   for (const name of [
@@ -88,11 +94,17 @@ describe("makeWhyCommand()", () => {
   ]) {
     it(`includes library production/development profiles for ${name}`, (t) => {
       const { output } = capture(t);
-      const { manifestPath } = project("library-profiles");
+      const { manifestPath } = project("library");
       equal(why(name, manifestPath), "success");
       equal(
         output(),
-        `└─ my-app\n   └─ ${name} (via 'babel-preset-react-native')`
+        [
+          "├─ my-app",
+          `│  └─ ${name} (via 'babel-preset-react-native')`,
+          "│",
+          "└─ library",
+          `   └─ ${name} (via 'babel-preset-react-native')`,
+        ].join("\n")
       );
     });
   }
@@ -126,8 +138,7 @@ describe("makeWhyCommand()", () => {
 
   it("succeeds silently for a known package with no matching declarations", (t) => {
     const { output } = capture(t);
-    const { manifestPath } = project();
-    equal(why("react", manifestPath), "success");
+    equal(why("@react-native-community/netinfo", modernManifest), "success");
     equal(output(), "");
   });
 
@@ -141,7 +152,7 @@ describe("makeWhyCommand()", () => {
 
   it("never writes or migrates legacy configuration", (t) => {
     capture(t);
-    const { manifestPath } = project("legacy");
+    const manifestPath = path.join(fixture, "package.json");
     const before = readFileSync(manifestPath, "utf8");
     equal(
       why("@react-native-community/netinfo", manifestPath, {
@@ -155,12 +166,14 @@ describe("makeWhyCommand()", () => {
 
   it("preserves configuration errors and exclusions", (t) => {
     const { output } = capture(t);
-    const { manifestPath } = project();
     equal(
-      why("react", manifestPath, { excludePackages: ["my-app"] }),
+      why("react", modernManifest, { excludePackages: ["misconfigured-app"] }),
       "excluded"
     );
-    equal(why("react", project("unconfigured").manifestPath), "not-configured");
+    equal(
+      why("react", path.join(fixture, "node_modules/react/package.json")),
+      "not-configured"
+    );
     equal(why("react", project("invalid").manifestPath), "invalid-manifest");
     equal(output(), "");
   });
@@ -223,31 +236,30 @@ describe("cli --why", () => {
 
   it("parses --why with a package path and dispatches the command", async (t) => {
     const { output } = capture(t);
-    const { root } = project();
     const yargs = require("yargs/yargs");
     await yargs()
       .exitProcess(false)
       .parserConfiguration({ "boolean-negation": false })
       .usage("$0 [packages...]", "align-deps", cliOptions, cli)
-      .parseAsync([root, "--why", "@react-native-community/netinfo"]);
+      .parseAsync([fixture, "--why", "@react-native-community/netinfo"]);
     equal(process.exitCode, 0);
     equal(
       output(),
-      "└─ my-app\n   └─ @react-native-community/netinfo (via 'netinfo')"
+      "└─ dutch\n   └─ @react-native-community/netinfo (via 'netinfo')"
     );
   });
 
   for (const explicit of [false, true]) {
     it(`uses ${explicit ? "an explicit path" : "the current package"} without running checks`, async (t) => {
       const { output, error } = capture(t);
-      const { root, manifestPath } = project();
-      process.chdir(root);
+      const manifestPath = path.join(fixture, "package.json");
+      process.chdir(fixture);
       const args: Args = {
         why: "@react-native-community/netinfo",
         write: true,
         "migrate-config": true,
       };
-      if (explicit) args.packages = [root];
+      if (explicit) args.packages = [fixture];
       const before = readFileSync(manifestPath, "utf8");
       await cli(args);
       equal(process.exitCode, 0);

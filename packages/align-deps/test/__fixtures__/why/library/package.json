@@ -10,8 +10,11 @@
   "rnx-kit": {
     "kitType": "library",
     "alignDeps": {
-      "requirements": ["react-native@0.70"],
-      "capabilities": []
+      "requirements": {
+        "production": ["react-native@0.72"],
+        "development": ["react-native@0.73"]
+      },
+      "capabilities": ["babel-preset-react-native"]
     }
   }
 }
