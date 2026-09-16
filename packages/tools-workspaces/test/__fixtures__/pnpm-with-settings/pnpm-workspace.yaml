@@ -1,0 +1,5 @@
+onlyBuiltDependencies:
+  - esbuild
+packages:
+  - 'packages/*'
+  - '!packages/t-800'

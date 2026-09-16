@@ -39,6 +39,14 @@ describe("findWorkspacePackages", () => {
     /__fixtures__[/\\]pnpm[/\\]packages[/\\]t-800$/,
   ];
 
+  // `packages/*` minus `packages/t-800`
+  const packagesWithSettings = [
+    /__fixtures__[/\\]pnpm-with-settings[/\\]packages[/\\]conan$/,
+    /__fixtures__[/\\]pnpm-with-settings[/\\]packages[/\\]dutch$/,
+    /__fixtures__[/\\]pnpm-with-settings[/\\]packages[/\\]john$/,
+    /__fixtures__[/\\]pnpm-with-settings[/\\]packages[/\\]quaid$/,
+  ];
+
   before(defineRequire);
 
   afterEach(() => {
@@ -64,6 +72,26 @@ describe("findWorkspacePackages", () => {
     equal(result.length, packages.length);
     for (let i = 0; i < result.length; ++i) {
       match(result[i], packages[i]);
+    }
+  });
+
+  it("returns packages when `packages` is set alongside other settings", async () => {
+    setFixture("pnpm-with-settings");
+
+    const result = (await findWorkspacePackages()).sort();
+    equal(result.length, packagesWithSettings.length);
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packagesWithSettings[i]);
+    }
+  });
+
+  it("returns packages when `packages` is set alongside other settings (sync)", () => {
+    setFixture("pnpm-with-settings");
+
+    const result = findWorkspacePackagesSync().sort();
+    equal(result.length, packagesWithSettings.length);
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packagesWithSettings[i]);
     }
   });
 
