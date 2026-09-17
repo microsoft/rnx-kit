@@ -1,11 +1,10 @@
 import { equal } from "node:assert/strict";
 import * as path from "node:path";
 import { after, before, describe, it } from "node:test";
-import { URL, fileURLToPath } from "node:url";
 import { checkPackageManifest as checkPackageManifestActual } from "../../src/commands/check.ts";
 import { defaultConfig } from "../../src/config.ts";
 import * as mockfs from "../__mocks__/fs.ts";
-import { defineRequire, undefineRequire } from "../helpers.ts";
+import { defineRequire, fixturePath, undefineRequire } from "../helpers.ts";
 
 const defaultOptions = {
   presets: defaultConfig.presets,
@@ -24,10 +23,6 @@ function checkPackageManifest(manifestPath: string) {
     undefined,
     mockfs as unknown as typeof import("node:fs")
   );
-}
-
-function fixturePath(name: string) {
-  return fileURLToPath(new URL(`../__fixtures__/${name}`, import.meta.url));
 }
 
 describe("checkPackageManifest({ kitType: 'app' })", () => {

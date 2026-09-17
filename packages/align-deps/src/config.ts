@@ -9,7 +9,7 @@ import type { PackageManifest } from "@rnx-kit/types-node";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { findBadPackages } from "./bannedPackages.ts";
-import { isEmptyArray } from "./helpers.ts";
+import { ILLEGAL_KEYS, isEmptyArray } from "./helpers.ts";
 import type {
   AlignDepsOptions,
   ErrorCode,
@@ -18,8 +18,6 @@ import type {
 } from "./types.ts";
 
 export type ConfigResult = AlignDepsOptions | LegacyCheckConfig | ErrorCode;
-
-const ILLEGAL_CAPABILITIES = ["__proto__", "constructor", "prototype"];
 
 export const defaultConfig: AlignDepsOptions["alignDeps"] = {
   presets: ["microsoft/react-native"],
@@ -70,7 +68,7 @@ export function isPackageManifest(
 export function sanitizeCapabilities(
   capabilities?: Capability[]
 ): Capability[] {
-  return capabilities?.filter((c) => !ILLEGAL_CAPABILITIES.includes(c)) ?? [];
+  return capabilities?.filter((c) => !ILLEGAL_KEYS.includes(c)) ?? [];
 }
 
 /**

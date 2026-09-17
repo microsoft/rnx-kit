@@ -266,6 +266,42 @@ Specify to increase logging verbosity.
 
 Default: `false`
 
+### `--why <package>`
+
+Shows which packages declare capabilities that require the specified dependency,
+including capabilities that depend on other capabilities:
+
+```sh
+yarn rnx-align-deps --why @react-native-community/netinfo
+# Search in current package
+
+yarn rnx-align-deps --why @react-native-community/netinfo ./packages/my-app
+# Search in ./packages/my-app
+```
+
+Example output:
+
+```
+├─ my-app
+│  └─ @react-native-community/netinfo (via 'netinfo')
+│
+└─ useful-library
+   └─ @react-native-community/netinfo (via 'netinfo')
+```
+
+The command inspects the selected package and its transitive dependencies,
+using installed package manifests and their inherited `rnx-kit` configuration.
+
+Capabilities are matched using the selected package's configured presets and
+requirements. This explains why a capability was included, not the final
+alignment result. It does not explain arbitrary installed dependencies that have
+no corresponding capability declaration.
+
+`--why` runs instead of alignment checks and never writes changes, even with
+`--write` or `--migrate-config`. It cannot be combined with `--init`,
+`--export-catalogs`, or `--set-version`. No matches produces no output and
+succeeds, while an unknown target skips dependency traversal entirely.
+
 ### `--write`
 
 Writes all proposed changes to the specified `package.json`.

@@ -13,6 +13,7 @@ import { makeCheckCommand } from "./commands/check.ts";
 import { makeExportCatalogsCommand } from "./commands/exportCatalogs.ts";
 import { makeInitializeCommand } from "./commands/initialize.ts";
 import { makeSetVersionCommand } from "./commands/setVersion.ts";
+import { makeWhyCommand } from "./commands/why.ts";
 import { defaultConfig } from "./config.ts";
 import { printError, printInfo } from "./errors.ts";
 import { isEmptyArray, isString } from "./helpers.ts";
@@ -45,6 +46,7 @@ export const cliOptions = {
     description: "Exports catalogs for use with pnpm or Yarn.",
     type: "string",
     conflicts: ["init", "requirements", "set-version"],
+    argsString: "<format>", // Used by Commander
   },
   init: {
     description:
@@ -95,6 +97,14 @@ export const cliOptions = {
     default: false,
     description: "Increase logging verbosity",
     type: "boolean",
+  },
+  why: {
+    description:
+      "Shows which packages require a dependency and via which capabilities.",
+    type: "string",
+    requiresArg: true,
+    conflicts: ["init", "export-catalogs", "set-version"],
+    argsString: "<package>", // Used by Commander
   },
   write: {
     default: false,
@@ -202,6 +212,9 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     ["init", "set-version"],
     ["init", args.write ? "write" : "no-write"],
     ["set-version", args.write ? "write" : "no-write"],
+    ["why", "init"],
+    ["why", "export-catalogs"],
+    ["why", "set-version"],
   ];
   if (reportConflicts(conflicts, args)) {
     return undefined;
@@ -221,6 +234,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     requirements,
     "set-version": setVersion,
     verbose,
+    why,
     write,
   } = args;
   if (checkOverrides && !isEmptyArray(packages)) {
@@ -258,6 +272,15 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     return makeSetVersionCommand(setVersion, options);
   }
 
+  if (typeof why !== "undefined") {
+    const target = why.trim();
+    if (!target || target === "#meta") {
+      error("No package was specified");
+      return undefined;
+    }
+    return makeWhyCommand(target, options);
+  }
+
   return makeCheckCommand(options);
 }
 
@@ -269,11 +292,20 @@ export async function cli(args: Args): Promise<void> {
   }
 
   if (command.isRootCommand) {
-    process.exitCode = command() === "success" ? 0 : 1;
+    const result = command();
+    if (result !== "success") {
+      printError("package.json", result);
+      process.exitCode = 1;
+    }
     return;
   }
 
-  const result = await getManifests(args.packages);
+  // Special case: `--why` only scans one package
+  const packages =
+    typeof args.why !== "undefined"
+      ? [args.packages?.[0] ?? "."]
+      : args.packages;
+  const result = await getManifests(packages);
   if (!result) {
     process.exitCode = 1;
     return;
