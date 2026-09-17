@@ -1,5 +1,11 @@
 # @rnx-kit/tools-workspaces
 
+## 0.2.5
+
+### Patch Changes
+
+- 08bab10: Fixed pnpm workspace packages not being found because `pnpm-workspace.yaml` was parsed without being read first
+
 ## 0.2.4
 
 ### Patch Changes

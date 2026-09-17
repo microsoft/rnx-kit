@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/align-deps
 
+## 4.1.0
+
+### Minor Changes
+
+- f7d8b07: Added `--check-overrides` for warning about `resolutions`/`overrides` entries that pin a managed dependency outside the current profiles
+- 8e3502c: `align-deps` now removes stale/renamed dependencies when aligning a package. A stale package is only removed when the capability that supersedes it is actually being managed e.g., the `@react-native-community/async-storage` package is only removed when the `storage` capability is declared. Packages that `align-deps` doesn't manage are never touched.
+
 ## 4.0.6
 
 ### Patch Changes
