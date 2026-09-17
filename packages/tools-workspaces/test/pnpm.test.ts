@@ -1,4 +1,4 @@
-import { equal, match } from "node:assert/strict";
+import { deepEqual, equal, match } from "node:assert/strict";
 import { after, afterEach, before, describe, it } from "node:test";
 import { findSentinel, findSentinelSync } from "../src/common.ts";
 import {
@@ -39,6 +39,14 @@ describe("findWorkspacePackages", () => {
     /__fixtures__[/\\]pnpm[/\\]packages[/\\]t-800$/,
   ];
 
+  // `packages/*` minus `packages/t-800`
+  const packagesWithSettings = [
+    /__fixtures__[/\\]pnpm-with-settings[/\\]packages[/\\]conan$/,
+    /__fixtures__[/\\]pnpm-with-settings[/\\]packages[/\\]dutch$/,
+    /__fixtures__[/\\]pnpm-with-settings[/\\]packages[/\\]john$/,
+    /__fixtures__[/\\]pnpm-with-settings[/\\]packages[/\\]quaid$/,
+  ];
+
   before(defineRequire);
 
   afterEach(() => {
@@ -51,6 +59,7 @@ describe("findWorkspacePackages", () => {
     setFixture("pnpm");
 
     const result = (await findWorkspacePackages()).sort();
+    equal(result.length, packages.length);
     for (let i = 0; i < result.length; ++i) {
       match(result[i], packages[i]);
     }
@@ -60,9 +69,42 @@ describe("findWorkspacePackages", () => {
     setFixture("pnpm");
 
     const result = findWorkspacePackagesSync().sort();
+    equal(result.length, packages.length);
     for (let i = 0; i < result.length; ++i) {
       match(result[i], packages[i]);
     }
+  });
+
+  it("returns packages when `packages` is set alongside other settings", async () => {
+    setFixture("pnpm-with-settings");
+
+    const result = (await findWorkspacePackages()).sort();
+    equal(result.length, packagesWithSettings.length);
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packagesWithSettings[i]);
+    }
+  });
+
+  it("returns packages when `packages` is set alongside other settings (sync)", () => {
+    setFixture("pnpm-with-settings");
+
+    const result = findWorkspacePackagesSync().sort();
+    equal(result.length, packagesWithSettings.length);
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packagesWithSettings[i]);
+    }
+  });
+
+  it("returns no packages when `packages` is unset", async () => {
+    setFixture("pnpm-no-packages");
+
+    deepEqual(await findWorkspacePackages(), []);
+  });
+
+  it("returns no packages when `packages` is unset (sync)", () => {
+    setFixture("pnpm-no-packages");
+
+    deepEqual(findWorkspacePackagesSync(), []);
   });
 });
 
