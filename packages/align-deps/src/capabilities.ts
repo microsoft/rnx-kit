@@ -2,6 +2,7 @@ import { warn } from "@rnx-kit/console";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { Capability } from "@rnx-kit/types-kit-config";
 import type { PackageManifest } from "@rnx-kit/types-node";
+import { makeVisitorSet } from "./helpers.ts";
 import type { MetaPackage, Package, Preset, Profile } from "./types.ts";
 
 type ResolvedDependencies = {
@@ -65,11 +66,7 @@ function resolveCapability(
   namedProfile: [string, Profile],
   dependencies: Record<string, Package[]>,
   unresolvedCapabilities: Record<string, string[]>,
-  /** @internal */ resolved = new Set<string>([
-    "__proto__",
-    "constructor",
-    "prototype",
-  ])
+  /** @internal */ resolved = makeVisitorSet()
 ): void {
   if (resolved.has(capability)) {
     return;
