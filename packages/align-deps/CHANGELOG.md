@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 4.2.0
+
+### Minor Changes
+
+- b37e653: Added `--why` for displaying why a package was included
+
 ## 4.1.0
 
 ### Minor Changes

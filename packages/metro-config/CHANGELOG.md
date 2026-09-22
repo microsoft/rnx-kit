@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 2.2.5
+
+### Patch Changes
+
+- 61c1cb7: Support `setup-env.js` introduced in 0.88
+
 ## 2.2.4
 
 ### Patch Changes
