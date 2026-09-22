@@ -32,7 +32,9 @@ npm add --save-dev @rnx-kit/tools-formatting
 ### Text metrics
 
 `getTextMetrics` measures line count and the terminal width of the widest line
-without splitting, stripping, or constructing intermediate strings:
+using JavaScript's Unicode code-point iterator, without first splitting or
+stripping the input. The iterator yields individual character strings rather
+than constructing a stripped or normalized copy of the input:
 
 ```typescript
 import { getTextMetrics, getTextOutput } from "@rnx-kit/tools-formatting";
@@ -190,7 +192,7 @@ shortenPath("/a/b/c/d/e.ts", 2);
 | ----------------------------------- | --------------------------------------------------------------------------------- |
 | `formatAsTable(data, opts?)`        | Format a 2D data array into a bordered ASCII table.                               |
 | `formatAsTree(header, rows, opts?)` | Format a header and a list of rows into a tree-shaped string.                     |
-| `getTextMetrics(text?)`             | Measure line count and maximum terminal width without creating intermediate text. |
+| `getTextMetrics(text?)`             | Measure line count and maximum terminal width using Unicode code-point iteration. |
 | `getTextOutput(text?)`              | Return text metrics and LF/CRLF-split lines, preserving styling and empty lines.  |
 | `shortenPath(path, segs?)`          | Shorten a file path to the last _segs_ segments (default 3), with `...` prefix.   |
 

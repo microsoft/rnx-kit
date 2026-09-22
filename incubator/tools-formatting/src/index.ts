@@ -1,5 +1,5 @@
 export type { TextMetrics, TextOutput } from "./metrics.ts";
-export { getTextMetrics, getTextOutput } from "./metrics.ts";
+export { getTextMetrics, getTextOutput, isWideChar } from "./metrics.ts";
 
 export { shortenPath } from "./paths.ts";
 

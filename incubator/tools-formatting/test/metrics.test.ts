@@ -62,6 +62,18 @@ const lineCases: {
     width: 2,
   },
   {
+    name: "a control-string escape interrupted by a newline",
+    text: "a\x1b]hidden\x1b\n\\still hidden\x07bc",
+    lines: ["a\x1b]hidden\x1b", "\\still hidden\x07bc"],
+    width: 2,
+  },
+  {
+    name: "a control-string escape interrupted by an array boundary",
+    text: ["a\x1b]hidden\x1b", "\\still hidden\x07bc"],
+    lines: ["a\x1b]hidden\x1b", "\\still hidden\x07bc"],
+    width: 2,
+  },
+  {
     name: "emoji modifiers on separate lines",
     text: ["\u{1f44d}", "\u{1f3fd}x"],
     lines: ["\u{1f44d}", "\u{1f3fd}x"],
@@ -100,6 +112,28 @@ const widthCases: [name: string, text: string, width: number][] = [
   ],
   ["8-bit OSC and ST", "\x9d0;window title\x9chello", 5],
   ["DCS control strings", "\x1bPignored\x07data\x1b\\hello", 5],
+  [
+    "a supplementary character after a control-string terminator",
+    "a\x1b]hidden\x1b\\\u{1f600}b",
+    4,
+  ],
+  [
+    "a nonterminating escape inside OSC",
+    "a\x1b]hidden\x1b\u{1f600}\\still hidden\x07bc",
+    3,
+  ],
+  ["consecutive escapes inside OSC", "\x1b]hidden\x1b\x1b\\ok", 2],
+  ["an escape followed by BEL inside OSC", "a\x1b]hidden\x1b\x07bc", 3],
+  [
+    "an escape followed by BEL inside DCS",
+    "a\x1bPhidden\x1b\x07still hidden\x1b\\bc",
+    3,
+  ],
+  [
+    "a cancelled pending control-string escape",
+    "\x1b]hidden\x1b\x18ok\x1b]\\hidden\x07end",
+    5,
+  ],
   [
     "SOS, PM, and APC control strings",
     "\x1bXhidden\x1b\\\x1b^hidden\x1b\\\x1b_hidden\x1b\\ok",
@@ -208,7 +242,7 @@ describe("getTextMetrics", () => {
     }
   });
 
-  it("walks long input without constructing intermediate text", (t) => {
+  it("iterates over long input without splitting or stripping it", (t) => {
     const text = "a".repeat(100_000) + "\x1b[31m\u{1f600}\x1b[0m\n\u4e2d";
     const split = t.mock.method(String.prototype, "split");
     const replace = t.mock.method(String.prototype, "replace");
