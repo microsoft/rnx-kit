@@ -22,21 +22,16 @@ const { requireModuleFromMetro } = require("@rnx-kit/tools-react-native/metro");
 function getPreludeModules(availablePlatforms, projectRoot) {
   // Include all instances of `InitializeCore` here and let Metro exclude
   // the unused ones.
-  const requireOptions = { paths: [projectRoot] };
-  const mainModules = new Set([
-    require.resolve(
-      "react-native/Libraries/Core/InitializeCore.js",
-      requireOptions
-    ),
-  ]);
+  const mainModules = new Set();
+  const opts = { paths: [projectRoot] };
   for (const moduleName of Object.values(availablePlatforms)) {
-    if (moduleName) {
+    const spec = moduleName || "react-native";
+    try {
+      mainModules.add(require.resolve(`${spec}/setup-env`, opts));
+    } catch (_) {
       try {
         mainModules.add(
-          require.resolve(
-            `${moduleName}/Libraries/Core/InitializeCore.js`,
-            requireOptions
-          )
+          require.resolve(`${spec}/Libraries/Core/InitializeCore.js`, opts)
         );
       } catch (_) {
         // Not all platform implementations have `InitializeCore.js` e.g.,
@@ -179,9 +174,8 @@ function getDefaultConfig(projectRoot, platform) {
     projectRoot
   );
 
-  const preludeModules = getPreludeModules(availablePlatforms, projectRoot);
   defaultConfig.serializer.getModulesRunBeforeMainModule = () => {
-    return preludeModules;
+    return getPreludeModules(availablePlatforms, projectRoot);
   };
 
   if (platform === "web") {

@@ -86,7 +86,7 @@ export default {
     },
     "packages/metro-config": {
       entry: [allTests],
-      ignoreDependencies: reactNativeDependencies,
+      ignoreDependencies: [...reactNativeDependencies, "react", "react-native"],
     },
     "packages/metro-plugin-typescript": {
       entry: [allTests],
