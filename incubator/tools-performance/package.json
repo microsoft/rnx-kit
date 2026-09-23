@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-performance",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "EXPERIMENTAL - USE WITH CAUTION - tools-performance",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/tools-performance#readme",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-formatting": "^0.1.0"
+    "@rnx-kit/tools-formatting": "^0.2.0"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
