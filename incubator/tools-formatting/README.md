@@ -29,6 +29,36 @@ npm add --save-dev @rnx-kit/tools-formatting
 
 ## Usage
 
+### Text metrics
+
+`getTextMetrics` measures line count and the terminal width of the widest line
+using JavaScript's Unicode code-point iterator, without first splitting or
+stripping the input. The iterator yields individual character strings rather
+than constructing a stripped or normalized copy of the input:
+
+```typescript
+import { getTextMetrics, getTextOutput } from "@rnx-kit/tools-formatting";
+
+getTextMetrics("\x1b[31mhello\x1b[0m\nworld");
+// => { lineCount: 2, width: 5 }
+
+getTextOutput(["first\r\nsecond", ""]);
+// => { lineCount: 3, width: 6, lines: ["first", "second", ""] }
+```
+
+Both functions accept a string or an array of strings. Array entries and
+embedded LF/CRLF separators contribute separate lines; empty and trailing
+lines are preserved. Omitted text is one empty line, while an empty array has
+zero lines. `getTextOutput` calls `getTextMetrics`, then splits the original
+text into lines without removing ANSI styling or other content.
+
+ANSI escape sequences, control characters, combining marks, and zero-width
+formatting characters do not contribute width. Wide/fullwidth characters and
+emoji sequences supported by Node's Unicode data occupy two columns;
+ambiguous-width characters occupy one. Tabs and cursor movement are ignored,
+not expanded or simulated, so these are text measurements rather than a
+terminal emulator.
+
 ### Table formatting
 
 The `formatAsTable` utility can format any 2D data array into a bordered table:
@@ -158,11 +188,21 @@ shortenPath("/a/b/c/d/e.ts", 2);
 
 ### Functions
 
-| Function                            | Description                                                                     |
-| ----------------------------------- | ------------------------------------------------------------------------------- |
-| `formatAsTable(data, opts?)`        | Format a 2D data array into a bordered ASCII table.                             |
-| `formatAsTree(header, rows, opts?)` | Format a header and a list of rows into a tree-shaped string.                   |
-| `shortenPath(path, segs?)`          | Shorten a file path to the last _segs_ segments (default 3), with `...` prefix. |
+| Function                            | Description                                                                       |
+| ----------------------------------- | --------------------------------------------------------------------------------- |
+| `formatAsTable(data, opts?)`        | Format a 2D data array into a bordered ASCII table.                               |
+| `formatAsTree(header, rows, opts?)` | Format a header and a list of rows into a tree-shaped string.                     |
+| `getTextMetrics(text?)`             | Measure line count and maximum terminal width using Unicode code-point iteration. |
+| `getTextOutput(text?)`              | Return text metrics and LF/CRLF-split lines, preserving styling and empty lines.  |
+| `shortenPath(path, segs?)`          | Shorten a file path to the last _segs_ segments (default 3), with `...` prefix.   |
+
+### TextMetrics and TextOutput
+
+| Field       | Type       | Description                                          |
+| ----------- | ---------- | ---------------------------------------------------- |
+| `lineCount` | `number`   | Number of lines, including empty and trailing lines. |
+| `width`     | `number`   | Terminal width of the widest line.                   |
+| `lines`     | `string[]` | Original text split into lines (`TextOutput` only).  |
 
 ### TableOptions
 
