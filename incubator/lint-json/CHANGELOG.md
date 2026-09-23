@@ -1,5 +1,12 @@
 # @rnx-kit/lint-json
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [bb5df98]
+  - @rnx-kit/tools-formatting@0.2.0
+
 ## 0.2.0
 
 ### Minor Changes

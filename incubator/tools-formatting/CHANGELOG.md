@@ -1,5 +1,11 @@
 # @rnx-kit/tools-formatting
 
+## 0.2.0
+
+### Minor Changes
+
+- bb5df98: Add terminal-aware text metrics and line output helpers with ANSI and Unicode support.
+
 ## 0.1.0
 
 ### Minor Changes
