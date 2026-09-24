@@ -10,7 +10,6 @@ import { defineRequire, undefineRequire } from "../helpers.ts";
 const defaultOptions = {
   presets: defaultConfig.presets,
   loose: false,
-  migrateConfig: false,
   noUnmanaged: false,
   verbose: false,
   write: false,

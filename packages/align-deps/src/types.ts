@@ -30,7 +30,6 @@ export type Options = {
   presets: string[];
   checkOverrides?: boolean;
   loose?: boolean;
-  migrateConfig?: boolean;
   noUnmanaged?: boolean;
   verbose?: boolean;
   write?: boolean;
@@ -44,7 +43,6 @@ export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
   "diff-mode"?: string;
   "exclude-packages"?: string | number;
   "export-catalogs"?: string;
-  "migrate-config"?: boolean;
   "no-unmanaged"?: boolean;
   "set-version"?: string | number;
   init?: string;
@@ -62,6 +60,7 @@ export type ErrorCode =
   | "invalid-app-requirements"
   | "invalid-configuration"
   | "invalid-manifest"
+  | "legacy-configuration"
   | "missing-react-native"
   | "not-configured"
   | "unsatisfied";
@@ -117,13 +116,4 @@ export type ManifestProfile = Pick<
   "dependencies" | "devDependencies" | "peerDependencies"
 > & {
   unmanagedCapabilities: Record<string, string | undefined>;
-};
-
-export type LegacyCheckConfig = {
-  kitType: KitType;
-  reactNativeVersion: string;
-  reactNativeDevVersion?: string;
-  capabilities: Capability[];
-  customProfiles?: string;
-  manifest: PackageManifest;
 };

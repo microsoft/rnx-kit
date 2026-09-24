@@ -3,17 +3,11 @@ import type { PackageManifest } from "@rnx-kit/types-node";
 import * as nodefs from "node:fs";
 import type prompts from "prompts";
 import semverCoerce from "semver/functions/coerce.js";
-import { transformConfig } from "../compatibility/config.ts";
 import { defaultConfig, loadConfig } from "../config.ts";
 import { isError } from "../errors.ts";
 import { isString, modifyManifest } from "../helpers.ts";
 import { preset as defaultPreset } from "../presets/microsoft/react-native.ts";
-import type {
-  AlignDepsOptions,
-  Command,
-  LegacyCheckConfig,
-  Options,
-} from "../types.ts";
+import type { AlignDepsOptions, Command, Options } from "../types.ts";
 import { checkPackageManifest } from "./check.ts";
 
 function parseVersions(versions: string): string[] {
@@ -110,16 +104,10 @@ function updateRequirements(
  * @returns Updated package manifest
  */
 function setVersion(
-  config: AlignDepsOptions | LegacyCheckConfig,
+  { kitType, manifest, alignDeps }: AlignDepsOptions,
   targetVersion: string,
   supportedVersions: string[]
 ): PackageManifest {
-  const { kitType, manifest } = config;
-  const alignDeps =
-    "alignDeps" in config
-      ? config.alignDeps
-      : transformConfig(config).alignDeps;
-
   if (kitType === "app") {
     updateRequirements(alignDeps, targetVersion);
   } else {
@@ -144,7 +132,7 @@ function setVersion(
     },
   };
 
-  return config.manifest;
+  return manifest;
 }
 
 /**

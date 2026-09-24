@@ -1,7 +1,6 @@
 import { readPackage } from "@rnx-kit/tools-node/package";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
-import { migrateConfig } from "../compatibility/config.ts";
 import { loadConfig } from "../config.ts";
 import { diff, stringify } from "../diff.ts";
 import { isError } from "../errors.ts";
@@ -49,13 +48,12 @@ export function checkPackageManifest(
     return inputConfig;
   }
 
-  const config = migrateConfig(inputConfig, manifestPath, options);
   const { devPreset, prodPreset, capabilities } = resolve(
-    config,
+    inputConfig,
     path.dirname(manifestPath),
     options
   );
-  const { kitType, manifest } = config;
+  const { kitType, manifest } = inputConfig;
 
   if (kitType === "app" && Object.keys(prodPreset).length !== 1) {
     return "invalid-app-requirements";
@@ -113,10 +111,7 @@ function makeCheckCommandInternal(
 
   return (manifestPath: string) => {
     const manifest = readPackage(manifestPath);
-    const inputConfig = loadConfig({ path: manifestPath, manifest }, options);
-    const config = isError(inputConfig)
-      ? inputConfig
-      : migrateConfig(inputConfig, manifestPath, options);
+    const config = loadConfig({ path: manifestPath, manifest }, options);
 
     // If the package is configured, run the normal check first.
     if (!isError(config)) {

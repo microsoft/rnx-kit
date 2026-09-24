@@ -60,12 +60,6 @@ export const cliOptions = {
       "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
     type: "boolean",
   },
-  "migrate-config": {
-    default: false,
-    description:
-      "Determines whether align-deps should try to update the config in 'package.json'.",
-    type: "boolean",
-  },
   "no-unmanaged": {
     default: false,
     description:
@@ -227,7 +221,6 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     "export-catalogs": exportCatalogs,
     init,
     loose,
-    "migrate-config": migrateConfig,
     "no-unmanaged": noUnmanaged,
     packages,
     presets,
@@ -245,7 +238,6 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     presets: presets?.toString()?.split(",") ?? defaultConfig.presets,
     checkOverrides,
     loose,
-    migrateConfig,
     noUnmanaged,
     verbose,
     write,

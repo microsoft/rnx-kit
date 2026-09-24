@@ -18,6 +18,7 @@ describe("printError()", () => {
       "invalid-app-requirements",
       "invalid-configuration",
       "invalid-manifest",
+      "legacy-configuration",
       "missing-react-native",
       "not-configured",
     ] as const;

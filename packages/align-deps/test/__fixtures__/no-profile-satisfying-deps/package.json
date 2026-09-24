@@ -11,11 +11,15 @@
     "node": "Do not install; for testing purposes only"
   },
   "rnx-kit": {
-    "reactNativeVersion": "^0.64",
     "kitType": "app",
-    "capabilities": [
-      "core-android",
-      "core-ios"
-    ]
+    "alignDeps": {
+      "requirements": [
+        "react-native@^0.64"
+      ],
+      "capabilities": [
+        "core-android",
+        "core-ios"
+      ]
+    }
   }
 }

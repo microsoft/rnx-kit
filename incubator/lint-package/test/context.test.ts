@@ -219,16 +219,16 @@ describe("PackageValidationContext.create: kitConfig", () => {
   it("returns the rnx-kit field when present and no extends", () => {
     const manifest = {
       ...baseManifest,
-      "rnx-kit": { reactNativeVersion: "0.74.0" },
+      "rnx-kit": { kitType: "library" },
     } as PackageManifest;
     const ctx = PackageValidationContext.create("/anywhere", { manifest });
-    deepEqual(ctx.kitConfig, { reactNativeVersion: "0.74.0" });
+    deepEqual(ctx.kitConfig, { kitType: "library" });
   });
 
   it("returns the same reference across reads", () => {
     const manifest = {
       ...baseManifest,
-      "rnx-kit": { reactNativeVersion: "0.74.0" },
+      "rnx-kit": { kitType: "library" },
     } as PackageManifest;
     const ctx = PackageValidationContext.create("/anywhere", { manifest });
     equal(ctx.kitConfig, ctx.kitConfig);
@@ -237,27 +237,27 @@ describe("PackageValidationContext.create: kitConfig", () => {
   it("dirty(['rnx-kit', ...]) invalidates the cache", () => {
     const manifest = {
       ...baseManifest,
-      "rnx-kit": { reactNativeVersion: "0.74.0" },
+      "rnx-kit": { kitType: "library" },
     } as PackageManifest;
     const ctx = PackageValidationContext.create("/anywhere", { manifest });
     const before = ctx.kitConfig;
     // swap in a fresh object so the next read can be distinguished by reference
-    manifest["rnx-kit"] = { reactNativeVersion: "0.75.0" };
-    ctx.dirty(["rnx-kit", "reactNativeVersion"]);
+    manifest["rnx-kit"] = { kitType: "app" };
+    ctx.dirty(["rnx-kit", "kitType"]);
     const after = ctx.kitConfig;
     notEqual(after, before);
-    deepEqual(after, { reactNativeVersion: "0.75.0" });
+    deepEqual(after, { kitType: "app" });
   });
 
   it("dirty() with a non-rnx-kit path does not invalidate the cache", () => {
     const manifest = {
       ...baseManifest,
-      "rnx-kit": { reactNativeVersion: "0.74.0" },
+      "rnx-kit": { kitType: "library" },
     } as PackageManifest;
     const ctx = PackageValidationContext.create("/anywhere", { manifest });
     const before = ctx.kitConfig;
     // swap in a fresh object — if the cache held, after === before
-    manifest["rnx-kit"] = { reactNativeVersion: "0.75.0" };
+    manifest["rnx-kit"] = { kitType: "app" };
     ctx.dirty(["dependencies", "react"]);
     equal(ctx.kitConfig, before);
   });

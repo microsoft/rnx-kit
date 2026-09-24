@@ -9,7 +9,6 @@ import { defineRequire, fixturePath, undefineRequire } from "../helpers.ts";
 const defaultOptions = {
   presets: defaultConfig.presets,
   loose: false,
-  migrateConfig: false,
   noUnmanaged: false,
   verbose: false,
   write: true,
@@ -44,16 +43,6 @@ describe("checkPackageManifest({ kitType: 'app' })", () => {
 
     equal(result, "invalid-app-requirements");
   });
-});
-
-describe("checkPackageManifest({ kitType: 'app' }) (backwards compatibility)", () => {
-  before(() => {
-    defineRequire("../../src/preset.ts", import.meta.url);
-  });
-
-  after(() => {
-    undefineRequire();
-  });
 
   it("adds required dependencies", (t) => {
     const manifestPath = path.join(fixturePath("awesome-repo"), "package.json");
@@ -61,8 +50,8 @@ describe("checkPackageManifest({ kitType: 'app' }) (backwards compatibility)", (
     let destination = "";
     let updatedManifest = "";
     mockfs.__setMockFileWriter((dest, content) => {
-      destination = dest;
-      updatedManifest = content;
+      destination = dest.toString();
+      updatedManifest = content.toString();
     });
 
     equal(checkPackageManifest(manifestPath), "success");

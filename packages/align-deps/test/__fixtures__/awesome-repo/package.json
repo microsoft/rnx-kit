@@ -11,12 +11,16 @@
     "node": "Do not install; for testing purposes only"
   },
   "rnx-kit": {
-    "reactNativeVersion": "^0.70",
     "kitType": "app",
-    "capabilities": [
-      "core-android",
-      "hermes",
-      "lazy-index"
-    ]
+    "alignDeps": {
+      "requirements": [
+        "react-native@^0.70"
+      ],
+      "capabilities": [
+        "core-android",
+        "hermes",
+        "lazy-index"
+      ]
+    }
   }
 }

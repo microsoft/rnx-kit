@@ -1,8 +1,5 @@
 export { getBundleConfig, getPlatformBundleConfig } from "./getBundleConfig.ts";
 
-export { getKitCapabilities } from "./getKitCapabilities.ts";
-export type { KitCapabilities } from "./getKitCapabilities.ts";
-
 export {
   getKitConfig,
   getKitConfigFromPackageInfo,

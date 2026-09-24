@@ -298,9 +298,9 @@ alignment result. It does not explain arbitrary installed dependencies that have
 no corresponding capability declaration.
 
 `--why` runs instead of alignment checks and never writes changes, even with
-`--write` or `--migrate-config`. It cannot be combined with `--init`,
-`--export-catalogs`, or `--set-version`. No matches produces no output and
-succeeds, while an unknown target skips dependency traversal entirely.
+`--write`. It cannot be combined with `--init`, `--export-catalogs`, or
+`--set-version`. No matches produces no output and succeeds, while an unknown
+target skips dependency traversal entirely.
 
 ### `--write`
 
@@ -757,9 +757,18 @@ the requirement. With this algorithm, only `0.70` is returned.
 Changes from `dep-check` to `align-deps` mostly surrounds the configuration
 schema, and renaming of a couple of flags:
 
-- In most cases, your old configuration will still work as before. `align-deps`
-  will tell you how to convert the old config, but you can also specify
-  `--migrate-config` to let `align-deps` do it for you.
+- The old `dep-check` config schema is no longer supported. Configuration must
+  be declared under `rnx-kit.alignDeps` — see [Configure](#configure). Packages
+  that still use the old schema will fail with a `legacy-configuration` error.
+
+  If you still have packages using the old schema, you can migrate them
+  automatically with the last version that supported it:
+
+  ```sh
+  npx @rnx-kit/align-deps@^4 --migrate-config --write
+  ```
+
+  Afterwards, you can upgrade to the latest version.
 
 - The following flags were renamed:
 

@@ -36,7 +36,7 @@ describe("makeWhyCommand()", () => {
 
   after(() => undefineRequire());
 
-  it("reports legacy transitive declarations", (t) => {
+  it("reports transitive declarations from dependencies", (t) => {
     const { output } = capture(t);
     equal(
       why("@react-native-community/netinfo", "awesome-repo/package.json"),
@@ -170,7 +170,7 @@ describe("makeWhyCommand()", () => {
     equal(warn.mock.callCount(), 1);
   });
 
-  it("never writes or migrates legacy configuration", (t) => {
+  it("never writes configuration", (t) => {
     capture(t);
 
     const manifestPath = fixturePath("awesome-repo/package.json");
@@ -179,7 +179,6 @@ describe("makeWhyCommand()", () => {
     equal(
       why("@react-native-community/netinfo", "awesome-repo/package.json", {
         write: true,
-        migrateConfig: true,
       }),
       "success"
     );
@@ -301,7 +300,6 @@ describe("cli --why", () => {
       const args: Args = {
         why: "@react-native-community/netinfo",
         write: true,
-        "migrate-config": true,
       };
 
       if (explicit) {

@@ -30,6 +30,15 @@ export function printError(manifestPath: string, code: ErrorCode): void {
       );
       break;
 
+    case "legacy-configuration":
+      error(
+        `${manifestPath}: align-deps was configured using the old 'dep-check' ` +
+          "schema, which is no longer supported. To migrate it, run the last " +
+          "version that supported it:\n\n" +
+          "\tnpx @rnx-kit/align-deps@^4 --migrate-config --write\n"
+      );
+      break;
+
     case "missing-react-native":
       error(
         `Failed to infer requirements for '${manifestPath}'. This command ` +

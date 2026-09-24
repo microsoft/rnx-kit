@@ -27,7 +27,6 @@ const defaultOptions: Options = {
   presets: defaultConfig.presets,
   checkOverrides: true,
   loose: false,
-  migrateConfig: false,
   noUnmanaged: false,
   verbose: false,
   write: false,
@@ -521,30 +520,6 @@ describe("makeOverridesChecker()", () => {
     check("package.json", reporter);
 
     equal(reporter.warnings.length, 0);
-  });
-
-  it("falls back to a legacy configuration", (t) => {
-    t.mock.method(console, "warn", () => undefined);
-
-    const check = makeChecker({ presets, checkOverrides: true });
-
-    mockfs.__setMockContent({
-      name: "workspace-root",
-      version: "1.0.0",
-      private: true,
-      resolutions: { "react-native": "0.71.0" },
-      "rnx-kit": {
-        reactNativeVersion: "^0.70.0",
-        capabilities: ["core"],
-      },
-    });
-
-    const reporter = makeReporter();
-    check("package.json", reporter);
-
-    equal(reporter.warnings.length, 1);
-    ok(reporter.warnings[0].includes(`resolutions["react-native"]`));
-    ok(reporter.warnings[0].endsWith("^0.70.0"));
   });
 
   it("scopes managed versions to the profiles satisfying the requirements", () => {
