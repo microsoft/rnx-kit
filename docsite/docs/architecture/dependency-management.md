@@ -2,8 +2,12 @@
 
 :::note
 
-`dep-check` was recently renamed to `align-deps` to avoid name clashes and
-general confusion. Unless noted otherwise, this document is still valid.
+`dep-check` was renamed to `align-deps` to avoid name clashes and general
+confusion. This document describes the original design, and uses the old
+`dep-check` config schema in its examples. That schema (`reactNativeVersion`,
+`reactNativeDevVersion`, `capabilities`, and `customProfiles`) is **no longer
+supported** — see [align-deps](../tools/align-deps) for the current schema.
+Unless noted otherwise, the concepts described here are still valid.
 
 You can read more about the changes in this RFC:
 [`dep-check` v2](https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md)
@@ -489,11 +493,11 @@ This format is explicitly chosen to be compatible with `--vigilant`.
 
 :::note
 
-In `align-deps`, we've deprecated `customProfiles` in favour of `presets`. A
-preset is just a collection of profiles like in the example above. This new
-property allows you to specify multiple presets and/or replace the built-in
-`react-native` preset. The command line flag, `--custom-profiles`, was replaced
-with `--presets`.
+In `align-deps`, `customProfiles` was removed in favour of `presets`. A preset
+is just a collection of profiles like in the example above. This property allows
+you to specify multiple presets and/or replace the built-in `react-native`
+preset. The command line flag, `--custom-profiles`, was replaced with
+`--presets`.
 
 You can read more about the changes in this RFC:
 [`dep-check` v2](https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md)

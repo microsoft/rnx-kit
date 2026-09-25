@@ -109,7 +109,7 @@ describe("gatherRequirements()", () => {
 
     const [fixture, manifest] = useFixture("awesome-repo");
     const initialPreset = { "0.69": profile_0_69, "0.70": profile_0_70 };
-    const initialCapabilities = manifest["rnx-kit"]?.capabilities;
+    const initialCapabilities = manifest["rnx-kit"]?.alignDeps?.capabilities;
     const { preset, capabilities } = gatherRequirements(
       fixture,
       manifest,
@@ -154,7 +154,7 @@ describe("gatherRequirements()", () => {
     };
 
     const [fixture, manifest] = useFixture("awesome-repo-extended");
-    const initialCapabilities = manifest["rnx-kit"]?.capabilities;
+    const initialCapabilities = manifest["rnx-kit"]?.alignDeps?.capabilities;
 
     const { preset, capabilities } = gatherRequirements(
       fixture,

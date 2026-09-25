@@ -40,7 +40,6 @@ describe("makeSetVersionCommand()", () => {
   const options = {
     presets: defaultConfig.presets,
     loose: false,
-    migrateConfig: false,
     noUnmanaged: false,
     verbose: false,
     write: false,
@@ -163,59 +162,6 @@ describe("makeSetVersionCommand()", () => {
       },
       "rnx-kit": {
         kitType: "library",
-        alignDeps: {
-          requirements: {
-            development: ["react-native@0.64"],
-            production: ["react-native@0.63 || 0.64"],
-          },
-          capabilities: ["core"],
-        },
-      },
-    });
-  });
-
-  it("updates `react-native` requirements (backwards compatibility)", async () => {
-    const result = setupMocks({
-      name: "@rnx-kit/align-deps",
-      version: "1.0.0-test",
-      peerDependencies: {
-        react: "16.13.1",
-        "react-native": "^0.63.2",
-      },
-      devDependencies: {
-        react: "16.13.1",
-        "react-native": "^0.63.2",
-      },
-      "rnx-kit": {
-        kitType: "library",
-        reactNativeVersion: "0.63",
-        reactNativeDevVersion: "0.63",
-        capabilities: ["core"],
-      },
-    });
-
-    const command = await makeSetVersionCommand("0.64,0.63", options);
-    if (typeof command !== "function") {
-      fail();
-    }
-
-    equal(command("package.json"), "success");
-    deepEqual(result.manifest, {
-      name: "@rnx-kit/align-deps",
-      version: "1.0.0-test",
-      peerDependencies: {
-        react: "16.13.1 || 17.0.1",
-        "react-native": "^0.63.2 || ^0.64.2",
-      },
-      devDependencies: {
-        react: "17.0.1",
-        "react-native": "^0.64.2",
-      },
-      "rnx-kit": {
-        kitType: "library",
-        reactNativeVersion: "0.63",
-        reactNativeDevVersion: "0.63",
-        capabilities: ["core"],
         alignDeps: {
           requirements: {
             development: ["react-native@0.64"],

@@ -19,15 +19,11 @@ is of type `KitConfig`.
 Configuration information for an rnx-kit package. This is retrieved from
 'rnx-kit' in package.json.
 
-| Name                  | Type                                          | Description                                                                                                                                                                                                                                         |
-| --------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| kitType               | `"app" \| "library" \| undefined`             | Library or App package. Used by the dependency manager when projecting capabilities into `dependencies`, `devDependencies`, and `peerDependencies`. Library package dependencies are private, in dev and peer. App package dependencies are public. |
-| reactNativeVersion    | `string \| undefined`                         | React Native version (or range) which this package supports.                                                                                                                                                                                        |
-| reactNativeDevVersion | `string \| undefined`                         | React Native version to use during development of this package. If not specified, the minimum `reactNativeVersion` is used.                                                                                                                         |
-| bundle                | `BundleConfig \| BundleConfig[] \| undefined` | Specifies how the package is bundled.                                                                                                                                                                                                               |
-| server                | `ServerConfig \| undefined`                   | Specifies how the package's bundle server is configured.                                                                                                                                                                                            |
-| capabilities          | `Capability[] \| undefined`                   | List of [capabilities](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#capabilities) that this package needs. A capability is a well-known name (string).                                                                         |
-| customProfiles        | `string \| undefined`                         | Path to a file containing [custom profiles](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#custom-profiles).                                                                                                                     |
+| Name    | Type                                          | Description                                                                                                                                                                                                                                         |
+| ------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| kitType | `"app" \| "library" \| undefined`             | Library or App package. Used by the dependency manager when projecting capabilities into `dependencies`, `devDependencies`, and `peerDependencies`. Library package dependencies are private, in dev and peer. App package dependencies are public. |
+| bundle  | `BundleConfig \| BundleConfig[] \| undefined` | Specifies how the package is bundled.                                                                                                                                                                                                               |
+| server  | `ServerConfig \| undefined`                   | Specifies how the package's bundle server is configured.                                                                                                                                                                                            |
 
 ### `BundleConfig` inherits `BundleParameters`
 
@@ -138,22 +134,3 @@ Resolves the platform selector for a bundle configuration.
 | bundle    | `BundleConfig`     | Bundle config to resolve (includes the optional platform selectors) |
 | platform  | `AllPlatforms`     | Target platform                                                     |
 | [Return]  | `BundleDefinition` | Bundle config containing platform-specific overrides                |
-
-### `getKitCapabilities(config)`
-
-Get capability information from the package configuration.
-
-| Parameter | Type              | Description             |
-| --------- | ----------------- | ----------------------- |
-| config    | `KitConfig`       | Package configuration.  |
-| [Return]  | `KitCapabilities` | Capability information. |
-
-#### `KitCapabilities`
-
-| Name                  | Type                              | Default                             | Description                                                                                                                                                                                                                                         |
-| --------------------- | --------------------------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| kitType               | `"app" \| "library" \| undefined` | `"library"`                         | Library or App package. Used by the dependency manager when projecting capabilities into `dependencies`, `devDependencies`, and `peerDependencies`. Library package dependencies are private, in dev and peer. App package dependencies are public. |
-| reactNativeVersion    | `string`                          |                                     | React Native version (or range) which this package supports.                                                                                                                                                                                        |
-| reactNativeDevVersion | `string `                         | Min version in `reactNativeVersion` | React Native version to use during development of this package. If not specified, the minimum `reactNativeVersion` is used.                                                                                                                         |
-| capabilities          | `Capability[]`                    | `[]`                                | List of [capabilities](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#capabilities) that this package needs. A capability is a well-known name (string).                                                                         |
-| customProfiles        | `string \| undefined`             |                                     | Path to a file containing [custom profiles](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#custom-profiles).                                                                                                                     |

@@ -2,7 +2,6 @@ import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { Capability } from "@rnx-kit/types-kit-config";
 import * as path from "node:path";
-import { transformConfig } from "../compatibility/config.ts";
 import { loadConfig, sanitizeCapabilities } from "../config.ts";
 import { visitDependencies } from "../dependencies.ts";
 import { isError } from "../errors.ts";
@@ -72,9 +71,7 @@ export function makeWhyCommand(name: string, options: Options): Command {
       return inputConfig;
     }
 
-    // Transform legacy config in memory only, even with --migrate-config.
-    const { alignDeps, manifest } =
-      "alignDeps" in inputConfig ? inputConfig : transformConfig(inputConfig);
+    const { alignDeps, manifest } = inputConfig;
     const { presets, requirements, capabilities } = alignDeps;
 
     const projectRoot = path.resolve(path.dirname(manifestPath));
@@ -107,7 +104,7 @@ export function makeWhyCommand(name: string, options: Options): Command {
     collect(manifest.name, capabilities);
     visitDependencies(manifest, projectRoot, (module, modulePath, manifest) => {
       const config = getKitConfigFromPackageManifest(manifest, modulePath);
-      collect(module, config?.alignDeps?.capabilities ?? config?.capabilities);
+      collect(module, config?.alignDeps?.capabilities);
     });
 
     const size = reasons.size;

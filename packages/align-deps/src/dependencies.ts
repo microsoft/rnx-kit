@@ -26,10 +26,6 @@ function getRequirements(kitConfig: KitConfig): string[] | null {
     return Array.isArray(requirements) ? requirements : requirements.production;
   }
 
-  if (kitConfig.reactNativeVersion) {
-    return [`react-native@${kitConfig.reactNativeVersion}`];
-  }
-
   return null;
 }
 
@@ -131,8 +127,7 @@ export function gatherRequirements(
       return;
     }
 
-    const capabilities =
-      kitConfig.alignDeps?.capabilities || kitConfig.capabilities;
+    const capabilities = kitConfig.alignDeps?.capabilities;
     if (Array.isArray(capabilities)) {
       for (const capability of capabilities) {
         allCapabilities.add(capability);

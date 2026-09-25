@@ -1,7 +1,4 @@
-import {
-  getKitCapabilities,
-  getKitConfigFromPackageManifest,
-} from "@rnx-kit/config";
+import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import type { Capability, KitConfig } from "@rnx-kit/types-kit-config";
@@ -10,14 +7,24 @@ import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { findBadPackages } from "./bannedPackages.ts";
 import { ILLEGAL_KEYS, isEmptyArray } from "./helpers.ts";
-import type {
-  AlignDepsOptions,
-  ErrorCode,
-  LegacyCheckConfig,
-  Options,
-} from "./types.ts";
+import type { AlignDepsOptions, ErrorCode, Options } from "./types.ts";
 
-export type ConfigResult = AlignDepsOptions | LegacyCheckConfig | ErrorCode;
+export type ConfigResult = AlignDepsOptions | ErrorCode;
+
+/**
+ * Keys from the old `dep-check` config schema. They are no longer supported,
+ * but we still detect them so we can tell users how to migrate.
+ */
+const LEGACY_KEYS = [
+  "capabilities",
+  "customProfiles",
+  "reactNativeDevVersion",
+  "reactNativeVersion",
+] as const;
+
+export function findLegacyKeys(config: KitConfig): string[] {
+  return LEGACY_KEYS.filter((key) => Object.hasOwn(config, key));
+}
 
 export const defaultConfig: AlignDepsOptions["alignDeps"] = {
   presets: ["microsoft/react-native"],
@@ -114,52 +121,42 @@ export function loadConfig(
   }
 
   const { kitType = "library", alignDeps, ...config } = kitConfig;
-  if (alignDeps) {
-    const errors = [];
-    if (!containsValidPresets(alignDeps)) {
-      errors.push(`${manifestPath}: 'alignDeps.presets' cannot be empty`);
-    }
-
-    const emptyReqs = findEmptyRequirements(alignDeps);
-    if (emptyReqs) {
-      errors.push(`${manifestPath}: 'alignDeps.${emptyReqs}' cannot be empty`);
-    }
-
-    if (errors.length > 0) {
-      for (const e of errors) {
-        error(e);
-      }
-      return "invalid-configuration";
-    }
-    return {
-      kitType,
-      alignDeps: {
-        ...defaultConfig,
-        ...alignDeps,
-        capabilities: sanitizeCapabilities(alignDeps.capabilities),
-      },
-      ...config,
-      manifest,
-    };
+  const legacyKeys = findLegacyKeys(kitConfig);
+  if (!alignDeps) {
+    return legacyKeys.length > 0 ? "legacy-configuration" : "not-configured";
   }
 
-  try {
-    const {
-      capabilities,
-      customProfiles,
-      reactNativeDevVersion,
-      reactNativeVersion,
-    } = getKitCapabilities(config);
+  if (legacyKeys.length > 0) {
+    warn(
+      `${manifestPath}: The following keys are no longer supported and can be removed: ${legacyKeys.join(", ")}`
+    );
+  }
 
-    return {
-      kitType,
-      reactNativeVersion,
-      ...(config.reactNativeDevVersion ? { reactNativeDevVersion } : undefined),
-      capabilities: sanitizeCapabilities(capabilities),
-      customProfiles,
-      manifest,
-    };
-  } catch (_) {
+  const errors = [];
+  if (!containsValidPresets(alignDeps)) {
+    errors.push(`${manifestPath}: 'alignDeps.presets' cannot be empty`);
+  }
+
+  const emptyReqs = findEmptyRequirements(alignDeps);
+  if (emptyReqs) {
+    errors.push(`${manifestPath}: 'alignDeps.${emptyReqs}' cannot be empty`);
+  }
+
+  if (errors.length > 0) {
+    for (const e of errors) {
+      error(e);
+    }
     return "invalid-configuration";
   }
+
+  return {
+    kitType,
+    alignDeps: {
+      ...defaultConfig,
+      ...alignDeps,
+      capabilities: sanitizeCapabilities(alignDeps.capabilities),
+    },
+    ...config,
+    manifest,
+  };
 }

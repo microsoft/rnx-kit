@@ -23,7 +23,6 @@ export const alignDepsCommand = {
       "check-overrides": Boolean(args.checkOverrides),
       "diff-mode": args.diffMode?.toString(),
       loose: Boolean(args.loose),
-      "migrate-config": Boolean(args.migrateConfig),
       "no-unmanaged": Boolean(args.noUnmanaged),
       verbose: Boolean(args.verbose),
       write: Boolean(args.write),

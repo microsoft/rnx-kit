@@ -4,7 +4,6 @@ import * as nodefs from "node:fs";
 import * as path from "node:path";
 import semverValidRange from "semver/ranges/valid.js";
 import { isMetaPackage } from "../capabilities.ts";
-import { transformConfig } from "../compatibility/config.ts";
 import { defaultConfig, loadConfig } from "../config.ts";
 import { isSubset } from "../diff.ts";
 import { isError } from "../errors.ts";
@@ -254,7 +253,7 @@ function resolveScope(
 
   const {
     alignDeps: { presets, requirements },
-  } = "alignDeps" in inputConfig ? inputConfig : transformConfig(inputConfig);
+  } = inputConfig;
   return {
     presets: presets || defaultConfig.presets,
     requirements: Array.isArray(requirements)
