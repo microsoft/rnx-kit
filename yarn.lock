@@ -4951,7 +4951,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/align-deps@npm:^4.0.6, @rnx-kit/align-deps@workspace:packages/align-deps":
+"@rnx-kit/align-deps@npm:^5.0.0, @rnx-kit/align-deps@workspace:packages/align-deps":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
@@ -4966,8 +4966,8 @@ __metadata:
     "@rnx-kit/tools-shell": "npm:*"
     "@rnx-kit/tools-workspaces": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@rnx-kit/types-kit-config": "npm:^1.0.1"
-    "@rnx-kit/types-node": "npm:^1.0.0"
+    "@rnx-kit/types-kit-config": "npm:^2.0.0"
+    "@rnx-kit/types-node": "npm:^1.0.1"
     "@types/prompts": "npm:^2.0.0"
     "@types/semver": "npm:^7.0.0"
     "@types/yargs": "npm:^17.0.0"
@@ -5034,7 +5034,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
   peerDependencies:
-    "@rnx-kit/build": ">=0.9.1"
+    "@rnx-kit/build": ">=0.9.2"
   languageName: unknown
   linkType: soft
 
@@ -5046,7 +5046,7 @@ __metadata:
     "@octokit/core": "npm:^7.0.0"
     "@octokit/plugin-rest-endpoint-methods": "npm:^17.0.0"
     "@octokit/request-error": "npm:^7.0.0"
-    "@rnx-kit/config": "npm:^0.9.0"
+    "@rnx-kit/config": "npm:^1.0.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-android": "npm:^0.2.0"
     "@rnx-kit/tools-apple": "npm:^0.2.0"
@@ -5087,8 +5087,8 @@ __metadata:
     "@babel/preset-env": "npm:^7.20.0"
     "@react-native-community/cli-types": "npm:^20.1.0"
     "@react-native-windows/cli": "npm:^0.82.0"
-    "@rnx-kit/align-deps": "npm:^4.0.6"
-    "@rnx-kit/config": "npm:^0.9.1"
+    "@rnx-kit/align-deps": "npm:^5.0.0"
+    "@rnx-kit/config": "npm:^1.0.0"
     "@rnx-kit/console": "npm:^3.0.0"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "npm:^3.0.1"
@@ -5107,8 +5107,8 @@ __metadata:
     "@rnx-kit/tools-react-native": "npm:^2.3.9"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^1.0.1"
-    "@rnx-kit/types-kit-config": "npm:^1.0.1"
-    "@rnx-kit/types-node": "npm:^1.0.0"
+    "@rnx-kit/types-kit-config": "npm:^2.0.0"
+    "@rnx-kit/types-node": "npm:^1.0.1"
     "@types/connect": "npm:^3.4.36"
     "@types/node": "npm:^24.0.0"
     "@types/qrcode": "npm:^1.4.2"
@@ -5148,7 +5148,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/config@npm:*, @rnx-kit/config@npm:^0.9.0, @rnx-kit/config@npm:^0.9.1, @rnx-kit/config@workspace:packages/config":
+"@rnx-kit/config@npm:*, @rnx-kit/config@npm:^1.0.0, @rnx-kit/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/config@workspace:packages/config"
   dependencies:
@@ -5157,8 +5157,8 @@ __metadata:
     "@rnx-kit/tools-packages": "npm:^0.1.3"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^1.0.0"
-    "@rnx-kit/types-kit-config": "npm:^1.0.0"
-    "@rnx-kit/types-node": "npm:^1.0.0"
+    "@rnx-kit/types-kit-config": "npm:^2.0.0"
+    "@rnx-kit/types-node": "npm:^1.0.1"
     "@types/lodash.merge": "npm:^4.6.9"
     "@types/node": "npm:^24.0.0"
     lodash.merge: "npm:^4.6.2"
@@ -5282,11 +5282,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/lint-lockfile@workspace:incubator/lint-lockfile"
   dependencies:
-    "@rnx-kit/config": "npm:^0.9.0"
+    "@rnx-kit/config": "npm:^1.0.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-workspaces": "npm:^0.2.3"
     "@rnx-kit/tsconfig": "npm:*"
-    "@rnx-kit/types-kit-config": "npm:^1.0.0"
+    "@rnx-kit/types-kit-config": "npm:^2.0.0"
     js-yaml: "npm:^5.2.3"
   bin:
     lint-lockfile: lib/cli.js
@@ -5297,13 +5297,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/lint-package@workspace:incubator/lint-package"
   dependencies:
-    "@rnx-kit/config": "npm:^0.9.0"
+    "@rnx-kit/config": "npm:^1.0.0"
     "@rnx-kit/lint-json": "npm:^0.2.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-filesystem": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@rnx-kit/types-kit-config": "npm:^1.0.0"
-    "@rnx-kit/types-node": "npm:^1.0.0"
+    "@rnx-kit/types-kit-config": "npm:^2.0.0"
+    "@rnx-kit/types-node": "npm:^1.0.1"
     "@types/node": "npm:^24.0.0"
     "@yarnpkg/types": "npm:^4.0.0"
   peerDependencies:
@@ -5987,7 +5987,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-typescript@workspace:incubator/tools-typescript"
   dependencies:
-    "@rnx-kit/config": "npm:^0.9.0"
+    "@rnx-kit/config": "npm:^1.0.0"
     "@rnx-kit/console": "npm:^3.0.0"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
@@ -6067,7 +6067,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/types-kit-config@npm:*, @rnx-kit/types-kit-config@npm:^1.0.0, @rnx-kit/types-kit-config@npm:^1.0.1, @rnx-kit/types-kit-config@workspace:packages/types-kit-config":
+"@rnx-kit/types-kit-config@npm:*, @rnx-kit/types-kit-config@npm:^2.0.0, @rnx-kit/types-kit-config@workspace:packages/types-kit-config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-kit-config@workspace:packages/types-kit-config"
   dependencies:
@@ -6089,14 +6089,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/types-node@npm:*, @rnx-kit/types-node@npm:^1.0.0, @rnx-kit/types-node@workspace:packages/types-node":
+"@rnx-kit/types-node@npm:*, @rnx-kit/types-node@npm:^1.0.0, @rnx-kit/types-node@npm:^1.0.1, @rnx-kit/types-node@workspace:packages/types-node":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-node@workspace:packages/types-node"
   dependencies:
     "@rnx-kit/oxlint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@rnx-kit/types-kit-config": "npm:^1.0.0"
+    "@rnx-kit/types-kit-config": "npm:^2.0.0"
   languageName: unknown
   linkType: soft
 

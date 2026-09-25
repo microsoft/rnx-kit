@@ -1,5 +1,12 @@
 # @rnx-kit/build
 
+## 0.9.2
+
+### Patch Changes
+
+- Updated dependencies [f35ba6b]
+  - @rnx-kit/config@1.0.0
+
 ## 0.9.1
 
 ### Patch Changes

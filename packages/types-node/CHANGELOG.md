@@ -1,5 +1,12 @@
 # @rnx-kit/types-node
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [f35ba6b]
+  - @rnx-kit/types-kit-config@2.0.0
+
 ## 1.0.0
 
 ### Major Changes

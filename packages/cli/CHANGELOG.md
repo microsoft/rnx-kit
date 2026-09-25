@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/cli
 
+## 2.0.5
+
+### Patch Changes
+
+- Updated dependencies [f35ba6b]
+  - @rnx-kit/align-deps@5.0.0
+  - @rnx-kit/config@1.0.0
+  - @rnx-kit/types-kit-config@2.0.0
+  - @rnx-kit/types-node@1.0.1
+
 ## 2.0.4
 
 ### Patch Changes
