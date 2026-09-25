@@ -28,13 +28,61 @@ const { readPackage } = require("@rnx-kit/tools-node/package");
  */
 
 /**
+ * Returns the source entry a package explicitly declares under one of the
+ * given condition names in its root export, e.g.:
+ *
+ *     "exports": {
+ *       ".": {
+ *         "source": "./src/index.ts",
+ *         "types": "./lib/index.d.ts",
+ *         "default": "./lib/index.js"
+ *       }
+ *     }
+ *
+ * The declaration must be a plain string on the `"."` export; nested
+ * conditions and subpaths are not considered.
+ * @param {unknown} exports
+ * @param {string[]} sourceConditions
+ * @returns {string | undefined}
+ */
+function findSourceEntry(exports, sourceConditions) {
+  if (
+    typeof exports !== "object" ||
+    exports == null ||
+    Array.isArray(exports)
+  ) {
+    return undefined;
+  }
+
+  const root = /** @type {Record<string, unknown>} */ (exports)["."];
+  if (typeof root !== "object" || root == null) {
+    return undefined;
+  }
+
+  for (const condition of sourceConditions) {
+    const entry = /** @type {Record<string, unknown>} */ (root)[condition];
+    if (typeof entry === "string") {
+      return entry;
+    }
+  }
+
+  return undefined;
+}
+
+/**
  * Finds the main source file in the specified package's manifest.
  * @param {string} sourcePath
  * @param {string | undefined} requester
  * @param {CustomRemapper | undefined} customRemap
+ * @param {string[]} sourceConditions
  * @returns {string | undefined}
  */
-function findMainSourceFile(sourcePath, requester, customRemap) {
+function findMainSourceFile(
+  sourcePath,
+  requester,
+  customRemap,
+  sourceConditions
+) {
   const path = require("path");
 
   const resolveOptions = {
@@ -46,17 +94,23 @@ function findMainSourceFile(sourcePath, requester, customRemap) {
   );
 
   const { main, exports } = readPackage(manifestPath);
-  if (exports) {
-    // Skip packages that declare entry points
-    return;
-  }
-
   if (customRemap) {
     return customRemap(
       sourcePath,
       typeof main === "string" ? main : undefined,
       requester
     );
+  }
+
+  if (exports) {
+    // `exports` is the package's public contract, so we never guess our way
+    // around it. Remap only when the package explicitly declares a source
+    // entry under a condition we were asked to honor; otherwise leave the
+    // package alone.
+    const sourceEntry = findSourceEntry(exports, sourceConditions);
+    return sourceEntry
+      ? `${sourcePath}/${sourceEntry.replace(/^\.\//, "")}`
+      : undefined;
   }
 
   if (typeof main !== "string") {
@@ -104,8 +158,16 @@ function updateDeclarationWith(path, source) {
  * @param {NodePath<T>} path
  * @param {(path: NodePath<T>, source: string) => void} updater
  * @param {CustomRemapper | undefined} customRemap
+ * @param {string[]} sourceConditions
  */
-function update(sourcePath, requester, path, updater, customRemap) {
+function update(
+  sourcePath,
+  requester,
+  path,
+  updater,
+  customRemap,
+  sourceConditions
+) {
   const m = parseModuleRef(sourcePath);
   if (!("name" in m)) {
     // This is not a module reference. Ignore unless we have a custom remapper.
@@ -122,7 +184,8 @@ function update(sourcePath, requester, path, updater, customRemap) {
       const mainSourceFile = findMainSourceFile(
         sourcePath,
         requester,
-        customRemap
+        customRemap,
+        sourceConditions
       );
       if (mainSourceFile) {
         updater(path, mainSourceFile);
@@ -149,9 +212,10 @@ module.exports = declare((api, options) => {
    * @type {{
    *   test?: (source: string) => boolean;
    *   remap?: CustomRemapper;
+   *   sourceExportCondition?: string | string[];
    * }}
    */
-  const { test, remap } = options;
+  const { test, remap, sourceExportCondition = [] } = options;
   if (typeof test !== "function") {
     throw new Error(
       "Expected option `test` to be a function `(source: string) => boolean`"
@@ -160,6 +224,14 @@ module.exports = declare((api, options) => {
   if (remap && typeof remap !== "function") {
     throw new Error(
       "Expected option `remap` to be undefined or a function `(moduleName: string, path: string) => string`"
+    );
+  }
+  const sourceConditions = Array.isArray(sourceExportCondition)
+    ? sourceExportCondition
+    : [sourceExportCondition];
+  if (sourceConditions.some((condition) => typeof condition !== "string")) {
+    throw new Error(
+      "Expected option `sourceExportCondition` to be a string or an array of strings"
     );
   }
 
@@ -181,7 +253,14 @@ module.exports = declare((api, options) => {
           return;
         }
 
-        update(sourcePath, state.filename, path, updateCallWith, remap);
+        update(
+          sourcePath,
+          state.filename,
+          path,
+          updateCallWith,
+          remap,
+          sourceConditions
+        );
       },
 
       /** @type {(path: ImportExportDeclarationNodePath, state: { filename?: string; }) => void} */
@@ -196,7 +275,14 @@ module.exports = declare((api, options) => {
           return;
         }
 
-        update(sourcePath, state.filename, path, updateDeclarationWith, remap);
+        update(
+          sourcePath,
+          state.filename,
+          path,
+          updateDeclarationWith,
+          remap,
+          sourceConditions
+        );
       },
     },
   };
