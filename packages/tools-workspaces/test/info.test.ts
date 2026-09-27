@@ -35,7 +35,9 @@ describe("isWorkspace", () => {
   it("agrees with `findPackagesSync()`", () => {
     const root = setFixture("pnpm-with-settings");
     const info = getWorkspacesInfoSync();
-    const packages = info.findPackagesSync();
+    // `findPackagesSync()` goes through fast-glob, which returns forward
+    // slashes even on Windows
+    const packages = info.findPackagesSync().map((p) => path.normalize(p));
 
     equal(packages.length, 4);
     for (const name of ["conan", "dutch", "john", "quaid", "t-800"]) {
