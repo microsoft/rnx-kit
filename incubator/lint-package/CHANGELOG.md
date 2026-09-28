@@ -1,5 +1,14 @@
 # @rnx-kit/lint-package
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [f35ba6b]
+  - @rnx-kit/config@1.0.0
+  - @rnx-kit/types-kit-config@2.0.0
+  - @rnx-kit/types-node@1.0.1
+
 ## 0.2.1
 
 ### Patch Changes
