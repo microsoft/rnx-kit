@@ -42,6 +42,13 @@ function applyExpoWorkarounds(config, defaultConfig) {
     delete config.resolver.resolveRequest;
   }
 
+  // Expo currently does not detect platforms it does not explicitly support. We
+  // need to remove it so that our list is used instead.
+  if (config.resolver?.platforms != null) {
+    // @ts-expect-error The operand of a 'delete' operator cannot be a read-only property
+    delete config.resolver.platforms;
+  }
+
   // Expo _always_ sets `getModulesRunBeforeMainModule`:
   // https://github.com/expo/expo/blob/sdk-51/packages/%40expo/metro-config/src/ExpoMetroConfig.ts#L207
   const getModulesRunBeforeMainModule =
