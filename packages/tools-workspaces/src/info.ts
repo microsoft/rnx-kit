@@ -55,7 +55,9 @@ export class WorkspacesInfoImpl implements WorkspacesInfo {
     if (this.packageFilter) {
       // do glob matching to see if this fits the pattern
       const relative = path.relative(this.root, packageRoot);
-      return micromatch.isMatch(relative, this.packageFilter);
+      // `isMatch()` ORs the patterns together, so a negated pattern such as
+      // `!packages/legacy` never excludes anything. `match()` subtracts it.
+      return micromatch.match([relative], this.packageFilter).length > 0;
     }
     // load or retrieve the cached packages and compare against that
     const packages = this.findPackagesSync();
