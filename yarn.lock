@@ -1601,19 +1601,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/apply-release-plan@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "@changesets/apply-release-plan@npm:8.0.0"
+"@changesets/apply-release-plan@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "@changesets/apply-release-plan@npm:8.1.1"
   dependencies:
-    "@changesets/config": "npm:^4.0.0"
-    "@changesets/format": "npm:^0.1.1"
-    "@changesets/git": "npm:^4.0.0"
+    "@changesets/config": "npm:^4.0.1"
+    "@changesets/format": "npm:^0.1.2"
+    "@changesets/git": "npm:^4.0.1"
     "@changesets/should-skip-package": "npm:^1.0.0"
     "@changesets/types": "npm:^7.0.0"
     import-meta-resolve: "npm:^4.2.0"
     jsonc-parser: "npm:^3.3.1"
     semver: "npm:^7.8.1"
-  checksum: 10c0/c2b35867e34a6bf4ac1f0b2d329d7fe9b0c25f580a9bf3fb106ad025566b4f4a4cf5f444c5d1287e8d482827a286163afd77992a21acb85d560826a26e6a03ed
+  checksum: 10c0/2a1cfb9e4e3feb2c76bcec646e116ebebc81271fed21a3e77d5f170963f88347a34e5d1474f8b87258448182cfa651c047282c8b1a741613a7f7d3fefc2eb9a2
   languageName: node
   linkType: hard
 
@@ -1640,18 +1640,18 @@ __metadata:
   linkType: hard
 
 "@changesets/cli@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "@changesets/cli@npm:3.0.1"
+  version: 3.0.3
+  resolution: "@changesets/cli@npm:3.0.3"
   dependencies:
-    "@changesets/apply-release-plan": "npm:^8.0.0"
+    "@changesets/apply-release-plan": "npm:^8.1.1"
     "@changesets/assemble-release-plan": "npm:^7.0.0"
     "@changesets/changelog-git": "npm:^1.0.0"
-    "@changesets/config": "npm:^4.0.0"
+    "@changesets/config": "npm:^4.0.1"
     "@changesets/errors": "npm:^1.0.0"
     "@changesets/get-dependents-graph": "npm:^3.0.0"
-    "@changesets/git": "npm:^4.0.0"
+    "@changesets/git": "npm:^4.0.1"
     "@changesets/pre": "npm:^3.0.0"
-    "@changesets/read": "npm:^1.0.0"
+    "@changesets/read": "npm:^1.0.1"
     "@changesets/should-skip-package": "npm:^1.0.0"
     "@changesets/types": "npm:^7.0.0"
     "@changesets/write": "npm:^1.0.1"
@@ -1663,23 +1663,23 @@ __metadata:
     launch-editor: "npm:^2.14.1"
     package-manager-detector: "npm:^1.6.0"
     semver: "npm:^7.8.1"
-    tinyexec: "npm:^1.3.0"
+    tinyexec: "npm:^1.3.1"
   bin:
     changeset: bin.js
-  checksum: 10c0/8ff35257fcfc3b627196c16fa2a130e130d57e089fce13c791037222cccf9883e7face01d5cc762f022e0f2057ea05a4a3b0fe9f3a1c0902ea5e274693b817ad
+  checksum: 10c0/238b98c590bfe33e794cf5ab47e0fa6eb46fc587da9498af49037877f1043b3e91dac65c990ebd1675115d82f2a3a2b3e7aa1b5d385369b0322a24e858eb1313
   languageName: node
   linkType: hard
 
-"@changesets/config@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@changesets/config@npm:4.0.0"
+"@changesets/config@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@changesets/config@npm:4.0.1"
   dependencies:
     "@changesets/get-dependents-graph": "npm:^3.0.0"
     "@changesets/should-skip-package": "npm:^1.0.0"
     "@changesets/types": "npm:^7.0.0"
     "@manypkg/get-packages": "npm:^3.1.0"
-    picomatch: "npm:^4.0.4"
-  checksum: 10c0/484cd32c509534cb0f46a28b7e18fafc9967ebf920e8df694603dcd83fdf49491b180e0f446c0923e471a984b5695ed1891f1b8a2a5a8ebcee84d27d29779533
+    picomatch: "npm:^4.0.7"
+  checksum: 10c0/959dbbb3ab9fab0427a8990cbe7d4465d9b67042c96108209c8110b7c5ccb2fc3303b75d5c024e911d3a51ca082d13d49a5091edf52014a2b8d69e89b58188ed
   languageName: node
   linkType: hard
 
@@ -1690,7 +1690,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/format@npm:^0.1.1":
+"@changesets/format@npm:^0.1.1, @changesets/format@npm:^0.1.2":
   version: 0.1.2
   resolution: "@changesets/format@npm:0.1.2"
   dependencies:
@@ -1710,16 +1710,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/git@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@changesets/git@npm:4.0.0"
+"@changesets/git@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@changesets/git@npm:4.0.1"
   dependencies:
     "@changesets/errors": "npm:^1.0.0"
     "@changesets/types": "npm:^7.0.0"
     "@manypkg/get-packages": "npm:^3.1.0"
     picomatch: "npm:^4.0.4"
     tinyexec: "npm:^1.3.0"
-  checksum: 10c0/8a286cf6ae6ac43d4394b3d8f8a97966ce3db583a0481126d73d87849d569911e5ba1384ac1344d69f71f04d603fab47a2b105744455f7b18a310840f35384d5
+  checksum: 10c0/b548ecfafb238ff477a793e4ee91c1fe818274b9ea5b6d5a9d619f75a915ad27831f2accf2edce77da57f918bf1009b59cca2c5aaa7288db4b266f87872c2c23
   languageName: node
   linkType: hard
 
@@ -1744,14 +1744,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/read@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@changesets/read@npm:1.0.0"
+"@changesets/read@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@changesets/read@npm:1.0.1"
   dependencies:
-    "@changesets/git": "npm:^4.0.0"
+    "@changesets/git": "npm:^4.0.1"
     "@changesets/parse": "npm:^1.0.0"
     "@changesets/types": "npm:^7.0.0"
-  checksum: 10c0/d82e6c89049d4bf86669229437e6bfccd87e6a0cb456c1567b221330c3d7efbeb463a25a0fbfc7fe192c3e6f31166c21fa0d08fcd27fdbba16e04fdae6495a52
+  checksum: 10c0/125de7132b71e9c184f35ec0ad4d23b9accb0aa04d178c835ef575fbf12afbed2fd2d975e987ebb70c007c9a08dc97a267123ba515a4c2f4f070279ad8193f46
   languageName: node
   linkType: hard
 
@@ -14949,10 +14949,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picomatch@npm:^4.0.1, picomatch@npm:^4.0.2, picomatch@npm:^4.0.4":
-  version: 4.0.4
-  resolution: "picomatch@npm:4.0.4"
-  checksum: 10c0/e2c6023372cc7b5764719a5ffb9da0f8e781212fa7ca4bd0562db929df8e117460f00dff3cb7509dacfc06b86de924b247f504d0ce1806a37fac4633081466b0
+"picomatch@npm:^4.0.1, picomatch@npm:^4.0.2, picomatch@npm:^4.0.4, picomatch@npm:^4.0.7":
+  version: 4.0.7
+  resolution: "picomatch@npm:4.0.7"
+  checksum: 10c0/beb6ae02c43ae44e84883b90830196d9046b1726ead292adcf7f57945e0bb0d992d68563d87e03b484b6f3c9a5c6defda7523477f047d7f0e663f126cc01787f
   languageName: node
   linkType: hard
 
@@ -16858,10 +16858,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinyexec@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "tinyexec@npm:1.3.0"
-  checksum: 10c0/e9b89f97489d2aab2cef408da279e6b32547e738d1275032ccb8fd0028a006d93eb70fc51c6cffd9fc2f5aca6c2a273d8b6f73b52d46ee5116da6b94969ef958
+"tinyexec@npm:^1.3.0, tinyexec@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "tinyexec@npm:1.3.1"
+  checksum: 10c0/c590369cb3fa73cc18a3998caec8a00f9712d91309c881be3ac52b160fb2f80c7b1fbf3591858ab6abab47ad55385b0c86ec19982e32441a01f55298dab9ccd2
   languageName: node
   linkType: hard
 
