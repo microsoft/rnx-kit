@@ -1,5 +1,15 @@
 # @rnx-kit/lint-lockfile
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [f35ba6b]
+- Updated dependencies [ff53986]
+  - @rnx-kit/config@1.0.0
+  - @rnx-kit/types-kit-config@2.0.0
+  - @rnx-kit/tools-workspaces@0.2.6
+
 ## 0.2.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @rnx-kit/tools-workspaces
 
+## 0.2.6
+
+### Patch Changes
+
+- ff53986: Fixed `WorkspacesInfo.isWorkspace()` returning `true` for packages that the workspace config excludes, e.g. `!packages/t-800`
+
 ## 0.2.5
 
 ### Patch Changes

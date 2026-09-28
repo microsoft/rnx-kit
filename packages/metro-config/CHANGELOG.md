@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-config
 
+## 2.2.6
+
+### Patch Changes
+
+- f3bd2b4: Workaround for Expo overwriting what platforms are available
+- Updated dependencies [ff53986]
+  - @rnx-kit/tools-workspaces@0.2.6
+
 ## 2.2.5
 
 ### Patch Changes
