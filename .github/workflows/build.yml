@@ -19,7 +19,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@c75754b0fedce160a4dcf7193fae1a6ece76efe2 # 5.4.11
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@35825d75adec302cf11ab1b7cf8a169c2499ea3d # 5.4.12
       - name: Install package dependencies
         run: |
           yarn
