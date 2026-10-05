@@ -53,7 +53,7 @@ export class TestCommand extends Command {
     }
 
     const tests =
-      this.args.length > 0 ? this.args : fs.globSync("test/**/*.test.ts");
+      this.args.length > 0 ? this.args : fs.globSync("test/**/*.test.{mts,ts}");
     return await execute(
       process.argv0,
       "--disable-warning",
