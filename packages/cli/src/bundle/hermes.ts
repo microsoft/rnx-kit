@@ -24,6 +24,7 @@ function hermesBinaryInDir(hermesc: string): string | null {
 
 function findHermesBinary({ reactNativePath }: CLIConfig) {
   const locations = [
+    () => findPackageDependencyDir("hermes-compiler/hermesc"),
     () => path.join(reactNativePath, "sdks", "hermesc"),
     () => findPackageDependencyDir("hermes-engine"),
   ];
