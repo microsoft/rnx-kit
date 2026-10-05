@@ -111,3 +111,24 @@ function takeDirection(direction) {
 console.log(takeDirection(Direction.Up));
 "
 `;
+
+exports[`@rnx-kit/babel-preset-metro-react-native transforms Flow enums 1`] = `
+"Object.defineProperty(exports, "__esModule", { value: true });
+exports.Status = void 0;
+exports.isVisible = isVisible;
+var Status = (exports.Status = require("flow-enums-runtime")({ Active: 0, Inactive: 1 }));
+var Mode = require("flow-enums-runtime")({ Visible: 0, Hidden: 1 });
+function isVisible(mode) {
+  return Mode.cast(mode) === Mode.Visible;
+}
+"
+`;
+
+exports[`@rnx-kit/babel-preset-metro-react-native transforms Flow enums when import/export transform is disabled 1`] = `
+"export var Status = require("flow-enums-runtime")({ Active: 0, Inactive: 1 });
+var Mode = require("flow-enums-runtime")({ Visible: 0, Hidden: 1 });
+export function isVisible(mode) {
+  return Mode.cast(mode) === Mode.Visible;
+}
+"
+`;

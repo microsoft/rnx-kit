@@ -4,5 +4,6 @@
     "types": ["jest", "node"],
     "noEmit": true
   },
-  "include": ["src", "test"]
+  "include": ["src", "test"],
+  "exclude": ["**/*.flow.js"]
 }
