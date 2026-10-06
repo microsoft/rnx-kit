@@ -38,7 +38,6 @@
     "@rnx-kit/tools-shell": "^0.2.2"
   },
   "devDependencies": {
-    "@rnx-kit/oxlint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
   },

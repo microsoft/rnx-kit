@@ -11,7 +11,7 @@ export default defineConfig({
   },
   overrides: [
     {
-      files: ["**/*.config.[jt]s"],
+      files: ["**/*.config.[jt]s", "**/*.eval.ts", "**/*.eval.mts"],
       rules: {
         "import/no-default-export": "off",
       },
