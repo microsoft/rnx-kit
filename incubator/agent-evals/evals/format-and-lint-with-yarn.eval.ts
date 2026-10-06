@@ -1,7 +1,7 @@
 import { allCommands, fail, pass, type TestCase } from "../src/index.ts";
 
 const DIRECT_INVOCATION =
-  /(?:^|\b(?:npx|yarn|pnpm|bunx)\s+|node_modules\/\.bin\/)(?:prettier|oxfmt|oxlint|eslint)\b/;
+  /^(?:(?:npx|yarn|pnpm|bunx)\s+)?(?:\S*node_modules\/\.bin\/)?(?:prettier|oxfmt|oxlint|eslint)\b/;
 
 export default {
   description: "Formats and lints with `yarn format` and `yarn lint`",
