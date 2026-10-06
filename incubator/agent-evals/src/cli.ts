@@ -120,8 +120,11 @@ if (
   missing.length > 0 ||
   !(passRate === undefined || (passRate >= 0 && passRate <= 1))
 ) {
+  for (const arg of missing) {
+    console.error(`Unknown eval or log: ${arg}`);
+  }
   if (missing.length > 0) {
-    console.error(`Unknown evals or logs: ${missing.join(", ")}\n`);
+    console.error();
   }
   console.error(
     [
