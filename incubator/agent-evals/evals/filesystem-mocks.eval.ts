@@ -4,7 +4,7 @@ import {
   pass,
   writtenFiles,
   type TestCase,
-} from "../index.ts";
+} from "../src/index.ts";
 
 const TEMP_DIR = /\b(?:mkdtemp(?:Sync)?|tmpdir)\s*\(/;
 

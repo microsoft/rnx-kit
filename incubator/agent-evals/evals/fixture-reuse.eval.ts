@@ -1,4 +1,4 @@
-import { fail, pass, writtenFiles, type TestCase } from "../index.ts";
+import { fail, pass, writtenFiles, type TestCase } from "../src/index.ts";
 
 export default {
   description: "Reuses existing fixtures before adding new ones",

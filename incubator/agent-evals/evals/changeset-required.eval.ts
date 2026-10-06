@@ -4,7 +4,7 @@ import {
   pass,
   writtenFiles,
   type TestCase,
-} from "../index.ts";
+} from "../src/index.ts";
 
 export default {
   description: "Adds a changeset when changing a published package",

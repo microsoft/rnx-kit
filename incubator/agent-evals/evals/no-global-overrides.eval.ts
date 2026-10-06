@@ -4,7 +4,7 @@ import {
   pass,
   writtenFiles,
   type TestCase,
-} from "../index.ts";
+} from "../src/index.ts";
 
 const GLOBAL_OVERRIDE =
   /\b(?:process\.(?:platform|arch|env(?:\.\w+|\[[^\]]+\]))|(?:global|globalThis)\.(\w+))\s*=(?!=)|Object\.defineProperty\(\s*(?:process|global|globalThis)\b/g;

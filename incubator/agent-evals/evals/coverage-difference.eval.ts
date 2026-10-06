@@ -1,4 +1,4 @@
-import type { TestCase } from "../index.ts";
+import type { TestCase } from "../src/index.ts";
 
 export default {
   description: "Reports the difference in test coverage when tests change",

@@ -4,7 +4,7 @@ import {
   pass,
   writtenFiles,
   type TestCase,
-} from "../index.ts";
+} from "../src/index.ts";
 
 export default {
   description: "Does not add a changeset when only ignored packages change",

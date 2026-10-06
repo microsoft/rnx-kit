@@ -17,8 +17,7 @@
   "bin": "lib/cli.js",
   "files": [
     "lib/**/*.d.ts",
-    "lib/**/*.js",
-    "!lib/evals/**"
+    "lib/**/*.js"
   ],
   "type": "module",
   "exports": {
@@ -44,7 +43,7 @@
     "@rnx-kit/tsconfig": "*"
   },
   "engines": {
-    "node": ">=20.18"
+    "node": ">=22.18"
   },
   "experimental": true
 }

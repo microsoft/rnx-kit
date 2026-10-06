@@ -48,7 +48,7 @@ export default {
       ignoreDependencies: reactNativeDependencies,
     },
     "incubator/agent-evals": {
-      entry: ["src/**/*.eval.ts"],
+      entry: ["evals/*.eval.ts"],
     },
     "incubator/fork-sync": {
       entry: ["harness/**/*.ts"],

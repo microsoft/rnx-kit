@@ -1,4 +1,4 @@
-import { allCommands, fail, pass, type TestCase } from "../index.ts";
+import { allCommands, fail, pass, type TestCase } from "../src/index.ts";
 
 const WRITE_TOOLS =
   /(?:add_issue_comment|add_comment_to_pending_review|pull_request_review_write|create_pull_request_review|update_pull_request|update_pull_request_branch|merge_pull_request|request_copilot_review|reply_to_comment|push_files|create_or_update_file|delete_file)$/;

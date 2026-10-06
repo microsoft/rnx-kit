@@ -1,4 +1,4 @@
-import { allCommands, fail, pass, type TestCase } from "../index.ts";
+import { allCommands, fail, pass, type TestCase } from "../src/index.ts";
 
 const YARN_TEST = /^yarn\s+(?:rnx-kit-scripts\s+)?test\s+(.+)$/;
 

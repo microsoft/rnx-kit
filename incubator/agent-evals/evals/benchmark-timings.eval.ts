@@ -1,4 +1,4 @@
-import type { TestCase } from "../index.ts";
+import type { TestCase } from "../src/index.ts";
 
 export default {
   description: "Reports fresh-process and warm timings separately",

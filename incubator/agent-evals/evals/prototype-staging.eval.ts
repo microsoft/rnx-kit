@@ -4,7 +4,7 @@ import {
   pass,
   writesBeforeApproval,
   type TestCase,
-} from "../index.ts";
+} from "../src/index.ts";
 
 export default {
   description:
