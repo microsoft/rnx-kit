@@ -2,10 +2,12 @@ import { fail, pass, writtenFiles } from "../src/index.ts";
 import type { TestCase } from "../src/index.ts";
 
 const TYPESCRIPT_FILE = /\.[cm]?tsx?$/;
-const INLINE_TYPE_IMPORT = /\bimport\s*\{[^}]*\btype\s+\w[^}]*\}/g;
+const INLINE_TYPE_SPECIFIER =
+  /\b(?:import|export)\s*\{[^}]*\btype\s+\w[^}]*\}\s*from\b/g;
 
 export default {
-  description: "Imports types with separate `import type` statements",
+  description:
+    "Imports and re-exports types with separate `import type`/`export type` statements",
   assert: [
     {
       type: "javascript",
@@ -16,14 +18,14 @@ export default {
             continue;
           }
 
-          for (const match of content.matchAll(INLINE_TYPE_IMPORT)) {
+          for (const match of content.matchAll(INLINE_TYPE_SPECIFIER)) {
             violations.push(`${path}: ${match[0].replace(/\s+/g, " ")}`);
           }
         }
 
         return violations.length > 0
-          ? fail(`Inline type imports: ${violations.join(", ")}`)
-          : pass("No inline type imports");
+          ? fail(`Inline type imports or re-exports: ${violations.join(", ")}`)
+          : pass("No inline type imports or re-exports");
       },
     },
   ],
