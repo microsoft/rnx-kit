@@ -6,9 +6,6 @@ const YARN_TEST = /^yarn\s+(?:rnx-kit-scripts\s+)?test\s+(.+)$/;
 export const testGlobWithArguments: TestCase = {
   description:
     "Passes the test glob explicitly when passing arguments to `yarn test`",
-  vars: {
-    prompt: "What is the test coverage of `@rnx-kit/tools-node`?",
-  },
   assert: [
     {
       type: "javascript",

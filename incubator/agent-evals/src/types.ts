@@ -58,7 +58,6 @@ export type GradingResult = {
 };
 
 export type AssertionContext = {
-  vars: TestCase["vars"];
   providerResponse: ProviderResponse;
 };
 
@@ -77,10 +76,6 @@ export type Assertion =
 
 export type TestCase = {
   description: string;
-  vars: {
-    /** Prompt given to the agent when recording the session. */
-    prompt: string;
-  };
   assert: Assertion[];
   metadata?: {
     /** Fraction of logs that must pass (default: 0.8). */

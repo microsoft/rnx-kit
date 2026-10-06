@@ -2,10 +2,6 @@ import type { TestCase } from "../types.ts";
 
 export const benchmarkTimings: TestCase = {
   description: "Reports fresh-process and warm timings separately",
-  vars: {
-    prompt:
-      "Make `readPackage()` in `@rnx-kit/tools-node` faster and show how much faster it is.",
-  },
   assert: [
     {
       type: "llm-rubric",

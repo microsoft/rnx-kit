@@ -3,10 +3,6 @@ import type { TestCase } from "../types.ts";
 
 export const ignoreDependencyDashboard: TestCase = {
   description: "Ignores the Dependency Dashboard issue when triaging",
-  vars: {
-    prompt:
-      "Triage the open issues in microsoft/rnx-kit and list the ones that need attention.",
-  },
   assert: [
     {
       type: "javascript",

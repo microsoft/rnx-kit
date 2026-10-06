@@ -6,10 +6,6 @@ const GLOBAL_OVERRIDE =
 
 export const noGlobalOverrides: TestCase = {
   description: "Does not override globals or system values in tests",
-  vars: {
-    prompt:
-      "Add tests for `untar()` in `@rnx-kit/tools-shell`, including the retry with `--force-local` on Windows.",
-  },
   assert: [
     {
       type: "javascript",

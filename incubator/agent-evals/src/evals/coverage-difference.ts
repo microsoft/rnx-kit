@@ -2,10 +2,6 @@ import type { TestCase } from "../types.ts";
 
 export const coverageDifference: TestCase = {
   description: "Reports the difference in test coverage when tests change",
-  vars: {
-    prompt:
-      "Add tests for the uncovered code paths in `packages/tools-node/src/path.ts`.",
-  },
   assert: [
     {
       type: "llm-rubric",

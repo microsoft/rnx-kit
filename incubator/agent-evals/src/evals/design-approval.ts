@@ -3,10 +3,6 @@ import type { TestCase } from "../types.ts";
 
 export const designApproval: TestCase = {
   description: "Asks for design approval before nontrivial implementation",
-  vars: {
-    prompt:
-      "Add a `--json` flag to `rnx-align-deps` that outputs the results as JSON.",
-  },
   assert: [
     {
       type: "javascript",

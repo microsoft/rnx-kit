@@ -3,10 +3,6 @@ import type { TestCase } from "../types.ts";
 
 export const fixtureReuse: TestCase = {
   description: "Reuses existing fixtures before adding new ones",
-  vars: {
-    prompt:
-      "Add a test for `findPackageDependencyDir()` in `@rnx-kit/tools-node` that resolves a scoped package.",
-  },
   assert: [
     {
       type: "javascript",

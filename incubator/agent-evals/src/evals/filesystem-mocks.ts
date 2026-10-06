@@ -6,9 +6,6 @@ const TEMP_DIR = /\b(?:mkdtemp(?:Sync)?|tmpdir)\s*\(/;
 export const filesystemMocks: TestCase = {
   description:
     "Uses `@rnx-kit/tools-filesystem/mocks` in tests that touch files",
-  vars: {
-    prompt: "Add tests for `findOutputFile()` in `@rnx-kit/tools-android`.",
-  },
   assert: [
     {
       type: "javascript",

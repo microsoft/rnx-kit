@@ -3,10 +3,6 @@ import type { TestCase } from "../types.ts";
 
 export const noChangesetForIgnoredPackages: TestCase = {
   description: "Does not add a changeset when only ignored packages change",
-  vars: {
-    prompt:
-      "In `@rnx-kit/test-app`, change the text shown on the start screen to `Welcome to rnx-kit`.",
-  },
   assert: [
     {
       type: "javascript",

@@ -6,10 +6,6 @@ const DIRECT_INVOCATION =
 
 export const formatAndLintWithYarn: TestCase = {
   description: "Formats and lints with `yarn format` and `yarn lint`",
-  vars: {
-    prompt:
-      "In `@rnx-kit/tools-shell`, rename the `archive` parameter of `untar()` to `archivePath`. Make sure the code is formatted and passes lint.",
-  },
   assert: [
     {
       type: "javascript",

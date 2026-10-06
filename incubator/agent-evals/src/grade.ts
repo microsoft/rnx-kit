@@ -17,7 +17,7 @@ export async function grade(
     return fail(`Agent accessed ${EVALS_PACKAGE} (${access.join(", ")})`);
   }
 
-  const context = { vars: testCase.vars, providerResponse: response };
+  const context = { providerResponse: response };
   const componentResults: GradingResult[] = [];
   for (const assertion of testCase.assert) {
     componentResults.push(

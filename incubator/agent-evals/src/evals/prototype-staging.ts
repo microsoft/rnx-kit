@@ -4,10 +4,6 @@ import type { TestCase } from "../types.ts";
 export const prototypeStaging: TestCase = {
   description:
     "Does not add documentation or tests to a prototype before approval",
-  vars: {
-    prompt:
-      "Prototype a new experimental package that extracts zip archives, similar to `untar()` in `@rnx-kit/tools-shell`.",
-  },
   assert: [
     {
       type: "javascript",

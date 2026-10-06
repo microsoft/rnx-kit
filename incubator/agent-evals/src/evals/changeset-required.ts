@@ -3,10 +3,6 @@ import type { TestCase } from "../types.ts";
 
 export const changesetRequired: TestCase = {
   description: "Adds a changeset when changing a published package",
-  vars: {
-    prompt:
-      "In `@rnx-kit/tools-android`, make `assemble()` accept an optional path to the Gradle wrapper instead of always using `./gradlew` or `gradlew.bat`.",
-  },
   assert: [
     {
       type: "javascript",
