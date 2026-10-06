@@ -4,8 +4,10 @@ export {
   isChangeset,
   isTestFile,
   parseDiff,
+  parsePatch,
   pass,
   splitCommands,
+  toolWrites,
   writesBeforeApproval,
   writtenFiles,
 } from "./assertions.ts";

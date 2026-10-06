@@ -2,8 +2,15 @@ import type {
   FileWrite,
   GradingResult,
   ProviderResponse,
+  ToolCall,
   Transcript,
 } from "./types.ts";
+
+type ShellCommand = {
+  command: string;
+  /** Files written via output redirection. */
+  outputs: string[];
+};
 
 export function pass(reason: string): GradingResult {
   return { pass: true, score: 1, reason };
@@ -39,6 +46,26 @@ export function parseDiff(diff: string): FileWrite[] {
 }
 
 /**
+ * Extracts written files from an `apply_patch` input.
+ */
+export function parsePatch(patch: string): FileWrite[] {
+  const writes: FileWrite[] = [];
+  let current: FileWrite | undefined;
+  for (const line of patch.split("\n")) {
+    const m = line.match(/^\*\*\* (?:Add|Update) File: (.+)$/);
+    if (m) {
+      current = { path: m[1].trim(), content: "" };
+      writes.push(current);
+    } else if (line.startsWith("*** ")) {
+      current = undefined;
+    } else if (current && line.startsWith("+")) {
+      current.content += line.substring(1) + "\n";
+    }
+  }
+  return writes;
+}
+
+/**
  * Returns files written during the session. Uses the diff if available since
  * it also captures files written by shell commands.
  */
@@ -58,22 +85,28 @@ export function isTestFile(file: string): boolean {
   return segments.includes("test") && /\.test\.m?ts$/.test(name);
 }
 
+function unquote(token: string): string {
+  return token.replace(/^(["'])(.*)\1$/s, "$2");
+}
+
 /**
- * Splits a shell command line into individual commands, without redirections.
- * Separators inside quotes are ignored, as are comments and heredoc bodies,
- * e.g. scripts passed to `python3 - <<EOF`.
+ * Splits a shell command line into individual commands, and separates out
+ * output redirections. Separators inside quotes are ignored, as are comments
+ * and heredoc bodies, e.g. scripts passed to `python3 - <<EOF`.
  */
-export function splitCommands(commandLine: string): string[] {
-  const commands: string[] = [];
+function scanCommands(commandLine: string): ShellCommand[] {
+  const commands: ShellCommand[] = [];
   const lines = commandLine.split("\n");
   let current = "";
+  let outputs: string[] = [];
   let quote = "";
   const flush = () => {
-    const cmd = current.replace(/\s\d?>+\s*&?\S+/g, "").trim();
-    if (cmd) {
-      commands.push(cmd);
+    const command = current.trim();
+    if (command) {
+      commands.push({ command, outputs });
     }
     current = "";
+    outputs = [];
   };
   for (let i = 0; i < lines.length; ++i) {
     const line = lines[i];
@@ -111,6 +144,17 @@ export function splitCommands(commandLine: string): string[] {
         } else {
           current += ch;
         }
+      } else if (ch === ">" || (ch === "&" && line[j + 1] === ">")) {
+        // Drop the file descriptor, e.g. `2>`
+        current = current.replace(/(^|\s)\d$/, "$1");
+        const redirect = line
+          .substring(j)
+          .match(/^&?>+\|?\s*(&\d|(?:"[^"]*"|'[^']*'|[^\s;|&<>])+)?/);
+        const target = redirect?.[1];
+        if (target && !target.startsWith("&")) {
+          outputs.push(unquote(target));
+        }
+        j += (redirect?.[0].length ?? 1) - 1;
       } else if (
         ch === ";" ||
         ch === "|" ||
@@ -141,8 +185,64 @@ export function splitCommands(commandLine: string): string[] {
   return commands;
 }
 
+/**
+ * Splits a shell command line into individual commands, without redirections.
+ * Separators inside quotes are ignored, as are comments and heredoc bodies,
+ * e.g. scripts passed to `python3 - <<EOF`.
+ */
+export function splitCommands(commandLine: string): string[] {
+  return scanCommands(commandLine).map(({ command }) => command);
+}
+
+/**
+ * Returns files written by a shell command line, e.g. via output redirection,
+ * `tee`, `sed -i`, `cp` or `mv`. Files under `/dev` and `/tmp` are ignored.
+ */
+function shellWrites(commandLine: string): string[] {
+  const files: string[] = [];
+  for (const { command, outputs } of scanCommands(commandLine)) {
+    files.push(...outputs);
+
+    const [name, ...args] = (command.match(/"[^"]*"|'[^']*'|\S+/g) ?? []).map(
+      unquote
+    );
+    const operands = args.filter((arg) => !arg.startsWith("-"));
+    if (name === "tee") {
+      files.push(...operands);
+    } else if ((name === "cp" || name === "mv") && operands.length > 1) {
+      files.push(operands[operands.length - 1]);
+    } else if (
+      name === "sed" &&
+      operands.length > 1 &&
+      args.some((arg) => /^(?:-[a-zA-Z]*i|--in-place)/.test(arg))
+    ) {
+      files.push(operands[operands.length - 1]);
+    }
+  }
+  return files.filter((file) => !/^\/(?:dev|tmp)\//.test(file));
+}
+
 export function allCommands({ commands }: Transcript): string[] {
   return commands.flatMap(splitCommands);
+}
+
+/**
+ * Returns files written by a tool call, including shell commands. Falls back to
+ * the tool name if an editing tool's paths are unknown.
+ */
+export function toolWrites({ name, arguments: args }: ToolCall): string[] {
+  if (name === "apply_patch") {
+    const patch = args.input ?? args.patch;
+    const paths =
+      typeof patch === "string" ? parsePatch(patch).map((w) => w.path) : [];
+    return paths.length > 0 ? paths : [name];
+  }
+
+  if (/^(?:create|edit|str_replace_editor)$/.test(name)) {
+    return args.command === "view" ? [] : [String(args.path ?? name)];
+  }
+
+  return typeof args.command === "string" ? shellWrites(args.command) : [];
 }
 
 /**
@@ -157,10 +257,8 @@ export function writesBeforeApproval({ entries }: Transcript): string[] {
       if (entry.role === "user" && ++userMessages > 1) {
         break;
       }
-    } else if (
-      /^(create|edit|apply_patch|str_replace_editor)$/.test(entry.name)
-    ) {
-      writes.push(String(entry.arguments.path ?? entry.name));
+    } else {
+      writes.push(...toolWrites(entry));
     }
   }
   return writes;

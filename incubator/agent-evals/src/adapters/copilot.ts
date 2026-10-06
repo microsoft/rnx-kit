@@ -1,5 +1,6 @@
 import * as path from "node:path";
-import type { FileWrite, Message, ToolCall, Transcript } from "../types.ts";
+import { parsePatch } from "../assertions.ts";
+import type { Message, ToolCall, Transcript } from "../types.ts";
 
 type Event = {
   type: string;
@@ -10,26 +11,6 @@ const SHELL_TOOLS = ["bash", "powershell"];
 
 function str(value: unknown): string | undefined {
   return typeof value === "string" ? value : undefined;
-}
-
-/**
- * Extracts written files from an `apply_patch` input.
- */
-function parsePatch(patch: string): FileWrite[] {
-  const writes: FileWrite[] = [];
-  let current: FileWrite | undefined;
-  for (const line of patch.split("\n")) {
-    const m = line.match(/^\*\*\* (?:Add|Update) File: (.+)$/);
-    if (m) {
-      current = { path: m[1].trim(), content: "" };
-      writes.push(current);
-    } else if (line.startsWith("*** ")) {
-      current = undefined;
-    } else if (current && line.startsWith("+")) {
-      current.content += line.substring(1) + "\n";
-    }
-  }
-  return writes;
 }
 
 /**
