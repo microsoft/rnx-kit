@@ -214,6 +214,10 @@ export function splitCommands(commandLine: string): string[] {
   return scanCommands(commandLine).map(({ command }) => command);
 }
 
+function tokenize(command: string): string[] {
+  return (command.match(/"[^"]*"|'[^']*'|\S+/g) ?? []).map(unquote);
+}
+
 /**
  * Returns files written by a shell command line, e.g. via output redirection,
  * `tee`, `sed -i`, `cp` or `mv`. Files under `/dev` and `/tmp` are ignored.
@@ -223,9 +227,7 @@ function shellWrites(commandLine: string): string[] {
   for (const { command, outputs } of scanCommands(commandLine)) {
     files.push(...outputs);
 
-    const [name, ...args] = (command.match(/"[^"]*"|'[^']*'|\S+/g) ?? []).map(
-      unquote
-    );
+    const [name, ...args] = tokenize(command);
     const operands = args.filter((arg) => !arg.startsWith("-"));
     if (name === "tee") {
       files.push(...operands);
@@ -263,6 +265,32 @@ export function toolWrites({ name, arguments: args }: ToolCall): string[] {
   }
 
   return typeof args.command === "string" ? shellWrites(args.command) : [];
+}
+
+/**
+ * Returns paths that a tool call may read or write: the paths of file tools
+ * and patches, and the operands and redirections of shell commands.
+ */
+export function toolPaths(call: ToolCall): string[] {
+  const { name, arguments: args } = call;
+  if (name === "apply_patch") {
+    return toolWrites(call);
+  }
+
+  if (typeof args.path === "string") {
+    return [args.path];
+  }
+
+  if (typeof args.command !== "string") {
+    return [];
+  }
+
+  return scanCommands(args.command).flatMap(({ command, outputs }) => [
+    ...tokenize(command)
+      .slice(1)
+      .filter((arg) => !arg.startsWith("-")),
+    ...outputs,
+  ]);
 }
 
 /**

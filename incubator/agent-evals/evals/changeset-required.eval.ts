@@ -2,7 +2,8 @@ import { fail, isChangeset, pass, writtenFiles } from "../src/index.ts";
 import type { TestCase } from "../src/index.ts";
 
 export default {
-  description: "Adds a changeset when changing a published package",
+  description:
+    "Adds a changeset when changing a published package (task: change `@rnx-kit/tools-android`)",
   assert: [
     {
       type: "javascript",

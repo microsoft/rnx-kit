@@ -8,6 +8,20 @@ describe("parseResponse()", () => {
     deepEqual(parseResponse(response), { pass: true, score: 1, reason: "ok" });
   });
 
+  it("uses the last JSON object with a boolean `pass`", () => {
+    const response = [
+      "The agent ran `if (x) { y(); }` before {asking}.",
+      '{ "pass": false, "reason": "draft" }',
+      '```json\n{ "pass": true, "reason": "uses {braces}" }\n```',
+      '{ "note": "not a verdict" } Done {',
+    ].join("\n");
+    deepEqual(parseResponse(response), {
+      pass: true,
+      score: 1,
+      reason: "uses {braces}",
+    });
+  });
+
   it("fails on invalid JSON", () => {
     for (const response of ["{ pass: true }", "I cannot grade this"]) {
       const result = parseResponse(response);

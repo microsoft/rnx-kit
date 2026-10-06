@@ -1,4 +1,4 @@
-import { fail } from "./assertions.ts";
+import { fail, toolPaths } from "./assertions.ts";
 import { gradeRubric } from "./rubric.ts";
 import type { GraderOptions } from "./rubric.ts";
 import type {
@@ -8,18 +8,23 @@ import type {
   Transcript,
 } from "./types.ts";
 
+// Eval files, or anything in an `evals/` folder, e.g. `evals/`, `evals/*` or
+// `incubator/agent-evals/evals`. Bare file name patterns, e.g. `*.eval.ts` in
+// `grep --include '*.eval.ts'`, are not paths and are ignored.
+const EVALS_PATH = /\.eval\.m?ts$|(?:^|\/)evals\/|(?:^|\/)agent-evals\/evals$/;
+
 /**
- * Returns the tool calls that access eval files. Agents must not see the
- * evals, so any such access fails the run.
+ * Returns paths of eval files that were read or written. Agents must not see
+ * the evals, so any such access fails the run.
  */
-function evalsAccess({ entries }: Transcript): string[] {
-  return entries
-    .filter(
-      (entry) =>
-        entry.type === "tool" &&
-        /\.eval\.m?ts\b/.test(JSON.stringify(entry.arguments))
-    )
-    .map((entry) => (entry.type === "tool" ? entry.name : ""));
+export function evalsAccess({ entries }: Transcript): string[] {
+  return entries.flatMap((entry) =>
+    entry.type === "tool"
+      ? toolPaths(entry)
+          .map((p) => p.replaceAll("\\", "/"))
+          .filter((p) => !p.startsWith("*") && EVALS_PATH.test(p))
+      : []
+  );
 }
 
 /**
@@ -31,8 +36,7 @@ export async function grade(
   response: ProviderResponse,
   graderOptions: GraderOptions = {}
 ): Promise<GradingResult> {
-  const { transcript } = response.metadata;
-  const access = evalsAccess(transcript);
+  const access = evalsAccess(response.metadata.transcript);
   if (access.length > 0) {
     return fail(`Agent accessed eval files (${access.join(", ")})`);
   }
@@ -43,7 +47,7 @@ export async function grade(
     componentResults.push(
       assertion.type === "javascript"
         ? await assertion.value(response.output, context)
-        : await gradeRubric(assertion.value, transcript, graderOptions)
+        : await gradeRubric(assertion.value, response.metadata, graderOptions)
     );
   }
 

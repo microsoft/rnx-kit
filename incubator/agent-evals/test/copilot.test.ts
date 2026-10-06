@@ -70,3 +70,22 @@ describe("copilot()", () => {
     });
   });
 });
+
+describe("copilot() paths", () => {
+  it("only makes paths inside the repository root relative", () => {
+    const log = [
+      { type: "session.start", data: { context: { gitRoot: "/repo" } } },
+      ...["/repo/..foo/a.ts", "/repo/src/b.ts", "/c.ts"].map((p, i) => ({
+        type: "tool.execution_start",
+        data: {
+          toolCallId: String(i),
+          toolName: "view",
+          arguments: { path: p },
+        },
+      })),
+    ]
+      .map((event) => JSON.stringify(event))
+      .join("\n");
+    deepEqual(copilot(log).filesRead, ["..foo/a.ts", "src/b.ts", "/c.ts"]);
+  });
+});

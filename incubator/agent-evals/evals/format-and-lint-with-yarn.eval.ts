@@ -1,4 +1,4 @@
-import { allCommands, fail, pass } from "../src/index.ts";
+import { allCommands, fail, pass, writtenFiles } from "../src/index.ts";
 import type { TestCase } from "../src/index.ts";
 
 const DIRECT_INVOCATION =
@@ -14,6 +14,10 @@ export default {
         const direct = commands.filter((cmd) => DIRECT_INVOCATION.test(cmd));
         if (direct.length > 0) {
           return fail(`Called tools directly: ${direct.join(", ")}`);
+        }
+
+        if (writtenFiles(providerResponse).length === 0) {
+          return pass("No files were changed");
         }
 
         const missing = ["format", "lint"].filter(

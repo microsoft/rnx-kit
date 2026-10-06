@@ -7,6 +7,7 @@ export {
   parsePatch,
   pass,
   splitCommands,
+  toolPaths,
   toolWrites,
   writesBeforeApproval,
   writtenFiles,

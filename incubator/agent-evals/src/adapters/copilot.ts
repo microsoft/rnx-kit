@@ -29,9 +29,9 @@ export function copilot(log: string): Transcript {
   let root = "";
   const relative = (p: string) => {
     if (root && path.isAbsolute(p)) {
-      const rel = path.relative(root, p);
-      if (!rel.startsWith("..")) {
-        return rel.replaceAll("\\", "/");
+      const rel = path.relative(root, p).replaceAll("\\", "/");
+      if (rel !== ".." && !rel.startsWith("../") && !path.isAbsolute(rel)) {
+        return rel;
       }
     }
     return p;

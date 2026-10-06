@@ -37,5 +37,9 @@ logs/
         └── events.jsonl
 ```
 
+If a log is inside the current folder, only folders below the current folder
+are considered. Otherwise, only folders in the log path as specified are
+considered.
+
 Evals that apply to any session set `metadata.allSessions` to `true`. Other logs
 are reported as skipped, and an eval without any matching logs is skipped.

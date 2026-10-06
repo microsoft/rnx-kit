@@ -3,13 +3,14 @@ import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import { fail } from "./assertions.ts";
-import type { GradingResult, Transcript } from "./types.ts";
+import type { GradingResult, ProviderResponse, Transcript } from "./types.ts";
 
 export type GraderOptions = {
   /** Model used by Copilot CLI to grade (default: Copilot CLI's default). */
   model?: string;
 };
 
+const DIFF_FILE = "changes.diff";
 const INSTRUCTIONS_FILE = "instructions.md";
 const TRANSCRIPT_FILE = "transcript.md";
 
@@ -38,11 +39,16 @@ export function formatTranscript({ entries }: Transcript): string {
     .join("\n\n");
 }
 
-function makeInstructions(rubric: string): string {
+function makeInstructions(rubric: string, hasDiff: boolean): string {
   return [
     "You grade transcripts of coding agent sessions against a rubric.",
     `Read the transcript in ${TRANSCRIPT_FILE} in this folder and grade it against the rubric below.`,
-    "Only consider what the transcript shows.",
+    ...(hasDiff
+      ? [
+          `The changes made during the session are in ${DIFF_FILE} in this folder, as a unified diff.`,
+        ]
+      : []),
+    "Only consider what the transcript and the changes show.",
     "",
     "Rubric:",
     rubric,
@@ -52,43 +58,75 @@ function makeInstructions(rubric: string): string {
 }
 
 /**
- * Parses the grader's response. The JSON object may be wrapped in other text,
- * e.g. a Markdown code block.
+ * Returns all top-level `{...}` blocks in the specified text. Braces inside
+ * JSON strings are ignored.
  */
-export function parseResponse(response: string): GradingResult {
-  const json = response.match(/\{[\s\S]*\}/)?.[0];
-  if (!json) {
-    return fail(`Grader returned an invalid response: ${response}`);
-  }
-
-  try {
-    const { pass, reason } = JSON.parse(json);
-    if (typeof pass !== "boolean") {
-      return fail(`Grader returned an invalid response: ${json}`);
+function findObjects(text: string): string[] {
+  const objects: string[] = [];
+  let depth = 0;
+  let start = 0;
+  let inString = false;
+  for (let i = 0; i < text.length; ++i) {
+    const ch = text[i];
+    if (inString) {
+      if (ch === "\\") {
+        ++i;
+      } else if (ch === '"') {
+        inString = false;
+      }
+    } else if (ch === '"' && depth > 0) {
+      inString = true;
+    } else if (ch === "{") {
+      if (depth++ === 0) {
+        start = i;
+      }
+    } else if (ch === "}" && depth > 0 && --depth === 0) {
+      objects.push(text.substring(start, i + 1));
     }
-    return { pass, score: pass ? 1 : 0, reason };
-  } catch (e) {
-    return fail(`Grader returned an invalid response: ${e}`);
   }
+  return objects;
 }
 
 /**
- * Grades a transcript against a rubric using Copilot CLI. The instructions and
- * the transcript are written to files since the transcript may exceed command
+ * Parses the grader's response. The JSON object may be wrapped in other text,
+ * e.g. a Markdown code block, which may also contain braces. The last object
+ * with a boolean `pass` is used.
+ */
+export function parseResponse(response: string): GradingResult {
+  const objects = findObjects(response);
+  for (let i = objects.length - 1; i >= 0; --i) {
+    try {
+      const { pass, reason } = JSON.parse(objects[i]);
+      if (typeof pass === "boolean") {
+        return { pass, score: pass ? 1 : 0, reason };
+      }
+    } catch {
+      // Not JSON; try the previous object
+    }
+  }
+  return fail(`Grader returned an invalid response: ${response}`);
+}
+
+/**
+ * Grades a session against a rubric using Copilot CLI. The instructions, the
+ * transcript and the diff, if available, are written to files since the transcript may exceed command
  * line length limits, and the prompt must be safe to pass through a shell on
  * Windows. The grader can only read files in that folder.
  */
 export async function gradeRubric(
   rubric: string,
-  transcript: Transcript,
+  { transcript, diff }: ProviderResponse["metadata"],
   { model }: GraderOptions = {}
 ): Promise<GradingResult> {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-"));
   try {
     fs.writeFileSync(
       path.join(cwd, INSTRUCTIONS_FILE),
-      makeInstructions(rubric)
+      makeInstructions(rubric, Boolean(diff))
     );
+    if (diff) {
+      fs.writeFileSync(path.join(cwd, DIFF_FILE), diff);
+    }
     fs.writeFileSync(
       path.join(cwd, TRANSCRIPT_FILE),
       formatTranscript(transcript)

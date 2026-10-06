@@ -12,6 +12,8 @@ import type { Adapter, ProviderResponse, TestCase } from "./types.ts";
 
 const DEFAULT_PASS_RATE = 0.8;
 
+const MAX_CONCURRENT_GRADES = 4;
+
 const EVAL_FILE = /\.eval\.m?ts$/;
 
 const IGNORED_FOLDERS = ["build", "dist", "lib", "node_modules"];
@@ -77,13 +79,42 @@ async function loadEvals(files: string[]): Promise<Map<string, TestCase>> {
 
 /**
  * Returns whether a log belongs to an eval, i.e. whether a folder in its path
- * is named after the eval.
+ * is named after the eval. Only folders below the current folder are
+ * considered if the log is inside it, otherwise only folders in the path as
+ * specified.
  */
 function isSessionFor(name: string, testCase: TestCase, log: string): boolean {
-  return (
-    testCase.metadata?.allSessions === true ||
-    path.resolve(log).split(/[\\/]/).includes(name)
+  if (testCase.metadata?.allSessions === true) {
+    return true;
+  }
+
+  const rel = path.relative(process.cwd(), path.resolve(log));
+  const isInside =
+    rel !== ".." && !/^\.\.[\\/]/.test(rel) && !path.isAbsolute(rel);
+  return (isInside ? rel : log).split(/[\\/]/).includes(name);
+}
+
+/**
+ * Maps items with at most `limit` calls in flight. Results are in the same
+ * order as the items.
+ */
+async function mapConcurrently<T, R>(
+  items: T[],
+  limit: number,
+  fn: (item: T) => Promise<R>
+): Promise<R[]> {
+  const results: R[] = [];
+  let next = 0;
+  const worker = async () => {
+    while (next < items.length) {
+      const i = next++;
+      results[i] = await fn(items[i]);
+    }
+  };
+  await Promise.all(
+    Array.from({ length: Math.min(limit, items.length) }, worker)
   );
+  return results;
 }
 
 function readResponse(logPath: string, adapter: Adapter): ProviderResponse {
@@ -152,7 +183,8 @@ if (
       "",
       "An eval only grades logs with a folder named after it in their path, e.g.",
       "`logs/changeset-required/session.jsonl`, unless it sets",
-      "`metadata.allSessions`. Other logs are skipped.",
+      "`metadata.allSessions`. Other logs are skipped. Only folders below the",
+      "current folder are considered for logs inside it.",
       "",
       "Options:",
       `  --agent <name>          Agent that produced the logs (default: copilot)`,
@@ -174,24 +206,29 @@ if (
     const requiredPassRate =
       passRate ?? testCase.metadata?.passRate ?? DEFAULT_PASS_RATE;
     test(`${name}: ${testCase.description}`, async (t) => {
-      let passed = 0;
-      let graded = 0;
+      const indices: number[] = [];
       for (let i = 0; i < logs.length; ++i) {
-        if (!isSessionFor(name, testCase, logs[i])) {
+        if (isSessionFor(name, testCase, logs[i])) {
+          indices.push(i);
+        } else {
           t.diagnostic(`skip: ${logs[i]}`);
-          continue;
         }
+      }
 
-        ++graded;
-        const result = await grade(testCase, responses[i], graderOptions);
-        if (result.pass) {
-          ++passed;
-        }
+      const results = await mapConcurrently(
+        indices,
+        MAX_CONCURRENT_GRADES,
+        (i) => grade(testCase, responses[i], graderOptions)
+      );
+      for (let j = 0; j < results.length; ++j) {
+        const { pass, reason } = results[j];
         t.diagnostic(
-          `${result.pass ? "pass" : "fail"}: ${logs[i]}: ${result.reason}`
+          `${pass ? "pass" : "fail"}: ${logs[indices[j]]}: ${reason}`
         );
       }
 
+      const graded = results.length;
+      const passed = results.filter((result) => result.pass).length;
       if (graded === 0) {
         t.skip("No sessions for this eval");
         return;
