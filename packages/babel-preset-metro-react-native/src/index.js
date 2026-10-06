@@ -76,7 +76,9 @@ function configurePluginTransformClasses(preset, babelPreset, api) {
   if (hasCompilerAssumptions(api)) {
     const { warn } = require("@rnx-kit/console");
     warn(
-      "`looseClassTransform` is deprecated — consider migrating to the top level assumptions for more granular control (see https://babeljs.io/docs/babel-plugin-transform-classes#loose)"
+      "`looseClassTransform` is deprecated — consider migrating to the top " +
+        "level assumptions for more granular control (see " +
+        "https://babeljs.io/docs/babel-plugin-transform-classes#loose)"
     );
   }
 
@@ -109,6 +111,30 @@ function configurePluginTransformRuntime(preset, babelPreset) {
 }
 
 /**
+ * Ensures that Flow enums are transformed before
+ * `@babel/plugin-transform-flow-strip-types` gets a chance to remove them.
+ *
+ * `@react-native/babel-preset` runs `@babel/plugin-transform-flow-strip-types`
+ * before `babel-plugin-transform-flow-enums`. Since `EnumDeclaration` is
+ * aliased as `Flow` in `@babel/types`, enums are stripped entirely instead of
+ * being transformed.
+ *
+ * @see {@link https://github.com/microsoft/rnx-kit/issues/4391}
+ *
+ * @param {Required<TransformOptions>} preset
+ * @param {string} babelPreset
+ */
+function configurePluginTransformFlowEnums(preset, babelPreset) {
+  try {
+    const opts = { paths: [babelPreset] };
+    const plugin = require.resolve("babel-plugin-transform-flow-enums", opts);
+    preset.overrides.unshift({ plugins: [plugin] });
+  } catch (_) {
+    // `@react-native/babel-preset` does not support Flow enums
+  }
+}
+
+/**
  * Returns plugin for transforming `const enum` if necessary.
  *
  * @babel/plugin-transform-typescript doesn't support `const enum`s until 7.15.
@@ -116,10 +142,8 @@ function configurePluginTransformRuntime(preset, babelPreset) {
  */
 function constEnumPlugin() {
   try {
-    const {
-      version,
-    } = require("@babel/plugin-transform-typescript/package.json");
-    if (parseVersion(version) >= 7015) {
+    const manifest = require("@babel/plugin-transform-typescript/package.json");
+    if (parseVersion(manifest.version) >= 7015) {
       return [];
     }
   } catch (_) {
@@ -234,6 +258,8 @@ module.exports = (
       ...(Array.isArray(additionalPlugins) ? additionalPlugins : []),
     ],
   });
+
+  configurePluginTransformFlowEnums(metroPreset, babelPreset);
 
   if (looseClassTransform) {
     configurePluginTransformClasses(metroPreset, babelPreset, api);

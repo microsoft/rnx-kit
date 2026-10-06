@@ -7,6 +7,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
   const preset = require("../src/index");
 
   const thisBabelPreset = path.dirname(__dirname);
+  const cwd = path.join(__dirname, "__fixtures__");
 
   const optionsWithAdditionalPlugins = {
     additionalPlugins: [
@@ -16,18 +17,28 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
   };
 
   /**
-   *
+   * @param {string} spec
+   * @returns {string}
+   */
+  function fixture(spec) {
+    return path.join(cwd, spec);
+  }
+
+  /**
    * @param {string} filename
    * @param {import("@babel/core").TransformOptions} opts
-   * @returns {Promise<string | null>}
+   * @returns {Promise<string>}
    */
   async function transform(filename, opts) {
     const oxfmt = await import("oxfmt");
     const output = babel.transformFileSync(filename, opts);
-    return output?.code
-      ? // Format the code to make the snapshot more legible.
-        (await oxfmt.format(filename, output.code)).code
-      : null;
+    const code = output?.code;
+    if (!code) {
+      fail(`Failed to transform '${filename}'`);
+    }
+
+    // Format the code to make the snapshot more legible.
+    return (await oxfmt.format(filename, code)).code;
   }
 
   afterEach(() => {
@@ -98,42 +109,43 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
   });
 
   test("forwards options to `@react-native/babel-preset`", async () => {
-    const cwd = path.join(__dirname, "__fixtures__");
-    const app = path.join(cwd, "App.ts");
-
-    const code = await transform(app, {
+    const code = await transform(fixture("App.ts"), {
       cwd,
       presets: [[thisBabelPreset, { disableImportExportTransform: true }]],
     });
-
-    if (!code) {
-      fail("Failed to transform `App.ts`");
-    }
 
     expect(code).toMatchSnapshot();
   });
 
   test("transforms `const enum`s", async () => {
-    const cwd = path.join(__dirname, "__fixtures__");
-    const app = path.join(cwd, "App.ts");
-
-    const code = await transform(app, {
+    const code = await transform(fixture("App.ts"), {
       cwd,
       presets: [thisBabelPreset],
     });
 
-    if (!code) {
-      fail("Failed to transform `App.ts`");
-    }
+    expect(code).toMatchSnapshot();
+  });
+
+  test("transforms Flow enums", async () => {
+    const code = await transform(fixture("Enum.flow.js"), {
+      cwd,
+      presets: [thisBabelPreset],
+    });
+
+    expect(code).toMatchSnapshot();
+  });
+
+  test("transforms Flow enums when import/export transform is disabled", async () => {
+    const code = await transform(fixture("Enum.flow.js"), {
+      cwd,
+      presets: [[thisBabelPreset, { disableImportExportTransform: true }]],
+    });
 
     expect(code).toMatchSnapshot();
   });
 
   test("applies additional plugins", async () => {
-    const cwd = path.join(__dirname, "__fixtures__");
-    const app = path.join(cwd, "App.ts");
-
-    const code = await transform(app, {
+    const code = await transform(fixture("App.ts"), {
       cwd,
       presets: [
         [
@@ -150,17 +162,10 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
       ],
     });
 
-    if (!code) {
-      fail("Failed to transform `App.ts`");
-    }
-
     expect(code).toMatchSnapshot();
   });
 
   test("can be further extended", async () => {
-    const cwd = path.join(__dirname, "__fixtures__");
-    const app = path.join(cwd, "App.ts");
-
     const customPreset = () => ({
       presets: [
         [
@@ -177,23 +182,16 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
       ],
     });
 
-    const code = await transform(app, {
+    const code = await transform(fixture("App.ts"), {
       cwd,
       presets: [customPreset],
     });
-
-    if (!code) {
-      fail("Failed to transform `App.ts`");
-    }
 
     expect(code).toMatchSnapshot();
   });
 
   test("passes `loose: true` to `@babel/plugin-transform-classes`", async () => {
-    const cwd = path.join(__dirname, "__fixtures__");
-    const app = path.join(cwd, "Class.ts");
-
-    const code = await transform(app, {
+    const code = await transform(fixture("Class.ts"), {
       cwd,
       presets: [
         [
@@ -205,10 +203,6 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
         ],
       ],
     });
-
-    if (!code) {
-      fail("Failed to transform `Class.ts`");
-    }
 
     expect(code).toMatchSnapshot();
   });
