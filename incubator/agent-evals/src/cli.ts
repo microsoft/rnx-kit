@@ -75,6 +75,17 @@ async function loadEvals(files: string[]): Promise<Map<string, TestCase>> {
   return evals;
 }
 
+/**
+ * Returns whether a log belongs to an eval, i.e. whether a folder in its path
+ * is named after the eval.
+ */
+function isSessionFor(name: string, testCase: TestCase, log: string): boolean {
+  return (
+    testCase.metadata?.allSessions === true ||
+    path.resolve(log).split(/[\\/]/).includes(name)
+  );
+}
+
 function readResponse(logPath: string, adapter: Adapter): ProviderResponse {
   if (fs.statSync(logPath).isDirectory()) {
     logPath = path.join(logPath, "events.jsonl");
@@ -139,6 +150,10 @@ if (
       "A log is a session log file or folder. If a file with the same name but",
       "with a `.diff` extension exists next to it, it is used as the diff.",
       "",
+      "An eval only grades logs with a folder named after it in their path, e.g.",
+      "`logs/changeset-required/session.jsonl`, unless it sets",
+      "`metadata.allSessions`. Other logs are skipped.",
+      "",
       "Options:",
       `  --agent <name>          Agent that produced the logs (default: copilot)`,
       "  --evals <path>          File or folder to find evals in, instead of the",
@@ -160,7 +175,14 @@ if (
       passRate ?? testCase.metadata?.passRate ?? DEFAULT_PASS_RATE;
     test(`${name}: ${testCase.description}`, async (t) => {
       let passed = 0;
+      let graded = 0;
       for (let i = 0; i < logs.length; ++i) {
+        if (!isSessionFor(name, testCase, logs[i])) {
+          t.diagnostic(`skip: ${logs[i]}`);
+          continue;
+        }
+
+        ++graded;
         const result = await grade(testCase, responses[i], graderOptions);
         if (result.pass) {
           ++passed;
@@ -170,9 +192,14 @@ if (
         );
       }
 
+      if (graded === 0) {
+        t.skip("No sessions for this eval");
+        return;
+      }
+
       ok(
-        passed / logs.length >= requiredPassRate,
-        `${passed} of ${logs.length} sessions passed; required pass rate: ${requiredPassRate}`
+        passed / graded >= requiredPassRate,
+        `${passed} of ${graded} sessions passed; required pass rate: ${requiredPassRate}`
       );
     });
   }

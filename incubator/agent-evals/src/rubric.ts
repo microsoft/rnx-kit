@@ -63,7 +63,10 @@ export function parseResponse(response: string): GradingResult {
 
   try {
     const { pass, reason } = JSON.parse(json);
-    return { pass: pass === true, score: pass === true ? 1 : 0, reason };
+    if (typeof pass !== "boolean") {
+      return fail(`Grader returned an invalid response: ${json}`);
+    }
+    return { pass, score: pass ? 1 : 0, reason };
   } catch (e) {
     return fail(`Grader returned an invalid response: ${e}`);
   }

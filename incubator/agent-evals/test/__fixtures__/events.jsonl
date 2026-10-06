@@ -1,0 +1,13 @@
+{"type": "session.start", "data": {"context": {"cwd": "/repo/packages/a", "gitRoot": "/repo"}}}
+{"type": "user.message", "data": {"content": "Fix the bug"}}
+{"type": "assistant.message", "data": {"content": "Looking into it"}}
+{"type": "assistant.message", "data": {"content": ""}}
+{"type": "tool.execution_start", "data": {"toolCallId": "1", "toolName": "bash", "arguments": {"command": "yarn test"}}}
+{"type": "tool.execution_complete", "data": {"toolCallId": "1", "success": true, "result": {"content": "ok"}}}
+{"type": "tool.execution_start", "data": {"toolCallId": "2", "toolName": "view", "arguments": {"path": "/repo/src/a.ts"}}}
+{"type": "tool.execution_complete", "data": {"toolCallId": "2", "success": false, "error": {"message": "not found"}}}
+{"type": "tool.execution_start", "data": {"toolCallId": "3", "toolName": "view", "arguments": {"path": "/elsewhere/b.ts"}}}
+{"type": "tool.execution_start", "data": {"toolCallId": "4", "toolName": "create", "arguments": {"path": "/repo/src/c.ts", "file_text": "c"}}}
+{"type": "tool.execution_start", "data": {"toolCallId": "5", "toolName": "edit", "arguments": {"path": "/repo/src/a.ts", "old_str": "a", "new_str": "b"}}}
+{"type": "tool.execution_start", "data": {"toolCallId": "6", "toolName": "apply_patch", "arguments": {"input": "*** Begin Patch\n*** Add File: /repo/test/d.test.ts\n+d\n*** End Patch"}}}
+{"type": "assistant.message", "data": {"content": "Done"}}

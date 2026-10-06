@@ -110,6 +110,29 @@ describe("parseDiff()", () => {
     ]);
   });
 
+  it("reads added lines starting with `++ ` as content", () => {
+    const diff = [
+      "diff --git a/a.md b/a.md",
+      "--- a/a.md",
+      "+++ b/a.md",
+      "@@ -1,2 +1,3 @@",
+      " a",
+      "--- b",
+      "+++ c",
+      "+d",
+      "\\ No newline at end of file",
+      "diff --git a/e.md b/e.md",
+      "--- /dev/null",
+      "+++ b/e.md",
+      "@@ -0,0 +1 @@",
+      "+e",
+    ].join("\n");
+    deepEqual(parseDiff(diff), [
+      { path: "a.md", content: "++ c\nd\n" },
+      { path: "e.md", content: "e\n" },
+    ]);
+  });
+
   it("skips deleted files", () => {
     const diff = [
       "diff --git a/c.ts b/c.ts",

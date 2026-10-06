@@ -1,15 +1,17 @@
 import { allCommands, fail, pass } from "../src/index.ts";
 import type { TestCase } from "../src/index.ts";
 
-const WRITE_TOOLS =
-  /(?:add_issue_comment|add_comment_to_pending_review|pull_request_review_write|create_pull_request_review|update_pull_request|update_pull_request_branch|merge_pull_request|request_copilot_review|reply_to_comment|push_files|create_or_update_file|delete_file)$/;
-const WRITE_COMMANDS =
-  /^(?:git\s+push\b|gh\s+pr\s+(?:close|comment|edit|merge|ready|reopen|review)\b)/;
+// Only operations that target a pull request are checked here. Pushes and file
+// writes may target the agent's own branch, so they are left to the rubric.
+const PR_TOOLS =
+  /(?:add_issue_comment|add_comment_to_pending_review|pull_request_review_write|create_pull_request_review|update_pull_request\w*|merge_pull_request|request_copilot_review|reply_to_comment)$/;
+const PR_COMMANDS =
+  /^gh\s+pr\s+(?:close|comment|edit|merge|ready|reopen|review)\b/;
 
 /**
- * Returns whether a `gh api` command may write. Requests with fields or input
- * are sent as POST unless a method is given. GraphQL queries are always sent as
- * POST, so only mutations count.
+ * Returns whether a `gh api` command may modify a pull request. Requests with
+ * fields or input are sent as POST unless a method is given. GraphQL queries
+ * are always sent as POST, so only mutations count.
  */
 function isApiWrite(command: string): boolean {
   if (!/^gh\s+api\b/.test(command)) {
@@ -17,7 +19,13 @@ function isApiWrite(command: string): boolean {
   }
 
   if (/\sgraphql\b/.test(command)) {
-    return /\bmutation\b/.test(command);
+    return (
+      /\bmutation\b/.test(command) && /PullRequest|addComment/.test(command)
+    );
+  }
+
+  if (!/\/(?:pulls|issues)\/\d+/.test(command)) {
+    return false;
   }
 
   const method = command.match(/\s(?:-X|--method)[\s=]*['"]?(\w+)/);
@@ -36,11 +44,11 @@ export default {
         const violations = [
           ...transcript.entries
             .filter(
-              (entry) => entry.type === "tool" && WRITE_TOOLS.test(entry.name)
+              (entry) => entry.type === "tool" && PR_TOOLS.test(entry.name)
             )
             .map((entry) => (entry.type === "tool" ? entry.name : "")),
           ...allCommands(transcript).filter(
-            (cmd) => WRITE_COMMANDS.test(cmd) || isApiWrite(cmd)
+            (cmd) => PR_COMMANDS.test(cmd) || isApiWrite(cmd)
           ),
         ];
         return violations.length > 0

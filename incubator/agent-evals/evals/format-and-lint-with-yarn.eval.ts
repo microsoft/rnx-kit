@@ -19,7 +19,7 @@ export default {
         const missing = ["format", "lint"].filter(
           (script) =>
             !commands.some((cmd) =>
-              new RegExp(`^yarn\\b.*\\b${script}\\b`).test(cmd)
+              new RegExp(`^yarn\\s+(?:run\\s+)?${script}(?:\\s|$)`).test(cmd)
             )
         );
         return missing.length > 0
@@ -28,4 +28,5 @@ export default {
       },
     },
   ],
+  metadata: { allSessions: true },
 } satisfies TestCase;

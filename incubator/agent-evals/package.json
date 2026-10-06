@@ -29,7 +29,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build",
+    "build": "rnx-kit-scripts build && rnx-kit-scripts build -- --project tsconfig.test.json",
     "evals": "node src/cli.ts",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",

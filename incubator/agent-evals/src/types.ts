@@ -78,6 +78,12 @@ export type TestCase = {
   description: string;
   assert: Assertion[];
   metadata?: {
+    /**
+     * Whether the eval grades all sessions. By default, an eval only grades
+     * logs with a folder named after the eval in their path, e.g.
+     * `logs/changeset-required/session.jsonl`.
+     */
+    allSessions?: boolean;
     /** Fraction of logs that must pass (default: 0.8). */
     passRate?: number;
   };

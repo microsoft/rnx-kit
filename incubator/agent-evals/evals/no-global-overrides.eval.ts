@@ -51,4 +51,5 @@ export default {
       },
     },
   ],
+  metadata: { allSessions: true },
 } satisfies TestCase;

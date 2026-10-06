@@ -21,13 +21,35 @@ export function fail(reason: string): GradingResult {
 }
 
 /**
- * Returns the added lines per file in a unified diff.
+ * Returns the added lines per file in a unified diff. Hunk line counts are
+ * tracked so that added lines starting with `++ ` are not read as headers.
  */
 export function parseDiff(diff: string): FileWrite[] {
   const writes: FileWrite[] = [];
   let current: FileWrite | undefined;
+  let oldLines = 0;
+  let newLines = 0;
   for (const line of diff.split("\n")) {
-    if (line.startsWith("+++ ")) {
+    if (oldLines > 0 || newLines > 0) {
+      if (line.startsWith("+")) {
+        --newLines;
+        if (current) {
+          current.content += line.substring(1) + "\n";
+        }
+      } else if (line.startsWith("-")) {
+        --oldLines;
+      } else if (!line.startsWith("\\")) {
+        --oldLines;
+        --newLines;
+      }
+      continue;
+    }
+
+    const hunk = line.match(/^@@ -\d+(?:,(\d+))? \+\d+(?:,(\d+))? @@/);
+    if (hunk) {
+      oldLines = Number(hunk[1] ?? 1);
+      newLines = Number(hunk[2] ?? 1);
+    } else if (line.startsWith("+++ ")) {
       const file = line.substring(4).trim();
       current =
         file === "/dev/null"
@@ -38,8 +60,6 @@ export function parseDiff(diff: string): FileWrite[] {
       }
     } else if (line.startsWith("diff --git ")) {
       current = undefined;
-    } else if (current && line.startsWith("+")) {
-      current.content += line.substring(1) + "\n";
     }
   }
   return writes;

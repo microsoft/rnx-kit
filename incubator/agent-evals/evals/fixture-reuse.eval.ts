@@ -31,20 +31,33 @@ export default {
       type: "javascript",
       value: (_output, { providerResponse }) => {
         const { entries } = providerResponse.metadata.transcript;
-        const firstWrite = entries.findIndex(
-          (entry) =>
-            entry.type === "tool" &&
-            toolWrites(entry).some((file) => file.includes(FIXTURES))
-        );
-        const hasNewFixtures =
-          firstWrite >= 0 ||
-          writtenFiles(providerResponse).some((f) => f.path.includes(FIXTURES));
-        if (!hasNewFixtures) {
-          return pass("No fixtures were added");
+        const findWrite = (predicate: (file: string) => boolean) =>
+          entries.findIndex(
+            (entry) =>
+              entry.type === "tool" && toolWrites(entry).some(predicate)
+          );
+        let firstWrite = findWrite((file) => file.includes(FIXTURES));
+        if (firstWrite < 0) {
+          if (
+            !writtenFiles(providerResponse).some((f) =>
+              f.path.includes(FIXTURES)
+            )
+          ) {
+            return pass("No fixtures were added");
+          }
+
+          // The fixtures were written by a command we cannot detect, e.g. a
+          // script; they cannot have been written before the first write
+          firstWrite = findWrite(() => true);
+          if (firstWrite < 0) {
+            return fail(
+              "Added fixtures, but could not tell when; no file writes were found in the transcript"
+            );
+          }
         }
 
         const inspected = entries
-          .slice(0, firstWrite >= 0 ? firstWrite : entries.length)
+          .slice(0, firstWrite)
           .some((entry) => entry.type === "tool" && inspectsFixtures(entry));
         return inspected
           ? pass("Inspected existing fixtures before adding new ones")
