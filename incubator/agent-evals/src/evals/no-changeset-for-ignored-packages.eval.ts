@@ -1,7 +1,12 @@
-import { fail, isChangeset, pass, writtenFiles } from "../assertions.ts";
-import type { TestCase } from "../types.ts";
+import {
+  fail,
+  isChangeset,
+  pass,
+  writtenFiles,
+  type TestCase,
+} from "../index.ts";
 
-export const noChangesetForIgnoredPackages: TestCase = {
+export default {
   description: "Does not add a changeset when only ignored packages change",
   assert: [
     {
@@ -16,4 +21,4 @@ export const noChangesetForIgnoredPackages: TestCase = {
       },
     },
   ],
-};
+} satisfies TestCase;

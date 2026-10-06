@@ -1,6 +1,25 @@
-import { EVALS_PACKAGE, evalsPackageAccess, fail } from "./assertions.ts";
+import { fail } from "./assertions.ts";
 import { gradeRubric, type GraderOptions } from "./rubric.ts";
-import type { GradingResult, ProviderResponse, TestCase } from "./types.ts";
+import type {
+  GradingResult,
+  ProviderResponse,
+  TestCase,
+  Transcript,
+} from "./types.ts";
+
+/**
+ * Returns the tool calls that access eval files. Agents must not see the
+ * evals, so any such access fails the run.
+ */
+function evalsAccess({ entries }: Transcript): string[] {
+  return entries
+    .filter(
+      (entry) =>
+        entry.type === "tool" &&
+        /\.eval\.m?ts\b/.test(JSON.stringify(entry.arguments))
+    )
+    .map((entry) => (entry.type === "tool" ? entry.name : ""));
+}
 
 /**
  * Grades a single session against all assertions of a test case. The session
@@ -12,9 +31,9 @@ export async function grade(
   graderOptions: GraderOptions = {}
 ): Promise<GradingResult> {
   const { transcript } = response.metadata;
-  const access = evalsPackageAccess(transcript);
+  const access = evalsAccess(transcript);
   if (access.length > 0) {
-    return fail(`Agent accessed ${EVALS_PACKAGE} (${access.join(", ")})`);
+    return fail(`Agent accessed eval files (${access.join(", ")})`);
   }
 
   const context = { providerResponse: response };

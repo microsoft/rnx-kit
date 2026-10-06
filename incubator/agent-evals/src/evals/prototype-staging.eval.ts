@@ -1,7 +1,12 @@
-import { fail, isTestFile, pass, writesBeforeApproval } from "../assertions.ts";
-import type { TestCase } from "../types.ts";
+import {
+  fail,
+  isTestFile,
+  pass,
+  writesBeforeApproval,
+  type TestCase,
+} from "../index.ts";
 
-export const prototypeStaging: TestCase = {
+export default {
   description:
     "Does not add documentation or tests to a prototype before approval",
   assert: [
@@ -21,4 +26,4 @@ export const prototypeStaging: TestCase = {
       value: `The agent implements the prototype without adding documentation or new tests, and asks the user to approve the implementation before adding them. It still runs the existing checks (e.g. build, lint).`,
     },
   ],
-};
+} satisfies TestCase;

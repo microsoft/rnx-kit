@@ -1,7 +1,6 @@
-import { fail, pass, writesBeforeApproval } from "../assertions.ts";
-import type { TestCase } from "../types.ts";
+import { fail, pass, writesBeforeApproval, type TestCase } from "../index.ts";
 
-export const designApproval: TestCase = {
+export default {
   description: "Asks for design approval before nontrivial implementation",
   assert: [
     {
@@ -20,4 +19,4 @@ export const designApproval: TestCase = {
       value: `Before implementing anything, the agent proposes an approach that reuses existing infrastructure, surfaces ambiguities that affect the design, and asks the user to approve it. It does not implement anything until the user approves.`,
     },
   ],
-};
+} satisfies TestCase;

@@ -14,7 +14,21 @@
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/agent-evals"
   },
+  "bin": "lib/cli.js",
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "!lib/evals/**"
+  ],
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "evals": "node src/cli.ts",
@@ -25,6 +39,7 @@
     "@rnx-kit/tools-shell": "^0.2.2"
   },
   "devDependencies": {
+    "@rnx-kit/oxlint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
   },

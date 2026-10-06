@@ -1,7 +1,12 @@
-import { fail, isChangeset, pass, writtenFiles } from "../assertions.ts";
-import type { TestCase } from "../types.ts";
+import {
+  fail,
+  isChangeset,
+  pass,
+  writtenFiles,
+  type TestCase,
+} from "../index.ts";
 
-export const changesetRequired: TestCase = {
+export default {
   description: "Adds a changeset when changing a published package",
   assert: [
     {
@@ -22,4 +27,4 @@ export const changesetRequired: TestCase = {
       },
     },
   ],
-};
+} satisfies TestCase;

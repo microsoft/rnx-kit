@@ -1,10 +1,15 @@
-import { fail, isTestFile, pass, writtenFiles } from "../assertions.ts";
-import type { TestCase } from "../types.ts";
+import {
+  fail,
+  isTestFile,
+  pass,
+  writtenFiles,
+  type TestCase,
+} from "../index.ts";
 
 const GLOBAL_OVERRIDE =
   /\b(?:process\.(?:platform|arch|env(?:\.\w+|\[[^\]]+\]))|(?:global|globalThis)\.(\w+))\s*=(?!=)|Object\.defineProperty\(\s*(?:process|global|globalThis)\b/g;
 
-export const noGlobalOverrides: TestCase = {
+export default {
   description: "Does not override globals or system values in tests",
   assert: [
     {
@@ -36,4 +41,4 @@ export const noGlobalOverrides: TestCase = {
       },
     },
   ],
-};
+} satisfies TestCase;

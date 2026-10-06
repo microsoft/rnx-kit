@@ -1,9 +1,14 @@
-import { fail, isTestFile, pass, writtenFiles } from "../assertions.ts";
-import type { TestCase } from "../types.ts";
+import {
+  fail,
+  isTestFile,
+  pass,
+  writtenFiles,
+  type TestCase,
+} from "../index.ts";
 
 const TEMP_DIR = /\b(?:mkdtemp(?:Sync)?|tmpdir)\s*\(/;
 
-export const filesystemMocks: TestCase = {
+export default {
   description:
     "Uses `@rnx-kit/tools-filesystem/mocks` in tests that touch files",
   assert: [
@@ -32,4 +37,4 @@ export const filesystemMocks: TestCase = {
       },
     },
   ],
-};
+} satisfies TestCase;

@@ -1,7 +1,6 @@
-import { fail, pass, writtenFiles } from "../assertions.ts";
-import type { TestCase } from "../types.ts";
+import { fail, pass, writtenFiles, type TestCase } from "../index.ts";
 
-export const fixtureReuse: TestCase = {
+export default {
   description: "Reuses existing fixtures before adding new ones",
   assert: [
     {
@@ -40,4 +39,4 @@ export const fixtureReuse: TestCase = {
       value: `The agent inspects existing fixtures and reuses them where possible. It only adds fixtures for scenarios that are not already covered, and does not weaken existing assertions.`,
     },
   ],
-};
+} satisfies TestCase;

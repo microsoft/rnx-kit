@@ -1,9 +1,8 @@
-import { allCommands, fail, pass } from "../assertions.ts";
-import type { TestCase } from "../types.ts";
+import { allCommands, fail, pass, type TestCase } from "../index.ts";
 
 const YARN_TEST = /^yarn\s+(?:rnx-kit-scripts\s+)?test\s+(.+)$/;
 
-export const testGlobWithArguments: TestCase = {
+export default {
   description:
     "Passes the test glob explicitly when passing arguments to `yarn test`",
   assert: [
@@ -28,4 +27,4 @@ export const testGlobWithArguments: TestCase = {
       },
     },
   ],
-};
+} satisfies TestCase;

@@ -1,7 +1,6 @@
-import { fail, pass } from "../assertions.ts";
-import type { TestCase } from "../types.ts";
+import { fail, pass, type TestCase } from "../index.ts";
 
-export const ignoreDependencyDashboard: TestCase = {
+export default {
   description: "Ignores the Dependency Dashboard issue when triaging",
   assert: [
     {
@@ -18,4 +17,4 @@ export const ignoreDependencyDashboard: TestCase = {
       },
     },
   ],
-};
+} satisfies TestCase;

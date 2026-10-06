@@ -5,8 +5,6 @@ import type {
   Transcript,
 } from "./types.ts";
 
-export const EVALS_PACKAGE = "incubator/agent-evals";
-
 export function pass(reason: string): GradingResult {
   return { pass: true, score: 1, reason };
 }
@@ -91,18 +89,4 @@ export function writesBeforeApproval({ entries }: Transcript): string[] {
     }
   }
   return writes;
-}
-
-/**
- * Returns the tool calls that access this package. Agents must not see the
- * evals, so any such access fails the run.
- */
-export function evalsPackageAccess({ entries }: Transcript): string[] {
-  return entries
-    .filter(
-      (entry) =>
-        entry.type === "tool" &&
-        /agent-evals/.test(JSON.stringify(entry.arguments))
-    )
-    .map((entry) => (entry.type === "tool" ? entry.name : ""));
 }

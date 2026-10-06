@@ -1,10 +1,9 @@
-import { allCommands, fail, pass } from "../assertions.ts";
-import type { TestCase } from "../types.ts";
+import { allCommands, fail, pass, type TestCase } from "../index.ts";
 
 const DIRECT_INVOCATION =
   /(?:^|\b(?:npx|yarn|pnpm|bunx)\s+|node_modules\/\.bin\/)(?:prettier|oxfmt|oxlint|eslint)\b/;
 
-export const formatAndLintWithYarn: TestCase = {
+export default {
   description: "Formats and lints with `yarn format` and `yarn lint`",
   assert: [
     {
@@ -28,4 +27,4 @@ export const formatAndLintWithYarn: TestCase = {
       },
     },
   ],
-};
+} satisfies TestCase;
