@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 2.0.6
+
+### Patch Changes
+
+- b5ddd52: Check for Hermes v1 compiler when bundling
+
 ## 2.0.5
 
 ### Patch Changes
