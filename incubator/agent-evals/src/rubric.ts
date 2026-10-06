@@ -11,7 +11,14 @@ export type GraderOptions = {
 };
 
 const MAX_RESULT_LENGTH = 1000;
+const INSTRUCTIONS_FILE = "instructions.md";
 const TRANSCRIPT_FILE = "transcript.md";
+
+// On Windows, npm installs Copilot CLI as a `.cmd` shim, which can only be run
+// through a shell. Node does not quote arguments passed to a shell, so we quote
+// them ourselves. They must not contain quotes, newlines or other shell syntax.
+const IS_WINDOWS = process.platform === "win32";
+const COPILOT = IS_WINDOWS ? "copilot.cmd" : "copilot";
 
 function truncate(text: string, length: number): string {
   return text.length > length ? text.substring(0, length) + " [...]" : text;
@@ -38,10 +45,10 @@ export function formatTranscript({ entries }: Transcript): string {
     .join("\n\n");
 }
 
-function makePrompt(rubric: string): string {
+function makeInstructions(rubric: string): string {
   return [
     "You grade transcripts of coding agent sessions against a rubric.",
-    `Read the transcript in ${TRANSCRIPT_FILE} in the current directory and grade it against the rubric below.`,
+    `Read the transcript in ${TRANSCRIPT_FILE} in this folder and grade it against the rubric below.`,
     "Only consider what the transcript shows.",
     "",
     "Rubric:",
@@ -70,9 +77,10 @@ export function parseResponse(response: string): GradingResult {
 }
 
 /**
- * Grades a transcript against a rubric using Copilot CLI. The transcript is
- * written to a file since it may exceed command line length limits. The grader
- * can only read files in that folder.
+ * Grades a transcript against a rubric using Copilot CLI. The instructions and
+ * the transcript are written to files since the transcript may exceed command
+ * line length limits, and the prompt must be safe to pass through a shell on
+ * Windows. The grader can only read files in that folder.
  */
 export async function gradeRubric(
   rubric: string,
@@ -82,13 +90,17 @@ export async function gradeRubric(
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-"));
   try {
     fs.writeFileSync(
+      path.join(cwd, INSTRUCTIONS_FILE),
+      makeInstructions(rubric)
+    );
+    fs.writeFileSync(
       path.join(cwd, TRANSCRIPT_FILE),
       formatTranscript(transcript)
     );
 
     const args = [
       "--prompt",
-      makePrompt(rubric),
+      `Follow the instructions in ${INSTRUCTIONS_FILE} in the current directory`,
       "--silent",
       "--no-ask-user",
       "--no-custom-instructions",
@@ -101,8 +113,10 @@ export async function gradeRubric(
       args.push(`--model=${model}`);
     }
 
-    const copilot = makeCommand("copilot", { cwd });
-    const { status, stdout, stderr } = await copilot(...args);
+    const copilot = makeCommand(COPILOT, { cwd });
+    const { status, stdout, stderr } = await copilot(
+      ...(IS_WINDOWS ? args.map((arg) => `"${arg}"`) : args)
+    );
     if (status !== 0) {
       return fail(`Grader failed with exit code ${status}: ${stderr}`);
     }
