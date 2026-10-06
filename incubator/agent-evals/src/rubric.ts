@@ -10,7 +10,6 @@ export type GraderOptions = {
   model?: string;
 };
 
-const MAX_RESULT_LENGTH = 1000;
 const INSTRUCTIONS_FILE = "instructions.md";
 const TRANSCRIPT_FILE = "transcript.md";
 
@@ -19,10 +18,6 @@ const TRANSCRIPT_FILE = "transcript.md";
 // them ourselves. They must not contain quotes, newlines or other shell syntax.
 const IS_WINDOWS = process.platform === "win32";
 const COPILOT = IS_WINDOWS ? "copilot.cmd" : "copilot";
-
-function truncate(text: string, length: number): string {
-  return text.length > length ? text.substring(0, length) + " [...]" : text;
-}
 
 export function formatTranscript({ entries }: Transcript): string {
   return entries
@@ -37,9 +32,7 @@ export function formatTranscript({ entries }: Transcript): string {
           : entry.success
             ? " (ok)"
             : " (failed)";
-      const result = entry.result
-        ? `\n\n${truncate(entry.result, MAX_RESULT_LENGTH)}`
-        : "";
+      const result = entry.result ? `\n\n${entry.result}` : "";
       return `### TOOL ${entry.name}${status}\n\n${JSON.stringify(entry.arguments)}${result}`;
     })
     .join("\n\n");
