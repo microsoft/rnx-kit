@@ -4956,6 +4956,7 @@ __metadata:
   resolution: "@rnx-kit/agent-evals@workspace:incubator/agent-evals"
   dependencies:
     "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-shell": "npm:^0.2.2"
     "@rnx-kit/tsconfig": "npm:*"
   languageName: unknown
   linkType: soft

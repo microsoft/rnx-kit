@@ -2,6 +2,7 @@ import { ok } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { test } from "node:test";
+import { parseArgs } from "node:util";
 import { copilot } from "./adapters/copilot.ts";
 import { evals } from "./evals/index.ts";
 import { grade } from "./grade.ts";
@@ -31,28 +32,52 @@ function readResponse(logPath: string, adapter: Adapter): ProviderResponse {
   return { output, metadata: { transcript, diff } };
 }
 
-const [name, ...logs] = process.argv.slice(2);
-const testCase = evals[name];
-const adapter = adapters[process.env["EVALS_AGENT"] || "copilot"];
+const { positionals, values } = parseArgs({
+  allowPositionals: true,
+  options: {
+    agent: { type: "string", default: "copilot" },
+    "grader-model": { type: "string" },
+    "pass-rate": { type: "string" },
+  },
+});
 
-if (!testCase || !adapter || logs.length === 0) {
+const [name, ...logs] = positionals;
+const testCase = evals[name];
+const adapter = adapters[values.agent];
+const passRate = Number(
+  values["pass-rate"] ?? testCase?.metadata?.passRate ?? DEFAULT_PASS_RATE
+);
+
+if (
+  !testCase ||
+  !adapter ||
+  logs.length === 0 ||
+  !(passRate >= 0 && passRate <= 1)
+) {
   console.error(
     [
-      "Usage: yarn evals <eval> <log...>",
+      "Usage: yarn evals <eval> <log...> [options]",
       "",
       "A log is a session log file or folder. If a file with the same name but",
       "with a `.diff` extension exists next to it, it is used as the diff.",
       "",
+      "Options:",
+      `  --agent <name>          Agent that produced the logs (default: copilot)`,
+      "  --grader-model <model>  Model used by Copilot CLI to grade rubrics",
+      `  --pass-rate <n>         Fraction of logs that must pass, 0-1 (default: ${DEFAULT_PASS_RATE} or the eval's)`,
+      "",
       `Evals: ${Object.keys(evals).join(", ")}`,
-      `Agents (EVALS_AGENT): ${Object.keys(adapters).join(", ")}`,
+      `Agents: ${Object.keys(adapters).join(", ")}`,
     ].join("\n")
   );
   process.exitCode = 1;
 } else {
+  const graderOptions = { model: values["grader-model"] };
   test(`${name}: ${testCase.description}`, async (t) => {
     let passed = 0;
     for (const log of logs) {
-      const result = await grade(testCase, readResponse(log, adapter));
+      const response = readResponse(log, adapter);
+      const result = await grade(testCase, response, graderOptions);
       if (result.pass) {
         ++passed;
       }
@@ -61,7 +86,6 @@ if (!testCase || !adapter || logs.length === 0) {
       );
     }
 
-    const passRate = testCase.metadata?.passRate ?? DEFAULT_PASS_RATE;
     ok(
       passed / logs.length >= passRate,
       `${passed} of ${logs.length} sessions passed; required pass rate: ${passRate}`

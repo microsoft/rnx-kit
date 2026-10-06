@@ -1,5 +1,5 @@
 import { EVALS_PACKAGE, evalsPackageAccess, fail } from "./assertions.ts";
-import { gradeRubric } from "./rubric.ts";
+import { gradeRubric, type GraderOptions } from "./rubric.ts";
 import type { GradingResult, ProviderResponse, TestCase } from "./types.ts";
 
 /**
@@ -8,7 +8,8 @@ import type { GradingResult, ProviderResponse, TestCase } from "./types.ts";
  */
 export async function grade(
   testCase: TestCase,
-  response: ProviderResponse
+  response: ProviderResponse,
+  graderOptions: GraderOptions = {}
 ): Promise<GradingResult> {
   const { transcript } = response.metadata;
   const access = evalsPackageAccess(transcript);
@@ -22,7 +23,7 @@ export async function grade(
     componentResults.push(
       assertion.type === "javascript"
         ? await assertion.value(response.output, context)
-        : await gradeRubric(assertion.value, transcript)
+        : await gradeRubric(assertion.value, transcript, graderOptions)
     );
   }
 

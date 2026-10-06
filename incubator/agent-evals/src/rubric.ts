@@ -1,13 +1,17 @@
+import { makeCommand } from "@rnx-kit/tools-shell";
+import * as fs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
 import { fail } from "./assertions.ts";
 import type { GradingResult, Transcript } from "./types.ts";
 
-const DEFAULT_API = "https://models.github.ai/inference";
-const DEFAULT_MODEL = "openai/gpt-4.1";
-const MAX_RESULT_LENGTH = 1000;
+export type GraderOptions = {
+  /** Model used by Copilot CLI to grade (default: Copilot CLI's default). */
+  model?: string;
+};
 
-const SYSTEM_PROMPT = `You grade transcripts of coding agent sessions against a rubric.
-Only consider what the transcript shows. Respond with a JSON object:
-{"pass": boolean, "reason": string}`;
+const MAX_RESULT_LENGTH = 1000;
+const TRANSCRIPT_FILE = "transcript.md";
 
 function truncate(text: string, length: number): string {
   return text.length > length ? text.substring(0, length) + " [...]" : text;
@@ -34,53 +38,79 @@ export function formatTranscript({ entries }: Transcript): string {
     .join("\n\n");
 }
 
+function makePrompt(rubric: string): string {
+  return [
+    "You grade transcripts of coding agent sessions against a rubric.",
+    `Read the transcript in ${TRANSCRIPT_FILE} in the current directory and grade it against the rubric below.`,
+    "Only consider what the transcript shows.",
+    "",
+    "Rubric:",
+    rubric,
+    "",
+    'Respond only with a JSON object: {"pass": boolean, "reason": string}',
+  ].join("\n");
+}
+
 /**
- * Grades a transcript against a rubric using GitHub Models (or any
- * OpenAI-compatible chat completions API).
+ * Parses the grader's response. The JSON object may be wrapped in other text,
+ * e.g. a Markdown code block.
  */
-export async function gradeRubric(
-  rubric: string,
-  transcript: Transcript
-): Promise<GradingResult> {
-  const token =
-    process.env["EVALS_GRADER_TOKEN"] || process.env["GITHUB_TOKEN"];
-  if (!token) {
-    return fail("Set EVALS_GRADER_TOKEN or GITHUB_TOKEN to grade rubrics");
+export function parseResponse(response: string): GradingResult {
+  const json = response.match(/\{[\s\S]*\}/)?.[0];
+  if (!json) {
+    return fail(`Grader returned an invalid response: ${response}`);
   }
 
-  const api = process.env["EVALS_GRADER_API"] || DEFAULT_API;
-  const response = await fetch(`${api}/chat/completions`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      Authorization: "Bearer " + token,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: process.env["EVALS_GRADER_MODEL"] || DEFAULT_MODEL,
-      temperature: 0,
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        {
-          role: "user",
-          content: `## Rubric\n\n${rubric}\n\n## Transcript\n\n${formatTranscript(transcript)}`,
-        },
-      ],
-    }),
-  });
-
-  if (!response.ok) {
-    return fail(`Grader failed: ${response.status} ${await response.text()}`);
-  }
-
-  const { choices } = (await response.json()) as {
-    choices: { message: { content: string } }[];
-  };
   try {
-    const { pass, reason } = JSON.parse(choices[0].message.content);
+    const { pass, reason } = JSON.parse(json);
     return { pass: pass === true, score: pass === true ? 1 : 0, reason };
   } catch (e) {
     return fail(`Grader returned an invalid response: ${e}`);
+  }
+}
+
+/**
+ * Grades a transcript against a rubric using Copilot CLI. The transcript is
+ * written to a file since it may exceed command line length limits. The grader
+ * can only read files in that folder.
+ */
+export async function gradeRubric(
+  rubric: string,
+  transcript: Transcript,
+  { model }: GraderOptions = {}
+): Promise<GradingResult> {
+  const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-"));
+  try {
+    fs.writeFileSync(
+      path.join(cwd, TRANSCRIPT_FILE),
+      formatTranscript(transcript)
+    );
+
+    const args = [
+      "--prompt",
+      makePrompt(rubric),
+      "--silent",
+      "--no-ask-user",
+      "--no-custom-instructions",
+      "--disable-builtin-mcps",
+      "--available-tools=view",
+      "--allow-tool=view",
+      `--add-dir=${cwd}`,
+    ];
+    if (model) {
+      args.push(`--model=${model}`);
+    }
+
+    const copilot = makeCommand("copilot", { cwd });
+    const { status, stdout, stderr } = await copilot(...args);
+    if (status !== 0) {
+      return fail(`Grader failed with exit code ${status}: ${stderr}`);
+    }
+
+    return parseResponse(stdout);
+  } catch (e) {
+    return fail(`Grader failed: ${e}`);
+  } finally {
+    fs.rmSync(cwd, { force: true, recursive: true });
   }
 }

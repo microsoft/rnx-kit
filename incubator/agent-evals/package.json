@@ -21,6 +21,9 @@
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint"
   },
+  "dependencies": {
+    "@rnx-kit/tools-shell": "^0.2.2"
+  },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
