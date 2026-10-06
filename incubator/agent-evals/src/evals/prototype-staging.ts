@@ -1,0 +1,28 @@
+import { fail, isTestFile, pass, writesBeforeApproval } from "../assertions.ts";
+import type { TestCase } from "../types.ts";
+
+export const prototypeStaging: TestCase = {
+  description:
+    "Does not add documentation or tests to a prototype before approval",
+  vars: {
+    prompt:
+      "Prototype a new experimental package that extracts zip archives, similar to `untar()` in `@rnx-kit/tools-shell`.",
+  },
+  assert: [
+    {
+      type: "javascript",
+      value: (_output, { providerResponse }) => {
+        const writes = writesBeforeApproval(
+          providerResponse.metadata.transcript
+        ).filter((file) => isTestFile(file) || /\.md$/i.test(file));
+        return writes.length > 0
+          ? fail(`Added docs or tests before approval: ${writes.join(", ")}`)
+          : pass("No docs or tests were added before approval");
+      },
+    },
+    {
+      type: "llm-rubric",
+      value: `The agent implements the prototype without adding documentation or new tests, and asks the user to approve the implementation before adding them. It still runs the existing checks (e.g. build, lint).`,
+    },
+  ],
+};

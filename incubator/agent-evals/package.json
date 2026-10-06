@@ -1,0 +1,32 @@
+{
+  "name": "@rnx-kit/agent-evals",
+  "version": "0.0.1",
+  "private": true,
+  "description": "EXPERIMENTAL - USE WITH CAUTION - Evals that grade coding agent session logs",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/agent-evals#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/agent-evals"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "evals": "node src/cli.ts",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*"
+  },
+  "engines": {
+    "node": ">=20.18"
+  },
+  "experimental": true
+}
