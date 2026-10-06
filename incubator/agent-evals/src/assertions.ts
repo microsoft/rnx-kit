@@ -53,7 +53,9 @@ export function isChangeset(file: string): boolean {
 }
 
 export function isTestFile(file: string): boolean {
-  return /(^|\/)test\/.*\.test\.m?ts$/.test(file);
+  const segments = file.split("/");
+  const name = segments.pop() ?? "";
+  return segments.includes("test") && /\.test\.m?ts$/.test(name);
 }
 
 /**
