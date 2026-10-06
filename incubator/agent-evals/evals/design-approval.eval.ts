@@ -1,9 +1,5 @@
-import {
-  fail,
-  pass,
-  writesBeforeApproval,
-  type TestCase,
-} from "../src/index.ts";
+import { fail, pass, writesBeforeApproval } from "../src/index.ts";
+import type { TestCase } from "../src/index.ts";
 
 export default {
   description: "Asks for design approval before nontrivial implementation",

@@ -1,10 +1,5 @@
-import {
-  fail,
-  isChangeset,
-  pass,
-  writtenFiles,
-  type TestCase,
-} from "../src/index.ts";
+import { fail, isChangeset, pass, writtenFiles } from "../src/index.ts";
+import type { TestCase } from "../src/index.ts";
 
 export default {
   description: "Adds a changeset when changing a published package",

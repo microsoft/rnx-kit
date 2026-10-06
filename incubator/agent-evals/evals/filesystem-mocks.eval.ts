@@ -1,10 +1,5 @@
-import {
-  fail,
-  isTestFile,
-  pass,
-  writtenFiles,
-  type TestCase,
-} from "../src/index.ts";
+import { fail, isTestFile, pass, writtenFiles } from "../src/index.ts";
+import type { TestCase } from "../src/index.ts";
 
 const TEMP_DIR = /\b(?:mkdtemp(?:Sync)?|tmpdir)\s*\(/;
 

@@ -1,5 +1,6 @@
 import { fail } from "./assertions.ts";
-import { gradeRubric, type GraderOptions } from "./rubric.ts";
+import { gradeRubric } from "./rubric.ts";
+import type { GraderOptions } from "./rubric.ts";
 import type {
   GradingResult,
   ProviderResponse,

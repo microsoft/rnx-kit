@@ -1,10 +1,5 @@
-import {
-  fail,
-  isTestFile,
-  pass,
-  writesBeforeApproval,
-  type TestCase,
-} from "../src/index.ts";
+import { fail, isTestFile, pass, writesBeforeApproval } from "../src/index.ts";
+import type { TestCase } from "../src/index.ts";
 
 export default {
   description:

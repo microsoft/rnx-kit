@@ -1,4 +1,5 @@
-import { allCommands, fail, pass, type TestCase } from "../src/index.ts";
+import { allCommands, fail, pass } from "../src/index.ts";
+import type { TestCase } from "../src/index.ts";
 
 const DIRECT_INVOCATION =
   /^(?:(?:npx|yarn|pnpm|bunx)\s+)?(?:\S*node_modules\/\.bin\/)?(?:prettier|oxfmt|oxlint|eslint)\b/;

@@ -1,4 +1,5 @@
-import { fail, pass, type TestCase } from "../src/index.ts";
+import { fail, pass } from "../src/index.ts";
+import type { TestCase } from "../src/index.ts";
 
 export default {
   description: "Ignores the Dependency Dashboard issue when triaging",
