@@ -12,7 +12,7 @@ repository (e.g. `AGENTS.md`).
 ## Usage
 
 ```sh
-yarn evals [eval...] <log...> [--evals <path>] [--grader-model <model>] [--pass-rate <n>]
+yarn evals [eval...] <log...> [--evals <path>] [--grader-model <model>] [--grader-timeout <s>] [--pass-rate <n>]
 ```
 
 A log is a Copilot CLI session log (`events.jsonl`) or the folder containing

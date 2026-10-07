@@ -8,6 +8,7 @@ import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { copilot } from "./adapters/copilot.ts";
 import { grade } from "./grade.ts";
+import { DEFAULT_GRADER_TIMEOUT } from "./rubric.ts";
 import type { Adapter, ProviderResponse, TestCase } from "./types.ts";
 
 const DEFAULT_PASS_RATE = 0.8;
@@ -143,29 +144,43 @@ const { positionals, values } = parseArgs({
     agent: { type: "string", default: "copilot" },
     evals: { type: "string", multiple: true },
     "grader-model": { type: "string" },
+    "grader-timeout": { type: "string" },
     "pass-rate": { type: "string" },
   },
 });
 
-const evals = await loadEvals(findEvalFiles(values.evals ?? ["."]));
+const evalsPaths = values.evals ?? ["."];
+const missingEvals = evalsPaths.filter((p) => !fs.existsSync(p));
+const evals = await loadEvals(
+  findEvalFiles(evalsPaths.filter((p) => !missingEvals.includes(p)))
+);
 const names = positionals.filter((p) => evals.has(p));
 const logs = positionals.filter((p) => !evals.has(p));
 const adapter = adapters[values.agent];
 const missing = logs.filter((log) => !fs.existsSync(log));
 const passRate =
   values["pass-rate"] === undefined ? undefined : Number(values["pass-rate"]);
+const graderTimeout =
+  values["grader-timeout"] === undefined
+    ? undefined
+    : Number(values["grader-timeout"]);
 
 if (
   evals.size === 0 ||
   !adapter ||
   logs.length === 0 ||
   missing.length > 0 ||
-  !(passRate === undefined || (passRate >= 0 && passRate <= 1))
+  missingEvals.length > 0 ||
+  !(passRate === undefined || (passRate >= 0 && passRate <= 1)) ||
+  !(graderTimeout === undefined || graderTimeout > 0)
 ) {
+  for (const p of missingEvals) {
+    console.error(`Unknown evals path: ${p}`);
+  }
   for (const arg of missing) {
     console.error(`Unknown eval or log: ${arg}`);
   }
-  if (missing.length > 0) {
+  if (missing.length > 0 || missingEvals.length > 0) {
     console.error();
   }
   console.error(
@@ -191,6 +206,7 @@ if (
       "  --evals <path>          File or folder to find evals in, instead of the",
       "                          current folder; can be specified multiple times",
       "  --grader-model <model>  Model used by Copilot CLI to grade rubrics",
+      `  --grader-timeout <s>    Seconds to wait for each rubric grade (default: ${DEFAULT_GRADER_TIMEOUT})`,
       `  --pass-rate <n>         Fraction of logs that must pass, 0-1 (default: ${DEFAULT_PASS_RATE} or the eval's)`,
       "",
       `Evals: ${[...evals.keys()].join(", ") || "(none found)"}`,
@@ -199,7 +215,10 @@ if (
   );
   process.exitCode = 1;
 } else {
-  const graderOptions = { model: values["grader-model"] };
+  const graderOptions = {
+    model: values["grader-model"],
+    timeout: graderTimeout,
+  };
   const responses = logs.map((log) => readResponse(log, adapter));
   for (const name of names.length > 0 ? names : evals.keys()) {
     const testCase = evals.get(name) as TestCase;

@@ -95,4 +95,27 @@ describe("grade()", () => {
       ],
     });
   });
+
+  it("fails assertions that throw", async () => {
+    const result = await grade(
+      {
+        description: "",
+        assert: [
+          {
+            type: "javascript",
+            value: () => {
+              throw new Error("oops");
+            },
+          },
+          { type: "javascript", value: () => pass("ok") },
+        ],
+      },
+      { output: "", metadata: { transcript: transcript() } }
+    );
+    deepEqual(result.componentResults, [
+      fail("Assertion threw: Error: oops"),
+      pass("ok"),
+    ]);
+    deepEqual(result.pass, false);
+  });
 });

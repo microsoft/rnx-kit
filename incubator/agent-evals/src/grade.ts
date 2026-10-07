@@ -47,7 +47,11 @@ export async function grade(
   const componentResults: GradingResult[] = [];
   for (const [i, assertion] of testCase.assert.entries()) {
     if (assertion.type === "javascript") {
-      componentResults[i] = await assertion.value(response.output, context);
+      try {
+        componentResults[i] = await assertion.value(response.output, context);
+      } catch (e) {
+        componentResults[i] = fail(`Assertion threw: ${e}`);
+      }
     }
   }
 

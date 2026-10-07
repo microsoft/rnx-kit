@@ -8,7 +8,11 @@ import type { GradingResult, ProviderResponse, Transcript } from "./types.ts";
 export type GraderOptions = {
   /** Model used by Copilot CLI to grade (default: Copilot CLI's default). */
   model?: string;
+  /** Seconds to wait for the grader before failing (default: 300). */
+  timeout?: number;
 };
+
+export const DEFAULT_GRADER_TIMEOUT = 300;
 
 const DIFF_FILE = "changes.diff";
 const INSTRUCTIONS_FILE = "instructions.md";
@@ -109,14 +113,15 @@ export function parseResponse(response: string): GradingResult {
 
 /**
  * Grades a session against a rubric using Copilot CLI. The instructions, the
- * transcript and the diff, if available, are written to files since the transcript may exceed command
- * line length limits, and the prompt must be safe to pass through a shell on
- * Windows. The grader can only read files in that folder.
+ * transcript and the diff, if available, are written to files since the
+ * transcript may exceed command line length limits, and the prompt must be safe
+ * to pass through a shell on Windows. The grader can only read files in that
+ * folder, and is killed if it does not finish within the timeout.
  */
 export async function gradeRubric(
   rubric: string,
   { transcript, diff }: ProviderResponse["metadata"],
-  { model }: GraderOptions = {}
+  { model, timeout = DEFAULT_GRADER_TIMEOUT }: GraderOptions = {}
 ): Promise<GradingResult> {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-"));
   try {
@@ -147,10 +152,13 @@ export async function gradeRubric(
       args.push(`--model=${model}`);
     }
 
-    const copilot = makeCommand(COPILOT, { cwd });
+    const copilot = makeCommand(COPILOT, { cwd, timeout: timeout * 1000 });
     const { status, stdout, stderr } = await copilot(
       ...(IS_WINDOWS ? args.map((arg) => `"${arg}"`) : args)
     );
+    if (status === null) {
+      return fail(`Grader timed out after ${timeout} s`);
+    }
     if (status !== 0) {
       return fail(`Grader failed with exit code ${status}: ${stderr}`);
     }
