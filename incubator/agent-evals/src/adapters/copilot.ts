@@ -16,7 +16,7 @@ function str(value: unknown): string | undefined {
  * Converts a Copilot CLI session log
  * (`~/.copilot/session-state/<id>/events.jsonl`) into a transcript.
  */
-export function copilot(log: string): Transcript {
+export function copilot(log: string, source = "session log"): Transcript {
   const transcript: Transcript = {
     agent: "copilot",
     entries: [],
@@ -50,11 +50,12 @@ export function copilot(log: string): Transcript {
       // The log may be truncated, e.g. if the session crashed
     }
     if (typeof event?.type !== "string") {
-      console.warn(`Skipped malformed line ${i + 1} in session log`);
+      console.warn(`Skipped malformed line ${i + 1} in ${source}`);
       continue;
     }
 
-    const { type, data = {} } = event;
+    const { type } = event;
+    const data = (event.data ?? {}) as Record<string, unknown>;
     switch (type) {
       case "session.start":
       case "session.resume": {

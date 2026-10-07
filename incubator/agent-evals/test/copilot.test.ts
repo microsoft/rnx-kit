@@ -122,6 +122,29 @@ describe("copilot() malformed logs", () => {
       { type: "message", role: "user", content: "Hi" },
     ]);
     equal(warn.mock.callCount(), 2);
-    match(String(warn.mock.calls[1].arguments[0]), /malformed line 3/);
+    match(
+      String(warn.mock.calls[1].arguments[0]),
+      /malformed line 3 in session log$/
+    );
+  });
+
+  it("includes the source in warnings", (t) => {
+    const warn = t.mock.method(console, "warn", () => undefined);
+    copilot("{", "logs/a/events.jsonl");
+    deepEqual(warn.mock.calls[0].arguments, [
+      "Skipped malformed line 1 in logs/a/events.jsonl",
+    ]);
+  });
+
+  it("handles events without data", () => {
+    const log = [
+      '{"type": "session.start", "data": null}',
+      '{"type": "user.message", "data": null}',
+      '{"type": "tool.execution_complete", "data": null}',
+      '{"type": "user.message", "data": {"content": "Hi"}}',
+    ].join("\n");
+    const { entries, root } = copilot(log);
+    equal(root, undefined);
+    deepEqual(entries, [{ type: "message", role: "user", content: "Hi" }]);
   });
 });

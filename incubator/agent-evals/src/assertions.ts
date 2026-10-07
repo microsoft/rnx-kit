@@ -331,6 +331,11 @@ function isAnsweredQuestion({ name, success }: ToolCall): boolean {
  * agent's first response, i.e. before approval could have been given. The
  * reply is either a second user message, or an answer to a question asked with
  * the `ask_user` tool.
+ *
+ * Any reply counts, including answers to clarifying questions (e.g. "Which
+ * file is the entry point?") and rejections, since telling them apart requires
+ * understanding the conversation. Evals that need to know whether the user
+ * actually approved should also use an `llm-rubric` assertion.
  */
 export function writesBeforeApproval({ entries, root }: Transcript): string[] {
   const writes: string[] = [];

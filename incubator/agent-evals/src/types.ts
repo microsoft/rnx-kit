@@ -40,7 +40,11 @@ export type Transcript = {
   filesWritten: FileWrite[];
 };
 
-export type Adapter = (log: string) => Transcript;
+/**
+ * Converts the contents of a session log into a transcript. `source`, e.g. the
+ * path of the log, is used in warnings.
+ */
+export type Adapter = (log: string, source?: string) => Transcript;
 
 // The types below mirror promptfoo's so that evals can be migrated if needed:
 // https://www.promptfoo.dev/docs/configuration/reference/

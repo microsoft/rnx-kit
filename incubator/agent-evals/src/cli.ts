@@ -122,7 +122,7 @@ function readResponse(logPath: string, adapter: Adapter): ProviderResponse {
     logPath = path.join(logPath, "events.jsonl");
   }
 
-  const transcript = adapter(fs.readFileSync(logPath, "utf-8"));
+  const transcript = adapter(fs.readFileSync(logPath, "utf-8"), logPath);
   const diffPath = logPath.replace(/(\.jsonl)?$/, ".diff");
   const diff = fs.existsSync(diffPath)
     ? fs.readFileSync(diffPath, "utf-8")
