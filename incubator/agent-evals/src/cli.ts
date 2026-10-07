@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { normalizePath } from "@rnx-kit/tools-node";
 import { ok } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -7,9 +8,15 @@ import { test } from "node:test";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { copilot } from "./adapters/copilot.ts";
+import { fail } from "./assertions.ts";
 import { grade } from "./grade.ts";
 import { DEFAULT_GRADER_TIMEOUT } from "./rubric.ts";
-import type { Adapter, ProviderResponse, TestCase } from "./types.ts";
+import type {
+  Adapter,
+  GradingResult,
+  ProviderResponse,
+  TestCase,
+} from "./types.ts";
 
 const DEFAULT_PASS_RATE = 0.8;
 
@@ -23,35 +30,20 @@ const adapters: Record<string, Adapter> = { copilot };
 
 /**
  * Returns all eval files under the specified paths. A path can be a file or a
- * folder, in which case it is searched recursively.
+ * folder, in which case it is searched recursively. Hidden folders are skipped.
  */
 function findEvalFiles(paths: string[]): string[] {
-  const files: string[] = [];
-  const search = (p: string) => {
-    if (!fs.statSync(p).isDirectory()) {
-      files.push(p);
-      return;
-    }
-
-    for (const entry of fs.readdirSync(p, { withFileTypes: true })) {
-      const entryPath = path.join(p, entry.name);
-      if (entry.isDirectory()) {
-        if (
-          !IGNORED_FOLDERS.includes(entry.name) &&
-          !entry.name.startsWith(".")
-        ) {
-          search(entryPath);
-        }
-      } else if (entry.isFile() && EVAL_FILE.test(entry.name)) {
-        files.push(entryPath);
-      }
-    }
-  };
-
-  for (const p of paths) {
-    search(p);
-  }
-  return files;
+  return paths.flatMap((p) =>
+    fs.statSync(p).isDirectory()
+      ? fs
+          .globSync("**/*.eval.{ts,mts}", {
+            cwd: p,
+            exclude: (f) => IGNORED_FOLDERS.includes(path.basename(f)),
+          })
+          .sort()
+          .map((f) => path.join(p, f))
+      : [p]
+  );
 }
 
 /**
@@ -92,30 +84,30 @@ function isSessionFor(name: string, testCase: TestCase, log: string): boolean {
   const rel = path.relative(process.cwd(), path.resolve(log));
   const isInside =
     rel !== ".." && !/^\.\.[\\/]/.test(rel) && !path.isAbsolute(rel);
-  return (isInside ? rel : log).split(/[\\/]/).includes(name);
+  return normalizePath(isInside ? rel : log)
+    .split("/")
+    .includes(name);
 }
 
 /**
- * Maps items with at most `limit` calls in flight. Results are in the same
- * order as the items.
+ * Returns a function that runs async functions with at most `limit` of them
+ * in flight at a time.
  */
-async function mapConcurrently<T, R>(
-  items: T[],
-  limit: number,
-  fn: (item: T) => Promise<R>
-): Promise<R[]> {
-  const results: R[] = [];
-  let next = 0;
-  const worker = async () => {
-    while (next < items.length) {
-      const i = next++;
-      results[i] = await fn(items[i]);
+function makeLimiter(limit: number) {
+  let running = 0;
+  const queue: (() => void)[] = [];
+  return async <T>(fn: () => Promise<T>): Promise<T> => {
+    if (running >= limit) {
+      await new Promise<void>((resolve) => queue.push(resolve));
+    }
+    ++running;
+    try {
+      return await fn();
+    } finally {
+      --running;
+      queue.shift()?.();
     }
   };
-  await Promise.all(
-    Array.from({ length: Math.min(limit, items.length) }, worker)
-  );
-  return results;
 }
 
 function readResponse(logPath: string, adapter: Adapter): ProviderResponse {
@@ -129,10 +121,9 @@ function readResponse(logPath: string, adapter: Adapter): ProviderResponse {
     ? fs.readFileSync(diffPath, "utf-8")
     : undefined;
 
-  const messages = transcript.entries.filter(
+  const last = transcript.entries.findLast(
     (entry) => entry.type === "message" && entry.role === "assistant"
   );
-  const last = messages[messages.length - 1];
   const output = last?.type === "message" ? last.content : "";
 
   return { output, metadata: { transcript, diff } };
@@ -220,27 +211,33 @@ if (
     timeout: graderTimeout,
   };
   const responses = logs.map((log) => readResponse(log, adapter));
+
+  // Start grading all evals up front so that the concurrency limit is shared
+  // across evals; tests below only wait for their results
+  const limit = makeLimiter(MAX_CONCURRENT_GRADES);
   for (const name of names.length > 0 ? names : evals.keys()) {
     const testCase = evals.get(name) as TestCase;
     const requiredPassRate =
       passRate ?? testCase.metadata?.passRate ?? DEFAULT_PASS_RATE;
+    const indices = logs
+      .map((_, i) => i)
+      .filter((i) => isSessionFor(name, testCase, logs[i]));
+    const pending = indices.map(
+      (i): Promise<GradingResult> =>
+        limit(() => grade(testCase, responses[i], graderOptions)).catch((e) =>
+          fail(`Grading failed: ${e}`)
+        )
+    );
+
     test(`${name}: ${testCase.description}`, async (t) => {
-      const indices: number[] = [];
-      for (let i = 0; i < logs.length; ++i) {
-        if (isSessionFor(name, testCase, logs[i])) {
-          indices.push(i);
-        } else {
-          t.diagnostic(`skip: ${logs[i]}`);
+      for (const [i, log] of logs.entries()) {
+        if (!indices.includes(i)) {
+          t.diagnostic(`skip: ${log}`);
         }
       }
 
-      const results = await mapConcurrently(
-        indices,
-        MAX_CONCURRENT_GRADES,
-        (i) => grade(testCase, responses[i], graderOptions)
-      );
-      for (let j = 0; j < results.length; ++j) {
-        const { pass, reason } = results[j];
+      const results = await Promise.all(pending);
+      for (const [j, { pass, reason }] of results.entries()) {
         t.diagnostic(
           `${pass ? "pass" : "fail"}: ${logs[indices[j]]}: ${reason}`
         );

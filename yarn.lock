@@ -4956,7 +4956,7 @@ __metadata:
   resolution: "@rnx-kit/agent-evals@workspace:incubator/agent-evals"
   dependencies:
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-shell": "npm:^0.2.2"
+    "@rnx-kit/tools-node": "npm:^3.0.6"
     "@rnx-kit/tsconfig": "npm:*"
   bin:
     agent-evals: lib/cli.js

@@ -1,0 +1,4 @@
+#!/bin/sh
+# The background child keeps stdout open after this script is killed
+sleep 30 &
+wait

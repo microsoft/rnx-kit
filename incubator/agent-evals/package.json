@@ -36,7 +36,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-shell": "^0.2.2"
+    "@rnx-kit/tools-node": "^3.0.6"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",

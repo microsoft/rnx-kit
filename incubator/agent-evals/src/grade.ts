@@ -1,3 +1,4 @@
+import { normalizePath } from "@rnx-kit/tools-node";
 import { fail, toolPaths } from "./assertions.ts";
 import { gradeRubric } from "./rubric.ts";
 import type { GraderOptions } from "./rubric.ts";
@@ -21,11 +22,13 @@ export function evalsAccess({ entries }: Transcript): string[] {
   return entries.flatMap((entry) =>
     entry.type === "tool"
       ? toolPaths(entry)
-          .map((p) => p.replaceAll("\\", "/"))
+          .map(normalizePath)
           .filter((p) => !p.startsWith("*") && EVALS_PATH.test(p))
       : []
   );
 }
+
+const accessCache = new WeakMap<Transcript, string[]>();
 
 /**
  * Grades a single session against all assertions of a test case. The session
@@ -36,7 +39,13 @@ export async function grade(
   response: ProviderResponse,
   graderOptions: GraderOptions = {}
 ): Promise<GradingResult> {
-  const access = evalsAccess(response.metadata.transcript);
+  // A session is graded by every eval; only check it once
+  const { transcript } = response.metadata;
+  let access = accessCache.get(transcript);
+  if (!access) {
+    access = evalsAccess(transcript);
+    accessCache.set(transcript, access);
+  }
   if (access.length > 0) {
     return fail(`Agent accessed eval files (${access.join(", ")})`);
   }

@@ -1,3 +1,4 @@
+import { normalizePath } from "@rnx-kit/tools-node";
 import * as path from "node:path";
 import type {
   FileWrite,
@@ -23,7 +24,7 @@ export function repoPath(p: string, root?: string): string | undefined {
     return p;
   }
 
-  const rel = path.relative(root, p).replaceAll("\\", "/");
+  const rel = normalizePath(path.relative(root, p));
   return rel === ".." || rel.startsWith("../") || path.isAbsolute(rel)
     ? undefined
     : rel;
@@ -102,14 +103,24 @@ export function parsePatch(patch: string): FileWrite[] {
   return writes;
 }
 
+const parsedDiffs = new WeakMap<ProviderResponse["metadata"], FileWrite[]>();
+
 /**
  * Returns files written during the session. Uses the diff if available since
- * it also captures files written by shell commands.
+ * it also captures files written by shell commands. The diff is only parsed
+ * once per session; the result must not be modified.
  */
 export function writtenFiles({ metadata }: ProviderResponse): FileWrite[] {
-  return metadata.diff
-    ? parseDiff(metadata.diff)
-    : metadata.transcript.filesWritten;
+  if (!metadata.diff) {
+    return metadata.transcript.filesWritten;
+  }
+
+  let files = parsedDiffs.get(metadata);
+  if (!files) {
+    files = parseDiff(metadata.diff);
+    parsedDiffs.set(metadata, files);
+  }
+  return files;
 }
 
 export function isChangeset(file: string): boolean {

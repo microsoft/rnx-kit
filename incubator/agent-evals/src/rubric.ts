@@ -1,4 +1,4 @@
-import { makeCommand } from "@rnx-kit/tools-shell";
+import { spawn } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -15,6 +15,7 @@ export type GraderOptions = {
 export const DEFAULT_GRADER_TIMEOUT = 300;
 
 const DIFF_FILE = "changes.diff";
+const MAX_RESULT_LENGTH = 4000;
 const INSTRUCTIONS_FILE = "instructions.md";
 const TRANSCRIPT_FILE = "transcript.md";
 
@@ -23,6 +24,91 @@ const TRANSCRIPT_FILE = "transcript.md";
 // them ourselves. They must not contain quotes, newlines or other shell syntax.
 const IS_WINDOWS = process.platform === "win32";
 const COPILOT = IS_WINDOWS ? "copilot.cmd" : "copilot";
+
+type GraderResult = {
+  status: number | null;
+  stdout: string;
+  stderr: string;
+  timedOut?: boolean;
+};
+
+/**
+ * Kills a process and all its descendants. On POSIX, the process must have
+ * been spawned with `detached: true` so that it leads its own process group.
+ */
+function killTree(pid: number) {
+  try {
+    if (IS_WINDOWS) {
+      spawn("taskkill", ["/pid", String(pid), "/T", "/F"], { stdio: "ignore" });
+    } else {
+      process.kill(-pid, "SIGKILL");
+    }
+  } catch {
+    // The process may already have exited
+  }
+}
+
+/**
+ * Runs the grader, killing it and any processes it started if it does not
+ * finish within the timeout. Unlike Node's `timeout` spawn option, this does
+ * not wait for descendants that keep stdout open.
+ */
+function runGrader(
+  args: string[],
+  cwd: string,
+  timeout: number
+): Promise<GraderResult> {
+  return new Promise((resolve, reject) => {
+    const stdout: Buffer[] = [];
+    const stderr: Buffer[] = [];
+    const child = spawn(COPILOT, args, {
+      cwd,
+      detached: !IS_WINDOWS,
+      shell: IS_WINDOWS,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    const result = (status: number | null, timedOut?: boolean) => ({
+      status,
+      stdout: Buffer.concat(stdout).toString().trim(),
+      stderr: Buffer.concat(stderr).toString().trim(),
+      timedOut,
+    });
+
+    const timer = setTimeout(() => {
+      if (child.pid !== undefined) {
+        killTree(child.pid);
+      }
+      child.stdout.destroy();
+      child.stderr.destroy();
+      resolve(result(null, true));
+    }, timeout * 1000);
+
+    child.stdout.on("data", (data) => stdout.push(data));
+    child.stderr.on("data", (data) => stderr.push(data));
+    child.on("close", (status) => {
+      clearTimeout(timer);
+      resolve(result(status));
+    });
+    child.on("error", (e) => {
+      clearTimeout(timer);
+      reject(e);
+    });
+  });
+}
+
+/**
+ * Truncates long tool results, e.g. file contents or build logs, keeping the
+ * beginning and the end, where errors usually are.
+ */
+function truncate(text: string): string {
+  if (text.length <= MAX_RESULT_LENGTH) {
+    return text;
+  }
+
+  const half = MAX_RESULT_LENGTH / 2;
+  const omitted = text.length - MAX_RESULT_LENGTH;
+  return `${text.slice(0, half)}\n[… ${omitted} characters omitted …]\n${text.slice(-half)}`;
+}
 
 export function formatTranscript({ entries }: Transcript): string {
   return entries
@@ -37,7 +123,7 @@ export function formatTranscript({ entries }: Transcript): string {
           : entry.success
             ? " (ok)"
             : " (failed)";
-      const result = entry.result ? `\n\n${entry.result}` : "";
+      const result = entry.result ? `\n\n${truncate(entry.result)}` : "";
       return `### TOOL ${entry.name}${status}\n\n${JSON.stringify(entry.arguments)}${result}`;
     })
     .join("\n\n");
@@ -152,11 +238,12 @@ export async function gradeRubric(
       args.push(`--model=${model}`);
     }
 
-    const copilot = makeCommand(COPILOT, { cwd, timeout: timeout * 1000 });
-    const { status, stdout, stderr } = await copilot(
-      ...(IS_WINDOWS ? args.map((arg) => `"${arg}"`) : args)
+    const { status, stdout, stderr, timedOut } = await runGrader(
+      IS_WINDOWS ? args.map((arg) => `"${arg}"`) : args,
+      cwd,
+      timeout
     );
-    if (status === null) {
+    if (timedOut) {
       return fail(`Grader timed out after ${timeout} s`);
     }
     if (status !== 0) {

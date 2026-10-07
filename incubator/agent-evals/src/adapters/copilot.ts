@@ -34,7 +34,7 @@ export function copilot(log: string, source = "session log"): Transcript {
     }
   };
 
-  const calls: Record<string, ToolCall> = {};
+  const calls = new Map<string, ToolCall>();
 
   const lines = log.split("\n");
   for (let i = 0; i < lines.length; ++i) {
@@ -84,7 +84,7 @@ export function copilot(log: string, source = "session log"): Transcript {
         const name = String(data.toolName);
         const args = (data.arguments ?? {}) as Record<string, unknown>;
         const call: ToolCall = { type: "tool", id, name, arguments: args };
-        calls[id] = call;
+        calls.set(id, call);
         transcript.entries.push(call);
 
         const filePath = str(args.path);
@@ -110,7 +110,7 @@ export function copilot(log: string, source = "session log"): Transcript {
       }
 
       case "tool.execution_complete": {
-        const call = calls[String(data.toolCallId)];
+        const call = calls.get(String(data.toolCallId));
         if (call) {
           const result = data.result as Record<string, unknown> | undefined;
           const error = data.error as Record<string, unknown> | undefined;
