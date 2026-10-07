@@ -15,7 +15,6 @@ export type GraderOptions = {
 export const DEFAULT_GRADER_TIMEOUT = 300;
 
 const DIFF_FILE = "changes.diff";
-const MAX_TOOL_TEXT_LENGTH = 4000;
 const INSTRUCTIONS_FILE = "instructions.md";
 const TRANSCRIPT_FILE = "transcript.md";
 
@@ -138,20 +137,6 @@ function runGrader(
   });
 }
 
-/**
- * Truncates long tool arguments and results, e.g. file contents or build logs,
- * keeping the beginning and the end, where errors usually are.
- */
-function truncate(text: string): string {
-  if (text.length <= MAX_TOOL_TEXT_LENGTH) {
-    return text;
-  }
-
-  const half = MAX_TOOL_TEXT_LENGTH / 2;
-  const omitted = text.length - MAX_TOOL_TEXT_LENGTH;
-  return `${text.slice(0, half)}\n[… ${omitted} characters omitted …]\n${text.slice(-half)}`;
-}
-
 export function formatTranscript({ entries }: Transcript): string {
   return entries
     .map((entry) => {
@@ -165,9 +150,8 @@ export function formatTranscript({ entries }: Transcript): string {
           : entry.success
             ? " (ok)"
             : " (failed)";
-      const result = entry.result ? `\n\n${truncate(entry.result)}` : "";
-      const args = truncate(JSON.stringify(entry.arguments));
-      return `### TOOL ${entry.name}${status}\n\n${args}${result}`;
+      const result = entry.result ? `\n\n${entry.result}` : "";
+      return `### TOOL ${entry.name}${status}\n\n${JSON.stringify(entry.arguments)}${result}`;
     })
     .join("\n\n");
 }
