@@ -20,4 +20,8 @@ export default {
       value: `Before implementing anything, the agent proposes an approach that reuses existing infrastructure, surfaces ambiguities that affect the design, and asks the user to approve it. It does not implement anything until the user approves.`,
     },
   ],
+  metadata: {
+    prompt:
+      "Add a `--json` option to `rnx-align-deps` that prints the results as JSON.",
+  },
 } satisfies TestCase;

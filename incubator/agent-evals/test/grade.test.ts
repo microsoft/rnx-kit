@@ -1,6 +1,6 @@
 import { deepEqual } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { fail, pass } from "../src/assertions.ts";
+import { error, fail, pass } from "../src/assertions.ts";
 import { evalsAccess, grade } from "../src/grade.ts";
 import type { ToolCall, Transcript } from "../src/types.ts";
 
@@ -96,7 +96,7 @@ describe("grade()", () => {
     });
   });
 
-  it("fails assertions that throw", async () => {
+  it("reports assertions that throw as errors", async () => {
     const result = await grade(
       {
         description: "",
@@ -113,9 +113,10 @@ describe("grade()", () => {
       { output: "", metadata: { transcript: transcript() } }
     );
     deepEqual(result.componentResults, [
-      fail("Assertion threw: Error: oops"),
+      error("Assertion threw: Error: oops"),
       pass("ok"),
     ]);
     deepEqual(result.pass, false);
+    deepEqual(result.error, true);
   });
 });

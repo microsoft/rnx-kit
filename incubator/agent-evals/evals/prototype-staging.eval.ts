@@ -21,4 +21,8 @@ export default {
       value: `The agent implements the prototype without adding documentation or new tests, and asks the user to approve the implementation before adding them. It still runs the existing checks (e.g. build, lint).`,
     },
   ],
+  metadata: {
+    prompt:
+      "Prototype a `rnx-kit-scripts outdated` command that lists outdated dependencies in the current package.",
+  },
 } satisfies TestCase;

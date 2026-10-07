@@ -8,7 +8,7 @@ import { test } from "node:test";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { copilot } from "./adapters/copilot.ts";
-import { fail } from "./assertions.ts";
+import { error } from "./assertions.ts";
 import { grade } from "./grade.ts";
 import { DEFAULT_GRADER_TIMEOUT } from "./rubric.ts";
 import type {
@@ -71,22 +71,42 @@ async function loadEvals(files: string[]): Promise<Map<string, TestCase>> {
 }
 
 /**
- * Returns whether a log belongs to an eval, i.e. whether a folder in its path
- * is named after the eval. Only folders below the current folder are
- * considered if the log is inside it, otherwise only folders in the path as
- * specified.
+ * Returns the folders and file name in a log path. Only those below the
+ * current folder are returned if the log is inside it, otherwise all of them
+ * as specified.
  */
-function isSessionFor(name: string, testCase: TestCase, log: string): boolean {
-  if (testCase.metadata?.allSessions === true) {
-    return true;
-  }
-
+function pathSegments(log: string): string[] {
   const rel = path.relative(process.cwd(), path.resolve(log));
   const isInside =
     rel !== ".." && !/^\.\.[\\/]/.test(rel) && !path.isAbsolute(rel);
-  return normalizePath(isInside ? rel : log)
-    .split("/")
-    .includes(name);
+  return normalizePath(isInside ? rel : log).split("/");
+}
+
+/**
+ * Returns whether a log belongs to an eval, i.e. whether a folder in its path
+ * is named after the eval. Labelled logs used for calibration always belong to
+ * a single eval.
+ */
+function isSessionFor(
+  name: string,
+  testCase: TestCase,
+  log: string,
+  calibrate: boolean
+): boolean {
+  return (
+    (!calibrate && testCase.metadata?.allSessions === true) ||
+    pathSegments(log).includes(name)
+  );
+}
+
+/**
+ * Returns the expected verdict of a labelled log, i.e. whether a folder in its
+ * path is named `pass` or `fail`.
+ */
+function expectedVerdict(log: string): boolean | undefined {
+  const segments = pathSegments(log).slice(0, -1);
+  const label = segments.findLast((s) => s === "pass" || s === "fail");
+  return label === undefined ? undefined : label === "pass";
 }
 
 /**
@@ -139,6 +159,7 @@ const { positionals, values } = parseArgs({
   allowPositionals: true,
   options: {
     agent: { type: "string", default: "copilot" },
+    calibrate: { type: "boolean", default: false },
     evals: { type: "string", multiple: true },
     "grader-model": { type: "string" },
     "grader-timeout": { type: "string" },
@@ -200,6 +221,9 @@ if (
       "",
       "Options:",
       `  --agent <name>          Agent that produced the logs (default: copilot)`,
+      "  --calibrate             Check that each log gets the verdict of the",
+      "                          `pass` or `fail` folder in its path, instead of",
+      "                          checking the pass rate",
       "  --evals <path>          File or folder to find evals in, instead of the",
       "                          current folder; can be specified multiple times",
       "  --grader-model <model>  Model used by Copilot CLI to grade rubrics",
@@ -227,11 +251,11 @@ if (
       passRate ?? testCase.metadata?.passRate ?? DEFAULT_PASS_RATE;
     const indices = logs
       .map((_, i) => i)
-      .filter((i) => isSessionFor(name, testCase, logs[i]));
+      .filter((i) => isSessionFor(name, testCase, logs[i], values.calibrate));
     const pending = indices.map(
       (i): Promise<GradingResult> =>
         limit(() => grade(testCase, responses[i], graderOptions)).catch((e) =>
-          fail(`Grading failed: ${e}`)
+          error(`Grading failed: ${e}`)
         )
     );
 
@@ -243,22 +267,39 @@ if (
       }
 
       const results = await Promise.all(pending);
-      for (const [j, { pass, reason }] of results.entries()) {
-        t.diagnostic(
-          `${pass ? "pass" : "fail"}: ${logs[indices[j]]}: ${reason}`
-        );
+      for (const [j, { pass, error, reason }] of results.entries()) {
+        const verdict = error ? "error" : pass ? "pass" : "fail";
+        t.diagnostic(`${verdict}: ${logs[indices[j]]}: ${reason}`);
       }
 
-      const graded = results.length;
-      const passed = results.filter((result) => result.pass).length;
-      if (graded === 0) {
+      if (results.length === 0) {
         t.skip("No sessions for this eval");
         return;
       }
 
+      // Sessions that could not be graded say nothing about the agent, but
+      // the eval cannot be trusted either
+      const errors = results.filter((result) => result.error).length;
       ok(
-        passed / graded >= requiredPassRate,
-        `${passed} of ${graded} sessions passed; required pass rate: ${requiredPassRate}`
+        errors === 0,
+        `${errors} of ${results.length} sessions could not be graded`
+      );
+
+      if (values.calibrate) {
+        const mismatches = indices.filter(
+          (i, j) => expectedVerdict(logs[i]) !== results[j].pass
+        );
+        ok(
+          mismatches.length === 0,
+          `Verdicts differ from the expected ones (pass/fail folder) for: ${mismatches.map((i) => logs[i]).join(", ")}`
+        );
+        return;
+      }
+
+      const passed = results.filter((result) => result.pass).length;
+      ok(
+        passed / results.length >= requiredPassRate,
+        `${passed} of ${results.length} sessions passed; required pass rate: ${requiredPassRate}`
       );
     });
   }

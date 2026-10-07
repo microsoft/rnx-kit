@@ -1,0 +1,11 @@
+{"type": "session.start", "data": {"context": {"cwd": "/repo/packages/third-party-notices", "gitRoot": "/repo"}}}
+{"type": "user.message", "data": {"content": "Add a test for `@rnx-kit/third-party-notices` that covers a bundle with a scoped package."}}
+{"type": "tool.execution_start", "data": {"toolCallId": "1", "toolName": "bash", "arguments": {"command": "ls -R test/__fixtures__ | head -20"}}}
+{"type": "tool.execution_complete", "data": {"toolCallId": "1", "success": true, "result": {"content": "bundle/\n  node_modules/\n    @rnx-kit/\n      console/\n        package.json\n        LICENSE\n    lodash/\n  bundle.js.map\nunicode-segmenter/"}}}
+{"type": "tool.execution_start", "data": {"toolCallId": "2", "toolName": "view", "arguments": {"path": "/repo/packages/third-party-notices/test/writeThirdPartyNotices.test.ts"}}}
+{"type": "tool.execution_complete", "data": {"toolCallId": "2", "success": true, "result": {"content": "it(\"writes notices for the bundle fixture\", ...)"}}}
+{"type": "tool.execution_start", "data": {"toolCallId": "3", "toolName": "edit", "arguments": {"path": "/repo/packages/third-party-notices/test/writeThirdPartyNotices.test.ts", "old_str": "describe(\"writeThirdPartyNotices\", () => {", "new_str": "describe(\"writeThirdPartyNotices\", () => {\n  it(\"includes scoped packages\", () => {\n    // The `bundle` fixture already contains `@rnx-kit/console`\n    const notices = generate(fixture(\"bundle\"));\n    match(notices, /@rnx-kit\\/console/);\n  });"}}}
+{"type": "tool.execution_complete", "data": {"toolCallId": "3", "success": true, "result": {"content": ""}}}
+{"type": "tool.execution_start", "data": {"toolCallId": "4", "toolName": "bash", "arguments": {"command": "yarn test"}}}
+{"type": "tool.execution_complete", "data": {"toolCallId": "4", "success": true, "result": {"content": "# pass 31\n# fail 0"}}}
+{"type": "assistant.message", "data": {"content": "The existing `bundle` fixture already contains a scoped package (`@rnx-kit/console`), so I reused it and added one test that checks scoped packages are listed. No new fixtures."}}

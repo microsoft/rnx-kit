@@ -69,4 +69,8 @@ export default {
       value: `The agent inspects existing fixtures and reuses them where possible. It only adds fixtures for scenarios that are not already covered, and does not weaken existing assertions.`,
     },
   ],
+  metadata: {
+    prompt:
+      "Add a test for `@rnx-kit/third-party-notices` that covers a bundle with a scoped package.",
+  },
 } satisfies TestCase;

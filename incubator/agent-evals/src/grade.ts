@@ -1,5 +1,5 @@
 import { normalizePath } from "@rnx-kit/tools-node";
-import { fail, toolPaths } from "./assertions.ts";
+import { error, fail, toolPaths } from "./assertions.ts";
 import { gradeRubric } from "./rubric.ts";
 import type { GraderOptions } from "./rubric.ts";
 import type {
@@ -59,7 +59,7 @@ export async function grade(
       try {
         componentResults[i] = await assertion.value(response.output, context);
       } catch (e) {
-        componentResults[i] = fail(`Assertion threw: ${e}`);
+        componentResults[i] = error(`Assertion threw: ${e}`);
       }
     }
   }
@@ -74,10 +74,12 @@ export async function grade(
   }
 
   const pass = componentResults.every((result) => result.pass);
+  const isError = componentResults.some((result) => result.error);
   return {
     pass,
     score: pass ? 1 : 0,
     reason: componentResults.map(({ reason }) => reason).join("; "),
+    ...(isError ? { error: true } : {}),
     componentResults,
   };
 }

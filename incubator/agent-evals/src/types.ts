@@ -63,6 +63,12 @@ export type GradingResult = {
   pass: boolean;
   score: number;
   reason: string;
+  /**
+   * Whether the result could not be determined, e.g. because the grader
+   * failed or an assertion threw. Errors are excluded from the pass rate and
+   * fail the eval. Not part of promptfoo's shape.
+   */
+  error?: boolean;
   componentResults?: GradingResult[];
 };
 
@@ -95,5 +101,10 @@ export type TestCase = {
     allSessions?: boolean;
     /** Fraction of logs that must pass (default: 0.8). */
     passRate?: number;
+    /**
+     * Task given to the agent when recording sessions for this eval. Evals
+     * that grade all sessions do not need one.
+     */
+    prompt?: string;
   };
 };

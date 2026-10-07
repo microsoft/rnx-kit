@@ -32,4 +32,7 @@ export default {
       },
     },
   ],
+  metadata: {
+    prompt: "Add tests for `findSchemes` in `@rnx-kit/tools-apple`.",
+  },
 } satisfies TestCase;

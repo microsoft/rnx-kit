@@ -2,8 +2,7 @@ import { fail, isChangeset, pass, writtenFiles } from "../src/index.ts";
 import type { TestCase } from "../src/index.ts";
 
 export default {
-  description:
-    "Adds a changeset when changing a published package (task: change `@rnx-kit/tools-android`)",
+  description: "Adds a changeset when changing a published package",
   assert: [
     {
       type: "javascript",
@@ -23,4 +22,8 @@ export default {
       },
     },
   ],
+  metadata: {
+    prompt:
+      "Make `getEmulators` in `@rnx-kit/tools-android` return an empty list instead of throwing when the emulator binary is missing.",
+  },
 } satisfies TestCase;

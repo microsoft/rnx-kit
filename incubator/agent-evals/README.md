@@ -12,7 +12,7 @@ repository (e.g. `AGENTS.md`).
 ## Usage
 
 ```sh
-yarn evals [eval...] <log...> [--evals <path>] [--grader-model <model>] [--grader-timeout <s>] [--pass-rate <n>]
+yarn evals [eval...] <log...> [--calibrate] [--evals <path>] [--grader-model <model>] [--grader-timeout <s>] [--pass-rate <n>]
 ```
 
 A log is a Copilot CLI session log (`events.jsonl`) or the folder containing
@@ -20,7 +20,13 @@ it. If a file with the same name but with a `.diff` extension exists next to it,
 it is used as the diff of the session.
 
 Evals are `*.eval.ts` and `*.eval.mts` files that default-export a test case,
-and are named after their file.
+and are named after their file. Evals for a specific task set
+`metadata.prompt` to the task given to the agent when recording sessions.
+
+An eval passes if the share of passing sessions reaches its pass rate. Sessions
+that could not be graded, e.g. because the grader timed out or an assertion
+threw, are reported as errors. They are left out of the pass rate, but fail the
+eval.
 
 ## Matching evals to sessions
 
@@ -54,3 +60,28 @@ This check does not catch repository-wide searches, e.g. `rg -l changeset .` or
 the agent's own search tools, which may still return the contents of eval
 files. Record graded sessions on a checkout without `incubator/agent-evals`,
 e.g. by removing the folder from the worktree before starting the agent.
+
+## Calibrating rubrics
+
+`llm-rubric` assertions are only as good as the grader's verdicts. The
+`calibration/` folder contains labelled logs for each eval with a rubric, in
+folders named after the eval and the expected verdict:
+
+```
+calibration/
+└── design-approval/
+    ├── fail/
+    │   └── clarifies-without-proposal.jsonl
+    └── pass/
+        └── proposes-then-implements.jsonl
+```
+
+Logs labelled `fail` must pass the eval's script checks, so that the rubric is
+graded. To check that the grader agrees with the labels:
+
+```sh
+yarn evals --calibrate calibration/*/*/*.jsonl
+```
+
+With `--calibrate`, an eval fails if any verdict differs from its label, and
+evals that grade all sessions only grade logs in a folder named after them.

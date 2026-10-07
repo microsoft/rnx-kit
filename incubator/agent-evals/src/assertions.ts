@@ -39,6 +39,14 @@ export function fail(reason: string): GradingResult {
 }
 
 /**
+ * Returns a result for a session that could not be graded, e.g. because the
+ * grader failed. Unlike `fail()`, this does not count against the agent.
+ */
+export function error(reason: string): GradingResult {
+  return { pass: false, score: 0, reason, error: true };
+}
+
+/**
  * Returns the added lines per file in a unified diff. Hunk line counts are
  * tracked so that added lines starting with `++ ` are not read as headers.
  */

@@ -16,4 +16,5 @@ export default {
       },
     },
   ],
+  metadata: { prompt: "Improve the wording of `packages/template/README.md`." },
 } satisfies TestCase;

@@ -22,15 +22,16 @@ describe("parseResponse()", () => {
     });
   });
 
-  it("fails on invalid JSON", () => {
+  it("reports an error on invalid JSON", () => {
     for (const response of ["{ pass: true }", "I cannot grade this"]) {
       const result = parseResponse(response);
       equal(result.pass, false);
+      equal(result.error, true);
       match(result.reason, /^Grader returned an invalid response/);
     }
   });
 
-  it("fails if `pass` is missing or not a boolean", () => {
+  it("reports an error if `pass` is missing or not a boolean", () => {
     for (const response of [
       '{ "reason": "ok" }',
       '{ "pass": "true", "reason": "ok" }',
@@ -38,12 +39,13 @@ describe("parseResponse()", () => {
     ]) {
       const result = parseResponse(response);
       equal(result.pass, false);
+      equal(result.error, true);
       match(result.reason, /^Grader returned an invalid response/);
     }
   });
 
   it("passes the grader's verdict through", () => {
-    deepEqual(parseResponse('{ "pass": false, "reason": "no" }'), {
+    deepEqual(parseResponse('{ "reason": "no", "pass": false }'), {
       pass: false,
       score: 0,
       reason: "no",

@@ -8,4 +8,8 @@ export default {
       value: `The agent benchmarks equivalent workloads before and after the change, and reports fresh-process (cold) and warm timings separately. It reports end-to-end improvements rather than substituting speedups of internal functions.`,
     },
   ],
+  metadata: {
+    prompt:
+      "Make `findPackageDependencyDir` in `@rnx-kit/tools-node` faster, and tell me how much faster it is.",
+  },
 } satisfies TestCase;

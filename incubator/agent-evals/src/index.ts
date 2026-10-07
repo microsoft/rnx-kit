@@ -1,5 +1,6 @@
 export {
   allCommands,
+  error,
   fail,
   isChangeset,
   isTestFile,

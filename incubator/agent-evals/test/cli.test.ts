@@ -1,11 +1,13 @@
-import { equal, match, ok } from "node:assert/strict";
+import { deepEqual, equal, match, ok } from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
+import * as fs from "node:fs";
 import * as path from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
 
 const fixtures = fileURLToPath(new URL("__fixtures__", import.meta.url));
 const cli = fileURLToPath(new URL("../src/cli.ts", import.meta.url));
+const pkgDir = fileURLToPath(new URL("..", import.meta.url));
 
 function makeEnv(graderDir?: string) {
   // Child processes of the test runner would otherwise report to it
@@ -74,16 +76,45 @@ describe("cli", () => {
   const skip = process.platform === "win32" && "Fake graders are POSIX scripts";
 
   for (const grader of ["grader-hang", "grader-hang-with-child"]) {
-    it(`fails rubrics when the grader times out (${grader})`, { skip }, () => {
-      const { status, output, duration } = run(
-        [...evals, "--grader-timeout", "1", log],
-        grader
-      );
-      equal(status, 1);
-      match(output, /Grader timed out after 1 s/);
-      ok(duration < 10000, `Grading took ${duration} ms`);
-    });
+    it(
+      `reports an error when the grader times out (${grader})`,
+      { skip },
+      () => {
+        const { status, output, duration } = run(
+          [...evals, "--grader-timeout", "1", log],
+          grader
+        );
+        equal(status, 1);
+        match(output, /^# error: .*: Grader timed out after 1 s$/m);
+        match(output, /1 of 1 sessions could not be graded/);
+        ok(duration < 10000, `Grading took ${duration} ms`);
+      }
+    );
   }
+
+  it("checks verdicts against labels with `--calibrate`", { skip }, () => {
+    // With a grader that always passes, only logs labelled `fail` differ. This
+    // also checks that they pass all script checks, so that their rubrics are
+    // actually graded.
+    const calibration = path.join(pkgDir, "calibration");
+    const labelled = fs
+      .globSync("*/*/*.jsonl", { cwd: calibration })
+      .map((f) => path.join(calibration, f));
+    const { status, output } = run(
+      ["--evals", path.join(pkgDir, "evals"), "--calibrate", ...labelled],
+      "grader-pass"
+    );
+    equal(status, 1);
+
+    const differ = [...output.matchAll(/Verdicts differ .*?for: ([^']+)/g)]
+      .flatMap((m) => m[1].split(", "))
+      .sort();
+    const expected = labelled
+      .filter((f) => path.basename(path.dirname(f)) === "fail")
+      .sort();
+    ok(expected.length > 0);
+    deepEqual(differ, expected);
+  });
 
   for (const [signal, code] of [
     ["SIGINT", 130],

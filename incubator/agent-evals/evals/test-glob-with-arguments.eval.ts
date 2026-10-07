@@ -28,4 +28,5 @@ export default {
       },
     },
   ],
+  metadata: { prompt: "Measure the test coverage of `@rnx-kit/align-deps`." },
 } satisfies TestCase;
