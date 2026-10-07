@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -15,7 +15,7 @@ export type GraderOptions = {
 export const DEFAULT_GRADER_TIMEOUT = 300;
 
 const DIFF_FILE = "changes.diff";
-const MAX_RESULT_LENGTH = 4000;
+const MAX_TOOL_TEXT_LENGTH = 4000;
 const INSTRUCTIONS_FILE = "instructions.md";
 const TRANSCRIPT_FILE = "transcript.md";
 
@@ -39,12 +39,45 @@ type GraderResult = {
 function killTree(pid: number) {
   try {
     if (IS_WINDOWS) {
-      spawn("taskkill", ["/pid", String(pid), "/T", "/F"], { stdio: "ignore" });
+      // Synchronous so that it also works in an 'exit' handler
+      spawnSync("taskkill", ["/pid", String(pid), "/T", "/F"], {
+        stdio: "ignore",
+      });
     } else {
       process.kill(-pid, "SIGKILL");
     }
   } catch {
     // The process may already have exited
+  }
+}
+
+// On POSIX, graders lead their own process groups and do not receive signals
+// sent to ours, e.g. on Ctrl+C. We need to kill them ourselves.
+const graders = new Set<number>();
+let isCleanupInstalled = false;
+
+function killGraders() {
+  for (const pid of graders) {
+    killTree(pid);
+  }
+  graders.clear();
+}
+
+function installCleanup() {
+  if (isCleanupInstalled) {
+    return;
+  }
+
+  isCleanupInstalled = true;
+  process.on("exit", killGraders);
+  for (const [signal, code] of [
+    ["SIGINT", 130],
+    ["SIGTERM", 143],
+  ] as const) {
+    process.on(signal, () => {
+      killGraders();
+      process.exit(code);
+    });
   }
 }
 
@@ -67,6 +100,11 @@ function runGrader(
       shell: IS_WINDOWS,
       stdio: ["ignore", "pipe", "pipe"],
     });
+    const pid = child.pid;
+    if (pid !== undefined) {
+      installCleanup();
+      graders.add(pid);
+    }
     const result = (status: number | null, timedOut?: boolean) => ({
       status,
       stdout: Buffer.concat(stdout).toString().trim(),
@@ -75,8 +113,9 @@ function runGrader(
     });
 
     const timer = setTimeout(() => {
-      if (child.pid !== undefined) {
-        killTree(child.pid);
+      if (pid !== undefined) {
+        killTree(pid);
+        graders.delete(pid);
       }
       child.stdout.destroy();
       child.stderr.destroy();
@@ -87,6 +126,9 @@ function runGrader(
     child.stderr.on("data", (data) => stderr.push(data));
     child.on("close", (status) => {
       clearTimeout(timer);
+      if (pid !== undefined) {
+        graders.delete(pid);
+      }
       resolve(result(status));
     });
     child.on("error", (e) => {
@@ -97,16 +139,16 @@ function runGrader(
 }
 
 /**
- * Truncates long tool results, e.g. file contents or build logs, keeping the
- * beginning and the end, where errors usually are.
+ * Truncates long tool arguments and results, e.g. file contents or build logs,
+ * keeping the beginning and the end, where errors usually are.
  */
 function truncate(text: string): string {
-  if (text.length <= MAX_RESULT_LENGTH) {
+  if (text.length <= MAX_TOOL_TEXT_LENGTH) {
     return text;
   }
 
-  const half = MAX_RESULT_LENGTH / 2;
-  const omitted = text.length - MAX_RESULT_LENGTH;
+  const half = MAX_TOOL_TEXT_LENGTH / 2;
+  const omitted = text.length - MAX_TOOL_TEXT_LENGTH;
   return `${text.slice(0, half)}\n[… ${omitted} characters omitted …]\n${text.slice(-half)}`;
 }
 
@@ -124,7 +166,8 @@ export function formatTranscript({ entries }: Transcript): string {
             ? " (ok)"
             : " (failed)";
       const result = entry.result ? `\n\n${truncate(entry.result)}` : "";
-      return `### TOOL ${entry.name}${status}\n\n${JSON.stringify(entry.arguments)}${result}`;
+      const args = truncate(JSON.stringify(entry.arguments));
+      return `### TOOL ${entry.name}${status}\n\n${args}${result}`;
     })
     .join("\n\n");
 }

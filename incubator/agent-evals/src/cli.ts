@@ -98,14 +98,20 @@ function makeLimiter(limit: number) {
   const queue: (() => void)[] = [];
   return async <T>(fn: () => Promise<T>): Promise<T> => {
     if (running >= limit) {
+      // The slot is handed over by the caller that frees it
       await new Promise<void>((resolve) => queue.push(resolve));
+    } else {
+      ++running;
     }
-    ++running;
     try {
       return await fn();
     } finally {
-      --running;
-      queue.shift()?.();
+      const next = queue.shift();
+      if (next) {
+        next();
+      } else {
+        --running;
+      }
     }
   };
 }
