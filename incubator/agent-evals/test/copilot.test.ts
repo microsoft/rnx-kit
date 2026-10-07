@@ -1,4 +1,4 @@
-import { deepEqual } from "node:assert/strict";
+import { deepEqual, equal, match } from "node:assert/strict";
 import * as fs from "node:fs";
 import { describe, it } from "node:test";
 import { copilot } from "../src/adapters/copilot.ts";
@@ -12,6 +12,7 @@ describe("copilot()", () => {
   it("converts a session log into a transcript", () => {
     deepEqual(copilot(log), {
       agent: "copilot",
+      root: "/repo",
       entries: [
         { type: "message", role: "user", content: "Fix the bug" },
         { type: "message", role: "assistant", content: "Looking into it" },
@@ -87,5 +88,40 @@ describe("copilot() paths", () => {
       .map((event) => JSON.stringify(event))
       .join("\n");
     deepEqual(copilot(log).filesRead, ["..foo/a.ts", "src/b.ts", "/c.ts"]);
+  });
+
+  it("ignores writes outside the repository root", () => {
+    const log = [
+      { type: "session.start", data: { context: { gitRoot: "/repo" } } },
+      ...["/root/.copilot/session-state/1/plan.md", "/repo/a.ts"].map(
+        (p, i) => ({
+          type: "tool.execution_start",
+          data: {
+            toolCallId: String(i),
+            toolName: "create",
+            arguments: { path: p, file_text: "x" },
+          },
+        })
+      ),
+    ]
+      .map((event) => JSON.stringify(event))
+      .join("\n");
+    deepEqual(copilot(log).filesWritten, [{ path: "a.ts", content: "x" }]);
+  });
+});
+
+describe("copilot() malformed logs", () => {
+  it("skips malformed lines with a warning", (t) => {
+    const warn = t.mock.method(console, "warn", () => undefined);
+    const log = [
+      '{"type": "user.message", "data": {"content": "Hi"}}',
+      "null",
+      '{"type": "assistant.message", "data": {"content": "Hel',
+    ].join("\n");
+    deepEqual(copilot(log).entries, [
+      { type: "message", role: "user", content: "Hi" },
+    ]);
+    equal(warn.mock.callCount(), 2);
+    match(String(warn.mock.calls[1].arguments[0]), /malformed line 3/);
   });
 });

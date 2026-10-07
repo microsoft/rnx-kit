@@ -1,3 +1,4 @@
+import * as path from "node:path";
 import type {
   FileWrite,
   GradingResult,
@@ -11,6 +12,22 @@ type ShellCommand = {
   /** Files written via output redirection. */
   outputs: string[];
 };
+
+/**
+ * Returns the path relative to the repository root, or `undefined` if it is
+ * outside of it. Relative paths, and paths in sessions without a known root,
+ * are returned as is.
+ */
+export function repoPath(p: string, root?: string): string | undefined {
+  if (!root || !path.isAbsolute(p)) {
+    return p;
+  }
+
+  const rel = path.relative(root, p).replaceAll("\\", "/");
+  return rel === ".." || rel.startsWith("../") || path.isAbsolute(rel)
+    ? undefined
+    : rel;
+}
 
 export function pass(reason: string): GradingResult {
   return { pass: true, score: 1, reason };
@@ -248,11 +265,7 @@ export function allCommands({ commands }: Transcript): string[] {
   return commands.flatMap(splitCommands);
 }
 
-/**
- * Returns files written by a tool call, including shell commands. Falls back to
- * the tool name if an editing tool's paths are unknown.
- */
-export function toolWrites({ name, arguments: args }: ToolCall): string[] {
+function rawWrites({ name, arguments: args }: ToolCall): string[] {
   if (name === "apply_patch") {
     const patch = args.input ?? args.patch;
     const paths =
@@ -268,13 +281,26 @@ export function toolWrites({ name, arguments: args }: ToolCall): string[] {
 }
 
 /**
+ * Returns files written by a tool call, including shell commands. Falls back to
+ * the tool name if an editing tool's paths are unknown. If the repository root
+ * is specified, absolute paths are made relative to it, and files outside of
+ * it, e.g. Copilot CLI's session state, are ignored.
+ */
+export function toolWrites(call: ToolCall, root?: string): string[] {
+  return rawWrites(call).flatMap((file) => {
+    const rel = repoPath(file, root);
+    return rel ? [rel] : [];
+  });
+}
+
+/**
  * Returns paths that a tool call may read or write: the paths of file tools
  * and patches, and the operands and redirections of shell commands.
  */
 export function toolPaths(call: ToolCall): string[] {
   const { name, arguments: args } = call;
   if (name === "apply_patch") {
-    return toolWrites(call);
+    return rawWrites(call);
   }
 
   if (typeof args.path === "string") {
@@ -294,10 +320,19 @@ export function toolPaths(call: ToolCall): string[] {
 }
 
 /**
- * Returns files written before the user replied to the
- * agent's first response, i.e. before approval could have been given.
+ * Returns whether a tool call asked the user a question and got an answer.
  */
-export function writesBeforeApproval({ entries }: Transcript): string[] {
+function isAnsweredQuestion({ name, success }: ToolCall): boolean {
+  return name === "ask_user" && success === true;
+}
+
+/**
+ * Returns files in the repository written before the user replied to the
+ * agent's first response, i.e. before approval could have been given. The
+ * reply is either a second user message, or an answer to a question asked with
+ * the `ask_user` tool.
+ */
+export function writesBeforeApproval({ entries, root }: Transcript): string[] {
   const writes: string[] = [];
   let userMessages = 0;
   for (const entry of entries) {
@@ -305,8 +340,10 @@ export function writesBeforeApproval({ entries }: Transcript): string[] {
       if (entry.role === "user" && ++userMessages > 1) {
         break;
       }
+    } else if (userMessages > 0 && isAnsweredQuestion(entry)) {
+      break;
     } else {
-      writes.push(...toolWrites(entry));
+      writes.push(...toolWrites(entry, root));
     }
   }
   return writes;

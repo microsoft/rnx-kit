@@ -41,14 +41,23 @@ export async function grade(
     return fail(`Agent accessed eval files (${access.join(", ")})`);
   }
 
+  // Script checks run first; rubrics are only graded if they all pass since
+  // the session fails either way
   const context = { providerResponse: response };
   const componentResults: GradingResult[] = [];
-  for (const assertion of testCase.assert) {
-    componentResults.push(
-      assertion.type === "javascript"
-        ? await assertion.value(response.output, context)
-        : await gradeRubric(assertion.value, response.metadata, graderOptions)
-    );
+  for (const [i, assertion] of testCase.assert.entries()) {
+    if (assertion.type === "javascript") {
+      componentResults[i] = await assertion.value(response.output, context);
+    }
+  }
+
+  const scriptsPassed = componentResults.every((result) => result.pass);
+  for (const [i, assertion] of testCase.assert.entries()) {
+    if (assertion.type === "llm-rubric") {
+      componentResults[i] = scriptsPassed
+        ? await gradeRubric(assertion.value, response.metadata, graderOptions)
+        : fail("Rubric skipped because a script check failed");
+    }
   }
 
   const pass = componentResults.every((result) => result.pass);

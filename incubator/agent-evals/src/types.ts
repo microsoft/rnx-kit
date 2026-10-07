@@ -25,13 +25,18 @@ export type FileWrite = {
  */
 export type Transcript = {
   agent: string;
+  /** Repository root of the session, if known. */
+  root?: string;
   /** Messages and tool calls in chronological order. */
   entries: (Message | ToolCall)[];
   /** Shell commands run by the agent. */
   commands: string[];
   /** Files read by the agent, relative to the repository root if possible. */
   filesRead: string[];
-  /** Files created or edited by the agent's file editing tools. */
+  /**
+   * Files in the repository created or edited by the agent's file editing
+   * tools, relative to the repository root if known.
+   */
   filesWritten: FileWrite[];
 };
 

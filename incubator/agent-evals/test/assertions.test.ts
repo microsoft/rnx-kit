@@ -21,9 +21,10 @@ function user(content: string): Message {
   return { type: "message", role: "user", content };
 }
 
-function transcript(entries: Transcript["entries"]): Transcript {
+function transcript(entries: Transcript["entries"], root?: string): Transcript {
   return {
     agent: "test",
+    root,
     entries,
     commands: [],
     filesRead: [],
@@ -192,6 +193,18 @@ describe("toolWrites()", () => {
     deepEqual(toolWrites(bash("cp -r a b && mv c d")), ["b", "d"]);
   });
 
+  it("ignores files outside the repository root", () => {
+    const root = "/repo";
+    deepEqual(toolWrites(tool("create", { path: "/repo/a.md" }), root), [
+      "a.md",
+    ]);
+    deepEqual(toolWrites(tool("create", { path: "/root/plan.md" }), root), []);
+    deepEqual(toolWrites(tool("create", { path: "b.md" }), root), ["b.md"]);
+    const input = "*** Begin Patch\n*** Add File: /repo/../c.md\n+c";
+    deepEqual(toolWrites(tool("apply_patch", { input }), root), []);
+    deepEqual(toolWrites(bash("echo a > /home/x.md > d.md"), root), ["d.md"]);
+  });
+
   it("ignores shell commands that do not write", () => {
     deepEqual(toolWrites(bash(`sed "s/a/b/" c && node -e "a > b"`)), []);
     deepEqual(toolWrites(bash("yarn build >/tmp/log 2>/dev/null")), []);
@@ -213,5 +226,36 @@ describe("writesBeforeApproval()", () => {
       "test/a.test.ts",
       "docs.md",
     ]);
+  });
+
+  it("treats an answer to `ask_user` as approval", () => {
+    const answered = { ...tool("ask_user", {}), success: true };
+    const entries = [
+      user("Implement it"),
+      tool("create", { path: "a.ts" }),
+      { ...tool("ask_user", {}), success: false },
+      tool("create", { path: "b.ts" }),
+      answered,
+      tool("create", { path: "c.ts" }),
+    ];
+    deepEqual(writesBeforeApproval(transcript(entries)), ["a.ts", "b.ts"]);
+  });
+
+  it("only treats `ask_user` after the first user message as approval", () => {
+    const entries = [
+      { ...tool("ask_user", {}), success: true },
+      user("Implement it"),
+      tool("create", { path: "a.ts" }),
+    ];
+    deepEqual(writesBeforeApproval(transcript(entries)), ["a.ts"]);
+  });
+
+  it("ignores files outside the repository root", () => {
+    const entries = [
+      user("Implement it"),
+      tool("create", { path: "/root/.copilot/session-state/1/plan.md" }),
+      tool("create", { path: "/repo/src/a.ts" }),
+    ];
+    deepEqual(writesBeforeApproval(transcript(entries, "/repo")), ["src/a.ts"]);
   });
 });

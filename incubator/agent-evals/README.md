@@ -43,3 +43,14 @@ considered.
 
 Evals that apply to any session set `metadata.allSessions` to `true`. Other logs
 are reported as skipped, and an eval without any matching logs is skipped.
+
+## Hiding evals from agents
+
+Agents must not see the evals they are graded against. A session fails if the
+agent explicitly reads or writes eval files or an `evals/` folder, e.g. by
+viewing `evals/changeset-required.eval.ts` or running `ls evals/`.
+
+This check does not catch repository-wide searches, e.g. `rg -l changeset .` or
+the agent's own search tools, which may still return the contents of eval
+files. Record graded sessions on a checkout without `incubator/agent-evals`,
+e.g. by removing the folder from the worktree before starting the agent.

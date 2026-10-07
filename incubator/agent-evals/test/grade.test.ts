@@ -1,6 +1,7 @@
 import { deepEqual } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { evalsAccess } from "../src/grade.ts";
+import { fail, pass } from "../src/assertions.ts";
+import { evalsAccess, grade } from "../src/grade.ts";
 import type { ToolCall, Transcript } from "../src/types.ts";
 
 function transcript(...calls: [string, Record<string, unknown>][]): Transcript {
@@ -67,5 +68,31 @@ describe("evalsAccess()", () => {
       )
     );
     deepEqual(access, []);
+  });
+});
+
+describe("grade()", () => {
+  it("skips rubrics if a script check fails", async () => {
+    const result = await grade(
+      {
+        description: "",
+        assert: [
+          { type: "llm-rubric", value: "Does something" },
+          { type: "javascript", value: () => pass("ok") },
+          { type: "javascript", value: () => fail("not ok") },
+        ],
+      },
+      { output: "", metadata: { transcript: transcript() } }
+    );
+    deepEqual(result, {
+      pass: false,
+      score: 0,
+      reason: "Rubric skipped because a script check failed; ok; not ok",
+      componentResults: [
+        fail("Rubric skipped because a script check failed"),
+        pass("ok"),
+        fail("not ok"),
+      ],
+    });
   });
 });

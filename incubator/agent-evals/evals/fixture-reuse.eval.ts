@@ -30,11 +30,11 @@ export default {
     {
       type: "javascript",
       value: (_output, { providerResponse }) => {
-        const { entries } = providerResponse.metadata.transcript;
+        const { entries, root } = providerResponse.metadata.transcript;
         const findWrite = (predicate: (file: string) => boolean) =>
           entries.findIndex(
             (entry) =>
-              entry.type === "tool" && toolWrites(entry).some(predicate)
+              entry.type === "tool" && toolWrites(entry, root).some(predicate)
           );
         let firstWrite = findWrite((file) => file.includes(FIXTURES));
         if (firstWrite < 0) {

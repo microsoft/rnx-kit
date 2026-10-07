@@ -1,6 +1,5 @@
-import * as path from "node:path";
-import { parsePatch } from "../assertions.ts";
-import type { Message, ToolCall, Transcript } from "../types.ts";
+import { parsePatch, repoPath } from "../assertions.ts";
+import type { FileWrite, Message, ToolCall, Transcript } from "../types.ts";
 
 type Event = {
   type: string;
@@ -26,30 +25,42 @@ export function copilot(log: string): Transcript {
     filesWritten: [],
   };
 
-  let root = "";
-  const relative = (p: string) => {
-    if (root && path.isAbsolute(p)) {
-      const rel = path.relative(root, p).replaceAll("\\", "/");
-      if (rel !== ".." && !rel.startsWith("../") && !path.isAbsolute(rel)) {
-        return rel;
-      }
+  // Paths outside the repository root are kept as is
+  const relative = (p: string) => repoPath(p, transcript.root) ?? p;
+  const addWrite = (write: FileWrite) => {
+    const p = repoPath(write.path, transcript.root);
+    if (p) {
+      transcript.filesWritten.push({ ...write, path: p });
     }
-    return p;
   };
 
   const calls: Record<string, ToolCall> = {};
 
-  for (const line of log.split("\n")) {
+  const lines = log.split("\n");
+  for (let i = 0; i < lines.length; ++i) {
+    const line = lines[i];
     if (!line.trim()) {
       continue;
     }
 
-    const { type, data } = JSON.parse(line) as Event;
+    let event: Partial<Event> | null = null;
+    try {
+      event = JSON.parse(line);
+    } catch {
+      // The log may be truncated, e.g. if the session crashed
+    }
+    if (typeof event?.type !== "string") {
+      console.warn(`Skipped malformed line ${i + 1} in session log`);
+      continue;
+    }
+
+    const { type, data = {} } = event;
     switch (type) {
       case "session.start":
       case "session.resume": {
         const context = data.context as Record<string, unknown> | undefined;
-        root = str(context?.gitRoot) ?? str(context?.cwd) ?? root;
+        transcript.root =
+          str(context?.gitRoot) ?? str(context?.cwd) ?? transcript.root;
         break;
       }
 
@@ -86,15 +97,12 @@ export function copilot(log: string): Transcript {
         } else if (name === "apply_patch") {
           const input = str(args.input) ?? str(args.patch) ?? "";
           for (const write of parsePatch(input)) {
-            transcript.filesWritten.push({
-              ...write,
-              path: relative(write.path),
-            });
+            addWrite(write);
           }
         } else if (filePath) {
           const content = str(args.file_text) ?? str(args.new_str);
           if (content !== undefined) {
-            transcript.filesWritten.push({ path: relative(filePath), content });
+            addWrite({ path: filePath, content });
           }
         }
         break;
