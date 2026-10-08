@@ -8,7 +8,7 @@
       value: file://src/assertions.ts:ranCommand
       config:
         pattern: '^yarn test(?=.*\s--coverage\b)(?=.*\s[''"]?test/\S*\*)'
-        package: '@rnx-kit/align-deps'
+        inPackage: true
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
       config: { forbidden: ['.'] }

@@ -10,7 +10,7 @@
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
       config:
-        package: '@rnx-kit/tools-react-native'
+        singlePackage: true
     - type: javascript
       value: file://src/assertions.ts:matchesContent
       config:

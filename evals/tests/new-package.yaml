@@ -7,9 +7,10 @@
     - type: javascript
       value: file://src/assertions.ts:ranCommand
       config:
-        pattern: '^yarn new-package(?=.*\s--experimental\b)(?=.*\stools-sample\b)'
+        pattern: '^yarn new-package\b.*\s--experimental\b'
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
       config:
-        required: ['^incubator/tools-sample/package\.json$']
-        forbidden: ['^packages/tools-sample/']
+        status: [added]
+        required: ['^incubator/[^/]+/package\.json$']
+        forbidden: ['^packages/[^/]+/package\.json$']

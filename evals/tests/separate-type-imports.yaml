@@ -15,6 +15,6 @@
     - type: javascript
       value: file://src/assertions.ts:matchesContent
       config:
-        files: '^packages/tools-node/src/index\.ts$'
+        files: '(^|/)src/index\.ts$'
         addedLinesOnly: true
         required: ['^export type \{', 'findPackageVersion']

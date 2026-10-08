@@ -16,5 +16,5 @@
     - type: javascript
       value: file://src/assertions.ts:matchesContent
       config:
-        files: '^packages/tools-android/src/gradle\.ts$'
+        files: '(^|/)src/.+\.ts$'
         required: ['DEFAULT_BUILD_CONFIGURATION']

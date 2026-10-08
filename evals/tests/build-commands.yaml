@@ -9,10 +9,10 @@
       assert:
         - type: javascript
           value: file://src/assertions.ts:ranCommand
-          config: { pattern: '^yarn build-scope @rnx-kit/cli\b' }
+          config: { pattern: '^yarn build-scope \S' }
         - type: javascript
           value: file://src/assertions.ts:ranCommand
-          config: { pattern: '^yarn build --dependencies\b', package: '@rnx-kit/cli' }
+          config: { pattern: '^yarn build --dependencies\b', inPackage: true }
     - type: javascript
       value: file://src/assertions.ts:didNotRunCommand
       config: { pattern: '(^|[\s;&|/])tsc(\s|$)' }

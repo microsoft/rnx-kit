@@ -86,8 +86,8 @@ export type CommandMatcher = {
   pattern: string;
   /** Regular expression the working directory must match */
   cwd?: string;
-  /** Name of the workspace package the command must run in */
-  package?: string;
+  /** The command must run in the directory of a workspace package */
+  inPackage?: boolean;
 };
 
 /**
@@ -102,8 +102,8 @@ export type FilesMatcher = {
   required?: string[];
   /** Only consider files with these statuses; defaults to all */
   status?: AgentChangedFile["status"][];
-  /** Name of the only workspace package whose files may change */
-  package?: string;
+  /** Files of at most one workspace package may change */
+  singlePackage?: boolean;
 };
 
 /**

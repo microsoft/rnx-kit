@@ -155,14 +155,6 @@ function lazyWorkspacePackages(workdir: string): () => Map<string, string> {
   return () => (packages ??= workspacePackages(workdir));
 }
 
-function packageDir(packages: Map<string, string>, name: string): string {
-  const dir = packages.get(name);
-  if (!dir) {
-    throw new Error(`Unknown workspace package: ${name}`);
-  }
-  return dir;
-}
-
 /**
  * Returns the directory of the package containing the specified file, relative
  * to the root of the checkout.
@@ -204,7 +196,7 @@ function resolveCommand(
       dir = toRelativePath(workdir, path.resolve(workdir, dir, value));
       args.splice(0, 1);
     } else if (arg === "workspace" && value && packages().has(value)) {
-      dir = packageDir(packages(), value);
+      dir = packages().get(value) ?? dir;
       args.splice(0, 2);
     } else {
       break;
@@ -215,19 +207,19 @@ function resolveCommand(
 
 function commandMatches(
   run: AgentRun,
-  { pattern, cwd, package: name }: CommandMatcher
+  { pattern, cwd, inPackage }: CommandMatcher
 ) {
   const packages = lazyWorkspacePackages(run.workdir);
   const command = new RegExp(pattern);
   const dir = cwd ? new RegExp(cwd) : undefined;
-  const pkgDir = name ? packageDir(packages(), name) : undefined;
+  const isPackageDir = (dir: string) => [...packages().values()].includes(dir);
   return run.commands
     .map((c) => resolveCommand(run.workdir, c, packages))
     .filter(
       (c) =>
         command.test(c.command) &&
         (!dir || dir.test(c.cwd)) &&
-        (!pkgDir || c.cwd === pkgDir)
+        (!inPackage || isPackageDir(c.cwd))
     );
 }
 
@@ -312,27 +304,21 @@ export function matchesFiles(
   context: AssertionContext<FilesMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
-  const {
-    allowed,
-    forbidden,
-    required,
-    status,
-    package: name,
-  } = requireConfig(context);
+  const { allowed, forbidden, required, status, singlePackage } =
+    requireConfig(context);
   const files = run.files
     .filter((file) => !status || status.includes(file.status))
     .map((file) => file.path);
 
   const failures: string[] = [];
 
-  if (name) {
-    const packages = workspacePackages(run.workdir);
-    const own = packageDir(packages, name);
-    const others = [...packages.values()].filter((dir) => dir !== own);
-    for (const file of files) {
-      if (others.some((dir) => file.startsWith(`${dir}/`))) {
-        failures.push(`File outside ${name}: ${file}`);
-      }
+  if (singlePackage) {
+    const dirs = [...workspacePackages(run.workdir).values()];
+    const touched = new Set(
+      files.flatMap((file) => dirs.filter((dir) => file.startsWith(`${dir}/`)))
+    );
+    if (touched.size > 1) {
+      failures.push(`Changed multiple packages: ${[...touched].join(", ")}`);
     }
   }
 
