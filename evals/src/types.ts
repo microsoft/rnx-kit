@@ -29,6 +29,9 @@ export type AgentChangedFile = {
 
 /**
  * Output of a single agent run, as returned by the harness to promptfoo.
+ *
+ * promptfoo: the value of `ProviderResponse.output`, which promptfoo types as
+ * `any` and passes unchanged to `javascript` assertions.
  */
 export type AgentRun = {
   commands: AgentCommand[];
@@ -122,6 +125,10 @@ export type ToolCallMatcher = {
 
 /**
  * Subset of promptfoo's `AssertionValueFunctionContext` used by assertions.
+ *
+ * promptfoo: `AssertionValueFunctionContext` (`config` is typed as
+ * `Record<string, any>`).
+ * @see https://www.promptfoo.dev/docs/configuration/expected-outputs/javascript/
  */
 export type AssertionContext<T> = {
   config?: T;
@@ -129,6 +136,10 @@ export type AssertionContext<T> = {
 
 /**
  * Subset of promptfoo's `GradingResult` returned by assertions.
+ *
+ * promptfoo: `GradingResult` (`pass`, `score` and `reason` are its only
+ * required fields).
+ * @see https://www.promptfoo.dev/docs/configuration/expected-outputs/javascript/
  */
 export type GradingResult = {
   pass: boolean;
@@ -163,6 +174,9 @@ export type GitHubFixture = {
 
 /**
  * Variables of each eval test case, consumed by the harness.
+ *
+ * promptfoo: the shape of `TestCase.vars` for this suite (promptfoo types it
+ * as `Record<string, VarValue>`).
  */
 export type EvalVars = {
   /** The first user message */
