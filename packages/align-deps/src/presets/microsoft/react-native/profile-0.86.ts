@@ -139,7 +139,7 @@ export const profile: Profile = {
 
   "safe-area": {
     name: "react-native-safe-area-context",
-    version: "^5.8.0",
+    version: "^5.8.1",
   },
 
   "test-app": {
