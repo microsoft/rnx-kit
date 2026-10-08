@@ -1,8 +1,17 @@
 /**
- * A shell command executed by the agent.
+ * A command executed by the agent.
+ *
+ * The harness must record commands as they are executed, not as they are
+ * typed, so that compound commands (`cd a && yarn build`) and scripts are
+ * captured with the correct working directory. It does this by putting shims
+ * first in `PATH` for every executable that evals match on (`gh`, `git`,
+ * `node`, `npx`, `tsc`, `yarn`, and formatters/linters). A shim records its
+ * arguments and working directory, then runs the real executable with an
+ * environment variable set so that nested invocations (e.g. `node` spawned by
+ * `yarn`) are not recorded.
  */
 export type AgentCommand = {
-  /** The command line as typed by the agent, e.g. `yarn build` */
+  /** Executable and arguments joined by spaces, unquoted, e.g. `yarn build` */
   command: string;
   /** Working directory relative to the repository root; `.` for the root */
   cwd: string;
@@ -37,7 +46,11 @@ export type AgentRun = {
   commands: AgentCommand[];
   toolCalls: AgentToolCall[];
   files: AgentChangedFile[];
-  /** Unified diff (`git diff <base>`) of all changes, including untracked files */
+  /**
+   * Unified diff of all changes, including untracked files. The harness must
+   * generate it with `git -c core.quotePath=false diff <base>`, otherwise git
+   * escapes non-ASCII paths, which `parse-diff` does not decode.
+   */
   diff: string;
   /** The agent's final message to the user */
   finalMessage: string;
@@ -84,13 +97,13 @@ export type ContentMatcher = {
 };
 
 /**
- * Configuration for `commandSucceeds`.
+ * Configuration for `passesOxlint`.
  */
-export type SuccessfulCommand = {
-  /** Executable and arguments, e.g. `["yarn", "lint"]` */
-  command: string[];
-  /** Working directory relative to the repository root; defaults to `.` */
-  cwd?: string;
+export type OxlintMatcher = {
+  /** Regular expression matched against changed file paths */
+  files: string;
+  /** Path to an oxlint config, relative to the `evals` workspace */
+  config: string;
 };
 
 /**

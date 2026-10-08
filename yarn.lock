@@ -5226,10 +5226,12 @@ __metadata:
   resolution: "@rnx-kit/evals@workspace:evals"
   dependencies:
     "@changesets/parse": "npm:^1.0.0"
+    "@rnx-kit/eslint-plugin": "workspace:*"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.0"
     oxc-parser: "npm:^0.123.0"
+    oxlint: "catalog:"
     parse-diff: "npm:^0.11.0"
   languageName: unknown
   linkType: soft

@@ -9,8 +9,10 @@
       `assemble`.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:commandSucceeds
-      config: { command: [yarn, lint], cwd: packages/tools-android }
+      value: file://src/assertions.ts:passesOxlint
+      config:
+        files: '(^|/)types\.ts$'
+        config: oxlint/types-only.json
     - type: javascript
       value: file://src/assertions.ts:matchesContent
       config:

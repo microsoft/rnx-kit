@@ -41,6 +41,8 @@ export default {
     },
     evals: {
       entry: ["src/assertions.ts", "src/transforms.ts"],
+      // Loaded as a jsPlugin by `oxlint/types-only.json`
+      ignoreDependencies: ["@rnx-kit/eslint-plugin"],
     },
     "incubator/@react-native-webapis/battery-status": {
       entry: ["react-native.config.js"],

@@ -1,6 +1,6 @@
 import { parseChangesetFile } from "@changesets/parse";
 import { spawnSync } from "node:child_process";
-import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 import { parseSync } from "oxc-parser";
 import parseDiff from "parse-diff";
 import type {
@@ -12,7 +12,7 @@ import type {
   ContentMatcher,
   FilesMatcher,
   GradingResult,
-  SuccessfulCommand,
+  OxlintMatcher,
   ToolCallMatcher,
   TypeSpecifierMatcher,
 } from "./types.ts";
@@ -247,49 +247,61 @@ export function matchesContent(
   );
 }
 
-const COMMAND_TIMEOUT_MS = 10 * 60 * 1000;
+const OXLINT = fileURLToPath(
+  new URL("./cli.js", import.meta.resolve("oxlint"))
+);
+const OXLINT_TIMEOUT_MS = 60 * 1000;
+
+type OxlintReport = {
+  diagnostics: {
+    message: string;
+    code: string;
+    filename: string;
+    labels: { span: { line: number } }[];
+  }[];
+};
 
 /**
- * Passes if the configured command exits successfully in the agent's checkout.
+ * Passes if the matching changed files pass oxlint with the configured config.
+ * Passes trivially if no files match. Nested configs in the checkout are
+ * ignored.
  *
  * Note: `spawnSync` blocks the event loop, which stalls other tests that
  * promptfoo runs concurrently. Switch to an async spawn if this becomes a
  * bottleneck; promptfoo accepts assertions that return a promise.
  */
-export function commandSucceeds(
+export function passesOxlint(
   output: AgentRun | string,
-  context: AssertionContext<SuccessfulCommand>
+  context: AssertionContext<OxlintMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
-  const { command, cwd = "." } = requireConfig(context);
-  const dir = path.resolve(run.workdir, cwd);
-  const relative = path.relative(run.workdir, dir);
-  if (
-    relative === ".." ||
-    relative.startsWith(`..${path.sep}`) ||
-    path.isAbsolute(relative)
-  ) {
-    throw new Error(`Working directory is outside the checkout: ${cwd}`);
+  const { files, config } = requireConfig(context);
+  const pattern = new RegExp(files);
+  const matching = existingFiles(run)
+    .filter((file) => pattern.test(file.path))
+    .map((file) => file.path);
+  if (matching.length === 0) {
+    return result([], "No matching files changed");
   }
 
-  // On Windows, executables like `yarn` are `.cmd` shims, which can only be
-  // spawned through a shell. Passing arguments separately with `shell: true`
-  // is deprecated, so we pass the whole command line instead.
-  const shell = process.platform === "win32";
-  const [executable, ...args] = shell ? [command.join(" ")] : command;
-  const { error, status } = spawnSync(executable, args, {
-    cwd: dir,
-    shell,
-    stdio: "ignore",
-    timeout: COMMAND_TIMEOUT_MS,
-  });
-  const commandLine = `${command.join(" ")} (in ${cwd})`;
-  return result(
-    status === 0
-      ? []
-      : [`${commandLine} failed: ${error?.message ?? `exit code ${status}`}`],
-    `${commandLine} succeeded`
+  const configPath = fileURLToPath(new URL(`../${config}`, import.meta.url));
+  const { error, status, stdout } = spawnSync(
+    process.execPath,
+    [OXLINT, "--config", configPath, "--format", "json", ...matching],
+    { cwd: run.workdir, encoding: "utf-8", timeout: OXLINT_TIMEOUT_MS }
   );
+  if (error || (status !== 0 && status !== 1)) {
+    throw new Error(
+      `oxlint failed: ${error?.message ?? `exit code ${status}`}`
+    );
+  }
+
+  const { diagnostics } = JSON.parse(stdout) as OxlintReport;
+  const failures = diagnostics.map(({ code, filename, labels, message }) => {
+    const line = labels[0]?.span.line;
+    return `${filename}${line ? `:${line}` : ""}: ${code}: ${message}`;
+  });
+  return result(failures, `${matching.join(", ")} passed oxlint`);
 }
 
 /**
