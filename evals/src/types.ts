@@ -9,6 +9,13 @@
  * arguments and working directory, then runs the real executable with an
  * environment variable set so that nested invocations (e.g. `node` spawned by
  * `yarn`) are not recorded.
+ *
+ * Executables invoked by path (e.g. `/usr/bin/git push`) bypass the shims. To
+ * cover these, the harness also splits the agent's shell tool input on `&&`,
+ * `||`, `;` and `|`, and adds any command that the shims did not record. The
+ * working directory of these commands is best-effort.
+ *
+ * The executable may include a path; assertions only match on its basename.
  */
 export type AgentCommand = {
   /** Executable and arguments joined by spaces, unquoted, e.g. `yarn build` */

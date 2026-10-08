@@ -99,11 +99,25 @@ function selectLines(
     .join("\n");
 }
 
+/**
+ * Reduces the executable to its basename without Windows extensions, e.g.
+ * `/usr/bin/git push` -> `git push` and
+ * `C:\bin\yarn.cmd build` -> `yarn build`.
+ */
+function withoutExecutablePath(command: string): string {
+  return command.replace(
+    /^(?:\S*[\\/])?([^\s\\/]+?)(?:\.(?:bat|cmd|exe|ps1))?(?=\s|$)/i,
+    "$1"
+  );
+}
+
 function commandMatches(run: AgentRun, { pattern, cwd }: CommandMatcher) {
   const command = new RegExp(pattern);
   const dir = cwd ? new RegExp(cwd) : undefined;
   return run.commands.filter(
-    (c) => command.test(c.command) && (!dir || dir.test(c.cwd))
+    (c) =>
+      command.test(withoutExecutablePath(c.command)) &&
+      (!dir || dir.test(c.cwd))
   );
 }
 
