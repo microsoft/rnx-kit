@@ -1,8 +1,7 @@
-import type { ESLint } from "eslint";
-import { Linter } from "eslint";
-import { createRequire } from "node:module";
-import tseslint from "typescript-eslint";
-import { addedLines } from "./diff.ts";
+import { spawnSync } from "node:child_process";
+import * as path from "node:path";
+import { parseSync } from "oxc-parser";
+import parseDiff from "parse-diff";
 import type {
   AgentChangedFile,
   AgentRun,
@@ -12,15 +11,10 @@ import type {
   ContentMatcher,
   FilesMatcher,
   GradingResult,
-  LintMatcher,
+  SuccessfulCommand,
   ToolCallMatcher,
+  TypeSpecifierMatcher,
 } from "./types.ts";
-
-// `@rnx-kit/eslint-plugin` is CommonJS without type definitions; loading it
-// through `require` keeps `tsc` from type checking its sources.
-const rnxkit: ESLint.Plugin = createRequire(import.meta.url)(
-  "@rnx-kit/eslint-plugin"
-);
 
 function result(failures: string[], success: string): GradingResult {
   const pass = failures.length === 0;
@@ -36,6 +30,27 @@ function result(failures: string[], success: string): GradingResult {
  */
 export function toAgentRun(output: AgentRun | string): AgentRun {
   return typeof output === "string" ? JSON.parse(output) : output;
+}
+
+/**
+ * Returns the line numbers added to each file in a unified diff.
+ */
+function addedLines(diff: string): Map<string, Set<number>> {
+  const result = new Map<string, Set<number>>();
+  for (const file of parseDiff(diff)) {
+    if (file.to && file.to !== "/dev/null") {
+      const lines = new Set<number>();
+      for (const chunk of file.chunks) {
+        for (const change of chunk.changes) {
+          if (change.type === "add") {
+            lines.add(change.ln);
+          }
+        }
+      }
+      result.set(file.to, lines);
+    }
+  }
+  return result;
 }
 
 function requireConfig<T>({ config }: AssertionContext<T>): T {
@@ -214,27 +229,46 @@ export function matchesContent(
 }
 
 /**
- * Passes if the matching files pass the configured ESLint rules. Passes
- * trivially if no files match.
+ * Passes if the configured command exits successfully in the agent's checkout.
  */
-export function passesLint(
+export function commandSucceeds(
   output: AgentRun | string,
-  context: AssertionContext<LintMatcher>
+  context: AssertionContext<SuccessfulCommand>
 ): GradingResult {
   const run = toAgentRun(output);
-  const { files, rules, addedLinesOnly } = requireConfig(context);
+  const { command, cwd = "." } = requireConfig(context);
+  const dir = path.resolve(run.workdir, cwd);
+  if (path.relative(run.workdir, dir).startsWith("..")) {
+    throw new Error(`Working directory is outside the checkout: ${cwd}`);
+  }
+
+  const [executable, ...args] = command;
+  const { error, status, stdout, stderr } = spawnSync(executable, args, {
+    cwd: dir,
+    encoding: "utf-8",
+  });
+  const commandLine = `${command.join(" ")} (in ${cwd})`;
+  return result(
+    status === 0
+      ? []
+      : [`${commandLine} failed: ${error?.message ?? ""}${stdout}${stderr}`],
+    `${commandLine} succeeded`
+  );
+}
+
+/**
+ * Passes if the matching files do not use inline `type` specifiers in import
+ * or export statements, e.g. `import { type A, b }`. Passes trivially if no
+ * files match.
+ */
+export function noInlineTypeSpecifiers(
+  output: AgentRun | string,
+  context: AssertionContext<TypeSpecifierMatcher>
+): GradingResult {
+  const run = toAgentRun(output);
+  const { files, addedLinesOnly } = requireConfig(context);
   const pathPattern = new RegExp(files);
   const added = addedLinesOnly ? addedLines(run.diff) : undefined;
-
-  const linter = new Linter({ configType: "flat" });
-  const config: Linter.Config[] = [
-    {
-      files: ["**/*.{cjs,cts,js,jsx,mjs,mts,ts,tsx}"],
-      languageOptions: { parser: tseslint.parser as Linter.Parser },
-      plugins: { "@rnx-kit": rnxkit },
-      rules: rules as Linter.RulesRecord,
-    },
-  ];
 
   const failures: string[] = [];
   const checked: string[] = [];
@@ -244,18 +278,34 @@ export function passesLint(
     }
 
     checked.push(file.path);
+    const content = file.content ?? "";
+    const { program, errors } = parseSync(file.path, content);
+    for (const { message } of errors) {
+      failures.push(`${file.path}: ${message}`);
+    }
+
     const lines = added?.get(file.path);
-    const messages = linter.verify(file.content ?? "", config, {
-      filename: file.path,
-    });
-    for (const { fatal, line, message, ruleId } of messages) {
-      if (fatal || !added || lines?.has(line)) {
-        failures.push(`${file.path}:${line}: ${message} (${ruleId})`);
+    for (const node of program.body) {
+      const specifiers =
+        node.type === "ImportDeclaration"
+          ? node.specifiers.filter(
+              (s) => s.type === "ImportSpecifier" && s.importKind === "type"
+            )
+          : node.type === "ExportNamedDeclaration"
+            ? node.specifiers.filter((s) => s.exportKind === "type")
+            : [];
+      for (const { start } of specifiers) {
+        const line = content.slice(0, start).split("\n").length;
+        if (!added || lines?.has(line)) {
+          failures.push(
+            `${file.path}:${line}: Use a separate \`${node.type === "ImportDeclaration" ? "import" : "export"} type\` statement`
+          );
+        }
       }
     }
   }
 
-  return result(failures, `Linted ${checked.join(", ") || "(none)"}`);
+  return result(failures, `Checked ${checked.join(", ") || "(none)"}`);
 }
 
 /**

@@ -1,5 +1,5 @@
-- description: "A2: Formats and lints through yarn instead of calling the tools directly"
-  metadata: { id: A2, source: AGENTS.md }
+- description: "Formats and lints through yarn instead of calling the tools directly"
+  metadata: { id: format-lint-commands, source: AGENTS.md }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-

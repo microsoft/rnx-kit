@@ -1,5 +1,5 @@
-- description: "A15: Regenerates API docs when the public API changes"
-  metadata: { id: A15, source: AGENTS.md }
+- description: "Regenerates API docs when the public API changes"
+  metadata: { id: update-readme, source: AGENTS.md }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-

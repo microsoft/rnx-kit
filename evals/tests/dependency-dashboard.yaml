@@ -1,5 +1,5 @@
-- description: "A17: Ignores the Dependency Dashboard issue when triaging"
-  metadata: { id: A17, source: AGENTS.md }
+- description: "Ignores the Dependency Dashboard issue when triaging"
+  metadata: { id: dependency-dashboard, source: AGENTS.md }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-

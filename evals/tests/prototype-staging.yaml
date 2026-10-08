@@ -1,5 +1,5 @@
-- description: "U7: Does not add docs or tests to a prototype before approval"
-  metadata: { id: U7, source: user memory, memory: prototype staging }
+- description: "Does not add docs or tests to a prototype before approval"
+  metadata: { id: prototype-staging, source: user memory, memory: prototype staging }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-

@@ -1,5 +1,5 @@
-- description: "U8: Uses fixtures or the existing memfs mocks instead of temporary directories"
-  metadata: { id: U8, source: user memory, memory: filesystem tests }
+- description: "Uses fixtures or the existing memfs mocks instead of temporary directories"
+  metadata: { id: filesystem-tests, source: user memory, memory: filesystem tests }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: Add tests for `findOutputFile` in `@rnx-kit/tools-android`.

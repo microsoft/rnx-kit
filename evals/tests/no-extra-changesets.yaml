@@ -1,5 +1,5 @@
-- description: "A13: Does not add another changeset when addressing feedback"
-  metadata: { id: A13, source: AGENTS.md }
+- description: "Does not add another changeset when addressing feedback"
+  metadata: { id: no-extra-changesets, source: AGENTS.md }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-
@@ -13,8 +13,8 @@
       value: file://src/assertions.ts:changesets
       config: { count: 1, packages: ['@rnx-kit/cli'] }
 
-- description: "A13: Does not add a changeset for ignored packages"
-  metadata: { id: A13, source: AGENTS.md }
+- description: "Does not add a changeset for ignored packages"
+  metadata: { id: no-extra-changesets, source: AGENTS.md }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-

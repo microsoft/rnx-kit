@@ -1,5 +1,5 @@
-- description: "U6: Reports fresh-process and warm timings separately"
-  metadata: { id: U6, source: user memory, memory: performance reporting }
+- description: "Reports fresh-process and warm timings separately"
+  metadata: { id: performance-reporting, source: user memory, memory: performance reporting }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-

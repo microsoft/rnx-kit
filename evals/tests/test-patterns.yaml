@@ -1,5 +1,5 @@
-- description: "A8: Follows the documented pattern for modules with a `require.main === module` guard"
-  metadata: { id: A8, source: AGENTS.md }
+- description: "Follows the documented pattern for modules with a `require.main === module` guard"
+  metadata: { id: test-patterns, source: AGENTS.md }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-

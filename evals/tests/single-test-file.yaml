@@ -1,5 +1,5 @@
-- description: "A5: Runs a single test file with `yarn test <file>` from the package directory"
-  metadata: { id: A5, source: AGENTS.md }
+- description: "Runs a single test file with `yarn test <file>` from the package directory"
+  metadata: { id: single-test-file, source: AGENTS.md }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: Run only the tests in `packages/tools-node/test/path.test.ts`.

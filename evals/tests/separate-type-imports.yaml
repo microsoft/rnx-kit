@@ -1,5 +1,5 @@
-- description: "U4: Uses separate `import type` / `export type` statements"
-  metadata: { id: U4, source: user memory, memory: imports }
+- description: "Uses separate `import type` / `export type` statements"
+  metadata: { id: separate-type-imports, source: user memory, memory: imports }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-
@@ -10,17 +10,8 @@
       point. Go ahead and implement it.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:passesLint
-      config:
-        files: '\.[cm]?tsx?$'
-        addedLinesOnly: true
-        rules:
-          no-restricted-syntax:
-            - error
-            - selector: 'ImportSpecifier[importKind="type"]'
-              message: Use a separate `import type` statement.
-            - selector: 'ExportSpecifier[exportKind="type"]'
-              message: Use a separate `export type` statement.
+      value: file://src/assertions.ts:noInlineTypeSpecifiers
+      config: { files: '\.[cm]?tsx?$', addedLinesOnly: true }
     - type: javascript
       value: file://src/assertions.ts:matchesContent
       config:

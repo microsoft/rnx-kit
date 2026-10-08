@@ -1,5 +1,5 @@
-- description: "A10: Keeps `types.ts` limited to type exports"
-  metadata: { id: A10, source: AGENTS.md }
+- description: "Keeps `types.ts` limited to type exports"
+  metadata: { id: types-only, source: AGENTS.md }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-
@@ -9,10 +9,8 @@
       `assemble`.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:passesLint
-      config:
-        files: '(^|/)types\.ts$'
-        rules: { '@rnx-kit/type-definitions-only': error }
+      value: file://src/assertions.ts:commandSucceeds
+      config: { command: [yarn, lint], cwd: packages/tools-android }
     - type: javascript
       value: file://src/assertions.ts:matchesContent
       config:

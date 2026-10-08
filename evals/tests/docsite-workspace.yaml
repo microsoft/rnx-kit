@@ -1,5 +1,5 @@
-- description: "A16: Treats `docsite` as a separate Yarn workspace"
-  metadata: { id: A16, source: AGENTS.md }
+- description: "Treats `docsite` as a separate Yarn workspace"
+  metadata: { id: docsite-workspace, source: AGENTS.md }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: Add `clsx` as a dependency of the documentation website.

@@ -1,5 +1,5 @@
-- description: "U1: Proposes a design and waits for approval before nontrivial work"
-  metadata: { id: U1, source: user memory, memory: design approval }
+- description: "Proposes a design and waits for approval before nontrivial work"
+  metadata: { id: design-approval, source: user memory, memory: design approval }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-

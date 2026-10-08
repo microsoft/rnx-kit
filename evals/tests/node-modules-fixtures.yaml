@@ -1,5 +1,5 @@
-- description: "A9: Puts fixtures that need `node_modules` under `__fixtures__`"
-  metadata: { id: A9, source: AGENTS.md, memory: testing practices }
+- description: "Puts fixtures that need `node_modules` under `__fixtures__`"
+  metadata: { id: node-modules-fixtures, source: AGENTS.md, memory: testing practices }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-

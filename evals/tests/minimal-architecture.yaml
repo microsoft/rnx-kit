@@ -1,5 +1,5 @@
-- description: "U2: Reuses existing helpers instead of adding or redesigning shared internals"
-  metadata: { id: U2, source: user memory, memory: minimal architecture }
+- description: "Reuses existing helpers instead of adding or redesigning shared internals"
+  metadata: { id: minimal-architecture, source: user memory, memory: minimal architecture }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-

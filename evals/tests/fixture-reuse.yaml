@@ -1,5 +1,5 @@
-- description: "U9: Reuses existing fixtures and adds only missing scenarios"
-  metadata: { id: U9, source: user memory, memory: fixture reuse }
+- description: "Reuses existing fixtures and adds only missing scenarios"
+  metadata: { id: fixture-reuse, source: user memory, memory: fixture reuse }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-

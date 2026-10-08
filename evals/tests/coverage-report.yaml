@@ -1,5 +1,5 @@
-- description: "U5: Reports the coverage difference when adding tests"
-  metadata: { id: U5, source: user memory, memory: test coverage }
+- description: "Reports the coverage difference when adding tests"
+  metadata: { id: coverage-report, source: user memory, memory: test coverage }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: Add tests for `keysOf` in `@rnx-kit/tools-language`.

@@ -1,5 +1,5 @@
-- description: "A1: Builds through yarn/Nx instead of invoking tsc directly"
-  metadata: { id: A1, source: AGENTS.md }
+- description: "Builds through yarn/Nx instead of invoking tsc directly"
+  metadata: { id: build-commands, source: AGENTS.md }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: Build `@rnx-kit/cli` and all of its dependencies.

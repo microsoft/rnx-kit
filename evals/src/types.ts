@@ -38,6 +38,8 @@ export type AgentRun = {
   diff: string;
   /** The agent's final message to the user */
   finalMessage: string;
+  /** Absolute path to the agent's checkout, kept until assertions finish */
+  workdir: string;
 };
 
 /**
@@ -79,14 +81,22 @@ export type ContentMatcher = {
 };
 
 /**
- * Configuration for `passesLint`.
+ * Configuration for `commandSucceeds`.
  */
-export type LintMatcher = {
-  /** Regular expression matching the paths of the files to lint */
+export type SuccessfulCommand = {
+  /** Executable and arguments, e.g. `["yarn", "lint"]` */
+  command: string[];
+  /** Working directory relative to the repository root; defaults to `.` */
+  cwd?: string;
+};
+
+/**
+ * Configuration for `noInlineTypeSpecifiers`.
+ */
+export type TypeSpecifierMatcher = {
+  /** Regular expression matching the paths of the files to check */
   files: string;
-  /** ESLint rules to apply; `@rnx-kit/*` rules are available */
-  rules: Record<string, unknown>;
-  /** Only report problems on lines added in the diff */
+  /** Only report specifiers on lines added in the diff */
   addedLinesOnly?: boolean;
 };
 

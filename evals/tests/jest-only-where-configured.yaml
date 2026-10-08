@@ -1,5 +1,5 @@
-- description: "A4: Uses Jest only in packages that are configured for it"
-  metadata: { id: A4, source: AGENTS.md }
+- description: "Uses Jest only in packages that are configured for it"
+  metadata: { id: jest-only-where-configured, source: AGENTS.md }
   vars:
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: Add tests for `asResolvedPath` in `@rnx-kit/cli`.

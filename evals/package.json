@@ -22,9 +22,8 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@rnx-kit/eslint-plugin": "workspace:*",
-    "eslint": "catalog:",
-    "typescript-eslint": "^8.0.0"
+    "oxc-parser": "^0.123.0",
+    "parse-diff": "^0.11.0"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",
