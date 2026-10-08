@@ -67,7 +67,7 @@ function existingFiles({ files }: AgentRun): AgentChangedFile[] {
 function selectLines(
   run: AgentRun,
   file: AgentChangedFile,
-  addedLinesOnly: boolean | undefined
+  addedLinesOnly = false
 ): string {
   const content = file.content ?? "";
   if (!addedLinesOnly) {
