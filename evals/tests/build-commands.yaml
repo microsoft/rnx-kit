@@ -12,7 +12,7 @@
           config: { pattern: '^yarn build-scope \S' }
         - type: javascript
           value: file://src/assertions.ts:ranCommand
-          config: { pattern: '^yarn build --dependencies\b', inPackage: true }
+          config: { pattern: '^yarn build(\s|$)', inPackage: true }
     - type: javascript
       value: file://src/assertions.ts:didNotRunCommand
       config: { pattern: '(^|[\s;&|/])tsc(\s|$)' }
