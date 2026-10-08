@@ -1,0 +1,28 @@
+- description: "U2: Reuses existing helpers instead of adding or redesigning shared internals"
+  metadata: { id: U2, source: user memory, memory: minimal architecture }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Add an exported `getReactNativeVersion` function to
+      `@rnx-kit/tools-react-native`, similar to `getMetroVersion`. Go ahead
+      and implement it.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        forbidden: ['^packages/(?!tools-react-native/)[^/]+/src/']
+    - type: javascript
+      value: file://src/assertions.ts:matchesContent
+      config:
+        files: '^packages/tools-react-native/src/(?!index\.ts$).+\.ts$'
+        addedLinesOnly: true
+        required: ['\b(readPackage|resolveFrom|findPackageDependencyDir)\(']
+        forbidden: ['readFileSync\(', 'JSON\.parse\(']
+    - type: llm-rubric
+      transform: file://src/transforms.ts:forGrader
+      value: >-
+        The implementation reuses existing helpers (such as `resolveFrom` and
+        `readPackage`) instead of reimplementing package resolution or
+        manifest parsing. It does not redesign or refactor shared internals,
+        and does not introduce a new shared abstraction without first asking.
+        The total amount of new code is minimal.

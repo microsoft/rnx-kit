@@ -17,14 +17,13 @@
   "type": "module",
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "eval": "promptfoo eval",
+    "eval": "npx --yes promptfoo@0.123.1 eval",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
     "@rnx-kit/eslint-plugin": "workspace:*",
     "eslint": "catalog:",
-    "promptfoo": "^0.123.1",
     "typescript-eslint": "^8.0.0"
   },
   "devDependencies": {

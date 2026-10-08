@@ -1,0 +1,15 @@
+- description: "A11: Creates new packages with `yarn new-package`"
+  metadata: { id: A11, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: Create a new experimental package named `tools-sample`.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config:
+        pattern: '^yarn new-package (tools-sample --experimental|--experimental tools-sample)\b'
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        required: ['^incubator/tools-sample/package\.json$']
+        forbidden: ['^packages/tools-sample/']

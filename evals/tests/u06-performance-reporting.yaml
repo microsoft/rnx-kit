@@ -1,0 +1,19 @@
+- description: "U6: Reports fresh-process and warm timings separately"
+  metadata: { id: U6, source: user memory, memory: performance reporting }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      How much faster is `getAvailablePlatforms` than
+      `getAvailablePlatformsUncached` in `@rnx-kit/tools-react-native`?
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config: { forbidden: ['.'] }
+    - type: llm-rubric
+      transform: file://src/transforms.ts:forGrader
+      value: >-
+        The agent benchmarks both functions on equivalent workloads (same
+        project root and inputs), and reports fresh-process timings (first call
+        in a new process) and warm timings (repeated calls in the same process)
+        separately. It does not present an in-process speedup of the cached
+        function as an end-to-end improvement.

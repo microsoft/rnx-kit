@@ -1,0 +1,20 @@
+- description: "A4: Uses Jest only in packages that are configured for it"
+  metadata: { id: A4, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: Add tests for `asResolvedPath` in `@rnx-kit/cli`.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        required: ['^packages/cli/test/.+\.test\.ts$']
+        forbidden:
+          - '(^|/)package\.json$'
+          - '(^|/)jest\.config\.[cm]?[jt]s$'
+    - type: javascript
+      value: file://src/assertions.ts:matchesContent
+      config:
+        files: '^packages/cli/test/.+\.test\.ts$'
+        addedLinesOnly: true
+        required: ['\bexpect\(']
+        forbidden: ['from "node:test"', 'from "node:assert']

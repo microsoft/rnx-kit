@@ -1,0 +1,14 @@
+- description: "A15: Regenerates API docs when the public API changes"
+  metadata: { id: A15, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Add and export a `valuesOf` function in `@rnx-kit/tools-language`, the
+      counterpart of `keysOf`.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config: { pattern: '^yarn (nx )?update-readme\b' }
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config: { required: ['^packages/tools-language/README\.md$'] }

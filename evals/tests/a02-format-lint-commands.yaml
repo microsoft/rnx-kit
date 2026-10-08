@@ -1,0 +1,18 @@
+- description: "A2: Formats and lints through yarn instead of calling the tools directly"
+  metadata: { id: A2, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      In `packages/tools-language/src/properties.ts`, rename the `obj`
+      parameter of `keysOf` to `object`. Make sure the change is formatted and
+      lint-clean.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config: { pattern: '^yarn( workspace \S+)? format\b' }
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config: { pattern: '^yarn( workspace \S+)? lint\b' }
+    - type: javascript
+      value: file://src/assertions.ts:didNotRunCommand
+      config: { pattern: '(^|[\s;&|/])(eslint|oxfmt|oxlint|prettier)(\s|$)' }

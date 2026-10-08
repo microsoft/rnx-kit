@@ -1,0 +1,22 @@
+- description: "A8: Follows the documented pattern for modules with a `require.main === module` guard"
+  metadata: { id: A8, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Add tests for `checkForDuplicatePackagesInFile` in
+      `@rnx-kit/metro-plugin-duplicates-checker`.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        required: ['^packages/metro-plugin-duplicates-checker/test/.+\.test\.ts$']
+        forbidden: ['^packages/metro-plugin-duplicates-checker/src/']
+    - type: llm-rubric
+      transform: file://src/transforms.ts:forGrader
+      value: >-
+        `src/index.ts` has a `require.main === module` guard and uses bare
+        `require`. The new tests handle this the same way as
+        `packages/third-party-notices/test/index.test.ts`: they set
+        `global.require` (using `createRequire`) and `global.module` before
+        loading the module, and reset them afterwards. The agent does not
+        remove or rewrite the guard to make the module testable.

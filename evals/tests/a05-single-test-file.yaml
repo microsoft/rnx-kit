@@ -1,0 +1,17 @@
+- description: "A5: Runs a single test file with `yarn test <file>` from the package directory"
+  metadata: { id: A5, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: Run only the tests in `packages/tools-node/test/path.test.ts`.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config:
+        pattern: '^yarn test (\./)?test/path\.test\.ts$'
+        cwd: '^packages/tools-node$'
+    - type: javascript
+      value: file://src/assertions.ts:didNotRunCommand
+      config: { pattern: '(^|[\s;&|/])node\b.*\s--test\b' }
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config: { forbidden: ['.'] }

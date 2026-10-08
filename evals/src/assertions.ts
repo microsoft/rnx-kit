@@ -1,5 +1,6 @@
-import rnxkit from "@rnx-kit/eslint-plugin";
+import type { ESLint } from "eslint";
 import { Linter } from "eslint";
+import { createRequire } from "node:module";
 import tseslint from "typescript-eslint";
 import { addedLines } from "./diff.ts";
 import type {
@@ -15,9 +16,26 @@ import type {
   ToolCallMatcher,
 } from "./types.ts";
 
+// `@rnx-kit/eslint-plugin` is CommonJS without type definitions; loading it
+// through `require` keeps `tsc` from type checking its sources.
+const rnxkit: ESLint.Plugin = createRequire(import.meta.url)(
+  "@rnx-kit/eslint-plugin"
+);
+
 function result(failures: string[], success: string): GradingResult {
   const pass = failures.length === 0;
-  return { pass, score: pass ? 1 : 0, reason: pass ? success : failures.join("\n") };
+  return {
+    pass,
+    score: pass ? 1 : 0,
+    reason: pass ? success : failures.join("\n"),
+  };
+}
+
+/**
+ * Returns the agent run, parsing it first if the provider returned JSON.
+ */
+export function toAgentRun(output: AgentRun | string): AgentRun {
+  return typeof output === "string" ? JSON.parse(output) : output;
 }
 
 function requireConfig<T>({ config }: AssertionContext<T>): T {
@@ -60,9 +78,10 @@ function commandMatches(run: AgentRun, { pattern, cwd }: CommandMatcher) {
  * Passes if the agent ran a command matching the configured pattern.
  */
 export function ranCommand(
-  run: AgentRun,
+  output: AgentRun | string,
   context: AssertionContext<CommandMatcher>
 ): GradingResult {
+  const run = toAgentRun(output);
   const config = requireConfig(context);
   const matches = commandMatches(run, config);
   return result(
@@ -75,9 +94,10 @@ export function ranCommand(
  * Passes if the agent did not run any command matching the configured pattern.
  */
 export function didNotRunCommand(
-  run: AgentRun,
+  output: AgentRun | string,
   context: AssertionContext<CommandMatcher>
 ): GradingResult {
+  const run = toAgentRun(output);
   const config = requireConfig(context);
   const matches = commandMatches(run, config);
   return result(
@@ -91,9 +111,10 @@ export function didNotRunCommand(
  * arguments.
  */
 export function noToolCall(
-  run: AgentRun,
+  output: AgentRun | string,
   context: AssertionContext<ToolCallMatcher>
 ): GradingResult {
+  const run = toAgentRun(output);
   const config = requireConfig(context);
   const name = new RegExp(config.name);
   const args = config.arguments ? new RegExp(config.arguments) : undefined;
@@ -103,7 +124,9 @@ export function noToolCall(
       (!args || args.test(JSON.stringify(call.arguments)))
   );
   return result(
-    calls.map((c) => `Unexpected tool call: ${c.name} ${JSON.stringify(c.arguments)}`),
+    calls.map(
+      (c) => `Unexpected tool call: ${c.name} ${JSON.stringify(c.arguments)}`
+    ),
     `No tool call matched /${config.name}/`
   );
 }
@@ -112,9 +135,10 @@ export function noToolCall(
  * Passes if the changed files satisfy the configured constraints.
  */
 export function matchesFiles(
-  run: AgentRun,
+  output: AgentRun | string,
   context: AssertionContext<FilesMatcher>
 ): GradingResult {
+  const run = toAgentRun(output);
   const { allowed, forbidden, required, status } = requireConfig(context);
   const files = run.files
     .filter((file) => !status || status.includes(file.status))
@@ -155,9 +179,10 @@ export function matchesFiles(
  * patterns. Fails if no files match.
  */
 export function matchesContent(
-  run: AgentRun,
+  output: AgentRun | string,
   context: AssertionContext<ContentMatcher>
 ): GradingResult {
+  const run = toAgentRun(output);
   const { files, required, forbidden, addedLinesOnly } = requireConfig(context);
   const pathPattern = new RegExp(files);
   const matching = existingFiles(run).filter((file) =>
@@ -193,9 +218,10 @@ export function matchesContent(
  * trivially if no files match.
  */
 export function passesLint(
-  run: AgentRun,
+  output: AgentRun | string,
   context: AssertionContext<LintMatcher>
 ): GradingResult {
+  const run = toAgentRun(output);
   const { files, rules, addedLinesOnly } = requireConfig(context);
   const pathPattern = new RegExp(files);
   const added = addedLinesOnly ? addedLines(run.diff) : undefined;
@@ -203,7 +229,7 @@ export function passesLint(
   const linter = new Linter({ configType: "flat" });
   const config: Linter.Config[] = [
     {
-      files: ["**/*"],
+      files: ["**/*.{cjs,cts,js,jsx,mjs,mts,ts,tsx}"],
       languageOptions: { parser: tseslint.parser as Linter.Parser },
       plugins: { "@rnx-kit": rnxkit },
       rules: rules as Linter.RulesRecord,
@@ -222,8 +248,8 @@ export function passesLint(
     const messages = linter.verify(file.content ?? "", config, {
       filename: file.path,
     });
-    for (const { line, message, ruleId } of messages) {
-      if (!added || lines?.has(line)) {
+    for (const { fatal, line, message, ruleId } of messages) {
+      if (fatal || !added || lines?.has(line)) {
         failures.push(`${file.path}:${line}: ${message} (${ruleId})`);
       }
     }
@@ -237,9 +263,10 @@ export function passesLint(
  * the configured packages.
  */
 export function changesets(
-  run: AgentRun,
+  output: AgentRun | string,
   context: AssertionContext<ChangesetMatcher>
 ): GradingResult {
+  const run = toAgentRun(output);
   const { count, packages } = requireConfig(context);
   const added = run.files.filter(
     (file) =>

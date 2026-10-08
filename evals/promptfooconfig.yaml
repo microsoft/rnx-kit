@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: rnx-kit agent evals
+prompts:
+  - "{{task}}"
+# The agent harness (provider) and the `llm-rubric` grader are not configured
+# yet. Until then, pass them on the command line, e.g.
+# `yarn eval --providers file://path/to/provider.ts`.
+tests: file://tests/*.yaml

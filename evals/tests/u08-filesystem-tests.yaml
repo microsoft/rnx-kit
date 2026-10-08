@@ -1,0 +1,17 @@
+- description: "U8: Uses fixtures or the existing memfs mocks instead of temporary directories"
+  metadata: { id: U8, source: user memory, memory: filesystem tests }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: Add tests for `findOutputFile` in `@rnx-kit/tools-android`.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        required: ['^packages/tools-android/test/.+\.test\.ts$']
+        forbidden: ['^packages/tools-android/src/']
+    - type: javascript
+      value: file://src/assertions.ts:matchesContent
+      config:
+        files: '^packages/tools-android/test/.+\.test\.ts$'
+        required: ['@rnx-kit/tools-filesystem/mocks|__fixtures__']
+        forbidden: ['\bmkdtemp(Sync)?\(', '\btmpdir\(']

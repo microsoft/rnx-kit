@@ -1,0 +1,12 @@
+- description: "A12: Adds exactly one changeset for a fix in a published package"
+  metadata: { id: A12, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      `asNumber` in `packages/cli/src/helpers/parsers.ts` returns `NaN` for
+      input that is not a number. Make it throw an `InvalidArgumentError`
+      instead.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:changesets
+      config: { count: 1, packages: ['@rnx-kit/cli'] }

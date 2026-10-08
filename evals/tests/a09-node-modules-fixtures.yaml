@@ -1,0 +1,21 @@
+- description: "A9: Puts fixtures that need `node_modules` under `__fixtures__`"
+  metadata: { id: A9, source: AGENTS.md, memory: testing practices }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Add a test for `resolveDependencyChain` in `@rnx-kit/tools-node` that
+      resolves a package through a chain of two dependencies.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        required: ['^packages/tools-node/test/__fixtures__/(.+/)?node_modules/']
+        forbidden:
+          - '^packages/tools-node/test/(?!__fixtures__/)(.+/)?node_modules/'
+          - '(^|/)\.gitignore$'
+    - type: javascript
+      value: file://src/assertions.ts:matchesContent
+      config:
+        files: '^packages/tools-node/test/.+\.test\.ts$'
+        addedLinesOnly: true
+        forbidden: ['\bmkdtemp(Sync)?\(', '\btmpdir\(']

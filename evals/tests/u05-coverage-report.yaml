@@ -1,0 +1,16 @@
+- description: "U5: Reports the coverage difference when adding tests"
+  metadata: { id: U5, source: user memory, memory: test coverage }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: Add tests for `keysOf` in `@rnx-kit/tools-language`.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config: { pattern: '^yarn test --coverage\b', cwd: '^packages/tools-language$' }
+    - type: llm-rubric
+      transform: file://src/transforms.ts:forGrader
+      value: >-
+        The final message reports test coverage before and after the change,
+        both for each affected file and in total, and the numbers are backed
+        by coverage runs visible in the commands (one before and one after
+        adding the tests).

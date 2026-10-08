@@ -1,0 +1,14 @@
+- description: "A16: Treats `docsite` as a separate Yarn workspace"
+  metadata: { id: A16, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: Add `clsx` as a dependency of the documentation website.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config: { pattern: '^yarn\b', cwd: '^docsite$' }
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        required: ['^docsite/package\.json$', '^docsite/yarn\.lock$']
+        forbidden: ['^package\.json$', '^yarn\.lock$']

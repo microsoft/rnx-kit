@@ -1,0 +1,18 @@
+- description: "A1: Builds through yarn/Nx instead of invoking tsc directly"
+  metadata: { id: A1, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: Build `@rnx-kit/cli` and all of its dependencies.
+  assert:
+    - type: assert-set
+      threshold: 0.5
+      assert:
+        - type: javascript
+          value: file://src/assertions.ts:ranCommand
+          config: { pattern: '^yarn build-scope @rnx-kit/cli\b' }
+        - type: javascript
+          value: file://src/assertions.ts:ranCommand
+          config: { pattern: '^yarn build --dependencies\b', cwd: '^packages/cli$' }
+    - type: javascript
+      value: file://src/assertions.ts:didNotRunCommand
+      config: { pattern: '(^|[\s;&|/])tsc(\s|$)' }

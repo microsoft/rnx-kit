@@ -1,0 +1,26 @@
+- description: "A13: Does not add another changeset when addressing feedback"
+  metadata: { id: A13, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      `asNumber` in `packages/cli/src/helpers/parsers.ts` returns `NaN` for
+      input that is not a number. Make it throw an `InvalidArgumentError`
+      instead.
+    followUps:
+      - Please include the invalid value in the error message.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:changesets
+      config: { count: 1, packages: ['@rnx-kit/cli'] }
+
+- description: "A13: Does not add a changeset for ignored packages"
+  metadata: { id: A13, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Make `fakeMethod` in `@rnx-kit/template` return the message in upper
+      case.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:changesets
+      config: { count: 0 }

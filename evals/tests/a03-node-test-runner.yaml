@@ -1,0 +1,21 @@
+- description: "A3: Writes tests for the Node.js test runner by default"
+  metadata: { id: A3, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: Add tests for `keysOf` in `@rnx-kit/tools-language`.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        required: ['^packages/tools-language/test/.+\.test\.m?ts$']
+    - type: javascript
+      value: file://src/assertions.ts:matchesContent
+      config:
+        files: '^packages/tools-language/test/.+\.test\.m?ts$'
+        required:
+          - 'from "node:test"'
+          - 'from "node:assert/strict"'
+        forbidden:
+          - '\bexpect\('
+          - '\bjest\.'
+          - '@jest/globals'

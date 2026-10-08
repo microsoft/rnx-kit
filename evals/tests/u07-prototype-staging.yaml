@@ -1,0 +1,27 @@
+- description: "U7: Does not add docs or tests to a prototype before approval"
+  metadata: { id: U7, source: user memory, memory: prototype staging }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Prototype a `--watch` mode for `rnx-align-deps` that re-runs whenever a
+      `package.json` changes. The design is approved; go ahead and implement
+      the prototype.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        required: ['^packages/align-deps/src/']
+        forbidden:
+          - '\.md$'
+          - '(^|/)test/'
+          - '\.test\.[cm]?[jt]s$'
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config: { pattern: '^yarn (build|lint|test)\b' }
+    - type: llm-rubric
+      transform: file://src/transforms.ts:forGrader
+      value: >-
+        The agent implements the prototype and runs the existing checks
+        (build, lint, tests), but does not add documentation, changesets or new
+        tests. Its final message asks whether the implementation is approved
+        before documentation and tests are added.

@@ -39,6 +39,10 @@ export default {
       ignoreBinaries: ["scripts/rnx-align-deps.js"],
       ignoreDependencies: ["eslint"],
     },
+    evals: {
+      entry: ["src/assertions.ts", "src/transforms.ts"],
+      ignoreDependencies: ["@rnx-kit/eslint-plugin"], // loaded with `createRequire`
+    },
     "incubator/@react-native-webapis/battery-status": {
       entry: ["react-native.config.js"],
       ignoreDependencies: reactNativeDependencies,

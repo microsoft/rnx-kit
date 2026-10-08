@@ -5221,6 +5221,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/evals@workspace:evals":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/evals@workspace:evals"
+  dependencies:
+    "@rnx-kit/eslint-plugin": "workspace:*"
+    "@rnx-kit/scripts": "workspace:*"
+    "@rnx-kit/tsconfig": "workspace:*"
+    "@types/node": "npm:^24.0.0"
+    eslint: "catalog:"
+    typescript-eslint: "npm:^8.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/fork-sync@workspace:incubator/fork-sync":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/fork-sync@workspace:incubator/fork-sync"

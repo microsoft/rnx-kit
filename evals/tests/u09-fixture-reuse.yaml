@@ -1,0 +1,26 @@
+- description: "U9: Reuses existing fixtures and adds only missing scenarios"
+  metadata: { id: U9, source: user memory, memory: fixture reuse }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Add tests for `getWorkspacesInfo` in `@rnx-kit/tools-workspaces` that
+      cover npm and Yarn workspaces.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        required: ['^packages/tools-workspaces/test/.+\.test\.ts$']
+        forbidden: ['^packages/tools-workspaces/test/__fixtures__/']
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        status: [deleted]
+        forbidden: ['.']
+    - type: llm-rubric
+      transform: file://src/transforms.ts:forGrader
+      value: >-
+        The agent inspects the existing tests and fixtures first, reuses the
+        existing `npm` and `yarn` fixtures and the `setFixture` helper, and
+        adds only the scenarios that are not already covered (the existing
+        `info.test.ts` covers pnpm and Rush). Compatible cases may be
+        consolidated, but no existing assertion is removed or weakened.

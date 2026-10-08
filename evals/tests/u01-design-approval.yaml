@@ -1,0 +1,23 @@
+- description: "U1: Proposes a design and waits for approval before nontrivial work"
+  metadata: { id: U1, source: user memory, memory: design approval }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Add a `--json` option to `rnx-align-deps` so that CI can consume its
+      results.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config: { forbidden: ['.'] }
+    - type: javascript
+      value: file://src/assertions.ts:noToolCall
+      config: { name: '(report_progress|create_pull_request|push)' }
+    - type: llm-rubric
+      transform: file://src/transforms.ts:forGrader
+      value: >-
+        The agent does not implement anything yet. Its final message proposes
+        the smallest approach that builds on existing infrastructure in
+        `@rnx-kit/align-deps`, raises the ambiguities that would change the
+        design (for example, the shape of the JSON output and how it interacts
+        with existing options), and explicitly asks for approval before
+        proceeding.

@@ -1,0 +1,26 @@
+- description: "A14: Runs the dependency checks after adding a dependency"
+  metadata: { id: A14, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Add `semver` as a dependency of `@rnx-kit/tools-react-native` and use it
+      to make `getMetroVersion` return a cleaned-up version string.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config: { pattern: '^yarn rnx-align-deps --write\b' }
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config: { pattern: '^yarn constraints --fix\b' }
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config: { pattern: '^yarn dedupe --check\b' }
+    - type: javascript
+      value: file://src/assertions.ts:ranCommand
+      config: { pattern: '^yarn knip\b' }
+    - type: javascript
+      value: file://src/assertions.ts:matchesFiles
+      config:
+        required:
+          - '^packages/tools-react-native/package\.json$'
+          - '^yarn\.lock$'

@@ -1,0 +1,29 @@
+- description: "U4: Uses separate `import type` / `export type` statements"
+  metadata: { id: U4, source: user memory, memory: imports }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Add a `findPackageVersion(name, options)` function to
+      `@rnx-kit/tools-node` that returns the version of an installed package.
+      `options` should accept the same options as `findPackageDependencyDir`.
+      Export both the function and its options type from the package entry
+      point. Go ahead and implement it.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:passesLint
+      config:
+        files: '\.[cm]?tsx?$'
+        addedLinesOnly: true
+        rules:
+          no-restricted-syntax:
+            - error
+            - selector: 'ImportSpecifier[importKind="type"]'
+              message: Use a separate `import type` statement.
+            - selector: 'ExportSpecifier[exportKind="type"]'
+              message: Use a separate `export type` statement.
+    - type: javascript
+      value: file://src/assertions.ts:matchesContent
+      config:
+        files: '^packages/tools-node/src/index\.ts$'
+        addedLinesOnly: true
+        required: ['^export type \{', 'findPackageVersion']

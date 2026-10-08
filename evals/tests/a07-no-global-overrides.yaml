@@ -1,0 +1,28 @@
+- description: "A7: Does not override globals or system values in tests"
+  metadata: { id: A7, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Add tests for `untar` in `@rnx-kit/tools-shell`, including the retry with
+      `--force-local` on Windows.
+  assert:
+    - type: javascript
+      value: file://src/assertions.ts:matchesContent
+      config:
+        files: '^packages/tools-shell/test/'
+        addedLinesOnly: true
+        forbidden:
+          - '\bprocess\.platform\s*=[^=]'
+          - 'defineProperty\(\s*process\b'
+          - 'mock\.property\(\s*process\b'
+          - '\bprocess\.env\.\w+\s*=[^=]'
+          - '\bglobal(This)?\.(?!require\b|module\b)\w+\s*=[^=]'
+    - type: llm-rubric
+      transform: file://src/transforms.ts:forGrader
+      value: >-
+        The new tests do not override `process.platform`, environment variables
+        or other globals and system values. The only acceptable exception is
+        setting `global.require` (and `global.module`) for sources loaded as
+        ESM, restored after the tests. If the Windows-only branch cannot be
+        tested without overriding a global, the agent leaves it untested and
+        says so in its final message instead of overriding the global.

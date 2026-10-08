@@ -125,3 +125,42 @@ export type GradingResult = {
   score: number;
   reason: string;
 };
+
+/**
+ * Mocked GitHub state exposed to the agent through the harness. Read calls
+ * return this data; write calls are recorded in `AgentRun.toolCalls` and are
+ * never sent to GitHub.
+ */
+export type GitHubFixture = {
+  /** Login of the user the agent is acting on behalf of */
+  viewer: string;
+  issues?: {
+    number: number;
+    title: string;
+    author: string;
+    body: string;
+    labels?: string[];
+  }[];
+  pullRequests?: {
+    number: number;
+    title: string;
+    author: string;
+    body: string;
+    /** Unified diff of the pull request */
+    diff: string;
+  }[];
+};
+
+/**
+ * Variables of each eval test case, consumed by the harness.
+ */
+export type EvalVars = {
+  /** The first user message */
+  task: string;
+  /** Commit to check out before the run */
+  ref: string;
+  /** Subsequent user messages, sent in order after the agent finishes a turn */
+  followUps?: string[];
+  /** Mocked GitHub state; when omitted, GitHub tools are unavailable */
+  github?: GitHubFixture;
+};
