@@ -11,6 +11,7 @@ import type {
   CommandMatcher,
   ContentMatcher,
   FilesMatcher,
+  GitHubMatcher,
   GradingResult,
   OxlintMatcher,
   ToolCallMatcher,
@@ -154,8 +155,7 @@ export function didNotRunCommand(
 }
 
 /**
- * Passes if the agent did not call any tool matching the configured name and
- * arguments.
+ * Passes if the agent did not call any tool matching the configured name.
  */
 export function noToolCall(
   output: AgentRun | string,
@@ -164,17 +164,34 @@ export function noToolCall(
   const run = toAgentRun(output);
   const config = requireConfig(context);
   const name = new RegExp(config.name);
-  const args = config.arguments ? new RegExp(config.arguments) : undefined;
-  const calls = run.toolCalls.filter(
-    (call) =>
-      name.test(call.name) &&
-      (!args || args.test(JSON.stringify(call.arguments)))
-  );
+  const calls = run.toolCalls.filter((call) => name.test(call.name));
   return result(
     calls.map(
       (c) => `Unexpected tool call: ${c.name} ${JSON.stringify(c.arguments)}`
     ),
     `No tool call matched /${config.name}/`
+  );
+}
+
+/**
+ * Passes if the agent did not modify the configured issues or pull requests.
+ */
+export function notModifiedOnGitHub(
+  output: AgentRun | string,
+  context: AssertionContext<GitHubMatcher>
+): GradingResult {
+  const run = toAgentRun(output);
+  const { numbers } = requireConfig(context);
+  if (!run.github || !Array.isArray(run.github.modified)) {
+    throw new Error("Invalid agent run; check: github.modified");
+  }
+
+  const { modified } = run.github;
+  return result(
+    numbers
+      .filter((number) => modified.includes(number))
+      .map((number) => `Modified #${number}`),
+    `Did not modify ${numbers.map((number) => `#${number}`).join(", ")}`
   );
 }
 

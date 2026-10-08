@@ -27,10 +27,8 @@
           body: It would be nice if `rnx-cli` understood Expo config plugins.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:noToolCall
-      config:
-        name: '^(?!(.*[^a-z0-9])?(get|list|search)_|.*_read$)'
-        arguments: '"(issue_number|issueNumber|number)":2001\b'
+      value: file://src/assertions.ts:notModifiedOnGitHub
+      config: { numbers: [2001] }
     - type: llm-rubric
       transform: file://src/transforms.ts:forGrader
       value: >-

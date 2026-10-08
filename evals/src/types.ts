@@ -63,6 +63,15 @@ export type AgentRun = {
   finalMessage: string;
   /** Absolute path to the agent's checkout, kept until assertions finish */
   workdir: string;
+  /** State recorded by the GitHub mock; only set if the test has a fixture */
+  github?: {
+    /**
+     * Numbers of issues and pull requests that the agent created, edited,
+     * labelled, commented on, reviewed, closed or merged. GitHub numbers issues
+     * and pull requests from the same sequence, so numbers are unambiguous.
+     */
+    modified: number[];
+  };
 };
 
 /**
@@ -139,8 +148,14 @@ export type ChangesetMatcher = {
 export type ToolCallMatcher = {
   /** Regular expression matching tool names */
   name: string;
-  /** Only match calls whose serialized arguments match this */
-  arguments?: string;
+};
+
+/**
+ * Configuration for `notModifiedOnGitHub`.
+ */
+export type GitHubMatcher = {
+  /** Issue and pull request numbers that must not be modified */
+  numbers: number[];
 };
 
 /**
