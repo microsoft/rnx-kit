@@ -1,14 +1,14 @@
 import type { Package, Profile } from "../../../types.ts";
-import { profile as profile_0_86 } from "./profile-0.86.ts";
+import { profile as profile_0_87 } from "./profile-0.87.ts";
 
 const reactNative: Package = {
   name: "react-native",
-  version: "^0.87.0",
+  version: "^0.88.0",
   capabilities: ["react", "core/metro-config", "community/cli"],
 };
 
 export const profile: Profile = {
-  ...profile_0_86,
+  ...profile_0_87,
 
   /*********
    * React *
@@ -16,18 +16,18 @@ export const profile: Profile = {
 
   react: {
     name: "react",
-    version: "19.2.3",
+    version: "19.3.0",
   },
 
   "react-dom": {
     name: "react-dom",
-    version: "^19.2.3",
+    version: "^19.3.0",
     capabilities: ["react"],
   },
 
   "react-test-renderer": {
     name: "react-test-renderer",
-    version: "19.2.3",
+    version: "19.3.0",
     capabilities: ["react"],
     devOnly: true,
   },
@@ -43,25 +43,25 @@ export const profile: Profile = {
 
   "core-macos": {
     name: "react-native-macos",
-    version: "^0.87.0",
+    version: "^0.88.0",
     capabilities: ["react"],
   },
 
   "core-visionos": {
     name: "@callstack/react-native-visionos",
-    version: "^0.87.0",
+    version: "^0.88.0",
     capabilities: ["react"],
   },
 
   "core-windows": {
     name: "react-native-windows",
-    version: "^0.87.0",
+    version: "^0.88.0",
     capabilities: ["core"],
   },
 
   "core/metro-config": {
     name: "@react-native/metro-config",
-    version: "^0.87.0",
+    version: "^0.88.0",
     devOnly: true,
   },
 
@@ -71,7 +71,7 @@ export const profile: Profile = {
 
   "babel-preset-react-native": {
     name: "@react-native/babel-preset",
-    version: "^0.87.0",
+    version: "^0.88.0",
     devOnly: true,
   },
 
@@ -96,37 +96,37 @@ export const profile: Profile = {
 
   metro: {
     name: "metro",
-    version: "^0.87.0",
+    version: "^0.87.1",
     devOnly: true,
   },
 
   "metro-config": {
     name: "metro-config",
-    version: "^0.87.0",
+    version: "^0.87.1",
     devOnly: true,
   },
 
   "metro-core": {
     name: "metro-core",
-    version: "^0.87.0",
+    version: "^0.87.1",
     devOnly: true,
   },
 
   "metro-react-native-babel-transformer": {
     name: "@react-native/metro-babel-transformer",
-    version: "^0.87.0",
+    version: "^0.88.0",
     devOnly: true,
   },
 
   "metro-resolver": {
     name: "metro-resolver",
-    version: "^0.87.0",
+    version: "^0.87.1",
     devOnly: true,
   },
 
   "metro-runtime": {
     name: "metro-runtime",
-    version: "^0.87.0",
+    version: "^0.87.1",
     devOnly: true,
   },
 
@@ -134,27 +134,17 @@ export const profile: Profile = {
    * Community Modules *
    *********************/ animation: {
     name: "react-native-reanimated",
-    version: "^4.5.3",
+    version: "^4.7.1",
   },
 
   gestures: {
     name: "react-native-gesture-handler",
-    version: "^3.1.0",
-  },
-
-  screens: {
-    name: "react-native-screens",
-    version: "^4.27.0",
+    version: "^3.3.0",
   },
 
   "test-app": {
     name: "react-native-test-app",
-    version: "^5.4.8",
+    version: "^5.4.12",
     devOnly: true,
-  },
-
-  "safe-area": {
-    name: "react-native-safe-area-context",
-    version: "^5.10.1",
   },
 };
