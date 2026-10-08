@@ -28,9 +28,27 @@ function result(failures: string[], success: string): GradingResult {
 
 /**
  * Returns the agent run, parsing it first if the provider returned JSON.
+ * Throws if the output does not have the shape of an `AgentRun`.
  */
 export function toAgentRun(output: AgentRun | string): AgentRun {
-  return typeof output === "string" ? JSON.parse(output) : output;
+  const run = typeof output === "string" ? JSON.parse(output) : output;
+  if (!run || typeof run !== "object") {
+    throw new Error(`Expected agent run to be an object, got: ${run}`);
+  }
+
+  const invalid = [
+    ...["commands", "toolCalls", "files"].filter(
+      (key) => !Array.isArray(run[key])
+    ),
+    ...["diff", "finalMessage", "workdir"].filter(
+      (key) => typeof run[key] !== "string"
+    ),
+  ];
+  if (invalid.length > 0) {
+    throw new Error(`Invalid agent run; check: ${invalid.join(", ")}`);
+  }
+
+  return run;
 }
 
 /**
@@ -66,19 +84,18 @@ function existingFiles({ files }: AgentRun): AgentChangedFile[] {
 }
 
 function selectLines(
-  run: AgentRun,
   file: AgentChangedFile,
-  addedLinesOnly = false
+  added?: Map<string, Set<number>>
 ): string {
   const content = file.content ?? "";
-  if (!addedLinesOnly) {
+  if (!added) {
     return content;
   }
 
-  const added = addedLines(run.diff).get(file.path);
+  const lines = added.get(file.path);
   return content
     .split("\n")
-    .filter((_, i) => added?.has(i + 1))
+    .filter((_, i) => lines?.has(i + 1))
     .join("\n");
 }
 
@@ -208,9 +225,10 @@ export function matchesContent(
     return result([`No changed file matched /${files}/`], "");
   }
 
+  const added = addedLinesOnly ? addedLines(run.diff) : undefined;
   const failures: string[] = [];
   for (const file of matching) {
-    const content = selectLines(run, file, addedLinesOnly);
+    const content = selectLines(file, added);
     for (const pattern of required ?? []) {
       if (!new RegExp(pattern, "m").test(content)) {
         failures.push(`${file.path}: missing /${pattern}/`);
@@ -229,8 +247,14 @@ export function matchesContent(
   );
 }
 
+const COMMAND_TIMEOUT_MS = 10 * 60 * 1000;
+
 /**
  * Passes if the configured command exits successfully in the agent's checkout.
+ *
+ * Note: `spawnSync` blocks the event loop, which stalls other tests that
+ * promptfoo runs concurrently. Switch to an async spawn if this becomes a
+ * bottleneck; promptfoo accepts assertions that return a promise.
  */
 export function commandSucceeds(
   output: AgentRun | string,
@@ -239,20 +263,31 @@ export function commandSucceeds(
   const run = toAgentRun(output);
   const { command, cwd = "." } = requireConfig(context);
   const dir = path.resolve(run.workdir, cwd);
-  if (path.relative(run.workdir, dir).startsWith("..")) {
+  const relative = path.relative(run.workdir, dir);
+  if (
+    relative === ".." ||
+    relative.startsWith(`..${path.sep}`) ||
+    path.isAbsolute(relative)
+  ) {
     throw new Error(`Working directory is outside the checkout: ${cwd}`);
   }
 
-  const [executable, ...args] = command;
-  const { error, status, stdout, stderr } = spawnSync(executable, args, {
+  // On Windows, executables like `yarn` are `.cmd` shims, which can only be
+  // spawned through a shell. Passing arguments separately with `shell: true`
+  // is deprecated, so we pass the whole command line instead.
+  const shell = process.platform === "win32";
+  const [executable, ...args] = shell ? [command.join(" ")] : command;
+  const { error, status } = spawnSync(executable, args, {
     cwd: dir,
-    encoding: "utf-8",
+    shell,
+    stdio: "ignore",
+    timeout: COMMAND_TIMEOUT_MS,
   });
   const commandLine = `${command.join(" ")} (in ${cwd})`;
   return result(
     status === 0
       ? []
-      : [`${commandLine} failed: ${error?.message ?? ""}${stdout}${stderr}`],
+      : [`${commandLine} failed: ${error?.message ?? `exit code ${status}`}`],
     `${commandLine} succeeded`
   );
 }
@@ -278,6 +313,11 @@ export function noInlineTypeSpecifiers(
       continue;
     }
 
+    const lines = added?.get(file.path);
+    if (added && !lines?.size) {
+      continue;
+    }
+
     checked.push(file.path);
     const content = file.content ?? "";
     const { program, errors } = parseSync(file.path, content);
@@ -285,7 +325,9 @@ export function noInlineTypeSpecifiers(
       failures.push(`${file.path}: ${message}`);
     }
 
-    const lines = added?.get(file.path);
+    // Only top-level statements are checked; imports and exports nested in
+    // ambient module declarations (`declare module "…" {}`) are not. Lint
+    // allows these; `typescript/no-namespace` only rejects named namespaces.
     for (const node of program.body) {
       const specifiers =
         node.type === "ImportDeclaration"

@@ -29,7 +29,7 @@
     - type: javascript
       value: file://src/assertions.ts:noToolCall
       config:
-        name: '^(?!(get|list|search)_|.*_read$)'
+        name: '^(?!(.*[^a-z0-9])?(get|list|search)_|.*_read$)'
         arguments: '"(issue_number|issueNumber|number)":2001\b'
     - type: llm-rubric
       transform: file://src/transforms.ts:forGrader
