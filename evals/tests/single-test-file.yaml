@@ -8,7 +8,7 @@
       value: file://src/assertions.ts:ranCommand
       config:
         pattern: '^yarn test (\./)?test/path\.test\.ts$'
-        cwd: '^packages/tools-node$'
+        package: '@rnx-kit/tools-node'
     - type: javascript
       value: file://src/assertions.ts:didNotRunCommand
       config: { pattern: '(^|[\s;&|/])node\b.*\s--test\b' }

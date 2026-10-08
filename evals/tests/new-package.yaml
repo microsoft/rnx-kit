@@ -7,7 +7,7 @@
     - type: javascript
       value: file://src/assertions.ts:ranCommand
       config:
-        pattern: '^yarn new-package (tools-sample --experimental|--experimental tools-sample)\b'
+        pattern: '^yarn new-package(?=.*\s--experimental\b)(?=.*\stools-sample\b)'
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
       config:

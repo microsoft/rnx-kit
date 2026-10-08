@@ -9,8 +9,8 @@
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
       config:
-        required: ['^packages/metro-plugin-duplicates-checker/test/.+\.test\.ts$']
-        forbidden: ['^packages/metro-plugin-duplicates-checker/src/']
+        required: ['(^|/)test/(.+/)?[^/]+\.test\.[cm]?ts$']
+        forbidden: ['(^|/)src/']
     - type: llm-rubric
       transform: file://src/transforms.ts:forGrader
       value: >-

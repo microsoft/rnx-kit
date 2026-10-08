@@ -1,10 +1,13 @@
 import { parseChangesetFile } from "@changesets/parse";
 import { spawnSync } from "node:child_process";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseSync } from "oxc-parser";
 import parseDiff from "parse-diff";
 import type {
   AgentChangedFile,
+  AgentCommand,
   AgentRun,
   AssertionContext,
   ChangesetMatcher,
@@ -112,14 +115,120 @@ function withoutExecutablePath(command: string): string {
   );
 }
 
-function commandMatches(run: AgentRun, { pattern, cwd }: CommandMatcher) {
+function readJSON(file: string) {
+  return JSON.parse(fs.readFileSync(file, "utf-8"));
+}
+
+function toRelativePath(workdir: string, p: string): string {
+  return path.relative(workdir, p).split(path.sep).join("/") || ".";
+}
+
+/**
+ * Returns the directories of the workspace packages in the checkout, relative
+ * to its root, keyed by package name.
+ *
+ * Note: `@rnx-kit/tools-workspaces` only finds the workspace of the current
+ * working directory and caches the result, so it cannot be used here.
+ */
+function workspacePackages(workdir: string): Map<string, string> {
+  const { workspaces = [] } = readJSON(path.join(workdir, "package.json"));
+  const patterns: string[] = Array.isArray(workspaces)
+    ? workspaces
+    : (workspaces.packages ?? []);
+  const packages = new Map<string, string>();
+  const manifests = fs.globSync(
+    patterns.map((pattern) => `${pattern}/package.json`),
+    { cwd: workdir }
+  );
+  for (const manifest of manifests) {
+    const { name } = readJSON(path.join(workdir, manifest));
+    if (name) {
+      const dir = path.dirname(path.join(workdir, manifest));
+      packages.set(name, toRelativePath(workdir, dir));
+    }
+  }
+  return packages;
+}
+
+function lazyWorkspacePackages(workdir: string): () => Map<string, string> {
+  let packages: Map<string, string> | undefined;
+  return () => (packages ??= workspacePackages(workdir));
+}
+
+function packageDir(packages: Map<string, string>, name: string): string {
+  const dir = packages.get(name);
+  if (!dir) {
+    throw new Error(`Unknown workspace package: ${name}`);
+  }
+  return dir;
+}
+
+/**
+ * Returns the directory of the package containing the specified file, relative
+ * to the root of the checkout.
+ */
+function owningPackageDir(workdir: string, file: string): string {
+  let dir = path.posix.dirname(file);
+  while (
+    dir !== "." &&
+    !fs.existsSync(path.join(workdir, dir, "package.json"))
+  ) {
+    dir = path.posix.dirname(dir);
+  }
+  return dir;
+}
+
+/**
+ * Strips the executable path, and applies Yarn's `--cwd <dir>` and
+ * `workspace <name>` to the working directory, e.g. `yarn workspace
+ * @rnx-kit/cli build` in `.` becomes `yarn build` in `packages/cli`.
+ */
+function resolveCommand(
+  workdir: string,
+  { command, cwd }: AgentCommand,
+  packages: () => Map<string, string>
+): AgentCommand {
+  const [executable, ...args] = withoutExecutablePath(command).split(/\s+/);
+  if (executable !== "yarn") {
+    return { command: [executable, ...args].join(" "), cwd };
+  }
+
+  let dir = cwd;
+  while (args.length > 0) {
+    const [arg, value] = args;
+    if (arg === "--cwd" && value) {
+      dir = toRelativePath(workdir, path.resolve(workdir, dir, value));
+      args.splice(0, 2);
+    } else if (arg.startsWith("--cwd=")) {
+      const value = arg.slice("--cwd=".length);
+      dir = toRelativePath(workdir, path.resolve(workdir, dir, value));
+      args.splice(0, 1);
+    } else if (arg === "workspace" && value && packages().has(value)) {
+      dir = packageDir(packages(), value);
+      args.splice(0, 2);
+    } else {
+      break;
+    }
+  }
+  return { command: ["yarn", ...args].join(" "), cwd: dir };
+}
+
+function commandMatches(
+  run: AgentRun,
+  { pattern, cwd, package: name }: CommandMatcher
+) {
+  const packages = lazyWorkspacePackages(run.workdir);
   const command = new RegExp(pattern);
   const dir = cwd ? new RegExp(cwd) : undefined;
-  return run.commands.filter(
-    (c) =>
-      command.test(withoutExecutablePath(c.command)) &&
-      (!dir || dir.test(c.cwd))
-  );
+  const pkgDir = name ? packageDir(packages(), name) : undefined;
+  return run.commands
+    .map((c) => resolveCommand(run.workdir, c, packages))
+    .filter(
+      (c) =>
+        command.test(c.command) &&
+        (!dir || dir.test(c.cwd)) &&
+        (!pkgDir || c.cwd === pkgDir)
+    );
 }
 
 /**
@@ -203,12 +312,29 @@ export function matchesFiles(
   context: AssertionContext<FilesMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
-  const { allowed, forbidden, required, status } = requireConfig(context);
+  const {
+    allowed,
+    forbidden,
+    required,
+    status,
+    package: name,
+  } = requireConfig(context);
   const files = run.files
     .filter((file) => !status || status.includes(file.status))
     .map((file) => file.path);
 
   const failures: string[] = [];
+
+  if (name) {
+    const packages = workspacePackages(run.workdir);
+    const own = packageDir(packages, name);
+    const others = [...packages.values()].filter((dir) => dir !== own);
+    for (const file of files) {
+      if (others.some((dir) => file.startsWith(`${dir}/`))) {
+        failures.push(`File outside ${name}: ${file}`);
+      }
+    }
+  }
 
   if (allowed) {
     const patterns = allowed.map((p) => new RegExp(p));
@@ -236,6 +362,68 @@ export function matchesFiles(
   }
 
   return result(failures, `Changed files: ${files.join(", ") || "(none)"}`);
+}
+
+const TEST_FILE = /(^|\/)test\/(.+\/)?[^/]+\.test\.[cm]?[jt]sx?$/;
+const NODE_TEST_IMPORT = /from ["']node:test["']/;
+const NODE_ASSERT_IMPORT = /from ["']node:assert\/strict["']/;
+const JEST_API = /\bexpect\(|\bjest\.|@jest\/globals/;
+const NODE_API = /from ["']node:(test|assert)/;
+
+/**
+ * Passes if every changed test file is written for the test runner of its
+ * package: Jest if the package has a `jest` field in `package.json` or a
+ * `jest.config.js`, otherwise the Node.js test runner. Fails if no test files
+ * changed.
+ *
+ * Note: This mirrors `useJest()` in `scripts/src/commands/test.js`.
+ */
+export function usesPackageTestRunner(
+  output: AgentRun | string
+): GradingResult {
+  const run = toAgentRun(output);
+  const tests = existingFiles(run).filter((file) => TEST_FILE.test(file.path));
+  if (tests.length === 0) {
+    return result(["No test files changed"], "");
+  }
+
+  const added = addedLines(run.diff);
+  const failures: string[] = [];
+  for (const file of tests) {
+    const dir = path.join(
+      run.workdir,
+      owningPackageDir(run.workdir, file.path)
+    );
+    const manifest = readJSON(path.join(dir, "package.json"));
+    const jest =
+      Boolean(manifest.jest) || fs.existsSync(path.join(dir, "jest.config.js"));
+    const content = file.content ?? "";
+    const newLines = selectLines(file, added);
+    if (jest) {
+      if (NODE_API.test(newLines)) {
+        failures.push(`${file.path}: uses node:test in a Jest package`);
+      }
+    } else {
+      if (
+        !NODE_TEST_IMPORT.test(content) ||
+        !NODE_ASSERT_IMPORT.test(content)
+      ) {
+        failures.push(
+          `${file.path}: missing imports from node:test and node:assert/strict`
+        );
+      }
+      if (JEST_API.test(newLines)) {
+        failures.push(
+          `${file.path}: uses Jest in a Node.js test runner package`
+        );
+      }
+    }
+  }
+
+  return result(
+    failures,
+    `Checked ${tests.map((file) => file.path).join(", ")}`
+  );
 }
 
 /**

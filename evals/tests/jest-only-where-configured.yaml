@@ -7,14 +7,8 @@
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
       config:
-        required: ['^packages/cli/test/.+\.test\.ts$']
         forbidden:
           - '(^|/)package\.json$'
           - '(^|/)jest\.config\.[cm]?[jt]s$'
     - type: javascript
-      value: file://src/assertions.ts:matchesContent
-      config:
-        files: '^packages/cli/test/.+\.test\.ts$'
-        addedLinesOnly: true
-        required: ['\bexpect\(']
-        forbidden: ['from "node:test"', 'from "node:assert']
+      value: file://src/assertions.ts:usesPackageTestRunner

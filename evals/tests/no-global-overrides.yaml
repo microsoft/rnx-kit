@@ -9,7 +9,7 @@
     - type: javascript
       value: file://src/assertions.ts:matchesContent
       config:
-        files: '^packages/tools-shell/test/'
+        files: '(^|/)test/'
         addedLinesOnly: true
         forbidden:
           - '\bprocess\.platform\s*=[^=]'

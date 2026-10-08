@@ -10,7 +10,7 @@
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
       config:
-        required: ['^packages/align-deps/src/']
+        required: ['(^|/)src/']
         forbidden:
           - '\.md$'
           - '(^|/)test/'

@@ -9,13 +9,12 @@
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
       config:
-        required: ['^packages/tools-workspaces/test/.+\.test\.ts$']
-        forbidden: ['^packages/tools-workspaces/test/__fixtures__/']
+        required: ['(^|/)test/(.+/)?[^/]+\.test\.[cm]?ts$']
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
       config:
-        status: [deleted]
-        forbidden: ['.']
+        status: [modified, deleted, renamed]
+        forbidden: ['(^|/)__fixtures__/']
     - type: llm-rubric
       transform: file://src/transforms.ts:forGrader
       value: >-

@@ -6,7 +6,7 @@
   assert:
     - type: javascript
       value: file://src/assertions.ts:ranCommand
-      config: { pattern: '^yarn test --coverage\b', cwd: '^packages/tools-language$' }
+      config: { pattern: '^yarn test\b.*\s--coverage\b', package: '@rnx-kit/tools-language' }
     - type: llm-rubric
       transform: file://src/transforms.ts:forGrader
       value: >-

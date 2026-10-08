@@ -5,17 +5,4 @@
     task: Add tests for `keysOf` in `@rnx-kit/tools-language`.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
-      config:
-        required: ['^packages/tools-language/test/.+\.test\.m?ts$']
-    - type: javascript
-      value: file://src/assertions.ts:matchesContent
-      config:
-        files: '^packages/tools-language/test/.+\.test\.m?ts$'
-        required:
-          - 'from "node:test"'
-          - 'from "node:assert/strict"'
-        forbidden:
-          - '\bexpect\('
-          - '\bjest\.'
-          - '@jest/globals'
+      value: file://src/assertions.ts:usesPackageTestRunner

@@ -11,4 +11,4 @@
       config: { pattern: '^yarn (nx )?update-readme\b' }
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
-      config: { required: ['^packages/tools-language/README\.md$'] }
+      config: { required: ['(^|/)README\.md$'] }

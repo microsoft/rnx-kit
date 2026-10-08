@@ -12,7 +12,7 @@
           config: { pattern: '^yarn build-scope @rnx-kit/cli\b' }
         - type: javascript
           value: file://src/assertions.ts:ranCommand
-          config: { pattern: '^yarn build --dependencies\b', cwd: '^packages/cli$' }
+          config: { pattern: '^yarn build --dependencies\b', package: '@rnx-kit/cli' }
     - type: javascript
       value: file://src/assertions.ts:didNotRunCommand
       config: { pattern: '(^|[\s;&|/])tsc(\s|$)' }

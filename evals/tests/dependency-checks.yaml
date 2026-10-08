@@ -22,5 +22,5 @@
       value: file://src/assertions.ts:matchesFiles
       config:
         required:
-          - '^packages/tools-react-native/package\.json$'
+          - '.+/package\.json$'
           - '^yarn\.lock$'

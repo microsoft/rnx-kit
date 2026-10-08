@@ -78,10 +78,16 @@ export type AgentRun = {
  * Configuration for `ranCommand` and `didNotRunCommand`.
  */
 export type CommandMatcher = {
-  /** Regular expression the command must match */
+  /**
+   * Regular expression the command must match. Yarn's `--cwd <dir>` and
+   * `workspace <name>` are removed before matching, and applied to the
+   * working directory instead.
+   */
   pattern: string;
   /** Regular expression the working directory must match */
   cwd?: string;
+  /** Name of the workspace package the command must run in */
+  package?: string;
 };
 
 /**
@@ -96,6 +102,8 @@ export type FilesMatcher = {
   required?: string[];
   /** Only consider files with these statuses; defaults to all */
   status?: AgentChangedFile["status"][];
+  /** Name of the only workspace package whose files may change */
+  package?: string;
 };
 
 /**

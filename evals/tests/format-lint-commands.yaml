@@ -9,10 +9,10 @@
   assert:
     - type: javascript
       value: file://src/assertions.ts:ranCommand
-      config: { pattern: '^yarn( workspace \S+)? format\b' }
+      config: { pattern: '^yarn format\b' }
     - type: javascript
       value: file://src/assertions.ts:ranCommand
-      config: { pattern: '^yarn( workspace \S+)? lint\b' }
+      config: { pattern: '^yarn lint\b' }
     - type: javascript
       value: file://src/assertions.ts:didNotRunCommand
       config: { pattern: '(^|[\s;&|/])(eslint|oxfmt|oxlint|prettier)(\s|$)' }

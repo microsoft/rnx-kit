@@ -10,13 +10,12 @@
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
       config:
-        forbidden: ['^packages/(?!tools-react-native/)[^/]+/src/']
+        package: '@rnx-kit/tools-react-native'
     - type: javascript
       value: file://src/assertions.ts:matchesContent
       config:
-        files: '^packages/tools-react-native/src/(?!index\.ts$).+\.ts$'
+        files: '(^|/)src/.+\.[cm]?ts$'
         addedLinesOnly: true
-        required: ['\b(readPackage|resolveFrom|findPackageDependencyDir)\(']
         forbidden: ['readFileSync\(', 'JSON\.parse\(']
     - type: llm-rubric
       transform: file://src/transforms.ts:forGrader
