@@ -5225,6 +5225,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/evals@workspace:evals"
   dependencies:
+    "@changesets/parse": "npm:^1.0.0"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.0"

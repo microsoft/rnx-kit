@@ -22,6 +22,7 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
+    "@changesets/parse": "^1.0.0",
     "oxc-parser": "^0.123.0",
     "parse-diff": "^0.11.0"
   },

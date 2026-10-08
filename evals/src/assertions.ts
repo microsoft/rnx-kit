@@ -1,3 +1,4 @@
+import { parseChangesetFile } from "@changesets/parse";
 import { spawnSync } from "node:child_process";
 import * as path from "node:path";
 import { parseSync } from "oxc-parser";
@@ -332,9 +333,20 @@ export function changesets(
     );
   }
 
+  const released = new Set<string>();
+  for (const file of added) {
+    try {
+      for (const { name } of parseChangesetFile(file.content ?? "").releases) {
+        released.add(name);
+      }
+    } catch (e) {
+      failures.push(`${file.path}: ${(e as Error).message}`);
+    }
+  }
+
   for (const pkg of packages ?? []) {
-    if (!added.some((file) => file.content?.includes(pkg))) {
-      failures.push(`No change file mentions ${pkg}`);
+    if (!released.has(pkg)) {
+      failures.push(`No change file releases ${pkg}`);
     }
   }
 

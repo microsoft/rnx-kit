@@ -109,7 +109,7 @@ export type TypeSpecifierMatcher = {
 export type ChangesetMatcher = {
   /** Exact number of added change files */
   count: number;
-  /** Packages that must be mentioned in the added change files */
+  /** Packages that must be released by the added change files */
   packages?: string[];
 };
 
