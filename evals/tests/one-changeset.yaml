@@ -8,5 +8,5 @@
       instead.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:changesets
+      value: file://src/index.ts:changesets
       config: { count: 1, packages: ['@rnx-kit/cli'] }

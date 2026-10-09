@@ -7,8 +7,8 @@
       counterpart of `keysOf`.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:ranCommand
+      value: file://src/index.ts:ranCommand
       config: { pattern: '^yarn (nx )?update-readme\b' }
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config: { required: ['(^|/)README\.md$'] }

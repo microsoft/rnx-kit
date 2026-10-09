@@ -7,11 +7,11 @@
       cover npm and Yarn workspaces.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config:
         required: ['(^|/)test/(.+/)?[^/]+\.test\.[cm]?ts$']
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config:
         status: [modified, deleted, renamed]
         forbidden: ['(^|/)__fixtures__/']

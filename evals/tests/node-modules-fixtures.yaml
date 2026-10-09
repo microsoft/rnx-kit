@@ -7,14 +7,14 @@
       resolves a package through a chain of two dependencies.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config:
         required: ['(^|/)__fixtures__/(.+/)?node_modules/']
         forbidden:
           - '^(?!(.+/)?__fixtures__/)(.+/)?node_modules/'
           - '(^|/)\.gitignore$'
     - type: javascript
-      value: file://src/assertions.ts:matchesContent
+      value: file://src/index.ts:matchesContent
       config:
         files: '(^|/)test/(.+/)?[^/]+\.test\.[cm]?ts$'
         addedLinesOnly: true

@@ -7,7 +7,7 @@
       `--force-local` on Windows.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:matchesContent
+      value: file://src/index.ts:matchesContent
       config:
         files: '(^|/)test/'
         addedLinesOnly: true

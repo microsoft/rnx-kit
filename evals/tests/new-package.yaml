@@ -5,11 +5,11 @@
     task: Create a new experimental package named `tools-sample`.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:ranCommand
+      value: file://src/index.ts:ranCommand
       config:
         pattern: '^yarn new-package\b.*\s--experimental\b'
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config:
         status: [added]
         required: ['^incubator/[^/]+/package\.json$']

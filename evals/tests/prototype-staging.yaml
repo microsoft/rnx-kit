@@ -8,7 +8,7 @@
       the prototype.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config:
         required: ['(^|/)src/']
         forbidden:
@@ -16,7 +16,7 @@
           - '(^|/)test/'
           - '\.test\.[cm]?[jt]s$'
     - type: javascript
-      value: file://src/assertions.ts:ranCommand
+      value: file://src/index.ts:ranCommand
       config: { pattern: '^yarn (build|lint|test)\b' }
     - type: llm-rubric
       transform: file://src/transforms.ts:forGrader

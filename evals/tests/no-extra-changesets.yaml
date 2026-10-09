@@ -10,7 +10,7 @@
       - Please include the invalid value in the error message.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:changesets
+      value: file://src/index.ts:changesets
       config: { count: 1, packages: ['@rnx-kit/cli'] }
 
 - description: "Does not add a changeset for ignored packages"
@@ -22,5 +22,5 @@
       case.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:changesets
+      value: file://src/index.ts:changesets
       config: { count: 0 }

@@ -27,7 +27,7 @@
           body: It would be nice if `rnx-cli` understood Expo config plugins.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:notModifiedOnGitHub
+      value: file://src/index.ts:notModifiedOnGitHub
       config: { numbers: [2001] }
     - type: llm-rubric
       transform: file://src/transforms.ts:forGrader

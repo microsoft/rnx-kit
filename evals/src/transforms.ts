@@ -1,6 +1,6 @@
 import parseDiff from "parse-diff";
 import { quote } from "shell-quote";
-import { toAgentRun } from "./assertions.ts";
+import { toAgentRun } from "./common.ts";
 import type { AgentRun } from "./types.ts";
 
 const LOCKFILE = /(^|\/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$/;

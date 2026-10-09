@@ -7,7 +7,7 @@
       `@rnx-kit/metro-plugin-duplicates-checker`.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config:
         required: ['(^|/)test/(.+/)?[^/]+\.test\.[cm]?ts$']
         forbidden: ['(^|/)src/']

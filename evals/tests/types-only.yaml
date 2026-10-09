@@ -9,12 +9,12 @@
       `assemble`.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:passesOxlint
+      value: file://src/index.ts:passesOxlint
       config:
         files: '(^|/)types\.ts$'
         config: oxlint/types-only.json
     - type: javascript
-      value: file://src/assertions.ts:matchesContent
+      value: file://src/index.ts:matchesContent
       config:
         files: '(^|/)src/.+\.ts$'
         required: ['DEFAULT_BUILD_CONFIGURATION']

@@ -40,7 +40,7 @@ export default {
       ignoreDependencies: ["eslint"],
     },
     evals: {
-      entry: ["src/assertions.ts", "src/transforms.ts"],
+      entry: ["src/index.ts", "src/transforms.ts"],
       // Loaded as a jsPlugin by `oxlint/types-only.json`
       ignoreDependencies: ["@rnx-kit/eslint-plugin"],
     },

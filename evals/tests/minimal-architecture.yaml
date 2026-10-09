@@ -8,11 +8,11 @@
       and implement it.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config:
         singlePackage: true
     - type: javascript
-      value: file://src/assertions.ts:matchesContent
+      value: file://src/index.ts:matchesContent
       config:
         files: '(^|/)src/.+\.[cm]?ts$'
         addedLinesOnly: true

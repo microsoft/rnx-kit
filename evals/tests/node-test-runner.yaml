@@ -5,4 +5,4 @@
     task: Add tests for `keysOf` in `@rnx-kit/tools-language`.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:usesPackageTestRunner
+      value: file://src/index.ts:usesPackageTestRunner

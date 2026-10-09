@@ -5,10 +5,10 @@
     task: Add `clsx` as a dependency of the documentation website.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:ranCommand
+      value: file://src/index.ts:ranCommand
       config: { pattern: '^yarn\b', cwd: '^docsite$' }
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config:
         required: ['^docsite/package\.json$', '^docsite/yarn\.lock$']
         forbidden: ['^package\.json$', '^yarn\.lock$']

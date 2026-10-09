@@ -8,11 +8,11 @@
       lint-clean.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:ranCommand
+      value: file://src/index.ts:ranCommand
       config: { pattern: '^yarn format\b' }
     - type: javascript
-      value: file://src/assertions.ts:ranCommand
+      value: file://src/index.ts:ranCommand
       config: { pattern: '^yarn lint\b' }
     - type: javascript
-      value: file://src/assertions.ts:didNotRunCommand
+      value: file://src/index.ts:didNotRunCommand
       config: { pattern: '^((npx|yarn) )?(eslint|oxfmt|oxlint|prettier)\b' }

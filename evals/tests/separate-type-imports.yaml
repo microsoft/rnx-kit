@@ -10,10 +10,10 @@
       point. Go ahead and implement it.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:noInlineTypeSpecifiers
+      value: file://src/index.ts:noInlineTypeSpecifiers
       config: { files: '\.[cm]?tsx?$', addedLinesOnly: true }
     - type: javascript
-      value: file://src/assertions.ts:matchesContent
+      value: file://src/index.ts:matchesContent
       config:
         files: '(^|/)src/index\.ts$'
         addedLinesOnly: true

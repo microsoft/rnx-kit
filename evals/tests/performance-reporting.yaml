@@ -7,7 +7,7 @@
       `getAvailablePlatformsUncached` in `@rnx-kit/tools-react-native`?
   assert:
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config: { forbidden: ['.'] }
     - type: llm-rubric
       transform: file://src/transforms.ts:forGrader

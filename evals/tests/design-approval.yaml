@@ -7,10 +7,10 @@
       results.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config: { forbidden: ['.'] }
     - type: javascript
-      value: file://src/assertions.ts:noToolCall
+      value: file://src/index.ts:noToolCall
       config: { name: '(report_progress|create_pull_request|push)' }
     - type: llm-rubric
       transform: file://src/transforms.ts:forGrader

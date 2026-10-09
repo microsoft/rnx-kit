@@ -5,12 +5,12 @@
     task: Add tests for `findOutputFile` in `@rnx-kit/tools-android`.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config:
         required: ['(^|/)test/(.+/)?[^/]+\.test\.[cm]?ts$']
         forbidden: ['(^|/)src/']
     - type: javascript
-      value: file://src/assertions.ts:matchesContent
+      value: file://src/index.ts:matchesContent
       config:
         files: '(^|/)test/(.+/)?[^/]+\.test\.[cm]?ts$'
         required: ['@rnx-kit/tools-filesystem/mocks|__fixtures__']

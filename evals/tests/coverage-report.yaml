@@ -5,7 +5,7 @@
     task: Add tests for `keysOf` in `@rnx-kit/tools-language`.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:ranCommand
+      value: file://src/index.ts:ranCommand
       config:
         pattern: '^yarn test(?=.*\s--coverage\b)(?=.*\stest/\S*\*)'
         inPackage: true

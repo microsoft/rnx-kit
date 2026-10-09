@@ -5,10 +5,10 @@
     task: Add tests for `asResolvedPath` in `@rnx-kit/cli`.
   assert:
     - type: javascript
-      value: file://src/assertions.ts:matchesFiles
+      value: file://src/index.ts:matchesFiles
       config:
         forbidden:
           - '(^|/)package\.json$'
           - '(^|/)jest\.config\.[cm]?[jt]s$'
     - type: javascript
-      value: file://src/assertions.ts:usesPackageTestRunner
+      value: file://src/index.ts:usesPackageTestRunner
