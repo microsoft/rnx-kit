@@ -23,15 +23,15 @@
   },
   "dependencies": {
     "@changesets/parse": "^1.0.0",
-    "@rnx-kit/eslint-plugin": "workspace:*",
+    "@rnx-kit/eslint-plugin": "^0.9.8",
     "oxc-parser": "^0.123.0",
     "oxlint": "catalog:",
     "parse-diff": "^0.11.0",
     "shell-quote": "^1.8.4"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "workspace:*",
-    "@rnx-kit/tsconfig": "workspace:*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0"
   },
   "engines": {
