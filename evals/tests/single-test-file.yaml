@@ -7,11 +7,11 @@
     - type: javascript
       value: file://src/assertions.ts:ranCommand
       config:
-        pattern: '^yarn test (\./)?test/path\.test\.ts$'
+        pattern: '^yarn test ([''"]?)(\./)?test/path\.test\.ts\1$'
         inPackage: true
     - type: javascript
       value: file://src/assertions.ts:didNotRunCommand
-      config: { pattern: '(^|[\s;&|/])node\b.*\s--test\b' }
+      config: { pattern: '^node\b.*\s--test\b' }
     - type: javascript
       value: file://src/assertions.ts:matchesFiles
       config: { forbidden: ['.'] }

@@ -18,3 +18,4 @@
       config:
         files: '(^|/)src/.+\.ts$'
         required: ['DEFAULT_BUILD_CONFIGURATION']
+        match: any

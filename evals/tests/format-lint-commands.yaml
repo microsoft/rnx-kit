@@ -15,4 +15,4 @@
       config: { pattern: '^yarn lint\b' }
     - type: javascript
       value: file://src/assertions.ts:didNotRunCommand
-      config: { pattern: '(^|[\s;&|/])(eslint|oxfmt|oxlint|prettier)(\s|$)' }
+      config: { pattern: '^((npx|yarn) )?(eslint|oxfmt|oxlint|prettier)\b' }

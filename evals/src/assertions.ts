@@ -119,6 +119,14 @@ function readJSON(file: string) {
   return JSON.parse(fs.readFileSync(file, "utf-8"));
 }
 
+function tryReadJSON(file: string) {
+  try {
+    return readJSON(file);
+  } catch {
+    return undefined;
+  }
+}
+
 function toRelativePath(workdir: string, p: string): string {
   return path.relative(workdir, p).split(path.sep).join("/") || ".";
 }
@@ -131,17 +139,19 @@ function toRelativePath(workdir: string, p: string): string {
  * working directory and caches the result, so it cannot be used here.
  */
 function workspacePackages(workdir: string): Map<string, string> {
-  const { workspaces = [] } = readJSON(path.join(workdir, "package.json"));
+  const packages = new Map<string, string>();
+  const { workspaces = [] } =
+    tryReadJSON(path.join(workdir, "package.json")) ?? {};
   const patterns: string[] = Array.isArray(workspaces)
     ? workspaces
     : (workspaces.packages ?? []);
-  const packages = new Map<string, string>();
   const manifests = fs.globSync(
     patterns.map((pattern) => `${pattern}/package.json`),
     { cwd: workdir }
   );
   for (const manifest of manifests) {
-    const { name } = readJSON(path.join(workdir, manifest));
+    // The agent may have left a manifest in an invalid state
+    const name = tryReadJSON(path.join(workdir, manifest))?.name;
     if (name) {
       const dir = path.dirname(path.join(workdir, manifest));
       packages.set(name, toRelativePath(workdir, dir));
@@ -156,24 +166,26 @@ function lazyWorkspacePackages(workdir: string): () => Map<string, string> {
 }
 
 /**
- * Returns the directory of the package containing the specified file, relative
- * to the root of the checkout.
+ * Returns the directory of the workspace package containing the specified
+ * file, relative to the root of the checkout, or `.` if it is not in one.
+ * Unlike looking for the nearest `package.json`, this skips manifests of
+ * test fixtures.
  */
-function owningPackageDir(workdir: string, file: string): string {
-  let dir = path.posix.dirname(file);
-  while (
-    dir !== "." &&
-    !fs.existsSync(path.join(workdir, dir, "package.json"))
-  ) {
-    dir = path.posix.dirname(dir);
+function owningPackageDir(packageDirs: Iterable<string>, file: string): string {
+  let owner = ".";
+  for (const dir of packageDirs) {
+    if (file.startsWith(`${dir}/`) && dir.length > owner.length) {
+      owner = dir;
+    }
   }
-  return dir;
+  return owner;
 }
 
 /**
- * Strips the executable path, and applies Yarn's `--cwd <dir>` and
- * `workspace <name>` to the working directory, e.g. `yarn workspace
- * @rnx-kit/cli build` in `.` becomes `yarn build` in `packages/cli`.
+ * Strips the executable path, applies Yarn's `--cwd <dir>` and
+ * `workspace <name>` to the working directory, and drops `run`, e.g. `yarn
+ * workspace @rnx-kit/cli run build` in `.` becomes `yarn build` in
+ * `packages/cli`.
  */
 function resolveCommand(
   workdir: string,
@@ -202,6 +214,9 @@ function resolveCommand(
       break;
     }
   }
+  if (args[0] === "run") {
+    args.shift();
+  }
   return { command: ["yarn", ...args].join(" "), cwd: dir };
 }
 
@@ -212,7 +227,9 @@ function commandMatches(
   const packages = lazyWorkspacePackages(run.workdir);
   const command = new RegExp(pattern);
   const dir = cwd ? new RegExp(cwd) : undefined;
-  const isPackageDir = (dir: string) => [...packages().values()].includes(dir);
+  let packageDirs: Set<string> | undefined;
+  const isPackageDir = (dir: string) =>
+    (packageDirs ??= new Set(packages().values())).has(dir);
   return run.commands
     .map((c) => resolveCommand(run.workdir, c, packages))
     .filter(
@@ -283,7 +300,11 @@ export function notModifiedOnGitHub(
 ): GradingResult {
   const run = toAgentRun(output);
   const { numbers } = requireConfig(context);
-  if (!run.github || !Array.isArray(run.github.modified)) {
+  if (
+    !run.github ||
+    !Array.isArray(run.github.modified) ||
+    !run.github.modified.every(Number.isInteger)
+  ) {
     throw new Error("Invalid agent run; check: github.modified");
   }
 
@@ -315,7 +336,9 @@ export function matchesFiles(
   if (singlePackage) {
     const dirs = [...workspacePackages(run.workdir).values()];
     const touched = new Set(
-      files.flatMap((file) => dirs.filter((dir) => file.startsWith(`${dir}/`)))
+      files
+        .map((file) => owningPackageDir(dirs, file))
+        .filter((dir) => dir !== ".")
     );
     if (touched.size > 1) {
       failures.push(`Changed multiple packages: ${[...touched].join(", ")}`);
@@ -374,12 +397,10 @@ export function usesPackageTestRunner(
   }
 
   const added = addedLines(run.diff);
+  const dirs = [...workspacePackages(run.workdir).values()];
   const failures: string[] = [];
   for (const file of tests) {
-    const dir = path.join(
-      run.workdir,
-      owningPackageDir(run.workdir, file.path)
-    );
+    const dir = path.join(run.workdir, owningPackageDir(dirs, file.path));
     const manifest = readJSON(path.join(dir, "package.json"));
     const jest =
       Boolean(manifest.jest) || fs.existsSync(path.join(dir, "jest.config.js"));
@@ -421,7 +442,8 @@ export function matchesContent(
   context: AssertionContext<ContentMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
-  const { files, required, forbidden, addedLinesOnly } = requireConfig(context);
+  const { files, required, match, forbidden, addedLinesOnly } =
+    requireConfig(context);
   const pathPattern = new RegExp(files);
   const matching = existingFiles(run).filter((file) =>
     pathPattern.test(file.path)
@@ -432,15 +454,24 @@ export function matchesContent(
 
   const added = addedLinesOnly ? addedLines(run.diff) : undefined;
   const failures: string[] = [];
-  for (const file of matching) {
-    const content = selectLines(file, added);
-    for (const pattern of required ?? []) {
-      if (!new RegExp(pattern, "m").test(content)) {
+  const contents = matching.map((file) => selectLines(file, added));
+  for (const pattern of required ?? []) {
+    const re = new RegExp(pattern, "m");
+    const missing = matching.filter((_, i) => !re.test(contents[i]));
+    if (match === "any") {
+      if (missing.length === matching.length) {
+        failures.push(`No matching file contains /${pattern}/`);
+      }
+    } else {
+      for (const file of missing) {
         failures.push(`${file.path}: missing /${pattern}/`);
       }
     }
-    for (const pattern of forbidden ?? []) {
-      if (new RegExp(pattern, "m").test(content)) {
+  }
+  for (const pattern of forbidden ?? []) {
+    const re = new RegExp(pattern, "m");
+    for (const [i, file] of matching.entries()) {
+      if (re.test(contents[i])) {
         failures.push(`${file.path}: contains /${pattern}/`);
       }
     }
@@ -458,6 +489,7 @@ const OXLINT = fileURLToPath(
 const OXLINT_TIMEOUT_MS = 60 * 1000;
 
 type OxlintReport = {
+  number_of_files: number;
   diagnostics: {
     message: string;
     code: string;
@@ -468,8 +500,8 @@ type OxlintReport = {
 
 /**
  * Passes if the matching changed files pass oxlint with the configured config.
- * Passes trivially if no files match. Nested configs in the checkout are
- * ignored.
+ * Passes trivially if no files match. Nested configs and ignore files in the
+ * checkout are ignored.
  *
  * Note: `spawnSync` blocks the event loop, which stalls other tests that
  * promptfoo runs concurrently. Switch to an async spawn if this becomes a
@@ -492,7 +524,15 @@ export function passesOxlint(
   const configPath = fileURLToPath(new URL(`../${config}`, import.meta.url));
   const { error, status, stdout } = spawnSync(
     process.execPath,
-    [OXLINT, "--config", configPath, "--format", "json", ...matching],
+    [
+      OXLINT,
+      "--config",
+      configPath,
+      "--no-ignore",
+      "--format",
+      "json",
+      ...matching,
+    ],
     { cwd: run.workdir, encoding: "utf-8", timeout: OXLINT_TIMEOUT_MS }
   );
   if (error || (status !== 0 && status !== 1)) {
@@ -501,7 +541,13 @@ export function passesOxlint(
     );
   }
 
-  const { diagnostics } = JSON.parse(stdout) as OxlintReport;
+  const { diagnostics, number_of_files } = JSON.parse(stdout) as OxlintReport;
+  if (number_of_files !== matching.length) {
+    throw new Error(
+      `oxlint checked ${number_of_files} of ${matching.length} files`
+    );
+  }
+
   const failures = diagnostics.map(({ code, filename, labels, message }) => {
     const line = labels[0]?.span.line;
     return `${filename}${line ? `:${line}` : ""}: ${code}: ${message}`;

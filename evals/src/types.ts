@@ -63,7 +63,11 @@ export type AgentRun = {
   finalMessage: string;
   /** Absolute path to the agent's checkout, kept until assertions finish */
   workdir: string;
-  /** State recorded by the GitHub mock; only set if the test has a fixture */
+  /**
+   * State recorded by the GitHub mock; only set if the test has a fixture. The
+   * mock serves both the GitHub MCP tools and the `gh` CLI (via its shim), so
+   * writes through either are recorded.
+   */
   github?: {
     /**
      * Numbers of issues and pull requests that the agent created, edited,
@@ -112,8 +116,13 @@ export type FilesMatcher = {
 export type ContentMatcher = {
   /** Regular expression matching the paths of the files to check */
   files: string;
-  /** Every matching file must match each of these */
+  /**
+   * Each of these must be matched by every matching file, or by at least one
+   * if `match` is `"any"`
+   */
   required?: string[];
+  /** Whether `required` applies to every matching file (default) or any */
+  match?: "all" | "any";
   /** No matching file may match any of these */
   forbidden?: string[];
   /** Only check lines added in the diff instead of the full content */

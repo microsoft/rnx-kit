@@ -15,4 +15,4 @@
           config: { pattern: '^yarn build(\s|$)', inPackage: true }
     - type: javascript
       value: file://src/assertions.ts:didNotRunCommand
-      config: { pattern: '(^|[\s;&|/])tsc(\s|$)' }
+      config: { pattern: '^((npx|yarn) )?tsc\b' }

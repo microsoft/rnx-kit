@@ -6,7 +6,9 @@
   assert:
     - type: javascript
       value: file://src/assertions.ts:ranCommand
-      config: { pattern: '^yarn test\b.*\s--coverage\b', inPackage: true }
+      config:
+        pattern: '^yarn test(?=.*\s--coverage\b)(?=.*\s[''"]?test/\S*\*)'
+        inPackage: true
     - type: llm-rubric
       transform: file://src/transforms.ts:forGrader
       value: >-
