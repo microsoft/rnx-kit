@@ -1,4 +1,5 @@
 import { parseChangesetFile } from "@changesets/parse";
+import { readJSONFileSync } from "@rnx-kit/tools-filesystem";
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -111,13 +112,9 @@ function withoutExecutablePath(executable: string): string {
   return path.win32.basename(executable).replace(/\.(bat|cmd|exe|ps1)$/i, "");
 }
 
-function readJSON(file: string) {
-  return JSON.parse(fs.readFileSync(file, "utf-8"));
-}
-
 function tryReadJSON(file: string) {
   try {
-    return readJSON(file);
+    return readJSONFileSync(file);
   } catch {
     return undefined;
   }
@@ -400,7 +397,7 @@ export function usesPackageTestRunner(
   const failures: string[] = [];
   for (const file of tests) {
     const dir = path.join(run.workdir, owningPackageDir(dirs, file.path));
-    const manifest = readJSON(path.join(dir, "package.json"));
+    const manifest = readJSONFileSync(path.join(dir, "package.json"));
     const jest =
       Boolean(manifest.jest) || fs.existsSync(path.join(dir, "jest.config.js"));
     const content = file.content ?? "";
