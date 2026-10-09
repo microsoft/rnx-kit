@@ -1,4 +1,5 @@
 import parseDiff from "parse-diff";
+import { quote } from "shell-quote";
 import { toAgentRun } from "./assertions.ts";
 import type { AgentRun } from "./types.ts";
 
@@ -32,7 +33,7 @@ function summarizeLockfiles(diff: string): string {
 export function forGrader(output: AgentRun | string): string {
   const { commands, toolCalls, diff, finalMessage } = toAgentRun(output);
   const commandList = commands.map(
-    ({ command, cwd }) => `[${cwd}] $ ${command}`
+    ({ argv, cwd }) => `[${cwd}] $ ${quote(argv)}`
   );
   const toolList = toolCalls.map(
     ({ name, arguments: args }) => `${name} ${JSON.stringify(args)}`

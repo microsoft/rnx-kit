@@ -5233,6 +5233,7 @@ __metadata:
     oxc-parser: "npm:^0.123.0"
     oxlint: "catalog:"
     parse-diff: "npm:^0.11.0"
+    shell-quote: "npm:^1.8.4"
   languageName: unknown
   linkType: soft
 

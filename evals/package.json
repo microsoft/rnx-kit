@@ -26,7 +26,8 @@
     "@rnx-kit/eslint-plugin": "workspace:*",
     "oxc-parser": "^0.123.0",
     "oxlint": "catalog:",
-    "parse-diff": "^0.11.0"
+    "parse-diff": "^0.11.0",
+    "shell-quote": "^1.8.4"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",

@@ -6,20 +6,21 @@
  * captured with the correct working directory. It does this by putting shims
  * first in `PATH` for every executable that evals match on (`gh`, `git`,
  * `node`, `npx`, `tsc`, `yarn`, and formatters/linters). A shim records its
- * arguments and working directory, then runs the real executable with an
- * environment variable set so that nested invocations (e.g. `node` spawned by
- * `yarn`) are not recorded.
+ * `argv` as received, i.e. after the shell has removed quotes, and its working
+ * directory, then runs the real executable with an environment variable set
+ * so that nested invocations (e.g. `node` spawned by `yarn`) are not recorded.
  *
  * Executables invoked by path (e.g. `/usr/bin/git push`) bypass the shims. To
- * cover these, the harness also splits the agent's shell tool input on `&&`,
- * `||`, `;` and `|`, and adds any command that the shims did not record. The
+ * cover these, the harness also parses the agent's shell tool input with
+ * `parse()` from `shell-quote`, splits the result on control operators (`&&`,
+ * `||`, `;`, `|`), and adds any command that the shims did not record. The
  * working directory of these commands is best-effort.
  *
  * The executable may include a path; assertions only match on its basename.
  */
 export type AgentCommand = {
-  /** Executable and arguments joined by spaces, unquoted, e.g. `yarn build` */
-  command: string;
+  /** Executable and arguments, unquoted, e.g. `["yarn", "test", "a b.ts"]` */
+  argv: string[];
   /** Working directory relative to the repository root; `.` for the root */
   cwd: string;
 };

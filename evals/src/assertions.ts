@@ -105,14 +105,10 @@ function selectLines(
 
 /**
  * Reduces the executable to its basename without Windows extensions, e.g.
- * `/usr/bin/git push` -> `git push` and
- * `C:\bin\yarn.cmd build` -> `yarn build`.
+ * `/usr/bin/git` -> `git` and `C:\bin\yarn.cmd` -> `yarn`.
  */
-function withoutExecutablePath(command: string): string {
-  return command.replace(
-    /^(?:\S*[\\/])?([^\s\\/]+?)(?:\.(?:bat|cmd|exe|ps1))?(?=\s|$)/i,
-    "$1"
-  );
+function withoutExecutablePath(executable: string): string {
+  return path.win32.basename(executable).replace(/\.(bat|cmd|exe|ps1)$/i, "");
 }
 
 function readJSON(file: string) {
@@ -181,20 +177,23 @@ function owningPackageDir(packageDirs: Iterable<string>, file: string): string {
   return owner;
 }
 
+type ResolvedCommand = { command: string; cwd: string };
+
 /**
- * Strips the executable path, applies Yarn's `--cwd <dir>` and
- * `workspace <name>` to the working directory, and drops `run`, e.g. `yarn
- * workspace @rnx-kit/cli run build` in `.` becomes `yarn build` in
- * `packages/cli`.
+ * Joins the arguments of a command for matching after stripping the executable
+ * path. For Yarn, also applies `--cwd <dir>` and `workspace <name>` to the
+ * working directory, and drops `run`, e.g. `yarn workspace @rnx-kit/cli run
+ * build` in `.` becomes `yarn build` in `packages/cli`.
  */
 function resolveCommand(
   workdir: string,
-  { command, cwd }: AgentCommand,
+  { argv, cwd }: AgentCommand,
   packages: () => Map<string, string>
-): AgentCommand {
-  const [executable, ...args] = withoutExecutablePath(command).split(/\s+/);
-  if (executable !== "yarn") {
-    return { command: [executable, ...args].join(" "), cwd };
+): ResolvedCommand {
+  const [executable = "", ...args] = argv;
+  const name = withoutExecutablePath(executable);
+  if (name !== "yarn") {
+    return { command: [name, ...args].join(" "), cwd };
   }
 
   let dir = cwd;
