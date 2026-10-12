@@ -1,0 +1,8 @@
+- description: "Writes tests for the Node.js test runner by default"
+  metadata: { id: node-test-runner, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: Add tests for `keysOf` in `@rnx-kit/tools-language`.
+  assert:
+    - type: javascript
+      value: file://src/index.ts:usesPackageTestRunner
