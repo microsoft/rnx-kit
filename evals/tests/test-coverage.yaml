@@ -1,0 +1,14 @@
+- description: "Passes the test glob explicitly when collecting coverage"
+  metadata: { id: test-coverage, source: repository memory }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: What is the test coverage of `@rnx-kit/align-deps`?
+  assert:
+    - type: javascript
+      value: file://src/index.ts:ranCommand
+      config:
+        pattern: '^yarn test(?=.*\s--coverage\b)(?=.*\stest/\S*\*)'
+        inPackage: true
+    - type: javascript
+      value: file://src/index.ts:matchesFiles
+      config: { forbidden: ['.'] }

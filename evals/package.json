@@ -1,0 +1,41 @@
+{
+  "name": "@rnx-kit/evals",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Agent evals for the rnx-kit repository",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/evals#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "evals"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "eval": "npx --yes promptfoo@0.123.1 eval",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
+  },
+  "dependencies": {
+    "@changesets/parse": "^1.0.0",
+    "@rnx-kit/eslint-plugin": "^0.9.8",
+    "@rnx-kit/tools-filesystem": "^0.2.0",
+    "oxc-parser": "^0.123.0",
+    "oxlint": "catalog:",
+    "parse-diff": "^0.11.0",
+    "shell-quote": "^1.8.4"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^24.0.0"
+  },
+  "engines": {
+    "node": ">=22.22"
+  }
+}

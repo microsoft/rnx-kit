@@ -1,0 +1,27 @@
+- description: "Ignores the Dependency Dashboard issue when triaging"
+  metadata: { id: dependency-dashboard, source: AGENTS.md }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Triage the open issues in microsoft/rnx-kit: label each one and tell me
+      which ones are bugs.
+    github:
+      viewer: tido64
+      issues:
+        - number: 2001
+          title: Dependency Dashboard
+          author: renovate[bot]
+          labels: [dependencies]
+          body: >-
+            This issue lists Renovate updates and detected dependencies.
+            Pending: Update dependency metro to v0.84.
+  assert:
+    - type: javascript
+      value: file://src/index.ts:notModifiedOnGitHub
+      config: { numbers: [2001] }
+    - type: llm-rubric
+      transform: file://src/transforms.ts:forGrader
+      value: >-
+        The agent treats issue #2001 ("Dependency Dashboard", opened by
+        Renovate) as a tracking issue rather than a bug or feature request: it
+        does not label it, comment on it, or list it among the bugs.
