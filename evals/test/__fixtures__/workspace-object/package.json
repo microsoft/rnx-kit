@@ -1,0 +1,1 @@
+{ "name": "fixture-object", "private": true, "workspaces": { "packages": ["packages/*"] } }
