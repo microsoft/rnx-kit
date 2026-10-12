@@ -5222,6 +5222,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/evals@workspace:evals":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/evals@workspace:evals"
+  dependencies:
+    "@changesets/parse": "npm:^1.0.0"
+    "@rnx-kit/eslint-plugin": "npm:^0.9.8"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-filesystem": "npm:^0.2.0"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@types/node": "npm:^24.0.0"
+    oxc-parser: "npm:^0.123.0"
+    oxlint: "catalog:"
+    parse-diff: "npm:^0.11.0"
+    shell-quote: "npm:^1.8.4"
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/fork-sync@workspace:incubator/fork-sync":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/fork-sync@workspace:incubator/fork-sync"

@@ -1,0 +1,9 @@
+{
+  "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "plugins": [],
+  "categories": { "correctness": "off" },
+  "jsPlugins": [
+    { "name": "@rnx-kit", "specifier": "@rnx-kit/eslint-plugin/rules" }
+  ],
+  "rules": { "@rnx-kit/type-definitions-only": "error" }
+}
