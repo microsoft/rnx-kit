@@ -2,7 +2,18 @@
 description: rnx-kit agent evals
 prompts:
   - "{{task}}"
-# The agent harness (provider) and the `llm-rubric` grader are not configured
-# yet. Until then, pass them on the command line, e.g.
-# `yarn eval --providers file://path/to/provider.ts`.
+providers:
+  # Requires a GitHub token with Copilot access in `COPILOT_GITHUB_TOKEN`,
+  # `GH_TOKEN` or `GITHUB_TOKEN`, or a `gh auth login` session. Set
+  # `config.model` to choose the model.
+  - id: file://src/harness/provider.ts
+    label: copilot
+extensions:
+  - file://src/harness/hooks.ts:afterEach
+  - file://src/harness/hooks.ts:afterAll
+evaluateOptions:
+  maxConcurrency: 4
+  timeoutMs: 3600000
+# The `llm-rubric` grader is not configured yet. promptfoo picks a default from
+# the environment (e.g. `OPENAI_API_KEY`); otherwise pass `--grader`.
 tests: file://tests/*.yaml
