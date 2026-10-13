@@ -202,8 +202,9 @@ export type GradingResult = {
 
 /**
  * Mocked GitHub state exposed to the agent through the harness. Read calls
- * return this data; write calls are recorded in `AgentRun.toolCalls` and are
- * never sent to GitHub.
+ * return this data. Write calls are never sent to GitHub; the numbers they
+ * touch are recorded in `AgentRun.github.modified`, and write tool calls also
+ * appear in `AgentRun.toolCalls` (or `AgentRun.commands` for `gh`).
  */
 export type GitHubFixture = {
   /** Login of the user the agent is acting on behalf of */
