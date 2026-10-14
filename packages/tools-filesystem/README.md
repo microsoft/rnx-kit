@@ -11,7 +11,7 @@ categories:
 
 ```typescript
 import * as tools from "@rnx-kit/tools-filesystem";
-
+//
 // Alternatively...
 import * as mocks from "@rnx-kit/tools-filesystem/mocks";
 ```

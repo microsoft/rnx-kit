@@ -11,7 +11,7 @@ categories:
 
 ```typescript
 import * as tools from "@rnx-kit/tools-react-native";
-
+//
 // Alternatively...
 import * as metroTools from "@rnx-kit/tools-react-native/metro";
 import * as platformTools from "@rnx-kit/tools-react-native/platform";
