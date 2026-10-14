@@ -11,7 +11,7 @@ categories:
 
 ```typescript
 import * as tools from "@rnx-kit/tools-node";
-
+//
 // Alternatively...
 import * as moduleTools from "@rnx-kit/tools-node/module";
 import * as packageTools from "@rnx-kit/tools-node/package";

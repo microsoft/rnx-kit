@@ -54,8 +54,8 @@ process.exit(ctx.finish());
 ### Yarn constraints (`yarn.config.js`)
 
 ```ts
-import { defineConfig } from "@yarnpkg/types";
 import { PackageValidationContext } from "@rnx-kit/lint-package";
+import { defineConfig } from "@yarnpkg/types";
 
 export default defineConfig({
   async constraints({ Yarn }) {

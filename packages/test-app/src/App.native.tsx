@@ -1,5 +1,5 @@
 import { acquireTokenWithScopes } from "@rnx-kit/react-native-auth";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Pressable, Text } from "react-native";
 import manifest from "../app.json";
 import { Feature } from "./Feature";
@@ -22,14 +22,11 @@ function Button({ children, onPress }: ButtonProps) {
 }
 
 function useLocalStorageStatus() {
-  const [localValue, setLocalValue] = useState("Checking");
-  useEffect(() => {
-    const key = "sample/local-storage";
-    window?.localStorage?.setItem(key, "Available");
-    setLocalValue(window?.localStorage?.getItem(key) ?? "Error");
-    return () => window?.localStorage?.removeItem(key);
-  }, []);
-  return localValue;
+  const key = "sample/local-storage";
+  window?.localStorage?.setItem(key, "Available");
+  const value = window?.localStorage?.getItem(key) ?? "Error";
+  window?.localStorage?.removeItem(key);
+  return value;
 }
 
 export function App({ concurrentRoot }: { concurrentRoot?: boolean }) {

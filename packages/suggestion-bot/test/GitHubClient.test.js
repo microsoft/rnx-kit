@@ -16,12 +16,7 @@ import {
  */
 class Octokit {
   constructor(
-    /** @type {OctokitOptions} */ {
-      auth,
-      createReview,
-      request,
-      setAuth,
-    }
+    /** @type {OctokitOptions} */ { auth, createReview, request, setAuth }
   ) {
     this.rest = { pulls: { createReview } };
     this.request = request;
