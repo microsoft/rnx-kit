@@ -7294,9 +7294,9 @@ __metadata:
   linkType: hard
 
 "http-cache-semantics@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "http-cache-semantics@npm:4.1.1"
-  checksum: 10c0/ce1319b8a382eb3cbb4a37c19f6bfe14e5bb5be3d09079e885e8c513ab2d3cd9214902f8a31c9dc4e37022633ceabfc2d697405deeaf1b8f3552bb4ed996fdfc
+  version: 4.3.0
+  resolution: "http-cache-semantics@npm:4.3.0"
+  checksum: 10c0/b9668e271b4a99cba067bfa6f286b12eff1408a24e090ca16f0f5fa826ac07f67b4b8c7aa6e7458596d890683f3c172f647a00ca516a8f0158c80d7e4ebe0316
   languageName: node
   linkType: hard
 
@@ -10612,12 +10612,12 @@ __metadata:
   linkType: hard
 
 "postcss-selector-parser@npm:^7.0.0":
-  version: 7.1.5
-  resolution: "postcss-selector-parser@npm:7.1.5"
+  version: 7.1.6
+  resolution: "postcss-selector-parser@npm:7.1.6"
   dependencies:
     cssesc: "npm:^3.0.0"
     util-deprecate: "npm:^1.0.2"
-  checksum: 10c0/e277a136ef87ae2abbc77d38e0773bf6245975889ada3d7d785f515df4d2ab543322f9189e851d6a6bcd2d8e512a1164d1dfd5af2f5bbb2d177c687faf945038
+  checksum: 10c0/fc8279859896b96ef25b24d0289b2bfff7bce6647b247aa983939ff872e226663788d1ea57bddf9d1695119c071e5cdcb8b2a364ed4313502efe4b0319879154
   languageName: node
   linkType: hard
 
@@ -11755,9 +11755,9 @@ __metadata:
   linkType: hard
 
 "source-map-js@npm:^1.0.1, source-map-js@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "source-map-js@npm:1.2.1"
-  checksum: 10c0/7bda1fc4c197e3c6ff17de1b8b2c20e60af81b63a52cb32ec5a5d67a20a7d42651e2cb34ebe93833c5a2a084377e17455854fee3e21e7925c64a51b6a52b0faf
+  version: 1.2.2
+  resolution: "source-map-js@npm:1.2.2"
+  checksum: 10c0/d5d6dec62266834f83dd4f8a2606a196fb1a006ca5d53b0ef80ee513b7eba2f4e2ae241f4bc129ae7e9b80dea24f6e3d92b446b7e6e96be7653cab8888168a94
   languageName: node
   linkType: hard
 
