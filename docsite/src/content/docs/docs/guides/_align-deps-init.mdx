@@ -1,0 +1,37 @@
+import { TabItem, Tabs } from "@astrojs/starlight/components";
+
+<Tabs syncKey="package-manager">
+<TabItem label="Yarn">
+
+```sh
+yarn rnx-align-deps --init app
+```
+
+```sh
+yarn rnx-align-deps --init library
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```sh
+pnpm rnx-align-deps --init app
+```
+
+```sh
+pnpm rnx-align-deps --init library
+```
+
+</TabItem>
+<TabItem label="npm">
+
+```sh
+npx rnx-align-deps --init app
+```
+
+```sh
+npx rnx-align-deps --init library
+```
+
+</TabItem>
+</Tabs>

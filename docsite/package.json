@@ -2,61 +2,28 @@
   "name": "@rnx-kit/docsite",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "docusaurus build",
-    "clear": "docusaurus clear",
-    "deploy": "docusaurus deploy",
-    "docusaurus": "docusaurus",
-    "format": "oxfmt $(git ls-files '*.[jt]s' '*.md' '*.mdx' '*.tsx')",
-    "serve": "docusaurus serve",
-    "start": "docusaurus start",
-    "swizzle": "docusaurus swizzle",
-    "typecheck": "tsc",
-    "write-heading-ids": "docusaurus write-heading-ids",
-    "write-translations": "docusaurus write-translations"
+    "build": "astro build",
+    "format": "oxfmt package.json $(git ls-files '*.[jt]s' '*.md' '*.mdx')",
+    "preview": "astro preview",
+    "start": "astro dev"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.10.0",
-    "@docusaurus/faster": "^3.10.0",
-    "@docusaurus/preset-classic": "^3.10.0",
-    "@mdx-js/react": "^3.0.0",
-    "clsx": "^2.0.0",
-    "docusaurus-lunr-search": "^3.6.0",
-    "prism-react-renderer": "^2.3.0",
-    "react": "~19.2.4",
-    "react-dom": "~19.2.4"
+    "@astrojs/starlight": "^0.42.5",
+    "astro": "^7.3.6",
+    "starlight-links-validator": "^0.26.0"
   },
   "devDependencies": {
-    "@tsconfig/docusaurus": "^2.0.1",
-    "@types/react": "~19.2.0",
+    "@astrojs/ts-content-mapper": "^0.2.0",
     "oxfmt": "catalog:",
     "typescript": "catalog:"
   },
   "resolutions": {
-    "@algolia/autocomplete-core": "ignore:",
-    "@docsearch/react": "ignore:",
-    "@pnpm/network.ca-file/graceful-fs": "^4.2.10",
-    "algoliasearch": "ignore:",
-    "algoliasearch-helper": "ignore:",
-    "copy-webpack-plugin/serialize-javascript": "^7.0.3",
-    "css-minimizer-webpack-plugin/serialize-javascript": "^7.0.3",
-    "node-gyp": "ignore:",
-    "selfsigned": "ignore:"
-  },
-  "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "@expressive-code/core/postcss-nested": "^7.0.2"
   },
   "engines": {
-    "node": ">=18.12"
+    "node": ">=22.12"
   },
   "packageManager": "yarn@4.18.1"
 }
