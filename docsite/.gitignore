@@ -2,13 +2,11 @@
 /node_modules
 
 # Production
-/build
+/dist
 
 # Generated files
-.docusaurus
-.cache-loader
-docs/contributing.md
-test-repos/
+.astro/
+src/content/docs/docs/contributing.md
 
 # Misc
 .DS_Store

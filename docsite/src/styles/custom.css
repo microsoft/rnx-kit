@@ -1,0 +1,13 @@
+/* Dark mode colors */
+:root {
+  --sl-color-accent-low: #0a2a4a;
+  --sl-color-accent: #0e93fd;
+  --sl-color-accent-high: #b3dcfe;
+}
+
+/* Light mode colors */
+:root[data-theme="light"] {
+  --sl-color-accent-low: #c9dcf7;
+  --sl-color-accent: #0e53bd;
+  --sl-color-accent-high: #0a3a84;
+}

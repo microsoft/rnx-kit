@@ -1,0 +1,34 @@
+---
+import { Image } from "astro:assets";
+import Default from "@astrojs/starlight/components/Footer.astro";
+import msossDark from "../assets/msoss-dark.png";
+import msossLight from "../assets/msoss-light.png";
+---
+
+<Default />
+<div class="site-footer">
+  <a href="https://opensource.microsoft.com">
+    <Image
+      class="light:sl-hidden"
+      src={msossDark}
+      alt="Microsoft Open Source logo"
+      width="300"
+    />
+    <Image
+      class="dark:sl-hidden"
+      src={msossLight}
+      alt="Microsoft Open Source logo"
+      width="300"
+    />
+  </a>
+  <p>Copyright © {new Date().getFullYear()} Microsoft</p>
+</div>
+
+<style>
+  .site-footer {
+    margin-top: 3rem;
+    text-align: center;
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-sm);
+  }
+</style>

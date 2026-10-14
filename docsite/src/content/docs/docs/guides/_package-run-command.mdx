@@ -1,0 +1,16 @@
+import { Code, TabItem, Tabs } from "@astrojs/starlight/components";
+
+<Tabs syncKey="package-manager">
+  <TabItem label="Yarn">
+    <Code lang="sh" code={`yarn ${props.args}`} />
+  </TabItem>
+  <TabItem label="pnpm">
+    <Code lang="sh" code={`pnpm ${props.args}`} />
+  </TabItem>
+  <TabItem label="npm">
+    <Code
+      lang="sh"
+      code={`${props.installedScript ? "npx" : "npm run"} ${props.args}`}
+    />
+  </TabItem>
+</Tabs>

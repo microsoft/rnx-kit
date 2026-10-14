@@ -23,7 +23,7 @@ to do this once across all repos using our CLA.
 
 - Node LTS (see [releases](https://nodejs.org/en/about/releases/) for specific
   versions)
-- [Yarn Classic](https://classic.yarnpkg.com/)
+- [Yarn](https://yarnpkg.com/getting-started/install)
 
 ### Optional
 

@@ -1,8 +1,10 @@
 // @ts-check
-const fs = require("node:fs");
-const path = require("node:path");
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 const UTF_8 = /** @type {const} */ ({ encoding: "utf-8" });
+
+const docsDir = path.join("src", "content", "docs", "docs");
 
 const badges = [
   "https://github\\.com/microsoft/rnx-kit/actions/workflows",
@@ -15,19 +17,29 @@ const badgesRE = new RegExp(
 );
 
 const localImagesRE = /!\[(.*?)\]\(\.\/(.*?)\)/g;
-const titleRE = /# @rnx-kit\/(.*)/;
+const titleRE = /^# (?:@rnx-kit\/)?(.*)\n+/m;
 
-function copyContributing() {
-  const contributing = "CONTRIBUTING.md";
-  fs.copyFileSync(
-    path.join("..", contributing),
-    path.join("docs", contributing.toLowerCase()),
-    fs.constants.COPYFILE_FICLONE
-  );
+/**
+ * Moves the first heading into front matter as required by Starlight.
+ * @param {string} content
+ * @returns {string}
+ */
+function toPage(content) {
+  const match = content.match(titleRE);
+  if (!match) {
+    throw new Error("Missing title");
+  }
+  const title = JSON.stringify(match[1].trim());
+  return `---\ntitle: ${title}\n---\n\n${content.replace(titleRE, "")}`;
 }
 
-function generateToolsSidebar() {
-  const items = [];
+function copyContributing() {
+  const content = fs.readFileSync(path.join("..", "CONTRIBUTING.md"), UTF_8);
+  fs.writeFileSync(path.join(docsDir, "contributing.md"), toPage(content));
+}
+
+function generateTools() {
+  const toolsDir = path.join(docsDir, "tools");
   const workspace = path.join("..", "packages");
   for (const pkg of fs.readdirSync(workspace)) {
     const manifest = path.join(workspace, pkg, "package.json");
@@ -40,32 +52,19 @@ function generateToolsSidebar() {
       continue;
     }
 
-    const output = path.join("docs", "tools", `${pkg}.md`);
+    const output = path.join(toolsDir, `${pkg}.md`);
     if (!fs.existsSync(output)) {
-      const content = fs.readFileSync(readme, UTF_8);
-      fs.writeFileSync(
-        output,
-        content
-          .replace(titleRE, "# $1") // Remove scope from title
-          .replace(badgesRE, "") // Remove badges
-          .replace(
-            localImagesRE,
-            `![$1](${path.join("..", "..", path.dirname(readme), "$2")})`
-          )
-      );
+      const imagesDir = path.posix.relative(toolsDir, path.dirname(readme));
+      const content = fs
+        .readFileSync(readme, UTF_8)
+        .replace(badgesRE, "") // Remove badges
+        .replace(localImagesRE, `![$1](${imagesDir}/$2)`);
+      fs.writeFileSync(output, toPage(content));
     }
-
-    items.push(`tools/${path.basename(pkg, ".md")}`);
   }
-  return items.sort();
 }
 
-function generateAll() {
+export function generateAll() {
   copyContributing();
-  generateToolsSidebar();
+  generateTools();
 }
-
-generateAll.copyContributing = copyContributing;
-generateAll.generateToolsSidebar = generateToolsSidebar;
-
-module.exports = generateAll;
