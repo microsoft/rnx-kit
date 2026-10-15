@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 3.0.4
+
+### Patch Changes
+
+- ceb56eb: Use default import for `yargs`
+
 ## 3.0.3
 
 ### Patch Changes
