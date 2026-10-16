@@ -29,16 +29,16 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-typescript": "^7.0.0",
     "@jest/create-cache-key-function": "^29.7.0",
-    "@rnx-kit/tools-node": "^3.0.5",
-    "@rnx-kit/tools-react-native": "^2.3.2"
+    "@rnx-kit/tools-node": "workspace:^",
+    "@rnx-kit/tools-react-native": "workspace:^"
   },
   "devDependencies": {
     "@jest/types": "^29.2.1",
     "@react-native-community/cli-types": "^20.1.0",
     "@react-native/babel-preset": "^0.85.0",
     "@react-native/jest-preset": "^0.85.0",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "^24.0.0",
     "react": "19.2.3",
     "react-native": "^0.85.0"

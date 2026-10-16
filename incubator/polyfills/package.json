@@ -29,12 +29,12 @@
     "@babel/core": "^7.0.0",
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/template": "^7.0.0",
-    "@rnx-kit/console": "^3.0.0",
-    "@rnx-kit/tools-node": "^3.0.3"
+    "@rnx-kit/console": "workspace:^",
+    "@rnx-kit/tools-node": "workspace:^"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/babel__core": "^7.0.0",
     "@types/babel__helper-plugin-utils": "^7.0.0",
     "@types/babel__template": "^7.0.0",

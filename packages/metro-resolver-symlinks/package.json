@@ -26,14 +26,14 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^3.0.0",
-    "@rnx-kit/tools-node": "^3.0.3",
-    "@rnx-kit/tools-react-native": "^2.3.2",
+    "@rnx-kit/console": "workspace:^",
+    "@rnx-kit/tools-node": "workspace:^",
+    "@rnx-kit/tools-react-native": "workspace:^",
     "enhanced-resolve": "^5.8.3"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "^24.0.0",
     "metro-resolver": "^0.84.0",
     "oxc-resolver": "^11.0.0"

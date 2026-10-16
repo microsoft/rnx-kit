@@ -39,5 +39,21 @@ module.exports = defineConfig({
         workspace.set("engines.yarn", ">=4.0");
       }
     }
+
+    // Internal dev dependencies should always point to the local workspace
+    for (const dependency of Yarn.dependencies({ type: "devDependencies" })) {
+      if (Yarn.workspace({ ident: dependency.ident })) {
+        dependency.update("workspace:*");
+      }
+    }
+
+    // Internal dependencies of published packages should point to the local
+    // workspace; Yarn replaces `workspace:^` with `^<version>` on publish
+    for (const dependency of Yarn.dependencies({ type: "dependencies" })) {
+      if (Yarn.workspace({ ident: dependency.ident })) {
+        const isPrivate = dependency.workspace.manifest.private;
+        dependency.update(isPrivate ? "workspace:*" : "workspace:^");
+      }
+    }
   },
 });

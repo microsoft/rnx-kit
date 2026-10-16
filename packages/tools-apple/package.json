@@ -54,12 +54,12 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "dependencies": {
-    "@rnx-kit/tools-shell": "^0.2.2",
+    "@rnx-kit/tools-shell": "workspace:^",
     "fast-xml-parser": "^5.3.4"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "^24.0.0"
   },
   "engines": {

@@ -33,9 +33,9 @@
     "lint": "rnx-kit-scripts lint"
   },
   "devDependencies": {
-    "@rnx-kit/build": "*",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*"
+    "@rnx-kit/build": "workspace:*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*"
   },
   "peerDependencies": {
     "@rnx-kit/build": ">=0.9.2"

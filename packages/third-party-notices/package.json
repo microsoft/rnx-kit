@@ -38,16 +38,16 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^3.0.0",
-    "@rnx-kit/tools-node": "^3.0.6",
+    "@rnx-kit/console": "workspace:^",
+    "@rnx-kit/tools-node": "workspace:^",
     "spdx-expression-parse": "^4.0.0",
     "yargs": "^17.0.0"
   },
   "devDependencies": {
     "@react-native-community/cli-types": "^20.1.0",
-    "@rnx-kit/metro-serializer": "*",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/metro-serializer": "workspace:*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "^24.0.0",
     "@types/yargs": "^17.0.0",
     "metro-source-map": "^0.84.0"

@@ -35,20 +35,20 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/config": "^1.0.0",
-    "@rnx-kit/console": "^3.0.0",
-    "@rnx-kit/tools-node": "^3.0.4",
-    "@rnx-kit/tools-packages": "^0.1.3",
-    "@rnx-kit/tools-react-native": "^2.3.3",
-    "@rnx-kit/types-bundle-config": "^1.0.0",
-    "@rnx-kit/typescript-service": "^2.0.3"
+    "@rnx-kit/config": "workspace:^",
+    "@rnx-kit/console": "workspace:^",
+    "@rnx-kit/tools-node": "workspace:^",
+    "@rnx-kit/tools-packages": "workspace:^",
+    "@rnx-kit/tools-react-native": "workspace:^",
+    "@rnx-kit/types-bundle-config": "workspace:^",
+    "@rnx-kit/typescript-service": "workspace:^"
   },
   "devDependencies": {
-    "@rnx-kit/jest-preset": "*",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
-    "@rnx-kit/types-kit-config": "*",
-    "@rnx-kit/types-node": "*"
+    "@rnx-kit/jest-preset": "workspace:*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
+    "@rnx-kit/types-kit-config": "workspace:*",
+    "@rnx-kit/types-node": "workspace:*"
   },
   "peerDependencies": {
     "typescript": "4.7 - 6.0"
