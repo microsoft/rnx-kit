@@ -37,8 +37,8 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "react": "19.2.3",
     "react-native": "^0.85.0"
   },

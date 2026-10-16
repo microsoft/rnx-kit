@@ -24,7 +24,7 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^3.0.0",
+    "@rnx-kit/console": "workspace:^",
     "babel-plugin-const-enum": "^1.0.0"
   },
   "devDependencies": {
@@ -32,9 +32,9 @@
     "@babel/plugin-transform-typescript": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@react-native/babel-preset": "^0.85.0",
-    "@rnx-kit/babel-plugin-import-path-remapper": "*",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/babel-plugin-import-path-remapper": "workspace:*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/babel__core": "^7.0.0",
     "@types/node": "^24.0.0"
   },

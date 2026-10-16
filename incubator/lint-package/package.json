@@ -35,15 +35,15 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/config": "^1.0.0",
-    "@rnx-kit/lint-json": "^0.2.0",
-    "@rnx-kit/types-kit-config": "^2.0.0",
-    "@rnx-kit/types-node": "^1.0.1"
+    "@rnx-kit/config": "workspace:^",
+    "@rnx-kit/lint-json": "workspace:^",
+    "@rnx-kit/types-kit-config": "workspace:^",
+    "@rnx-kit/types-node": "workspace:^"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tools-filesystem": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tools-filesystem": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "^24.0.0",
     "@yarnpkg/types": "^4.0.0"
   },

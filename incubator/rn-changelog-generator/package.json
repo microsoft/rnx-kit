@@ -29,10 +29,10 @@
     "test:local": "RN_REPO='../../../react-native' rnx-kit-scripts test"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/jest-preset": "*",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/eslint-config": "workspace:*",
+    "@rnx-kit/jest-preset": "workspace:*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/fast-levenshtein": "0.0.4",
     "@types/node": "^24.0.0",
     "chalk": "^4.1.0",

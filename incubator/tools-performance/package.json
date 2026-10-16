@@ -33,11 +33,11 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-formatting": "^0.2.0"
+    "@rnx-kit/tools-formatting": "workspace:^"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "metro-config": "^0.84.0"
   },
   "engines": {
