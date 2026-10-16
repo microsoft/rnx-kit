@@ -17,7 +17,10 @@ Android, macOS, Windows).
   in package.json)
 - **`scripts/`** - Internal build tooling (`rnx-kit-scripts` CLI)
 - **`docsite/`** - Documentation website (separate Yarn workspace with its own
-  `yarn.lock`; **not** in root `workspaces`)
+  `yarn.lock`; **not** in root `workspaces`). Built with Astro Starlight; pages
+  live in `docsite/src/content/docs/docs/`, and `docsite/generate.js` copies
+  package READMEs there. `yarn build` (in `docsite/`) fails on broken links and
+  anchors
 - **`.changeset/`** - Changeset configuration for versioning
 
 ## Build System
@@ -74,17 +77,22 @@ import { describe, it } from "node:test";
 
 ### Test Patterns
 
-- Coverage, or passing arguments to `yarn test`: see how the default test glob
-  is applied in `scripts/src/commands/test.js`
+- Passing any argument to `yarn test` disables the default test glob (see
+  `scripts/src/commands/test.js`), so include it explicitly, e.g.
+  `yarn test --coverage 'test/**/*.test.ts'` for coverage
 - Source files that use bare `require`: see
   `packages/tools-react-native/test/metro.test.mts`
 - Modules with a `require.main === module` guard: see
   `packages/third-party-notices/test/index.test.ts`
 - Code that reads or writes files: use `@rnx-kit/tools-filesystem/mocks`
   (see `packages/tools-filesystem/src/mockfs/index.ts` and
-  `packages/cli/test/bundle/metro.test.ts` for usage)
+  `packages/cli/test/bundle/metro.test.ts` for usage) or checked-in fixtures
+  instead of temporary directories. Don't change production APIs solely to
+  enable mocking
 - Fixtures that need a `node_modules` folder: see the `__fixtures__` exception
   in the root `.gitignore`
+- Inspect and reuse existing fixtures and helpers before creating new ones; add
+  only missing scenarios, and don't remove or weaken existing assertions
 - Do not override globals or system values in tests (e.g. `process.platform`)
   unless absolutely necessary, such as setting `global.require` for sources
   loaded as ESM (see `packages/tools-react-native/test/metro.test.mts` for how
@@ -147,7 +155,10 @@ test apps.
 - **`@rnx-kit/metro-*`** - Metro bundler plugins (TypeScript, config,
   tree-shaking, duplicate detection, cyclic deps)
 - **`@rnx-kit/tools-*`** - Platform-specific utilities (android, apple, node,
-  react-native, filesystem, shell, workspaces, etc.)
+  react-native, filesystem, shell, workspaces, etc.). Note that
+  `@rnx-kit/tools-workspaces` always searches from `process.cwd()` and caches
+  the workspace root it finds (except under `NODE_TEST_CONTEXT`), so it can't
+  inspect other directories
 - **`@rnx-kit/config`** - Configuration loading from `package.json` `rnx-kit`
   field
 - **`@rnx-kit/eslint-plugin`** - Custom lint rules (see
@@ -167,6 +178,17 @@ root:
 ```sh
 yarn rnx-align-deps --write  # Fix misaligned dependencies
 ```
+
+- New npm dependencies must use a version published at least 7 days ago
+  (`npmMinimalAgeGate` in `.yarnrc.yml`)
+- `nx` is listed under `dynamicPackageOverrides` in `.yarnrc.yml`, so its pinned
+  dependencies can be bumped in `yarn.lock` with `yarn up -R <pkg>`
+
+## Security Audits
+
+Run `yarn npm audit --all --recursive` in both the repository root and
+`docsite/` (it has its own `yarn.lock`). Fix vulnerable packages within their
+existing ranges with `yarn up -R <pkg>`.
 
 ## Quality Checks
 
@@ -209,3 +231,6 @@ constraints, align-deps, and readme issues.
   `rnx-kit-scripts format` and `lint` commands (`scripts/src/commands/`) decide
   which tools and configs are used
 - The formatter also sorts imports and `package.json` fields
+- Prefer consuming existing helpers over redesigning shared internals. Ask
+  before adding new shared abstractions; optimize for total complexity, not
+  individual file length
