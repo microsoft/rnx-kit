@@ -11,7 +11,10 @@ import {
   getSavedState,
   saveConfigToCache,
 } from "@rnx-kit/tools-react-native/cache";
-import { resolveCommunityCLI } from "@rnx-kit/tools-react-native/context";
+import {
+  makeLoadConfigOptions,
+  resolveCommunityCLI,
+} from "@rnx-kit/tools-react-native/context";
 import { reactNativeConfig } from "../index.ts";
 import { RNX_FAST_PATH, RNX_PREFIX } from "./constants.ts";
 
@@ -70,12 +73,12 @@ async function loadContextWithCLI(root: string) {
   const rncli = resolveCommunityCLI(root);
   const { loadConfig, loadConfigAsync } = require(rncli);
 
+  const options = makeLoadConfigOptions(loadConfig, root, rncli);
   if (!loadConfigAsync) {
-    const options = loadConfig.length === 1 ? { projectRoot: root } : root;
     return loadConfig(options);
   }
 
-  return await loadConfigAsync({ projectRoot: root });
+  return await loadConfigAsync(options);
 }
 
 export async function loadContextForCommand(
