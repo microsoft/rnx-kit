@@ -74,17 +74,22 @@ import { describe, it } from "node:test";
 
 ### Test Patterns
 
-- Coverage, or passing arguments to `yarn test`: see how the default test glob
-  is applied in `scripts/src/commands/test.js`
+- Passing any argument to `yarn test` disables the default test glob (see
+  `scripts/src/commands/test.js`), so include it explicitly, e.g.
+  `yarn test --coverage 'test/**/*.test.ts'` for coverage
 - Source files that use bare `require`: see
   `packages/tools-react-native/test/metro.test.mts`
 - Modules with a `require.main === module` guard: see
   `packages/third-party-notices/test/index.test.ts`
 - Code that reads or writes files: use `@rnx-kit/tools-filesystem/mocks`
   (see `packages/tools-filesystem/src/mockfs/index.ts` and
-  `packages/cli/test/bundle/metro.test.ts` for usage)
+  `packages/cli/test/bundle/metro.test.ts` for usage) or checked-in fixtures
+  instead of temporary directories. Don't change production APIs solely to
+  enable mocking
 - Fixtures that need a `node_modules` folder: see the `__fixtures__` exception
   in the root `.gitignore`
+- Inspect and reuse existing fixtures and helpers before creating new ones; add
+  only missing scenarios, and don't remove or weaken existing assertions
 - Do not override globals or system values in tests (e.g. `process.platform`)
   unless absolutely necessary, such as setting `global.require` for sources
   loaded as ESM (see `packages/tools-react-native/test/metro.test.mts` for how
@@ -209,3 +214,6 @@ constraints, align-deps, and readme issues.
   `rnx-kit-scripts format` and `lint` commands (`scripts/src/commands/`) decide
   which tools and configs are used
 - The formatter also sorts imports and `package.json` fields
+- Prefer consuming existing helpers over redesigning shared internals. Ask
+  before adding new shared abstractions; optimize for total complexity, not
+  individual file length
