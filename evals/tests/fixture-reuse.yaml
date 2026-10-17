@@ -1,0 +1,24 @@
+- description: "Reuses existing fixtures and adds only missing scenarios"
+  metadata: { id: fixture-reuse, source: user memory, memory: fixture reuse }
+  vars:
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
+    task: >-
+      Add tests for `getWorkspacesInfo` in `@rnx-kit/tools-workspaces` that
+      cover npm and Yarn workspaces.
+  assert:
+    - type: javascript
+      value: file://src/index.ts:matchesFiles
+      config:
+        required: ['(^|/)test/(.+/)?[^/]+\.test\.[cm]?ts$']
+    - type: javascript
+      value: file://src/index.ts:matchesFiles
+      config:
+        status: [modified, deleted, renamed]
+        forbidden: ['(^|/)__fixtures__/']
+    - type: llm-rubric
+      transform: file://src/transforms.ts:forGrader
+      value: >-
+        The agent inspects the existing tests and fixtures first, reuses the
+        existing fixtures and helpers, and adds only the scenarios that are not
+        already covered. Compatible cases may be consolidated, but no existing
+        assertion is removed or weakened.
