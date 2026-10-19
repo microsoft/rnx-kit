@@ -34,15 +34,15 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@rnx-kit/types-metro-serializer-esbuild": "^1.0.0",
-    "@rnx-kit/types-plugin-cyclic-dependencies": "^1.0.0",
-    "@rnx-kit/types-plugin-duplicates-checker": "^1.0.0",
-    "@rnx-kit/types-plugin-typescript": "^1.0.0"
+    "@rnx-kit/types-metro-serializer-esbuild": "workspace:^",
+    "@rnx-kit/types-plugin-cyclic-dependencies": "workspace:^",
+    "@rnx-kit/types-plugin-duplicates-checker": "workspace:^",
+    "@rnx-kit/types-plugin-typescript": "workspace:^"
   },
   "devDependencies": {
-    "@rnx-kit/oxlint-config": "*",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/oxlint-config": "workspace:*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "metro": "^0.84.0"
   },
   "peerDependencies": {

@@ -26,11 +26,11 @@
   "dependencies": {
     "@babel/core": "^7.0.0",
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@rnx-kit/tools-node": "^3.0.0"
+    "@rnx-kit/tools-node": "workspace:^"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/babel__core": "^7.0.0",
     "@types/babel__helper-plugin-utils": "^7.0.0",
     "@types/node": "^24.0.0"

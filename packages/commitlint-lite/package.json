@@ -33,8 +33,8 @@
     "test": "rnx-kit-scripts test"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "^24.0.0"
   },
   "engines": {

@@ -34,15 +34,15 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^3.0.0",
-    "@rnx-kit/tools-node": "^3.0.3",
-    "@rnx-kit/tools-react-native": "^2.3.5"
+    "@rnx-kit/console": "workspace:^",
+    "@rnx-kit/tools-node": "workspace:^",
+    "@rnx-kit/tools-react-native": "workspace:^"
   },
   "devDependencies": {
     "@react-native-community/cli-types": "^20.1.0",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tools-filesystem": "^0.2.0",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tools-filesystem": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "^24.0.0",
     "metro": "^0.84.0",
     "metro-config": "^0.84.0",

@@ -76,15 +76,15 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "dependencies": {
-    "@rnx-kit/tools-filesystem": "^0.2.0",
-    "@rnx-kit/tools-node": "^3.0.5",
-    "@rnx-kit/types-bundle-config": "^1.0.1"
+    "@rnx-kit/tools-filesystem": "workspace:^",
+    "@rnx-kit/tools-node": "workspace:^",
+    "@rnx-kit/types-bundle-config": "workspace:^"
   },
   "devDependencies": {
     "@react-native-community/cli": "^20.1.0",
     "@react-native-community/cli-types": "^20.1.0",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "^24.0.0",
     "memfs": "^4.56.10",
     "metro": "^0.84.0",

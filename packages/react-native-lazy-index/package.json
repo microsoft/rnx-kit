@@ -43,8 +43,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "^24.0.0"
   },
   "peerDependencies": {
