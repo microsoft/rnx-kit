@@ -15,6 +15,11 @@ import {
   saveConfigToCache,
 } from "./cache.ts";
 
+type LoadConfigOptions = {
+  projectRoot: string;
+  platforms: Record<string, unknown>;
+};
+
 // As of 0.76, `@react-native-community/cli` is no longer a dependency of
 // `react-native`. Consumers have to take a direct dependency on CLI instead.
 const RN_CLI_DECOUPLED = 76;
@@ -61,10 +66,37 @@ function getConfigOrState<T = Config>(
   return state;
 }
 
-function makeLoadConfigOptions(fn: typeof loadConfig, projectRoot: string) {
-  return fn.length === 1
-    ? { projectRoot }
-    : (projectRoot as unknown as { projectRoot: string });
+export function makeLoadConfigOptions(
+  fn: typeof loadConfig,
+  projectRoot: string,
+  rncli?: string
+) {
+  if (fn.length !== 1) {
+    return projectRoot as unknown as { projectRoot: string };
+  }
+
+  // As of 0.89, we have to manually include Android and iOS
+  const opts: LoadConfigOptions = { projectRoot, platforms: {} };
+
+  const paths = { paths: rncli ? [rncli, projectRoot] : [projectRoot] };
+  const platforms = [
+    ["android", "@react-native-community/cli-platform-android"],
+    ["ios", "@react-native-community/cli-platform-ios"],
+  ];
+
+  for (const [platform, pkg] of platforms) {
+    try {
+      const p = require(require.resolve(pkg, paths));
+      opts.platforms[platform] = {
+        projectConfig: p.projectConfig,
+        dependencyConfig: p.dependencyConfig,
+      };
+    } catch (_) {
+      // Ignore
+    }
+  }
+
+  return opts;
 }
 
 /**
@@ -94,7 +126,7 @@ export function loadContext(projectRoot = process.cwd()): Config {
   const rncli = resolveCommunityCLI(projectRoot);
   const { loadConfig } = require(rncli);
 
-  const options = makeLoadConfigOptions(loadConfig, projectRoot);
+  const options = makeLoadConfigOptions(loadConfig, projectRoot, rncli);
   const config = loadConfig(options);
   saveConfigToCache(projectRoot, state, config);
   return config;
@@ -117,7 +149,7 @@ export async function loadContextAsync(
   const rncli = resolveCommunityCLI(projectRoot);
   const { loadConfig, loadConfigAsync } = require(rncli);
 
-  const options = makeLoadConfigOptions(loadConfig, projectRoot);
+  const options = makeLoadConfigOptions(loadConfig, projectRoot, rncli);
 
   if (!loadConfigAsync) {
     const config = loadConfig(options);
