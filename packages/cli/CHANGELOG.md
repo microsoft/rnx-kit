@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/cli
 
+## 2.0.7
+
+### Patch Changes
+
+- afc8028: As of 0.89, we need to manually include Android/iOS configs
+- Updated dependencies [ceb56eb]
+- Updated dependencies [afc8028]
+  - @rnx-kit/third-party-notices@3.0.4
+  - @rnx-kit/tools-react-native@2.3.10
+
 ## 2.0.6
 
 ### Patch Changes

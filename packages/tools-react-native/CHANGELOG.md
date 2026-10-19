@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.3.10
+
+### Patch Changes
+
+- afc8028: As of 0.89, we need to manually include Android/iOS configs
+
 ## 2.3.9
 
 ### Patch Changes
