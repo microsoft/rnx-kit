@@ -152,4 +152,9 @@ export const profile: Profile = {
     version: "^5.4.8",
     devOnly: true,
   },
+
+  "safe-area": {
+    name: "react-native-safe-area-context",
+    version: "^5.10.1",
+  },
 };
