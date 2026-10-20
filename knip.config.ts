@@ -41,6 +41,7 @@ export default {
     },
     evals: {
       entry: [
+        "src/harness/grader.ts",
         "src/harness/hooks.ts",
         "src/harness/provider.ts",
         "src/index.ts",

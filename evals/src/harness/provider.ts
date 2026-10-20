@@ -55,7 +55,7 @@ type CallApiOptions = {
   abortSignal?: AbortSignal;
 };
 
-function getToken(): string {
+export function getToken(): string {
   const token =
     process.env["COPILOT_GITHUB_TOKEN"] ||
     process.env["GH_TOKEN"] ||
