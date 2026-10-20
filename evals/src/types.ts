@@ -155,6 +155,8 @@ export type TypeSpecifierMatcher = {
 export type ChangesetMatcher = {
   /** Exact number of added change files */
   count: number;
+  /** Whether `count` is the minimum number of change files */
+  atLeast?: boolean;
   /** Packages that must be released by the added change files */
   packages?: string[];
   /** Packages that must not be released by the added change files */

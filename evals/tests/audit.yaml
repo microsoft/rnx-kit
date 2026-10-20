@@ -2,7 +2,7 @@
 # in `promptfooconfig.yaml`). Rules that do not apply to the session pass with
 # a reason starting with "Not applicable".
 
-- description: "Adds one change file for published packages, and none otherwise"
+- description: "Adds change files for published packages, and none otherwise"
   metadata: { id: changesets, source: AGENTS.md }
   assert:
     - type: javascript

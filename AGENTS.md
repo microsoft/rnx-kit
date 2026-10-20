@@ -210,9 +210,10 @@ constraints, align-deps, and readme issues.
 ## Code Style
 
 - Run `yarn format` and `yarn lint` before committing (CI enforces both)
-- Don't format or lint by hand or call the underlying tools directly — the
-  `rnx-kit-scripts format` and `lint` commands (`scripts/src/commands/`) decide
-  which tools and configs are used
+- Don't format, lint or build by hand or call the underlying tools (e.g.
+  `oxfmt`, `oxlint`, `tsc`) directly — the `rnx-kit-scripts format`, `lint` and
+  `build` commands (`scripts/src/commands/`) decide which tools and configs are
+  used
 - The formatter also sorts imports and `package.json` fields
 - Prefer consuming existing helpers over redesigning shared internals. Ask
   before adding new shared abstractions; optimize for total complexity, not

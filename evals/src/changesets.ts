@@ -9,7 +9,8 @@ import type {
 } from "./types.ts";
 
 /**
- * Passes if the agent added the configured number of change files, releasing
+ * Passes if the agent added the configured number of change files, or at
+ * least that many if `atLeast` is set, releasing
  * the configured packages and none of the forbidden ones.
  */
 export function changesets(
@@ -17,7 +18,7 @@ export function changesets(
   context: AssertionContext<ChangesetMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
-  const { count, packages, forbidden } = requireConfig(context);
+  const { count, atLeast, packages, forbidden } = requireConfig(context);
   const added = run.files.filter((file) => {
     if (file.status !== "added" || !file.path.endsWith(".md")) {
       return false;
@@ -29,9 +30,9 @@ export function changesets(
   });
 
   const failures: string[] = [];
-  if (added.length !== count) {
+  if (atLeast ? added.length < count : added.length !== count) {
     failures.push(
-      `Expected ${count} change file(s), found ${added.length}: ${added.map((f) => f.path).join(", ")}`
+      `Expected ${atLeast ? "at least " : ""}${count} change file(s), found ${added.length}: ${added.map((f) => f.path).join(", ")}`
     );
   }
 
