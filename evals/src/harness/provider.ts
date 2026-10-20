@@ -241,7 +241,7 @@ async function runAgent(
 
     await session.disconnect();
 
-    const { files, diff } = await collectChanges(run.workdir, vars.ref);
+    const { files, diff } = await collectChanges(run.workdir, run.commit);
     const recorded = readJSONLines<RecordedCommand>(env[COMMANDS_LOG_VAR]);
     const commands = mergeCommands(run.workdir, recorded, shellInputs, SHIMMED);
 
@@ -283,7 +283,9 @@ export default class CopilotAgentProvider {
     _prompt: string,
     context?: CallApiContext,
     options?: CallApiOptions
-  ): Promise<{ output: AgentRun } | { error: string }> {
+  ): Promise<
+    { output: AgentRun; metadata: { commit: string } } | { error: string }
+  > {
     const vars = context?.vars as EvalVars | undefined;
     if (!vars?.task || !vars.ref) {
       return { error: "Missing required vars: task, ref" };
@@ -298,7 +300,7 @@ export default class CopilotAgentProvider {
         this.model,
         options?.abortSignal
       );
-      return { output };
+      return { output, metadata: { commit: run.commit } };
     } catch (e) {
       if (run) {
         removeRun(run.dir);

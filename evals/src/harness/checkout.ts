@@ -31,6 +31,8 @@ export type Run = {
   dir: string;
   /** The agent's checkout */
   workdir: string;
+  /** The commit that `ref` resolved to */
+  commit: string;
 };
 
 const templates = new Map<string, Promise<string[]>>();
@@ -68,15 +70,31 @@ function exec(command: string, args: string[], cwd: string, log: string) {
   });
 }
 
-async function clone(ref: string, dest: string): Promise<void> {
-  const root = repositoryRoot();
+/**
+ * Resolves `ref` (a commit, branch or tag) to a commit hash, so that a moving
+ * ref such as `main` cannot change between checkout and diff.
+ */
+async function resolveCommit(ref: string): Promise<string> {
   try {
-    await git(root, ["cat-file", "-e", `${ref}^{commit}`]);
+    if (ref.startsWith("-")) {
+      throw new Error();
+    }
+    const root = repositoryRoot();
+    const commit = await git(root, [
+      "rev-parse",
+      "--verify",
+      `${ref}^{commit}`,
+    ]);
+    return commit.trim();
   } catch (_) {
     throw new Error(
       `Commit ${ref} is not available; fetch it first, e.g. 'git fetch --depth=1 origin ${ref}'`
     );
   }
+}
+
+async function clone(commit: string, dest: string): Promise<void> {
+  const root = repositoryRoot();
 
   // Unlike `git worktree`, a separate repository does not share config, refs
   // or hooks with the main checkout. Objects are borrowed through alternates,
@@ -94,22 +112,22 @@ async function clone(ref: string, dest: string): Promise<void> {
   if (fs.existsSync(shallow)) {
     fs.copyFileSync(shallow, path.join(dest, ".git", "shallow"));
   }
-  await git(dest, ["checkout", "--quiet", "--detach", ref]);
+  await git(dest, ["checkout", "--quiet", "--detach", commit]);
   await git(dest, ["remote", "add", "origin", UPSTREAM_URL]);
   await git(dest, ["remote", "set-url", "--push", "origin", "PUSH_DISABLED"]);
 }
 
 /**
- * Installs dependencies for `ref` once and returns the paths of everything
+ * Installs dependencies for `commit` once and returns the paths of everything
  * `yarn install` generated, relative to the template's root.
  */
-function prepareTemplate(ref: string): Promise<string[]> {
-  const pending = templates.get(ref);
+function prepareTemplate(commit: string): Promise<string[]> {
+  const pending = templates.get(commit);
   if (pending) {
     return pending;
   }
 
-  const template = path.join(HARNESS_ROOT, "templates", ref);
+  const template = path.join(HARNESS_ROOT, "templates", commit);
   const marker = path.join(template, READY_MARKER);
   const result = (async () => {
     if (fs.existsSync(marker)) {
@@ -118,7 +136,7 @@ function prepareTemplate(ref: string): Promise<string[]> {
 
     fs.rmSync(template, { recursive: true, force: true });
     fs.mkdirSync(path.dirname(template), { recursive: true });
-    await clone(ref, template);
+    await clone(commit, template);
     await exec("yarn", ["install"], template, `${template}.log`);
 
     // Ignored `node_modules` only; fixtures may check in `node_modules`
@@ -141,8 +159,8 @@ function prepareTemplate(ref: string): Promise<string[]> {
     return artifacts;
   })();
 
-  templates.set(ref, result);
-  result.catch(() => templates.delete(ref));
+  templates.set(commit, result);
+  result.catch(() => templates.delete(commit));
   return result;
 }
 
@@ -150,8 +168,9 @@ function prepareTemplate(ref: string): Promise<string[]> {
  * Creates an isolated checkout of `ref` with dependencies installed.
  */
 export async function createRun(ref: string): Promise<Run> {
-  const artifacts = await prepareTemplate(ref);
-  const template = path.join(HARNESS_ROOT, "templates", ref);
+  const commit = await resolveCommit(ref);
+  const artifacts = await prepareTemplate(commit);
+  const template = path.join(HARNESS_ROOT, "templates", commit);
 
   fs.mkdirSync(RUNS_ROOT, { recursive: true });
   // Resolve symlinks (e.g. `/var` -> `/private/var` on macOS) so that paths
@@ -159,7 +178,7 @@ export async function createRun(ref: string): Promise<Run> {
   const dir = fs.realpathSync(fs.mkdtempSync(path.join(RUNS_ROOT, "run-")));
   const workdir = path.join(dir, "repo");
   try {
-    await clone(ref, workdir);
+    await clone(commit, workdir);
     await Promise.all(
       artifacts.map((p) => {
         const dest = path.join(workdir, p);
@@ -173,7 +192,7 @@ export async function createRun(ref: string): Promise<Run> {
     throw e;
   }
 
-  return { dir, workdir };
+  return { dir, workdir, commit };
 }
 
 /**
@@ -203,23 +222,23 @@ const STATUS: Record<string, AgentChangedFile["status"]> = {
 };
 
 /**
- * Returns the files changed relative to `ref`, including untracked files, and
- * the unified diff.
+ * Returns the files changed relative to `commit`, including untracked files,
+ * and the unified diff.
  */
 export async function collectChanges(
   workdir: string,
-  ref: string
+  commit: string
 ): Promise<{ files: AgentChangedFile[]; diff: string }> {
   // Include untracked files in the diff
   await git(workdir, ["add", "--intent-to-add", "--all"]);
 
   const diffArgs = ["-c", "core.quotePath=false", "diff", "--find-renames"];
-  const diff = await git(workdir, [...diffArgs, ref]);
+  const diff = await git(workdir, [...diffArgs, commit]);
   const nameStatus = await git(workdir, [
     ...diffArgs,
     "--name-status",
     "-z",
-    ref,
+    commit,
   ]);
 
   const files: AgentChangedFile[] = [];
