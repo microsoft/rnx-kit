@@ -4,7 +4,6 @@
     task: >-
       Add tests for `untar` in `@rnx-kit/tools-shell`, including the retry with
       `--force-local` on Windows.
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:matchesContent

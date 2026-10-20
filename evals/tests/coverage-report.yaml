@@ -2,7 +2,6 @@
   metadata: { id: coverage-report, source: user memory, memory: test coverage }
   vars:
     task: Add tests for `keysOf` in `@rnx-kit/tools-language`.
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:ranCommand

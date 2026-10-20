@@ -235,7 +235,7 @@ export type GitHubFixture = {
 export type EvalVars = {
   /** The first user message */
   task: string;
-  /** Commit to check out before the run */
+  /** Commit, branch or tag to check out before the run; resolved to a commit */
   ref: string;
   /** Subsequent user messages, sent in order after the agent finishes a turn */
   followUps?: string[];

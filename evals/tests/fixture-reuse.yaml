@@ -4,7 +4,6 @@
     task: >-
       Add tests for `getWorkspacesInfo` in `@rnx-kit/tools-workspaces` that
       cover npm and Yarn workspaces.
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:matchesFiles
