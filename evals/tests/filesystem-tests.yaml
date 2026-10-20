@@ -1,5 +1,5 @@
 - description: "Uses fixtures or the existing memfs mocks instead of temporary directories"
-  metadata: { id: filesystem-tests, source: user memory, memory: filesystem tests }
+  metadata: { id: filesystem-tests, source: AGENTS.md }
   vars:
     task: Add tests for `findOutputFile` in `@rnx-kit/tools-android`.
     ref: 840c033e79d6d5952587699100222ccfeaa92dc4
