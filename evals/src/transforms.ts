@@ -40,14 +40,20 @@ function summarizeLockfiles(diff: string): string {
  * Formats an agent run for `llm-rubric` graders.
  */
 export function forGrader(output: AgentRun | string): string {
-  const { commands, toolCalls, diff, finalMessage } = toAgentRun(output);
+  const { commands, toolCalls, diff, finalMessage, requests } =
+    toAgentRun(output);
   const commandList = commands.map(
     ({ argv, cwd }) => `[${cwd}] $ ${quote(argv)}`
   );
   const toolList = toolCalls.map(
     ({ name, arguments: args }) => `${name} ${JSON.stringify(args)}`
   );
+  const requestList = (requests ?? []).map(
+    ({ prompt, reply }, i) =>
+      `### Request ${i + 1}\n\n${prompt}\n\n### Reply ${i + 1}\n\n${reply || "(none)"}`
+  );
   return [
+    ...(requestList.length > 0 ? ["## Requests", ...requestList] : []),
     "## Commands",
     commandList.join("\n") || "(none)",
     "## Tool calls",

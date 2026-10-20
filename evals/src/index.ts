@@ -1,3 +1,9 @@
+export {
+  changesetsMatchChanges,
+  docsiteDependencies,
+  newPackagesScaffolded,
+  ranChecksForChanges,
+} from "./audit.ts";
 export { changesets } from "./changesets.ts";
 export {
   didNotRunCommand,

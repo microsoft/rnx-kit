@@ -1,8 +1,8 @@
 import { CopilotClient, RuntimeConnection } from "@github/copilot-sdk";
+import { execFileSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { HARNESS_ROOT } from "./checkout.ts";
-import { getToken } from "./provider.ts";
 
 /** Maximum duration of a single grading call */
 const GRADING_TIMEOUT_MS = 5 * 60 * 1000;
@@ -18,6 +18,24 @@ type ProviderOptions = {
 type CallApiOptions = {
   abortSignal?: AbortSignal;
 };
+
+function getToken(): string {
+  const token =
+    process.env["COPILOT_GITHUB_TOKEN"] ||
+    process.env["GH_TOKEN"] ||
+    process.env["GITHUB_TOKEN"];
+  if (token) {
+    return token;
+  }
+
+  try {
+    return execFileSync("gh", ["auth", "token"], { encoding: "utf8" }).trim();
+  } catch (_) {
+    throw new Error(
+      "A GitHub token with Copilot access is required; set COPILOT_GITHUB_TOKEN or log in with 'gh auth login'"
+    );
+  }
+}
 
 type ChatMessage = {
   role: string;

@@ -1,27 +1,22 @@
 # yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
-description: rnx-kit agent evals
+description: rnx-kit session audit
 prompts:
-  - "{{task}}"
+  - "{{session}}"
 providers:
-  # Requires a GitHub token with Copilot access in `COPILOT_GITHUB_TOKEN`,
-  # `GH_TOKEN` or `GITHUB_TOKEN`, or a `gh auth login` session. Uses the
-  # Copilot runtime's default model unless `config.model` is set.
+  # Replays a Copilot session from its event log in `$COPILOT_HOME` (default:
+  # `~/.copilot`) and compares the session's checkout with the commit the
+  # session started from. Looks up modified issues and pull requests with `gh`.
   - id: file://src/harness/provider.ts
-    label: copilot
-extensions:
-  - file://src/harness/hooks.ts:afterEach
-  - file://src/harness/hooks.ts:afterAll
-evaluateOptions:
-  maxConcurrency: 4
-  timeoutMs: 3600000
+    label: copilot-session
 defaultTest:
   vars:
-    # Commit, branch or tag to run the evals against; it must be available
-    # locally. Override it with e.g. `--var ref=main`. Keep it short: promptfoo
-    # lists it before `task` in the progress bar.
-    ref: e8dd0b95e629
+    # ID of the session to audit, e.g. `--var session=<id>`. If empty, audits
+    # the most recently updated session in this repository that is not in use.
+    session: ""
   options:
-    # Grades `llm-rubric` assertions with Copilot using the same credentials as
-    # the provider; pass `--grader` to use another provider instead.
+    # Grades `llm-rubric` assertions with Copilot; requires a GitHub token
+    # with Copilot access in `COPILOT_GITHUB_TOKEN`, `GH_TOKEN` or
+    # `GITHUB_TOKEN`, or a `gh auth login` session. Pass `--grader` to use
+    # another provider instead.
     provider: file://src/harness/grader.ts
 tests: file://tests/*.yaml

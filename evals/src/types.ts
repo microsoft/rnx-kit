@@ -1,20 +1,11 @@
 /**
  * A command executed by the agent.
  *
- * The harness must record commands as they are executed, not as they are
- * typed, so that compound commands (`cd a && yarn build`) and scripts are
- * captured with the correct working directory. It does this by putting shims
- * first in `PATH` for every executable that evals match on (`gh`, `git`,
- * `node`, `npx`, `tsc`, `yarn`, and formatters/linters). A shim records its
- * `argv` as received, i.e. after the shell has removed quotes, and its working
- * directory, then runs the real executable with an environment variable set
- * so that nested invocations (e.g. `node` spawned by `yarn`) are not recorded.
- *
- * Executables invoked by path (e.g. `/usr/bin/git push`) bypass the shims. To
- * cover these, the harness also parses the agent's shell tool input with
- * `parse()` from `shell-quote`, splits the result on control operators (`&&`,
- * `||`, `;`, `|`), and adds any command that the shims did not record. The
- * working directory of these commands is best-effort.
+ * The harness reconstructs commands from the session's shell tool input: it
+ * parses the input with `parse()` from `shell-quote` and splits the result on
+ * control operators (`&&`, `||`, `;`, `|`). Arguments are unquoted, but
+ * variables and substitutions are not expanded. The working directory is
+ * tracked through `cd` and is best-effort.
  *
  * The executable may include a path; assertions only match on its basename.
  */
@@ -45,7 +36,25 @@ export type AgentChangedFile = {
 };
 
 /**
- * Output of a single agent run, as returned by the harness to promptfoo.
+ * A user request and the agent's last reply to it.
+ */
+export type AgentRequest = {
+  prompt: string;
+  reply: string;
+};
+
+/**
+ * An issue or pull request that the agent modified, as looked up on GitHub.
+ */
+export type GitHubItem = {
+  number: number;
+  title: string;
+  /** Login of the author */
+  author: string;
+};
+
+/**
+ * Output of a single agent session, as returned by the harness to promptfoo.
  *
  * promptfoo: the value of `ProviderResponse.output`, which promptfoo types as
  * `any` and passes unchanged to `javascript` assertions.
@@ -62,20 +71,25 @@ export type AgentRun = {
   diff: string;
   /** The agent's final message to the user */
   finalMessage: string;
-  /** Absolute path to the agent's checkout, kept until assertions finish */
+  /** User requests in order, with the agent's last reply to each */
+  requests?: AgentRequest[];
+  /** Absolute path to the checkout the session worked in */
   workdir: string;
   /**
-   * State recorded by the GitHub mock; only set if the test has a fixture. The
-   * mock serves both the GitHub MCP tools and the `gh` CLI (via its shim), so
-   * writes through either are recorded.
+   * GitHub writes made by the agent through the GitHub MCP tools or the `gh`
+   * CLI. The write calls themselves are in `toolCalls` and `commands`.
    */
   github?: {
     /**
-     * Numbers of issues and pull requests that the agent created, edited,
-     * labelled, commented on, reviewed, closed or merged. GitHub numbers issues
-     * and pull requests from the same sequence, so numbers are unambiguous.
+     * Numbers of issues and pull requests that the agent edited, labelled,
+     * commented on, reviewed, closed or merged. GitHub numbers issues and pull
+     * requests from the same sequence, so numbers are unambiguous.
      */
     modified: number[];
+    /** Login of the user the agent acted on behalf of, if known */
+    viewer?: string;
+    /** The items in `modified`, if they could be looked up */
+    items?: GitHubItem[];
   };
 };
 
@@ -128,6 +142,16 @@ export type ContentMatcher = {
   forbidden?: string[];
   /** Only check lines added in the diff instead of the full content */
   addedLinesOnly?: boolean;
+  /** Pass instead of failing if no changed files match */
+  optional?: boolean;
+};
+
+/**
+ * Configuration for `usesPackageTestRunner`.
+ */
+export type TestRunnerMatcher = {
+  /** Pass instead of failing if no test files changed */
+  optional?: boolean;
 };
 
 /**
@@ -158,6 +182,8 @@ export type ChangesetMatcher = {
   count: number;
   /** Packages that must be released by the added change files */
   packages?: string[];
+  /** Packages that must not be released by the added change files */
+  forbidden?: string[];
 };
 
 /**
@@ -173,7 +199,11 @@ export type ToolCallMatcher = {
  */
 export type GitHubMatcher = {
   /** Issue and pull request numbers that must not be modified */
-  numbers: number[];
+  numbers?: number[];
+  /** Regular expression; items with a matching title must not be modified */
+  title?: string;
+  /** Only items authored by `github.viewer` may be modified */
+  ownOnly?: boolean;
 };
 
 /**
@@ -201,44 +231,15 @@ export type GradingResult = {
 };
 
 /**
- * Mocked GitHub state exposed to the agent through the harness. Read calls
- * return this data. Write calls are never sent to GitHub; the numbers they
- * touch are recorded in `AgentRun.github.modified`, and write tool calls also
- * appear in `AgentRun.toolCalls` (or `AgentRun.commands` for `gh`).
- */
-export type GitHubFixture = {
-  /** Login of the user the agent is acting on behalf of */
-  viewer: string;
-  issues?: {
-    number: number;
-    title: string;
-    author: string;
-    body: string;
-    labels?: string[];
-  }[];
-  pullRequests?: {
-    number: number;
-    title: string;
-    author: string;
-    body: string;
-    /** Unified diff of the pull request */
-    diff: string;
-  }[];
-};
-
-/**
- * Variables of each eval test case, consumed by the harness.
+ * Variables of each test case, consumed by the harness.
  *
  * promptfoo: the shape of `TestCase.vars` for this suite (promptfoo types it
  * as `Record<string, VarValue>`).
  */
 export type EvalVars = {
-  /** The first user message */
-  task: string;
-  /** Commit, branch or tag to check out before the run; resolved to a commit */
-  ref: string;
-  /** Subsequent user messages, sent in order after the agent finishes a turn */
-  followUps?: string[];
-  /** Mocked GitHub state; when omitted, GitHub tools are unavailable */
-  github?: GitHubFixture;
+  /**
+   * ID of the Copilot session to audit; defaults to the most recently updated
+   * session in this repository that is not in use
+   */
+  session?: string;
 };

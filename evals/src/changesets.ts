@@ -9,15 +9,15 @@ import type {
 } from "./types.ts";
 
 /**
- * Passes if the agent added the configured number of change files, mentioning
- * the configured packages.
+ * Passes if the agent added the configured number of change files, releasing
+ * the configured packages and none of the forbidden ones.
  */
 export function changesets(
   output: AgentRun | string,
   context: AssertionContext<ChangesetMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
-  const { count, packages } = requireConfig(context);
+  const { count, packages, forbidden } = requireConfig(context);
   const added = run.files.filter((file) => {
     if (file.status !== "added" || !file.path.endsWith(".md")) {
       return false;
@@ -49,6 +49,12 @@ export function changesets(
   for (const pkg of packages ?? []) {
     if (!released.has(pkg)) {
       failures.push(`No change file releases ${pkg}`);
+    }
+  }
+
+  for (const pkg of forbidden ?? []) {
+    if (released.has(pkg)) {
+      failures.push(`A change file releases ${pkg}`);
     }
   }
 

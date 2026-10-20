@@ -73,21 +73,23 @@ export function matchesFiles(
 
 /**
  * Passes if the content of the matching files satisfies the configured
- * patterns. Fails if no files match.
+ * patterns. Fails if no files match, unless `optional` is set.
  */
 export function matchesContent(
   output: AgentRun | string,
   context: AssertionContext<ContentMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
-  const { files, required, match, forbidden, addedLinesOnly } =
+  const { files, required, match, forbidden, addedLinesOnly, optional } =
     requireConfig(context);
   const pathPattern = new RegExp(files);
   const matching = existingFiles(run).filter((file) =>
     pathPattern.test(file.path)
   );
   if (matching.length === 0) {
-    return result([`No changed file matched /${files}/`], "");
+    return optional
+      ? result([], `Not applicable: no changed file matched /${files}/`)
+      : result([`No changed file matched /${files}/`], "");
   }
 
   const added = addedLinesOnly ? addedLines(run.diff) : undefined;
