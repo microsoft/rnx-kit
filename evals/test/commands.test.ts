@@ -202,6 +202,55 @@ describe("notModifiedOnGitHub()", () => {
     );
   });
 
+  it("fails for modified items that could not be looked up", () => {
+    const result = notModifiedOnGitHub(
+      makeRun({ github: { modified: [3, 4], items } }),
+      { config }
+    );
+    equal(result.pass, false);
+    equal(result.reason, "Modified #4, which could not be looked up");
+  });
+
+  describe("with `ownOnly`", () => {
+    const ownOnly = { ownOnly: true };
+    const mine = { number: 5, title: "Add feature", author: "tido64" };
+
+    it("passes if only items by the viewer were modified", () => {
+      const result = notModifiedOnGitHub(
+        makeRun({
+          github: { modified: [5], viewer: "tido64", items: [...items, mine] },
+        }),
+        { config: ownOnly }
+      );
+      equal(result.pass, true);
+      equal(result.reason, "Did not modify items by others");
+    });
+
+    it("fails for modified items by others", () => {
+      const result = notModifiedOnGitHub(
+        makeRun({
+          github: {
+            modified: [3, 5],
+            viewer: "tido64",
+            items: [...items, mine],
+          },
+        }),
+        { config: ownOnly }
+      );
+      equal(result.pass, false);
+      equal(result.reason, "Modified #3 by renovate, not by tido64");
+    });
+
+    it("fails if the viewer is unknown", () => {
+      const result = notModifiedOnGitHub(
+        makeRun({ github: { modified: [5], items: [mine] } }),
+        { config: ownOnly }
+      );
+      equal(result.pass, false);
+      equal(result.reason, "Modified #5 by tido64, not by (unknown user)");
+    });
+  });
+
   it("throws if `github.modified` is missing or invalid", () => {
     for (const github of [
       undefined,
