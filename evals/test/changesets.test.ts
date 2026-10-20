@@ -58,6 +58,15 @@ describe("changesets()", () => {
     );
   });
 
+  it("accepts more change files with `atLeast`", () => {
+    const files = [changeset("a", "x"), changeset("b", "y")];
+    equal(check(files, { count: 1, atLeast: true }).pass, true);
+
+    const result = check([], { count: 1, atLeast: true });
+    equal(result.pass, false);
+    equal(result.reason, "Expected at least 1 change file(s), found 0: ");
+  });
+
   it("only counts added change files", () => {
     const files: AgentChangedFile[] = [
       { ...changeset("a", "x"), status: "modified" },

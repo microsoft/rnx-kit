@@ -55,9 +55,12 @@ function combine(results: GradingResult[], notApplicable: string) {
 }
 
 /**
- * Passes if the agent added exactly one change file if it changed published
- * packages, releasing all of them, and none otherwise. No change file may
- * release a private package.
+ * Passes if the agent added change files releasing all published packages it
+ * changed, and none if it did not change any. No change file may release a
+ * private package.
+ *
+ * Note: Changes that do not affect the published package, e.g. to tests or
+ * docs, do not need a change file, but Changesets does not tell them apart.
  */
 export function changesetsMatchChanges(
   output: AgentRun | string
@@ -77,6 +80,7 @@ export function changesetsMatchChanges(
   return changesets(run, {
     config: {
       count: published.length > 0 ? 1 : 0,
+      atLeast: true,
       packages: published,
       forbidden: privatePackages,
     },

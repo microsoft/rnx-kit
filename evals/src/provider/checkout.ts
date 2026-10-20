@@ -81,7 +81,7 @@ export async function collectChanges(
 
     const files: AgentChangedFile[] = [];
     const tokens = nameStatus.split("\0");
-    for (let i = 0; i < tokens.length - 1; ) {
+    for (let i = 0; i < tokens.length - 1;) {
       const code = tokens[i][0];
       const isPair = code === "R" || code === "C";
       const file = tokens[i + (isPair ? 2 : 1)];

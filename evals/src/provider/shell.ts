@@ -17,15 +17,21 @@ const CONTROL_OPERATORS = new Set([
 
 /**
  * Replaces unquoted newlines with `;`, which `shell-quote` does not treat as
- * command separators.
+ * command separators. Also removes line continuations, and here-documents
+ * with their redirection operators, so that their content is not parsed as
+ * commands.
  */
 function separateLines(input: string): string {
   let result = "";
   let quote = "";
+  const heredocs: { word: string; stripTabs: boolean }[] = [];
   for (let i = 0; i < input.length; ++i) {
     const c = input[i];
     if (c === "\\" && quote !== "'") {
-      result += c + (input[++i] ?? "");
+      const next = input[++i] ?? "";
+      if (next !== "\n") {
+        result += c + next;
+      }
       continue;
     }
     if (quote) {
@@ -34,8 +40,35 @@ function separateLines(input: string): string {
       }
     } else if (c === "'" || c === '"') {
       quote = c;
+    } else if (input.startsWith("<<<", i)) {
+      result += "<<<";
+      i += 2;
+      continue;
+    } else if (input.startsWith("<<", i)) {
+      const match = input
+        .slice(i)
+        .match(/^<<(-?)[ \t]*(['"]?)([^\s'"<>|&;()]+)\2/);
+      if (match) {
+        heredocs.push({ word: match[3], stripTabs: match[1] === "-" });
+        i += match[0].length - 1;
+        continue;
+      }
     } else if (c === "\n") {
       result += ";";
+      let pos = i + 1;
+      for (const { word, stripTabs } of heredocs) {
+        while (pos < input.length) {
+          const end = input.indexOf("\n", pos);
+          const next = end < 0 ? input.length : end;
+          const line = input.slice(pos, next);
+          pos = next + 1;
+          if ((stripTabs ? line.replace(/^\t+/, "") : line) === word) {
+            break;
+          }
+        }
+      }
+      heredocs.length = 0;
+      i = pos - 1;
       continue;
     }
     result += c;
@@ -83,16 +116,17 @@ export function parseShellInput(input: string): string[][] {
 }
 
 /**
- * Returns the commands in the shell tool's inputs, in order. The working
- * directory starts at `workdir`, is tracked through `cd` and is best-effort.
+ * Returns the commands in the shell tool's inputs, in order. Each input runs
+ * in a new shell, so the working directory starts at `workdir` for each, is
+ * tracked through `cd` and is best-effort.
  */
 export function parseCommands(
   workdir: string,
   inputs: string[]
 ): AgentCommand[] {
   const commands: AgentCommand[] = [];
-  let cwd = workdir;
   for (const input of inputs) {
+    let cwd = workdir;
     for (const argv of parseShellInput(input)) {
       const [executable, ...args] = argv;
       if (executable === "cd") {

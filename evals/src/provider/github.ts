@@ -22,36 +22,63 @@ const MCP_NUMBER_ARGS = [
 const GH_VALUE_FLAGS = new Set([
   "-A",
   "-B",
+  "-F",
   "-H",
   "-L",
   "-R",
   "-S",
+  "-T",
   "-a",
   "-b",
+  "-c",
   "-l",
   "-m",
+  "-n",
+  "-p",
   "-q",
+  "-r",
   "-s",
   "-t",
+  "--add-assignee",
   "--add-label",
+  "--add-project",
+  "--add-reviewer",
   "--assignee",
   "--author",
+  "--author-email",
   "--base",
   "--body",
   "--body-file",
+  "--comment",
+  "--duplicate-of",
   "--head",
   "--jq",
   "--json",
   "--label",
   "--limit",
+  "--match-head-commit",
   "--milestone",
+  "--name",
+  "--project",
+  "--reason",
+  "--remove-assignee",
   "--remove-label",
+  "--remove-project",
+  "--remove-reviewer",
   "--repo",
+  "--reviewer",
   "--search",
   "--state",
+  "--subject",
   "--template",
   "--title",
 ]);
+
+/** Short flags that do not take a value in specific `gh` commands */
+const GH_BOOLEAN_FLAGS: Record<string, string[]> = {
+  "pr merge": ["-d", "-m", "-r", "-s"],
+  "pr review": ["-a", "-c", "-r"],
+};
 
 const GH_WRITES: Record<string, string[]> = {
   issue: [
@@ -83,7 +110,8 @@ const GH_WRITES: Record<string, string[]> = {
   ],
 };
 
-function parseGhArgs(args: string[]) {
+function parseGhArgs(command: string, args: string[]) {
+  const booleans = GH_BOOLEAN_FLAGS[command] ?? [];
   const flags = new Map<string, string | true>();
   const positionals: string[] = [];
   for (let i = 0; i < args.length; ++i) {
@@ -91,7 +119,7 @@ function parseGhArgs(args: string[]) {
     const eq = arg.indexOf("=");
     if (arg.startsWith("--") && eq > 0) {
       flags.set(arg.slice(0, eq), arg.slice(eq + 1));
-    } else if (GH_VALUE_FLAGS.has(arg)) {
+    } else if (GH_VALUE_FLAGS.has(arg) && !booleans.includes(arg)) {
       flags.set(arg, args[++i] ?? "");
     } else if (arg.startsWith("-")) {
       flags.set(arg, true);
@@ -160,9 +188,15 @@ function ghApiWrite(args: string[]): number | undefined {
     const arg = args[i];
     if (arg === "-X" || arg === "--method") {
       method = args[++i]?.toUpperCase();
+    } else if (arg.startsWith("--method=")) {
+      method = arg.slice("--method=".length).toUpperCase();
+    } else if (/^-X./.test(arg)) {
+      method = arg.slice(2).toUpperCase();
     } else if (/^-[fF]$|^--(raw-)?field$|^--input$/.test(arg)) {
       hasFields = true;
       ++i;
+    } else if (/^-[fF].|^--(raw-)?field=|^--input=/.test(arg)) {
+      hasFields = true;
     } else if (/^(-H|--header|-q|--jq|-t|--template|--hostname)$/.test(arg)) {
       ++i;
     } else if (!arg.startsWith("-")) {
@@ -196,7 +230,7 @@ function ghWrite({ argv }: AgentCommand): number | undefined {
     return undefined;
   }
 
-  const { flags, positionals } = parseGhArgs(rest);
+  const { flags, positionals } = parseGhArgs(`${command} ${subcommand}`, rest);
   const repo = flags.get("-R") ?? flags.get("--repo");
   return isThisRepository(repo) ? toNumber(positionals[0]) : undefined;
 }
