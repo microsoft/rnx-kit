@@ -27,6 +27,7 @@
     "@github/copilot-sdk": "^1.0.16",
     "@rnx-kit/eslint-plugin": "^0.9.8",
     "@rnx-kit/tools-filesystem": "^0.2.0",
+    "@rnx-kit/tools-shell": "^0.2.2",
     "oxc-parser": "^0.123.0",
     "oxlint": "catalog:",
     "parse-diff": "^0.11.0",

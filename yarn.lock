@@ -5447,6 +5447,7 @@ __metadata:
     "@rnx-kit/eslint-plugin": "npm:^0.9.8"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-filesystem": "npm:^0.2.0"
+    "@rnx-kit/tools-shell": "npm:^0.2.2"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
     oxc-parser: "npm:^0.123.0"

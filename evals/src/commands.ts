@@ -7,7 +7,6 @@ import type {
   CommandMatcher,
   GitHubMatcher,
   GradingResult,
-  ToolCallMatcher,
 } from "./types.ts";
 import { lazyWorkspacePackages } from "./workspace.ts";
 
@@ -62,24 +61,13 @@ function resolveCommand(
   return { command: ["yarn", ...args].join(" "), cwd: dir };
 }
 
-function commandMatches(
-  run: AgentRun,
-  { pattern, cwd, inPackage }: CommandMatcher
-) {
+function commandMatches(run: AgentRun, { pattern, cwd }: CommandMatcher) {
   const packages = lazyWorkspacePackages(run.workdir);
   const command = new RegExp(pattern);
   const dir = cwd ? new RegExp(cwd) : undefined;
-  let packageDirs: Set<string> | undefined;
-  const isPackageDir = (dir: string) =>
-    (packageDirs ??= new Set(packages().values())).has(dir);
   return run.commands
     .map((c) => resolveCommand(run.workdir, c, packages))
-    .filter(
-      (c) =>
-        command.test(c.command) &&
-        (!dir || dir.test(c.cwd)) &&
-        (!inPackage || isPackageDir(c.cwd))
-    );
+    .filter((c) => command.test(c.command) && (!dir || dir.test(c.cwd)));
 }
 
 /**
@@ -115,36 +103,17 @@ export function didNotRunCommand(
 }
 
 /**
- * Passes if the agent did not call any tool matching the configured name.
- */
-export function noToolCall(
-  output: AgentRun | string,
-  context: AssertionContext<ToolCallMatcher>
-): GradingResult {
-  const run = toAgentRun(output);
-  const config = requireConfig(context);
-  const name = new RegExp(config.name);
-  const calls = run.toolCalls.filter((call) => name.test(call.name));
-  return result(
-    calls.map(
-      (c) => `Unexpected tool call: ${c.name} ${JSON.stringify(c.arguments)}`
-    ),
-    `No tool call matched /${config.name}/`
-  );
-}
-
-/**
  * Passes if the agent did not modify the configured issues or pull requests:
- * those in `numbers`, those with a title matching `title`, and, if `ownOnly`
- * is set, those not authored by `github.viewer`. Fails if `title` or
- * `ownOnly` is set and modified items could not be looked up.
+ * those with a title matching `title`, and, if `ownOnly` is set, those not
+ * authored by `github.viewer`. Fails if modified items could not be looked
+ * up.
  */
 export function notModifiedOnGitHub(
   output: AgentRun | string,
   context: AssertionContext<GitHubMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
-  const { numbers = [], title, ownOnly } = requireConfig(context);
+  const { title, ownOnly } = requireConfig(context);
   if (
     !run.github ||
     !Array.isArray(run.github.modified) ||
@@ -154,29 +123,23 @@ export function notModifiedOnGitHub(
   }
 
   const { modified, viewer, items } = run.github;
-  const failures = numbers
-    .filter((number) => modified.includes(number))
-    .map((number) => `Modified #${number}`);
-
-  if (title || ownOnly) {
-    const found = new Map((items ?? []).map((item) => [item.number, item]));
-    const titlePattern = title ? new RegExp(title) : undefined;
-    for (const number of modified) {
-      const item = found.get(number);
-      if (!item) {
-        failures.push(`Modified #${number}, which could not be looked up`);
-      } else if (titlePattern?.test(item.title)) {
-        failures.push(`Modified #${number} (${item.title})`);
-      } else if (ownOnly && (!viewer || item.author !== viewer)) {
-        failures.push(
-          `Modified #${number} by ${item.author}, not by ${viewer ?? "(unknown user)"}`
-        );
-      }
+  const failures: string[] = [];
+  const found = new Map((items ?? []).map((item) => [item.number, item]));
+  const titlePattern = title ? new RegExp(title) : undefined;
+  for (const number of modified) {
+    const item = found.get(number);
+    if (!item) {
+      failures.push(`Modified #${number}, which could not be looked up`);
+    } else if (titlePattern?.test(item.title)) {
+      failures.push(`Modified #${number} (${item.title})`);
+    } else if (ownOnly && (!viewer || item.author !== viewer)) {
+      failures.push(
+        `Modified #${number} by ${item.author}, not by ${viewer ?? "(unknown user)"}`
+      );
     }
   }
 
   const checked = [
-    ...numbers.map((number) => `#${number}`),
     ...(title ? [`items titled /${title}/`] : []),
     ...(ownOnly ? ["items by others"] : []),
   ];

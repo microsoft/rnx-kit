@@ -3,7 +3,6 @@ import parseDiff from "parse-diff";
 import { changesets } from "./changesets.ts";
 import { ranCommand } from "./commands.ts";
 import { result, toAgentRun, tryReadJSON } from "./common.ts";
-import { matchesFiles } from "./files.ts";
 import type { AgentRun, GradingResult } from "./types.ts";
 import { owningPackageDir, workspacePackages } from "./workspace.ts";
 
@@ -160,5 +159,7 @@ export function docsiteDependencies(output: AgentRun | string): GradingResult {
       "Not applicable: no dependencies changed in docsite/package.json"
     );
   }
-  return matchesFiles(run, { config: { required: ["^docsite/yarn\\.lock$"] } });
+  return run.files.some((file) => file.path === "docsite/yarn.lock")
+    ? result([], "docsite/yarn.lock changed")
+    : result(["Changed dependencies without updating docsite/yarn.lock"], "");
 }

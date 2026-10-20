@@ -68,21 +68,17 @@ function stateDir(): string {
   return path.join(home, "session-state");
 }
 
+/**
+ * Returns the first line of `file`, or `""` if it is longer than 64 KB. The
+ * first event is `session.start`, which is far shorter.
+ */
 function readFirstLine(file: string): string {
   const fd = fs.openSync(file, "r");
   try {
-    const chunks: Buffer[] = [];
     const buffer = Buffer.alloc(64 * 1024);
-    let bytesRead = 0;
-    while ((bytesRead = fs.readSync(fd, buffer)) > 0) {
-      const chunk = buffer.subarray(0, bytesRead);
-      const end = chunk.indexOf("\n");
-      chunks.push(Buffer.from(end >= 0 ? chunk.subarray(0, end) : chunk));
-      if (end >= 0) {
-        break;
-      }
-    }
-    return Buffer.concat(chunks).toString("utf8");
+    const content = buffer.subarray(0, fs.readSync(fd, buffer));
+    const end = content.indexOf("\n");
+    return end >= 0 ? content.subarray(0, end).toString("utf8") : "";
   } finally {
     fs.closeSync(fd);
   }
@@ -152,7 +148,7 @@ function findLatestSession(root: string): string {
   const latest = candidates.sort((a, b) => b.time - a.time)[0];
   if (!latest) {
     throw new Error(
-      `No Copilot session for ${root} found in ${base}; pass one with '--var session=<id>'`
+      `No Copilot session for ${root} found in ${base}; pass one with '--var copilotSession=<id>'`
     );
   }
   return latest.id;

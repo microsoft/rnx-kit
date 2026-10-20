@@ -1,7 +1,7 @@
 /**
  * A command executed by the agent.
  *
- * The harness reconstructs commands from the session's shell tool input: it
+ * The provider reconstructs commands from the session's shell tool input: it
  * parses the input with `parse()` from `shell-quote` and splits the result on
  * control operators (`&&`, `||`, `;`, `|`). Arguments are unquoted, but
  * variables and substitutions are not expanded. The working directory is
@@ -54,7 +54,7 @@ export type GitHubItem = {
 };
 
 /**
- * Output of a single agent session, as returned by the harness to promptfoo.
+ * Output of a single agent session, as returned by the provider to promptfoo.
  *
  * promptfoo: the value of `ProviderResponse.output`, which promptfoo types as
  * `any` and passes unchanged to `javascript` assertions.
@@ -64,7 +64,7 @@ export type AgentRun = {
   toolCalls: AgentToolCall[];
   files: AgentChangedFile[];
   /**
-   * Unified diff of all changes, including untracked files. The harness must
+   * Unified diff of all changes, including untracked files. The provider must
    * generate it with `git -c core.quotePath=false diff <base>`, otherwise git
    * escapes non-ASCII paths, which `parse-diff` does not decode.
    */
@@ -105,24 +105,6 @@ export type CommandMatcher = {
   pattern: string;
   /** Regular expression the working directory must match */
   cwd?: string;
-  /** The command must run in the directory of a workspace package */
-  inPackage?: boolean;
-};
-
-/**
- * Configuration for `matchesFiles`.
- */
-export type FilesMatcher = {
-  /** Every matching file must also match at least one of these */
-  allowed?: string[];
-  /** No matching file may match any of these */
-  forbidden?: string[];
-  /** At least one matching file must match each of these */
-  required?: string[];
-  /** Only consider files with these statuses; defaults to all */
-  status?: AgentChangedFile["status"][];
-  /** Files of at most one workspace package may change */
-  singlePackage?: boolean;
 };
 
 /**
@@ -131,14 +113,7 @@ export type FilesMatcher = {
 export type ContentMatcher = {
   /** Regular expression matching the paths of the files to check */
   files: string;
-  /**
-   * Each of these must be matched by every matching file, or by at least one
-   * if `match` is `"any"`
-   */
-  required?: string[];
-  /** Whether `required` applies to every matching file (default) or any */
-  match?: "all" | "any";
-  /** No matching file may match any of these */
+  /** No matching file may contain a match for any of these */
   forbidden?: string[];
   /** Only check lines added in the diff instead of the full content */
   addedLinesOnly?: boolean;
@@ -187,19 +162,9 @@ export type ChangesetMatcher = {
 };
 
 /**
- * Configuration for `noToolCall`.
- */
-export type ToolCallMatcher = {
-  /** Regular expression matching tool names */
-  name: string;
-};
-
-/**
  * Configuration for `notModifiedOnGitHub`.
  */
 export type GitHubMatcher = {
-  /** Issue and pull request numbers that must not be modified */
-  numbers?: number[];
   /** Regular expression; items with a matching title must not be modified */
   title?: string;
   /** Only items authored by `github.viewer` may be modified */
@@ -231,7 +196,7 @@ export type GradingResult = {
 };
 
 /**
- * Variables of each test case, consumed by the harness.
+ * Variables of each test case, consumed by the provider.
  *
  * promptfoo: the shape of `TestCase.vars` for this suite (promptfoo types it
  * as `Record<string, VarValue>`).
