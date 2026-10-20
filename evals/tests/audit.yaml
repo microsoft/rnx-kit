@@ -1,4 +1,4 @@
-# One test per rule. Every test audits the same session (`vars.session`, set
+# One test per rule. Every test audits the same session (`vars.copilotSession`, set
 # in `promptfooconfig.yaml`). Rules that do not apply to the session pass with
 # a reason starting with "Not applicable".
 

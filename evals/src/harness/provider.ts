@@ -1,7 +1,7 @@
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { AgentRun, EvalVars } from "../types.ts";
-import { collectChanges, git } from "./checkout.ts";
+import { addWorktree, collectChanges, git } from "./checkout.ts";
 import { lookUp, modifiedNumbers } from "./github.ts";
 import { readSession } from "./session.ts";
 import { parseCommands } from "./shell.ts";
@@ -14,9 +14,14 @@ type CallApiContext = {
   vars: Record<string, unknown>;
 };
 
-type Metadata = { session: string; baseCommit: string };
+type Metadata = {
+  copilotSession: string;
+  branch: string;
+  baseCommit: string;
+  endCommit: string;
+};
 
-/** Sessions already replayed, keyed by the `session` var */
+/** Sessions already replayed, keyed by the `copilotSession` var */
 const runs = new Map<
   string,
   Promise<{ output: AgentRun; metadata: Metadata }>
@@ -24,6 +29,19 @@ const runs = new Map<
 
 function repositoryRoot(): string {
   return path.resolve(fileURLToPath(new URL("../../..", import.meta.url)));
+}
+
+async function resolveBranch(root: string, branch: string): Promise<string> {
+  for (const ref of [`refs/heads/${branch}`, `refs/remotes/origin/${branch}`]) {
+    try {
+      return (
+        await git(root, ["rev-parse", "--verify", "--quiet", `${ref}^{commit}`])
+      ).trim();
+    } catch (_) {
+      // Try the next ref
+    }
+  }
+  return "";
 }
 
 async function replay(
@@ -35,11 +53,9 @@ async function replay(
     throw new Error(`Session ${session.id} did not record its start commit`);
   }
 
-  const branch = (await git(root, ["branch", "--show-current"])).trim();
-  if (session.branch && branch !== session.branch) {
-    throw new Error(
-      `Session ${session.id} worked on '${session.branch}', but '${branch}' is checked out in ${root}`
-    );
+  const { branch } = session;
+  if (!branch) {
+    throw new Error(`Session ${session.id} did not record its branch`);
   }
 
   try {
@@ -50,6 +66,24 @@ async function replay(
     );
   }
 
+  // The event log does not record the files the session ended with, so they
+  // are taken from the session's branch: the working tree, including
+  // uncommitted changes, if the branch is checked out, otherwise its tip
+  // (local, or else on `origin`) in a temporary worktree.
+  let workdir = root;
+  let endCommit = "WORKING_TREE";
+  const current = (await git(root, ["branch", "--show-current"])).trim();
+  if (current !== branch) {
+    endCommit = await resolveBranch(root, branch);
+    if (!endCommit) {
+      throw new Error(
+        `Branch '${branch}' of session ${session.id} was not found locally or on 'origin'`
+      );
+    }
+    workdir = await addWorktree(root, endCommit);
+  }
+
+  // Paths in commands are relative to the session's checkout
   const commands = parseCommands(root, session.shellInputs);
   const toolCalls = session.toolCalls.map(({ name, arguments: args }) => ({
     name,
@@ -57,7 +91,7 @@ async function replay(
   }));
   const modified = modifiedNumbers(session.toolCalls, commands);
   const github = { modified, ...(await lookUp(modified)) };
-  const { files, diff } = await collectChanges(root, baseCommit);
+  const { files, diff } = await collectChanges(workdir, baseCommit);
   const requests = session.requests;
 
   return {
@@ -68,10 +102,10 @@ async function replay(
       diff,
       finalMessage: requests[requests.length - 1]?.reply ?? "",
       requests,
-      workdir: root,
+      workdir,
       github,
     },
-    metadata: { session: session.id, baseCommit },
+    metadata: { copilotSession: session.id, branch, baseCommit, endCommit },
   };
 }
 
@@ -97,11 +131,11 @@ export default class CopilotSessionProvider {
     _prompt: string,
     context?: CallApiContext
   ): Promise<{ output: AgentRun; metadata: Metadata } | { error: string }> {
-    const { session } = (context?.vars ?? {}) as EvalVars;
-    const key = session ?? "";
+    const { copilotSession } = (context?.vars ?? {}) as EvalVars;
+    const key = copilotSession ?? "";
     let pending = runs.get(key);
     if (!pending) {
-      pending = replay(session || undefined);
+      pending = replay(copilotSession || undefined);
       runs.set(key, pending);
     }
 

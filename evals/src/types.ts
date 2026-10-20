@@ -239,7 +239,8 @@ export type GradingResult = {
 export type EvalVars = {
   /**
    * ID of the Copilot session to audit; defaults to the most recently updated
-   * session in this repository that is not in use
+   * session in this repository that is not in use. Not named `session`
+   * because promptfoo redacts fields with that name.
    */
-  session?: string;
+  copilotSession?: string;
 };
