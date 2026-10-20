@@ -17,7 +17,7 @@
   "type": "module",
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "eval": "npx --yes promptfoo@0.123.1 eval",
+    "eval": "npx --yes promptfoo@0.124.1 eval",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
@@ -25,17 +25,17 @@
   "dependencies": {
     "@changesets/parse": "^1.0.0",
     "@github/copilot-sdk": "^1.0.16",
-    "@rnx-kit/eslint-plugin": "^0.9.8",
-    "@rnx-kit/tools-filesystem": "^0.2.0",
-    "@rnx-kit/tools-shell": "^0.2.2",
+    "@rnx-kit/eslint-plugin": "workspace:*",
+    "@rnx-kit/tools-filesystem": "workspace:*",
+    "@rnx-kit/tools-shell": "workspace:*",
     "oxc-parser": "^0.123.0",
     "oxlint": "catalog:",
     "parse-diff": "^0.11.0",
     "shell-quote": "^1.8.4"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "^24.0.0"
   },
   "engines": {
