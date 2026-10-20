@@ -21,6 +21,12 @@ describe("matchesContent()", () => {
     equal(result.reason, "No changed file matched /\\.md$/");
   });
 
+  it("passes as not applicable if no changed file matches with `optional`", () => {
+    const result = check({ files: "\\.md$", optional: true });
+    equal(result.pass, true);
+    equal(result.reason, "Not applicable: no changed file matched /\\.md$/");
+  });
+
   it("ignores deleted files", () => {
     const result = check({ files: "\\.ts$" }, [
       { path: "src/c.ts", status: "deleted" },
