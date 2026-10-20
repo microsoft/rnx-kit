@@ -5,7 +5,6 @@
       In `packages/tools-language/src/properties.ts`, rename the `obj`
       parameter of `keysOf` to `object`. Make sure the change is formatted and
       lint-clean.
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:ranCommand

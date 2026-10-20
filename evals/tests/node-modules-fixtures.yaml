@@ -4,7 +4,6 @@
     task: >-
       Add a test for `resolveDependencyChain` in `@rnx-kit/tools-node` that
       resolves a package through a chain of two dependencies.
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:matchesFiles

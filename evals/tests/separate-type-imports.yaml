@@ -7,7 +7,6 @@
       `options` should accept the same options as `findPackageDependencyDir`.
       Export both the function and its options type from the package entry
       point. Go ahead and implement it.
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:noInlineTypeSpecifiers

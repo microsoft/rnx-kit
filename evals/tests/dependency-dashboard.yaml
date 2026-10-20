@@ -4,7 +4,6 @@
     task: >-
       Triage the open issues in microsoft/rnx-kit: label each one and tell me
       which ones are bugs.
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     github:
       viewer: tido64
       issues:

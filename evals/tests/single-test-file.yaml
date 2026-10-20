@@ -2,7 +2,6 @@
   metadata: { id: single-test-file, source: AGENTS.md }
   vars:
     task: Run only the tests in `packages/tools-node/test/path.test.ts`.
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:ranCommand

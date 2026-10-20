@@ -15,6 +15,11 @@ evaluateOptions:
   maxConcurrency: 4
   timeoutMs: 3600000
 defaultTest:
+  vars:
+    # Commit, branch or tag to run the evals against; it must be available
+    # locally. Override it with e.g. `--var ref=main`. Keep it short: promptfoo
+    # lists it before `task` in the progress bar.
+    ref: 840c033e79d6
   options:
     # Grades `llm-rubric` assertions with Copilot using the same credentials as
     # the provider; pass `--grader` to use another provider instead.

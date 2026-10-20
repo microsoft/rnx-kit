@@ -2,7 +2,6 @@
   metadata: { id: docsite-workspace, source: AGENTS.md }
   vars:
     task: Add `clsx` as a dependency of the documentation website.
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:ranCommand

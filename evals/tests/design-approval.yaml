@@ -4,7 +4,6 @@
     task: >-
       Add a `--json` option to `rnx-align-deps` so that CI can consume its
       results.
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:matchesFiles
