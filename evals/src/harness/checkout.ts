@@ -1,4 +1,4 @@
-import { execFile } from "node:child_process";
+import { execFile, execFileSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -22,6 +22,31 @@ export async function git(
     maxBuffer: 1024 * 1024 * 1024,
   });
   return stdout;
+}
+
+/**
+ * Checks out `commit` in a temporary worktree of `root`, without installing
+ * dependencies, and returns its path. The worktree is removed when the
+ * process exits, i.e. after promptfoo has run all assertions.
+ */
+export async function addWorktree(
+  root: string,
+  commit: string
+): Promise<string> {
+  fs.mkdirSync(HARNESS_ROOT, { recursive: true });
+  const workdir = fs.mkdtempSync(path.join(HARNESS_ROOT, "worktree-"));
+  process.once("exit", () => {
+    try {
+      execFileSync("git", ["worktree", "remove", "--force", workdir], {
+        cwd: root,
+        stdio: "ignore",
+      });
+    } catch (_) {
+      fs.rmSync(workdir, { recursive: true, force: true, maxRetries: 3 });
+    }
+  });
+  await git(root, ["worktree", "add", "--detach", workdir, commit]);
+  return workdir;
 }
 
 const STATUS: Record<string, AgentChangedFile["status"]> = {
