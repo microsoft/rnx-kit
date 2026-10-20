@@ -14,6 +14,9 @@ extensions:
 evaluateOptions:
   maxConcurrency: 4
   timeoutMs: 3600000
-# The `llm-rubric` grader is promptfoo's default, chosen from the environment
-# (e.g. `OPENAI_API_KEY`); pass `--grader` to override it.
+defaultTest:
+  options:
+    # Grades `llm-rubric` assertions with Copilot using the same credentials as
+    # the provider; pass `--grader` to use another provider instead.
+    provider: file://src/harness/grader.ts
 tests: file://tests/*.yaml
