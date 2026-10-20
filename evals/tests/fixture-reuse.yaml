@@ -1,5 +1,5 @@
 - description: "Reuses existing fixtures and adds only missing scenarios"
-  metadata: { id: fixture-reuse, source: user memory, memory: fixture reuse }
+  metadata: { id: fixture-reuse, source: AGENTS.md }
   vars:
     task: >-
       Add tests for `getWorkspacesInfo` in `@rnx-kit/tools-workspaces` that

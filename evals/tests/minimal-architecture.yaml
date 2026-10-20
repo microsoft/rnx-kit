@@ -1,5 +1,5 @@
 - description: "Reuses existing helpers instead of adding or redesigning shared internals"
-  metadata: { id: minimal-architecture, source: user memory, memory: minimal architecture }
+  metadata: { id: minimal-architecture, source: AGENTS.md }
   vars:
     task: >-
       Add an exported `getReactNativeVersion` function to
