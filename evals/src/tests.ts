@@ -8,7 +8,12 @@ import {
   selectLines,
   toAgentRun,
 } from "./common.ts";
-import type { AgentRun, GradingResult } from "./types.ts";
+import type {
+  AgentRun,
+  AssertionContext,
+  GradingResult,
+  TestRunnerMatcher,
+} from "./types.ts";
 import { owningPackageDir, workspacePackages } from "./workspace.ts";
 
 const TEST_FILE = /\.test\.[cm]?[jt]sx?$/;
@@ -19,12 +24,13 @@ const NODE_API = /from ["']node:(assert\/strict|test)/;
  * Passes if every changed test file is written for the test runner of its
  * package: Jest if the package has a `jest` field in `package.json` or a
  * `jest.config.js`, otherwise the Node.js test runner. Fails if no test files
- * changed.
+ * changed, unless `optional` is set.
  *
  * Note: This mirrors `useJest()` in `scripts/src/commands/test.js`.
  */
 export function usesPackageTestRunner(
-  output: AgentRun | string
+  output: AgentRun | string,
+  context?: AssertionContext<TestRunnerMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
   const tests = existingFiles(run).filter((file) => {
@@ -34,7 +40,9 @@ export function usesPackageTestRunner(
     );
   });
   if (tests.length === 0) {
-    return result(["No test files changed"], "");
+    return context?.config?.optional
+      ? result([], "Not applicable: no test files changed")
+      : result(["No test files changed"], "");
   }
 
   const added = addedLines(run.diff);

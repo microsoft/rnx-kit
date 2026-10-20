@@ -2,14 +2,6 @@ import * as path from "node:path";
 import { parse } from "shell-quote";
 import { toRelativePath } from "../common.ts";
 import type { AgentCommand } from "../types.ts";
-import type { RecordedCommand } from "./shim.ts";
-
-/** Input to the agent's shell tool */
-export type ShellInput = {
-  command: string;
-  /** Milliseconds since epoch */
-  time: number;
-};
 
 const CONTROL_OPERATORS = new Set([
   "&&",
@@ -91,21 +83,17 @@ export function parseShellInput(input: string): string[][] {
 }
 
 /**
- * Merges commands recorded by the shims with commands parsed from the shell
- * tool's input that the shims could not have recorded, i.e. those that are
- * not shimmed or are invoked by path. The working directory of parsed
- * commands is tracked through `cd` and is best-effort.
+ * Returns the commands in the shell tool's inputs, in order. The working
+ * directory starts at `workdir`, is tracked through `cd` and is best-effort.
  */
-export function mergeCommands(
+export function parseCommands(
   workdir: string,
-  recorded: RecordedCommand[],
-  inputs: ShellInput[],
-  shimmed: string[]
+  inputs: string[]
 ): AgentCommand[] {
-  const parsed: RecordedCommand[] = [];
+  const commands: AgentCommand[] = [];
   let cwd = workdir;
-  for (const { command, time } of inputs) {
-    for (const argv of parseShellInput(command)) {
+  for (const input of inputs) {
+    for (const argv of parseShellInput(input)) {
       const [executable, ...args] = argv;
       if (executable === "cd") {
         const target = args[0];
@@ -114,13 +102,10 @@ export function mergeCommands(
         } else if (!/^[-~$]/.test(target)) {
           cwd = path.resolve(cwd, target);
         }
-      } else if (executable.includes("/") || !shimmed.includes(executable)) {
-        parsed.push({ argv, cwd, time });
+      } else {
+        commands.push({ argv, cwd: toRelativePath(workdir, cwd) });
       }
     }
   }
-
-  return [...recorded, ...parsed]
-    .sort((a, b) => a.time - b.time)
-    .map(({ argv, cwd }) => ({ argv, cwd: toRelativePath(workdir, cwd) }));
+  return commands;
 }

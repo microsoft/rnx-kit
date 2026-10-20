@@ -134,14 +134,17 @@ export function noToolCall(
 }
 
 /**
- * Passes if the agent did not modify the configured issues or pull requests.
+ * Passes if the agent did not modify the configured issues or pull requests:
+ * those in `numbers`, those with a title matching `title`, and, if `ownOnly`
+ * is set, those not authored by `github.viewer`. Fails if `title` or
+ * `ownOnly` is set and modified items could not be looked up.
  */
 export function notModifiedOnGitHub(
   output: AgentRun | string,
   context: AssertionContext<GitHubMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
-  const { numbers } = requireConfig(context);
+  const { numbers = [], title, ownOnly } = requireConfig(context);
   if (
     !run.github ||
     !Array.isArray(run.github.modified) ||
@@ -150,11 +153,32 @@ export function notModifiedOnGitHub(
     throw new Error("Invalid agent run; check: github.modified");
   }
 
-  const { modified } = run.github;
-  return result(
-    numbers
-      .filter((number) => modified.includes(number))
-      .map((number) => `Modified #${number}`),
-    `Did not modify ${numbers.map((number) => `#${number}`).join(", ")}`
-  );
+  const { modified, viewer, items } = run.github;
+  const failures = numbers
+    .filter((number) => modified.includes(number))
+    .map((number) => `Modified #${number}`);
+
+  if (title || ownOnly) {
+    const found = new Map((items ?? []).map((item) => [item.number, item]));
+    const titlePattern = title ? new RegExp(title) : undefined;
+    for (const number of modified) {
+      const item = found.get(number);
+      if (!item) {
+        failures.push(`Modified #${number}, which could not be looked up`);
+      } else if (titlePattern?.test(item.title)) {
+        failures.push(`Modified #${number} (${item.title})`);
+      } else if (ownOnly && (!viewer || item.author !== viewer)) {
+        failures.push(
+          `Modified #${number} by ${item.author}, not by ${viewer ?? "(unknown user)"}`
+        );
+      }
+    }
+  }
+
+  const checked = [
+    ...numbers.map((number) => `#${number}`),
+    ...(title ? [`items titled /${title}/`] : []),
+    ...(ownOnly ? ["items by others"] : []),
+  ];
+  return result(failures, `Did not modify ${checked.join(", ")}`);
 }
