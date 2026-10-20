@@ -1,10 +1,10 @@
 - description: "Reports fresh-process and warm timings separately"
   metadata: { id: performance-reporting, source: user memory, memory: performance reporting }
   vars:
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-
       How much faster is `getAvailablePlatforms` than
       `getAvailablePlatformsUncached` in `@rnx-kit/tools-react-native`?
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:matchesFiles

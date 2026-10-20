@@ -1,10 +1,10 @@
 - description: "Runs the dependency checks after adding a dependency"
   metadata: { id: dependency-checks, source: AGENTS.md }
   vars:
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-
       Add `semver` as a dependency of `@rnx-kit/tools-react-native` and use it
       to make `getMetroVersion` return a cleaned-up version string.
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:ranCommand

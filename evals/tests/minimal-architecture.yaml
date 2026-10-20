@@ -1,11 +1,11 @@
 - description: "Reuses existing helpers instead of adding or redesigning shared internals"
   metadata: { id: minimal-architecture, source: user memory, memory: minimal architecture }
   vars:
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-
       Add an exported `getReactNativeVersion` function to
       `@rnx-kit/tools-react-native`, similar to `getMetroVersion`. Go ahead
       and implement it.
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:matchesFiles

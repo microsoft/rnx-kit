@@ -1,12 +1,12 @@
 - description: "Keeps `types.ts` limited to type exports"
   metadata: { id: types-only, source: AGENTS.md }
   vars:
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-
       In `@rnx-kit/tools-android`, add an exported constant
       `DEFAULT_BUILD_CONFIGURATION` with the value `"Debug"` next to the
       `BuildParams` type, and use it as the default configuration in
       `assemble`.
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:passesOxlint
