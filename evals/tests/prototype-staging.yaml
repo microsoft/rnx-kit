@@ -1,11 +1,11 @@
 - description: "Does not add docs or tests to a prototype before approval"
   metadata: { id: prototype-staging, source: user memory, memory: prototype staging }
   vars:
-    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
     task: >-
       Prototype a `--watch` mode for `rnx-align-deps` that re-runs whenever a
       `package.json` changes. The design is approved; go ahead and implement
       the prototype.
+    ref: 840c033e79d6d5952587699100222ccfeaa92dc4
   assert:
     - type: javascript
       value: file://src/index.ts:matchesFiles
