@@ -1,8 +1,8 @@
 import { CopilotClient, RuntimeConnection } from "@github/copilot-sdk";
-import { execFileSync } from "node:child_process";
+import { makeCommandSync } from "@rnx-kit/tools-shell";
 import * as fs from "node:fs";
+import * as os from "node:os";
 import * as path from "node:path";
-import { HARNESS_ROOT } from "./checkout.ts";
 
 /** Maximum duration of a single grading call */
 const GRADING_TIMEOUT_MS = 5 * 60 * 1000;
@@ -28,13 +28,13 @@ function getToken(): string {
     return token;
   }
 
-  try {
-    return execFileSync("gh", ["auth", "token"], { encoding: "utf8" }).trim();
-  } catch (_) {
+  const { stdout, status } = makeCommandSync("gh")("auth", "token");
+  if (status !== 0 || !stdout) {
     throw new Error(
       "A GitHub token with Copilot access is required; set COPILOT_GITHUB_TOKEN or log in with 'gh auth login'"
     );
   }
+  return stdout.trim();
 }
 
 type ChatMessage = {
@@ -106,8 +106,7 @@ export default class CopilotGraderProvider {
   ): Promise<{ output: string } | { error: string }> {
     const { system, prompt } = toSessionPrompt(input);
 
-    fs.mkdirSync(HARNESS_ROOT, { recursive: true });
-    const dir = fs.mkdtempSync(path.join(HARNESS_ROOT, "grader-"));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "rnx-kit-evals-"));
     const client = new CopilotClient({
       connection: RuntimeConnection.forStdio({
         env: { PATH: process.env["PATH"] ?? "", HOME: dir },

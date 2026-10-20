@@ -1,27 +1,21 @@
-import { execFile, execFileSync } from "node:child_process";
+import { ensure, makeCommand } from "@rnx-kit/tools-shell";
+import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { promisify } from "node:util";
 import type { AgentChangedFile } from "../types.ts";
-
-const execFileAsync = promisify(execFile);
-
-/** Root of temporary files created by the harness */
-export const HARNESS_ROOT = path.join(os.tmpdir(), "rnx-kit-evals");
 
 export async function git(
   cwd: string,
   args: string[],
   env?: Record<string, string>
 ): Promise<string> {
-  const { stdout } = await execFileAsync("git", args, {
-    cwd,
-    encoding: "utf8",
-    env: env ? { ...process.env, ...env } : process.env,
-    maxBuffer: 1024 * 1024 * 1024,
-  });
-  return stdout;
+  const run = makeCommand("git", { cwd, env: { ...process.env, ...env } });
+  return ensure(await run(...args));
+}
+
+function makeTempDir(): string {
+  return fs.mkdtempSync(path.join(os.tmpdir(), "rnx-kit-evals-"));
 }
 
 /**
@@ -33,15 +27,10 @@ export async function addWorktree(
   root: string,
   commit: string
 ): Promise<string> {
-  fs.mkdirSync(HARNESS_ROOT, { recursive: true });
-  const workdir = fs.mkdtempSync(path.join(HARNESS_ROOT, "worktree-"));
+  const workdir = makeTempDir();
   process.once("exit", () => {
-    try {
-      execFileSync("git", ["worktree", "remove", "--force", workdir], {
-        cwd: root,
-        stdio: "ignore",
-      });
-    } catch (_) {
+    const args = ["worktree", "remove", "--force", workdir];
+    if (spawnSync("git", args, { cwd: root }).status !== 0) {
       fs.rmSync(workdir, { recursive: true, force: true, maxRetries: 3 });
     }
   });
@@ -68,8 +57,7 @@ export async function collectChanges(
   workdir: string,
   commit: string
 ): Promise<{ files: AgentChangedFile[]; diff: string }> {
-  fs.mkdirSync(HARNESS_ROOT, { recursive: true });
-  const dir = fs.mkdtempSync(path.join(HARNESS_ROOT, "index-"));
+  const dir = makeTempDir();
   try {
     const index = path.resolve(
       workdir,

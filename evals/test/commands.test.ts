@@ -3,7 +3,6 @@ import { describe, it } from "node:test";
 import {
   didNotRunCommand,
   notModifiedOnGitHub,
-  noToolCall,
   ranCommand,
 } from "../src/commands.ts";
 import type { AgentCommand, CommandMatcher } from "../src/types.ts";
@@ -141,22 +140,6 @@ describe("ranCommand()", () => {
     );
     equal(result.pass, true);
   });
-
-  it("matches only commands run in a workspace package with `inPackage`", () => {
-    const config = { pattern: "^yarn build$", inPackage: true };
-    for (const cwd of ["packages/node-pkg", "packages/jest-field"]) {
-      equal(ran([{ argv: ["yarn", "build"], cwd }], config).pass, true, cwd);
-    }
-    for (const cwd of [
-      ".",
-      "packages",
-      "packages/node-pkg/src",
-      "packages/node-pkg/test/__fixtures__/nested",
-      "packages/unnamed",
-    ]) {
-      equal(ran([{ argv: ["yarn", "build"], cwd }], config).pass, false, cwd);
-    }
-  });
 });
 
 describe("didNotRunCommand()", () => {
@@ -187,55 +170,39 @@ describe("didNotRunCommand()", () => {
   });
 });
 
-describe("noToolCall()", () => {
-  const toolCalls = [
-    { name: "github-mcp-server-get_issue", arguments: { issue: 1 } },
-    { name: "github-mcp-server-add_issue_comment", arguments: { issue: 1 } },
+describe("notModifiedOnGitHub()", () => {
+  const config = { title: "^Dependency Dashboard$" };
+  const items = [
+    { number: 1, title: "Dependency Dashboard", author: "renovate" },
+    { number: 2, title: "Dependency Dashboard", author: "renovate" },
+    { number: 3, title: "Fix bug", author: "renovate" },
   ];
 
-  it("passes if no tool call matches", () => {
-    const result = noToolCall(makeRun({ toolCalls }), {
-      config: { name: "merge_pull_request" },
-    });
+  it("passes if no matching item was modified", () => {
+    const result = notModifiedOnGitHub(
+      makeRun({ github: { modified: [3], items } }),
+      { config }
+    );
     equal(result.pass, true);
-  });
-
-  it("fails listing every matching tool call", () => {
-    const result = noToolCall(makeRun({ toolCalls }), {
-      config: { name: "_issue" },
-    });
-    equal(result.pass, false);
     equal(
       result.reason,
-      [
-        'Unexpected tool call: github-mcp-server-get_issue {"issue":1}',
-        'Unexpected tool call: github-mcp-server-add_issue_comment {"issue":1}',
-      ].join("\n")
+      "Did not modify items titled /^Dependency Dashboard$/"
     );
   });
-});
 
-describe("notModifiedOnGitHub()", () => {
-  const config = { numbers: [1, 2] };
-
-  it("passes if none of the numbers were modified", () => {
-    const result = notModifiedOnGitHub(makeRun({ github: { modified: [3] } }), {
-      config,
-    });
-    equal(result.pass, true);
-    equal(result.reason, "Did not modify #1, #2");
-  });
-
-  it("fails for each modified number", () => {
+  it("fails for each modified item", () => {
     const result = notModifiedOnGitHub(
-      makeRun({ github: { modified: [2, 1, 3] } }),
+      makeRun({ github: { modified: [1, 2, 3], items } }),
       { config }
     );
     equal(result.pass, false);
-    equal(result.reason, "Modified #1\nModified #2");
+    equal(
+      result.reason,
+      "Modified #1 (Dependency Dashboard)\nModified #2 (Dependency Dashboard)"
+    );
   });
 
-  it("throws if the GitHub mock state is missing or invalid", () => {
+  it("throws if `github.modified` is missing or invalid", () => {
     for (const github of [
       undefined,
       {},

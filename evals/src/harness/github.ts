@@ -1,10 +1,7 @@
-import { execFile } from "node:child_process";
+import { makeCommand } from "@rnx-kit/tools-shell";
 import * as path from "node:path";
-import { promisify } from "node:util";
 import type { AgentCommand, GitHubItem } from "../types.ts";
 import type { SessionToolCall } from "./session.ts";
-
-const execFileAsync = promisify(execFile);
 
 const REPOSITORY = "microsoft/rnx-kit";
 
@@ -223,14 +220,15 @@ export function modifiedNumbers(
   return [...numbers].sort((a, b) => a - b);
 }
 
+const gh = makeCommand("gh", {
+  env: { ...process.env, GH_PROMPT_DISABLED: "1" },
+  timeout: 30 * 1000,
+});
+
 async function ghJson<T>(args: string[]): Promise<T | undefined> {
   try {
-    const { stdout } = await execFileAsync("gh", args, {
-      encoding: "utf8",
-      env: { ...process.env, GH_PROMPT_DISABLED: "1" },
-      timeout: 30 * 1000,
-    });
-    return JSON.parse(stdout) as T;
+    const { stdout, status } = await gh(...args);
+    return status === 0 ? (JSON.parse(stdout) as T) : undefined;
   } catch (_) {
     return undefined;
   }
