@@ -41,8 +41,8 @@ export default {
     },
     evals: {
       entry: [
-        "src/harness/grader.ts",
-        "src/harness/provider.ts",
+        "src/provider/grader.ts",
+        "src/provider/provider.ts",
         "src/index.ts",
         "src/transforms.ts",
         allFixtures,
