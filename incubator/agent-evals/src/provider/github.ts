@@ -9,12 +9,7 @@ const MCP_SERVER = "github-mcp-server";
 const MCP_READ_TOOL = /^(download|get|list|search)_|_read$/;
 
 /** Arguments of GitHub MCP tools that hold an issue or pull request number */
-const MCP_NUMBER_ARGS = [
-  "issue_number",
-  "issueNumber",
-  "pullNumber",
-  "pull_number",
-];
+const MCP_NUMBER_ARGS = ["issue_number", "pullNumber"];
 
 /** `gh issue` and `gh pr` subcommands that only read; all others write */
 const GH_READS: Record<string, string[]> = {
