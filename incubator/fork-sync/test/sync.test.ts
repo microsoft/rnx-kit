@@ -461,8 +461,15 @@ describe("sync (snapshot mode, submodules, keepLocalDeletions)", () => {
       const id =
         `${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(t.getDate())}_` +
         `${pad(t.getHours())}-${pad(t.getMinutes())}-${pad(t.getSeconds())}`;
-      await git(syncDir, "branch", "-f", `work_${id}`, head);
-      await git(syncDir, "branch", "-f", `target_${id}`, head);
+      for (const name of [`work_${id}`, `target_${id}`]) {
+        // A name may already exist (and be checked out) from the previous
+        // sync in the same second; it only needs to be taken.
+        await spawn("git", ["branch", name, head], {
+          cwd: syncDir,
+          env: gitEnv,
+          fallback: "",
+        });
+      }
     }
 
     const before = read(libDir, "sync-config.json");
