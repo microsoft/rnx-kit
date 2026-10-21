@@ -40,11 +40,11 @@ const runs = new Map<
  * Returns the `owner/repo` part of a GitHub remote URL, e.g.
  * `https://github.com/owner/repo.git` or `git@github.com:owner/repo.git`.
  */
-function parseRepository(url: string): string | undefined {
+export function parseRepository(url: string): string | undefined {
   return url.trim().match(/[/:]([^/:]+\/[^/]+?)(?:\.git)?\/?$/)?.[1];
 }
 
-async function resolveRepository(
+export async function resolveRepository(
   root: string,
   { repository, remote = "origin" }: ProviderConfig
 ): Promise<string> {
