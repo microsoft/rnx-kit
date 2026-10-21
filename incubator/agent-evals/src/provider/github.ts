@@ -3,8 +3,6 @@ import * as path from "node:path";
 import type { AgentCommand, GitHubItem } from "../types.ts";
 import type { SessionToolCall } from "./session.ts";
 
-const REPOSITORY = "microsoft/rnx-kit";
-
 const MCP_SERVER = "github-mcp-server";
 
 /** GitHub MCP tools that only read */
@@ -137,20 +135,19 @@ function toNumber(arg: string | undefined): number | undefined {
   return match ? Number(match[1]) : undefined;
 }
 
-function isThisRepository(repo: unknown): boolean {
+function isRepository(repository: string, repo: unknown): boolean {
+  const expected = repository.toLowerCase();
   return (
     typeof repo !== "string" ||
-    repo.toLowerCase() === REPOSITORY ||
-    repo.toLowerCase() === `github.com/${REPOSITORY}`
+    repo.toLowerCase() === expected ||
+    repo.toLowerCase() === `github.com/${expected}`
   );
 }
 
-function mcpWrite({
-  name,
-  arguments: args,
-  server,
-  serverTool,
-}: SessionToolCall) {
+function mcpWrite(
+  repository: string,
+  { name, arguments: args, server, serverTool }: SessionToolCall
+) {
   const tool =
     server === MCP_SERVER
       ? (serverTool ?? name)
@@ -163,7 +160,7 @@ function mcpWrite({
 
   const { owner, repo } = args;
   if (typeof owner === "string" && typeof repo === "string") {
-    if (!isThisRepository(`${owner}/${repo}`)) {
+    if (!isRepository(repository, `${owner}/${repo}`)) {
       return undefined;
     }
   }
@@ -181,7 +178,7 @@ function mcpWrite({
  * Returns the number written to by `gh api`, e.g. `gh api -X POST
  * repos/{owner}/{repo}/issues/1/comments`.
  */
-function ghApiWrite(args: string[]): number | undefined {
+function ghApiWrite(repository: string, args: string[]): number | undefined {
   let method: string | undefined;
   let hasFields = false;
   const positionals: string[] = [];
@@ -211,18 +208,23 @@ function ghApiWrite(args: string[]): number | undefined {
 
   const endpoint = (positionals[0] ?? "")
     .replace(/^\//, "")
-    .replace("{owner}/{repo}", REPOSITORY);
+    .replace("{owner}/{repo}", repository);
   const match = endpoint.match(/^repos\/([^/]+\/[^/]+)\/(issues|pulls)\/(\d+)/);
-  return match && isThisRepository(match[1]) ? Number(match[3]) : undefined;
+  return match && isRepository(repository, match[1])
+    ? Number(match[3])
+    : undefined;
 }
 
-function ghWrite({ argv }: AgentCommand): number | undefined {
+function ghWrite(
+  repository: string,
+  { argv }: AgentCommand
+): number | undefined {
   const [executable = "", command, subcommand, ...rest] = argv;
   if (path.win32.basename(executable).replace(/\.exe$/i, "") !== "gh") {
     return undefined;
   }
   if (command === "api") {
-    return ghApiWrite(argv.slice(2));
+    return ghApiWrite(repository, argv.slice(2));
   }
   if (
     (command !== "issue" && command !== "pr") ||
@@ -233,21 +235,25 @@ function ghWrite({ argv }: AgentCommand): number | undefined {
 
   const { flags, positionals } = parseGhArgs(`${command} ${subcommand}`, rest);
   const repo = flags.get("-R") ?? flags.get("--repo");
-  return isThisRepository(repo) ? toNumber(positionals[0]) : undefined;
+  return isRepository(repository, repo) ? toNumber(positionals[0]) : undefined;
 }
 
 /**
- * Returns the numbers of issues and pull requests in this repository that the
- * agent wrote to through the GitHub MCP tools or the `gh` CLI. Writes that
+ * Returns the numbers of issues and pull requests in `repository` (`owner/repo`)
+ * that the agent wrote to through the GitHub MCP tools or the `gh` CLI. Writes that
  * create items, or that do not name the item (e.g. `gh pr comment` on the
  * current branch), are not included.
  */
 export function modifiedNumbers(
+  repository: string,
   toolCalls: SessionToolCall[],
   commands: AgentCommand[]
 ): number[] {
   const numbers = new Set<number>();
-  for (const number of [...toolCalls.map(mcpWrite), ...commands.map(ghWrite)]) {
+  for (const number of [
+    ...toolCalls.map((call) => mcpWrite(repository, call)),
+    ...commands.map((command) => ghWrite(repository, command)),
+  ]) {
     if (number !== undefined) {
       numbers.add(number);
     }
@@ -270,27 +276,28 @@ async function ghJson<T>(args: string[]): Promise<T | undefined> {
 }
 
 /**
- * Looks up the author of the pull request for `branch` in this repository,
+ * Looks up the author of the pull request for `branch` in `repository`,
  * i.e. the user the session acted as, and the specified issues and pull
  * requests. Only reads from GitHub. Values that cannot be looked up, e.g. the
  * author if the session did not open a pull request, are omitted.
  */
 export async function lookUp(
+  repository: string,
   numbers: number[],
   branch: string
 ): Promise<{ actor?: string; items: GitHubItem[] }> {
-  const [owner] = REPOSITORY.split("/");
+  const [owner] = repository.split("/");
   const head = encodeURIComponent(`${owner}:${branch}`);
   const pulls = await ghJson<{ user: { login: string } }[]>([
     "api",
-    `repos/${REPOSITORY}/pulls?head=${head}&state=all&per_page=1`,
+    `repos/${repository}/pulls?head=${head}&state=all&per_page=1`,
   ]);
   const user = pulls?.[0]?.user;
   const items = await Promise.all(
     numbers.map(async (number) => {
       const issue = await ghJson<{ title: string; user: { login: string } }>([
         "api",
-        `repos/${REPOSITORY}/issues/${number}`,
+        `repos/${repository}/issues/${number}`,
       ]);
       return issue
         ? { number, title: issue.title, author: issue.user.login }

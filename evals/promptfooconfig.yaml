@@ -6,10 +6,11 @@ providers:
   # Replays a Copilot session from its event log in `$COPILOT_HOME` (default:
   # `~/.copilot`) and compares the session's branch with the commit the
   # session started from: the working tree if the branch is checked out, or
-  # else the tip of the branch, local or on `origin`, in a temporary worktree.
-  # Looks up modified issues and pull requests, and the author of the pull
-  # request for the session's branch, with `gh`.
-  - id: file://src/provider/provider.ts
+  # else the tip of the branch, local or on `config.remote` (default: `origin`),
+  # in a temporary worktree. Looks up modified issues and pull requests, and
+  # the author of the pull request for the session's branch, with `gh` in
+  # `config.repository` (default: the GitHub repository of the remote).
+  - id: file://src/provider.ts
     label: copilot-session
 defaultTest:
   vars:
@@ -23,5 +24,5 @@ defaultTest:
     # with Copilot access in `COPILOT_GITHUB_TOKEN`, `GH_TOKEN` or
     # `GITHUB_TOKEN`, or a `gh auth login` session. Pass `--grader` to use
     # another provider instead.
-    provider: file://src/provider/grader.ts
+    provider: file://src/grader.ts
 tests: file://tests/*.yaml

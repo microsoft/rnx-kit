@@ -15,7 +15,7 @@ export async function git(
 }
 
 function makeTempDir(): string {
-  return fs.mkdtempSync(path.join(os.tmpdir(), "rnx-kit-evals-"));
+  return fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-"));
 }
 
 /**

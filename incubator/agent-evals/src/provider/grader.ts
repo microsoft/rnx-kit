@@ -106,7 +106,7 @@ export default class CopilotGraderProvider {
   ): Promise<{ output: string } | { error: string }> {
     const { system, prompt } = toSessionPrompt(input);
 
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "rnx-kit-evals-"));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-"));
     const client = new CopilotClient({
       connection: RuntimeConnection.forStdio({
         env: { PATH: process.env["PATH"] ?? "", HOME: dir },
