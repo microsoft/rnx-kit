@@ -25,6 +25,17 @@ describe("modifiedNumbers()", () => {
     deepEqual(modified(input), [1, 2, 3]);
   });
 
+  it("treats all but read-only subcommands as writes", () => {
+    const input = [
+      "gh issue view 1",
+      "gh pr checks 2",
+      "gh pr diff 3",
+      "gh pr revert 4",
+      "gh issue pin 5",
+    ].join("\n");
+    deepEqual(modified(input), [4, 5]);
+  });
+
   it("reads the repository in any form", () => {
     const input = [
       "gh pr comment -R microsoft/rnx-kit 1",
@@ -61,7 +72,9 @@ describe("modifiedNumbers()", () => {
       "gh api --field=body=x repos/{owner}/{repo}/issues/3/comments",
       "gh api -fbody=x repos/microsoft/rnx-kit/issues/4/comments",
       "gh api repos/microsoft/rnx-kit/issues/5",
+      "gh api -H 'Accept: x' -X DELETE /repos/microsoft/rnx-kit/issues/6/lock",
+      "gh api -X POST repos/fork/rnx-kit/issues/7/comments",
     ].join("\n");
-    deepEqual(modified(input), [1, 2, 3, 4]);
+    deepEqual(modified(input), [1, 2, 3, 4, 6]);
   });
 });

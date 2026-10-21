@@ -10,7 +10,7 @@ describe("noInlineTypeSpecifiers()", () => {
     config: Partial<
       Parameters<typeof noInlineTypeSpecifiers>[1]["config"]
     > = {},
-    diff = ""
+    diff = files.map((file) => diffAdding(file)).join("")
   ) {
     return noInlineTypeSpecifiers(makeRun({ files, diff }), {
       config: { files: "\\.ts$", ...config },
@@ -69,19 +69,18 @@ describe("noInlineTypeSpecifiers()", () => {
     equal(result.reason.startsWith("a.ts: "), true);
   });
 
-  it("only checks added lines with `addedLinesOnly`", () => {
+  it("only checks added lines", () => {
     const file = added(
       "a.ts",
       'import { type A } from "a";\nimport { type B } from "b";'
     );
-    const config = { addedLinesOnly: true };
 
-    const result = check([file], config, diffAdding(file, [2]));
+    const result = check([file], {}, diffAdding(file, [2]));
     equal(result.pass, false);
     equal(result.reason, "a.ts:2: Use a separate `import type` statement");
 
     const other = added("b.ts", "");
-    const skipped = check([file, other], config, diffAdding(other));
+    const skipped = check([file, other], {}, diffAdding(other));
     equal(skipped.pass, true);
     equal(skipped.reason, "Checked b.ts");
   });

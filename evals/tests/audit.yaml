@@ -33,7 +33,7 @@
   assert:
     - type: javascript
       value: file://src/index.ts:noInlineTypeSpecifiers
-      config: { files: '\.[cm]?tsx?$', addedLinesOnly: true }
+      config: { files: '\.[cm]?tsx?$' }
 
 - description: "Keeps types.ts files to type exports only"
   metadata: { id: types-only, source: AGENTS.md }
@@ -47,7 +47,6 @@
   assert:
     - type: javascript
       value: file://src/index.ts:usesPackageTestRunner
-      config: { optional: true }
 
 - description: "Does not override globals or system values in tests"
   metadata: { id: no-global-overrides, source: AGENTS.md }

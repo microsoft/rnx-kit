@@ -7,22 +7,10 @@ import {
   toAgentRun,
   workspacePackages,
 } from "@rnx-kit/agent-evals";
-import type {
-  AgentRun,
-  AssertionContext,
-  GradingResult,
-} from "@rnx-kit/agent-evals";
+import type { AgentRun, GradingResult } from "@rnx-kit/agent-evals";
 import { readJSONFileSync } from "@rnx-kit/tools-filesystem";
 import * as fs from "node:fs";
 import * as path from "node:path";
-
-/**
- * Configuration for `usesPackageTestRunner`.
- */
-export type TestRunnerMatcher = {
-  /** Pass instead of failing if no test files changed */
-  optional?: boolean;
-};
 
 const TEST_FILE = /\.test\.[cm]?[jt]sx?$/;
 const JEST_API = /\bexpect\(|\bjest\.|@jest\/globals/;
@@ -31,14 +19,13 @@ const NODE_API = /from ["']node:(assert\/strict|test)/;
 /**
  * Passes if every changed test file is written for the test runner of its
  * package: Jest if the package has a `jest` field in `package.json` or a
- * `jest.config.js`, otherwise the Node.js test runner. Fails if no test files
- * changed, unless `optional` is set.
+ * `jest.config.js`, otherwise the Node.js test runner. Passes trivially if no
+ * test files changed.
  *
  * Note: This mirrors `useJest()` in `scripts/src/commands/test.js`.
  */
 export function usesPackageTestRunner(
-  output: AgentRun | string,
-  context?: AssertionContext<TestRunnerMatcher>
+  output: AgentRun | string
 ): GradingResult {
   const run = toAgentRun(output);
   const tests = existingFiles(run).filter((file) => {
@@ -48,9 +35,7 @@ export function usesPackageTestRunner(
     );
   });
   if (tests.length === 0) {
-    return context?.config?.optional
-      ? result([], "Not applicable: no test files changed")
-      : result(["No test files changed"], "");
+    return result([], "Not applicable: no test files changed");
   }
 
   const added = addedLines(run.diff);
