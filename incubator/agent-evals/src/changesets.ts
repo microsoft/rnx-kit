@@ -43,7 +43,7 @@ export function changesets(
         released.add(name);
       }
     } catch (e) {
-      failures.push(`${file.path}: ${e instanceof Error ? e.message : e}`);
+      failures.push(`${file.path}: ${Error.isError(e) ? e.message : e}`);
     }
   }
 

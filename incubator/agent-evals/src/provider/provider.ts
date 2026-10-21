@@ -195,7 +195,7 @@ export default class CopilotSessionProvider {
     try {
       return await pending;
     } catch (e) {
-      return { error: e instanceof Error ? e.message : String(e) };
+      return { error: Error.isError(e) ? e.message : String(e) };
     }
   }
 }

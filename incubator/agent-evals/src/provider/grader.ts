@@ -151,7 +151,7 @@ export default class CopilotGraderProvider {
       const output = reply?.data.content;
       return output ? { output } : { error: "Grader returned no output" };
     } catch (e) {
-      return { error: e instanceof Error ? e.message : String(e) };
+      return { error: Error.isError(e) ? e.message : String(e) };
     } finally {
       options?.abortSignal?.removeEventListener("abort", abort);
       await client.stop();
