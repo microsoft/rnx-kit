@@ -142,8 +142,8 @@ One change file per feature/fix. No need for multiple entries when addressing PR
 feedback. Releases are automated via CI — on merge to `main`, the changesets
 action creates a release PR or publishes to npm.
 
-Ignored packages (no changesets needed): `@rnx-kit/ignore`, `@rnx-kit/template`,
-test apps.
+Don't add change files for private packages (`"private": true`), e.g.
+`@rnx-kit/template` and test apps.
 
 ## Key Packages
 
