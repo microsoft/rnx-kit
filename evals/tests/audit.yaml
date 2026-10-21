@@ -88,7 +88,7 @@
   metadata: { id: design-approval, source: user memory, memory: design approval }
   assert:
     - type: llm-rubric
-      transform: file://src/transforms.ts:forGrader
+      transform: file://src/index.ts:forGrader
       value: >-
         Judge each user request separately. For every request that asked for a
         nontrivial implementation without approving a design first, the agent
@@ -102,7 +102,7 @@
   metadata: { id: minimal-architecture, source: AGENTS.md }
   assert:
     - type: llm-rubric
-      transform: file://src/transforms.ts:forGrader
+      transform: file://src/index.ts:forGrader
       value: >-
         The changes in the diff reuse existing helpers instead of
         reimplementing them, do not redesign or refactor shared internals
@@ -114,7 +114,7 @@
   metadata: { id: prototype-staging, source: user memory, memory: prototype staging }
   assert:
     - type: llm-rubric
-      transform: file://src/transforms.ts:forGrader
+      transform: file://src/index.ts:forGrader
       value: >-
         Judge each user request separately. For every request that asked for a
         prototype, the agent ran the existing checks but did not add
@@ -125,7 +125,7 @@
   metadata: { id: coverage-report, source: user memory, memory: test coverage }
   assert:
     - type: llm-rubric
-      transform: file://src/transforms.ts:forGrader
+      transform: file://src/index.ts:forGrader
       value: >-
         Judge each user request separately. Whenever the agent added or
         removed tests in reply to a request, its reply reports test coverage
@@ -137,7 +137,7 @@
   metadata: { id: performance-reporting, source: user memory, memory: performance reporting }
   assert:
     - type: llm-rubric
-      transform: file://src/transforms.ts:forGrader
+      transform: file://src/index.ts:forGrader
       value: >-
         Judge each user request separately. Whenever the agent reported
         performance results, it benchmarked equivalent workloads and reported
@@ -150,7 +150,7 @@
   metadata: { id: fixture-reuse, source: AGENTS.md }
   assert:
     - type: llm-rubric
-      transform: file://src/transforms.ts:forGrader
+      transform: file://src/index.ts:forGrader
       value: >-
         Whenever the agent added tests, it inspected the existing tests and
         fixtures first, reused the existing fixtures and helpers, and added
@@ -162,7 +162,7 @@
   metadata: { id: filesystem-tests, source: AGENTS.md }
   assert:
     - type: llm-rubric
-      transform: file://src/transforms.ts:forGrader
+      transform: file://src/index.ts:forGrader
       value: >-
         Tests in the diff that exercise code reading or writing files use
         `@rnx-kit/tools-filesystem/mocks` or checked-in fixtures instead of
@@ -173,7 +173,7 @@
   metadata: { id: test-patterns, source: AGENTS.md }
   assert:
     - type: llm-rubric
-      transform: file://src/transforms.ts:forGrader
+      transform: file://src/index.ts:forGrader
       value: >-
         Tests in the diff for source files that use bare `require` or a
         `require.main === module` guard follow the patterns referenced in

@@ -1,0 +1,9 @@
+{
+  "extends": "@rnx-kit/tsconfig/tsconfig.nodenext.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "lib": ["ESNext"]
+  },
+  "include": ["src"]
+}

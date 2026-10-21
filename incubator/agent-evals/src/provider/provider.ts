@@ -1,13 +1,22 @@
-import * as path from "node:path";
-import { fileURLToPath } from "node:url";
 import type { AgentRun, EvalVars } from "../types.ts";
 import { addWorktree, collectChanges, git } from "./checkout.ts";
 import { lookUp, modifiedNumbers } from "./github.ts";
 import { readSession } from "./session.ts";
 import { parseCommands } from "./shell.ts";
 
+type ProviderConfig = {
+  /**
+   * GitHub repository the session worked on, as `owner/repo`; defaults to
+   * the repository that `remote` points to
+   */
+  repository?: string;
+  /** Remote to look up branches and the repository on; defaults to `origin` */
+  remote?: string;
+};
+
 type ProviderOptions = {
   id?: string;
+  config?: ProviderConfig;
 };
 
 type CallApiContext = {
@@ -27,12 +36,44 @@ const runs = new Map<
   Promise<{ output: AgentRun; metadata: Metadata }>
 >();
 
-function repositoryRoot(): string {
-  return path.resolve(fileURLToPath(new URL("../../..", import.meta.url)));
+/**
+ * Returns the `owner/repo` part of a GitHub remote URL, e.g.
+ * `https://github.com/owner/repo.git` or `git@github.com:owner/repo.git`.
+ */
+function parseRepository(url: string): string | undefined {
+  return url.trim().match(/[/:]([^/:]+\/[^/]+?)(?:\.git)?\/?$/)?.[1];
 }
 
-async function resolveBranch(root: string, branch: string): Promise<string> {
-  for (const ref of [`refs/heads/${branch}`, `refs/remotes/origin/${branch}`]) {
+async function resolveRepository(
+  root: string,
+  { repository, remote = "origin" }: ProviderConfig
+): Promise<string> {
+  if (repository) {
+    return repository;
+  }
+  try {
+    const url = await git(root, ["remote", "get-url", remote]);
+    const parsed = parseRepository(url);
+    if (parsed) {
+      return parsed;
+    }
+  } catch (_) {
+    // Fall through to the error below
+  }
+  throw new Error(
+    `Could not determine the GitHub repository from remote '${remote}'; set 'repository' in the provider config`
+  );
+}
+
+async function resolveBranch(
+  root: string,
+  remote: string,
+  branch: string
+): Promise<string> {
+  for (const ref of [
+    `refs/heads/${branch}`,
+    `refs/remotes/${remote}/${branch}`,
+  ]) {
     try {
       return (
         await git(root, ["rev-parse", "--verify", "--quiet", `${ref}^{commit}`])
@@ -45,9 +86,13 @@ async function resolveBranch(root: string, branch: string): Promise<string> {
 }
 
 async function replay(
-  id: string | undefined
+  id: string | undefined,
+  config: ProviderConfig
 ): Promise<{ output: AgentRun; metadata: Metadata }> {
-  const session = readSession(repositoryRoot(), id);
+  const cwdRoot = (
+    await git(process.cwd(), ["rev-parse", "--show-toplevel"])
+  ).trim();
+  const session = readSession(cwdRoot, id);
   const { root, baseCommit } = session;
   if (!baseCommit) {
     throw new Error(`Session ${session.id} did not record its start commit`);
@@ -69,15 +114,17 @@ async function replay(
   // The event log does not record the files the session ended with, so they
   // are taken from the session's branch: the working tree, including
   // uncommitted changes, if the branch is checked out, otherwise its tip
-  // (local, or else on `origin`) in a temporary worktree.
+  // (local, or else on the remote) in a temporary worktree.
+  const remote = config.remote ?? "origin";
+  const repository = await resolveRepository(root, config);
   let workdir = root;
   let endCommit = "WORKING_TREE";
   const current = (await git(root, ["branch", "--show-current"])).trim();
   if (current !== branch) {
-    endCommit = await resolveBranch(root, branch);
+    endCommit = await resolveBranch(root, remote, branch);
     if (!endCommit) {
       throw new Error(
-        `Branch '${branch}' of session ${session.id} was not found locally or on 'origin'`
+        `Branch '${branch}' of session ${session.id} was not found locally or on '${remote}'`
       );
     }
     workdir = await addWorktree(root, endCommit);
@@ -89,8 +136,11 @@ async function replay(
     name,
     arguments: args,
   }));
-  const modified = modifiedNumbers(session.toolCalls, commands);
-  const github = { modified, ...(await lookUp(modified, branch)) };
+  const modified = modifiedNumbers(repository, session.toolCalls, commands);
+  const github = {
+    modified,
+    ...(await lookUp(repository, modified, branch)),
+  };
   const { files, diff } = await collectChanges(workdir, baseCommit);
   const requests = session.requests;
 
@@ -118,9 +168,11 @@ async function replay(
 // oxlint-disable-next-line import/no-default-export
 export default class CopilotSessionProvider {
   private readonly providerId: string;
+  private readonly config: ProviderConfig;
 
-  constructor({ id }: ProviderOptions = {}) {
+  constructor({ id, config = {} }: ProviderOptions = {}) {
     this.providerId = id ?? "copilot-session";
+    this.config = config;
   }
 
   id(): string {
@@ -135,7 +187,7 @@ export default class CopilotSessionProvider {
     const key = copilotSession ?? "";
     let pending = runs.get(key);
     if (!pending) {
-      pending = replay(copilotSession || undefined);
+      pending = replay(copilotSession || undefined, this.config);
       runs.set(key, pending);
     }
 

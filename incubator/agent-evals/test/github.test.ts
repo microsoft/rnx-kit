@@ -5,7 +5,7 @@ import { parseShellInput } from "../src/provider/shell.ts";
 
 function modified(input: string): number[] {
   const commands = parseShellInput(input).map((argv) => ({ argv, cwd: "." }));
-  return modifiedNumbers([], commands);
+  return modifiedNumbers("microsoft/rnx-kit", [], commands);
 }
 
 describe("modifiedNumbers()", () => {
