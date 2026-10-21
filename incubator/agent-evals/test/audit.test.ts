@@ -61,7 +61,7 @@ describe("ranChecksForChanges()", () => {
     equal(result.pass, true);
     equal(
       result.reason,
-      "Not applicable: no source files changed in workspace packages"
+      "packages/jest-config defines none of: format, lint, test"
     );
   });
 

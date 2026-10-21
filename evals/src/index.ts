@@ -5,8 +5,8 @@ export {
   matchesContent,
   noInlineTypeSpecifiers,
   notModifiedOnGitHub,
-  passesOxlint,
   ranChecksForChanges,
   usesPackageTestRunner,
 } from "@rnx-kit/agent-evals";
 export { docsiteDependencies, newPackagesScaffolded } from "./audit.ts";
+export { passesOxlint } from "./oxlint.ts";

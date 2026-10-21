@@ -5,9 +5,9 @@ export {
   notModifiedOnGitHub,
   ranCommand,
 } from "./commands.ts";
-export { result, toAgentRun } from "./common.ts";
+export { existingFiles, requireConfig, result, toAgentRun } from "./common.ts";
 export { matchesContent } from "./files.ts";
-export { noInlineTypeSpecifiers, passesOxlint } from "./lint.ts";
+export { noInlineTypeSpecifiers } from "./lint.ts";
 export { usesPackageTestRunner } from "./tests.ts";
 export { forGrader } from "./transforms.ts";
 export type {
@@ -24,7 +24,6 @@ export type {
   GitHubItem,
   GitHubMatcher,
   GradingResult,
-  OxlintMatcher,
   TestRunnerMatcher,
   TypeSpecifierMatcher,
 } from "./types.ts";
