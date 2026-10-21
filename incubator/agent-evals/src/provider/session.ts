@@ -98,7 +98,7 @@ function isRunning(pid: number): boolean {
     process.kill(pid, 0);
     return true;
   } catch (e) {
-    return e instanceof Error && "code" in e && e["code"] === "EPERM";
+    return Error.isError(e) && "code" in e && e["code"] === "EPERM";
   }
 }
 
