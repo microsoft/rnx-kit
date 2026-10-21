@@ -40,11 +40,8 @@ export async function addWorktree(
 
 const STATUS: Record<string, AgentChangedFile["status"]> = {
   A: "added",
-  C: "added",
   D: "deleted",
-  M: "modified",
   R: "renamed",
-  T: "modified",
 };
 
 /**
@@ -83,9 +80,8 @@ export async function collectChanges(
     const tokens = nameStatus.split("\0");
     for (let i = 0; i < tokens.length - 1;) {
       const code = tokens[i][0];
-      const isPair = code === "R" || code === "C";
-      const file = tokens[i + (isPair ? 2 : 1)];
-      i += isPair ? 3 : 2;
+      const file = tokens[i + (code === "R" ? 2 : 1)];
+      i += code === "R" ? 3 : 2;
 
       const status = STATUS[code] ?? "modified";
       const change: AgentChangedFile = { path: file, status };

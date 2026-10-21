@@ -16,34 +16,10 @@ const MCP_NUMBER_ARGS = [
   "pull_number",
 ];
 
-const GH_WRITES: Record<string, string[]> = {
-  issue: [
-    "close",
-    "comment",
-    "create",
-    "delete",
-    "develop",
-    "edit",
-    "lock",
-    "pin",
-    "reopen",
-    "transfer",
-    "unlock",
-    "unpin",
-  ],
-  pr: [
-    "close",
-    "comment",
-    "create",
-    "edit",
-    "lock",
-    "merge",
-    "ready",
-    "reopen",
-    "review",
-    "unlock",
-    "update-branch",
-  ],
+/** `gh issue` and `gh pr` subcommands that only read; all others write */
+const GH_READS: Record<string, string[]> = {
+  issue: ["list", "ls", "status", "view"],
+  pr: ["checkout", "checks", "co", "diff", "list", "ls", "status", "view"],
 };
 
 /**
@@ -99,12 +75,13 @@ function mcpWrite(
 
 /**
  * Returns the number written to by `gh api`, e.g. `gh api -X POST
- * repos/{owner}/{repo}/issues/1/comments`.
+ * repos/{owner}/{repo}/issues/1/comments`. Only the method, whether fields
+ * are passed, and the endpoint are needed.
  */
 function ghApiWrite(repository: string, args: string[]): number | undefined {
   let method: string | undefined;
   let hasFields = false;
-  const positionals: string[] = [];
+  let match: RegExpMatchArray | null = null;
   for (let i = 0; i < args.length; ++i) {
     const arg = args[i];
     if (arg === "-X" || arg === "--method") {
@@ -113,15 +90,12 @@ function ghApiWrite(repository: string, args: string[]): number | undefined {
       method = arg.substring("--method=".length).toUpperCase();
     } else if (/^-X./.test(arg)) {
       method = arg.substring(2).toUpperCase();
-    } else if (/^-[fF]$|^--(raw-)?field$|^--input$/.test(arg)) {
+    } else if (/^(-[fF]|--(raw-)?field(=|$)|--input(=|$))/.test(arg)) {
       hasFields = true;
-      ++i;
-    } else if (/^-[fF].|^--(raw-)?field=|^--input=/.test(arg)) {
-      hasFields = true;
-    } else if (/^(-H|--header|-q|--jq|-t|--template|--hostname)$/.test(arg)) {
-      ++i;
-    } else if (!arg.startsWith("-")) {
-      positionals.push(arg);
+    } else if (!match) {
+      match = arg
+        .replace("{owner}/{repo}", repository)
+        .match(/^\/?repos\/([^/]+\/[^/]+)\/(issues|pulls)\/(\d+)/);
     }
   }
 
@@ -129,10 +103,6 @@ function ghApiWrite(repository: string, args: string[]): number | undefined {
     return undefined;
   }
 
-  const endpoint = (positionals[0] ?? "")
-    .replace(/^\//, "")
-    .replace("{owner}/{repo}", repository);
-  const match = endpoint.match(/^repos\/([^/]+\/[^/]+)\/(issues|pulls)\/(\d+)/);
   return match && isRepository(repository, match[1])
     ? Number(match[3])
     : undefined;
@@ -153,7 +123,7 @@ function ghWrite(
 
   if (
     (command !== "issue" && command !== "pr") ||
-    !GH_WRITES[command].includes(subcommand)
+    GH_READS[command].includes(subcommand)
   ) {
     return undefined;
   }

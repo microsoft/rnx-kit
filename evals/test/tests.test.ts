@@ -20,21 +20,21 @@ function check(files: AgentChangedFile[], diff?: string) {
 }
 
 describe("usesPackageTestRunner()", () => {
-  it("fails if no test files changed", () => {
+  it("passes trivially if no test files changed", () => {
     const result = check([
-      added("packages/node-pkg/src/index.ts", ""),
-      added("packages/node-pkg/test/helpers.ts", ""),
+      added("packages/node-pkg/src/index.ts", JEST_TEST),
+      added("packages/node-pkg/test/helpers.ts", JEST_TEST),
+      added("packages/node-pkg/test/sub/a.test.mts", JEST_TEST),
       { path: "packages/node-pkg/test/a.test.ts", status: "deleted" },
     ]);
-    equal(result.pass, false);
-    equal(result.reason, "No test files changed");
+    equal(result.pass, true);
+    equal(result.reason, "Not applicable: no test files changed");
   });
 
   it("recognizes test files", () => {
     for (const path of [
       "test/a.test.ts",
       "packages/node-pkg/test/a.test.js",
-      "packages/node-pkg/test/sub/a.test.mts",
       "packages/node-pkg/test/a.test.cjs",
       "packages/node-pkg/test/a.test.tsx",
     ]) {

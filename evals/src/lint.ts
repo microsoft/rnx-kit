@@ -18,23 +18,20 @@ import { parseSync } from "oxc-parser";
 export type TypeSpecifierMatcher = {
   /** Regular expression matching the paths of the files to check */
   files: string;
-  /** Only report specifiers on lines added in the diff */
-  addedLinesOnly?: boolean;
 };
 
 /**
  * Passes if the matching files do not use inline `type` specifiers in import
- * or export statements, e.g. `import { type A, b }`. Passes trivially if no
- * files match.
+ * or export statements, e.g. `import { type A, b }`, on lines added in the
+ * diff. Passes trivially if no files match.
  */
 export function noInlineTypeSpecifiers(
   output: AgentRun | string,
   context: AssertionContext<TypeSpecifierMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
-  const { files, addedLinesOnly } = requireConfig(context);
-  const pathPattern = new RegExp(files);
-  const added = addedLinesOnly ? addedLines(run.diff) : undefined;
+  const pathPattern = new RegExp(requireConfig(context).files);
+  const added = addedLines(run.diff);
 
   const failures: string[] = [];
   const checked: string[] = [];
@@ -43,8 +40,8 @@ export function noInlineTypeSpecifiers(
       continue;
     }
 
-    const lines = added?.get(file.path);
-    if (added && !lines?.size) {
+    const lines = added.get(file.path);
+    if (!lines?.size) {
       continue;
     }
 
@@ -75,7 +72,7 @@ export function noInlineTypeSpecifiers(
 
       for (const { start } of specifiers) {
         const line = content.substring(0, start).split("\n").length;
-        if (!added || lines?.has(line)) {
+        if (lines.has(line)) {
           failures.push(
             `${file.path}:${line}: Use a separate \`${keyword} type\` statement`
           );
