@@ -133,16 +133,6 @@ export type TestRunnerMatcher = {
 };
 
 /**
- * Configuration for `passesOxlint`.
- */
-export type OxlintMatcher = {
-  /** Regular expression matched against changed file paths */
-  files: string;
-  /** Path to an oxlint config, relative to the `evals` workspace */
-  config: string;
-};
-
-/**
  * Configuration for `noInlineTypeSpecifiers`.
  */
 export type TypeSpecifierMatcher = {

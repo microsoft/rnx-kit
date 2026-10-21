@@ -5174,14 +5174,12 @@ __metadata:
   dependencies:
     "@changesets/parse": "npm:^1.0.0"
     "@github/copilot-sdk": "npm:^1.0.16"
-    "@rnx-kit/eslint-plugin": "workspace:*"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tools-filesystem": "workspace:*"
     "@rnx-kit/tools-shell": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.0"
     oxc-parser: "npm:^0.123.0"
-    oxlint: "catalog:"
     parse-diff: "npm:^0.11.0"
     shell-quote: "npm:^1.8.4"
   languageName: unknown
@@ -5462,9 +5460,11 @@ __metadata:
   resolution: "@rnx-kit/evals@workspace:evals"
   dependencies:
     "@rnx-kit/agent-evals": "workspace:*"
+    "@rnx-kit/eslint-plugin": "workspace:*"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.0"
+    oxlint: "catalog:"
     parse-diff: "npm:^0.11.0"
   languageName: unknown
   linkType: soft

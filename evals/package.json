@@ -19,10 +19,13 @@
     "build": "rnx-kit-scripts build",
     "eval": "npx --yes promptfoo@0.124.1 eval",
     "format": "rnx-kit-scripts format",
-    "lint": "rnx-kit-scripts lint"
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
   },
   "dependencies": {
     "@rnx-kit/agent-evals": "workspace:*",
+    "@rnx-kit/eslint-plugin": "workspace:*",
+    "oxlint": "catalog:",
     "parse-diff": "^0.11.0"
   },
   "devDependencies": {

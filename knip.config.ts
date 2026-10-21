@@ -40,7 +40,15 @@ export default {
       ignoreDependencies: ["eslint"],
     },
     evals: {
-      entry: ["src/grader.ts", "src/index.ts", "src/provider.ts"],
+      entry: [
+        "src/grader.ts",
+        "src/index.ts",
+        "src/provider.ts",
+        allFixtures,
+        allTests,
+      ],
+      // Loaded as a jsPlugin by `oxlint/types-only.json`
+      ignoreDependencies: ["@rnx-kit/eslint-plugin"],
     },
     "incubator/@react-native-webapis/battery-status": {
       entry: ["react-native.config.js"],
@@ -52,8 +60,6 @@ export default {
     },
     "incubator/agent-evals": {
       entry: [allFixtures, allTests],
-      // Loaded as a jsPlugin by `oxlint/types-only.json`
-      ignoreDependencies: ["@rnx-kit/eslint-plugin"],
     },
     "incubator/fork-sync": {
       entry: ["harness/**/*.ts"],

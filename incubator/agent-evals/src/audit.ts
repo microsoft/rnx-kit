@@ -109,6 +109,11 @@ export function ranChecksForChanges(
   for (const { dir, manifest } of packages) {
     const cwd = `^(\\.|${escapeRegExp(dir)})$`;
     const scripts = checks.filter((script) => manifest.scripts?.[script]);
+    if (scripts.length === 0) {
+      results.push(result([], `${dir} defines none of: ${checks.join(", ")}`));
+      continue;
+    }
+
     for (const script of scripts) {
       const pattern = `^yarn ${script}\\b`;
       const check = ranCommand(run, { config: { pattern, cwd } });
