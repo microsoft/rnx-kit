@@ -90,7 +90,7 @@ export type AgentRun = {
      * Login of the user the session acted as: the author of the pull request
      * for the session's branch, if there is one
      */
-    viewer?: string;
+    actor?: string;
     /** The items in `modified`, if they could be looked up */
     items?: GitHubItem[];
   };
@@ -172,7 +172,7 @@ export type ChangesetMatcher = {
 export type GitHubMatcher = {
   /** Regular expression; items with a matching title must not be modified */
   title?: string;
-  /** Only items authored by `github.viewer` may be modified */
+  /** Only items authored by `github.actor` may be modified */
   ownOnly?: boolean;
 };
 

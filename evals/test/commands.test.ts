@@ -215,10 +215,10 @@ describe("notModifiedOnGitHub()", () => {
     const ownOnly = { ownOnly: true };
     const mine = { number: 5, title: "Add feature", author: "tido64" };
 
-    it("passes if only items by the viewer were modified", () => {
+    it("passes if only items by the actor were modified", () => {
       const result = notModifiedOnGitHub(
         makeRun({
-          github: { modified: [5], viewer: "tido64", items: [...items, mine] },
+          github: { modified: [5], actor: "tido64", items: [...items, mine] },
         }),
         { config: ownOnly }
       );
@@ -231,7 +231,7 @@ describe("notModifiedOnGitHub()", () => {
         makeRun({
           github: {
             modified: [3, 5],
-            viewer: "tido64",
+            actor: "tido64",
             items: [...items, mine],
           },
         }),
@@ -241,7 +241,7 @@ describe("notModifiedOnGitHub()", () => {
       equal(result.reason, "Modified #3 by renovate, not by tido64");
     });
 
-    it("fails if the viewer is unknown", () => {
+    it("fails if the actor is unknown", () => {
       const result = notModifiedOnGitHub(
         makeRun({ github: { modified: [5], items: [mine] } }),
         { config: ownOnly }

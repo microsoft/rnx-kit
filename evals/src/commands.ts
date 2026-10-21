@@ -105,8 +105,8 @@ export function didNotRunCommand(
 /**
  * Passes if the agent did not modify the configured issues or pull requests:
  * those with a title matching `title`, and, if `ownOnly` is set, those not
- * authored by `github.viewer`. Fails if modified items could not be looked
- * up, or, with `ownOnly`, if `github.viewer` is unknown.
+ * authored by `github.actor`. Fails if modified items could not be looked
+ * up, or, with `ownOnly`, if `github.actor` is unknown.
  */
 export function notModifiedOnGitHub(
   output: AgentRun | string,
@@ -122,7 +122,7 @@ export function notModifiedOnGitHub(
     throw new Error("Invalid agent run; check: github.modified");
   }
 
-  const { modified, viewer, items } = run.github;
+  const { modified, actor, items } = run.github;
   const failures: string[] = [];
   const found = new Map((items ?? []).map((item) => [item.number, item]));
   const titlePattern = title ? new RegExp(title) : undefined;
@@ -132,9 +132,9 @@ export function notModifiedOnGitHub(
       failures.push(`Modified #${number}, which could not be looked up`);
     } else if (titlePattern?.test(item.title)) {
       failures.push(`Modified #${number} (${item.title})`);
-    } else if (ownOnly && (!viewer || item.author !== viewer)) {
+    } else if (ownOnly && (!actor || item.author !== actor)) {
       failures.push(
-        `Modified #${number} by ${item.author}, not by ${viewer ?? "(unknown user)"}`
+        `Modified #${number} by ${item.author}, not by ${actor ?? "(unknown user)"}`
       );
     }
   }
