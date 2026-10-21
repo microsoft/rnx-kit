@@ -1,20 +1,28 @@
-import { readJSONFileSync } from "@rnx-kit/tools-filesystem";
-import * as fs from "node:fs";
-import * as path from "node:path";
 import {
   addedLines,
   existingFiles,
+  owningPackageDir,
   result,
   selectLines,
   toAgentRun,
-} from "./common.ts";
+  workspacePackages,
+} from "@rnx-kit/agent-evals";
 import type {
   AgentRun,
   AssertionContext,
   GradingResult,
-  TestRunnerMatcher,
-} from "./types.ts";
-import { owningPackageDir, workspacePackages } from "./workspace.ts";
+} from "@rnx-kit/agent-evals";
+import { readJSONFileSync } from "@rnx-kit/tools-filesystem";
+import * as fs from "node:fs";
+import * as path from "node:path";
+
+/**
+ * Configuration for `usesPackageTestRunner`.
+ */
+export type TestRunnerMatcher = {
+  /** Pass instead of failing if no test files changed */
+  optional?: boolean;
+};
 
 const TEST_FILE = /\.test\.[cm]?[jt]sx?$/;
 const JEST_API = /\bexpect\(|\bjest\.|@jest\/globals/;

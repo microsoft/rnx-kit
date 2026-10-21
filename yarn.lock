@@ -5181,7 +5181,6 @@ __metadata:
     "@rnx-kit/tools-shell": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.0"
-    oxc-parser: "npm:^0.123.0"
     parse-diff: "npm:^0.11.0"
     shell-quote: "npm:^1.8.4"
   languageName: unknown
@@ -5464,8 +5463,10 @@ __metadata:
     "@rnx-kit/agent-evals": "workspace:*"
     "@rnx-kit/eslint-plugin": "workspace:*"
     "@rnx-kit/scripts": "workspace:*"
+    "@rnx-kit/tools-filesystem": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.0"
+    oxc-parser: "catalog:"
     oxlint: "catalog:"
     parse-diff: "npm:^0.11.0"
   languageName: unknown
@@ -16504,7 +16505,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shell-quote@npm:^1.10.0, shell-quote@npm:^1.6.1":
+"shell-quote@npm:^1.10.0, shell-quote@npm:^1.6.1, shell-quote@npm:^1.8.4":
   version: 1.12.0
   resolution: "shell-quote@npm:1.12.0"
   checksum: 10c0/1605a4ed6a758bf13de7cb8197a4184d8015f7a4dbdcd6cd4a717d5b30b3ae7666300cc4ae7f3155cf80ace9739e9e82061ee5aa1a648f53f5fab31a220816d0

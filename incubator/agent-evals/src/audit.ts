@@ -1,5 +1,4 @@
 import * as path from "node:path";
-import { changesets } from "./changesets.ts";
 import { ranCommand } from "./commands.ts";
 import { result, toAgentRun, tryReadJSON } from "./common.ts";
 import type { AgentRun, GradingResult } from "./types.ts";
@@ -7,7 +6,7 @@ import { owningPackageDir, workspacePackages } from "./workspace.ts";
 
 const SOURCE_FILE = /\.[cm]?[jt]sx?$/;
 
-type ChangedPackage = {
+export type ChangedPackage = {
   name: string;
   dir: string;
   manifest: { private?: boolean; scripts?: Record<string, string> };
@@ -21,7 +20,7 @@ function escapeRegExp(s: string): string {
  * Returns the workspace packages containing the changed files that match
  * `filter`, in order of their directories.
  */
-function changedPackages(
+export function changedPackages(
   run: AgentRun,
   filter: (file: AgentRun["files"][number]) => boolean = () => true
 ): ChangedPackage[] {
@@ -55,39 +54,6 @@ function combine(
     failed.map((r) => r.reason),
     results.map((r) => r.reason).join("\n")
   );
-}
-
-/**
- * Passes if the agent added change files releasing all published packages it
- * changed, and none if it did not change any. No change file may release a
- * private package.
- *
- * Note: Changes that do not affect the published package, e.g. to tests or
- * docs, do not need a change file, but Changesets does not tell them apart.
- */
-export function changesetsMatchChanges(
-  output: AgentRun | string
-): GradingResult {
-  const run = toAgentRun(output);
-  const isChangeset = (file: { path: string }) =>
-    file.path.startsWith(".changeset/");
-  const published = changedPackages(run, (file) => !isChangeset(file))
-    .filter(({ manifest }) => !manifest.private)
-    .map(({ name }) => name);
-  const privatePackages: string[] = [];
-  for (const [name, dir] of workspacePackages(run.workdir)) {
-    if (tryReadJSON(path.join(run.workdir, dir, "package.json"))?.private) {
-      privatePackages.push(name);
-    }
-  }
-  return changesets(run, {
-    config: {
-      count: published.length > 0 ? 1 : 0,
-      atLeast: published.length > 0,
-      packages: published,
-      forbidden: privatePackages,
-    },
-  });
 }
 
 /**

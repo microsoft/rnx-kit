@@ -1,17 +1,26 @@
-import { parseSync } from "oxc-parser";
 import {
   addedLines,
   existingFiles,
   requireConfig,
   result,
   toAgentRun,
-} from "./common.ts";
+} from "@rnx-kit/agent-evals";
 import type {
   AgentRun,
   AssertionContext,
   GradingResult,
-  TypeSpecifierMatcher,
-} from "./types.ts";
+} from "@rnx-kit/agent-evals";
+import { parseSync } from "oxc-parser";
+
+/**
+ * Configuration for `noInlineTypeSpecifiers`.
+ */
+export type TypeSpecifierMatcher = {
+  /** Regular expression matching the paths of the files to check */
+  files: string;
+  /** Only report specifiers on lines added in the diff */
+  addedLinesOnly?: boolean;
+};
 
 /**
  * Passes if the matching files do not use inline `type` specifiers in import

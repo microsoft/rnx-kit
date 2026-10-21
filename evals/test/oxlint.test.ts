@@ -1,35 +1,22 @@
-import type { AgentChangedFile, AgentRun } from "@rnx-kit/agent-evals";
+import type { AgentChangedFile } from "@rnx-kit/agent-evals";
 import { equal, throws } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { describe, it } from "node:test";
-import { fileURLToPath } from "node:url";
 import { passesOxlint } from "../src/oxlint.ts";
-
-const FIXTURE = fileURLToPath(new URL("__fixtures__/oxlint", import.meta.url));
+import { WORKSPACE, added, makeRun } from "./helpers.ts";
 
 function fixture(file: string): AgentChangedFile {
-  const content = fs.readFileSync(path.join(FIXTURE, file), "utf-8");
-  return { path: file, status: "added", content };
-}
-
-function makeRun(files: AgentChangedFile[]): AgentRun {
-  return {
-    commands: [],
-    toolCalls: [],
-    files,
-    diff: "",
-    finalMessage: "",
-    workdir: FIXTURE,
-  };
+  const content = fs.readFileSync(path.join(WORKSPACE, file), "utf-8");
+  return added(file, content);
 }
 
 describe("passesOxlint()", () => {
-  const index = fixture("src/index.ts");
-  const types = fixture("src/types.ts");
+  const index = fixture("packages/node-pkg/src/index.ts");
+  const types = fixture("packages/node-pkg/src/types.ts");
 
   it("passes if no files match", () => {
-    const result = passesOxlint(makeRun([index]), {
+    const result = passesOxlint(makeRun({ files: [index] }), {
       config: { files: "\\.md$", config: "oxlint/types-only.json" },
     });
     equal(result.pass, true);
@@ -37,15 +24,15 @@ describe("passesOxlint()", () => {
   });
 
   it("passes if matching files pass", () => {
-    const result = passesOxlint(makeRun([types]), {
+    const result = passesOxlint(makeRun({ files: [types] }), {
       config: { files: "/types\\.ts$", config: "oxlint/types-only.json" },
     });
     equal(result.pass, true);
-    equal(result.reason, "src/types.ts passed oxlint");
+    equal(result.reason, "packages/node-pkg/src/types.ts passed oxlint");
   });
 
   it("fails for each diagnostic", () => {
-    const result = passesOxlint(makeRun([index, types]), {
+    const result = passesOxlint(makeRun({ files: [index, types] }), {
       config: {
         files: "\\.ts$",
         config: "../../test/__fixtures__/oxlint-no-plusplus.json",
@@ -54,18 +41,14 @@ describe("passesOxlint()", () => {
     equal(result.pass, false);
     equal(
       result.reason,
-      "src/index.ts:3: eslint(no-plusplus): Unary operator '++' used."
+      "packages/node-pkg/src/index.ts:3: eslint(no-plusplus): Unary operator '++' used."
     );
   });
 
   it("throws if oxlint cannot lint the files", () => {
-    const missing: AgentChangedFile = {
-      path: "src/missing.ts",
-      status: "added",
-      content: "",
-    };
+    const missing = added("packages/node-pkg/src/missing.ts", "");
     throws(() =>
-      passesOxlint(makeRun([missing]), {
+      passesOxlint(makeRun({ files: [missing] }), {
         config: { files: "\\.ts$", config: "oxlint/types-only.json" },
       })
     );
@@ -73,7 +56,7 @@ describe("passesOxlint()", () => {
 
   it("throws if the config is invalid", () => {
     throws(() =>
-      passesOxlint(makeRun([types]), {
+      passesOxlint(makeRun({ files: [types] }), {
         config: { files: "\\.ts$", config: "oxlint/missing.json" },
       })
     );
