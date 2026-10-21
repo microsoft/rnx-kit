@@ -730,6 +730,34 @@ describe("sync (snapshot mode, --abort and subDir)", () => {
   });
 });
 
+describe("sync (path aliases)", () => {
+  it("works when the repo is reached through a junction or symlink", async () => {
+    const base = path.join(root, "alias");
+    fs.mkdirSync(base);
+    const upstream = path.join(base, "up.git");
+    await initServer(upstream);
+    await commit(upstream, "A", { "src/a.txt": "a1\n" });
+    const mainDir = path.join(base, "main");
+    await createMainRepo(mainDir, {
+      repo: url(upstream),
+      branch: "main",
+      tag: "",
+      lastSync: "",
+    });
+    // Like an 8.3 short name (e.g. RUNNER~1 in TEMP) or a subst drive: the
+    // same directory under a different path than git reports.
+    const alias = path.join(base, "alias-link");
+    fs.symlinkSync(mainDir, alias, "junction");
+
+    const result = await runSync(base, ["-C", alias]);
+    assert.ok(result.ok, result.output);
+    assert.strictEqual(
+      read(path.join(mainDir, "deps", "lib"), "src/a.txt"),
+      "a1\n"
+    );
+  });
+});
+
 describe("sync (config validation)", () => {
   async function expectConfigError(
     name: string,

@@ -2917,21 +2917,28 @@ async function main(): Promise<void> {
   const args = parseCliArgs();
 
   // Resolve working directory (-C / --directory)
-  const workingDirectory = args.directory
+  const requestedDirectory = args.directory
     ? path.resolve(args.directory)
     : process.cwd();
-  if (args.directory && !(await exists(workingDirectory))) {
-    return fatal(`Working directory not found: ${workingDirectory}`);
+  if (args.directory && !(await exists(requestedDirectory))) {
+    return fatal(`Working directory not found: ${requestedDirectory}`);
   }
+  // Canonical paths: git reports the repo root with symlinks, junctions and
+  // Windows 8.3 short names resolved, and paths relative to it are derived
+  // from the manifest location, so both must use the same spelling.
+  const workingDirectory = await fs.realpath(requestedDirectory);
 
   // Discover manifest and repo root
-  const { manifestPath, manifestDir } = await discoverManifest(
-    args.manifest,
-    workingDirectory
+  const discovered = await discoverManifest(args.manifest, workingDirectory);
+  const manifestDir = await fs.realpath(discovered.manifestDir);
+  const manifestPath = path.join(
+    manifestDir,
+    path.basename(discovered.manifestPath)
   );
-  const repoRoot = await discoverRepoRoot(workingDirectory);
-  if (!repoRoot)
+  const gitRoot = await discoverRepoRoot(workingDirectory);
+  if (!gitRoot)
     return fatal("Not in a git repository. sync requires a git repository.");
+  const repoRoot = await fs.realpath(gitRoot);
 
   // Initialize logging (default: .sync/.logs/ relative to manifest)
   const defaultLogDir = path.join(manifestDir, SYNC_DIR, ".logs");
