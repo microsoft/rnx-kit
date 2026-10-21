@@ -9,9 +9,13 @@
  *
  * This module provides:
  * - **GitRepo**: Class wrapping a directory path, providing typed git operations
- *   (includes **tagsPointingAt** for listing tags at a commit)
+ *   (includes **tagsPointingAt** for listing tags at a commit, and snapshot
+ *   plumbing: **fetchRefs**, **listMissingObjects**,
+ *   **lsTreeEntries**, **buildTree**, **commitTree**, **readGitmodules**)
  * - **isGitRepo**: Check if a directory is a git repository
  * - **clone**: Clone a repository with progress streaming
+ * - **resolveRemoteRef**: Resolve a remote ref via `ls-remote` (peels tags)
+ * - **parseGitmodulesConfig** / **resolveSubmoduleUrl**: `.gitmodules` helpers
  * - **listFilesWithExclusions**: List tracked files with .syncignore support
  * - **getAllowedRelativePaths**: Get relative paths with prefix stripping
  * - **getGitTreeHashes**: Get file hashes from `git ls-tree`
@@ -30,6 +34,7 @@
  * @module git
  */
 
+import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { exists, normalizePath } from "./fs.ts";
 import { spawn, type OutputChunk } from "./proc.ts";
@@ -55,6 +60,38 @@ export interface MergeTool {
   path: string | null;
   trustExitCode: string | null;
 }
+
+/** One `git ls-tree` entry. `type` is `blob`, `tree`, or `commit` (gitlink). */
+export interface TreeEntry {
+  mode: string;
+  type: string;
+  oid: string;
+  path: string;
+}
+
+/** One `[submodule "<name>"]` section of a `.gitmodules` file. */
+export interface GitSubmodule {
+  name: string;
+  path: string;
+  url: string;
+}
+
+/** Git mode of a gitlink (submodule) tree entry. */
+export const GITLINK_MODE = "160000";
+
+/**
+ * `-c` options applied to every fork-sync fetch. They skip work fork-sync never
+ * needs and that is very slow on huge partial clones: scanning fetched commits
+ * for submodule changes, auto-gc/maintenance, and commit-graph writing.
+ */
+export const FETCH_HYGIENE_CONFIG = [
+  "-c",
+  "fetch.recurseSubmodules=false",
+  "-c",
+  "gc.auto=0",
+  "-c",
+  "maintenance.auto=false",
+];
 
 // =============================================================================
 // Path Utilities
@@ -237,7 +274,194 @@ export class GitRepo {
 
   /** Fetch from remote (default: origin). */
   async fetch(remote = "origin"): Promise<void> {
-    await spawn("git", ["fetch", remote], { cwd: this.dir });
+    await spawn(
+      "git",
+      [...FETCH_HYGIENE_CONFIG, "fetch", "--no-write-commit-graph", remote],
+      { cwd: this.dir }
+    );
+  }
+
+  /**
+   * Fetch specific refspecs or commit SHAs from a remote (or URL).
+   * Uses the same hygiene flags as {@link fetch}. With `depth: 1` and
+   * `filter: "blob:none"` this fetches a commit's full tree in one pack
+   * without history or file contents.
+   */
+  async fetchRefs(
+    remote: string,
+    refspecs: string[],
+    opts?: {
+      depth?: number;
+      filter?: string;
+      noTags?: boolean;
+      env?: NodeJS.ProcessEnv;
+    }
+  ): Promise<void> {
+    const args = [...FETCH_HYGIENE_CONFIG, "fetch", "--no-write-commit-graph"];
+    if (opts?.noTags) args.push("--no-tags");
+    if (opts?.depth) args.push(`--depth=${opts.depth}`);
+    if (opts?.filter) args.push(`--filter=${opts.filter}`);
+    args.push(remote, ...refspecs);
+    await spawn("git", args, { cwd: this.dir, env: opts?.env });
+  }
+
+  /**
+   * List objects reachable from `refs` that are missing locally, without
+   * triggering lazy fetches (`rev-list --missing=print`).
+   */
+  async listMissingObjects(refs: string[]): Promise<string[]> {
+    if (refs.length === 0) return [];
+    const output = await spawn(
+      "git",
+      [
+        "rev-list",
+        "--objects",
+        "--no-object-names",
+        "--missing=print",
+        ...refs,
+      ],
+      { cwd: this.dir }
+    );
+    return output
+      .split("\n")
+      .filter((line) => line.startsWith("?"))
+      .map((line) => line.slice(1).trim());
+  }
+
+  /** True if the object exists locally (never triggers a lazy fetch). */
+  async hasCommit(oid: string): Promise<boolean> {
+    const result = await spawn("git", ["cat-file", "-e", `${oid}^{commit}`], {
+      cwd: this.dir,
+      fallback: "missing",
+      env: { GIT_NO_LAZY_FETCH: "1" },
+    });
+    return result !== "missing";
+  }
+
+  /**
+   * List tree entries recursively (`ls-tree -r -z --full-tree`).
+   * Gitlinks (submodules) are returned with type `commit`.
+   */
+  async lsTreeEntries(
+    treeish: string,
+    pathspecs: string[] = []
+  ): Promise<TreeEntry[]> {
+    const args = ["ls-tree", "-r", "-z", "--full-tree", treeish];
+    const specs = toPathspecList(pathspecs);
+    if (specs.length) args.push("--", ...specs);
+    const output = await spawn("git", args, { cwd: this.dir });
+    const entries: TreeEntry[] = [];
+    for (const record of output.split("\0")) {
+      if (!record) continue;
+      const tab = record.indexOf("\t");
+      if (tab < 0) continue;
+      const [mode, type, oid] = record.slice(0, tab).split(" ");
+      entries.push({ mode, type, oid, path: record.slice(tab + 1) });
+    }
+    return entries;
+  }
+
+  /**
+   * Write a tree object containing exactly `entries`, using a temporary index
+   * so the working index is untouched. Blobs do not need to exist locally.
+   */
+  async buildTree(entries: TreeEntry[]): Promise<string> {
+    const gitDir = path.resolve(
+      this.dir,
+      await spawn("git", ["rev-parse", "--git-dir"], { cwd: this.dir })
+    );
+    const indexFile = path.join(
+      gitDir,
+      `fork-sync-${process.pid}-${Date.now()}.index`
+    );
+    const env = { GIT_INDEX_FILE: indexFile };
+    try {
+      if (entries.length > 0) {
+        const input = entries
+          .map((e) => `${e.mode} ${e.type} ${e.oid}\t${e.path}\0`)
+          .join("");
+        // The trees are data, not a checkout: keep paths that are invalid on
+        // this filesystem (e.g. '*' or '?' on NTFS) instead of silently
+        // dropping them; a later checkout reports them loudly.
+        await spawn(
+          "git",
+          [
+            "-c",
+            "core.protectNTFS=false",
+            "-c",
+            "core.protectHFS=false",
+            "update-index",
+            "-z",
+            "--index-info",
+          ],
+          { cwd: this.dir, env, input }
+        );
+        const written = await spawn("git", ["ls-files", "-z"], {
+          cwd: this.dir,
+          env,
+        });
+        const count = written.split("\0").filter((p) => p.length > 0).length;
+        if (count !== entries.length) {
+          throw new Error(
+            `git update-index kept ${count} of ${entries.length} tree entries.`
+          );
+        }
+      }
+      return await spawn("git", ["write-tree", "--missing-ok"], {
+        cwd: this.dir,
+        env,
+      });
+    } finally {
+      await fs.rm(indexFile, { force: true });
+    }
+  }
+
+  /** Create a commit object for `tree` with the given parents. */
+  async commitTree(
+    tree: string,
+    parents: string[],
+    message: string
+  ): Promise<string> {
+    const args = ["commit-tree", tree];
+    for (const parent of parents) args.push("-p", parent);
+    args.push("-m", message);
+    return spawn("git", args, { cwd: this.dir });
+  }
+
+  /** Create or move a branch to a commit without checking it out. */
+  async branchForce(name: string, commit: string): Promise<void> {
+    await spawn("git", ["branch", "-f", name, commit], { cwd: this.dir });
+  }
+
+  /**
+   * Read `.gitmodules` from a commit (`git config --blob`).
+   * Returns [] when the commit has no `.gitmodules`.
+   */
+  async readGitmodules(commit: string): Promise<GitSubmodule[]> {
+    const output = await spawn(
+      "git",
+      ["config", "-z", "--blob", `${commit}:.gitmodules`, "--list"],
+      { cwd: this.dir, fallback: "" }
+    );
+    return parseGitmodulesConfig(output);
+  }
+
+  /** Paths deleted between two commits (`diff --diff-filter=D`, no renames). */
+  async deletedPaths(from: string, to: string): Promise<string[]> {
+    const output = await spawn(
+      "git",
+      [
+        "diff",
+        "-z",
+        "--name-only",
+        "--no-renames",
+        "--diff-filter=D",
+        from,
+        to,
+      ],
+      { cwd: this.dir }
+    );
+    return output.split("\0").filter((f) => f.length > 0);
   }
 
   /** Checkout a ref (commit, branch, or tag). */
@@ -410,11 +634,28 @@ export class GitRepo {
     });
   }
 
-  /** Set sparse checkout patterns. Accepts one or more directory paths. */
+  /** Set sparse checkout patterns. Accepts directories and (root or nested) files. */
   async sparseCheckoutSet(...dirs: string[]): Promise<void> {
-    await spawn("git", ["sparse-checkout", "set", ...dirs], {
-      cwd: this.dir,
-    });
+    try {
+      await spawn("git", ["sparse-checkout", "set", ...dirs], {
+        cwd: this.dir,
+      });
+    } catch (e) {
+      // Cone mode rejects file entries unless --skip-checks (git >= 2.36) is
+      // given. A file entry adds its parent directory's immediate files to the
+      // cone, which materializes it; listing is still scoped by pathspecs.
+      // Retried on any failure (git's message may be localized); the original
+      // error is reported if the retry fails too.
+      try {
+        await spawn(
+          "git",
+          ["sparse-checkout", "set", "--skip-checks", ...dirs],
+          { cwd: this.dir }
+        );
+      } catch {
+        throw e;
+      }
+    }
   }
 
   /** Disable sparse checkout (re-enable full working tree). */
@@ -498,17 +739,113 @@ export async function validateCloneOrigin(
     : `${expectedUrl}.git`;
   const expectedHttpsNoGit = expectedUrl.replace(/\.git$/, "");
 
-  // For SSH comparison, parse the URL to get host/owner/name
-  const { host, owner, name } = parseRepoUrl(expectedUrl);
-  const expectedSsh = `git@${host}:${owner}/${name}.git`;
+  // For SSH comparison, parse the URL to get host/owner/name. Non-GitHub-style
+  // URLs (e.g. file:// or deeper googlesource paths) only compare HTTPS forms.
+  const candidates = [expectedHttps, expectedHttpsNoGit];
+  try {
+    const { host, owner, name } = parseRepoUrl(expectedUrl);
+    candidates.push(`git@${host}:${owner}/${name}.git`);
+  } catch {
+    // no SSH equivalent
+  }
 
-  const originMatchesExpected = [
-    expectedHttps,
-    expectedHttpsNoGit,
-    expectedSsh,
-  ].some((expected) => originUrl.toLowerCase() === expected.toLowerCase());
+  const originMatchesExpected = candidates.some(
+    (expected) => originUrl.toLowerCase() === expected.toLowerCase()
+  );
 
   return { valid: originMatchesExpected, currentOrigin: originUrl };
+}
+
+/** Append `.git` to a repo URL unless it already ends with it. */
+export function toCloneUrl(url: string): string {
+  return url.endsWith(".git") ? url : `${url}.git`;
+}
+
+/**
+ * Resolve a ref name on a remote to an object ID via `git ls-remote`.
+ * For annotated tags, returns the peeled commit (`<ref>^{}`).
+ * Returns "" when the ref does not exist.
+ */
+export async function resolveRemoteRef(
+  repo: GitRepo,
+  remote: string,
+  ref: string
+): Promise<string> {
+  // No fallback: a network/auth failure must surface, not look like "no ref".
+  // --tags/--heads make the server filter by prefix; a bare pattern makes it
+  // send every ref (millions on Chromium) and filter client-side.
+  const kind = ref.startsWith("refs/tags/")
+    ? ["--tags"]
+    : ref.startsWith("refs/heads/")
+      ? ["--heads"]
+      : [];
+  const output = await spawn("git", ["ls-remote", ...kind, remote, ref], {
+    cwd: repo.dir,
+  });
+  return parseLsRemoteRef(output, ref);
+}
+
+/** Parse `git ls-remote` output for an exact ref, preferring the peeled entry. */
+export function parseLsRemoteRef(output: string, ref: string): string {
+  let direct = "";
+  for (const line of output.split("\n")) {
+    const [oid, name] = line.trim().split("\t");
+    if (!oid || !name) continue;
+    if (name === `${ref}^{}`) return oid;
+    if (name === ref) direct = oid;
+  }
+  return direct;
+}
+
+/**
+ * Parse `git config -z --list` output of a `.gitmodules` blob into submodule
+ * entries. Records are `key\nvalue\0`; submodule names may contain dots.
+ */
+export function parseGitmodulesConfig(output: string): GitSubmodule[] {
+  const byName = new Map<string, { path?: string; url?: string }>();
+  for (const record of output.split("\0")) {
+    if (!record) continue;
+    const newline = record.indexOf("\n");
+    const key = newline < 0 ? record : record.slice(0, newline);
+    const value = newline < 0 ? "" : record.slice(newline + 1);
+    const match = key.match(/^submodule\.(.+)\.(path|url)$/);
+    if (!match) continue;
+    const [, name, field] = match;
+    const entry = byName.get(name) ?? {};
+    entry[field as "path" | "url"] = value;
+    byName.set(name, entry);
+  }
+  const result: GitSubmodule[] = [];
+  for (const [name, { path: subPath, url }] of byName) {
+    if (subPath && url) {
+      result.push({
+        name,
+        path: normalizePath(subPath).replace(/\/+$/, ""),
+        url,
+      });
+    }
+  }
+  return result;
+}
+
+/**
+ * Resolve a `.gitmodules` URL against the superproject URL. Relative URLs
+ * (`./x`, `../x`) are resolved the way git does: relative to the superproject
+ * repository URL treated as a directory.
+ */
+export function resolveSubmoduleUrl(
+  url: string,
+  superprojectUrl: string
+): string {
+  if (!url.startsWith("./") && !url.startsWith("../")) return url;
+  const base = superprojectUrl.replace(/\.git$/, "").replace(/\/+$/, "") + "/";
+  try {
+    return new URL(url, base).toString().replace(/\/+$/, "");
+  } catch {
+    throw new Error(
+      `Cannot resolve relative submodule URL '${url}' against '${superprojectUrl}'.`
+    );
+  }
 }
 
 // =============================================================================
@@ -648,7 +985,12 @@ export async function getChangeStats(
   repo: GitRepo,
   pathspec: string
 ): Promise<ChangeStats> {
-  const status = await repo.statusPorcelain(pathspec);
+  // -uall: count every new file, not one line per new directory.
+  const status = await spawn(
+    "git",
+    ["status", "--porcelain", "--untracked-files=all", "--", pathspec],
+    { cwd: repo.dir, fallback: "" }
+  );
   if (!status) return { modified: 0, added: 0, deleted: 0 };
 
   let modified = 0;

@@ -490,7 +490,7 @@ export function applyResolved(
   info: MergeInfo,
   hunkIndex: number,
   contextLineCount: number,
-  resolvedLines: string[]
+  resolvedInput: string[]
 ): ApplyResult {
   const hunk = info.hunks[hunkIndex];
   const { localLines } = info;
@@ -500,6 +500,19 @@ export function applyResolved(
   const actualAfter = Math.min(
     contextLineCount,
     localLines.length - (hunk.localSpan.start + hunk.localSpan.count)
+  );
+
+  // Responses lose blank context lines at their edges (the response parser
+  // trims trailing blank lines, and models drop the empty "line" after a
+  // file's final newline). Restore the blank context lines that are missing,
+  // so a valid resolution is not rejected as a context mismatch.
+  const resolvedLines = restoreBlankEdges(
+    resolvedInput,
+    localLines.slice(hunk.localSpan.start - actualBefore, hunk.localSpan.start),
+    localLines.slice(
+      hunk.localSpan.start + hunk.localSpan.count,
+      hunk.localSpan.start + hunk.localSpan.count + actualAfter
+    )
   );
 
   // Validate context before
@@ -542,6 +555,43 @@ export function applyResolved(
 // =============================================================================
 // File reconstruction
 // =============================================================================
+
+function countLeadingBlank(lines: string[]): number {
+  let n = 0;
+  while (n < lines.length && lines[n] === "") n++;
+  return n;
+}
+
+function countTrailingBlank(lines: string[]): number {
+  let n = 0;
+  while (n < lines.length && lines[lines.length - 1 - n] === "") n++;
+  return n;
+}
+
+/**
+ * Re-add blank lines that the expected context starts or ends with but the
+ * resolved output lacks at the same edge.
+ */
+function restoreBlankEdges(
+  resolved: string[],
+  before: string[],
+  after: string[]
+): string[] {
+  const missingBefore = Math.max(
+    0,
+    countLeadingBlank(before) - countLeadingBlank(resolved)
+  );
+  const missingAfter = Math.max(
+    0,
+    countTrailingBlank(after) - countTrailingBlank(resolved)
+  );
+  if (missingBefore === 0 && missingAfter === 0) return resolved;
+  return [
+    ...new Array<string>(missingBefore).fill(""),
+    ...resolved,
+    ...new Array<string>(missingAfter).fill(""),
+  ];
+}
 
 /**
  * Get the resolved file content.

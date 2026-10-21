@@ -7,6 +7,10 @@ import * as os from "node:os";
 import * as path from "node:path";
 import { after, test } from "node:test";
 import {
+  classifyModelError,
+  DEFAULT_COPILOT_MODELS,
+} from "../src/modules/ai-model.ts";
+import {
   DEFAULT_ALLOWED_TOOLS,
   DEFAULT_TIMEOUT,
   invokeCopilotReadOnly,
@@ -79,6 +83,15 @@ test("invokeCopilotReadOnly: timeout exceeding max returns error", async () => {
   assert.ok(result.error?.includes("Timeout"));
 });
 
+test("invokeCopilotReadOnly: invalid reasoning effort returns error", async () => {
+  const result = await invokeCopilotReadOnly({
+    promptFile: "test.md",
+    reasoningEffort: "extreme",
+  });
+  assert.strictEqual(result.success, false);
+  assert.ok(result.error?.includes("Invalid reasoning effort"));
+});
+
 // =============================================================================
 // Constants
 // =============================================================================
@@ -102,6 +115,62 @@ test("DEFAULT_ALLOWED_TOOLS contains read-only tools", () => {
 // =============================================================================
 // Integration (skipped if CLI missing)
 // =============================================================================
+
+test(
+  "invokeCopilotReadOnly: default router model 'auto'",
+  { skip: skipReason },
+  async () => {
+    const promptFile = setupIntegrationTest();
+    const result = await invokeCopilotReadOnly({
+      promptFile,
+      model: DEFAULT_COPILOT_MODELS[0],
+      timeout: 60000,
+    });
+    assert.strictEqual(result.success, true, result.error);
+  }
+);
+
+test(
+  "invokeCopilotReadOnly: 'auto' rejects reasoning effort recognizably",
+  { skip: skipReason },
+  async () => {
+    const promptFile = setupIntegrationTest();
+    const result = await invokeCopilotReadOnly({
+      promptFile,
+      model: "auto",
+      reasoningEffort: "low",
+      timeout: 60000,
+    });
+    // The CLI may start accepting it; when it does not, ai-merge must be able
+    // to recognize the error and retry without it.
+    if (!result.success) {
+      assert.strictEqual(
+        classifyModelError(result.error ?? ""),
+        "effort-unsupported",
+        result.error
+      );
+    }
+  }
+);
+
+test(
+  "invokeCopilotReadOnly: unknown model is reported as unavailable",
+  { skip: skipReason },
+  async () => {
+    const promptFile = setupIntegrationTest();
+    const result = await invokeCopilotReadOnly({
+      promptFile,
+      model: "no-such-model-xyz",
+      timeout: 60000,
+    });
+    assert.strictEqual(result.success, false);
+    assert.strictEqual(
+      classifyModelError(result.error ?? ""),
+      "model-unavailable",
+      result.error
+    );
+  }
+);
 
 test(
   "invokeCopilotReadOnly: basic invocation",

@@ -78,8 +78,9 @@ or hits a `.git` boundary.
 {
   "version": 1,
   "aiMerge": {
-    "provider": "claude",
-    "model": "haiku",
+    "provider": "copilot",
+    "model": ["gpt-6-luna", "auto"],
+    "reasoningEffort": "low",
     "minConfidence": "MEDIUM"
   },
   "dependencies": [
@@ -95,14 +96,33 @@ or hits a `.git` boundary.
 }
 ```
 
-| Field                      | Description                                                                        |
-| -------------------------- | ---------------------------------------------------------------------------------- |
-| `version`                  | Must be `1`                                                                        |
-| `aiMerge.provider`         | AI provider: `"claude"` or `"copilot"`                                             |
-| `aiMerge.model`            | Model name (optional, provider-specific)                                           |
-| `aiMerge.minConfidence`    | Minimum confidence to apply a hunk: `"HIGH"`, `"MEDIUM"` (default), or `"LOW"`     |
-| `dependencies[].name`      | Unique name for the dependency (used in `--dep` flag)                              |
-| `dependencies[].localPath` | Path to the vendored copy, relative to the manifest. Use `"."` for full-repo forks |
+| Field                      | Description                                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `version`                  | Must be `1`                                                                                            |
+| `aiMerge.provider`         | AI CLI: `"copilot"` (default, GitHub Copilot CLI) or `"claude"` (Claude Code)                          |
+| `aiMerge.model`            | Model ID, or an ordered list of model IDs to fall back through (optional; see below)                   |
+| `aiMerge.reasoningEffort`  | Copilot reasoning effort: `none`…`max`, or `"default"` for the model's own (optional; default `"low"`) |
+| `aiMerge.minConfidence`    | Minimum confidence to apply a hunk: `"HIGH"`, `"MEDIUM"` (default), or `"LOW"`                         |
+| `dependencies[].name`      | Unique name for the dependency (used in `--dep` flag)                                                  |
+| `dependencies[].localPath` | Path to the vendored copy, relative to the manifest. Use `"."` for full-repo forks                     |
+
+#### Choosing AI models
+
+Model IDs change as providers release and retire models, so fork-sync does not
+hard-code any. Without `aiMerge.model`, the Copilot provider uses **`auto`**:
+Copilot routes each request to a suitable model (the VS Code model picker calls
+this "Fusion"), which never goes stale. To pin specific models, list them in
+order of preference; when the CLI reports a model as not available, ai-merge
+warns and moves to the next entry, and after the last entry it uses the CLI's
+default model. Ending the list with `"auto"` keeps merges working when a pinned
+model is retired. Model IDs are the ones the CLI accepts with `--model`
+(e.g. `gpt-6-luna`, `claude-haiku-5.5`); for Claude Code, aliases such as
+`"haiku"` always mean the latest model of that family.
+
+Each conflict hunk costs two short AI calls (resolve, then validate), so small,
+low-cost models work well. `reasoningEffort` (Copilot only, default `"low"`)
+keeps them fast and cheap; it is skipped automatically for models that do not
+support it, such as `auto`.
 
 ### sync-config.json
 
@@ -122,16 +142,19 @@ after each successful sync.
 }
 ```
 
-| Field         | Description                                                                    |
-| ------------- | ------------------------------------------------------------------------------ |
-| `repo`        | Full HTTPS URL of the upstream repository                                      |
-| `branch`      | Upstream branch to track                                                       |
-| `commit`      | Last synced upstream commit hash (empty/absent for the first sync)             |
-| `subDir`      | Single subfolder within the upstream repo to sync, prefix-stripped (optional)  |
-| `sparsePaths` | Multiple upstream directories to vendor, identity-mapped (optional; see below) |
-| `cloneFilter` | Partial-clone filter, `git --filter=<value>` (optional; default `blob:none`)   |
-| `tag`         | Tag name if synced to a tag (empty string otherwise)                           |
-| `lastSync`    | ISO timestamp of last sync (empty string if never synced)                      |
+| Field                | Description                                                                                |
+| -------------------- | ------------------------------------------------------------------------------------------ |
+| `repo`               | Full URL of the upstream repository                                                        |
+| `branch`             | Upstream branch to track                                                                   |
+| `commit`             | Last synced upstream commit hash (empty/absent for the first sync)                         |
+| `subDir`             | Single subfolder within the upstream repo to sync, prefix-stripped (optional)              |
+| `sparsePaths`        | Multiple upstream directories or files to vendor, identity-mapped (optional; see below)    |
+| `cloneFilter`        | Partial-clone filter, `git --filter=<value>` (optional; default `blob:none`; history mode) |
+| `fetchMode`          | `"history"` (default) or `"snapshot"` (optional; see below)                                |
+| `submodules`         | Git submodules to sync at the SHAs upstream pins (optional; snapshot mode; see below)      |
+| `keepLocalDeletions` | Keep files removed from the vendored copy removed on every sync (optional; snapshot mode)  |
+| `tag`                | Tag name if synced to a tag (empty string otherwise)                                       |
+| `lastSync`           | ISO timestamp of last sync (empty string if never synced)                                  |
 
 > `subDir` and `sparsePaths` are mutually exclusive. Omit both to sync the whole repo.
 
@@ -200,6 +223,8 @@ When `sparsePaths` is set:
 - **`.syncignore` still applies** for fine-grained trimming _within_ the selected
   directories (e.g. drop `base/test/`).
 - It is **mutually exclusive** with `subDir`.
+- Entries may also be **files** (e.g. `"LICENSE"` at the repo root) to vendor
+  single files outside the listed directories.
 - The clone uses **`--no-checkout`** so the entire default branch is never
   materialized before sparse-checkout narrows it; hydration happens once, at the
   sparse target checkout.
@@ -218,7 +243,109 @@ are ever fetched, shrinking the initial clone by orders of magnitude:
 
 Trade-off: `tree:0` makes later **history-walking** operations (the 3-way-merge
 re-sync, PR-note `git log`) fetch trees on demand, so they are slower. A **first
-sync** runs no merge, so `tree:0` is essentially free for the initial import.
+sync** runs no merge, so `tree:0` is essentially free for the initial import. On
+repos the size of Chromium these on-demand fetches can take very long or fail;
+use `fetchMode: "snapshot"` instead.
+
+#### Snapshot mode (`fetchMode: "snapshot"`)
+
+The default `history` mode keeps a partial clone of the upstream history in
+`.sync/<dep>/` and merges the target commit into the base commit. Snapshot mode
+needs no history at all, which makes it the right choice for very large repos
+and for release tags that live on separate branches:
+
+```json
+{
+  "repo": "https://chromium.googlesource.com/chromium/src",
+  "branch": "main",
+  "commit": "a1956b5dc600da374ac77dae6723e664488f09c2",
+  "tag": "149.0.7827.149",
+  "fetchMode": "snapshot",
+  "sparsePaths": ["LICENSE", "base", "sandbox", "build"]
+}
+```
+
+In snapshot mode fork-sync:
+
+- resolves `--tag`/`--branch` with `git ls-remote` (no local tags needed;
+  `--commit` must be a full SHA),
+- fetches **only the base and target commits** (`--depth=1`) into
+  `.sync/<dep>/`,
+- builds two synthetic commits containing just the synced scope, the target
+  parented on the base, so the 3-way merge base is **exactly** the last synced
+  commit — even when the target is not a descendant of it (e.g.
+  `149.0.7827.149` → `156.0.8078.48`),
+- links the upstream range in the PR notes instead of listing every commit.
+
+Conflict resolution, `--continue`, `--abort`, and PR creation work as in history
+mode. The first snapshot sync of a big repo downloads one full snapshot (for
+Chromium about 1.4 GB); later syncs only fetch what changed.
+
+#### Git submodules (`submodules`)
+
+Many large repos pull third-party code in as git submodules. Their content is
+not part of the superproject's tree (only a _gitlink_ pinning a commit of another
+repo), so it is normally invisible to fork-sync. List the submodules to follow
+by their path in the superproject:
+
+```json
+{
+  "fetchMode": "snapshot",
+  "submodules": {
+    "third_party/boringssl/src": {},
+    "third_party/perfetto": {
+      "fallbackUrls": ["https://github.com/google/perfetto"]
+    }
+  }
+}
+```
+
+For each listed submodule fork-sync reads the URL from upstream's
+`.gitmodules` and the pinned SHA from the gitlink **at the base and at the
+target commit**, fetches both, and grafts the submodule's files into the synced
+tree in place of the gitlink. The SHAs are never written to the config: they move
+with the superproject, so a sync always vendors the versions upstream tested
+together. Everything else (3-way merge of local edits, conflicts, `.syncignore`,
+deletions) works on submodule files exactly as on the superproject's own files.
+
+- `fallbackUrls` are tried in order when the `.gitmodules` URL cannot serve a
+  pinned commit (mirrors occasionally drop old commits). Commit SHAs pin the
+  content, so a fallback changes availability, not content. The PR notes flag
+  every fallback, and any change of a submodule's `.gitmodules` URL between the
+  base and target commits.
+- Like `git submodule`, URLs taken from upstream's `.gitmodules` may not use the
+  local `file` transport (unless the upstream repo itself is local), so an
+  upstream cannot make fork-sync vendor files from your disk. `fallbackUrls`
+  come from your config and are trusted.
+- A listed path that is no longer a gitlink at the target stops the sync, so the
+  config is updated deliberately.
+- Gitlinks inside the synced scope that are **not** listed are ignored and
+  reported in the PR notes (including ones that appeared or disappeared), as a
+  review checkpoint for new third-party code.
+- Nested submodules (submodules of a followed submodule) are not followed.
+
+#### Pruned forks (`keepLocalDeletions`)
+
+Some forks vendor only part of what the selected directories contain — e.g.
+just the files their build needs. Without this option, every sync re-adds the
+files the fork deleted unless `.syncignore` lists each of them. With
+`keepLocalDeletions: true` (snapshot mode):
+
+- a file that exists at the base commit but **not** in the vendored copy stays
+  absent, even if upstream changes it (the PR notes count these),
+- **new** upstream files are added (filter categories you never want with
+  `.syncignore`),
+- local files are deleted only when **upstream deleted** them; files that only
+  exist locally are never deleted,
+- a `sparsePaths` entry or submodule with **no** local files yet (just added to
+  the config) is imported in full rather than treated as removed,
+- fork-sync warns when a vendored file is hidden by `.syncignore` but still
+  exists upstream, since such a file would silently stop updating; re-include it
+  with a `!` pattern.
+
+To bring back a file you previously removed, copy it from upstream into the
+vendored copy and commit it; later syncs track it again. A removed file that
+upstream renames comes back under its new name, like any new upstream file.
 
 ### .syncignore
 
@@ -305,5 +432,6 @@ domain-specific merge guidance.
 ## Requirements
 
 - Node.js ^20.16.0 or >=22.4.0
-- Git
-- For AI merge: Claude CLI (`claude`) or GitHub Copilot CLI (`copilot`)
+- Git 2.25 or later
+- For AI merge: GitHub Copilot CLI (`copilot`, default) or Claude Code
+  (`claude`)

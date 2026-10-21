@@ -55,6 +55,8 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { parseArgs } from "node:util";
+import { parseModelList } from "./modules/ai-model.ts";
+import { REASONING_EFFORT_LEVELS } from "./modules/copilot.ts";
 import {
   copyFilesInParallel,
   deleteFile,
@@ -74,13 +76,30 @@ import {
   getGitTreeHashes,
   isGitRepo,
   pickTag,
+  resolveRemoteRef,
+  toCloneUrl,
   validateCloneOrigin,
   type ChangeStats,
   type MergeResult,
   type MergeTool,
 } from "./modules/git.ts";
 import { closePR, createPR, findPR, updatePR } from "./modules/github.ts";
+import {
+  compareUrl,
+  formatCommitTable,
+  formatSubmoduleSection,
+  type SubmoduleReport,
+  type UpstreamCommit,
+} from "./modules/notes.ts";
 import * as proc from "./modules/proc.ts";
+import {
+  buildSnapshotCommits,
+  fetchSubmodules,
+  resolveSubmodules,
+  type ResolvedSubmodule,
+  type SnapshotResult,
+  type SubmoduleSpec,
+} from "./modules/snapshot.ts";
 const { spawn, exec } = proc;
 
 import type { Job } from "./modules/job-ui.ts";
@@ -130,6 +149,9 @@ const SYNC_PR_NOTES_FILE = "sync-pr-notes.md";
 
 /** Merge result for paths that never run a merge (e.g. a first sync). */
 const EMPTY_MERGE_RESULT: MergeResult = { resolved: [], conflicts: [] };
+
+/** Git config key marking .sync/<dep>/ as a snapshot-mode repo. */
+const SNAPSHOT_MODE_CONFIG_KEY = "forksync.fetchmode";
 
 /** AI merge script filename */
 const AI_MERGE_SCRIPT = import.meta.url.endsWith(".ts")
@@ -245,8 +267,16 @@ function parseCliArgs() {
 // =============================================================================
 
 export interface AiMergeConfig {
-  provider: "copilot" | "claude";
-  model?: string;
+  /** AI CLI to use (default: "copilot"). */
+  provider?: "copilot" | "claude";
+  /**
+   * Model, or an ordered preference list; ai-merge falls back to the next
+   * entry when the CLI reports a model as not available. Copilot default:
+   * "auto" (Copilot routes each request).
+   */
+  model?: string | string[];
+  /** Copilot `--reasoning-effort` (default "low"; "default" = model's own). */
+  reasoningEffort?: string;
   /** Minimum confidence to apply hunk: HIGH, MEDIUM (default), or LOW */
   minConfidence?: "HIGH" | "MEDIUM" | "LOW";
 }
@@ -283,9 +313,22 @@ interface SyncConfigFile {
   // dramatically shrinks the initial clone — at the cost of on-demand fetches
   // during later history-walking operations (merge re-syncs, PR-note logs).
   cloneFilter?: string;
+  // "history" (default): full-history partial clone of the upstream repo.
+  // "snapshot": fetch only the base and target commits (depth 1, no blobs up
+  // front) and merge synthetic snapshots; supports cross-branch targets.
+  fetchMode?: FetchMode;
+  // Git submodules (gitlink paths) whose content is synced at the SHAs the
+  // upstream commit pins. Requires fetchMode "snapshot".
+  submodules?: Record<string, { fallbackUrls?: string[] }>;
+  // Files present at the base commit but missing locally stay missing, and
+  // only files deleted by the merge are deleted locally. Requires "snapshot".
+  keepLocalDeletions?: boolean;
   tag: string; // Tag name if synced to a tag (empty string otherwise)
   lastSync: string; // ISO timestamp of last sync (empty string if never synced)
 }
+
+/** How the upstream repo is fetched into .sync/<dep>/. */
+type FetchMode = "history" | "snapshot";
 
 /**
  * Fully resolved sync configuration.
@@ -310,6 +353,11 @@ interface SyncConfig {
   subDir: string; // Normalized subfolder path, empty string = whole repo
   sparsePaths: string[]; // Normalized sparse-checkout paths, [] = not used
   cloneFilter: string; // git partial-clone filter, defaults to "blob:none"
+  fetchMode: FetchMode;
+  submodules: SubmoduleSpec[]; // Followed submodules, [] = none
+  /** Raw `submodules` object, written back unchanged by saveSyncConfig. */
+  submodulesRaw?: SyncConfigFile["submodules"];
+  keepLocalDeletions: boolean;
 }
 
 /**
@@ -331,14 +379,21 @@ interface SyncCheckpoint {
     work: string;
     target: string;
   };
+  /** Work branch commit before the merge (local overlay on the base). */
+  workCommit?: string;
+  /** Fingerprint of options that must not change while paused. */
+  options?: string;
+  /** Snapshot mode: resolved submodules and snapshot stats, for reporting. */
+  snapshot?: {
+    submodules: ResolvedSubmodule[];
+    gitlinks: SnapshotResult["gitlinks"];
+    pruned: SnapshotResult["pruned"];
+    /** Tracked local files hidden by .syncignore that upstream also has. */
+    frozen?: string[];
+    /** Scopes with no local files yet, imported in full (keepLocalDeletions). */
+    newlyFollowed?: string[];
+  };
   startedAt: string;
-}
-
-/** An upstream commit between base and target. */
-interface UpstreamCommit {
-  hash: string;
-  author: string;
-  subject: string;
 }
 
 type CliArgs = ReturnType<typeof parseCliArgs>;
@@ -368,8 +423,11 @@ class SyncSession {
   /** Sparse-checkout paths (identity-mapped), empty when not used. */
   readonly sparsePaths: string[];
   /** Pathspec(s) scoping listing on the upstream (sync) side: the sparse paths
-   * when set, else the single subDir, else [] (whole repo). */
+   * when set, else the single subDir, else [] (whole repo). In snapshot mode
+   * the synthetic trees are already scoped, so only subDir is kept. */
   readonly syncPathspecs: string[];
+  /** Snapshot mode: pathspecs selecting superproject entries for the trees. */
+  readonly snapshotScope: string[];
 
   // === Git repo wrapper for the sync directory ===
   readonly syncRepo: GitRepo;
@@ -380,6 +438,14 @@ class SyncSession {
   targetTag?: string;
   workBranch!: string;
   targetMergeBranch!: string;
+  /** Commit the work branch starts from (base commit, or synthetic base). */
+  workBaseCommit = "";
+  /** Work branch commit after the local overlay, before the merge. */
+  workCommit = "";
+  /** Snapshot mode results (submodules, gitlink drift, prune stats). */
+  snapshotInfo?: SyncCheckpoint["snapshot"];
+  /** Per-submodule results for the summary and PR notes. */
+  submoduleReports: SubmoduleReport[] = [];
   syncCheckpoint?: SyncCheckpoint;
   mergeResult!: MergeResult;
   changeStats!: ChangeStats;
@@ -408,12 +474,23 @@ class SyncSession {
     // sparsePaths are identity-mapped: no prefix stripping (syncSubPath stays at
     // the repo root), but the listing is scoped to the sparse paths.
     this.sparsePaths = config.sparsePaths;
-    this.syncPathspecs =
+    this.snapshotScope =
       this.sparsePaths.length > 0
         ? this.sparsePaths
         : this.subDirPrefix
           ? [this.subDirPrefix]
           : [];
+    this.syncPathspecs = this.isSnapshot
+      ? this.subDirPrefix
+        ? [this.subDirPrefix]
+        : []
+      : this.snapshotScope;
+    this.workBaseCommit = config.baseCommit;
+  }
+
+  /** True when the upstream is fetched as two snapshots (no history). */
+  get isSnapshot(): boolean {
+    return this.config.fetchMode === "snapshot";
   }
 
   /** True for the initial import of a dependency with no prior vendored content. */
@@ -470,7 +547,11 @@ class SyncSession {
         this.mergeResult = EMPTY_MERGE_RESULT;
       } else {
         this.generateBranchNames();
-        await this.createTargetBranch();
+        if (this.isSnapshot) {
+          await this.prepareSnapshot();
+        } else {
+          await this.createTargetBranch();
+        }
         await this.createWorkBranch();
         await this.performMerge();
       }
@@ -490,6 +571,7 @@ class SyncSession {
     }
 
     await this.applyChanges();
+    if (this.syncCheckpoint) await this.clearSyncCheckpoint();
     this.printSummary();
 
     if (this.args["create-pr"]) {
@@ -534,7 +616,7 @@ ${style.line()}
 ${style.label("Dependency:")}   ${this.config.name}
 ${style.label("Local path:")}   ${this.config.localPath}
 ${style.label("Upstream:")}     ${this.config.repo}
-${style.label("Work folder:")}  .sync/${this.config.name}/
+${style.label("Work folder:")}  .sync/${this.config.name}/${this.isSnapshot ? ` (snapshot mode${this.config.submodules.length ? `, ${this.config.submodules.length} submodule(s)` : ""})` : ""}
 
 ${style.label("Target:")}       ${target}
 ${style.label("Base commit:")}  ${this.config.baseCommit.slice(0, 8)}${mode === "resume" ? getResumeInfo() : ""}
@@ -668,6 +750,43 @@ ${style.line()}
         ? `\n\n${style.success(`Resolved: ${this.mergeResult.resolved.length} merge conflict(s)`)}`
         : "";
 
+    const submoduleSection = () => {
+      if (this.submoduleReports.length === 0) return "";
+      const rows = this.submoduleReports.map((r) => {
+        const pin =
+          r.baseSha === r.targetSha
+            ? `${r.targetSha.slice(0, 12)} (unchanged)`
+            : `${r.baseSha ? r.baseSha.slice(0, 12) : "(new)"} → ${r.targetSha.slice(0, 12)}`;
+        const { modified, added, deleted } = r.changes;
+        const fallback = r.servedUrl !== r.url ? ` [via ${r.servedUrl}]` : "";
+        const moved =
+          r.baseUrl && r.baseUrl !== r.url
+            ? ` [URL changed from ${r.baseUrl}]`
+            : "";
+        return `  ${r.path}: ${pin}, ${modified}M ${added}A ${deleted}D${fallback}${moved}`;
+      });
+      return `\n\n${style.label("Submodules:")}\n${rows.join("\n")}`;
+    };
+
+    const prunedSection = () => {
+      const newly = this.snapshotInfo?.newlyFollowed ?? [];
+      const newlyText =
+        newly.length > 0
+          ? `\n\nNewly followed, imported in full: ${newly.join(", ")}`
+          : "";
+      const pruned = this.snapshotInfo?.pruned;
+      if (!this.config.keepLocalDeletions || !pruned || pruned.count === 0) {
+        return newlyText;
+      }
+      return (
+        newlyText +
+        `\n\n${pruned.count} locally removed file(s) kept out` +
+        (pruned.changedUpstream > 0
+          ? ` (${pruned.changedUpstream} changed or removed upstream)`
+          : "")
+      );
+    };
+
     const footerMessage = () =>
       totalChanges > 0
         ? `Use ${style.command(`git diff ${localPath}/`)} to review changes.`
@@ -690,7 +809,7 @@ ${style.line()}
 Upstream: ${this.config.repo}
   Commit: ${style.command(shortCommit)} (${refName})
 
-${changesSection()}${resolvedSection()}
+${changesSection()}${resolvedSection()}${submoduleSection()}${prunedSection()}
 ${mergeBranchesSection()}
 ${style.line()}
 ${footerMessage()}
@@ -994,6 +1113,11 @@ ${style.line()}
    * Ensure the upstream clone exists and is up to date.
    */
   private async ensureUpstreamClone(): Promise<void> {
+    if (this.isSnapshot) {
+      await this.ensureSnapshotRepo();
+      return;
+    }
+
     const label = () => style.label("Upstream clone:");
     using job = jobs.addJob("upstream-clone", () => `${label()} setting up...`);
 
@@ -1002,6 +1126,30 @@ ${style.line()}
     const originValidation = repoExists
       ? await validateCloneOrigin(this.syncRepo, this.config.repo)
       : { valid: true, currentOrigin: undefined };
+
+    // A snapshot-mode repo (shallow, no history) cannot serve history mode.
+    if (
+      repoExists &&
+      originValidation.valid &&
+      (await this.syncRepo.configGet(SNAPSHOT_MODE_CONFIG_KEY))
+    ) {
+      job.warn(
+        `Cached repo at .sync/${this.config.name}/ is a snapshot-mode repo and cannot be used in history mode.`
+      );
+      const answer = await confirm(
+        "Delete it and clone the upstream history?",
+        { yes: this.args.yes }
+      );
+      if (!answer) {
+        job.done({ state: "failed", message: () => `${label()} not reusable` });
+        return fatal(
+          `Cannot proceed: .sync/${this.config.name}/ must be replaced for history mode.`
+        );
+      }
+      job.step("Removing snapshot repo...");
+      await removeDir(this.syncPath);
+      repoExists = false;
+    }
 
     if (!originValidation.valid && repoExists) {
       job.warn(
@@ -1082,6 +1230,264 @@ ${style.line()}
   }
 
   /**
+   * Snapshot mode: ensure .sync/<dep>/ is a plain repo with the upstream as
+   * `origin` and no sparse checkout (the synthetic trees are already scoped).
+   * Objects are fetched later, once the base and target SHAs are known. A
+   * cached history-mode clone is replaced, since it is not reusable here.
+   */
+  private async ensureSnapshotRepo(): Promise<void> {
+    const label = () => style.label("Upstream repo:");
+    using job = jobs.addJob("upstream-clone", () => `${label()} setting up...`);
+
+    let repoExists = await isGitRepo(this.syncPath);
+    if (repoExists) {
+      job.step("Validating cached repo...");
+      const origin = await validateCloneOrigin(this.syncRepo, this.config.repo);
+      const mode = await this.syncRepo.configGet(SNAPSHOT_MODE_CONFIG_KEY);
+      const partial = await this.syncRepo.configGet("remote.origin.promisor");
+      if (!origin.valid || mode !== "snapshot" || partial) {
+        const reason = !origin.valid
+          ? `origin is ${origin.currentOrigin}, expected ${this.config.repo}`
+          : mode !== "snapshot"
+            ? "it is a history-mode clone"
+            : "it is a partial clone";
+        job.warn(
+          `Cached repo at .sync/${this.config.name}/ is not reusable: ${reason}.`
+        );
+        const answer = await confirm("Delete it and start a snapshot repo?", {
+          yes: this.args.yes,
+        });
+        if (!answer) {
+          job.done({
+            state: "failed",
+            message: () => `${label()} not reusable`,
+          });
+          return fatal(
+            `Cannot proceed: .sync/${this.config.name}/ must be replaced for snapshot mode.`
+          );
+        }
+        job.step("Removing cached repo...");
+        await removeDir(this.syncPath);
+        repoExists = false;
+      }
+    }
+
+    if (repoExists) {
+      job.step("Resetting sync directory...");
+      await this.syncRepo.resetHard();
+      await this.syncRepo.cleanFd();
+      job.done(() => `${label()} reusing .sync/${this.config.name}/`);
+      return;
+    }
+
+    job.step("Initializing snapshot repo...");
+    await ensureDir(this.syncPath);
+    await spawn("git", ["init", "--quiet"], { cwd: this.syncPath });
+    await this.syncRepo.configSet(
+      "remote.origin.url",
+      toCloneUrl(this.config.repo)
+    );
+    await this.syncRepo.configSet(SNAPSHOT_MODE_CONFIG_KEY, "snapshot");
+    job.done(() => `${label()} initialized .sync/${this.config.name}/`);
+  }
+
+  /**
+   * Snapshot mode: resolve the target via `ls-remote`, fetch the base and
+   * target snapshots, resolve and fetch followed submodules, and write the
+   * synthetic base/target commits. Sets {@link workBaseCommit} and creates the
+   * target merge branch (first sync: just checks out the target).
+   */
+  private async prepareSnapshot(): Promise<void> {
+    const label = () => style.label("Snapshot:");
+    using job = jobs.addJob("snapshot", () => `${label()} preparing...`);
+
+    await this.resolveTargetRemote(job);
+
+    const base = this.config.baseCommit;
+    const shas = [...new Set([base, this.targetCommit].filter(Boolean))];
+    job.step(`Fetching ${shas.map((s) => s.slice(0, 8)).join(" and ")}...`);
+    // Full snapshots (no blob filter): fetching blobs later by object ID makes
+    // some servers (e.g. googlesource) prove reachability per object, which
+    // takes minutes for old commits. Wanting the commits themselves does not.
+    try {
+      await this.syncRepo.fetchRefs("origin", shas, {
+        depth: 1,
+        noTags: true,
+      });
+    } catch (e) {
+      job.done({ state: "failed", message: () => `${label()} fetch failed` });
+      return fatal(
+        `Could not fetch ${shas.join(" and ")} from ${this.config.repo}:\n` +
+          ((e as Error).message ?? String(e))
+      );
+    }
+    for (const sha of shas) {
+      if (!(await this.syncRepo.hasCommit(sha))) {
+        job.done({ state: "failed", message: () => `${label()} fetch failed` });
+        return fatal(
+          `Upstream commit ${sha} could not be fetched from ${this.config.repo}.`
+        );
+      }
+    }
+
+    let submodules: ResolvedSubmodule[] = [];
+    if (this.config.submodules.length > 0) {
+      job.step("Resolving submodules...");
+      submodules = await resolveSubmodules(
+        this.syncRepo,
+        this.config.repo,
+        this.config.submodules,
+        base,
+        this.targetCommit
+      );
+      await fetchSubmodules(this.syncRepo, submodules, this.config.submodules, {
+        onProgress: (message) => job.step(message),
+        // A local superproject (e.g. a test fixture) may use local
+        // submodule URLs; a remote one may not.
+        allowLocalUrls:
+          /^file:/i.test(this.config.repo) || path.isAbsolute(this.config.repo),
+      });
+    }
+
+    let isPruned: ((p: string) => boolean) | undefined;
+    const frozen: string[] = [];
+    const newScopes: string[] = [];
+    if (this.config.keepLocalDeletions && base) {
+      job.step("Listing local files...");
+      const localFiles = new Set(
+        await getAllowedRelativePaths(
+          this.mainRepo,
+          this.syncIgnorePath,
+          this.depPathPrefix,
+          this.depPathPrefix
+        )
+      );
+      // Tracked local files hidden by .syncignore: if upstream has them too,
+      // they would silently never update. Collected for a warning.
+      const tracked = await getAllowedRelativePaths(
+        this.mainRepo,
+        undefined,
+        this.depPathPrefix,
+        this.depPathPrefix
+      );
+      const ignoredTracked = new Set(tracked.filter((f) => !localFiles.has(f)));
+      // A followed submodule or sparse path with no local files at all was
+      // just added to the config: import it in full instead of treating its
+      // upstream files as pruned.
+      const hasLocalUnder = (scope: string) => {
+        if (localFiles.has(scope)) return true;
+        for (const f of localFiles) if (f.startsWith(`${scope}/`)) return true;
+        return false;
+      };
+      for (const scope of [
+        ...this.config.sparsePaths,
+        ...this.config.submodules.map((s) => s.path),
+      ]) {
+        if (!hasLocalUnder(scope)) newScopes.push(scope);
+      }
+      const prefix = this.subDirPrefix ? `${this.subDirPrefix}/` : "";
+      isPruned = (upstreamPath) => {
+        if (prefix && !upstreamPath.startsWith(prefix)) return true;
+        const local = upstreamPath.slice(prefix.length);
+        if (localFiles.has(local)) return false;
+        if (newScopes.some((s) => local === s || local.startsWith(`${s}/`))) {
+          return false;
+        }
+        if (ignoredTracked.has(local)) frozen.push(local);
+        return true;
+      };
+    }
+
+    job.step("Writing snapshot commits...");
+    const snapshot = await buildSnapshotCommits({
+      repo: this.syncRepo,
+      scope: this.snapshotScope,
+      submodules,
+      baseCommit: base,
+      targetCommit: this.targetCommit,
+      isPruned,
+    });
+    this.snapshotInfo = {
+      submodules,
+      gitlinks: snapshot.gitlinks,
+      pruned: snapshot.pruned,
+      frozen: frozen.sort(),
+      newlyFollowed: newScopes,
+    };
+    if (newScopes.length > 0) {
+      job.step(`Newly followed (imported in full): ${newScopes.join(", ")}`);
+    }
+    if (frozen.length > 0) {
+      job.warn(
+        `${frozen.length} vendored file(s) are excluded by .syncignore but exist upstream; ` +
+          `they will not be updated (e.g. ${frozen.slice(0, 3).join(", ")}). ` +
+          `Re-include them with a '!' pattern if they should follow upstream.`
+      );
+    }
+
+    if (this.isFirstSync) {
+      job.step(`Checking out target snapshot...`);
+      await this.syncRepo.checkout(snapshot.targetCommit);
+    } else {
+      this.workBaseCommit = snapshot.baseCommit;
+      job.step(`Creating branch ${this.targetMergeBranch}...`);
+      await this.syncRepo.branchForce(
+        this.targetMergeBranch,
+        snapshot.targetCommit
+      );
+    }
+
+    const subText =
+      submodules.length > 0 ? `, ${submodules.length} submodule(s)` : "";
+    const pruneText = isPruned
+      ? `, ${snapshot.pruned.count} pruned path(s) kept out`
+      : "";
+    job.done(
+      () =>
+        `${label()} ${base ? `${base.slice(0, 8)} → ` : ""}${this.targetCommit.slice(0, 8)}${
+          this.targetTag ? ` (${this.targetTag})` : ""
+        }${subText}${pruneText}`
+    );
+  }
+
+  /**
+   * Snapshot mode target resolution through the remote (no local refs):
+   * `--commit` must be a full SHA, `--tag` and the branch go via `ls-remote`.
+   */
+  private async resolveTargetRemote(job: Job): Promise<void> {
+    this.targetBranch = this.args.branch ?? this.config.branch;
+    this.targetTag = this.args.tag;
+
+    if (this.args.commit) {
+      if (!/^[0-9a-f]{40}([0-9a-f]{24})?$/i.test(this.args.commit)) {
+        return fatal(
+          `--commit must be a full commit SHA in snapshot mode (got '${this.args.commit}').`
+        );
+      }
+      this.targetCommit = this.args.commit.toLowerCase();
+      job.step(
+        `Using specified target commit: ${this.targetCommit.slice(0, 8)}`
+      );
+      return;
+    }
+
+    const ref = this.args.tag
+      ? `refs/tags/${this.args.tag}`
+      : `refs/heads/${this.targetBranch}`;
+    job.step(`Resolving ${ref} on ${this.config.repo}...`);
+    const commit = await resolveRemoteRef(this.syncRepo, "origin", ref);
+    if (!commit) {
+      return fatal(
+        this.args.tag
+          ? `Tag '${this.args.tag}' not found on ${this.config.repo}.`
+          : `Branch '${this.targetBranch}' not found on ${this.config.repo}.`
+      );
+    }
+    this.targetCommit = commit;
+    job.step(`${ref} → ${commit.slice(0, 8)}`);
+  }
+
+  /**
    * Generate branch names for this sync session.
    */
   private generateBranchNames(): void {
@@ -1100,6 +1506,12 @@ ${style.line()}
    * selected files into the local path. `.syncignore` still applies.
    */
   private async performFirstSync(): Promise<void> {
+    if (this.isSnapshot) {
+      await this.prepareSnapshot();
+      await this.copySyncIgnoreToSyncRepo();
+      return;
+    }
+
     const label = () => style.label("First sync:");
     using job = jobs.addJob("first-sync", () => `${label()} importing...`);
 
@@ -1176,16 +1588,47 @@ ${style.line()}
         `Using specified target commit: ${this.args.commit.slice(0, 8)}`
       );
       this.targetCommit = this.args.commit;
+      // Commits only reachable from refs `git fetch origin` skips (e.g.
+      // release branches outside refs/heads) must be fetched by SHA.
+      if (
+        /^[0-9a-f]{40}([0-9a-f]{24})?$/i.test(this.args.commit) &&
+        !(await this.syncRepo.hasCommit(this.args.commit))
+      ) {
+        job.step(`Fetching commit ${this.args.commit.slice(0, 8)}...`);
+        await this.syncRepo.fetchRefs("origin", [this.args.commit], {
+          noTags: true,
+        });
+      }
     } else if (this.args.tag) {
       // Tag specified — resolve to commit using local refs
       job.step(`Resolving target tag ${this.args.tag}...`);
       // git rev-list -n 1 handles both lightweight and annotated tags
-      const commit = await this.syncRepo.revList(`refs/tags/${this.args.tag}`, {
+      let commit = await this.syncRepo.revList(`refs/tags/${this.args.tag}`, {
         count: 1,
       });
       if (!commit) {
+        // Tags on commits outside the fetched branches are not auto-followed
+        // by `git fetch origin`; fetch this one explicitly.
+        job.step(`Fetching tag ${this.args.tag}...`);
+        const tagRef = `refs/tags/${this.args.tag}`;
+        let fetchError = "";
+        try {
+          await this.syncRepo.fetchRefs("origin", [`+${tagRef}:${tagRef}`], {
+            noTags: true,
+          });
+        } catch (e) {
+          fetchError = (e as Error).message ?? String(e);
+        }
+        commit = await this.syncRepo.revList(tagRef, { count: 1 });
+        if (!commit && fetchError) {
+          fatal(
+            `Could not fetch tag '${this.args.tag}' from origin:\n${fetchError}`
+          );
+        }
+      }
+      if (!commit) {
         fatal(
-          `Tag '${this.args.tag}' not found in local clone.\n` +
+          `Tag '${this.args.tag}' not found in local clone or on origin.\n` +
             `Try running: git fetch origin --tags (in ${this.syncPath})`
         );
       }
@@ -1237,9 +1680,9 @@ ${style.line()}
     using job = jobs.addJob("work-branch", () => `${label()} creating...`);
 
     job.step(
-      `Checking out base commit ${this.config.baseCommit.slice(0, 8)}...`
+      `Checking out base ${this.isSnapshot ? "snapshot" : "commit"} ${this.workBaseCommit.slice(0, 8)}...`
     );
-    await this.syncRepo.checkout(this.config.baseCommit);
+    await this.syncRepo.checkout(this.workBaseCommit);
 
     job.step(`Creating branch ${this.workBranch}...`);
     await this.syncRepo.checkoutNewBranch(this.workBranch);
@@ -1281,6 +1724,7 @@ ${style.line()}
     if (status) {
       await this.syncRepo.commit("Local changes");
     }
+    this.workCommit = await this.syncRepo.revParse("HEAD");
 
     job.done(() => `${label()} created ${this.workBranch}`);
   }
@@ -1334,13 +1778,9 @@ ${style.line()}
 
     this.mergeResult = await this.syncRepo.getMergeResult();
 
-    if (this.mergeResult.conflicts.length > 0) {
-      return false;
-    }
-
-    // Conflicts resolved - clean up checkpoint
-    await this.clearSyncCheckpoint();
-    return true;
+    // A checkpoint left in place is cleared by run() once the changes are
+    // applied, so a failure while applying can still be resumed.
+    return this.mergeResult.conflicts.length === 0;
   }
 
   /**
@@ -1409,21 +1849,7 @@ ${style.line()}
     }
 
     // Delete files removed upstream
-    const allowedSync = new Set(
-      await getAllowedRelativePaths(
-        this.syncRepo,
-        this.syncIgnorePath,
-        this.subDirPrefix,
-        this.syncPathspecs
-      )
-    );
-    const localFiles = await getAllowedRelativePaths(
-      this.mainRepo,
-      this.syncIgnorePath,
-      this.depPathPrefix,
-      this.depPathPrefix
-    );
-    const filesToDelete = localFiles.filter((file) => !allowedSync.has(file));
+    const filesToDelete = await this.computeFilesToDelete();
 
     if (filesToDelete.length > 0) {
       let deleted = 0;
@@ -1453,6 +1879,22 @@ ${style.line()}
     job.step("Computing change statistics...");
     const changes = await getChangeStats(this.mainRepo, this.depPathPrefix);
     this.changeStats = changes;
+
+    this.submoduleReports = [];
+    for (const sub of this.snapshotInfo?.submodules ?? []) {
+      this.submoduleReports.push({
+        path: sub.path,
+        url: sub.url,
+        baseUrl: sub.baseUrl,
+        servedUrl: sub.servedUrl,
+        baseSha: sub.baseSha,
+        targetSha: sub.targetSha,
+        changes: await getChangeStats(
+          this.mainRepo,
+          this.depPathPrefix ? `${this.depPathPrefix}/${sub.path}` : sub.path
+        ),
+      });
+    }
 
     const newTag = this.targetTag ?? "";
     const totalChanges = changes.added + changes.modified + changes.deleted;
@@ -1487,6 +1929,11 @@ ${style.line()}
       ...(this.config.cloneFilter !== "blob:none"
         ? { cloneFilter: this.config.cloneFilter }
         : {}),
+      ...(this.isSnapshot ? { fetchMode: this.config.fetchMode } : {}),
+      ...(this.config.submodulesRaw
+        ? { submodules: this.config.submodulesRaw }
+        : {}),
+      ...(this.config.keepLocalDeletions ? { keepLocalDeletions: true } : {}),
       tag: newTag,
       lastSync: new Date().toISOString(),
     });
@@ -1515,7 +1962,8 @@ ${style.line()}
    */
   private async getUpstreamCommits(): Promise<UpstreamCommit[]> {
     // First sync has no base commit, so `base..target` is not a valid range.
-    if (this.isFirstSync) return [];
+    // Snapshot mode has no local history; the notes link to the range instead.
+    if (this.isFirstSync || this.isSnapshot) return [];
 
     const range = `${this.config.baseCommit}..${this.targetCommit}`;
     const output = await this.syncRepo.log({
@@ -1561,21 +2009,42 @@ ${style.line()}
     );
     lines.push("");
 
-    // Commit table
-    lines.push(`### Upstream Commits (${commits.length})`);
-    lines.push("");
-    if (commits.length > 0) {
-      lines.push("| Commit | Author | Description |");
-      lines.push("|--------|--------|-------------|");
-      for (const c of commits) {
+    // Commit table (history mode) or a link to the upstream range (snapshot)
+    if (this.isSnapshot) {
+      lines.push("### Upstream Changes");
+      lines.push("");
+      const link = compareUrl(
+        this.config.repo,
+        this.config.baseCommit,
+        this.targetCommit
+      );
+      if (this.isFirstSync) {
+        lines.push("Initial import.");
+      } else if (this.config.baseCommit === this.targetCommit) {
+        lines.push("Same upstream commit.");
+      } else {
         lines.push(
-          `| \`${c.hash.slice(0, 8)}\` | ${c.author} | ${c.subject} |`
+          link
+            ? `[\`${shortBase}..${shortTarget}\`](${link})`
+            : `\`${this.config.baseCommit}..${this.targetCommit}\``
         );
       }
     } else {
-      lines.push("No commits found in range.");
+      lines.push(`### Upstream Commits (${commits.length})`);
+      lines.push("");
+      lines.push(...formatCommitTable(commits));
     }
     lines.push("");
+
+    if (this.snapshotInfo) {
+      lines.push(
+        ...formatSubmoduleSection(
+          this.submoduleReports,
+          this.snapshotInfo.gitlinks,
+          !this.isFirstSync
+        )
+      );
+    }
 
     // Conflict resolution summary
     const { resolved, conflicts } = this.mergeResult;
@@ -1598,6 +2067,32 @@ ${style.line()}
     lines.push("### Files Changed");
     lines.push("");
     lines.push(`- ${modified} modified, ${added} added, ${deleted} deleted`);
+    const pruned = this.snapshotInfo?.pruned;
+    if (this.config.keepLocalDeletions && pruned && pruned.count > 0) {
+      lines.push(
+        `- ${pruned.count} locally removed file(s) kept out` +
+          (pruned.changedUpstream > 0
+            ? ` (${pruned.changedUpstream} changed or removed upstream)`
+            : "")
+      );
+    }
+    const frozen = this.snapshotInfo?.frozen ?? [];
+    const newlyFollowed = this.snapshotInfo?.newlyFollowed ?? [];
+    if (newlyFollowed.length > 0) {
+      lines.push(
+        `- Newly followed, imported in full: ${newlyFollowed.map((p) => `\`${p}\``).join(", ")}`
+      );
+    }
+    if (frozen.length > 0) {
+      lines.push(
+        `- ⚠️ ${frozen.length} vendored file(s) excluded by .syncignore were not updated: ` +
+          frozen
+            .slice(0, 10)
+            .map((f) => `\`${f}\``)
+            .join(", ") +
+          (frozen.length > 10 ? `, … and ${frozen.length - 10} more` : "")
+      );
+    }
     lines.push("");
 
     // Footer
@@ -1664,12 +2159,29 @@ ${style.line()}
         `Sync config commit changed - was another sync completed while this one was paused?`
       );
     }
+    if (
+      checkpoint.options !== undefined &&
+      checkpoint.options !== this.optionsFingerprint()
+    ) {
+      return fatal(
+        `Sync options (fetchMode, keepLocalDeletions, subDir, sparsePaths, or submodules) ` +
+          `changed since the sync started. Restore them, or run --abort and start again.`
+      );
+    }
+    if (this.config.keepLocalDeletions && !checkpoint.workCommit) {
+      return fatal(
+        `The paused sync was started by an older fork-sync and cannot be continued ` +
+          `with keepLocalDeletions. Run --abort and start again.`
+      );
+    }
 
     this.targetCommit = checkpoint.upstream.targetCommit;
     this.targetBranch = checkpoint.upstream.branch;
     this.targetTag = checkpoint.upstream.tag ?? "";
     this.workBranch = checkpoint.mergeBranches.work;
     this.targetMergeBranch = checkpoint.mergeBranches.target;
+    this.workCommit = checkpoint.workCommit ?? "";
+    this.snapshotInfo = checkpoint.snapshot;
   }
 
   /**
@@ -1678,6 +2190,17 @@ ${style.line()}
   private async clearSyncCheckpoint(): Promise<void> {
     await deleteFile(this.getSyncCheckpointPath());
     this.syncCheckpoint = undefined;
+  }
+
+  /** Options that must not change while a sync is paused. */
+  private optionsFingerprint(): string {
+    return JSON.stringify({
+      fetchMode: this.config.fetchMode,
+      keepLocalDeletions: this.config.keepLocalDeletions,
+      subDir: this.config.subDir,
+      sparsePaths: this.config.sparsePaths,
+      submodules: this.config.submodules.map((s) => s.path),
+    });
   }
 
   /**
@@ -1698,6 +2221,9 @@ ${style.line()}
         work: this.workBranch,
         target: this.targetMergeBranch,
       },
+      ...(this.workCommit ? { workCommit: this.workCommit } : {}),
+      ...(this.snapshotInfo ? { snapshot: this.snapshotInfo } : {}),
+      options: this.optionsFingerprint(),
       startedAt: new Date().toISOString(),
     };
 
@@ -1809,8 +2335,13 @@ ${style.line()}
       result.push("--ai-provider", this.config.aiMerge.provider);
     }
 
-    if (this.config.aiMerge.model) {
-      result.push("--ai-model", this.config.aiMerge.model);
+    const models = parseModelList(this.config.aiMerge.model);
+    if (models.length > 0) {
+      result.push("--ai-model", models.join(","));
+    }
+
+    if (this.config.aiMerge.reasoningEffort) {
+      result.push("--ai-reasoning-effort", this.config.aiMerge.reasoningEffort);
     }
 
     if (this.config.aiMerge.minConfidence) {
@@ -1862,6 +2393,50 @@ ${style.line()}
         this.syncPathspecs
       ),
     };
+  }
+
+  /**
+   * Local files to delete after the merge.
+   *
+   * Default: local files (minus `.syncignore`) missing from the merged upstream
+   * listing. With `keepLocalDeletions`: only files the merge itself deleted
+   * (present in the work branch before the merge, gone after it), so local-only
+   * files and pruned files are never touched.
+   */
+  private async computeFilesToDelete(): Promise<string[]> {
+    const localFiles = await getAllowedRelativePaths(
+      this.mainRepo,
+      this.syncIgnorePath,
+      this.depPathPrefix,
+      this.depPathPrefix
+    );
+
+    if (this.config.keepLocalDeletions) {
+      if (this.isFirstSync || !this.workCommit) return [];
+      const prefix = this.subDirPrefix ? `${this.subDirPrefix}/` : "";
+      const deleted = new Set<string>();
+      for (const p of await this.syncRepo.deletedPaths(
+        this.workCommit,
+        "HEAD"
+      )) {
+        const normalized = normalizePath(p);
+        if (!prefix) deleted.add(normalized);
+        else if (normalized.startsWith(prefix)) {
+          deleted.add(normalized.slice(prefix.length));
+        }
+      }
+      return localFiles.filter((file) => deleted.has(file));
+    }
+
+    const allowedSync = new Set(
+      await getAllowedRelativePaths(
+        this.syncRepo,
+        this.syncIgnorePath,
+        this.subDirPrefix,
+        this.syncPathspecs
+      )
+    );
+    return localFiles.filter((file) => !allowedSync.has(file));
   }
 
   private async computeChangedPaths(
@@ -1977,6 +2552,62 @@ function getSyncConfigFilePath(localPath: string): string {
 }
 
 /**
+ * Validate the manifest's `aiMerge` settings. They are written into the git
+ * mergetool command line, so values are restricted to known words and model
+ * IDs made of safe characters.
+ */
+function validateAiMergeConfig(
+  aiMerge: AiMergeConfig | undefined,
+  manifestPath: string
+): void {
+  if (aiMerge === undefined) return;
+  const where = `in 'aiMerge' at ${manifestPath}`;
+  if (aiMerge === null || typeof aiMerge !== "object") {
+    fatal(`Invalid 'aiMerge' at ${manifestPath}: must be an object.`);
+  }
+  if (
+    aiMerge.provider !== undefined &&
+    aiMerge.provider !== "copilot" &&
+    aiMerge.provider !== "claude"
+  ) {
+    fatal(`Invalid 'provider' ${where}: use "copilot" or "claude".`);
+  }
+  const model = aiMerge.model as unknown;
+  const models =
+    typeof model === "string"
+      ? [model]
+      : Array.isArray(model)
+        ? (model as unknown[])
+        : model === undefined
+          ? []
+          : null;
+  if (
+    models === null ||
+    models.some((m) => typeof m !== "string" || !/^[\w.:/@[\]-]+$/.test(m))
+  ) {
+    fatal(
+      `Invalid 'model' ${where}: use a model ID or a list of model IDs ` +
+        `(letters, digits, and . _ - : / @ [ ] only).`
+    );
+  }
+  if (
+    aiMerge.reasoningEffort !== undefined &&
+    aiMerge.reasoningEffort !== "default" &&
+    !REASONING_EFFORT_LEVELS.includes(aiMerge.reasoningEffort)
+  ) {
+    fatal(
+      `Invalid 'reasoningEffort' ${where}: use "default" or one of ${REASONING_EFFORT_LEVELS.join(", ")}.`
+    );
+  }
+  if (
+    aiMerge.minConfidence !== undefined &&
+    !["HIGH", "MEDIUM", "LOW"].includes(aiMerge.minConfidence)
+  ) {
+    fatal(`Invalid 'minConfidence' ${where}: use HIGH, MEDIUM, or LOW.`);
+  }
+}
+
+/**
  * Load and validate the fully resolved sync configuration.
  * Combines data from the manifest and sync-config.json into a single object.
  * Calls fatal() if any required file is missing or invalid.
@@ -2000,6 +2631,7 @@ async function loadSyncConfig(
 
   // Validate uniqueness
   validateUniqueDependencyNames(manifest, manifestPath);
+  validateAiMergeConfig(manifest.aiMerge, manifestPath);
 
   // Find dependency
   const dep = manifest.dependencies.find((d) => d.name === depName);
@@ -2086,6 +2718,103 @@ async function loadSyncConfig(
     }
   }
 
+  const fetchMode = configFile.fetchMode ?? "history";
+  if (fetchMode !== "history" && fetchMode !== "snapshot") {
+    return fatal(
+      `Invalid 'fetchMode' in ${configPath}: must be "history" or "snapshot" (got "${String(configFile.fetchMode)}").`
+    );
+  }
+
+  const submodules: SubmoduleSpec[] = [];
+  if (configFile.submodules !== undefined) {
+    const raw = configFile.submodules as unknown;
+    if (raw === null || typeof raw !== "object" || Array.isArray(raw)) {
+      return fatal(
+        `Invalid 'submodules' in ${configPath}: must be an object mapping gitlink paths to options, ` +
+          `e.g. { "third_party/foo/src": {} }.`
+      );
+    }
+    for (const [key, options] of Object.entries(
+      raw as Record<string, unknown>
+    )) {
+      const normalized = normalizePath(key).replace(/\/+$/, "");
+      if (
+        !normalized ||
+        normalized.startsWith("/") ||
+        normalized.split("/").includes("..")
+      ) {
+        return fatal(
+          `Invalid submodule path in ${configPath}: must be a relative path within the upstream repo (got "${key}").`
+        );
+      }
+      const opts = (options ?? {}) as { fallbackUrls?: unknown };
+      if (typeof opts !== "object" || Array.isArray(opts)) {
+        return fatal(
+          `Invalid options for submodule "${key}" in ${configPath}: must be an object.`
+        );
+      }
+      const fallbackUrls = opts.fallbackUrls ?? [];
+      if (
+        !Array.isArray(fallbackUrls) ||
+        fallbackUrls.some((u) => typeof u !== "string" || !u)
+      ) {
+        return fatal(
+          `Invalid 'fallbackUrls' for submodule "${key}" in ${configPath}: must be an array of URLs.`
+        );
+      }
+      submodules.push({
+        path: normalized,
+        fallbackUrls: fallbackUrls as string[],
+      });
+    }
+    for (const a of submodules) {
+      for (const b of submodules) {
+        if (a !== b && (a.path === b.path || b.path.startsWith(a.path + "/"))) {
+          return fatal(
+            `Invalid 'submodules' in ${configPath}: "${b.path}" overlaps "${a.path}".`
+          );
+        }
+      }
+    }
+  }
+
+  const keepLocalDeletions = configFile.keepLocalDeletions ?? false;
+  if (typeof keepLocalDeletions !== "boolean") {
+    return fatal(
+      `Invalid 'keepLocalDeletions' in ${configPath}: must be true or false.`
+    );
+  }
+
+  if (fetchMode !== "snapshot") {
+    if (submodules.length > 0) {
+      return fatal(
+        `Invalid sync config at ${configPath}: 'submodules' requires "fetchMode": "snapshot".`
+      );
+    }
+    if (keepLocalDeletions) {
+      return fatal(
+        `Invalid sync config at ${configPath}: 'keepLocalDeletions' requires "fetchMode": "snapshot".`
+      );
+    }
+  }
+
+  if (
+    fetchMode === "snapshot" &&
+    configFile.commit &&
+    !/^[0-9a-f]{40}([0-9a-f]{24})?$/i.test(configFile.commit)
+  ) {
+    return fatal(
+      `Invalid 'commit' in ${configPath}: snapshot mode needs a full commit SHA (got "${configFile.commit}").`
+    );
+  }
+
+  if (configFile.subDir && submodules.length > 0) {
+    return fatal(
+      `Invalid sync config at ${configPath}: 'submodules' cannot be combined with 'subDir'. ` +
+        `Use 'sparsePaths' (or the whole repo) instead.`
+    );
+  }
+
   // Return combined config
   return {
     // From manifest
@@ -2099,7 +2828,10 @@ async function loadSyncConfig(
     // From sync-config.json
     repo: configFile.repo,
     branch: configFile.branch,
-    baseCommit: configFile.commit ?? "",
+    baseCommit:
+      fetchMode === "snapshot"
+        ? (configFile.commit ?? "").toLowerCase()
+        : (configFile.commit ?? ""),
     tag: configFile.tag,
     lastSync: configFile.lastSync,
     subDir: configFile.subDir
@@ -2107,6 +2839,10 @@ async function loadSyncConfig(
       : "",
     sparsePaths,
     cloneFilter: configFile.cloneFilter?.trim() || "blob:none",
+    fetchMode,
+    submodules,
+    submodulesRaw: configFile.submodules,
+    keepLocalDeletions,
   };
 }
 

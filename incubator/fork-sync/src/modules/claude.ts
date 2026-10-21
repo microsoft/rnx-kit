@@ -320,13 +320,16 @@ export async function invokeClaudeReadOnly(
     "--verbose",
   ];
 
-  if (options.model && options.model.trim().length > 0) {
-    cmdParts.push("--model", options.model.trim());
-  }
-
   // Meta-prompt references the prompt file via env var to avoid shell escaping issues
   const metaPrompt = `Read and follow the prompt in ${options.promptFile}`;
   const shellEnv: Record<string, string> = { CLAUDE_PROMPT: metaPrompt };
+
+  if (options.model && options.model.trim().length > 0) {
+    // Via env var: the model name comes from config and must not be parsed
+    // by the shell.
+    shellEnv.CLAUDE_MODEL = options.model.trim();
+    cmdParts.push("--model", shellVar("CLAUDE_MODEL"));
+  }
 
   // Add meta-prompt BEFORE --allowedTools (variadic option)
   cmdParts.push(shellVar("CLAUDE_PROMPT"));

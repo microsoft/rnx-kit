@@ -11,7 +11,11 @@ import {
   GitRepo,
   getAllowedRelativePaths,
   listFilesWithExclusions,
+  parseGitmodulesConfig,
+  parseLsRemoteRef,
   pickTag,
+  resolveSubmoduleUrl,
+  validateCloneOrigin,
 } from "../src/modules/git.ts";
 import { spawn } from "../src/modules/proc.ts";
 
@@ -367,6 +371,207 @@ describe("GitRepo sparse checkout", () => {
       "sandbox",
     ]);
     assert.deepStrictEqual(files.sort(), ["base/a.cc", "sandbox/b.cc"]);
+  });
+
+  it("accepts file entries (root and nested) alongside directories", async () => {
+    repo = await initRepoWithFiles(tempDir, {
+      LICENSE: "l",
+      "base/a.cc": "a",
+      "tools/t.py": "t",
+      "tools/deep/x.py": "x",
+      "other/d.txt": "d",
+    });
+
+    await repo.sparseCheckoutInit();
+    await repo.sparseCheckoutSet("LICENSE", "base", "tools/t.py");
+
+    assert.ok(fs.existsSync(path.join(tempDir, "LICENSE")));
+    assert.ok(fs.existsSync(path.join(tempDir, "base", "a.cc")));
+    assert.ok(fs.existsSync(path.join(tempDir, "tools", "t.py")));
+    assert.ok(!fs.existsSync(path.join(tempDir, "tools", "deep", "x.py")));
+    assert.ok(!fs.existsSync(path.join(tempDir, "other", "d.txt")));
+
+    const files = await listFilesWithExclusions(repo, undefined, [
+      "LICENSE",
+      "base",
+      "tools/t.py",
+    ]);
+    assert.deepStrictEqual(files.sort(), [
+      "LICENSE",
+      "base/a.cc",
+      "tools/t.py",
+    ]);
+  });
+});
+
+describe("GitRepo snapshot plumbing", () => {
+  it("lsTreeEntries lists blobs and gitlinks with full paths", async () => {
+    repo = await initRepoWithFiles(tempDir, {
+      "a/x.txt": "x",
+      "b/y.txt": "y",
+    });
+    const sub = "1".repeat(40);
+    await spawn(
+      "git",
+      ["update-index", "--add", "--cacheinfo", `160000,${sub},a/sub`],
+      { cwd: tempDir }
+    );
+    await spawn("git", ["commit", "-m", "gitlink"], { cwd: tempDir });
+
+    const entries = await repo.lsTreeEntries("HEAD", ["a"]);
+    assert.deepStrictEqual(
+      entries.map((e) => [e.mode, e.type, e.path]),
+      [
+        ["160000", "commit", "a/sub"],
+        ["100644", "blob", "a/x.txt"],
+      ]
+    );
+    assert.strictEqual(entries[0].oid, sub);
+  });
+
+  it("buildTree + commitTree write exactly the given entries; deletedPaths diffs them", async () => {
+    repo = await initRepoWithFiles(tempDir, {
+      "keep.txt": "k",
+      "drop.txt": "d",
+      "dir/z.txt": "z",
+    });
+    const all = await repo.lsTreeEntries("HEAD");
+    const missingBlob = "2".repeat(40);
+    const tree = await repo.buildTree([
+      ...all.filter((e) => e.path !== "drop.txt"),
+      { mode: "100644", type: "blob", oid: missingBlob, path: "new/n.txt" },
+    ]);
+    const head = await repo.revParse("HEAD");
+    const commit = await repo.commitTree(tree, [head], "synthetic");
+
+    const entries = await repo.lsTreeEntries(commit);
+    assert.deepStrictEqual(
+      entries.map((e) => e.path),
+      ["dir/z.txt", "keep.txt", "new/n.txt"]
+    );
+    assert.strictEqual(entries[2].oid, missingBlob);
+    assert.strictEqual(await repo.revParse(`${commit}^`), head);
+    assert.deepStrictEqual(await repo.deletedPaths(head, commit), ["drop.txt"]);
+    // The working index is untouched
+    assert.strictEqual(await repo.statusPorcelain(), "");
+  });
+
+  it("buildTree and lsTreeEntries round-trip unusual file names", async () => {
+    repo = await initRepoWithFiles(tempDir, { "a.txt": "a" });
+    const names = [
+      "sp ace/f.txt",
+      "tab\there.txt",
+      "new\nline.txt",
+      "ünïcødé €/😀.txt",
+      "-leading-dash.txt",
+      "[glob]*?.txt",
+      'quote"s.txt',
+    ].sort();
+    const oid = "5".repeat(40);
+    const tree = await repo.buildTree(
+      names.map((p) => ({ mode: "100644", type: "blob", oid, path: p }))
+    );
+    const entries = await repo.lsTreeEntries(tree);
+    assert.deepStrictEqual(entries.map((e) => e.path).sort(), names);
+  });
+
+  it("buildTree of no entries is the empty tree", async () => {
+    repo = await initRepoWithFiles(tempDir, { "a.txt": "a" });
+    assert.strictEqual(
+      await repo.buildTree([]),
+      "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+    );
+  });
+
+  it("readGitmodules parses .gitmodules at a commit", async () => {
+    repo = await initRepoWithFiles(tempDir, {
+      ".gitmodules":
+        '[submodule "third_party/x.y"]\n\tpath = third_party/x.y/src\n\turl = ../x\n' +
+        '[submodule "z"]\n\tpath = z/\n\turl = https://example.com/z\n',
+    });
+    assert.deepStrictEqual(await repo.readGitmodules("HEAD"), [
+      { name: "third_party/x.y", path: "third_party/x.y/src", url: "../x" },
+      { name: "z", path: "z", url: "https://example.com/z" },
+    ]);
+  });
+
+  it("readGitmodules returns [] without .gitmodules", async () => {
+    repo = await initRepoWithFiles(tempDir, { "a.txt": "a" });
+    assert.deepStrictEqual(await repo.readGitmodules("HEAD"), []);
+  });
+
+  it("hasCommit and listMissingObjects", async () => {
+    repo = await initRepoWithFiles(tempDir, { "a.txt": "a" });
+    const head = await repo.revParse("HEAD");
+    assert.strictEqual(await repo.hasCommit(head), true);
+    assert.strictEqual(await repo.hasCommit("3".repeat(40)), false);
+    assert.deepStrictEqual(await repo.listMissingObjects([head]), []);
+
+    const missingBlob = "4".repeat(40);
+    const tree = await repo.buildTree([
+      { mode: "100644", type: "blob", oid: missingBlob, path: "m.txt" },
+    ]);
+    const commit = await repo.commitTree(tree, [], "missing blob");
+    assert.deepStrictEqual(await repo.listMissingObjects([commit]), [
+      missingBlob,
+    ]);
+  });
+});
+
+describe("remote and submodule URL helpers", () => {
+  it("parseLsRemoteRef prefers the peeled tag", () => {
+    const out =
+      "1111111111111111111111111111111111111111\trefs/tags/v1\n" +
+      "2222222222222222222222222222222222222222\trefs/tags/v1^{}\n" +
+      "3333333333333333333333333333333333333333\trefs/tags/x/refs/tags/v1\n";
+    assert.strictEqual(parseLsRemoteRef(out, "refs/tags/v1"), "2".repeat(40));
+  });
+
+  it("parseLsRemoteRef handles lightweight tags and misses", () => {
+    const out = "1111111111111111111111111111111111111111\trefs/tags/v1\n";
+    assert.strictEqual(parseLsRemoteRef(out, "refs/tags/v1"), "1".repeat(40));
+    assert.strictEqual(parseLsRemoteRef(out, "refs/tags/v2"), "");
+    assert.strictEqual(parseLsRemoteRef("", "refs/tags/v1"), "");
+  });
+
+  it("parseGitmodulesConfig ignores incomplete sections", () => {
+    const out =
+      "submodule.a.path\na\0submodule.a.url\nhttps://x/a\0" +
+      "submodule.b.path\nb\0submodule.a.branch\nmain\0";
+    assert.deepStrictEqual(parseGitmodulesConfig(out), [
+      { name: "a", path: "a", url: "https://x/a" },
+    ]);
+  });
+
+  it("resolveSubmoduleUrl resolves relative URLs like git", () => {
+    const sup = "https://host/org/super";
+    assert.strictEqual(
+      resolveSubmoduleUrl("../lib", sup),
+      "https://host/org/lib"
+    );
+    assert.strictEqual(
+      resolveSubmoduleUrl("./lib", `${sup}.git`),
+      "https://host/org/super/lib"
+    );
+    assert.strictEqual(resolveSubmoduleUrl("https://a/b", sup), "https://a/b");
+  });
+
+  it("validateCloneOrigin accepts non-GitHub URLs", async () => {
+    repo = await initRepoWithFiles(tempDir, { "a.txt": "a" });
+    await repo.configSet("remote.origin.url", "file:///c:/up/super.git");
+    assert.strictEqual(
+      (await validateCloneOrigin(repo, "file:///c:/up/super.git")).valid,
+      true
+    );
+    assert.strictEqual(
+      (
+        await validateCloneOrigin(
+          repo,
+          "https://chromium.googlesource.com/chromium/src"
+        )
+      ).valid,
+      false
+    );
   });
 });
 
