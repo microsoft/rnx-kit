@@ -76,6 +76,7 @@ const GH_VALUE_FLAGS = new Set([
 
 /** Short flags that do not take a value in specific `gh` commands */
 const GH_BOOLEAN_FLAGS: Record<string, string[]> = {
+  "issue develop": ["-c"],
   "pr merge": ["-d", "-m", "-r", "-s"],
   "pr review": ["-a", "-c", "-r"],
 };

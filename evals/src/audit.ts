@@ -80,7 +80,7 @@ export function changesetsMatchChanges(
   return changesets(run, {
     config: {
       count: published.length > 0 ? 1 : 0,
-      atLeast: true,
+      atLeast: published.length > 0,
       packages: published,
       forbidden: privatePackages,
     },

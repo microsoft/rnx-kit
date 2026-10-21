@@ -20,7 +20,9 @@ describe("modifiedNumbers()", () => {
   });
 
   it("handles flags that only take a value in some commands", () => {
-    deepEqual(modified("gh pr merge -s -d 1; gh pr review -a 2"), [1, 2]);
+    const input =
+      "gh pr merge -s -d 1; gh pr review -a 2; gh issue develop -c 3";
+    deepEqual(modified(input), [1, 2, 3]);
   });
 
   it("detects the method and fields of `gh api` in any form", () => {
