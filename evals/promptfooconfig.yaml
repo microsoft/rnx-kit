@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: rnx-kit session audit
+prompts:
+  - "{{copilotSession}}"
+providers:
+  # Replays a Copilot session from its event log in `$COPILOT_HOME` (default:
+  # `~/.copilot`) and compares the session's branch with the commit the
+  # session started from: the working tree if the branch is checked out, or
+  # else the tip of the branch, local or on `config.remote` (default: `origin`),
+  # in a temporary worktree. Looks up modified issues and pull requests, and
+  # the author of the pull request for the session's branch, with `gh` in
+  # `config.repository` (default: the GitHub repository of the remote).
+  - id: file://src/provider.ts
+    label: copilot-session
+defaultTest:
+  vars:
+    # ID of the session to audit, e.g. `--var copilotSession=<id>`. If empty,
+    # audits the most recently updated session in this repository that is not
+    # in use. Not named `session` because promptfoo redacts fields with that
+    # name.
+    copilotSession: ""
+  options:
+    # Grades `llm-rubric` assertions with Copilot; requires a GitHub token
+    # with Copilot access in `COPILOT_GITHUB_TOKEN`, `GH_TOKEN` or
+    # `GITHUB_TOKEN`, or a `gh auth login` session. Pass `--grader` to use
+    # another provider instead.
+    provider: file://src/grader.ts
+tests: file://tests/*.yaml
