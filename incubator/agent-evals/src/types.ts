@@ -125,24 +125,6 @@ export type ContentMatcher = {
 };
 
 /**
- * Configuration for `usesPackageTestRunner`.
- */
-export type TestRunnerMatcher = {
-  /** Pass instead of failing if no test files changed */
-  optional?: boolean;
-};
-
-/**
- * Configuration for `noInlineTypeSpecifiers`.
- */
-export type TypeSpecifierMatcher = {
-  /** Regular expression matching the paths of the files to check */
-  files: string;
-  /** Only report specifiers on lines added in the diff */
-  addedLinesOnly?: boolean;
-};
-
-/**
  * Configuration for `changesets`.
  */
 export type ChangesetMatcher = {

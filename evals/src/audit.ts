@@ -1,10 +1,14 @@
 import {
+  changedPackages,
+  changesets,
   ranCommand,
   result,
   toAgentRun,
+  tryReadJSON,
   workspacePackages,
 } from "@rnx-kit/agent-evals";
 import type { AgentRun, GradingResult } from "@rnx-kit/agent-evals";
+import * as path from "node:path";
 import parseDiff from "parse-diff";
 
 const DEPENDENCY_LINE = /^[+-]\s*"[^"]+":\s*"([\^~]?\d|[a-z]+:)/;
@@ -58,4 +62,37 @@ export function docsiteDependencies(output: AgentRun | string): GradingResult {
   return run.files.some((file) => file.path === "docsite/yarn.lock")
     ? result([], "docsite/yarn.lock changed")
     : result(["Changed dependencies without updating docsite/yarn.lock"], "");
+}
+
+/**
+ * Passes if the agent added change files releasing all published packages it
+ * changed, and none if it did not change any. No change file may release a
+ * private package.
+ *
+ * Note: Changes that do not affect the published package, e.g. to tests or
+ * docs, do not need a change file, but Changesets does not tell them apart.
+ */
+export function changesetsMatchChanges(
+  output: AgentRun | string
+): GradingResult {
+  const run = toAgentRun(output);
+  const isChangeset = (file: { path: string }) =>
+    file.path.startsWith(".changeset/");
+  const published = changedPackages(run, (file) => !isChangeset(file))
+    .filter(({ manifest }) => !manifest.private)
+    .map(({ name }) => name);
+  const privatePackages: string[] = [];
+  for (const [name, dir] of workspacePackages(run.workdir)) {
+    if (tryReadJSON(path.join(run.workdir, dir, "package.json"))?.private) {
+      privatePackages.push(name);
+    }
+  }
+  return changesets(run, {
+    config: {
+      count: published.length > 0 ? 1 : 0,
+      atLeast: published.length > 0,
+      packages: published,
+      forbidden: privatePackages,
+    },
+  });
 }

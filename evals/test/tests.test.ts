@@ -1,7 +1,7 @@
+import type { AgentChangedFile } from "@rnx-kit/agent-evals";
 import { equal } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { usesPackageTestRunner } from "../src/tests.ts";
-import type { AgentChangedFile } from "../src/types.ts";
 import { added, diffAdding, makeRun } from "./helpers.ts";
 
 const NODE_TEST = [

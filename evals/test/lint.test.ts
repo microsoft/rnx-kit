@@ -1,7 +1,7 @@
+import type { AgentChangedFile } from "@rnx-kit/agent-evals";
 import { equal } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { noInlineTypeSpecifiers } from "../src/lint.ts";
-import type { AgentChangedFile } from "../src/types.ts";
 import { added, diffAdding, makeRun } from "./helpers.ts";
 
 describe("noInlineTypeSpecifiers()", () => {
