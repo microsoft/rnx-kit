@@ -27,6 +27,34 @@ describe("proc", () => {
       assert.strictEqual(result, "hello");
     });
 
+    it("should decode multi-byte UTF-8 split across chunks", async () => {
+      const result = await spawn("node", [
+        "-e",
+        'const b=Buffer.from("é€😀");process.stdout.write(b.subarray(0,1));setTimeout(()=>process.stdout.write(b.subarray(1,4)),50);setTimeout(()=>process.stdout.write(b.subarray(4)),100)',
+      ]);
+      assert.strictEqual(result, "é€😀");
+    });
+
+    it("should write input to stdin", async () => {
+      const result = await spawn(
+        "node",
+        [
+          "-e",
+          'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(s.toUpperCase()))',
+        ],
+        { input: "abc\0def" }
+      );
+      assert.strictEqual(result, "ABC\0DEF");
+    });
+
+    it("should ignore stdin when no input is given", async () => {
+      const result = await spawn("node", [
+        "-e",
+        'process.stdin.on("data",()=>{}).on("end",()=>console.log("eof"))',
+      ]);
+      assert.strictEqual(result, "eof");
+    });
+
     it("should throw ExecError on non-zero exit", async () => {
       await assert.rejects(
         async () => {

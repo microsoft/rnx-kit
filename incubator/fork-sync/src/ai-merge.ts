@@ -56,8 +56,17 @@ import * as proc from "./modules/proc.ts";
 const { exec, shellVar } = proc;
 
 // Import claude module
+import {
+  DEFAULT_COPILOT_MODELS,
+  DEFAULT_COPILOT_REASONING_EFFORT,
+  ModelChain,
+  parseModelList,
+} from "./modules/ai-model.ts";
 import { invokeClaudeReadOnly } from "./modules/claude.ts";
-import { invokeCopilotReadOnly } from "./modules/copilot.ts";
+import {
+  invokeCopilotReadOnly,
+  REASONING_EFFORT_LEVELS,
+} from "./modules/copilot.ts";
 import * as JobProgress from "./modules/job-ui.ts";
 import {
   debug,
@@ -142,8 +151,12 @@ ${style.heading("Batch Mode:")}
 
 ${style.heading("Options:")}
   ${style.command("-C")}, ${style.command("--directory")} <path>       Working directory for git operations (default: cwd)
-  ${style.command("--ai-provider")} <provider>     AI provider: ${style.highlight("claude")} (default) or ${style.highlight("copilot")}
-  ${style.command("--ai-model")} <model>           Optional model name for provider
+  ${style.command("--ai-provider")} <provider>     AI provider: ${style.highlight("copilot")} (default) or ${style.highlight("claude")}
+  ${style.command("--ai-model")} <models>          Model, or comma-separated preference list; falls back to the
+                               next one when a model is not available.
+                               Default for copilot: ${style.highlight(DEFAULT_COPILOT_MODELS.join(","))} (Copilot picks)
+  ${style.command("--ai-reasoning-effort")} <lvl>  Copilot reasoning effort: ${style.highlight(REASONING_EFFORT_LEVELS.join("|"))} or ${style.highlight("default")}
+                               Default: ${style.highlight(DEFAULT_COPILOT_REASONING_EFFORT)} (ignored by models that don't support it)
   ${style.command("--min-confidence")} <level>     Minimum confidence: ${style.highlight("HIGH")}, ${style.highlight("MEDIUM")}, ${style.highlight("LOW")}
                                Default: ${style.highlight("MEDIUM")} (apply HIGH and MEDIUM, skip LOW)
   ${style.command("--retry-limit")} <n>            Max retries per hunk (default: ${style.highlight(RETRY_LIMIT_DEFAULT.toString())})
@@ -204,6 +217,7 @@ async function parseCliArgs(): Promise<ParsedArgs> {
       directory: { type: "string", short: "C" },
       "ai-provider": { type: "string" },
       "ai-model": { type: "string" },
+      "ai-reasoning-effort": { type: "string" },
       "min-confidence": { type: "string" },
       "retry-limit": { type: "string", default: String(RETRY_LIMIT_DEFAULT) },
       concurrency: { type: "string", default: "4" },
@@ -252,10 +266,35 @@ async function parseCliArgs(): Promise<ParsedArgs> {
     error(`Working directory not found: ${workingDirectory}`);
   }
 
-  const aiProvider = (values["ai-provider"] ?? "claude") as AiProvider;
+  const aiProvider = (values["ai-provider"] ?? "copilot") as AiProvider;
   if (aiProvider !== "claude" && aiProvider !== "copilot") {
     error(`Provider '${aiProvider}' is not supported. Use claude or copilot.`);
   }
+
+  // Models: an ordered preference list. Copilot defaults to its router.
+  const configuredModels = parseModelList(values["ai-model"]);
+  const aiModels =
+    configuredModels.length > 0
+      ? configuredModels
+      : aiProvider === "copilot"
+        ? DEFAULT_COPILOT_MODELS
+        : [];
+
+  // Reasoning effort (Copilot only). "default" = let the model decide.
+  const effortArg = values["ai-reasoning-effort"]?.trim().toLowerCase();
+  if (
+    effortArg &&
+    effortArg !== "default" &&
+    !REASONING_EFFORT_LEVELS.includes(effortArg)
+  ) {
+    error(
+      `Invalid --ai-reasoning-effort value: ${effortArg}. Use default or one of: ${REASONING_EFFORT_LEVELS.join(", ")}.`
+    );
+  }
+  const aiReasoningEffort =
+    aiProvider !== "copilot" || effortArg === "default"
+      ? undefined
+      : (effortArg ?? DEFAULT_COPILOT_REASONING_EFFORT);
 
   const validConfidenceLevels: ConfidenceLevel[] = ["HIGH", "MEDIUM", "LOW"];
   const minConfidenceRaw = (values["min-confidence"]?.toUpperCase() ??
@@ -314,7 +353,8 @@ async function parseCliArgs(): Promise<ParsedArgs> {
     directory: values.directory,
     workingDirectory,
     aiProvider,
-    aiModel: values["ai-model"],
+    aiModels,
+    aiReasoningEffort,
     minConfidence,
     retryLimit,
     concurrency,
@@ -383,7 +423,10 @@ interface ParsedArgs {
   directory?: string;
   workingDirectory: string;
   aiProvider: AiProvider;
-  aiModel?: string;
+  /** Ordered model preference ([] = provider CLI default). */
+  aiModels: string[];
+  /** Copilot `--reasoning-effort`, or undefined to let the model decide. */
+  aiReasoningEffort?: string;
   minConfidence: ConfidenceLevel;
   retryLimit: number;
   concurrency: number;
@@ -451,6 +494,9 @@ let promptTemplate: PromptTemplate | null = null;
 
 /** Parsed CLI args (initialized in main) */
 let args!: ParsedArgs;
+
+/** Model selection shared by all AI calls of this run (initialized in main) */
+let modelChain!: ModelChain;
 
 // =============================================================================
 // Utility Functions
@@ -719,26 +765,45 @@ function parseValidationResponse(response: string): ValidationResult {
 async function invokeProvider(
   promptFile: string,
   provider: AiProvider,
-  timeout: number,
-  model?: string
+  timeout: number
 ) {
-  if (provider === "claude") {
-    return invokeClaudeReadOnly({
-      promptFile,
-      cwd: args.workingDirectory,
-      verbose: args.logLevel === "debug",
-      timeout,
-      model,
-    });
+  // Retry with the next model (or without reasoning effort) when the CLI
+  // rejects the current selection; any other failure is returned as is.
+  for (;;) {
+    const selection = modelChain.current;
+    const result =
+      provider === "claude"
+        ? await invokeClaudeReadOnly({
+            promptFile,
+            cwd: args.workingDirectory,
+            verbose: args.logLevel === "debug",
+            timeout,
+            model: selection.model,
+          })
+        : await invokeCopilotReadOnly({
+            promptFile,
+            cwd: args.workingDirectory,
+            verbose: args.logLevel === "debug",
+            timeout,
+            model: selection.model,
+            reasoningEffort: selection.reasoningEffort,
+          });
+    if (
+      result.success ||
+      !modelChain.handleFailure(selection, result.error ?? "")
+    ) {
+      return result;
+    }
   }
+}
 
-  return invokeCopilotReadOnly({
-    promptFile,
-    cwd: args.workingDirectory,
-    verbose: args.logLevel === "debug",
-    timeout,
-    model,
-  });
+/** Human-readable model selection for headers. */
+function describeModels(): string {
+  const models =
+    args.aiModels.length > 0 ? args.aiModels.join(" → ") : "CLI default";
+  return args.aiReasoningEffort
+    ? `${models} (reasoning effort: ${args.aiReasoningEffort})`
+    : models;
 }
 
 /**
@@ -1047,12 +1112,7 @@ class FileProcessor {
       prompt
     );
 
-    const result = await invokeProvider(
-      promptFile,
-      this.provider,
-      120000,
-      args.aiModel
-    );
+    const result = await invokeProvider(promptFile, this.provider, 120000);
 
     await saveResponse(
       this.filePath,
@@ -1132,12 +1192,7 @@ class FileProcessor {
       prompt
     );
 
-    const result = await invokeProvider(
-      promptFile,
-      this.provider,
-      60000,
-      args.aiModel
-    );
+    const result = await invokeProvider(promptFile, this.provider, 60000);
 
     await saveResponse(
       this.filePath,
@@ -1226,6 +1281,7 @@ ${style.line()}
 ${style.line()}
 ${style.label("Files:")}       ${style.command(conflictedFiles.length.toString())}
 ${style.label("Provider:")}    ${args.aiProvider}
+${style.label("Model:")}       ${describeModels()}
 ${style.label("Confidence:")}  ${args.minConfidence}
 ${style.label("Concurrency:")} ${args.concurrency}
 ${style.label("Fallback:")}    ${args.fallback ? "enabled" : "disabled"}
@@ -1498,7 +1554,7 @@ ${style.line()}
   ${style.heading("AI MERGE")}
 ${style.line()}
 ${style.label("File:")}            ${style.command(path.basename(args.merged))}
-${style.label("AI provider:")}     ${args.aiProvider}, model=${args.aiModel ?? "default"}
+${style.label("AI provider:")}     ${args.aiProvider}, model=${describeModels()}
 ${style.label("Min confidence:")}  ${args.minConfidence}
 ${style.label("Concurrency:")}     ${args.concurrency}
 ${style.label("Retry limit:")}     ${args.retryLimit}
@@ -1667,6 +1723,11 @@ async function main(): Promise<void> {
   ui.setLogger(logMessage);
   JobProgress.setLogger(logMessage);
   proc.setLogger(logMessage);
+
+  // Console + log: a model fallback means the config needs updating.
+  modelChain = new ModelChain(args.aiModels, args.aiReasoningEffort, (m) =>
+    ui.warn(m)
+  );
 
   // Dispatch based on mode
   if (args.mergeAll) {

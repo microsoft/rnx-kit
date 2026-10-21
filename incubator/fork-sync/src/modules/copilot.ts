@@ -10,9 +10,22 @@ export interface CopilotInvokeOptions {
   env?: NodeJS.ProcessEnv;
   timeout?: number; // ms
   model?: string;
+  /** Copilot CLI `--reasoning-effort` (see {@link REASONING_EFFORT_LEVELS}). */
+  reasoningEffort?: string;
   /** Tools to allow (default: ['read', 'search']) */
   allowedTools?: string[];
 }
+
+/** Values accepted by the Copilot CLI's `--reasoning-effort`. */
+export const REASONING_EFFORT_LEVELS = [
+  "none",
+  "minimal",
+  "low",
+  "medium",
+  "high",
+  "xhigh",
+  "max",
+];
 
 /** Default read-only tools for AI operations */
 export const DEFAULT_ALLOWED_TOOLS = ["read", "search"];
@@ -82,7 +95,23 @@ export async function invokeCopilotReadOnly(
   }
 
   if (options.model && options.model.trim().length > 0) {
-    cmdParts.push("--model", options.model.trim());
+    // Via env var: the model name comes from config and must not be parsed
+    // by the shell.
+    shellEnv.COPILOT_MODEL = options.model.trim();
+    cmdParts.push("--model", shellVar("COPILOT_MODEL"));
+  }
+
+  if (options.reasoningEffort) {
+    if (!REASONING_EFFORT_LEVELS.includes(options.reasoningEffort)) {
+      return {
+        success: false,
+        result: "",
+        exitCode: null,
+        signal: null,
+        error: `Invalid reasoning effort '${options.reasoningEffort}'. Use one of: ${REASONING_EFFORT_LEVELS.join(", ")}`,
+      };
+    }
+    cmdParts.push("--reasoning-effort", options.reasoningEffort);
   }
 
   cmdParts.push("--no-ask-user"); // Disable the ask_user tool (agent works autonomously without asking questions)

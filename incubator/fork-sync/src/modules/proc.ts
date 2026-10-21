@@ -28,6 +28,9 @@
  * // Simple command - get output as string
  * const hash = await spawn('git', ['rev-parse', 'HEAD']);
  *
+ * // Feed stdin (string mode only)
+ * const tree = await spawn('git', ['mktree', '-z'], { input: entries });
+ *
  * // Stream lines with progress
  * for await (const chunk of spawn('git', ['ls-files'], { mode: 'lines' })) {
  *   console.log(chunk.text);
@@ -44,6 +47,7 @@
  */
 
 import { spawn as nodeSpawn } from "node:child_process";
+import { StringDecoder } from "node:string_decoder";
 import type { LoggerCallback } from "./common.ts";
 import { Queue } from "./queue.ts";
 
@@ -86,6 +90,9 @@ export interface StringSpawnOptions extends BaseSpawnOptions {
 
   /** Value to return if process exits with non-zero code. System errors still throw. */
   fallback?: string;
+
+  /** Text written to the child's stdin (then closed). Default: stdin ignored. */
+  input?: string;
 }
 
 /**
@@ -437,7 +444,12 @@ function spawnString(
     () => {
       const result = stdout.join("").trimEnd();
       if (logger && result) {
-        logger("debug", `proc: [${callId}] stdout: ${result}`);
+        // Snapshot listings can be tens of MB; log only the head.
+        const shown =
+          result.length > 4096
+            ? `${result.slice(0, 4096)}… (${result.length} chars)`
+            : result;
+        logger("debug", `proc: [${callId}] stdout: ${shown}`);
       }
       return result;
     },
@@ -595,6 +607,10 @@ function spawnCore(
   const timeout = options.timeout;
   const isInteractive = options.mode === "interactive";
   const isPassthrough = options.mode === "passthrough";
+  const input =
+    options.mode === undefined || options.mode === "string"
+      ? options.input
+      : undefined;
 
   // Generate unique call ID for this invocation
   const callId = nextCallId++;
@@ -615,7 +631,11 @@ function spawnCore(
       windowsHide: true,
       stdio: isPassthrough
         ? ["inherit", "inherit", "inherit"]
-        : [isInteractive ? "inherit" : "ignore", "pipe", "pipe"],
+        : [
+            isInteractive ? "inherit" : input !== undefined ? "pipe" : "ignore",
+            "pipe",
+            "pipe",
+          ],
       env: options.env ? { ...process.env, ...options.env } : process.env,
       timeout,
       shell,
@@ -635,14 +655,30 @@ function spawnCore(
         ...extra,
       });
 
+    if (input !== undefined && child.stdin) {
+      // Ignore EPIPE if the child exits before consuming all input; the exit
+      // code reports the real failure.
+      child.stdin.on("error", () => undefined);
+      child.stdin.end(input, "utf-8");
+    }
+
+    // One decoder per stream: a multi-byte UTF-8 character split across two
+    // pipe chunks must not decode as replacement characters.
+    const stdoutDecoder = new StringDecoder("utf8");
+    const stderrDecoder = new StringDecoder("utf8");
+    const emitStderr = (text: string) => {
+      if (!text) return;
+      stderr.push(text);
+      onData({ text, stream: "stderr" });
+    };
+
     child.stdout?.on("data", (chunk: Buffer) => {
-      onData({ text: chunk.toString("utf-8"), stream: "stdout" });
+      const text = stdoutDecoder.write(chunk);
+      if (text) onData({ text, stream: "stdout" });
     });
 
     child.stderr?.on("data", (chunk: Buffer) => {
-      const text = chunk.toString("utf-8");
-      stderr.push(text);
-      onData({ text, stream: "stderr" });
+      emitStderr(stderrDecoder.write(chunk));
     });
 
     child.on("spawn", () => {
@@ -657,6 +693,10 @@ function spawnCore(
 
     child.on("close", (exitCode, signal) => {
       const duration = Date.now() - startTime;
+
+      const restOut = stdoutDecoder.end();
+      if (restOut) onData({ text: restOut, stream: "stdout" });
+      emitStderr(stderrDecoder.end());
 
       // Log completion
       if (logger) {

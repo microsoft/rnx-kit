@@ -1347,6 +1347,88 @@ test("applyResolved: context after mismatch returns error", () => {
 });
 
 // =============================================================================
+// applyResolved Test 5b: Blank context lines dropped by the response
+// =============================================================================
+
+test("applyResolved: restores trailing blank context (file ends with newline)", () => {
+  // splitLines of "a\n<conflict>\nc\n" ends with an empty "line"
+  const input = [
+    "a",
+    "<<<<<<< LOCAL",
+    "b-fork",
+    "=======",
+    "B-upstream",
+    ">>>>>>> REMOTE",
+    "c",
+    "",
+  ];
+
+  const result = parseConflictedFile(input);
+  assert.strictEqual(result.success, true);
+  const { info } = result as ParseSuccess;
+
+  // Both sides kept; the response's trailing blank line was trimmed
+  const resolved = ["a", "b-fork", "B-upstream", "c"];
+
+  const applyResult = applyResolved(info, 0, 5, resolved);
+
+  assert.strictEqual(applyResult.success, true, applyResult.error);
+  assert.deepStrictEqual(info.hunks[0].resolved, ["b-fork", "B-upstream"]);
+  assert.deepStrictEqual(getResolved(info).lines, [
+    "a",
+    "b-fork",
+    "B-upstream",
+    "c",
+    "",
+  ]);
+});
+
+test("applyResolved: restores leading and trailing blank context lines", () => {
+  const input = [
+    "",
+    "",
+    "<<<<<<< LOCAL",
+    "local",
+    "=======",
+    "remote",
+    ">>>>>>> REMOTE",
+    "",
+    "",
+  ];
+
+  const result = parseConflictedFile(input);
+  assert.strictEqual(result.success, true);
+  const { info } = result as ParseSuccess;
+
+  const applyResult = applyResolved(info, 0, 2, ["local", "remote"]);
+
+  assert.strictEqual(applyResult.success, true, applyResult.error);
+  assert.deepStrictEqual(info.hunks[0].resolved, ["local", "remote"]);
+});
+
+test("applyResolved: still rejects non-blank context mismatches", () => {
+  const input = [
+    "a",
+    "<<<<<<< LOCAL",
+    "local",
+    "=======",
+    "remote",
+    ">>>>>>> REMOTE",
+    "c",
+    "",
+  ];
+
+  const result = parseConflictedFile(input);
+  assert.strictEqual(result.success, true);
+  const { info } = result as ParseSuccess;
+
+  const applyResult = applyResolved(info, 0, 5, ["a", "merged", "x"]);
+
+  assert.strictEqual(applyResult.success, false);
+  assert.ok(applyResult.error?.includes("Context after mismatch"));
+});
+
+// =============================================================================
 // applyResolved Test 6: Zero context lines
 // =============================================================================
 
