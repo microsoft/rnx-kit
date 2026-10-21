@@ -451,6 +451,20 @@ describe("sync (snapshot mode, submodules, keepLocalDeletions)", () => {
   });
 
   it("re-syncing the same tag is a no-op", async () => {
+    // Merge branches of earlier syncs are kept and names have one-second
+    // resolution: occupy the names of the next 30 seconds to force a clash.
+    const syncDir = path.join(mainDir, ".sync", "lib");
+    const head = await git(syncDir, "rev-parse", "HEAD");
+    const pad = (n: number) => String(n).padStart(2, "0");
+    for (let s = 0; s < 30; s++) {
+      const t = new Date(Date.now() + s * 1000);
+      const id =
+        `${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(t.getDate())}_` +
+        `${pad(t.getHours())}-${pad(t.getMinutes())}-${pad(t.getSeconds())}`;
+      await git(syncDir, "branch", "-f", `work_${id}`, head);
+      await git(syncDir, "branch", "-f", `target_${id}`, head);
+    }
+
     const before = read(libDir, "sync-config.json");
     const result = await runSync(mainDir, ["--tag", "v2"]);
     assert.ok(result.ok, result.output);

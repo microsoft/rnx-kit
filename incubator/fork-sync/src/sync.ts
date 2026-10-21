@@ -546,7 +546,7 @@ class SyncSession {
         await this.performFirstSync();
         this.mergeResult = EMPTY_MERGE_RESULT;
       } else {
-        this.generateBranchNames();
+        await this.generateBranchNames();
         if (this.isSnapshot) {
           await this.prepareSnapshot();
         } else {
@@ -1488,12 +1488,25 @@ ${style.line()}
   }
 
   /**
-   * Generate branch names for this sync session.
+   * Generate branch names for this sync session. The timestamp has one-second
+   * resolution, so a numeric suffix keeps names unique when syncs run back to
+   * back (merge branches of earlier syncs are kept for inspection).
    */
-  private generateBranchNames(): void {
+  private async generateBranchNames(): Promise<void> {
     const syncId = getTimestampForFile();
-    this.workBranch = `work_${syncId}`;
-    this.targetMergeBranch = `target_${syncId}`;
+    for (let n = 1; ; n++) {
+      const id = n === 1 ? syncId : `${syncId}_${n}`;
+      const work = `work_${id}`;
+      const target = `target_${id}`;
+      if (
+        !(await this.syncRepo.revParse(`refs/heads/${work}`)) &&
+        !(await this.syncRepo.revParse(`refs/heads/${target}`))
+      ) {
+        this.workBranch = work;
+        this.targetMergeBranch = target;
+        break;
+      }
+    }
     debug(`Work branch:   ${this.workBranch}`);
     debug(`Target branch: ${this.targetMergeBranch}`);
   }
