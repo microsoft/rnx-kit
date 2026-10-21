@@ -278,7 +278,7 @@ async function ghJson<T>(args: string[]): Promise<T | undefined> {
 export async function lookUp(
   numbers: number[],
   branch: string
-): Promise<{ viewer?: string; items: GitHubItem[] }> {
+): Promise<{ actor?: string; items: GitHubItem[] }> {
   const [owner] = REPOSITORY.split("/");
   const head = encodeURIComponent(`${owner}:${branch}`);
   const pulls = await ghJson<{ user: { login: string } }[]>([
@@ -298,7 +298,7 @@ export async function lookUp(
     })
   );
   return {
-    ...(user ? { viewer: user.login } : {}),
+    ...(user ? { actor: user.login } : {}),
     items: items.filter((item) => item !== undefined),
   };
 }
