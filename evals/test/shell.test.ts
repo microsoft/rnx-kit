@@ -29,6 +29,22 @@ describe("parseShellInput()", () => {
     ]);
   });
 
+  it("does not mistake arithmetic shifts for here-documents", () => {
+    deepEqual(parseShellInput("echo $((1<<2))\nyarn lint\n2"), [
+      ["echo", "$((1<<2))"],
+      ["yarn", "lint"],
+      ["2"],
+    ]);
+  });
+
+  it("skips comments", () => {
+    const input = "# see <<EOF\nyarn lint # or <<EOF\necho a#b '# c'";
+    deepEqual(parseShellInput(input), [
+      ["yarn", "lint"],
+      ["echo", "a#b", "# c"],
+    ]);
+  });
+
   it("does not split quoted newlines", () => {
     deepEqual(parseShellInput("echo 'a\nb' && yarn build"), [
       ["echo", "a\nb"],

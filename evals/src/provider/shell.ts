@@ -17,9 +17,9 @@ const CONTROL_OPERATORS = new Set([
 
 /**
  * Replaces unquoted newlines with `;`, which `shell-quote` does not treat as
- * command separators. Also removes line continuations, and here-documents
- * with their redirection operators, so that their content is not parsed as
- * commands.
+ * command separators. Also removes line continuations, comments, and
+ * here-documents with their redirection operators, so that their content is
+ * not parsed as commands.
  */
 function separateLines(input: string): string {
   let result = "";
@@ -40,6 +40,30 @@ function separateLines(input: string): string {
       }
     } else if (c === "'" || c === '"') {
       quote = c;
+    } else if (c === "#") {
+      if (i === 0 || /[\s;&|()]/.test(input[i - 1])) {
+        const end = input.indexOf("\n", i);
+        i = (end < 0 ? input.length : end) - 1;
+      } else {
+        // `shell-quote` treats `#` inside a word as a comment
+        result += "\\#";
+      }
+      continue;
+    } else if (input.startsWith("$((", i)) {
+      // Arithmetic expansion, which may contain `<<`; quoted so that it is
+      // kept as a single argument
+      let depth = 0;
+      let j = i + 1;
+      for (; j < input.length; ++j) {
+        if (input[j] === "(") {
+          ++depth;
+        } else if (input[j] === ")" && --depth === 0) {
+          break;
+        }
+      }
+      result += `'${input.slice(i, j + 1)}'`;
+      i = j;
+      continue;
     } else if (input.startsWith("<<<", i)) {
       result += "<<<";
       i += 2;
