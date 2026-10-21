@@ -51,6 +51,7 @@ async function resolveRepository(
   if (repository) {
     return repository;
   }
+
   try {
     const url = await git(root, ["remote", "get-url", remote]);
     const parsed = parseRepository(url);

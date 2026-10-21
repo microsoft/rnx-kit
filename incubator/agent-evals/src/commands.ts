@@ -45,7 +45,7 @@ function resolveCommand(
       dir = toRelativePath(workdir, path.resolve(workdir, dir, value));
       args.splice(0, 2);
     } else if (arg.startsWith("--cwd=")) {
-      const value = arg.slice("--cwd=".length);
+      const value = arg.substring("--cwd=".length);
       dir = toRelativePath(workdir, path.resolve(workdir, dir, value));
       args.shift();
     } else if (arg === "workspace" && value && packages().has(value)) {
@@ -61,7 +61,10 @@ function resolveCommand(
   return { command: ["yarn", ...args].join(" "), cwd: dir };
 }
 
-function commandMatches(run: AgentRun, { pattern, cwd }: CommandMatcher) {
+function commandMatches(
+  run: AgentRun,
+  { pattern, cwd }: CommandMatcher
+): ResolvedCommand[] {
   const packages = lazyWorkspacePackages(run.workdir);
   const command = new RegExp(pattern);
   const dir = cwd ? new RegExp(cwd) : undefined;

@@ -127,19 +127,25 @@ export function noInlineTypeSpecifiers(
     // ambient module declarations (`declare module "…" {}`) are not. Lint
     // allows these; `typescript/no-namespace` only rejects named namespaces.
     for (const node of program.body) {
-      const specifiers =
-        node.type === "ImportDeclaration"
-          ? node.specifiers.filter(
-              (s) => s.type === "ImportSpecifier" && s.importKind === "type"
-            )
-          : node.type === "ExportNamedDeclaration"
-            ? node.specifiers.filter((s) => s.exportKind === "type")
-            : [];
+      let keyword: string;
+      let specifiers: { start: number }[];
+      if (node.type === "ImportDeclaration") {
+        keyword = "import";
+        specifiers = node.specifiers.filter(
+          (s) => s.type === "ImportSpecifier" && s.importKind === "type"
+        );
+      } else if (node.type === "ExportNamedDeclaration") {
+        keyword = "export";
+        specifiers = node.specifiers.filter((s) => s.exportKind === "type");
+      } else {
+        continue;
+      }
+
       for (const { start } of specifiers) {
-        const line = content.slice(0, start).split("\n").length;
+        const line = content.substring(0, start).split("\n").length;
         if (!added || lines?.has(line)) {
           failures.push(
-            `${file.path}:${line}: Use a separate \`${node.type === "ImportDeclaration" ? "import" : "export"} type\` statement`
+            `${file.path}:${line}: Use a separate \`${keyword} type\` statement`
           );
         }
       }

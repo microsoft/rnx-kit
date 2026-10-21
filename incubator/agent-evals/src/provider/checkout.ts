@@ -91,7 +91,7 @@ export async function collectChanges(
       const change: AgentChangedFile = { path: file, status };
       if (status !== "deleted") {
         try {
-          change.content = fs.readFileSync(path.join(workdir, file), "utf8");
+          change.content = fs.readFileSync(path.join(workdir, file), "utf-8");
         } catch (_) {
           // Not a regular file, e.g. a submodule
         }

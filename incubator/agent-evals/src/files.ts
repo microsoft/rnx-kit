@@ -14,7 +14,8 @@ import type {
 } from "./types.ts";
 
 /**
- * Passes if no matching file contains any of the `forbidden` patterns. Fails if no files match, unless `optional` is set.
+ * Passes if no matching file contains any of the `forbidden` patterns. Fails
+ * if no files match, unless `optional` is set.
  */
 export function matchesContent(
   output: AgentRun | string,

@@ -34,6 +34,7 @@ function separateLines(input: string): string {
       }
       continue;
     }
+
     if (quote) {
       if (c === quote) {
         quote = "";
@@ -61,7 +62,7 @@ function separateLines(input: string): string {
           break;
         }
       }
-      result += `'${input.slice(i, j + 1)}'`;
+      result += `'${input.substring(i, j + 1)}'`;
       i = j;
       continue;
     } else if (input.startsWith("<<<", i)) {
@@ -70,7 +71,7 @@ function separateLines(input: string): string {
       continue;
     } else if (input.startsWith("<<", i)) {
       const match = input
-        .slice(i)
+        .substring(i)
         .match(/^<<(-?)[ \t]*(['"]?)([^\s'"<>|&;()]+)\2/);
       if (match) {
         heredocs.push({ word: match[3], stripTabs: match[1] === "-" });
@@ -84,7 +85,7 @@ function separateLines(input: string): string {
         while (pos < input.length) {
           const end = input.indexOf("\n", pos);
           const next = end < 0 ? input.length : end;
-          const line = input.slice(pos, next);
+          const line = input.substring(pos, next);
           pos = next + 1;
           if ((stripTabs ? line.replace(/^\t+/, "") : line) === word) {
             break;
@@ -95,6 +96,7 @@ function separateLines(input: string): string {
       i = pos - 1;
       continue;
     }
+
     result += c;
   }
   return result;

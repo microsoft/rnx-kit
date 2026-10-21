@@ -16,10 +16,11 @@ export function newPackagesScaffolded(
   output: AgentRun | string
 ): GradingResult {
   const run = toAgentRun(output);
-  const added = [...workspacePackages(run.workdir).values()].filter((dir) =>
-    run.files.some(
-      (file) => file.status === "added" && file.path === `${dir}/package.json`
-    )
+  const added = Array.from(workspacePackages(run.workdir).values()).filter(
+    (dir) =>
+      run.files.some(
+        (file) => file.status === "added" && file.path === `${dir}/package.json`
+      )
   );
   if (added.length === 0) {
     return result([], "Not applicable: no packages were added");

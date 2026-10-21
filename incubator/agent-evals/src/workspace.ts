@@ -35,7 +35,12 @@ export function lazyWorkspacePackages(
   workdir: string
 ): () => Map<string, string> {
   let packages: Map<string, string> | undefined;
-  return () => (packages ??= workspacePackages(workdir));
+  return () => {
+    if (!packages) {
+      packages = workspacePackages(workdir);
+    }
+    return packages;
+  };
 }
 
 /**

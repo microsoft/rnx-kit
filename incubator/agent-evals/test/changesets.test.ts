@@ -1,5 +1,5 @@
 import { equal } from "node:assert/strict";
-import { after, before, describe, it } from "node:test";
+import { describe, it } from "node:test";
 import { changesetsMatchChanges } from "../src/audit.ts";
 import { changesets } from "../src/changesets.ts";
 import type { AgentChangedFile } from "../src/types.ts";
@@ -21,20 +21,6 @@ function check(
 }
 
 describe("changesets()", () => {
-  const missingIsError = !("isError" in Error);
-
-  before(() => {
-    if (missingIsError) {
-      Error.isError = (e: unknown) => e instanceof Error;
-    }
-  });
-
-  after(() => {
-    if (missingIsError) {
-      Error.isError = undefined;
-    }
-  });
-
   it("passes if the expected number of change files was added", () => {
     const result = check([changeset("a", "node-pkg")], {
       count: 1,

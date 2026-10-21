@@ -109,7 +109,10 @@ const GH_WRITES: Record<string, string[]> = {
   ],
 };
 
-function parseGhArgs(command: string, args: string[]) {
+function parseGhArgs(
+  command: string,
+  args: string[]
+): { flags: Map<string, string | true>; positionals: string[] } {
   const booleans = GH_BOOLEAN_FLAGS[command] ?? [];
   const flags = new Map<string, string | true>();
   const positionals: string[] = [];
@@ -117,7 +120,7 @@ function parseGhArgs(command: string, args: string[]) {
     const arg = args[i];
     const eq = arg.indexOf("=");
     if (arg.startsWith("--") && eq > 0) {
-      flags.set(arg.slice(0, eq), arg.slice(eq + 1));
+      flags.set(arg.substring(0, eq), arg.substring(eq + 1));
     } else if (GH_VALUE_FLAGS.has(arg) && !booleans.includes(arg)) {
       flags.set(arg, args[++i] ?? "");
     } else if (arg.startsWith("-")) {
@@ -147,13 +150,13 @@ function isRepository(repository: string, repo: unknown): boolean {
 function mcpWrite(
   repository: string,
   { name, arguments: args, server, serverTool }: SessionToolCall
-) {
-  const tool =
-    server === MCP_SERVER
-      ? (serverTool ?? name)
-      : name.startsWith(`${MCP_SERVER}-`)
-        ? name.slice(MCP_SERVER.length + 1)
-        : undefined;
+): number | undefined {
+  let tool: string | undefined;
+  if (server === MCP_SERVER) {
+    tool = serverTool ?? name;
+  } else if (name.startsWith(`${MCP_SERVER}-`)) {
+    tool = name.substring(MCP_SERVER.length + 1);
+  }
   if (!tool || MCP_READ_TOOL.test(tool)) {
     return undefined;
   }
@@ -187,9 +190,9 @@ function ghApiWrite(repository: string, args: string[]): number | undefined {
     if (arg === "-X" || arg === "--method") {
       method = args[++i]?.toUpperCase();
     } else if (arg.startsWith("--method=")) {
-      method = arg.slice("--method=".length).toUpperCase();
+      method = arg.substring("--method=".length).toUpperCase();
     } else if (/^-X./.test(arg)) {
-      method = arg.slice(2).toUpperCase();
+      method = arg.substring(2).toUpperCase();
     } else if (/^-[fF]$|^--(raw-)?field$|^--input$/.test(arg)) {
       hasFields = true;
       ++i;
@@ -223,9 +226,11 @@ function ghWrite(
   if (path.win32.basename(executable).replace(/\.exe$/i, "") !== "gh") {
     return undefined;
   }
+
   if (command === "api") {
     return ghApiWrite(repository, argv.slice(2));
   }
+
   if (
     (command !== "issue" && command !== "pr") ||
     !GH_WRITES[command].includes(subcommand)
@@ -239,10 +244,10 @@ function ghWrite(
 }
 
 /**
- * Returns the numbers of issues and pull requests in `repository` (`owner/repo`)
- * that the agent wrote to through the GitHub MCP tools or the `gh` CLI. Writes that
- * create items, or that do not name the item (e.g. `gh pr comment` on the
- * current branch), are not included.
+ * Returns the numbers of issues and pull requests in `repository`
+ * (`owner/repo`) that the agent wrote to through the GitHub MCP tools or the
+ * `gh` CLI. Writes that create items, or that do not name the item (e.g.
+ * `gh pr comment` on the current branch), are not included.
  */
 export function modifiedNumbers(
   repository: string,
@@ -258,7 +263,7 @@ export function modifiedNumbers(
       numbers.add(number);
     }
   }
-  return [...numbers].sort((a, b) => a - b);
+  return Array.from(numbers).sort((a, b) => a - b);
 }
 
 const gh = makeCommand("gh", {
