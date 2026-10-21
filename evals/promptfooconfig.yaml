@@ -7,7 +7,8 @@ providers:
   # `~/.copilot`) and compares the session's branch with the commit the
   # session started from: the working tree if the branch is checked out, or
   # else the tip of the branch, local or on `origin`, in a temporary worktree.
-  # Looks up modified issues and pull requests with `gh`.
+  # Looks up modified issues and pull requests, and the author of the pull
+  # request for the session's branch, with `gh`.
   - id: file://src/provider/provider.ts
     label: copilot-session
 defaultTest:
