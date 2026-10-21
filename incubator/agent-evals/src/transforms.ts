@@ -31,6 +31,7 @@ function summarizeLockfiles(diff: string): string {
       if (!filename || !LOCKFILES.has(path.win32.basename(filename))) {
         return section;
       }
+
       return `(${filename}: ${file.additions} lines added, ${file.deletions} lines removed; omitted)\n`;
     })
     .join("");

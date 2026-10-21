@@ -46,7 +46,7 @@ export function usesPackageTestRunner(
   }
 
   const added = addedLines(run.diff);
-  const dirs = [...workspacePackages(run.workdir).values()];
+  const dirs = Array.from(workspacePackages(run.workdir).values());
   const failures: string[] = [];
   for (const file of tests) {
     const dir = path.join(run.workdir, owningPackageDir(dirs, file.path));

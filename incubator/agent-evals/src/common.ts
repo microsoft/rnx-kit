@@ -67,6 +67,7 @@ export function requireConfig<T>({ config }: AssertionContext<T>): T {
   if (!config) {
     throw new Error("Missing assertion config");
   }
+
   return config;
 }
 
@@ -90,10 +91,12 @@ export function selectLines(
     .join("\n");
 }
 
-export function tryReadJSON(file: string) {
+export function tryReadJSON(
+  file: string
+): ReturnType<typeof JSON.parse> | undefined {
   try {
     return readJSONFileSync(file);
-  } catch {
+  } catch (_) {
     return undefined;
   }
 }

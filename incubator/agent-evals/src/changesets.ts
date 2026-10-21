@@ -10,8 +10,8 @@ import type {
 
 /**
  * Passes if the agent added the configured number of change files, or at
- * least that many if `atLeast` is set, releasing
- * the configured packages and none of the forbidden ones.
+ * least that many if `atLeast` is set, releasing the configured packages and
+ * none of the forbidden ones.
  */
 export function changesets(
   output: AgentRun | string,
@@ -43,7 +43,7 @@ export function changesets(
         released.add(name);
       }
     } catch (e) {
-      failures.push(`${file.path}: ${Error.isError(e) ? e.message : e}`);
+      failures.push(`${file.path}: ${e instanceof Error ? e.message : e}`);
     }
   }
 

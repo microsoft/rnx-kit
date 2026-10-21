@@ -26,24 +26,30 @@ function changedPackages(
   filter: (file: AgentRun["files"][number]) => boolean = () => true
 ): ChangedPackage[] {
   const packages = workspacePackages(run.workdir);
-  const names = new Map([...packages].map(([name, dir]) => [dir, name]));
+  const names = new Map(Array.from(packages).map(([name, dir]) => [dir, name]));
   const dirs = new Set(
     run.files
       .filter(filter)
       .map((file) => owningPackageDir(names.keys(), file.path))
       .filter((dir) => dir !== ".")
   );
-  return [...dirs].sort().map((dir) => ({
-    name: names.get(dir) ?? dir,
-    dir,
-    manifest: tryReadJSON(path.join(run.workdir, dir, "package.json")) ?? {},
-  }));
+  return Array.from(dirs)
+    .sort()
+    .map((dir) => ({
+      name: names.get(dir) ?? dir,
+      dir,
+      manifest: tryReadJSON(path.join(run.workdir, dir, "package.json")) ?? {},
+    }));
 }
 
-function combine(results: GradingResult[], notApplicable: string) {
+function combine(
+  results: GradingResult[],
+  notApplicable: string
+): GradingResult {
   if (results.length === 0) {
     return result([], `Not applicable: ${notApplicable}`);
   }
+
   const failed = results.filter((r) => !r.pass);
   return result(
     failed.map((r) => r.reason),

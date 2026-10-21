@@ -34,6 +34,7 @@ function getToken(): string {
       "A GitHub token with Copilot access is required; set COPILOT_GITHUB_TOKEN or log in with 'gh auth login'"
     );
   }
+
   return stdout.trim();
 }
 
@@ -65,6 +66,7 @@ function toSessionPrompt(prompt: string): {
   } catch (_) {
     return { prompt };
   }
+
   if (!isChat(messages)) {
     return { prompt };
   }

@@ -78,7 +78,7 @@ function readFirstLine(file: string): string {
     const buffer = Buffer.alloc(64 * 1024);
     const content = buffer.subarray(0, fs.readSync(fd, buffer));
     const end = content.indexOf("\n");
-    return end >= 0 ? content.subarray(0, end).toString("utf8") : "";
+    return end >= 0 ? content.subarray(0, end).toString("utf-8") : "";
   } finally {
     fs.closeSync(fd);
   }
@@ -98,7 +98,7 @@ function isRunning(pid: number): boolean {
     process.kill(pid, 0);
     return true;
   } catch (e) {
-    return (e as NodeJS.ErrnoException).code === "EPERM";
+    return e instanceof Error && "code" in e && e["code"] === "EPERM";
   }
 }
 
@@ -116,6 +116,7 @@ function sameDir(a: string | undefined, b: string): boolean {
   if (!a) {
     return false;
   }
+
   try {
     return fs.realpathSync(a) === fs.realpathSync(b);
   } catch (_) {
@@ -178,7 +179,7 @@ export function readSession(root: string, id?: string): Session {
     toolCalls: [],
     requests: [],
   };
-  for (const line of fs.readFileSync(file, "utf8").split("\n")) {
+  for (const line of fs.readFileSync(file, "utf-8").split("\n")) {
     const event = line ? parseEvent(line) : undefined;
     switch (event?.type) {
       case "session.start":
