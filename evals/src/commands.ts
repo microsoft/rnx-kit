@@ -106,7 +106,7 @@ export function didNotRunCommand(
  * Passes if the agent did not modify the configured issues or pull requests:
  * those with a title matching `title`, and, if `ownOnly` is set, those not
  * authored by `github.viewer`. Fails if modified items could not be looked
- * up.
+ * up, or, with `ownOnly`, if `github.viewer` is unknown.
  */
 export function notModifiedOnGitHub(
   output: AgentRun | string,

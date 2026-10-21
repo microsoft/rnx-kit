@@ -86,7 +86,10 @@ export type AgentRun = {
      * requests from the same sequence, so numbers are unambiguous.
      */
     modified: number[];
-    /** Login of the user the agent acted on behalf of, if known */
+    /**
+     * Login of the user the session acted as: the author of the pull request
+     * for the session's branch, if there is one
+     */
     viewer?: string;
     /** The items in `modified`, if they could be looked up */
     items?: GitHubItem[];

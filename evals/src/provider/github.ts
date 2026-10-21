@@ -270,13 +270,22 @@ async function ghJson<T>(args: string[]): Promise<T | undefined> {
 }
 
 /**
- * Looks up the current `gh` user and the specified issues and pull requests.
- * Only reads from GitHub. Values that cannot be looked up are omitted.
+ * Looks up the author of the pull request for `branch` in this repository,
+ * i.e. the user the session acted as, and the specified issues and pull
+ * requests. Only reads from GitHub. Values that cannot be looked up, e.g. the
+ * author if the session did not open a pull request, are omitted.
  */
 export async function lookUp(
-  numbers: number[]
+  numbers: number[],
+  branch: string
 ): Promise<{ viewer?: string; items: GitHubItem[] }> {
-  const user = await ghJson<{ login: string }>(["api", "user"]);
+  const [owner] = REPOSITORY.split("/");
+  const head = encodeURIComponent(`${owner}:${branch}`);
+  const pulls = await ghJson<{ user: { login: string } }[]>([
+    "api",
+    `repos/${REPOSITORY}/pulls?head=${head}&state=all&per_page=1`,
+  ]);
+  const user = pulls?.[0]?.user;
   const items = await Promise.all(
     numbers.map(async (number) => {
       const issue = await ghJson<{ title: string; user: { login: string } }>([

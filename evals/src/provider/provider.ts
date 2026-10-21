@@ -90,7 +90,7 @@ async function replay(
     arguments: args,
   }));
   const modified = modifiedNumbers(session.toolCalls, commands);
-  const github = { modified, ...(await lookUp(modified)) };
+  const github = { modified, ...(await lookUp(modified, branch)) };
   const { files, diff } = await collectChanges(workdir, baseCommit);
   const requests = session.requests;
 
