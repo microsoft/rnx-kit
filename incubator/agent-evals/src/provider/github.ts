@@ -16,69 +16,6 @@ const MCP_NUMBER_ARGS = [
   "pull_number",
 ];
 
-/** Flags of `gh issue|pr` that take a value */
-const GH_VALUE_FLAGS = new Set([
-  "-A",
-  "-B",
-  "-F",
-  "-H",
-  "-L",
-  "-R",
-  "-S",
-  "-T",
-  "-a",
-  "-b",
-  "-c",
-  "-l",
-  "-m",
-  "-n",
-  "-p",
-  "-q",
-  "-r",
-  "-s",
-  "-t",
-  "--add-assignee",
-  "--add-label",
-  "--add-project",
-  "--add-reviewer",
-  "--assignee",
-  "--author",
-  "--author-email",
-  "--base",
-  "--body",
-  "--body-file",
-  "--comment",
-  "--duplicate-of",
-  "--head",
-  "--jq",
-  "--json",
-  "--label",
-  "--limit",
-  "--match-head-commit",
-  "--milestone",
-  "--name",
-  "--project",
-  "--reason",
-  "--remove-assignee",
-  "--remove-label",
-  "--remove-project",
-  "--remove-reviewer",
-  "--repo",
-  "--reviewer",
-  "--search",
-  "--state",
-  "--subject",
-  "--template",
-  "--title",
-]);
-
-/** Short flags that do not take a value in specific `gh` commands */
-const GH_BOOLEAN_FLAGS: Record<string, string[]> = {
-  "issue develop": ["-c"],
-  "pr merge": ["-d", "-m", "-r", "-s"],
-  "pr review": ["-a", "-c", "-r"],
-};
-
 const GH_WRITES: Record<string, string[]> = {
   issue: [
     "close",
@@ -109,32 +46,15 @@ const GH_WRITES: Record<string, string[]> = {
   ],
 };
 
-function parseGhArgs(
-  command: string,
-  args: string[]
-): { flags: Map<string, string | true>; positionals: string[] } {
-  const booleans = GH_BOOLEAN_FLAGS[command] ?? [];
-  const flags = new Map<string, string | true>();
-  const positionals: string[] = [];
-  for (let i = 0; i < args.length; ++i) {
-    const arg = args[i];
-    const eq = arg.indexOf("=");
-    if (arg.startsWith("--") && eq > 0) {
-      flags.set(arg.substring(0, eq), arg.substring(eq + 1));
-    } else if (GH_VALUE_FLAGS.has(arg) && !booleans.includes(arg)) {
-      flags.set(arg, args[++i] ?? "");
-    } else if (arg.startsWith("-")) {
-      flags.set(arg, true);
-    } else {
-      positionals.push(arg);
-    }
-  }
-  return { flags, positionals };
-}
-
-function toNumber(arg: string | undefined): number | undefined {
+/**
+ * Returns the number in `123`, `#123` or an issue or pull request URL.
+ */
+function toNumber(arg: string): number | undefined {
   const match =
-    arg?.match(/^#?(\d+)$/) ?? arg?.match(/\/(?:issues|pull)\/(\d+)/);
+    arg.match(/^#?(\d+)$/) ??
+    arg.match(
+      /^https?:\/\/[^/\s]+\/[^/\s]+\/[^/\s]+\/(?:issues|pull)\/(\d+)(?:[/?#]\S*)?$/
+    );
   return match ? Number(match[1]) : undefined;
 }
 
@@ -238,9 +158,25 @@ function ghWrite(
     return undefined;
   }
 
-  const { flags, positionals } = parseGhArgs(`${command} ${subcommand}`, rest);
-  const repo = flags.get("-R") ?? flags.get("--repo");
-  return isRepository(repository, repo) ? toNumber(positionals[0]) : undefined;
+  // Only the repository and the number are needed. Flag values that precede
+  // the number are skipped unless they look like a number themselves.
+  let repo: string | undefined;
+  let number: number | undefined;
+  for (let i = 0; i < rest.length; ++i) {
+    const arg = rest[i];
+    if (arg === "-R" || arg === "--repo") {
+      repo = rest[++i];
+    } else if (arg.startsWith("--repo=")) {
+      repo = arg.substring("--repo=".length);
+    } else if (/^-R./.test(arg)) {
+      repo = arg.substring(2);
+    } else if (arg === "--duplicate-of") {
+      ++i;
+    } else if (number === undefined && !arg.startsWith("-")) {
+      number = toNumber(arg);
+    }
+  }
+  return isRepository(repository, repo) ? number : undefined;
 }
 
 /**

@@ -25,6 +25,35 @@ describe("modifiedNumbers()", () => {
     deepEqual(modified(input), [1, 2, 3]);
   });
 
+  it("reads the repository in any form", () => {
+    const input = [
+      "gh pr comment -R microsoft/rnx-kit 1",
+      "gh pr comment --repo=microsoft/rnx-kit 2",
+      "gh pr comment -Rmicrosoft/rnx-kit 3",
+      "gh pr comment -Rfork/rnx-kit 4",
+      "gh pr comment --repo fork/rnx-kit 5",
+    ].join("\n");
+    deepEqual(modified(input), [1, 2, 3]);
+  });
+
+  it("accepts issue and pull request URLs", () => {
+    const input = [
+      "gh issue comment https://github.com/microsoft/rnx-kit/issues/1",
+      "gh pr review https://github.com/microsoft/rnx-kit/pull/2/files",
+      "gh pr close '#3'",
+    ].join("\n");
+    deepEqual(modified(input), [1, 2, 3]);
+  });
+
+  it("does not mistake flag values for the number", () => {
+    const input = [
+      "gh issue close --duplicate-of 9 1",
+      'gh pr comment --body "Fixed in https://github.com/microsoft/rnx-kit/pull/9" 2',
+      "gh pr comment -- 3",
+    ].join("\n");
+    deepEqual(modified(input), [1, 2, 3]);
+  });
+
   it("detects the method and fields of `gh api` in any form", () => {
     const input = [
       "gh api --method=PATCH repos/microsoft/rnx-kit/issues/1",
