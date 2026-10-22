@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "@microsoft/eslint-plugin-sdl": "^1.0.0",
-    "@react-native/eslint-plugin": "^0.84.0",
+    "@react-native/eslint-plugin": "^0.85.0",
     "@rnx-kit/eslint-plugin": "workspace:^"
   },
   "devDependencies": {
