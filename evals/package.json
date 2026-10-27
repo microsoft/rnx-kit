@@ -28,7 +28,7 @@
     "@rnx-kit/tools-filesystem": "workspace:*",
     "oxc-parser": "catalog:",
     "oxlint": "catalog:",
-    "parse-diff": "^0.11.0"
+    "parse-diff": "catalog:"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",

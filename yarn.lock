@@ -5181,7 +5181,7 @@ __metadata:
     "@rnx-kit/tools-shell": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.0"
-    parse-diff: "npm:^0.11.0"
+    parse-diff: "catalog:"
     shell-quote: "npm:^1.8.4"
   languageName: unknown
   linkType: soft
@@ -5468,7 +5468,7 @@ __metadata:
     "@types/node": "npm:^24.0.0"
     oxc-parser: "catalog:"
     oxlint: "catalog:"
-    parse-diff: "npm:^0.11.0"
+    parse-diff: "catalog:"
   languageName: unknown
   linkType: soft
 
@@ -17027,7 +17027,7 @@ __metadata:
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
     azure-devops-node-api: "npm:^15.0.0"
-    parse-diff: "npm:^0.11.0"
+    parse-diff: "catalog:"
   bin:
     suggestion-bot: cli.js
   languageName: unknown
