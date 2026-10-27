@@ -26,8 +26,8 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/core": "catalog:",
+    "@babel/helper-plugin-utils": "catalog:",
     "@babel/template": "^7.0.0",
     "@rnx-kit/console": "workspace:^",
     "@rnx-kit/tools-node": "workspace:^"
@@ -35,10 +35,10 @@
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "@types/babel__core": "^7.0.0",
-    "@types/babel__helper-plugin-utils": "^7.0.0",
+    "@types/babel__core": "catalog:",
+    "@types/babel__helper-plugin-utils": "catalog:",
     "@types/babel__template": "^7.0.0",
-    "@types/node": "^22.0.0",
+    "@types/node": "catalog:",
     "metro-config": "^0.84.0"
   },
   "peerDependencies": {

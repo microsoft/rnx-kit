@@ -46,21 +46,21 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@react-native/eslint-plugin": "^0.84.0",
-    "enhanced-resolve": "^5.8.3",
+    "@react-native/eslint-plugin": "catalog:",
+    "enhanced-resolve": "catalog:",
     "eslint-plugin-react": "^7.35.2",
     "eslint-plugin-react-hooks": "^5.2.0",
     "typescript-eslint": "^8.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
-    "@microsoft/eslint-plugin-sdl": "^1.0.0",
+    "@microsoft/eslint-plugin-sdl": "catalog:",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "@typescript-eslint/parser": "^8.0.0",
     "@typescript-eslint/types": "^8.0.0",
-    "eslint": "^9.0.0"
+    "eslint": "catalog:"
   },
   "peerDependencies": {
     "eslint": ">=8.57.0"

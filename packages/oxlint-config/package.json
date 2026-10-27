@@ -63,15 +63,15 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@microsoft/eslint-plugin-sdl": "^1.0.0",
-    "@react-native/eslint-plugin": "^0.84.0",
+    "@microsoft/eslint-plugin-sdl": "catalog:",
+    "@react-native/eslint-plugin": "catalog:",
     "@rnx-kit/eslint-plugin": "workspace:^"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "eslint": "^9.0.0",
-    "oxlint": "^1.61.0"
+    "eslint": "catalog:",
+    "oxlint": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^9.0.0",

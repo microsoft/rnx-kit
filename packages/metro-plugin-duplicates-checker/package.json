@@ -46,7 +46,7 @@
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
-    "memfs": "^4.0.0",
+    "memfs": "catalog:",
     "metro": "^0.84.0",
     "metro-source-map": "catalog:"
   },

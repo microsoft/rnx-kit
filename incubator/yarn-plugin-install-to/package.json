@@ -31,9 +31,9 @@
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
-    "@yarnpkg/cli": "^4.6.0",
-    "@yarnpkg/core": "^4.2.0",
-    "clipanion": "^4.0.0-rc.4"
+    "@yarnpkg/cli": "catalog:",
+    "@yarnpkg/core": "catalog:",
+    "clipanion": "catalog:"
   },
   "engines": {
     "node": ">=20.18",

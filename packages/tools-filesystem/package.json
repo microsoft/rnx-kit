@@ -44,7 +44,7 @@
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
-    "memfs": "^4.56.10"
+    "memfs": "catalog:"
   },
   "peerDependencies": {
     "memfs": ">=4.0.0"

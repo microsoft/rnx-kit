@@ -34,9 +34,9 @@
     "react-native-macos": "^0.81.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0",
-    "@babel/runtime": "^7.20.0",
+    "@babel/core": "catalog:",
+    "@babel/preset-env": "catalog:",
+    "@babel/runtime": "catalog:",
     "@react-native-community/cli": "^20.0.0",
     "@react-native-community/cli-platform-android": "^20.0.0",
     "@react-native-community/cli-platform-ios": "^20.0.0",
@@ -58,7 +58,7 @@
     "@rnx-kit/react-native-test-app-msal": "workspace:*",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/third-party-notices": "workspace:*",
-    "@types/react": "^19.0.0",
+    "@types/react": "catalog:",
     "react-native-test-app": "^5.0.9"
   },
   "rnx-kit": {

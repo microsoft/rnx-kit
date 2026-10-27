@@ -32,8 +32,8 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0",
+    "@babel/core": "catalog:",
+    "@babel/preset-env": "catalog:",
     "@react-native-community/cli": "^20.1.0",
     "@react-native-community/cli-platform-android": "^20.1.0",
     "@react-native-community/cli-platform-ios": "^20.1.0",

@@ -61,27 +61,27 @@
     "@rnx-kit/types-node": "workspace:^",
     "commander": "^11.1.0",
     "ora": "^5.4.1",
-    "qrcode": "^1.5.0"
+    "qrcode": "catalog:"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0",
+    "@babel/core": "catalog:",
+    "@babel/preset-env": "catalog:",
     "@react-native-community/cli-types": "catalog:",
     "@react-native-windows/cli": "^0.82.0",
     "@rnx-kit/jest-preset": "workspace:*",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "@types/connect": "^3.4.36",
+    "@types/connect": "catalog:",
     "@types/node": "catalog:",
-    "@types/qrcode": "^1.4.2",
-    "markdown-table": "^3.0.0",
-    "memfs": "^4.56.10",
+    "@types/qrcode": "catalog:",
+    "markdown-table": "catalog:",
+    "memfs": "catalog:",
     "metro": "^0.84.0",
     "metro-babel-transformer": "catalog:",
     "metro-config": "^0.84.0",
     "react": "19.2.3",
     "react-native": "^0.85.0",
-    "type-fest": "^4.0.0"
+    "type-fest": "catalog:"
   },
   "peerDependencies": {
     "jest": ">=26.0",

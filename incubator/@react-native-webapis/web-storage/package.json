@@ -35,8 +35,8 @@
     "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0",
+    "@babel/core": "catalog:",
+    "@babel/preset-env": "catalog:",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
     "react": "19.2.3",

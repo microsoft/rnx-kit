@@ -29,7 +29,7 @@
     "@rnx-kit/console": "workspace:^",
     "@rnx-kit/tools-node": "workspace:^",
     "@rnx-kit/tools-react-native": "workspace:^",
-    "enhanced-resolve": "^5.8.3"
+    "enhanced-resolve": "catalog:"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",

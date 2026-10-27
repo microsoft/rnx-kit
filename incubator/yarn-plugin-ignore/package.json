@@ -29,8 +29,8 @@
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "@yarnpkg/core": "^4.2.0",
-    "@yarnpkg/fslib": "^3.1.1"
+    "@yarnpkg/core": "catalog:",
+    "@yarnpkg/fslib": "catalog:"
   },
   "engines": {
     "node": ">=20.18",

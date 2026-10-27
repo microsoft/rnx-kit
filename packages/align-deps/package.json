@@ -46,8 +46,8 @@
     "oxc-resolver": "catalog:"
   },
   "devDependencies": {
-    "@octokit/core": "^7.0.0",
-    "@octokit/plugin-rest-endpoint-methods": "^17.0.0",
+    "@octokit/core": "catalog:",
+    "@octokit/plugin-rest-endpoint-methods": "catalog:",
     "@react-native-community/cli-types": "catalog:",
     "@rnx-kit/config": "workspace:*",
     "@rnx-kit/console": "workspace:*",
@@ -62,11 +62,11 @@
     "@types/yargs": "catalog:",
     "detect-indent": "^6.0.0",
     "js-yaml": "catalog:",
-    "markdown-table": "^3.0.0",
+    "markdown-table": "catalog:",
     "package-json": "^10.0.0",
     "prompts": "^2.4.0",
     "recast": "^0.23.0",
-    "semver": "catalog:",
+    "semver": "^7.0.0",
     "yargs": "catalog:"
   },
   "engines": {
