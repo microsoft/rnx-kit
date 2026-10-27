@@ -39,11 +39,11 @@
     "@rnx-kit/tools-react-native": "workspace:^"
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^20.1.0",
+    "@react-native-community/cli-types": "catalog:",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tools-filesystem": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "@types/node": "^24.0.0",
+    "@types/node": "catalog:",
     "metro": "^0.84.0",
     "metro-config": "^0.84.0",
     "metro-core": "^0.84.0",

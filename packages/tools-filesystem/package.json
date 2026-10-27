@@ -43,7 +43,7 @@
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "@types/node": "^24.0.0",
+    "@types/node": "catalog:",
     "memfs": "^4.56.10"
   },
   "peerDependencies": {

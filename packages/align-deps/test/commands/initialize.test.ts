@@ -1,5 +1,6 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
 import { after, before, describe, it } from "node:test";
+import { URL, fileURLToPath } from "node:url";
 import {
   initializeConfig,
   makeInitializeCommand,
@@ -199,7 +200,12 @@ describe("initializeConfig()", () => {
   it("adds config with custom profiles", () => {
     const presets = [
       ...defaultConfig.presets,
-      "@rnx-kit/scripts/align-deps-preset.cjs",
+      fileURLToPath(
+        new URL(
+          "../__fixtures__/custom-profiles/valid-profiles.js",
+          import.meta.url
+        )
+      ),
     ];
     const result = initializeConfig(
       {

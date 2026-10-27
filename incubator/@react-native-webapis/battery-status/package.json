@@ -38,7 +38,7 @@
     "@babel/preset-env": "^7.20.0",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "@types/node": "^24.0.0",
+    "@types/node": "catalog:",
     "react": "19.2.3",
     "react-native": "^0.85.0"
   },

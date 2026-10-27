@@ -74,7 +74,7 @@
     "@testing-library/react-native": "^12.4.3",
     "@types/react": "^19.0.0",
     "jest": "^29.2.1",
-    "oxc-resolver": "^11.0.0",
+    "oxc-resolver": "catalog:",
     "react-native-test-app": "^5.1.2",
     "react-test-renderer": "19.2.3"
   },
@@ -172,10 +172,6 @@
       ]
     },
     "alignDeps": {
-      "presets": [
-        "microsoft/react-native",
-        "@rnx-kit/scripts/align-deps-preset.cjs"
-      ],
       "requirements": [
         "react-native@0.85"
       ],
@@ -184,7 +180,6 @@
         "core-ios",
         "core/testing",
         "babel-preset-react-native",
-        "oxc-resolver",
         "react",
         "test-app"
       ]

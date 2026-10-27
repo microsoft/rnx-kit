@@ -35,7 +35,7 @@
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
     "@types/babel__core": "^7.0.0",
-    "metro-babel-transformer": "^0.84.0"
+    "metro-babel-transformer": "catalog:"
   },
   "peerDependencies": {
     "@react-native/babel-preset": "*"

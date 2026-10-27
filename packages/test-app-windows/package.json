@@ -127,10 +127,6 @@
       ]
     },
     "alignDeps": {
-      "presets": [
-        "microsoft/react-native",
-        "@rnx-kit/scripts/align-deps-preset.cjs"
-      ],
       "requirements": [
         "react-native@0.82"
       ],
