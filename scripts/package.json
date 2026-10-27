@@ -24,11 +24,11 @@
   },
   "dependencies": {
     "@rnx-kit/typedoc-tsc6": "workspace:*",
-    "@yarnpkg/cli": "^4.6.0",
-    "clipanion": "^4.0.0-rc.4",
+    "@yarnpkg/cli": "catalog:",
+    "clipanion": "catalog:",
     "esbuild": "catalog:",
     "jest": "^29.2.1",
-    "markdown-table": "^3.0.0",
+    "markdown-table": "catalog:",
     "oxfmt": "catalog:",
     "typescript": "catalog:"
   },

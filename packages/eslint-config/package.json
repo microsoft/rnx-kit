@@ -30,11 +30,11 @@
     "format": "oxfmt README.md index.js package.json"
   },
   "dependencies": {
-    "@microsoft/eslint-plugin-sdl": "^1.0.0",
+    "@microsoft/eslint-plugin-sdl": "catalog:",
     "@rnx-kit/eslint-plugin": "workspace:*"
   },
   "devDependencies": {
-    "eslint": "^9.0.0"
+    "eslint": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^9.0.0"

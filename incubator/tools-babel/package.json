@@ -28,10 +28,10 @@
   "dependencies": {
     "@rnx-kit/tools-performance": "workspace:^",
     "hermes-parser": "^0.34.0",
-    "oxc-parser": "^0.123.0"
+    "oxc-parser": "catalog:"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "catalog:",
     "@babel/generator": "^7.20.0",
     "@react-native/babel-preset": "^0.85.0",
     "@rnx-kit/reporter": "workspace:*",
@@ -40,7 +40,7 @@
     "@rnx-kit/tools-formatting": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
     "@swc/core": "^1.15.24",
-    "@types/babel__core": "^7.20.0",
+    "@types/babel__core": "catalog:",
     "@types/babel__generator": "^7.20.0",
     "metro-babel-transformer": "catalog:"
   },

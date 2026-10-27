@@ -30,7 +30,7 @@
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "@yarnpkg/core": "^4.0.0"
+    "@yarnpkg/core": "catalog:"
   },
   "engines": {
     "node": ">=20.18",

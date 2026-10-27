@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@rnx-kit/tools-shell": "workspace:^",
-    "fast-xml-parser": "^5.3.4"
+    "fast-xml-parser": "catalog:"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",

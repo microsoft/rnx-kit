@@ -45,7 +45,7 @@
     "@rnx-kit/tools-filesystem": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
-    "@yarnpkg/types": "^4.0.0"
+    "@yarnpkg/types": "catalog:"
   },
   "peerDependencies": {
     "@yarnpkg/types": ">=4.0.0"

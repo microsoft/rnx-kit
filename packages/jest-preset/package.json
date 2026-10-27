@@ -25,8 +25,8 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/core": "catalog:",
+    "@babel/preset-env": "catalog:",
     "@babel/preset-typescript": "^7.0.0",
     "@jest/create-cache-key-function": "^29.7.0",
     "@rnx-kit/tools-node": "workspace:^",
@@ -36,7 +36,7 @@
     "@jest/types": "^29.2.1",
     "@react-native-community/cli-types": "catalog:",
     "@react-native/babel-preset": "^0.85.0",
-    "@react-native/jest-preset": "^0.85.0",
+    "@react-native/jest-preset": "catalog:",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",

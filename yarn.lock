@@ -190,7 +190,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.0.0, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.20.0, @babel/core@npm:^7.25.2":
+"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.20.0, @babel/core@npm:^7.25.2":
   version: 7.29.7
   resolution: "@babel/core@npm:7.29.7"
   dependencies:
@@ -1442,7 +1442,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-env@npm:^7.0.0, @babel/preset-env@npm:^7.20.0":
+"@babel/preset-env@npm:^7.20.0":
   version: 7.29.7
   resolution: "@babel/preset-env@npm:7.29.7"
   dependencies:
@@ -1804,31 +1804,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emnapi/core@npm:^1.4.3, @emnapi/core@npm:^1.4.5":
-  version: 1.11.3
-  resolution: "@emnapi/core@npm:1.11.3"
+"@emnapi/core@npm:1.10.0, @emnapi/core@npm:^1.4.3, @emnapi/core@npm:^1.4.5":
+  version: 1.10.0
+  resolution: "@emnapi/core@npm:1.10.0"
   dependencies:
-    "@emnapi/wasi-threads": "npm:1.2.3"
+    "@emnapi/wasi-threads": "npm:1.2.1"
     tslib: "npm:^2.4.0"
-  checksum: 10c0/4ca08d349a82d5d2887ccc9e12df630877b0412ddcd59b9faee61e3c3947ccead27a18257a18bfe17abdf2b0709857808ad75d423ac49edd50c32fb140a7ed6e
+  checksum: 10c0/f51d08227857b60632de7714d708124f0e100a1462dde6df8221760939aa3204a73193830371830fac0716f3ccd2129f2cac1b17cd7d7958bc4da9018a296edb
   languageName: node
   linkType: hard
 
-"@emnapi/runtime@npm:^1.4.3, @emnapi/runtime@npm:^1.4.5":
-  version: 1.11.3
-  resolution: "@emnapi/runtime@npm:1.11.3"
+"@emnapi/runtime@npm:1.10.0, @emnapi/runtime@npm:^1.4.3, @emnapi/runtime@npm:^1.4.5":
+  version: 1.10.0
+  resolution: "@emnapi/runtime@npm:1.10.0"
   dependencies:
     tslib: "npm:^2.4.0"
-  checksum: 10c0/a00f1020fefb9d4145c367f93a9fddb383a00da8ffd7871e20b19659890379b83aeecb9f84d7d0eda5456343f4a09eb05b0acb5153b0d3d889539dedb1ed87c3
+  checksum: 10c0/953f14991d1aefb92ee6f8eb27dea725e484791a53a0cb5f47d9e0087b9a2c929ff2e92adf95af15d6ad456db6300c6b761ebf72b50a875b874a83520b3ba093
   languageName: node
   linkType: hard
 
-"@emnapi/wasi-threads@npm:1.2.3, @emnapi/wasi-threads@npm:^1.0.4":
-  version: 1.2.3
-  resolution: "@emnapi/wasi-threads@npm:1.2.3"
+"@emnapi/wasi-threads@npm:1.2.1, @emnapi/wasi-threads@npm:^1.0.4":
+  version: 1.2.1
+  resolution: "@emnapi/wasi-threads@npm:1.2.1"
   dependencies:
     tslib: "npm:^2.4.0"
-  checksum: 10c0/5aed84bc5dbe867973b20406ca1ed95661a4892ecaef80378fdf2d37424b3f7b9c428df8a3e1d82b783a3345a530032bf049e699e1f113ea52203c3e9b4e6ce5
+  checksum: 10c0/32fcfa81ab396533b2ec1f4082b1ff779a05d9c836bbbd3f4398405b0e6814c0d9503b7993130e37bc6941dbc1ded49f55e9700ae9ca4e803bab2b5bc5deb331
   languageName: node
   linkType: hard
 
@@ -2917,15 +2917,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@napi-rs/wasm-runtime@npm:^1.1.1, @napi-rs/wasm-runtime@npm:^1.1.2":
-  version: 1.1.3
-  resolution: "@napi-rs/wasm-runtime@npm:1.1.3"
+"@napi-rs/wasm-runtime@npm:^1.1.1, @napi-rs/wasm-runtime@npm:^1.1.4":
+  version: 1.2.5
+  resolution: "@napi-rs/wasm-runtime@npm:1.2.5"
   dependencies:
-    "@tybys/wasm-util": "npm:^0.10.1"
+    "@tybys/wasm-util": "npm:^0.10.3"
   peerDependencies:
-    "@emnapi/core": ^1.7.1
-    "@emnapi/runtime": ^1.7.1
-  checksum: 10c0/745bb32a023b95095a18d93658bf4564403c2283ca0500a043afcf566ac6082bd0611792f14636276bab07dc2ce6d862591c8aabddae02ec697245b05bc6f144
+    "@emnapi/core": ^1.7.1 || ^2.0.0-alpha.4
+    "@emnapi/runtime": ^1.7.1 || ^2.0.0-alpha.4
+  checksum: 10c0/dae2bc48077df6da2d59f3c0f3e17b03b99953dbd97fd1fb1f0d261c6036b812538d5905266bd2402182e2709a778d63c8bbb3c2d7fe090fcea863f717954fce
   languageName: node
   linkType: hard
 
@@ -3208,9 +3208,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-android-arm-eabi@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-android-arm-eabi@npm:0.123.0"
+"@oxc-parser/binding-android-arm-eabi@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-android-arm-eabi@npm:0.134.0"
   conditions: os=android & cpu=arm
   languageName: node
   linkType: hard
@@ -3222,9 +3222,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-android-arm64@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-android-arm64@npm:0.123.0"
+"@oxc-parser/binding-android-arm64@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-android-arm64@npm:0.134.0"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
@@ -3236,9 +3236,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-darwin-arm64@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-darwin-arm64@npm:0.123.0"
+"@oxc-parser/binding-darwin-arm64@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-darwin-arm64@npm:0.134.0"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
@@ -3250,9 +3250,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-darwin-x64@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-darwin-x64@npm:0.123.0"
+"@oxc-parser/binding-darwin-x64@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-darwin-x64@npm:0.134.0"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
@@ -3264,9 +3264,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-freebsd-x64@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-freebsd-x64@npm:0.123.0"
+"@oxc-parser/binding-freebsd-x64@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-freebsd-x64@npm:0.134.0"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
@@ -3278,9 +3278,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-linux-arm-gnueabihf@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-linux-arm-gnueabihf@npm:0.123.0"
+"@oxc-parser/binding-linux-arm-gnueabihf@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-linux-arm-gnueabihf@npm:0.134.0"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
@@ -3292,9 +3292,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-linux-arm-musleabihf@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-linux-arm-musleabihf@npm:0.123.0"
+"@oxc-parser/binding-linux-arm-musleabihf@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-linux-arm-musleabihf@npm:0.134.0"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
@@ -3306,9 +3306,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-linux-arm64-gnu@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-linux-arm64-gnu@npm:0.123.0"
+"@oxc-parser/binding-linux-arm64-gnu@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-linux-arm64-gnu@npm:0.134.0"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
@@ -3320,9 +3320,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-linux-arm64-musl@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-linux-arm64-musl@npm:0.123.0"
+"@oxc-parser/binding-linux-arm64-musl@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-linux-arm64-musl@npm:0.134.0"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
@@ -3334,9 +3334,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-linux-ppc64-gnu@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-linux-ppc64-gnu@npm:0.123.0"
+"@oxc-parser/binding-linux-ppc64-gnu@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-linux-ppc64-gnu@npm:0.134.0"
   conditions: os=linux & cpu=ppc64 & libc=glibc
   languageName: node
   linkType: hard
@@ -3348,9 +3348,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-linux-riscv64-gnu@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-linux-riscv64-gnu@npm:0.123.0"
+"@oxc-parser/binding-linux-riscv64-gnu@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-linux-riscv64-gnu@npm:0.134.0"
   conditions: os=linux & cpu=riscv64 & libc=glibc
   languageName: node
   linkType: hard
@@ -3362,9 +3362,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-linux-riscv64-musl@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-linux-riscv64-musl@npm:0.123.0"
+"@oxc-parser/binding-linux-riscv64-musl@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-linux-riscv64-musl@npm:0.134.0"
   conditions: os=linux & cpu=riscv64 & libc=musl
   languageName: node
   linkType: hard
@@ -3376,9 +3376,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-linux-s390x-gnu@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-linux-s390x-gnu@npm:0.123.0"
+"@oxc-parser/binding-linux-s390x-gnu@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-linux-s390x-gnu@npm:0.134.0"
   conditions: os=linux & cpu=s390x & libc=glibc
   languageName: node
   linkType: hard
@@ -3390,9 +3390,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-linux-x64-gnu@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-linux-x64-gnu@npm:0.123.0"
+"@oxc-parser/binding-linux-x64-gnu@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-linux-x64-gnu@npm:0.134.0"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
@@ -3404,9 +3404,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-linux-x64-musl@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-linux-x64-musl@npm:0.123.0"
+"@oxc-parser/binding-linux-x64-musl@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-linux-x64-musl@npm:0.134.0"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
@@ -3418,9 +3418,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-openharmony-arm64@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-openharmony-arm64@npm:0.123.0"
+"@oxc-parser/binding-openharmony-arm64@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-openharmony-arm64@npm:0.134.0"
   conditions: os=openharmony & cpu=arm64
   languageName: node
   linkType: hard
@@ -3434,11 +3434,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-wasm32-wasi@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-wasm32-wasi@npm:0.123.0"
+"@oxc-parser/binding-wasm32-wasi@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-wasm32-wasi@npm:0.134.0"
   dependencies:
-    "@napi-rs/wasm-runtime": "npm:^1.1.2"
+    "@emnapi/core": "npm:1.10.0"
+    "@emnapi/runtime": "npm:1.10.0"
+    "@napi-rs/wasm-runtime": "npm:^1.1.4"
   conditions: cpu=wasm32
   languageName: node
   linkType: hard
@@ -3450,9 +3452,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-win32-arm64-msvc@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-win32-arm64-msvc@npm:0.123.0"
+"@oxc-parser/binding-win32-arm64-msvc@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-win32-arm64-msvc@npm:0.134.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
@@ -3464,9 +3466,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-win32-ia32-msvc@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-win32-ia32-msvc@npm:0.123.0"
+"@oxc-parser/binding-win32-ia32-msvc@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-win32-ia32-msvc@npm:0.134.0"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
@@ -3478,9 +3480,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-parser/binding-win32-x64-msvc@npm:0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-parser/binding-win32-x64-msvc@npm:0.123.0"
+"@oxc-parser/binding-win32-x64-msvc@npm:0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-parser/binding-win32-x64-msvc@npm:0.134.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -3492,10 +3494,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-project/types@npm:^0.123.0":
-  version: 0.123.0
-  resolution: "@oxc-project/types@npm:0.123.0"
-  checksum: 10c0/7f71f9fa38796e6e5431390c213ec9626a3972feec07b513c513828bbfba5f6d908b04e8c679ae2b30b49cc1dee2dc0b2f1012f38ed1cb9e54bfeba09119f36d
+"@oxc-project/types@npm:^0.134.0":
+  version: 0.134.0
+  resolution: "@oxc-project/types@npm:0.134.0"
+  checksum: 10c0/d90ee664206091d539a24de6ec703bdb2124e1181680609ac3c27326273a3189c5bb6e0177f3171c85a78e8c01eb43a9903cbbe13257053c7df141c030579c16
   languageName: node
   linkType: hard
 
@@ -4149,8 +4151,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@react-native-webapis/battery-status@workspace:incubator/@react-native-webapis/battery-status"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
-    "@babel/preset-env": "npm:^7.20.0"
+    "@babel/core": "catalog:"
+    "@babel/preset-env": "catalog:"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
@@ -4166,8 +4168,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@react-native-webapis/web-storage@workspace:incubator/@react-native-webapis/web-storage"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
-    "@babel/preset-env": "npm:^7.20.0"
+    "@babel/core": "catalog:"
+    "@babel/preset-env": "catalog:"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     react: "npm:19.2.3"
@@ -4954,8 +4956,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
-    "@octokit/core": "npm:^7.0.0"
-    "@octokit/plugin-rest-endpoint-methods": "npm:^17.0.0"
+    "@octokit/core": "catalog:"
+    "@octokit/plugin-rest-endpoint-methods": "catalog:"
     "@react-native-community/cli-types": "catalog:"
     "@rnx-kit/config": "workspace:*"
     "@rnx-kit/console": "workspace:*"
@@ -4972,12 +4974,12 @@ __metadata:
     "@types/yargs": "catalog:"
     detect-indent: "npm:^6.0.0"
     js-yaml: "catalog:"
-    markdown-table: "npm:^3.0.0"
+    markdown-table: "catalog:"
     oxc-resolver: "catalog:"
     package-json: "npm:^10.0.0"
     prompts: "npm:^2.4.0"
     recast: "npm:^0.23.0"
-    semver: "catalog:"
+    semver: "npm:^7.0.0"
     yargs: "catalog:"
   bin:
     rnx-align-deps: lib/index.js
@@ -4988,13 +4990,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/babel-plugin-import-path-remapper@workspace:packages/babel-plugin-import-path-remapper"
   dependencies:
-    "@babel/core": "npm:^7.0.0"
-    "@babel/helper-plugin-utils": "npm:^7.0.0"
+    "@babel/core": "catalog:"
+    "@babel/helper-plugin-utils": "catalog:"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tools-node": "workspace:^"
     "@rnx-kit/tsconfig": "workspace:*"
-    "@types/babel__core": "npm:^7.0.0"
-    "@types/babel__helper-plugin-utils": "npm:^7.0.0"
+    "@types/babel__core": "catalog:"
+    "@types/babel__helper-plugin-utils": "catalog:"
     "@types/node": "catalog:"
   languageName: unknown
   linkType: soft
@@ -5003,15 +5005,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/babel-preset-metro-react-native@workspace:packages/babel-preset-metro-react-native"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
+    "@babel/core": "catalog:"
     "@babel/plugin-transform-typescript": "npm:^7.20.0"
-    "@babel/runtime": "npm:^7.20.0"
+    "@babel/runtime": "catalog:"
     "@react-native/babel-preset": "npm:^0.85.0"
     "@rnx-kit/babel-plugin-import-path-remapper": "workspace:*"
     "@rnx-kit/console": "workspace:^"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
-    "@types/babel__core": "npm:^7.0.0"
+    "@types/babel__core": "catalog:"
     "@types/node": "catalog:"
     babel-plugin-const-enum: "npm:^1.0.0"
   peerDependencies:
@@ -5042,8 +5044,8 @@ __metadata:
   resolution: "@rnx-kit/build@workspace:incubator/build"
   dependencies:
     "@octokit/auth-oauth-device": "npm:^8.0.0"
-    "@octokit/core": "npm:^7.0.0"
-    "@octokit/plugin-rest-endpoint-methods": "npm:^17.0.0"
+    "@octokit/core": "catalog:"
+    "@octokit/plugin-rest-endpoint-methods": "catalog:"
     "@octokit/request-error": "npm:^7.0.0"
     "@rnx-kit/config": "workspace:^"
     "@rnx-kit/scripts": "workspace:*"
@@ -5054,11 +5056,11 @@ __metadata:
     "@rnx-kit/tools-windows": "workspace:^"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
-    "@types/qrcode": "npm:^1.4.2"
+    "@types/qrcode": "catalog:"
     "@types/yargs": "catalog:"
     git-url-parse: "npm:^16.0.0"
     ora: "npm:^8.0.0"
-    qrcode: "npm:^1.5.0"
+    qrcode: "catalog:"
     yargs: "catalog:"
   bin:
     rnx-build: lib/cli.js
@@ -5082,8 +5084,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/cli@workspace:packages/cli"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
-    "@babel/preset-env": "npm:^7.20.0"
+    "@babel/core": "catalog:"
+    "@babel/preset-env": "catalog:"
     "@react-native-community/cli-types": "catalog:"
     "@react-native-windows/cli": "npm:^0.82.0"
     "@rnx-kit/align-deps": "workspace:^"
@@ -5108,20 +5110,20 @@ __metadata:
     "@rnx-kit/types-bundle-config": "workspace:^"
     "@rnx-kit/types-kit-config": "workspace:^"
     "@rnx-kit/types-node": "workspace:^"
-    "@types/connect": "npm:^3.4.36"
+    "@types/connect": "catalog:"
     "@types/node": "catalog:"
-    "@types/qrcode": "npm:^1.4.2"
+    "@types/qrcode": "catalog:"
     commander: "npm:^11.1.0"
-    markdown-table: "npm:^3.0.0"
-    memfs: "npm:^4.56.10"
+    markdown-table: "catalog:"
+    memfs: "catalog:"
     metro: "npm:^0.84.0"
     metro-babel-transformer: "catalog:"
     metro-config: "npm:^0.84.0"
     ora: "npm:^5.4.1"
-    qrcode: "npm:^1.5.0"
+    qrcode: "catalog:"
     react: "npm:19.2.3"
     react-native: "npm:^0.85.0"
-    type-fest: "npm:^4.0.0"
+    type-fest: "catalog:"
   peerDependencies:
     jest: ">=26.0"
     react-native: ">=0.64"
@@ -5190,9 +5192,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-config@workspace:packages/eslint-config"
   dependencies:
-    "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
+    "@microsoft/eslint-plugin-sdl": "catalog:"
     "@rnx-kit/eslint-plugin": "workspace:*"
-    eslint: "npm:^9.0.0"
+    eslint: "catalog:"
   peerDependencies:
     eslint: ^9.0.0
   languageName: unknown
@@ -5203,15 +5205,15 @@ __metadata:
   resolution: "@rnx-kit/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
     "@eslint/js": "npm:^9.0.0"
-    "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
-    "@react-native/eslint-plugin": "npm:^0.84.0"
+    "@microsoft/eslint-plugin-sdl": "catalog:"
+    "@react-native/eslint-plugin": "catalog:"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
     "@typescript-eslint/parser": "npm:^8.0.0"
     "@typescript-eslint/types": "npm:^8.0.0"
-    enhanced-resolve: "npm:^5.8.3"
-    eslint: "npm:^9.0.0"
+    enhanced-resolve: "catalog:"
+    eslint: "catalog:"
     eslint-plugin-react: "npm:^7.35.2"
     eslint-plugin-react-hooks: "npm:^5.2.0"
     typescript-eslint: "npm:^8.0.0"
@@ -5239,14 +5241,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/jest-preset@workspace:packages/jest-preset"
   dependencies:
-    "@babel/core": "npm:^7.0.0"
-    "@babel/preset-env": "npm:^7.0.0"
+    "@babel/core": "catalog:"
+    "@babel/preset-env": "catalog:"
     "@babel/preset-typescript": "npm:^7.0.0"
     "@jest/create-cache-key-function": "npm:^29.7.0"
     "@jest/types": "npm:^29.2.1"
     "@react-native-community/cli-types": "catalog:"
     "@react-native/babel-preset": "npm:^0.85.0"
-    "@react-native/jest-preset": "npm:^0.85.0"
+    "@react-native/jest-preset": "catalog:"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tools-node": "workspace:^"
     "@rnx-kit/tools-react-native": "workspace:^"
@@ -5304,7 +5306,7 @@ __metadata:
     "@rnx-kit/types-kit-config": "workspace:^"
     "@rnx-kit/types-node": "workspace:^"
     "@types/node": "catalog:"
-    "@yarnpkg/types": "npm:^4.0.0"
+    "@yarnpkg/types": "catalog:"
   peerDependencies:
     "@yarnpkg/types": ">=4.0.0"
   peerDependenciesMeta:
@@ -5317,20 +5319,20 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-config@workspace:packages/metro-config"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
-    "@babel/preset-env": "npm:^7.20.0"
+    "@babel/core": "catalog:"
+    "@babel/preset-env": "catalog:"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tools-node": "workspace:^"
     "@rnx-kit/tools-react-native": "workspace:^"
     "@rnx-kit/tools-workspaces": "workspace:^"
     "@rnx-kit/tsconfig": "workspace:*"
-    "@types/connect": "npm:^3.4.36"
+    "@types/connect": "catalog:"
     metro: "npm:^0.84.0"
     metro-config: "npm:^0.84.0"
     metro-resolver: "npm:^0.84.0"
     react: "npm:19.2.3"
     react-native: "npm:^0.85.0"
-    type-fest: "npm:^4.0.0"
+    type-fest: "catalog:"
   peerDependencies:
     "@react-native/metro-config": "*"
     react: "*"
@@ -5367,7 +5369,7 @@ __metadata:
     "@rnx-kit/tsconfig": "workspace:*"
     "@rnx-kit/types-plugin-duplicates-checker": "workspace:^"
     "@types/node": "catalog:"
-    memfs: "npm:^4.0.0"
+    memfs: "catalog:"
     metro: "npm:^0.84.0"
     metro-source-map: "catalog:"
   bin:
@@ -5404,7 +5406,7 @@ __metadata:
     "@rnx-kit/tools-react-native": "workspace:^"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
-    enhanced-resolve: "npm:^5.8.3"
+    enhanced-resolve: "catalog:"
     metro-resolver: "npm:^0.84.0"
     oxc-resolver: "catalog:"
   peerDependencies:
@@ -5419,8 +5421,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
-    "@babel/preset-env": "npm:^7.20.0"
+    "@babel/core": "catalog:"
+    "@babel/preset-env": "catalog:"
     "@fluentui/utilities": "npm:8.17.2"
     "@react-native-community/cli-types": "catalog:"
     "@react-native/babel-preset": "npm:^0.85.0"
@@ -5442,7 +5444,7 @@ __metadata:
     lodash-es: "npm:^4.17.21"
     metro: "npm:^0.84.0"
     metro-config: "npm:^0.84.0"
-    metro-transform-worker: "catalog:"
+    metro-transform-worker: "npm:^0.84.0"
     react: "npm:19.2.3"
     react-native: "npm:^0.85.0"
   languageName: unknown
@@ -5495,14 +5497,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-transformer-oxc@workspace:incubator/metro-transformer-oxc"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
+    "@babel/core": "catalog:"
     "@react-native/babel-preset": "npm:^0.85.0"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
-    "@types/babel__core": "npm:^7.0.0"
+    "@types/babel__core": "catalog:"
     estree-to-babel: "npm:^12.0.1"
     metro-babel-transformer: "catalog:"
-    oxc-parser: "npm:^0.120.0"
+    oxc-parser: "catalog:"
   peerDependencies:
     "@react-native/babel-preset": "*"
   languageName: unknown
@@ -5512,13 +5514,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/oxlint-config@workspace:packages/oxlint-config"
   dependencies:
-    "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
-    "@react-native/eslint-plugin": "npm:^0.84.0"
+    "@microsoft/eslint-plugin-sdl": "catalog:"
+    "@react-native/eslint-plugin": "catalog:"
     "@rnx-kit/eslint-plugin": "workspace:^"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
-    eslint: "npm:^9.0.0"
-    oxlint: "npm:^1.61.0"
+    eslint: "catalog:"
+    oxlint: "catalog:"
   peerDependencies:
     eslint: ^9.0.0
     oxlint: ^1.50.0
@@ -5532,17 +5534,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/polyfills@workspace:incubator/polyfills"
   dependencies:
-    "@babel/core": "npm:^7.0.0"
-    "@babel/helper-plugin-utils": "npm:^7.0.0"
+    "@babel/core": "catalog:"
+    "@babel/helper-plugin-utils": "catalog:"
     "@babel/template": "npm:^7.0.0"
     "@rnx-kit/console": "workspace:^"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tools-node": "workspace:^"
     "@rnx-kit/tsconfig": "workspace:*"
-    "@types/babel__core": "npm:^7.0.0"
-    "@types/babel__helper-plugin-utils": "npm:^7.0.0"
+    "@types/babel__core": "catalog:"
+    "@types/babel__helper-plugin-utils": "catalog:"
     "@types/babel__template": "npm:^7.0.0"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "catalog:"
     metro-config: "npm:^0.84.0"
   peerDependencies:
     "@react-native/js-polyfills": "*"
@@ -5556,8 +5558,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/react-native-auth@workspace:packages/react-native-auth"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
-    "@babel/preset-env": "npm:^7.20.0"
+    "@babel/core": "catalog:"
+    "@babel/preset-env": "catalog:"
     "@react-native-community/cli": "npm:^20.1.0"
     "@react-native-community/cli-platform-android": "npm:^20.1.0"
     "@react-native-community/cli-platform-ios": "npm:^20.1.0"
@@ -5586,7 +5588,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/react-native-lazy-index@workspace:packages/react-native-lazy-index"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
+    "@babel/core": "catalog:"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
@@ -5645,11 +5647,11 @@ __metadata:
     "@rnx-kit/typedoc-tsc6": "workspace:*"
     "@types/jest": "catalog:"
     "@types/node": "catalog:"
-    "@yarnpkg/cli": "npm:^4.6.0"
-    clipanion: "npm:^4.0.0-rc.4"
+    "@yarnpkg/cli": "catalog:"
+    clipanion: "catalog:"
     esbuild: "catalog:"
     jest: "npm:^29.2.1"
-    markdown-table: "npm:^3.0.0"
+    markdown-table: "catalog:"
     oxfmt: "catalog:"
     typescript: "catalog:"
   bin:
@@ -5670,9 +5672,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/test-app-macos@workspace:packages/test-app-macos"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
-    "@babel/preset-env": "npm:^7.20.0"
-    "@babel/runtime": "npm:^7.20.0"
+    "@babel/core": "catalog:"
+    "@babel/preset-env": "catalog:"
+    "@babel/runtime": "catalog:"
     "@react-native-community/cli": "npm:^20.0.0"
     "@react-native-community/cli-platform-android": "npm:^20.0.0"
     "@react-native-community/cli-platform-ios": "npm:^20.0.0"
@@ -5695,7 +5697,7 @@ __metadata:
     "@rnx-kit/react-native-test-app-msal": "workspace:*"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/third-party-notices": "workspace:*"
-    "@types/react": "npm:^19.0.0"
+    "@types/react": "catalog:"
     react: "npm:19.1.4"
     react-native: "npm:^0.81.6"
     react-native-macos: "npm:^0.81.0"
@@ -5710,9 +5712,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/test-app-windows@workspace:packages/test-app-windows"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
-    "@babel/preset-env": "npm:^7.20.0"
-    "@babel/runtime": "npm:^7.20.0"
+    "@babel/core": "catalog:"
+    "@babel/preset-env": "catalog:"
+    "@babel/runtime": "catalog:"
     "@react-native-community/cli": "npm:^20.0.0"
     "@react-native-community/cli-platform-android": "npm:^20.0.0"
     "@react-native-community/cli-platform-ios": "npm:^20.0.0"
@@ -5734,7 +5736,7 @@ __metadata:
     "@rnx-kit/react-native-host": "workspace:*"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/third-party-notices": "workspace:*"
-    "@types/react": "npm:^19.0.0"
+    "@types/react": "catalog:"
     react: "npm:19.1.1"
     react-native: "npm:^0.82.0"
     react-native-test-app: "npm:^5.1.2"
@@ -5746,16 +5748,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/test-app@workspace:packages/test-app"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
-    "@babel/preset-env": "npm:^7.20.0"
-    "@babel/runtime": "npm:^7.20.0"
+    "@babel/core": "catalog:"
+    "@babel/preset-env": "catalog:"
+    "@babel/runtime": "catalog:"
     "@jridgewell/trace-mapping": "npm:^0.3.18"
     "@react-native-community/cli": "npm:^20.1.0"
     "@react-native-community/cli-platform-android": "npm:^20.1.0"
     "@react-native-community/cli-platform-ios": "npm:^20.1.0"
     "@react-native-webapis/web-storage": "workspace:*"
     "@react-native/babel-preset": "npm:^0.85.0"
-    "@react-native/jest-preset": "npm:^0.85.0"
+    "@react-native/jest-preset": "catalog:"
     "@react-native/metro-config": "npm:^0.85.0"
     "@rnx-kit/babel-preset-metro-react-native": "workspace:*"
     "@rnx-kit/build": "workspace:*"
@@ -5777,7 +5779,7 @@ __metadata:
     "@rnx-kit/third-party-notices": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@testing-library/react-native": "npm:^12.4.3"
-    "@types/react": "npm:^19.0.0"
+    "@types/react": "catalog:"
     jest: "npm:^29.2.1"
     oxc-resolver: "catalog:"
     react: "npm:19.2.3"
@@ -5838,7 +5840,7 @@ __metadata:
     "@rnx-kit/tools-shell": "workspace:^"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
-    fast-xml-parser: "npm:^5.3.4"
+    fast-xml-parser: "catalog:"
   languageName: unknown
   linkType: soft
 
@@ -5846,7 +5848,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-babel@workspace:incubator/tools-babel"
   dependencies:
-    "@babel/core": "npm:^7.20.0"
+    "@babel/core": "catalog:"
     "@babel/generator": "npm:^7.20.0"
     "@react-native/babel-preset": "npm:^0.85.0"
     "@rnx-kit/reporter": "workspace:*"
@@ -5856,11 +5858,11 @@ __metadata:
     "@rnx-kit/tools-performance": "workspace:^"
     "@rnx-kit/tsconfig": "workspace:*"
     "@swc/core": "npm:^1.15.24"
-    "@types/babel__core": "npm:^7.20.0"
+    "@types/babel__core": "catalog:"
     "@types/babel__generator": "npm:^7.20.0"
     hermes-parser: "npm:^0.34.0"
     metro-babel-transformer: "catalog:"
-    oxc-parser: "npm:^0.123.0"
+    oxc-parser: "catalog:"
   peerDependencies:
     "@babel/core": "*"
     "@react-native/babel-preset": "*"
@@ -5874,7 +5876,7 @@ __metadata:
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
-    memfs: "npm:^4.56.10"
+    memfs: "catalog:"
   peerDependencies:
     memfs: ">=4.0.0"
   peerDependenciesMeta:
@@ -5958,7 +5960,7 @@ __metadata:
     "@rnx-kit/tsconfig": "workspace:*"
     "@rnx-kit/types-bundle-config": "workspace:^"
     "@types/node": "catalog:"
-    memfs: "npm:^4.56.10"
+    memfs: "catalog:"
     metro: "npm:^0.84.0"
     metro-config: "npm:^0.84.0"
     metro-core: "npm:^0.84.0"
@@ -6011,7 +6013,7 @@ __metadata:
     "@rnx-kit/tools-shell": "workspace:^"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
-    fast-xml-parser: "npm:^5.3.4"
+    fast-xml-parser: "catalog:"
   languageName: unknown
   linkType: soft
 
@@ -6024,7 +6026,7 @@ __metadata:
     "@types/micromatch": "npm:^4.0.0"
     "@types/node": "catalog:"
     fast-glob: "npm:^3.2.7"
-    find-up: "catalog:"
+    find-up: "npm:^5.0.0"
     js-yaml: "catalog:"
     micromatch: "npm:^4.0.0"
     strip-json-comments: "npm:^3.1.1"
@@ -6148,8 +6150,8 @@ __metadata:
   dependencies:
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
-    "@yarnpkg/core": "npm:^4.0.0"
-    "@yarnpkg/fslib": "npm:^3.1.1"
+    "@yarnpkg/core": "catalog:"
+    "@yarnpkg/fslib": "catalog:"
   languageName: unknown
   linkType: soft
 
@@ -6159,7 +6161,7 @@ __metadata:
   dependencies:
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
-    "@yarnpkg/core": "npm:^4.0.0"
+    "@yarnpkg/core": "catalog:"
   languageName: unknown
   linkType: soft
 
@@ -6170,10 +6172,10 @@ __metadata:
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
-    "@yarnpkg/cli": "npm:^4.6.0"
-    "@yarnpkg/core": "npm:^4.2.0"
-    "@yarnpkg/fslib": "npm:^3.1.1"
-    clipanion: "npm:^4.0.0-rc.4"
+    "@yarnpkg/cli": "catalog:"
+    "@yarnpkg/core": "catalog:"
+    "@yarnpkg/fslib": "catalog:"
+    clipanion: "catalog:"
   bin:
     install-external-workspaces-plugin: bin/install-plugin.cjs
   languageName: unknown
@@ -6185,8 +6187,8 @@ __metadata:
   dependencies:
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
-    "@yarnpkg/core": "npm:^4.2.0"
-    "@yarnpkg/fslib": "npm:^3.1.1"
+    "@yarnpkg/core": "catalog:"
+    "@yarnpkg/fslib": "catalog:"
   languageName: unknown
   linkType: soft
 
@@ -6197,9 +6199,9 @@ __metadata:
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
-    "@yarnpkg/cli": "npm:^4.6.0"
-    "@yarnpkg/core": "npm:^4.2.0"
-    clipanion: "npm:^4.0.0-rc.4"
+    "@yarnpkg/cli": "catalog:"
+    "@yarnpkg/core": "catalog:"
+    clipanion: "catalog:"
   languageName: unknown
   linkType: soft
 
@@ -6558,12 +6560,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tybys/wasm-util@npm:^0.10.0, @tybys/wasm-util@npm:^0.10.1":
-  version: 0.10.3
-  resolution: "@tybys/wasm-util@npm:0.10.3"
+"@tybys/wasm-util@npm:^0.10.0, @tybys/wasm-util@npm:^0.10.3":
+  version: 0.10.4
+  resolution: "@tybys/wasm-util@npm:0.10.4"
   dependencies:
     tslib: "npm:^2.4.0"
-  checksum: 10c0/fd2bd2a79c6cd8c79ed1cf7a0fa375c64589264c88a27acaf9756d556b453ea222b62a4f68dd2fbb8b3a78b6bab3b1f4fb2431b6afc6aeda8344b53a521a1cd3
+  checksum: 10c0/27947f254efa3f2bc41f47040f57f41c246200c6439a9fd54c69f50940e320022c320275f138e30b543ee81ce69593905dfa7ba0831577ab636f829aafa70701
   languageName: node
   linkType: hard
 
@@ -6576,7 +6578,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.20.0":
+"@types/babel__core@npm:*, @types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.20.0":
   version: 7.20.5
   resolution: "@types/babel__core@npm:7.20.5"
   dependencies:
@@ -6791,15 +6793,6 @@ __metadata:
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10c0/22ba2bc9f8863101a7e90a56aaeba1eb3ebdc51e847cef4a6d188967ab1acbce9b4f92251372fd0329ecb924bbf610509e122c3dfe346c04dbad04013d4ad7d0
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^22.0.0":
-  version: 22.20.0
-  resolution: "@types/node@npm:22.20.0"
-  dependencies:
-    undici-types: "npm:~6.21.0"
-  checksum: 10c0/55d78223205bd5f81f043d71b7a5c8d8854b9ef44ef81291680943adb27fa5ba1f092658c87183d5bc8cf6baf6a57b81dad966eb3afa452cc301a615b6d9b20e
   languageName: node
   linkType: hard
 
@@ -7248,7 +7241,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/core@npm:^4.0.0, @yarnpkg/core@npm:^4.2.0, @yarnpkg/core@npm:^4.9.1":
+"@yarnpkg/core@npm:^4.2.0, @yarnpkg/core@npm:^4.9.1":
   version: 4.9.1
   resolution: "@yarnpkg/core@npm:4.9.1"
   dependencies:
@@ -12865,7 +12858,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memfs@npm:^4.0.0, memfs@npm:^4.56.10":
+"memfs@npm:^4.56.10":
   version: 4.56.11
   resolution: "memfs@npm:4.56.11"
   dependencies:
@@ -14409,31 +14402,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oxc-parser@npm:^0.123.0":
-  version: 0.123.0
-  resolution: "oxc-parser@npm:0.123.0"
+"oxc-parser@npm:^0.134.0":
+  version: 0.134.0
+  resolution: "oxc-parser@npm:0.134.0"
   dependencies:
-    "@oxc-parser/binding-android-arm-eabi": "npm:0.123.0"
-    "@oxc-parser/binding-android-arm64": "npm:0.123.0"
-    "@oxc-parser/binding-darwin-arm64": "npm:0.123.0"
-    "@oxc-parser/binding-darwin-x64": "npm:0.123.0"
-    "@oxc-parser/binding-freebsd-x64": "npm:0.123.0"
-    "@oxc-parser/binding-linux-arm-gnueabihf": "npm:0.123.0"
-    "@oxc-parser/binding-linux-arm-musleabihf": "npm:0.123.0"
-    "@oxc-parser/binding-linux-arm64-gnu": "npm:0.123.0"
-    "@oxc-parser/binding-linux-arm64-musl": "npm:0.123.0"
-    "@oxc-parser/binding-linux-ppc64-gnu": "npm:0.123.0"
-    "@oxc-parser/binding-linux-riscv64-gnu": "npm:0.123.0"
-    "@oxc-parser/binding-linux-riscv64-musl": "npm:0.123.0"
-    "@oxc-parser/binding-linux-s390x-gnu": "npm:0.123.0"
-    "@oxc-parser/binding-linux-x64-gnu": "npm:0.123.0"
-    "@oxc-parser/binding-linux-x64-musl": "npm:0.123.0"
-    "@oxc-parser/binding-openharmony-arm64": "npm:0.123.0"
-    "@oxc-parser/binding-wasm32-wasi": "npm:0.123.0"
-    "@oxc-parser/binding-win32-arm64-msvc": "npm:0.123.0"
-    "@oxc-parser/binding-win32-ia32-msvc": "npm:0.123.0"
-    "@oxc-parser/binding-win32-x64-msvc": "npm:0.123.0"
-    "@oxc-project/types": "npm:^0.123.0"
+    "@oxc-parser/binding-android-arm-eabi": "npm:0.134.0"
+    "@oxc-parser/binding-android-arm64": "npm:0.134.0"
+    "@oxc-parser/binding-darwin-arm64": "npm:0.134.0"
+    "@oxc-parser/binding-darwin-x64": "npm:0.134.0"
+    "@oxc-parser/binding-freebsd-x64": "npm:0.134.0"
+    "@oxc-parser/binding-linux-arm-gnueabihf": "npm:0.134.0"
+    "@oxc-parser/binding-linux-arm-musleabihf": "npm:0.134.0"
+    "@oxc-parser/binding-linux-arm64-gnu": "npm:0.134.0"
+    "@oxc-parser/binding-linux-arm64-musl": "npm:0.134.0"
+    "@oxc-parser/binding-linux-ppc64-gnu": "npm:0.134.0"
+    "@oxc-parser/binding-linux-riscv64-gnu": "npm:0.134.0"
+    "@oxc-parser/binding-linux-riscv64-musl": "npm:0.134.0"
+    "@oxc-parser/binding-linux-s390x-gnu": "npm:0.134.0"
+    "@oxc-parser/binding-linux-x64-gnu": "npm:0.134.0"
+    "@oxc-parser/binding-linux-x64-musl": "npm:0.134.0"
+    "@oxc-parser/binding-openharmony-arm64": "npm:0.134.0"
+    "@oxc-parser/binding-wasm32-wasi": "npm:0.134.0"
+    "@oxc-parser/binding-win32-arm64-msvc": "npm:0.134.0"
+    "@oxc-parser/binding-win32-ia32-msvc": "npm:0.134.0"
+    "@oxc-parser/binding-win32-x64-msvc": "npm:0.134.0"
+    "@oxc-project/types": "npm:^0.134.0"
   dependenciesMeta:
     "@oxc-parser/binding-android-arm-eabi":
       optional: true
@@ -14475,7 +14468,7 @@ __metadata:
       optional: true
     "@oxc-parser/binding-win32-x64-msvc":
       optional: true
-  checksum: 10c0/e0149bd38e1ebc6faf5b1126b3c43e377f7db80f0f5ec8f69a273864de596bc808efd206d7b7c061aa522b038565af8779d6b77c94e7c6d11b6608cae78f7638
+  checksum: 10c0/e61a7429869a0abd1adc162999c3413b96fff77b4b77460436f8fd87d74d254731aea66cdc6a5c996185e8e227f0a2f61f165de74a52b8163646dd1464c561b9
   languageName: node
   linkType: hard
 
@@ -14625,7 +14618,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oxlint@npm:^1.61.0, oxlint@npm:^1.87.0":
+"oxlint@npm:^1.87.0":
   version: 1.87.0
   resolution: "oxlint@npm:1.87.0"
   dependencies:
@@ -15919,7 +15912,7 @@ __metadata:
   dependencies:
     "@changesets/cli": "npm:^3.0.0"
     "@types/node": "catalog:"
-    "@yarnpkg/types": "npm:^4.0.0"
+    "@yarnpkg/types": "catalog:"
     eslint: "catalog:"
     knip: "npm:^6.0.0"
     nx: "patch:nx@npm%3A22.7.12#~/.yarn/patches/nx-npm-22.7.2-0fb0af5a48.patch"
@@ -16715,8 +16708,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "suggestion-bot@workspace:packages/suggestion-bot"
   dependencies:
-    "@octokit/core": "npm:^7.0.0"
-    "@octokit/plugin-rest-endpoint-methods": "npm:^17.0.0"
+    "@octokit/core": "catalog:"
+    "@octokit/plugin-rest-endpoint-methods": "catalog:"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "catalog:"
@@ -17278,13 +17271,6 @@ __metadata:
   version: 5.26.5
   resolution: "undici-types@npm:5.26.5"
   checksum: 10c0/bb673d7876c2d411b6eb6c560e0c571eef4a01c1c19925175d16e3a30c4c428181fb8d7ae802a261f283e4166a0ac435e2f505743aa9e45d893f9a3df017b501
-  languageName: node
-  linkType: hard
-
-"undici-types@npm:~6.21.0":
-  version: 6.21.0
-  resolution: "undici-types@npm:6.21.0"
-  checksum: 10c0/c01ed51829b10aa72fc3ce64b747f8e74ae9b60eafa19a7b46ef624403508a54c526ffab06a14a26b3120d055e1104d7abe7c9017e83ced038ea5cf52f8d5e04
   languageName: node
   linkType: hard
 

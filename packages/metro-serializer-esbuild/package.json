@@ -42,8 +42,8 @@
     "esbuild-plugin-lodash": "^1.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0",
+    "@babel/core": "catalog:",
+    "@babel/preset-env": "catalog:",
     "@fluentui/utilities": "8.17.2",
     "@react-native-community/cli-types": "catalog:",
     "@react-native/babel-preset": "^0.85.0",
@@ -59,7 +59,7 @@
     "lodash-es": "^4.17.21",
     "metro": "^0.84.0",
     "metro-config": "^0.84.0",
-    "metro-transform-worker": "catalog:",
+    "metro-transform-worker": "^0.84.0",
     "react": "19.2.3",
     "react-native": "^0.85.0"
   },
