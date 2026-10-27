@@ -29,7 +29,7 @@
     "@rnx-kit/config": "workspace:^",
     "@rnx-kit/tools-workspaces": "workspace:^",
     "@rnx-kit/types-kit-config": "workspace:^",
-    "js-yaml": "^5.2.3"
+    "js-yaml": "catalog:"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",

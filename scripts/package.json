@@ -26,7 +26,7 @@
     "@rnx-kit/typedoc-tsc6": "workspace:*",
     "@yarnpkg/cli": "^4.6.0",
     "clipanion": "^4.0.0-rc.4",
-    "esbuild": "^0.28.1",
+    "esbuild": "catalog:",
     "jest": "^29.2.1",
     "markdown-table": "^3.0.0",
     "oxfmt": "catalog:",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@rnx-kit/tsconfig": "workspace:*",
-    "@types/jest": "^29.2.1",
-    "@types/node": "^24.0.0"
+    "@types/jest": "catalog:",
+    "@types/node": "catalog:"
   }
 }

@@ -43,12 +43,12 @@
   "dependencies": {
     "@rnx-kit/types-kit-config": "workspace:^",
     "@rnx-kit/types-node": "workspace:^",
-    "oxc-resolver": "^11.0.0"
+    "oxc-resolver": "catalog:"
   },
   "devDependencies": {
     "@octokit/core": "^7.0.0",
     "@octokit/plugin-rest-endpoint-methods": "^17.0.0",
-    "@react-native-community/cli-types": "^20.1.0",
+    "@react-native-community/cli-types": "catalog:",
     "@rnx-kit/config": "workspace:*",
     "@rnx-kit/console": "workspace:*",
     "@rnx-kit/scripts": "workspace:*",
@@ -59,15 +59,15 @@
     "@rnx-kit/tsconfig": "workspace:*",
     "@types/prompts": "^2.0.0",
     "@types/semver": "^7.0.0",
-    "@types/yargs": "^17.0.0",
+    "@types/yargs": "catalog:",
     "detect-indent": "^6.0.0",
-    "js-yaml": "^5.2.3",
+    "js-yaml": "catalog:",
     "markdown-table": "^3.0.0",
     "package-json": "^10.0.0",
     "prompts": "^2.4.0",
     "recast": "^0.23.0",
-    "semver": "^7.0.0",
-    "yargs": "^17.0.0"
+    "semver": "catalog:",
+    "yargs": "catalog:"
   },
   "engines": {
     "node": ">=20.18"

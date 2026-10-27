@@ -37,7 +37,7 @@
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "@types/node": "^24.0.0"
+    "@types/node": "catalog:"
   },
   "engines": {
     "node": ">=20.18"

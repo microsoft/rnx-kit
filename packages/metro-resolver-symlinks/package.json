@@ -34,9 +34,9 @@
   "devDependencies": {
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "@types/node": "^24.0.0",
+    "@types/node": "catalog:",
     "metro-resolver": "^0.84.0",
-    "oxc-resolver": "^11.0.0"
+    "oxc-resolver": "catalog:"
   },
   "peerDependencies": {
     "oxc-resolver": "^11.0.0"

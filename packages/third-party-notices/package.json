@@ -41,16 +41,16 @@
     "@rnx-kit/console": "workspace:^",
     "@rnx-kit/tools-node": "workspace:^",
     "spdx-expression-parse": "^4.0.0",
-    "yargs": "^17.0.0"
+    "yargs": "catalog:"
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^20.1.0",
+    "@react-native-community/cli-types": "catalog:",
     "@rnx-kit/metro-serializer": "workspace:*",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "@types/node": "^24.0.0",
-    "@types/yargs": "^17.0.0",
-    "metro-source-map": "^0.84.0"
+    "@types/node": "catalog:",
+    "@types/yargs": "catalog:",
+    "metro-source-map": "catalog:"
   },
   "engines": {
     "node": ">=20.18"

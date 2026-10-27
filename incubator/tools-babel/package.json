@@ -42,7 +42,7 @@
     "@swc/core": "^1.15.24",
     "@types/babel__core": "^7.20.0",
     "@types/babel__generator": "^7.20.0",
-    "metro-babel-transformer": "^0.84.0"
+    "metro-babel-transformer": "catalog:"
   },
   "peerDependencies": {
     "@babel/core": "*",

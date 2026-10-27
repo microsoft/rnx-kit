@@ -32,7 +32,7 @@
     "@rnx-kit/oxlint-config": "workspace:*",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
-    "esbuild": "^0.28.1"
+    "esbuild": "catalog:"
   },
   "engines": {
     "node": ">=18.12"
