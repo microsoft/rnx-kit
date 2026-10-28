@@ -5,6 +5,7 @@ import assert from "node:assert";
 import { describe, it } from "node:test";
 import {
   compareUrl,
+  escapeCell,
   formatCommitTable,
   formatSubmoduleSection,
   type SubmoduleReport,
@@ -47,6 +48,43 @@ describe("formatCommitTable", () => {
       { hash: "f".repeat(40), author: "a|b", subject: "x | y" },
     ]);
     assert.strictEqual(lines[2], "| `ffffffff` | a\\|b | x \\| y |");
+  });
+
+  it("keeps hostile commit text inside its cells", () => {
+    const lines = formatCommitTable([
+      { hash: "f".repeat(40), author: "a\\", subject: "x\\| y\nz" },
+    ]);
+    assert.strictEqual(lines.length, 3);
+    assert.strictEqual(cellDelimiters(lines[2]), 4);
+  });
+});
+
+/**
+ * Count the pipes a GFM table parser treats as cell delimiters: those not
+ * preceded by an odd number of backslashes.
+ */
+function cellDelimiters(row: string): number {
+  return (row.match(/(?<!\\)(?:\\\\)*\|/g) ?? []).length;
+}
+
+describe("escapeCell", () => {
+  it("escapes pipes and backslashes", () => {
+    assert.strictEqual(escapeCell("a|b"), "a\\|b");
+    assert.strictEqual(escapeCell("a\\b"), "a\\\\b");
+    // A backslash before a pipe must not cancel the pipe's escape
+    assert.strictEqual(escapeCell("a\\|b"), "a\\\\\\|b");
+    assert.strictEqual(cellDelimiters(escapeCell("a\\|b\\")), 0);
+  });
+
+  it("replaces line breaks, which would end the table row", () => {
+    assert.strictEqual(escapeCell("a\nb\r\nc\rd"), "a b c d");
+  });
+
+  it("leaves ordinary text alone", () => {
+    assert.strictEqual(
+      escapeCell("https://github.com/google/perfetto"),
+      "https://github.com/google/perfetto"
+    );
   });
 });
 
@@ -101,6 +139,26 @@ describe("formatSubmoduleSection", () => {
     ).join("\n");
     assert.match(text, /`cccccccccccc` \(unchanged\)/);
     assert.match(text, /https:\/\/github\.com\/foo\/foo \(\*\*fallback\*\*/);
+  });
+
+  it("keeps hostile submodule URLs inside their cells", () => {
+    // A GitHub URL so the pin cell also gets a compare link built from it
+    const hostile = "https://github.com/o/r|x\\";
+    const lines = formatSubmoduleSection(
+      [
+        report({
+          path: "a|b\\",
+          url: hostile,
+          servedUrl: hostile,
+          baseUrl: "https://example.com/old\\|\nrow",
+        }),
+      ],
+      { base: [], target: [] }
+    );
+    const row = lines.find((l) => l.startsWith("| `"))!;
+    assert.match(row, /\]\(https:\/\/github\.com\/o\/r\\\|x\\\\\/compare\//);
+    assert.strictEqual(cellDelimiters(row), 5);
+    assert.ok(!row.includes("\n"));
   });
 
   it("flags a submodule URL change between base and target", () => {
