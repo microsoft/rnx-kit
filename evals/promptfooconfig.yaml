@@ -26,3 +26,10 @@ defaultTest:
     # another provider instead.
     provider: file://src/grader.ts
 tests: file://tests/*.yaml
+extensions:
+  # Prints each test with the reasons it failed, instead of promptfoo's table.
+  # Pass `--table` to show the table as well, or run `yarn view` to browse the
+  # results.
+  - file://src/report.ts:afterAll
+commandLineOptions:
+  table: false

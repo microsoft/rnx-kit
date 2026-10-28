@@ -53,12 +53,9 @@ function failureReasons(result: EvalResult): string[] {
 
 /**
  * Formats eval results as one line per test, in the order of the tests,
- * followed by the reasons of failed assertions and errors, and a summary.
+ * each followed by the reasons of its failed assertions or its error.
  */
 export function formatReport(results: EvalResult[]): string {
-  let passed = 0;
-  let failed = 0;
-  let errors = 0;
   const lines: string[] = [];
   const sorted = Array.from(results).sort((a, b) => a.testIdx - b.testIdx);
   for (const result of sorted) {
@@ -67,29 +64,22 @@ export function formatReport(results: EvalResult[]): string {
       result.description ||
       `Test #${result.testIdx + 1}`;
     const id = result.testCase?.metadata?.["id"];
-    const title = typeof id === "string" ? `${description} [${id}]` : description;
+    const title =
+      typeof id === "string" ? `${description} [${id}]` : description;
     if (result.success) {
-      ++passed;
       lines.push(`${styleText("green", "✓")} ${title}`);
       continue;
     }
 
     if (result.failureReason === FAILURE_REASON_ERROR) {
-      ++errors;
       lines.push(`${styleText("yellow", "!")} ${title}`);
     } else {
-      ++failed;
       lines.push(`${styleText("red", "✗")} ${title}`);
     }
     for (const reason of failureReasons(result)) {
       lines.push(indent(reason));
     }
   }
-
-  lines.push(
-    "",
-    `${sorted.length} tests: ${passed} passed, ${failed} failed, ${errors} errors`
-  );
   return lines.join("\n");
 }
 

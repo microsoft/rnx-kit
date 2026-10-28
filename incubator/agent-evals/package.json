@@ -19,6 +19,7 @@
     ".": "./src/index.ts",
     "./grader": "./src/provider/grader.ts",
     "./provider": "./src/provider/provider.ts",
+    "./report": "./src/provider/report.ts",
     "./package.json": "./package.json"
   },
   "scripts": {

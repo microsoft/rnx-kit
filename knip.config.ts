@@ -44,6 +44,7 @@ export default {
         "src/grader.ts",
         "src/index.ts",
         "src/provider.ts",
+        "src/report.ts",
         allFixtures,
         allTests,
       ],
