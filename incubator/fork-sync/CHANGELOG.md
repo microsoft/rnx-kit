@@ -1,5 +1,11 @@
 # @rnx-kit/fork-sync
 
+## 0.6.1
+
+### Patch Changes
+
+- a95d640: Escape backslashes and line breaks, not just pipes, in PR-notes table cells, including submodule compare links, so upstream commit text and `.gitmodules` URLs cannot break out of their cells.
+
 ## 0.6.0
 
 ### Minor Changes
