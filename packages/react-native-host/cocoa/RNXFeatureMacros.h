@@ -1,3 +1,23 @@
+#pragma once
+
+#if __has_include(<cxxreact/ReactNativeVersion.h>)
+#include <cxxreact/ReactNativeVersion.h>
+#define REACT_NATIVE_VERSION                                                                       \
+    REACT_NATIVE_VERSION_MAJOR * 1000000 + REACT_NATIVE_VERSION_MINOR * 1000 +                     \
+        REACT_NATIVE_VERSION_PATCH
+#else
+#define REACT_NATIVE_VERSION 0
+#endif  // __has_include(<cxxreact/ReactNativeVersion.h>)
+
+// Force enable New Architecture if it cannot be disabled (>= 0.82). Build
+// systems that don't set preprocessor definitions (e.g. SwiftPM) rely on this.
+#if !USE_FABRIC && REACT_NATIVE_VERSION >= 82000
+#ifdef USE_FABRIC
+#undef USE_FABRIC
+#endif  // USE_FABRIC
+#define USE_FABRIC 1
+#endif  // !USE_FABRIC && REACT_NATIVE_VERSION >= 82000
+
 // Force enable Hermes if JSC is not available
 #if !__has_include(<ReactCommon/RCTJscInstance.h>)
 #ifdef USE_HERMES
@@ -15,15 +35,6 @@
 #endif  // USE_FABRIC && !__has_include(<react/config/ReactNativeConfig.h>)
 
 #if USE_BRIDGELESS
-
-#if __has_include(<cxxreact/ReactNativeVersion.h>)
-#include <cxxreact/ReactNativeVersion.h>
-#define REACT_NATIVE_VERSION                                                                       \
-    REACT_NATIVE_VERSION_MAJOR * 1000000 + REACT_NATIVE_VERSION_MINOR * 1000 +                     \
-        REACT_NATIVE_VERSION_PATCH
-#else
-#define REACT_NATIVE_VERSION 0
-#endif  // __has_include(<cxxreact/ReactNativeVersion.h>)
 
 #if __has_include(<react/config/ReactNativeConfig.h>)
 #define USE_REACT_NATIVE_CONFIG 1

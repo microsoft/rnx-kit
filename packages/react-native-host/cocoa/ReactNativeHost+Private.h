@@ -1,4 +1,4 @@
-#import "ReactNativeHost.h"
+#import "include/ReactNativeHost/ReactNativeHost.h"
 
 @class RCTHost;
 @class RCTSurfacePresenter;
