@@ -20,8 +20,8 @@
     "eval": "npx --yes promptfoo@0.124.1 eval",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test",
-    "view": "npx --yes promptfoo@0.124.1 view"
+    "promptfoo": "npx --yes promptfoo@0.124.1",
+    "test": "rnx-kit-scripts test"
   },
   "dependencies": {
     "@rnx-kit/agent-evals": "workspace:*",
