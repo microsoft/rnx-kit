@@ -55,8 +55,17 @@ export interface SubmoduleReport {
   changes: ChangeStats;
 }
 
-function escapeCell(text: string): string {
-  return text.replace(/\|/g, "\\|");
+/**
+ * Make text safe inside a markdown table cell. Values can come from upstream
+ * (commit subjects, `.gitmodules` URLs), so a stray `|` or line break must not
+ * end the cell or row. Backslashes are escaped first so `\|` in the input
+ * cannot cancel the pipe's escape.
+ */
+export function escapeCell(text: string): string {
+  return text
+    .replace(/\\/g, "\\\\")
+    .replace(/\|/g, "\\|")
+    .replace(/\r?\n|\r/g, " ");
 }
 
 /**
@@ -136,7 +145,9 @@ export function formatSubmoduleSection(
           : `${shortSha(r.baseSha)} → ${shortSha(r.targetSha)}`;
       const link = compareUrl(r.servedUrl, r.baseSha, r.targetSha);
       const pinCell =
-        link && r.baseSha !== r.targetSha ? `[${pin}](${link})` : pin;
+        link && r.baseSha !== r.targetSha
+          ? `[${pin}](${escapeCell(link)})`
+          : pin;
       const fallback =
         r.servedUrl === r.url
           ? escapeCell(r.url)
