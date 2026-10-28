@@ -50,21 +50,21 @@
 
 #ifdef USE_FEATURE_FLAGS
 
-#if __has_include(<react/featureflags/ReactNativeFeatureFlagsOverridesOSSStable.h>)  // >= 0.80
+#if REACT_NATIVE_VERSION >= 80000
 #define USE_FEATURE_FLAGS_OSS_OVERRIDES 1
 #define USE_UNIFIED_FEATURE_FLAGS 1
 #elif __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>) || __has_include(<React_RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
 #define USE_UNIFIED_FEATURE_FLAGS 1
-#endif  // __has_include(<react/featureflags/ReactNativeFeatureFlagsOverridesOSSStable.h>)
+#endif  // REACT_NATIVE_VERSION >= 80000
 
 #if !__has_include(<React-RCTAppDelegate/RCTReactNativeFactory.h>) && !__has_include(<React_RCTAppDelegate/RCTReactNativeFactory.h>)
 #define USE_VIEW_COMMAND_RACE_FIX 1
 #endif  // !__has_include(<React-RCTAppDelegate/RCTReactNativeFactory.h>)
 
 // `useShadowNodeStateOnClone` should be enabled from 0.79 and is on by default in 0.85
-#if REACT_NATIVE_VERSION < 85000 && (__has_include(<React-RCTAppDelegate/RCTJSRuntimeConfiguratorProtocol.h>) || __has_include(<React_RCTAppDelegate/RCTJSRuntimeConfiguratorProtocol.h>))
+#if REACT_NATIVE_VERSION >= 79000 && REACT_NATIVE_VERSION < 85000
 #define USE_UPDATE_RUNTIME_SHADOW_NODE_REFS_ON_COMMIT 1
-#endif  // __has_include(<React-RCTAppDelegate/RCTJSRuntimeConfiguratorProtocol.h>)
+#endif  // REACT_NATIVE_VERSION >= 79000 && REACT_NATIVE_VERSION < 85000
 
 #if REACT_NATIVE_VERSION >= 87000
 #define RCT_REMOVE_LEGACY_ARCH 1
