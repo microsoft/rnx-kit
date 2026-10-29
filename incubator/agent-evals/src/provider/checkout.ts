@@ -39,13 +39,22 @@ export async function addWorktree(
   commit: string
 ): Promise<string> {
   const workdir = makeTempDir();
+  // Fixtures in rnx-kit exceed the 260 character path limit on Windows
+  const longPaths = ["-c", "core.longpaths=true"];
   process.once("exit", () => {
-    const args = ["worktree", "remove", "--force", workdir];
+    const args = [...longPaths, "worktree", "remove", "--force", workdir];
     if (spawnSync("git", args, { cwd: root }).status !== 0) {
       fs.rmSync(workdir, { recursive: true, force: true, maxRetries: 3 });
     }
   });
-  await git(root, ["worktree", "add", "--detach", workdir, commit]);
+  await git(root, [
+    ...longPaths,
+    "worktree",
+    "add",
+    "--detach",
+    workdir,
+    commit,
+  ]);
   return workdir;
 }
 
