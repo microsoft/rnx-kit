@@ -51,6 +51,8 @@ export type Session = {
   id: string;
   /** Root of the repository the session worked in */
   root: string;
+  /** Directory the session started in; shell inputs start there */
+  cwd: string;
   /** Branch checked out when the session was last started or resumed */
   branch?: string;
   /** Commit checked out when the session started */
@@ -175,6 +177,7 @@ export function readSession(root: string, id?: string): Session {
   const session: Session = {
     id: sessionId,
     root,
+    cwd: root,
     shellInputs: [],
     toolCalls: [],
     requests: [],
@@ -187,6 +190,7 @@ export function readSession(root: string, id?: string): Session {
         const { context } = event.data;
         if (event.type === "session.start") {
           session.root = context?.gitRoot ?? context?.cwd ?? root;
+          session.cwd = context?.cwd ?? session.root;
           session.baseCommit = context?.headCommit;
         }
         session.branch = context?.branch ?? session.branch;

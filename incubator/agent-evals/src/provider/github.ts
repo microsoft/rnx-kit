@@ -1,5 +1,5 @@
 import { makeCommand } from "@rnx-kit/tools-shell";
-import * as path from "node:path";
+import { withoutExecutablePath } from "../common.ts";
 import type { AgentCommand, GitHubItem } from "../types.ts";
 import type { SessionToolCall } from "./session.ts";
 
@@ -38,10 +38,25 @@ function isRepository(repository: string, repo: unknown): boolean {
   );
 }
 
+const UNKNOWN = "unknown";
+
+/**
+ * A write to GitHub: the number of the issue or pull request written to,
+ * `UNKNOWN` if it could not be determined, or `undefined` if not a write to an
+ * existing item in the repository.
+ */
+type Write = number | typeof UNKNOWN | undefined;
+
+/** GitHub MCP tools that write to a comment identified only by its ID */
+const MCP_COMMENT_TOOLS = [
+  "add_reply_to_pull_request_comment",
+  "update_issue_comment",
+];
+
 function mcpWrite(
   repository: string,
   { name, arguments: args, server, serverTool }: SessionToolCall
-): number | undefined {
+): Write {
   let tool: string | undefined;
   if (server === MCP_SERVER) {
     tool = serverTool ?? name;
@@ -65,17 +80,19 @@ function mcpWrite(
       return number;
     }
   }
-  return undefined;
+  return MCP_COMMENT_TOOLS.includes(tool) ? UNKNOWN : undefined;
 }
 
 /**
- * Returns the number written to by `gh api`, e.g. `gh api -X POST
+ * Returns the item written to by `gh api`, e.g. `gh api -X POST
  * repos/{owner}/{repo}/issues/1/comments`. Only the method, whether fields
- * are passed, and the endpoint are needed.
+ * are passed, and the endpoint are needed. GraphQL mutations and writes to
+ * comments by ID are `UNKNOWN`.
  */
-function ghApiWrite(repository: string, args: string[]): number | undefined {
+function ghApiWrite(repository: string, args: string[]): Write {
   let method: string | undefined;
   let hasFields = false;
+  let isGraphQL = false;
   let match: RegExpMatchArray | null = null;
   for (let i = 0; i < args.length; ++i) {
     const arg = args[i];
@@ -87,50 +104,49 @@ function ghApiWrite(repository: string, args: string[]): number | undefined {
       method = arg.substring(2).toUpperCase();
     } else if (/^(-[fF]|--(raw-)?field(=|$)|--input(=|$))/.test(arg)) {
       hasFields = true;
-    } else if (!match) {
-      match = arg
-        .replace("{owner}/{repo}", repository)
-        .match(/^\/?repos\/([^/]+\/[^/]+)\/(issues|pulls)\/(\d+)/);
+    } else {
+      // Endpoints may be full URLs, e.g. `https://api.github.com/graphql`
+      const endpoint = arg
+        .replace(/^https?:\/\/(api\.github\.com|[^/]+\/api\/v3)\//, "")
+        .replace("{owner}/{repo}", repository);
+      if (/^\/?graphql$/.test(endpoint)) {
+        isGraphQL = true;
+      } else if (!match) {
+        match = endpoint.match(
+          /^\/?repos\/([^/]+\/[^/]+)\/(issues|pulls)\/(\d+|comments\/\d+)/
+        );
+      }
     }
+  }
+
+  if (isGraphQL) {
+    return args.some((arg) => arg.includes("mutation")) ? UNKNOWN : undefined;
   }
 
   if ((method ?? (hasFields ? "POST" : "GET")) === "GET") {
     return undefined;
   }
 
-  return match && isRepository(repository, match[1])
-    ? Number(match[3])
-    : undefined;
+  if (!match || !isRepository(repository, match[1])) {
+    return undefined;
+  }
+
+  return match[3].startsWith("comments/") ? UNKNOWN : Number(match[3]);
 }
 
-function ghWrite(
-  repository: string,
-  { argv }: AgentCommand
-): number | undefined {
-  const [executable = "", command, subcommand, ...rest] = argv;
-  if (path.win32.basename(executable).replace(/\.exe$/i, "") !== "gh") {
-    return undefined;
-  }
-
-  if (command === "api") {
-    return ghApiWrite(repository, argv.slice(2));
-  }
-
-  if (
-    (command !== "issue" && command !== "pr") ||
-    GH_READS[command].includes(subcommand)
-  ) {
-    return undefined;
-  }
-
-  // Only the repository and the number are needed. Flag values that precede
-  // the number are skipped unless they look like a number themselves.
+/**
+ * Returns the repository (`-R`, `--repo`) and the issue or pull request
+ * number in the arguments of `gh issue` and `gh pr` subcommands. Flag values
+ * that precede the number are skipped unless they look like a number
+ * themselves.
+ */
+function ghItemArgs(args: string[]): { repo?: string; number?: number } {
   let repo: string | undefined;
   let number: number | undefined;
-  for (let i = 0; i < rest.length; ++i) {
-    const arg = rest[i];
+  for (let i = 0; i < args.length; ++i) {
+    const arg = args[i];
     if (arg === "-R" || arg === "--repo") {
-      repo = rest[++i];
+      repo = args[++i];
     } else if (arg.startsWith("--repo=")) {
       repo = arg.substring("--repo=".length);
     } else if (/^-R./.test(arg)) {
@@ -141,30 +157,79 @@ function ghWrite(
       number = toNumber(arg);
     }
   }
-  return isRepository(repository, repo) ? number : undefined;
+  return { repo, number };
 }
 
 /**
- * Returns the numbers of issues and pull requests in `repository`
- * (`owner/repo`) that the agent wrote to through the GitHub MCP tools or the
- * `gh` CLI. Writes that create items, or that do not name the item (e.g.
- * `gh pr comment` on the current branch), are not included.
+ * Returns the issues and pull requests in `repository` (`owner/repo`) that
+ * the agent wrote to through the GitHub MCP tools or the `gh` CLI:
+ *
+ * - `modified`: the numbers of the items written to. Writes to a pull request
+ *   without a number, e.g. `gh pr comment`, are attributed to the pull request
+ *   checked out last with `gh pr checkout`. Writes that create items, or that
+ *   do not name the item and follow no checkout, are not included.
+ * - `unknownWrites`: writes whose item could not be determined, e.g. GraphQL
+ *   mutations and writes to comments by ID.
  */
-export function modifiedNumbers(
+export function gitHubWrites(
   repository: string,
   toolCalls: SessionToolCall[],
   commands: AgentCommand[]
-): number[] {
+): { modified: number[]; unknownWrites: string[] } {
   const numbers = new Set<number>();
-  for (const number of [
-    ...toolCalls.map((call) => mcpWrite(repository, call)),
-    ...commands.map((command) => ghWrite(repository, command)),
-  ]) {
-    if (number !== undefined) {
-      numbers.add(number);
+  const unknownWrites: string[] = [];
+  const add = (write: Write, description: string) => {
+    if (write === UNKNOWN) {
+      unknownWrites.push(description);
+    } else if (write !== undefined) {
+      numbers.add(write);
+    }
+  };
+
+  for (const call of toolCalls) {
+    add(
+      mcpWrite(repository, call),
+      `${call.name} ${JSON.stringify(call.arguments)}`
+    );
+  }
+
+  let checkedOut: number | undefined;
+  for (const { argv } of commands) {
+    const [executable = "", command, subcommand, ...rest] = argv;
+    if (withoutExecutablePath(executable) !== "gh") {
+      continue;
+    }
+
+    if (command === "api") {
+      add(ghApiWrite(repository, argv.slice(2)), argv.join(" "));
+      continue;
+    }
+
+    if (command !== "issue" && command !== "pr") {
+      continue;
+    }
+
+    const { repo, number } = ghItemArgs(rest);
+    if (!isRepository(repository, repo)) {
+      continue;
+    }
+
+    if (
+      command === "pr" &&
+      (subcommand === "checkout" || subcommand === "co")
+    ) {
+      checkedOut = number;
+    } else if (!GH_READS[command].includes(subcommand)) {
+      const current =
+        command === "pr" && subcommand !== "create" ? checkedOut : undefined;
+      add(number ?? current, argv.join(" "));
     }
   }
-  return Array.from(numbers).sort((a, b) => a - b);
+
+  return {
+    modified: Array.from(numbers).sort((a, b) => a - b),
+    unknownWrites,
+  };
 }
 
 const gh = makeCommand("gh", {
@@ -182,36 +247,28 @@ async function ghJson<T>(args: string[]): Promise<T | undefined> {
 }
 
 /**
- * Looks up the author of the pull request for `branch` in `repository`,
- * i.e. the user the session acted as, and the specified issues and pull
- * requests. Only reads from GitHub. Values that cannot be looked up, e.g. the
- * author if the session did not open a pull request, are omitted.
+ * Looks up the authenticated `gh` user, i.e. the user the session acted as,
+ * and the specified issues and pull requests in `repository`. Only reads from
+ * GitHub. Values that cannot be looked up are omitted.
  */
 export async function lookUp(
   repository: string,
-  numbers: number[],
-  branch: string
+  numbers: number[]
 ): Promise<{ actor?: string; items: GitHubItem[] }> {
-  const [owner] = repository.split("/");
-  const head = encodeURIComponent(`${owner}:${branch}`);
-  const pulls = await ghJson<{ user: { login: string } }[]>([
-    "api",
-    `repos/${repository}/pulls?head=${head}&state=all&per_page=1`,
-  ]);
-  const user = pulls?.[0]?.user;
+  const user = await ghJson<{ login: string }>(["api", "user"]);
   const items = await Promise.all(
     numbers.map(async (number) => {
-      const issue = await ghJson<{ title: string; user: { login: string } }>([
-        "api",
-        `repos/${repository}/issues/${number}`,
-      ]);
+      const issue = await ghJson<{
+        title: string;
+        user: { login: string } | null;
+      }>(["api", `repos/${repository}/issues/${number}`]);
       return issue
-        ? { number, title: issue.title, author: issue.user.login }
+        ? { number, title: issue.title, author: issue.user?.login ?? "ghost" }
         : undefined;
     })
   );
   return {
-    ...(user ? { actor: user.login } : {}),
+    ...(user?.login ? { actor: user.login } : {}),
     items: items.filter((item) => item !== undefined),
   };
 }

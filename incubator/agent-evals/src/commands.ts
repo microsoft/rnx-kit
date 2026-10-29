@@ -1,5 +1,11 @@
 import * as path from "node:path";
-import { requireConfig, result, toAgentRun, toRelativePath } from "./common.ts";
+import {
+  requireConfig,
+  result,
+  toAgentRun,
+  toRelativePath,
+  withoutExecutablePath,
+} from "./common.ts";
 import type {
   AgentCommand,
   AgentRun,
@@ -11,15 +17,6 @@ import type {
 import { lazyWorkspacePackages } from "./workspace.ts";
 
 type ResolvedCommand = { command: string; cwd: string };
-
-/**
- * Reduces the executable to its basename without Windows extensions, e.g.
- * `/usr/bin/git` -> `git` and `C:\bin\yarn.cmd` -> `yarn`.
- */
-function withoutExecutablePath(executable: string): string {
-  const extensions = /\.(bat|cmd|com|exe|ps1)$/i;
-  return path.win32.basename(executable).replace(extensions, "");
-}
 
 /**
  * Joins the arguments of a command for matching after stripping the executable
@@ -125,8 +122,18 @@ export function notModifiedOnGitHub(
     throw new Error("Invalid agent run; check: github.modified");
   }
 
-  const { modified, actor, items } = run.github;
-  const failures: string[] = [];
+  const { modified, unknownWrites, actor, items } = run.github;
+  if (
+    !Array.isArray(unknownWrites) ||
+    !unknownWrites.every((write) => typeof write === "string")
+  ) {
+    throw new Error("Invalid agent run; check: github.unknownWrites");
+  }
+
+  const failures = unknownWrites.map(
+    (write) =>
+      `Wrote to an issue or pull request that could not be determined: ${write}`
+  );
   const found = new Map((items ?? []).map((item) => [item.number, item]));
   const titlePattern = title ? new RegExp(title) : undefined;
   for (const number of modified) {

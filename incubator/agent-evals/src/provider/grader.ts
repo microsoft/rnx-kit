@@ -19,12 +19,73 @@ type CallApiOptions = {
   abortSignal?: AbortSignal;
 };
 
-function getToken(): string {
+/**
+ * Environment variables passed on to the Copilot runtime: those needed on
+ * Windows and behind proxies. Tokens are passed through `gitHubTokenProvider`.
+ */
+const RUNTIME_ENV = [
+  "PATH",
+  // Windows
+  "APPDATA",
+  "ComSpec",
+  "LOCALAPPDATA",
+  "PATHEXT",
+  "SystemRoot",
+  "TEMP",
+  "TMP",
+  "USERPROFILE",
+  // Proxies and certificates
+  "HTTP_PROXY",
+  "HTTPS_PROXY",
+  "NO_PROXY",
+  "http_proxy",
+  "https_proxy",
+  "no_proxy",
+  "NODE_EXTRA_CA_CERTS",
+  "SSL_CERT_DIR",
+  "SSL_CERT_FILE",
+];
+
+/**
+ * Returns the environment for the Copilot runtime. The home directory is
+ * replaced with `home`, so that user config and memories are not used.
+ */
+export function runtimeEnv(
+  home: string,
+  env: NodeJS.ProcessEnv,
+  platform: NodeJS.Platform
+): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const name of RUNTIME_ENV) {
+    const value = env[name];
+    if (value !== undefined) {
+      result[name] = value;
+    }
+  }
+  result["HOME"] = home;
+  if (platform === "win32") {
+    result["USERPROFILE"] = home;
+  }
+  return result;
+}
+
+let cachedToken: string | undefined;
+
+/**
+ * Returns a GitHub token from the environment or from `gh`. The token is
+ * looked up once.
+ */
+export function getToken(): string {
+  if (cachedToken) {
+    return cachedToken;
+  }
+
   const token =
     process.env["COPILOT_GITHUB_TOKEN"] ||
     process.env["GH_TOKEN"] ||
     process.env["GITHUB_TOKEN"];
   if (token) {
+    cachedToken = token;
     return token;
   }
 
@@ -35,7 +96,8 @@ function getToken(): string {
     );
   }
 
-  return stdout.trim();
+  cachedToken = stdout.trim();
+  return cachedToken;
 }
 
 type ChatMessage = {
@@ -106,12 +168,16 @@ export default class CopilotGraderProvider {
     _context?: unknown,
     options?: CallApiOptions
   ): Promise<{ output: string } | { error: string }> {
+    if (options?.abortSignal?.aborted) {
+      return { error: "Grading was aborted" };
+    }
+
     const { system, prompt } = toSessionPrompt(input);
 
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-"));
     const client = new CopilotClient({
       connection: RuntimeConnection.forStdio({
-        env: { PATH: process.env["PATH"] ?? "", HOME: dir },
+        env: runtimeEnv(dir, process.env, process.platform),
       }),
       baseDirectory: path.join(dir, "copilot"),
       workingDirectory: dir,

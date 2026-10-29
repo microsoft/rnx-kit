@@ -8,6 +8,15 @@ import type {
   GradingResult,
 } from "./types.ts";
 
+/**
+ * Reduces the executable to its basename without Windows extensions, e.g.
+ * `/usr/bin/git` -> `git` and `C:\bin\yarn.cmd` -> `yarn`.
+ */
+export function withoutExecutablePath(executable: string): string {
+  const extensions = /\.(bat|cmd|com|exe|ps1)$/i;
+  return path.win32.basename(executable).replace(extensions, "");
+}
+
 export function result(failures: string[], success: string): GradingResult {
   const pass = failures.length === 0;
   return {

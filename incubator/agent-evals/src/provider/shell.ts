@@ -3,17 +3,7 @@ import { parse } from "shell-quote";
 import { toRelativePath } from "../common.ts";
 import type { AgentCommand } from "../types.ts";
 
-const CONTROL_OPERATORS = new Set([
-  "&&",
-  "||",
-  ";",
-  ";;",
-  "|",
-  "|&",
-  "&",
-  "(",
-  ")",
-]);
+const CONTROL_OPERATORS = new Set(["&&", "||", ";", ";;", "|", "|&", "&"]);
 
 /**
  * Replaces unquoted newlines with `;`, which `shell-quote` does not treat as
@@ -72,7 +62,7 @@ function separateLines(input: string): string {
     } else if (input.startsWith("<<", i)) {
       const match = input
         .substring(i)
-        .match(/^<<(-?)[ \t]*(['"]?)([^\s'"<>|&;()]+)\2/);
+        .match(/^<<(-?)[ \t]*\\?(['"]?)([^\s'"\\<>|&;()]+)\2/);
       if (match) {
         heredocs.push({ word: match[3], stripTabs: match[1] === "-" });
         i += match[0].length - 1;
@@ -105,6 +95,8 @@ function separateLines(input: string): string {
 /**
  * Splits shell input into commands on control operators. Redirections and
  * leading variable assignments are removed; variables are left unexpanded.
+ * Subshells, including command substitutions, are marked with `["("]` and
+ * `[")"]`.
  */
 export function parseShellInput(input: string): string[][] {
   const commands: string[][] = [];
@@ -129,6 +121,9 @@ export function parseShellInput(input: string): string[][] {
       current.push(token.pattern);
     } else if (CONTROL_OPERATORS.has(token.op)) {
       flush();
+    } else if (token.op === "(" || token.op === ")") {
+      flush();
+      commands.push([token.op]);
     } else {
       // Redirection, e.g. `2>&1` is parsed as `2`, `>&`, `1`
       if (/^\d+$/.test(current[current.length - 1] ?? "")) {
@@ -143,27 +138,34 @@ export function parseShellInput(input: string): string[][] {
 
 /**
  * Returns the commands in the shell tool's inputs, in order. Each input runs
- * in a new shell, so the working directory starts at `workdir` for each, is
- * tracked through `cd` and is best-effort.
+ * in a new shell, so the working directory starts at `startDir` for each, is
+ * tracked through `cd` and subshells, and is best-effort. Working directories
+ * are reported relative to `root`.
  */
 export function parseCommands(
-  workdir: string,
+  root: string,
+  startDir: string,
   inputs: string[]
 ): AgentCommand[] {
   const commands: AgentCommand[] = [];
   for (const input of inputs) {
-    let cwd = workdir;
+    let cwd = startDir;
+    const subshells: string[] = [];
     for (const argv of parseShellInput(input)) {
       const [executable, ...args] = argv;
-      if (executable === "cd") {
+      if (argv.length === 1 && executable === "(") {
+        subshells.push(cwd);
+      } else if (argv.length === 1 && executable === ")") {
+        cwd = subshells.pop() ?? cwd;
+      } else if (executable === "cd") {
         const target = args[0];
         if (!target) {
-          cwd = workdir;
+          cwd = startDir;
         } else if (!/^[-~$]/.test(target)) {
           cwd = path.resolve(cwd, target);
         }
       } else {
-        commands.push({ argv, cwd: toRelativePath(workdir, cwd) });
+        commands.push({ argv, cwd: toRelativePath(root, cwd) });
       }
     }
   }

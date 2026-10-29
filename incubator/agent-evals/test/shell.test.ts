@@ -54,12 +54,60 @@ describe("parseShellInput()", () => {
 });
 
 describe("parseCommands()", () => {
-  it("starts each input in the checkout root", () => {
+  it("starts each input in the start directory", () => {
     deepEqual(
-      parseCommands("/repo", ["cd packages/a && yarn test", "yarn format"]),
+      parseCommands("/repo", "/repo", [
+        "cd packages/a && yarn test",
+        "yarn format",
+      ]),
       [
         { argv: ["yarn", "test"], cwd: "packages/a" },
         { argv: ["yarn", "format"], cwd: "." },
+      ]
+    );
+  });
+
+  it("reports directories relative to the root when starting elsewhere", () => {
+    deepEqual(
+      parseCommands("/repo", "/repo/packages/a", [
+        "yarn test && cd ../b && yarn lint && cd && yarn format",
+        "cd .. && yarn build",
+      ]),
+      [
+        { argv: ["yarn", "test"], cwd: "packages/a" },
+        { argv: ["yarn", "lint"], cwd: "packages/b" },
+        { argv: ["yarn", "format"], cwd: "packages/a" },
+        { argv: ["yarn", "build"], cwd: "packages" },
+      ]
+    );
+  });
+
+  it("parses commands after here-documents with escaped delimiters", () => {
+    deepEqual(
+      parseCommands("/r", "/r", ["cat > f <<\\EOF\nhello\nEOF\nyarn lint"]),
+      [
+        { argv: ["cat"], cwd: "." },
+        { argv: ["yarn", "lint"], cwd: "." },
+      ]
+    );
+  });
+
+  it("restores the directory after subshells", () => {
+    deepEqual(
+      parseCommands("/r", "/r", [
+        "(cd packages/a && yarn test) && yarn lint",
+        "echo $(cd packages/b && pwd) && yarn format",
+        "case $x in a) cd packages/c;; esac; yarn build",
+      ]),
+      [
+        { argv: ["yarn", "test"], cwd: "packages/a" },
+        { argv: ["yarn", "lint"], cwd: "." },
+        { argv: ["echo", "$"], cwd: "." },
+        { argv: ["pwd"], cwd: "packages/b" },
+        { argv: ["yarn", "format"], cwd: "." },
+        { argv: ["case", "$x", "in", "a"], cwd: "." },
+        { argv: ["esac"], cwd: "packages/c" },
+        { argv: ["yarn", "build"], cwd: "packages/c" },
       ]
     );
   });

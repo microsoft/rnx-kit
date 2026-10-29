@@ -1,6 +1,6 @@
 import type { AgentRun, EvalVars } from "../types.ts";
 import { addWorktree, collectChanges, git } from "./checkout.ts";
-import { lookUp, modifiedNumbers } from "./github.ts";
+import { lookUp, gitHubWrites } from "./github.ts";
 import { readSession } from "./session.ts";
 import { parseCommands } from "./shell.ts";
 
@@ -132,15 +132,20 @@ async function replay(
   }
 
   // Paths in commands are relative to the session's checkout
-  const commands = parseCommands(root, session.shellInputs);
+  const commands = parseCommands(root, session.cwd, session.shellInputs);
   const toolCalls = session.toolCalls.map(({ name, arguments: args }) => ({
     name,
     arguments: args,
   }));
-  const modified = modifiedNumbers(repository, session.toolCalls, commands);
+  const { modified, unknownWrites } = gitHubWrites(
+    repository,
+    session.toolCalls,
+    commands
+  );
   const github = {
     modified,
-    ...(await lookUp(repository, modified, branch)),
+    unknownWrites,
+    ...(await lookUp(repository, modified)),
   };
   const { files, diff } = await collectChanges(workdir, baseCommit);
   const requests = session.requests;

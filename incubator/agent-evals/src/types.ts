@@ -87,9 +87,13 @@ export type AgentRun = {
      */
     modified: number[];
     /**
-     * Login of the user the session acted as: the author of the pull request
-     * for the session's branch, if there is one
+     * Writes whose issue or pull request could not be determined, e.g. GraphQL
+     * mutations and writes to comments by ID. Each is the command line or the
+     * tool call. Writes that create items, or that do not name the item, e.g.
+     * `gh pr comment` before any `gh pr checkout`, are in neither list.
      */
+    unknownWrites: string[];
+    /** Login of the authenticated `gh` user, i.e. the user the session acted as */
     actor?: string;
     /** The items in `modified`, if they could be looked up */
     items?: GitHubItem[];

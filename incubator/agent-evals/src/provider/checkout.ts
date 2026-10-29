@@ -1,17 +1,28 @@
-import { ensure, makeCommand } from "@rnx-kit/tools-shell";
-import { spawnSync } from "node:child_process";
+import { execFile, spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
+import { promisify } from "node:util";
 import type { AgentChangedFile } from "../types.ts";
 
+const execFileAsync = promisify(execFile);
+
+/**
+ * Runs `git` and returns its output untrimmed; e.g. the last line of a diff
+ * may be a context line consisting of a single space. Throws if it fails.
+ */
 export async function git(
   cwd: string,
   args: string[],
   env?: Record<string, string>
 ): Promise<string> {
-  const run = makeCommand("git", { cwd, env: { ...process.env, ...env } });
-  return ensure(await run(...args));
+  const { stdout } = await execFileAsync("git", args, {
+    cwd,
+    env: { ...process.env, ...env },
+    encoding: "utf-8",
+    maxBuffer: Infinity,
+  });
+  return stdout;
 }
 
 function makeTempDir(): string {
@@ -68,7 +79,17 @@ export async function collectChanges(
     // Include untracked files in the diff
     await git(workdir, ["add", "--intent-to-add", "--all"], env);
 
-    const diffArgs = ["-c", "core.quotePath=false", "diff", "--find-renames"];
+    // Ignore user config that changes the output, e.g. `diff.noprefix`
+    const diffArgs = [
+      "-c",
+      "core.quotePath=false",
+      "diff",
+      "--find-renames",
+      "--no-ext-diff",
+      "--no-color",
+      "--src-prefix=a/",
+      "--dst-prefix=b/",
+    ];
     const diff = await git(workdir, [...diffArgs, commit, "--"], env);
     const nameStatus = await git(
       workdir,

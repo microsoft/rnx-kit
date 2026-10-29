@@ -180,7 +180,7 @@ describe("notModifiedOnGitHub()", () => {
 
   it("passes if no matching item was modified", () => {
     const result = notModifiedOnGitHub(
-      makeRun({ github: { modified: [3], items } }),
+      makeRun({ github: { modified: [3], unknownWrites: [], items } }),
       { config }
     );
     equal(result.pass, true);
@@ -192,7 +192,7 @@ describe("notModifiedOnGitHub()", () => {
 
   it("fails for each modified item", () => {
     const result = notModifiedOnGitHub(
-      makeRun({ github: { modified: [1, 2, 3], items } }),
+      makeRun({ github: { modified: [1, 2, 3], unknownWrites: [], items } }),
       { config }
     );
     equal(result.pass, false);
@@ -204,7 +204,7 @@ describe("notModifiedOnGitHub()", () => {
 
   it("fails for modified items that could not be looked up", () => {
     const result = notModifiedOnGitHub(
-      makeRun({ github: { modified: [3, 4], items } }),
+      makeRun({ github: { modified: [3, 4], unknownWrites: [], items } }),
       { config }
     );
     equal(result.pass, false);
@@ -218,7 +218,12 @@ describe("notModifiedOnGitHub()", () => {
     it("passes if only items by the actor were modified", () => {
       const result = notModifiedOnGitHub(
         makeRun({
-          github: { modified: [5], actor: "tido64", items: [...items, mine] },
+          github: {
+            modified: [5],
+            unknownWrites: [],
+            actor: "tido64",
+            items: [...items, mine],
+          },
         }),
         { config: ownOnly }
       );
@@ -231,6 +236,7 @@ describe("notModifiedOnGitHub()", () => {
         makeRun({
           github: {
             modified: [3, 5],
+            unknownWrites: [],
             actor: "tido64",
             items: [...items, mine],
           },
@@ -243,12 +249,42 @@ describe("notModifiedOnGitHub()", () => {
 
     it("fails if the actor is unknown", () => {
       const result = notModifiedOnGitHub(
-        makeRun({ github: { modified: [5], items: [mine] } }),
+        makeRun({
+          github: { modified: [5], unknownWrites: [], items: [mine] },
+        }),
         { config: ownOnly }
       );
       equal(result.pass, false);
       equal(result.reason, "Modified #5 by tido64, not by (unknown user)");
     });
+  });
+
+  it("fails for writes to items that could not be determined", () => {
+    const write = "gh api graphql -f query=mutation { closeIssue }";
+    const result = notModifiedOnGitHub(
+      makeRun({ github: { modified: [3], unknownWrites: [write], items } }),
+      { config }
+    );
+    equal(result.pass, false);
+    equal(
+      result.reason,
+      `Wrote to an issue or pull request that could not be determined: ${write}`
+    );
+  });
+
+  it("throws if `github.unknownWrites` is missing or invalid", () => {
+    for (const github of [
+      { modified: [] },
+      { modified: [], unknownWrites: "gh" },
+      { modified: [], unknownWrites: [1] },
+    ]) {
+      throws(
+        // @ts-expect-error testing invalid input
+        () => notModifiedOnGitHub(makeRun({ github }), { config }),
+        /check: github\.unknownWrites/,
+        JSON.stringify(github)
+      );
+    }
   });
 
   it("throws if `github.modified` is missing or invalid", () => {
