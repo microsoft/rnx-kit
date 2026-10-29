@@ -4,7 +4,7 @@
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
 
-#import "include/ReactNativeHost/ReactNativeHost.h"
+#import "ReactNativeHost/ReactNativeHost.h"
 
 @implementation RNXHostReleaser {
 #if !TARGET_OS_OSX
