@@ -1,4 +1,4 @@
-#import "ReactNativeHost.h"
+#import "ReactNativeHost/ReactNativeHost.h"
 
 // clang-format off
 #include "FollyConfig.h"
@@ -12,9 +12,9 @@
 #import "RNXBridgelessHeaders.h"
 #import "RNXFabricAdapter.h"
 #import "RNXFeatureMacros.h"
-#import "RNXHostConfig.h"
 #import "RNXHostReleaser.h"
 #import "RNXTurboModuleAdapter.h"
+#import "ReactNativeHost/RNXHostConfig.h"
 
 #if !USE_BRIDGELESS
 #import <React/RCTCxxBridgeDelegate.h>
