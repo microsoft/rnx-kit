@@ -1,18 +1,44 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
 import * as fs from "node:fs";
+import * as os from "node:os";
 import * as path from "node:path";
-import { describe, it } from "node:test";
-import { fileURLToPath } from "node:url";
+import { after, describe, it } from "node:test";
 import { addedLines } from "../src/common.ts";
-import { addWorktree, collectChanges, git } from "../src/provider/checkout.ts";
+import { collectChanges, git } from "../src/provider/checkout.ts";
 
 describe("collectChanges()", () => {
-  const root = fileURLToPath(new URL("..", import.meta.url));
+  // `collectChanges()` runs the real `git`, so it needs a real repository
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-test-"));
+
+  after(() => {
+    fs.rmSync(workdir, { recursive: true, force: true, maxRetries: 3 });
+  });
 
   it("returns paths and a diff regardless of the user's git config", async () => {
-    const commit = (await git(root, ["rev-parse", "HEAD"])).trim();
-    const workdir = await addWorktree(root, commit);
     const pkg = path.join(workdir, "incubator", "agent-evals");
+    fs.mkdirSync(pkg, { recursive: true });
+    fs.writeFileSync(path.join(pkg, "README.md"), "# agent-evals\n");
+    fs.writeFileSync(path.join(pkg, "tsconfig.json"), "{}\n");
+
+    const identity = [
+      "-c",
+      "user.name=test",
+      "-c",
+      "user.email=test@example.com",
+    ];
+    await git(workdir, ["init", "--quiet"]);
+    await git(workdir, ["add", "--all"]);
+    await git(workdir, [
+      ...identity,
+      "commit",
+      "--quiet",
+      "--no-verify",
+      "--no-gpg-sign",
+      "-m",
+      "Initial commit",
+    ]);
+    const commit = (await git(workdir, ["rev-parse", "HEAD"])).trim();
+
     fs.appendFileSync(path.join(pkg, "README.md"), "\nAdded line\n");
     fs.writeFileSync(path.join(pkg, "ärende.md"), "Ny fil\n");
     fs.rmSync(path.join(pkg, "tsconfig.json"));
