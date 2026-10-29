@@ -2,6 +2,7 @@ import { ensureDirSync } from "@rnx-kit/tools-filesystem";
 import { findUp } from "@rnx-kit/tools-node/path";
 import * as crypto from "node:crypto";
 import * as nodefs from "node:fs";
+import * as os from "node:os";
 import * as path from "node:path";
 import { REACT_NATIVE_CONFIG_FILES } from "./context.ts";
 
@@ -9,8 +10,9 @@ export const CONFIG_CACHE_KEY = "config";
 const HASH_ALGO = "sha256";
 const UTF8 = { encoding: "utf-8" as const };
 
-function makeCachePath(projectRoot: string, filename: string): string {
-  return path.join(projectRoot, "node_modules", ".cache", "rnx-kit", filename);
+export function makeCachePath(projectRoot: string, filename: string): string {
+  const hash = crypto.createHash(HASH_ALGO).update(projectRoot).digest("hex");
+  return path.join(os.tmpdir(), "rnx-kit", hash, filename);
 }
 
 function cacheStatePath(projectRoot: string, key: string): string {
@@ -41,10 +43,10 @@ function updateHash(
 }
 
 export function getCurrentState(projectRoot: string): string {
-  const sha2 = crypto.createHash(HASH_ALGO);
+  const hash = crypto.createHash(HASH_ALGO);
 
   const configFiles = ["package.json", ...REACT_NATIVE_CONFIG_FILES];
-  updateHash(sha2, configFiles, projectRoot, "all");
+  updateHash(hash, configFiles, projectRoot, "all");
 
   const lockfiles = [
     "yarn.lock",
@@ -53,9 +55,9 @@ export function getCurrentState(projectRoot: string): string {
     "bun.lock",
     "bun.lockb",
   ];
-  updateHash(sha2, lockfiles, projectRoot, "first-only");
+  updateHash(hash, lockfiles, projectRoot, "first-only");
 
-  return sha2.digest("hex");
+  return hash.digest("hex");
 }
 
 export function getSavedState(
