@@ -5175,7 +5175,7 @@ __metadata:
   resolution: "@rnx-kit/agent-evals@workspace:incubator/agent-evals"
   dependencies:
     "@changesets/parse": "npm:^1.0.0"
-    "@github/copilot-sdk": "npm:^1.0.16"
+    "@github/copilot-sdk": "catalog:"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tools-filesystem": "workspace:*"
     "@rnx-kit/tools-shell": "workspace:*"
@@ -5183,6 +5183,11 @@ __metadata:
     "@types/node": "npm:^24.0.0"
     parse-diff: "catalog:"
     shell-quote: "npm:^1.8.4"
+  peerDependencies:
+    "@github/copilot-sdk": ^1.0.16
+  peerDependenciesMeta:
+    "@github/copilot-sdk":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -5460,6 +5465,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/evals@workspace:evals"
   dependencies:
+    "@github/copilot-sdk": "catalog:"
     "@rnx-kit/agent-evals": "workspace:*"
     "@rnx-kit/eslint-plugin": "workspace:*"
     "@rnx-kit/scripts": "workspace:*"

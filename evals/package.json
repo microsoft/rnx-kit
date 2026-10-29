@@ -17,13 +17,14 @@
   "type": "module",
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "eval": "npx --yes promptfoo@0.124.1 eval",
+    "eval": "NODE_OPTIONS=--conditions=typescript npx --yes promptfoo@0.124.1 eval",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "promptfoo": "npx --yes promptfoo@0.124.1",
+    "promptfoo": "NODE_OPTIONS=--conditions=typescript npx --yes promptfoo@0.124.1",
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
+    "@github/copilot-sdk": "catalog:",
     "@rnx-kit/agent-evals": "workspace:*",
     "@rnx-kit/eslint-plugin": "workspace:*",
     "@rnx-kit/tools-filesystem": "workspace:*",

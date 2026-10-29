@@ -1,4 +1,3 @@
-import { CopilotClient, RuntimeConnection } from "@github/copilot-sdk";
 import { makeCommandSync } from "@rnx-kit/tools-shell";
 import * as fs from "node:fs";
 import * as os from "node:os";
@@ -172,6 +171,16 @@ export default class CopilotGraderProvider {
       return { error: "Grading was aborted" };
     }
 
+    let sdk: typeof import("@github/copilot-sdk");
+    try {
+      sdk = await import("@github/copilot-sdk");
+    } catch (_) {
+      return {
+        error: "Install @github/copilot-sdk to use @rnx-kit/agent-evals/grader",
+      };
+    }
+
+    const { CopilotClient, RuntimeConnection } = sdk;
     const { system, prompt } = toSessionPrompt(input);
 
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-"));
