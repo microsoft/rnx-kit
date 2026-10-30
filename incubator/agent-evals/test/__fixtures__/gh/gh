@@ -1,0 +1,25 @@
+#!/usr/bin/env node
+// Replaces `gh` in tests. `gh auth token` prints a new token on every call.
+// For `gh api`, `user` is the authenticated user, #1 is by another user, #2 is
+// by a deleted user, and all other items do not exist.
+const responses = {
+  user: { login: "tido64" },
+  "repos/microsoft/rnx-kit/issues/1": {
+    title: "Fix bug",
+    user: { login: "contributor" },
+  },
+  "repos/microsoft/rnx-kit/issues/2": { title: "Spam", user: null },
+};
+const [command, endpoint] = process.argv.slice(2);
+if (command === "auth" && endpoint === "token") {
+  console.log(`token-${process.hrtime.bigint()}`);
+  process.exit(0);
+}
+
+const response = command === "api" ? responses[endpoint] : undefined;
+if (response) {
+  console.log(JSON.stringify(response));
+} else {
+  console.error("HTTP 404: Not Found");
+  process.exitCode = 1;
+}
