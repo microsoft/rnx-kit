@@ -83,27 +83,60 @@ function mcpWrite(
   return MCP_COMMENT_TOOLS.includes(tool) ? UNKNOWN : undefined;
 }
 
+/** A GraphQL document that only reads: a `query` or a `{ … }` shorthand */
+const GRAPHQL_QUERY = /^(?:[\s,]|#[^\n\r]*)*(?:query\b|\{)/;
+
+/**
+ * Returns whether the fields of a `gh api graphql` call send only queries.
+ * Queries must be inline; queries read from a file (`-F query=@file`) or
+ * passed with `--input` are assumed to be mutations.
+ */
+function isGraphQLQuery(fields: { flag: string; value: string }[]): boolean {
+  let hasQuery = false;
+  for (const { flag, value } of fields) {
+    if (flag === "--input") {
+      return false;
+    }
+    if (value.startsWith("query=")) {
+      const query = value.substring("query=".length);
+      const fromFile =
+        (flag === "-F" || flag === "--field") && query.startsWith("@");
+      if (fromFile || !GRAPHQL_QUERY.test(query)) {
+        return false;
+      }
+      hasQuery = true;
+    }
+  }
+  return hasQuery;
+}
+
 /**
  * Returns the item written to by `gh api`, e.g. `gh api -X POST
- * repos/{owner}/{repo}/issues/1/comments`. Only the method, whether fields
- * are passed, and the endpoint are needed. GraphQL mutations and writes to
- * comments by ID are `UNKNOWN`.
+ * repos/{owner}/{repo}/issues/1/comments`. Only the method, the fields and
+ * the endpoint are needed. GraphQL calls other than inline queries, and
+ * writes to comments by ID, are `UNKNOWN`.
  */
 function ghApiWrite(repository: string, args: string[]): Write {
   let method: string | undefined;
-  let hasFields = false;
+  const fields: { flag: string; value: string }[] = [];
   let isGraphQL = false;
   let match: RegExpMatchArray | null = null;
   for (let i = 0; i < args.length; ++i) {
     const arg = args[i];
+    const field = arg.match(/^(-[fF])(.+)$|^(--(?:raw-)?field|--input)=(.*)$/);
     if (arg === "-X" || arg === "--method") {
       method = args[++i]?.toUpperCase();
     } else if (arg.startsWith("--method=")) {
       method = arg.substring("--method=".length).toUpperCase();
     } else if (/^-X./.test(arg)) {
       method = arg.substring(2).toUpperCase();
-    } else if (/^(-[fF]|--(raw-)?field(=|$)|--input(=|$))/.test(arg)) {
-      hasFields = true;
+    } else if (/^(-[fF]|--(raw-)?field|--input)$/.test(arg)) {
+      fields.push({ flag: arg, value: args[++i] ?? "" });
+    } else if (field) {
+      fields.push({
+        flag: field[1] ?? field[3],
+        value: field[2] ?? field[4],
+      });
     } else {
       // Endpoints may be full URLs, e.g. `https://api.github.com/graphql`
       const endpoint = arg
@@ -120,10 +153,10 @@ function ghApiWrite(repository: string, args: string[]): Write {
   }
 
   if (isGraphQL) {
-    return args.some((arg) => arg.includes("mutation")) ? UNKNOWN : undefined;
+    return isGraphQLQuery(fields) ? undefined : UNKNOWN;
   }
 
-  if ((method ?? (hasFields ? "POST" : "GET")) === "GET") {
+  if ((method ?? (fields.length > 0 ? "POST" : "GET")) === "GET") {
     return undefined;
   }
 
@@ -166,10 +199,12 @@ function ghItemArgs(args: string[]): { repo?: string; number?: number } {
  *
  * - `modified`: the numbers of the items written to. Writes to a pull request
  *   without a number, e.g. `gh pr comment`, are attributed to the pull request
- *   checked out last with `gh pr checkout`. Writes that create items, or that
- *   do not name the item and follow no checkout, are not included.
+ *   checked out last with `gh pr checkout`. `gh pr create`, `git checkout
+ *   <ref>` and `git switch` end that attribution. Writes that create items,
+ *   or that do not name the item and follow no checkout, are not included.
  * - `unknownWrites`: writes whose item could not be determined, e.g. GraphQL
- *   mutations and writes to comments by ID.
+ *   calls other than inline queries, writes to comments by ID, and writes
+ *   without a number after `gh pr checkout <branch>`.
  */
 export function gitHubWrites(
   repository: string,
@@ -193,10 +228,25 @@ export function gitHubWrites(
     );
   }
 
-  let checkedOut: number | undefined;
+  let checkedOut: Write;
   for (const { argv } of commands) {
     const [executable = "", command, subcommand, ...rest] = argv;
-    if (withoutExecutablePath(executable) !== "gh") {
+    const program = withoutExecutablePath(executable);
+    if (program === "git") {
+      // Switching branches leaves the pull request; `git checkout [<ref>] --
+      // <path>` only restores files
+      const args = argv.slice(2);
+      if (
+        (command === "checkout" || command === "switch") &&
+        args.length > 0 &&
+        !args.includes("--")
+      ) {
+        checkedOut = undefined;
+      }
+      continue;
+    }
+
+    if (program !== "gh") {
       continue;
     }
 
@@ -218,11 +268,16 @@ export function gitHubWrites(
       command === "pr" &&
       (subcommand === "checkout" || subcommand === "co")
     ) {
-      checkedOut = number;
+      // A branch name names no pull request we can look up
+      checkedOut = number ?? UNKNOWN;
+    } else if (command === "pr" && subcommand === "create") {
+      // The new pull request is the session's own
+      checkedOut = undefined;
     } else if (!GH_READS[command].includes(subcommand)) {
-      const current =
-        command === "pr" && subcommand !== "create" ? checkedOut : undefined;
-      add(number ?? current, argv.join(" "));
+      add(
+        number ?? (command === "pr" ? checkedOut : undefined),
+        argv.join(" ")
+      );
     }
   }
 

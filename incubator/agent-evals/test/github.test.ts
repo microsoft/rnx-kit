@@ -147,7 +147,72 @@ describe("gitHubWrites()", () => {
       "gh pr checkout feature-branch",
       "gh pr merge -s",
     ].join("\n");
-    deepEqual(writes(input), { modified: [1, 3], unknownWrites: [] });
+    deepEqual(writes(input), {
+      modified: [1, 3],
+      unknownWrites: ["gh pr merge -s"],
+    });
+  });
+
+  it("treats GraphQL calls other than inline queries as unknown writes", () => {
+    const input = [
+      "gh api graphql -F query=@m.graphql",
+      "gh api graphql --input mutation.json",
+      "gh api graphql --input query.json",
+      "gh api graphql -F 'query=# comment\n  { viewer { login } }'",
+      "gh api graphql --raw-field='query=query { viewer { login } }'",
+      "gh api graphql -f 'query=query { a }' -f 'query=mutation { b }'",
+      "gh api graphql -f owner=microsoft",
+    ].join("\n");
+    deepEqual(writes(input), {
+      modified: [],
+      unknownWrites: [
+        "gh api graphql -F query=@m.graphql",
+        "gh api graphql --input mutation.json",
+        "gh api graphql --input query.json",
+        "gh api graphql -f query=query { a } -f query=mutation { b }",
+        "gh api graphql -f owner=microsoft",
+      ],
+    });
+  });
+
+  it("treats writes without a number after checking out a branch as unknown writes", () => {
+    const input = "gh pr checkout some/branch; gh pr comment --body hi";
+    deepEqual(writes(input), {
+      modified: [],
+      unknownWrites: ["gh pr comment --body hi"],
+    });
+  });
+
+  it("does not attribute writes after `gh pr create` to the pull request checked out before", () => {
+    const input = [
+      "gh pr checkout 5",
+      "gh pr create --fill",
+      "gh pr edit --add-label x",
+    ].join("\n");
+    deepEqual(writes(input), { modified: [], unknownWrites: [] });
+  });
+
+  it("does not attribute writes after switching branches to the pull request checked out before", () => {
+    const sequences = [
+      "gh pr checkout 5; git switch main; gh pr comment --body hi",
+      "gh pr checkout 5; git checkout main; gh pr comment --body hi",
+      "gh pr checkout 5; git checkout -b fix; gh pr comment --body hi",
+      "gh pr checkout some/branch; git switch -; gh pr comment --body hi",
+    ];
+    for (const input of sequences) {
+      deepEqual(writes(input), { modified: [], unknownWrites: [] }, input);
+    }
+  });
+
+  it("keeps the pull request checked out when restoring files", () => {
+    const input = [
+      "gh pr checkout 5",
+      "git checkout -- README.md",
+      "git checkout main -- package.json",
+      "git checkout",
+      "gh pr comment --body hi",
+    ].join("\n");
+    deepEqual(writes(input), { modified: [5], unknownWrites: [] });
   });
 
   it("recognizes `gh` with Windows extensions", () => {

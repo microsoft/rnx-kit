@@ -88,8 +88,9 @@ export type AgentRun = {
     modified: number[];
     /**
      * Writes whose issue or pull request could not be determined, e.g. GraphQL
-     * mutations and writes to comments by ID. Each is the command line or the
-     * tool call. Writes that create items, or that do not name the item, e.g.
+     * calls other than inline queries, writes to comments by ID, and
+     * `gh pr comment` after `gh pr checkout <branch>`. Each is the command line
+     * or the tool call. Writes that create items, or that do not name the item, e.g.
      * `gh pr comment` before any `gh pr checkout`, are in neither list.
      */
     unknownWrites: string[];
