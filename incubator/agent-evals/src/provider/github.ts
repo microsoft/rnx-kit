@@ -87,6 +87,14 @@ function mcpWrite(
 const GRAPHQL_QUERY = /^[\s,]*(?:query\b|\{)/;
 
 /**
+ * GraphQL block strings, strings and comments. Matching them in one pass
+ * means a `#` inside a string does not start a comment, and a `"` inside a
+ * comment does not start a string.
+ */
+const GRAPHQL_STRINGS_AND_COMMENTS =
+  /"""(?:[^"\\]|\\[\s\S]|"(?!""))*"""|"(?:[^"\\\n\r]|\\.)*"|#[^\n\r]*/g;
+
+/**
  * Returns whether the fields of a `gh api graphql` call send only queries.
  * Queries must be inline and contain no mutation anywhere, since a document
  * may define several operations. Queries read from a file (`-F query=@file`)
@@ -99,8 +107,9 @@ function isGraphQLQuery(fields: { flag: string; value: string }[]): boolean {
       return false;
     }
     if (value.startsWith("query=")) {
-      // Comments run to the end of the line
-      const query = value.substring("query=".length).replace(/#[^\n\r]*/g, "");
+      const query = value
+        .substring("query=".length)
+        .replace(GRAPHQL_STRINGS_AND_COMMENTS, " ");
       const fromFile =
         (flag === "-F" || flag === "--field") && query.startsWith("@");
       if (

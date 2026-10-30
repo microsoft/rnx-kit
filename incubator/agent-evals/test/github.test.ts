@@ -163,6 +163,9 @@ describe("gitHubWrites()", () => {
       "gh api graphql -f 'query=query { a }' -f 'query=mutation { b }'",
       "gh api graphql -f owner=microsoft",
       "gh api graphql -f 'query=query A { viewer { login } } mutation B { addComment(input: {}) { clientMutationId } }' -f operationName=B",
+      `gh api graphql -f 'query=query A { x(p: "#") { id } } mutation B { addComment(input: {}) { clientMutationId } }' -f operationName=B`,
+      `gh api graphql -f 'query=query A { x(p: """ " # """) { id } } mutation B { addComment(input: {}) { clientMutationId } }' -f operationName=B`,
+      `gh api graphql -f 'query=query { x(path: "src/mutation.ts", p: "\\"", q: """ \\""" mutation """) { id } } # "mutation"'`,
     ].join("\n");
     deepEqual(writes(input), {
       modified: [],
@@ -173,6 +176,8 @@ describe("gitHubWrites()", () => {
         "gh api graphql -f query=query { a } -f query=mutation { b }",
         "gh api graphql -f owner=microsoft",
         "gh api graphql -f query=query A { viewer { login } } mutation B { addComment(input: {}) { clientMutationId } } -f operationName=B",
+        'gh api graphql -f query=query A { x(p: "#") { id } } mutation B { addComment(input: {}) { clientMutationId } } -f operationName=B',
+        'gh api graphql -f query=query A { x(p: """ " # """) { id } } mutation B { addComment(input: {}) { clientMutationId } } -f operationName=B',
       ],
     });
   });
