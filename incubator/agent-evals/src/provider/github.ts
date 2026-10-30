@@ -84,7 +84,7 @@ function mcpWrite(
 }
 
 /** A GraphQL document that only reads: a `query` or a `{ … }` shorthand */
-const GRAPHQL_QUERY = /^(?:[\s,]|#[^\n\r]*)*(?:query\b|\{)/;
+const GRAPHQL_QUERY = /^[\s,]*(?:query\b|\{)/;
 
 /**
  * Returns whether the fields of a `gh api graphql` call send only queries.
@@ -98,7 +98,8 @@ function isGraphQLQuery(fields: { flag: string; value: string }[]): boolean {
       return false;
     }
     if (value.startsWith("query=")) {
-      const query = value.substring("query=".length);
+      // Comments run to the end of the line
+      const query = value.substring("query=".length).replace(/#[^\n\r]*/g, "");
       const fromFile =
         (flag === "-F" || flag === "--field") && query.startsWith("@");
       if (fromFile || !GRAPHQL_QUERY.test(query)) {
