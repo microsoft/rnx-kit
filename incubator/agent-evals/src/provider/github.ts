@@ -83,13 +83,14 @@ function mcpWrite(
   return MCP_COMMENT_TOOLS.includes(tool) ? UNKNOWN : undefined;
 }
 
-/** A GraphQL document that only reads: a `query` or a `{ … }` shorthand */
+/** A GraphQL document that starts with a `query` or a `{ … }` shorthand */
 const GRAPHQL_QUERY = /^[\s,]*(?:query\b|\{)/;
 
 /**
  * Returns whether the fields of a `gh api graphql` call send only queries.
- * Queries must be inline; queries read from a file (`-F query=@file`) or
- * passed with `--input` are assumed to be mutations.
+ * Queries must be inline and contain no mutation anywhere, since a document
+ * may define several operations. Queries read from a file (`-F query=@file`)
+ * or passed with `--input` are assumed to be mutations.
  */
 function isGraphQLQuery(fields: { flag: string; value: string }[]): boolean {
   let hasQuery = false;
@@ -102,7 +103,11 @@ function isGraphQLQuery(fields: { flag: string; value: string }[]): boolean {
       const query = value.substring("query=".length).replace(/#[^\n\r]*/g, "");
       const fromFile =
         (flag === "-F" || flag === "--field") && query.startsWith("@");
-      if (fromFile || !GRAPHQL_QUERY.test(query)) {
+      if (
+        fromFile ||
+        !GRAPHQL_QUERY.test(query) ||
+        /\bmutation\b/.test(query)
+      ) {
         return false;
       }
       hasQuery = true;
@@ -194,18 +199,62 @@ function ghItemArgs(args: string[]): { repo?: string; number?: number } {
   return { repo, number };
 }
 
+/** Global `git` options that take a value in the next argument */
+const GIT_GLOBAL_OPTIONS_WITH_VALUE = ["-C", "-c", "--git-dir", "--work-tree"];
+
+/**
+ * Returns how `git` changes the pull request checked out with `gh pr
+ * checkout`, given the arguments after `git`:
+ *
+ * - `undefined`: switches to another branch, which has no known pull request
+ *   (`git switch <branch>`, `git checkout -b|-B|--orphan <branch>`).
+ * - `UNKNOWN`: may switch branches or restore files (`git checkout <arg>`).
+ * - `"unchanged"`: restores files (`git checkout [<ref>] -- <path>`), or is
+ *   not a checkout.
+ */
+function gitCheckout(args: string[]): Write | "unchanged" {
+  let i = 0;
+  while (i < args.length && args[i].startsWith("-")) {
+    i += GIT_GLOBAL_OPTIONS_WITH_VALUE.includes(args[i]) ? 2 : 1;
+  }
+
+  const command = args[i];
+  const rest = args.slice(i + 1);
+  if (rest.length === 0) {
+    return "unchanged";
+  }
+
+  if (command === "switch") {
+    return undefined;
+  }
+
+  if (command !== "checkout" || rest.includes("--")) {
+    return "unchanged";
+  }
+
+  const newBranch = rest.some(
+    (arg) =>
+      arg === "-b" ||
+      arg === "-B" ||
+      arg === "--orphan" ||
+      arg.startsWith("--orphan=")
+  );
+  return newBranch ? undefined : UNKNOWN;
+}
+
 /**
  * Returns the issues and pull requests in `repository` (`owner/repo`) that
  * the agent wrote to through the GitHub MCP tools or the `gh` CLI:
  *
  * - `modified`: the numbers of the items written to. Writes to a pull request
  *   without a number, e.g. `gh pr comment`, are attributed to the pull request
- *   checked out last with `gh pr checkout`. `gh pr create`, `git checkout
- *   <ref>` and `git switch` end that attribution. Writes that create items,
+ *   checked out last with `gh pr checkout`. `gh pr create`, `git switch` and
+ *   `git checkout -b` end that attribution. Writes that create items,
  *   or that do not name the item and follow no checkout, are not included.
  * - `unknownWrites`: writes whose item could not be determined, e.g. GraphQL
  *   calls other than inline queries, writes to comments by ID, and writes
- *   without a number after `gh pr checkout <branch>`.
+ *   without a number after `gh pr checkout <branch>` or `git checkout <arg>`,
+ *   which may or may not switch branches.
  */
 export function gitHubWrites(
   repository: string,
@@ -234,15 +283,9 @@ export function gitHubWrites(
     const [executable = "", command, subcommand, ...rest] = argv;
     const program = withoutExecutablePath(executable);
     if (program === "git") {
-      // Switching branches leaves the pull request; `git checkout [<ref>] --
-      // <path>` only restores files
-      const args = argv.slice(2);
-      if (
-        (command === "checkout" || command === "switch") &&
-        args.length > 0 &&
-        !args.includes("--")
-      ) {
-        checkedOut = undefined;
+      const checkout = gitCheckout(argv.slice(1));
+      if (checkout !== "unchanged") {
+        checkedOut = checkout;
       }
       continue;
     }
