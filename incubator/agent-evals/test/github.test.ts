@@ -162,6 +162,7 @@ describe("gitHubWrites()", () => {
       "gh api graphql --raw-field='query=query { viewer { login } }'",
       "gh api graphql -f 'query=query { a }' -f 'query=mutation { b }'",
       "gh api graphql -f owner=microsoft",
+      "gh api graphql -f 'query=query A { viewer { login } } mutation B { addComment(input: {}) { clientMutationId } }' -f operationName=B",
     ].join("\n");
     deepEqual(writes(input), {
       modified: [],
@@ -171,6 +172,7 @@ describe("gitHubWrites()", () => {
         "gh api graphql --input query.json",
         "gh api graphql -f query=query { a } -f query=mutation { b }",
         "gh api graphql -f owner=microsoft",
+        "gh api graphql -f query=query A { viewer { login } } mutation B { addComment(input: {}) { clientMutationId } } -f operationName=B",
       ],
     });
   });
@@ -195,12 +197,32 @@ describe("gitHubWrites()", () => {
   it("does not attribute writes after switching branches to the pull request checked out before", () => {
     const sequences = [
       "gh pr checkout 5; git switch main; gh pr comment --body hi",
-      "gh pr checkout 5; git checkout main; gh pr comment --body hi",
+      "gh pr checkout 5; git -C . switch main; gh pr comment --body hi",
+      "gh pr checkout 5; git -c a=b --no-pager -P --git-dir=.git --work-tree=. switch main; gh pr comment --body hi",
+      "gh pr checkout 5; git --git-dir .git --work-tree . switch main; gh pr comment --body hi",
       "gh pr checkout 5; git checkout -b fix; gh pr comment --body hi",
+      "gh pr checkout 5; git checkout -B fix origin/main; gh pr comment --body hi",
+      "gh pr checkout 5; git checkout --orphan fix; gh pr comment --body hi",
+      "gh pr checkout 5; git checkout --orphan=fix; gh pr comment --body hi",
       "gh pr checkout some/branch; git switch -; gh pr comment --body hi",
     ];
     for (const input of sequences) {
       deepEqual(writes(input), { modified: [], unknownWrites: [] }, input);
+    }
+  });
+
+  it("treats writes without a number after `git checkout <arg>` as unknown writes", () => {
+    const sequences = [
+      "gh pr checkout 5; git checkout src/a.ts; gh pr comment --body hi",
+      "gh pr checkout 5; git checkout main; gh pr comment --body hi",
+      "gh pr checkout 5; git -C . checkout main; gh pr comment --body hi",
+    ];
+    for (const input of sequences) {
+      deepEqual(
+        writes(input),
+        { modified: [], unknownWrites: ["gh pr comment --body hi"] },
+        input
+      );
     }
   });
 
@@ -209,7 +231,9 @@ describe("gitHubWrites()", () => {
       "gh pr checkout 5",
       "git checkout -- README.md",
       "git checkout main -- package.json",
+      "git -C . checkout -- README.md",
       "git checkout",
+      "git status",
       "gh pr comment --body hi",
     ].join("\n");
     deepEqual(writes(input), { modified: [5], unknownWrites: [] });
