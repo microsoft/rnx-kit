@@ -30,7 +30,7 @@
   "dependencies": {
     "@react-native-webapis/web-storage": "workspace:*",
     "react": "19.1.4",
-    "react-native": "^0.81.6",
+    "react-native": "^0.85.0",
     "react-native-macos": "^0.81.0"
   },
   "devDependencies": {
@@ -40,8 +40,8 @@
     "@react-native-community/cli": "^20.0.0",
     "@react-native-community/cli-platform-android": "^20.0.0",
     "@react-native-community/cli-platform-ios": "^20.0.0",
-    "@react-native/babel-preset": "^0.81.0",
-    "@react-native/metro-config": "^0.81.0",
+    "@react-native/babel-preset": "^0.85.0",
+    "@react-native/metro-config": "^0.85.0",
     "@rnx-kit/babel-preset-metro-react-native": "workspace:*",
     "@rnx-kit/build": "workspace:*",
     "@rnx-kit/cli": "workspace:*",
