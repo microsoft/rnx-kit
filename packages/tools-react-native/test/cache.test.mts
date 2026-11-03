@@ -2,12 +2,12 @@ import type { Config } from "@react-native-community/cli-types";
 import { readTextFileSync as readText } from "@rnx-kit/tools-filesystem";
 import { mockFS } from "@rnx-kit/tools-filesystem/mocks";
 import { deepEqual, equal, ok } from "node:assert/strict";
-import * as path from "node:path";
 import { describe, it } from "node:test";
 import {
   CONFIG_CACHE_KEY,
   getSavedState,
   loadConfigFromCache,
+  makeCachePath,
   saveConfigToCache,
 } from "../src/cache.ts";
 
@@ -16,13 +16,8 @@ const config = {
   reactNativePath: "node_modules/react-native",
 } as Config;
 const stateHash = "c3eb082d-c157-4a5a-93ef-a781bbd7ca04";
-const cacheFile = path.join("node_modules", ".cache", "rnx-kit", "config.json");
-const stateFile = path.join(
-  "node_modules",
-  ".cache",
-  "rnx-kit",
-  "config.sha256"
-);
+const cacheFile = makeCachePath(".", "config.json");
+const stateFile = makeCachePath(".", "config.sha256");
 
 describe("getSavedState()", () => {
   it("returns false if there is no saved state", () => {
