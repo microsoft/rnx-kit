@@ -162,29 +162,34 @@ function sameDir(a: string | undefined, b: string): boolean {
 }
 
 /**
- * Returns the ID of the most recently updated session that worked in `root`
- * and is not in use, e.g. by the session running the audit. With `current`,
- * returns the session that is running the audit instead.
+ * Returns the ID of the session that is running this process, if any.
  */
-function findLatestSession(root: string, current = false): string {
+function findOwnSession(): string | undefined {
   const base = stateDir();
-  const ownPids = current ? ancestors() : new Set<number>();
+  const ownPids = ancestors();
+  for (const id of fs.existsSync(base) ? fs.readdirSync(base) : []) {
+    const dir = path.join(base, id);
+    if (
+      fs.existsSync(path.join(dir, "events.jsonl")) &&
+      openedBy(dir).some((pid) => ownPids.has(pid))
+    ) {
+      return id;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Returns the ID of the most recently updated session that worked in `root`
+ * and is not in use.
+ */
+function findLatestSession(root: string): string {
+  const base = stateDir();
   const candidates: { id: string; time: number }[] = [];
   for (const id of fs.existsSync(base) ? fs.readdirSync(base) : []) {
     const dir = path.join(base, id);
     const events = path.join(dir, "events.jsonl");
-    if (!fs.existsSync(events)) {
-      continue;
-    }
-
-    const pids = openedBy(dir);
-    if (current) {
-      if (pids.some((pid) => ownPids.has(pid))) {
-        return id;
-      }
-      continue;
-    }
-    if (pids.length > 0) {
+    if (!fs.existsSync(events) || openedBy(dir).length > 0) {
       continue;
     }
 
@@ -194,12 +199,6 @@ function findLatestSession(root: string, current = false): string {
     if (sameDir(context?.gitRoot ?? context?.cwd, root)) {
       candidates.push({ id, time: fs.statSync(events).mtimeMs });
     }
-  }
-
-  if (current) {
-    throw new Error(
-      `Not running in a Copilot session, or it was not found in ${base}`
-    );
   }
 
   const latest = candidates.sort((a, b) => b.time - a.time)[0];
@@ -213,8 +212,9 @@ function findLatestSession(root: string, current = false): string {
 
 /**
  * Reads a Copilot session from its event log without modifying it. If `id` is
- * omitted, reads the most recently updated session that worked in `root`; if
- * it is `current`, reads the session that is running this process.
+ * omitted, reads the session that is running this process, or if there is
+ * none, the most recently updated session that worked in `root` and is not in
+ * use. If `id` is `previous`, always reads the latter.
  */
 export function readSession(root: string, id?: string): Session {
   if (id !== undefined && !/^[\w-]+$/.test(id)) {
@@ -222,7 +222,9 @@ export function readSession(root: string, id?: string): Session {
   }
 
   const sessionId =
-    !id || id === "current" ? findLatestSession(root, Boolean(id)) : id;
+    id === "previous"
+      ? findLatestSession(root)
+      : id || findOwnSession() || findLatestSession(root);
   const file = path.join(stateDir(), sessionId, "events.jsonl");
   if (!fs.existsSync(file)) {
     throw new Error(
