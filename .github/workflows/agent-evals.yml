@@ -60,40 +60,11 @@ jobs:
       - name: Audit the pull request
         if: ${{ steps.detect.outputs.assisted == 'true' }}
         env:
-          AGENT_EVALS_REPORT: ${{ runner.temp }}/agent-evals.txt
+          GH_TOKEN: ${{ github.token }}
           GITHUB_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        # Only reports; failed rules do not fail the check
+        # Only reports; failed rules do not fail the check. Skipped if the agent
+        # already posted a report with its session log for this commit.
         run: |
-          yarn workspace @rnx-kit/evals eval --var "pullRequest=${PR_NUMBER}" || true
-      - name: Report results
-        if: ${{ steps.detect.outputs.assisted == 'true' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          REPORT: ${{ runner.temp }}/agent-evals.txt
-        run: |
-          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          {
-            echo '### Agent evals'
-            echo
-            if [[ -s "${REPORT}" ]]; then
-              echo '```'
-              cat "${REPORT}"
-              echo '```'
-            else
-              echo "The audit did not produce a report; see the [workflow run](${run_url})."
-            fi
-            if [[ ! -s "${REPORT}" ]] || grep -qE '^[-!] ' "${REPORT}"; then
-              echo
-              echo 'Rules marked `-` need the session log, and rules marked `!` could not be checked, e.g. because the grader needs Copilot access. Neither is available to this workflow. To audit them, run the following in `evals/` on the base branch:'
-              echo
-              echo "- Copilot cloud agent: \`yarn eval --var pullRequest=${PR_NUMBER}\`"
-              echo '- Copilot CLI: `yarn eval --var copilotSession=<id>`, on the machine that ran the session'
-            fi
-            echo
-            echo "<sub>[Workflow run](${run_url}) · This check only reports and never fails.</sub>"
-          } > "${RUNNER_TEMP}/comment.md"
-          cat "${RUNNER_TEMP}/comment.md" >> "${GITHUB_STEP_SUMMARY}"
-          gh pr comment "${PR_NUMBER}" --repo "${GITHUB_REPOSITORY}" --body-file "${RUNNER_TEMP}/comment.md" --edit-last --create-if-none
+          yarn workspace @rnx-kit/evals eval:report --unless-reported "${PR_NUMBER}"
     timeout-minutes: 30

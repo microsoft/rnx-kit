@@ -192,6 +192,20 @@ yarn update-readme                 # Regenerate API docs
 CI uses `suggestion-bot` to post code review suggestions for format,
 constraints, align-deps, and readme issues.
 
+### Agent Evals
+
+After creating a pull request, or pushing changes to one, run the evals and
+post the report on the pull request:
+
+```sh
+cd evals
+yarn eval:report
+```
+
+This audits the current session and posts the report as a comment. Do not
+edit the report. The `Agent evals` workflow only audits the diff if there is no
+report for the latest commit.
+
 ## Housekeeping
 
 - When triaging issues, ignore the issue titled "Dependency Dashboard" (opened
