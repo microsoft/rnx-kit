@@ -18,7 +18,7 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "eval": "NODE_OPTIONS=--conditions=typescript npx --yes promptfoo@0.124.1 eval",
-    "eval:report": "node src/post-report.ts",
+    "eval:report": "node --conditions=typescript src/post-report.ts",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "promptfoo": "NODE_OPTIONS=--conditions=typescript npx --yes promptfoo@0.124.1",
