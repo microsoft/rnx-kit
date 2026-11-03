@@ -12,6 +12,8 @@
  * - With `--unless-reported`, does nothing if the comment already has a report
  *   with the session log for the head of the pull request.
  */
+import { formatMarkdown, statusOf } from "@rnx-kit/agent-evals/report";
+import type { EvalResult } from "@rnx-kit/agent-evals/report";
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
@@ -21,6 +23,9 @@ import { fileURLToPath } from "node:url";
 const MARKER = /<!-- agent-evals head=(\w+) log=(yes|no) -->/;
 
 type Comment = { id: number; body: string };
+
+/** Subset of the file that `promptfoo eval --output <file>.json` writes */
+type EvalOutput = { results: { results: EvalResult[] } };
 
 function gh(...args: string[]): string {
   const { error, status, stderr, stdout } = spawnSync("gh", args, {
@@ -51,24 +56,26 @@ function findComment(repository: string, number: string): Comment | undefined {
 }
 
 function formatComment(
-  report: string,
+  results: EvalResult[] | undefined,
   head: string,
   hasLog: boolean,
   number: string
 ): string {
   const lines = [
     `<!-- agent-evals head=${head} log=${hasLog ? "yes" : "no"} -->`,
+    "### Agent evals",
+    "",
+    results ? formatMarkdown(results) : "The audit did not produce a report.",
   ];
-  lines.push("### Agent evals", "");
-  lines.push(
-    report
-      ? ["```", report, "```"].join("\n")
-      : "The audit did not produce a report."
-  );
-  if (!report || /^[-!] /m.test(report)) {
+  const statuses = results?.map(statusOf) ?? [];
+  if (
+    !results ||
+    statuses.includes("skipped") ||
+    statuses.includes("unchecked")
+  ) {
     lines.push(
       "",
-      "Rules marked `-` need the session log, and rules marked `!` could not be checked, e.g. because the grader needs Copilot access. To audit them, run the following in `evals/`:",
+      "Skipped rules need the session log, and unchecked rules could not be evaluated, e.g. because the grader needs Copilot access. To audit them, run the following in `evals/`:",
       "",
       `- Copilot cloud agent: \`yarn eval:report ${number}\``,
       "- Copilot CLI: `yarn eval:report` on the branch, on the machine that ran the session"
@@ -109,24 +116,33 @@ function main(argv: string[]): void {
 
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-"));
   try {
-    const reportFile = path.join(dir, "report.txt");
-    // Failed rules make promptfoo exit with an error; they are in the report
+    const output = path.join(dir, "results.json");
+    // Failed rules make promptfoo exit with an error; they are in the results
     spawnSync(
       "yarn",
-      ["eval", ...(number ? ["--var", `pullRequest=${number}`] : []), ...args],
+      [
+        "eval",
+        ...(number ? ["--var", `pullRequest=${number}`] : []),
+        ...args,
+        "--output",
+        output,
+      ],
       {
         cwd: fileURLToPath(new URL("..", import.meta.url)),
-        env: { ...process.env, AGENT_EVALS_REPORT: reportFile },
         stdio: "inherit",
       }
     );
 
-    const report = fs.existsSync(reportFile)
-      ? fs.readFileSync(reportFile, "utf-8").trim()
-      : "";
-    // Without the session, every rule is skipped (`-`) or errored (`!`)
-    const hasLog = /^[✓✗] /m.test(report) && !/^- /m.test(report);
-    const body = formatComment(report, pr.headRefOid, hasLog, prNumber);
+    const results = fs.existsSync(output)
+      ? (JSON.parse(fs.readFileSync(output, "utf-8")) as EvalOutput).results
+          .results
+      : undefined;
+    // Without the session, every rule is skipped or unchecked
+    const statuses = results?.map(statusOf) ?? [];
+    const hasLog =
+      !statuses.includes("skipped") &&
+      (statuses.includes("passed") || statuses.includes("failed"));
+    const body = formatComment(results, pr.headRefOid, hasLog, prNumber);
 
     const summary = process.env["GITHUB_STEP_SUMMARY"];
     if (summary) {
