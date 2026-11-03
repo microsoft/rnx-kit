@@ -15,7 +15,7 @@ const IGNORED_TOOLS = ["report_intent"];
  * Note: The file format is not documented; these match `SessionEvent` in
  * `@github/copilot-sdk`.
  */
-type SessionEvent =
+export type SessionEvent =
   | {
       type: "session.start" | "session.resume";
       data: {
@@ -32,6 +32,7 @@ type SessionEvent =
   | {
       type: "tool.execution_start";
       data: {
+        toolCallId?: string;
         toolName: string;
         arguments?: Record<string, unknown>;
         mcpServerName?: string;
@@ -182,14 +183,30 @@ export function readSession(root: string, id?: string): Session {
     toolCalls: [],
     requests: [],
   };
-  for (const line of fs.readFileSync(file, "utf-8").split("\n")) {
-    const event = line ? parseEvent(line) : undefined;
+  const lines = fs.readFileSync(file, "utf-8").split("\n");
+  applyEvents(
+    session,
+    lines.map((line) => (line ? parseEvent(line) : undefined))
+  );
+  return session;
+}
+
+/**
+ * Records `events` in `session`. Tool calls with the same `toolCallId` are
+ * recorded once; Copilot cloud agent sessions report each twice.
+ */
+export function applyEvents(
+  session: Session,
+  events: (SessionEvent | undefined)[]
+): void {
+  const toolCallIds = new Set<string>();
+  for (const event of events) {
     switch (event?.type) {
       case "session.start":
       case "session.resume": {
         const { context } = event.data;
         if (event.type === "session.start") {
-          session.root = context?.gitRoot ?? context?.cwd ?? root;
+          session.root = context?.gitRoot ?? context?.cwd ?? session.root;
           session.cwd = context?.cwd ?? session.root;
           session.baseCommit = context?.headCommit;
         }
@@ -210,7 +227,18 @@ export function readSession(root: string, id?: string): Session {
       }
 
       case "tool.execution_start": {
-        const { toolName, arguments: args = {}, mcpServerName } = event.data;
+        const {
+          toolCallId,
+          toolName,
+          arguments: args = {},
+          mcpServerName,
+        } = event.data;
+        if (toolCallId) {
+          if (toolCallIds.has(toolCallId)) {
+            break;
+          }
+          toolCallIds.add(toolCallId);
+        }
         if (SHELL_TOOLS.includes(toolName)) {
           if (typeof args["command"] === "string") {
             session.shellInputs.push(args["command"]);
@@ -228,5 +256,4 @@ export function readSession(root: string, id?: string): Session {
       }
     }
   }
-  return session;
 }

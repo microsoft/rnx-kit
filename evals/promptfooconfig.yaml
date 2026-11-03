@@ -19,6 +19,10 @@ defaultTest:
     # in use. Not named `session` because promptfoo redacts fields with that
     # name.
     copilotSession: ""
+    # Number of a pull request to audit instead, e.g. `--var pullRequest=123`.
+    # Reads its Copilot cloud agent sessions from GitHub; if they cannot be
+    # read, audits only its changes and skips rules with `requires: session`.
+    pullRequest: ""
   options:
     # Grades `llm-rubric` assertions with Copilot; requires a GitHub token
     # with Copilot access in `COPILOT_GITHUB_TOKEN`, `GH_TOKEN` or

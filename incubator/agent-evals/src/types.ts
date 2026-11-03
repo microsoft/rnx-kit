@@ -190,4 +190,11 @@ export type EvalVars = {
    * because promptfoo redacts fields with that name.
    */
   copilotSession?: string;
+  /**
+   * Number of the pull request to audit instead of a local session. Its
+   * Copilot cloud agent sessions are read from GitHub; if they cannot be read,
+   * only its changes are audited and tests with `requires: session` metadata
+   * are skipped.
+   */
+  pullRequest?: string;
 };

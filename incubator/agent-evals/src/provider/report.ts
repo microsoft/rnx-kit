@@ -1,3 +1,4 @@
+import * as fs from "node:fs";
 import { styleText } from "node:util";
 
 /** promptfoo's `ResultFailureReason.ERROR` */
@@ -71,7 +72,12 @@ export function formatReport(results: EvalResult[]): string {
       continue;
     }
 
-    if (result.failureReason === FAILURE_REASON_ERROR) {
+    if (
+      result.failureReason === FAILURE_REASON_ERROR &&
+      result.error?.startsWith("Skipped:")
+    ) {
+      lines.push(`${styleText("gray", "-")} ${title}`);
+    } else if (result.failureReason === FAILURE_REASON_ERROR) {
       lines.push(`${styleText("yellow", "!")} ${title}`);
     } else {
       lines.push(`${styleText("red", "✗")} ${title}`);
@@ -84,8 +90,15 @@ export function formatReport(results: EvalResult[]): string {
 }
 
 /**
- * promptfoo `afterAll` extension hook that prints a report of the results.
+ * promptfoo `afterAll` extension hook that prints a report of the results,
+ * and also writes it to `AGENT_EVALS_REPORT` if set.
  */
 export function afterAll({ results }: { results: EvalResult[] }): void {
-  console.log(`\n${formatReport(results)}\n`);
+  const report = formatReport(results);
+  console.log(`\n${report}\n`);
+
+  const file = process.env["AGENT_EVALS_REPORT"];
+  if (file) {
+    fs.writeFileSync(file, `${report}\n`);
+  }
 }

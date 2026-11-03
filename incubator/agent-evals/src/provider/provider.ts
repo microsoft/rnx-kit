@@ -1,7 +1,10 @@
 import type { AgentRun, EvalVars } from "../types.ts";
 import { addWorktree, collectChanges, git } from "./checkout.ts";
-import { lookUp, gitHubWrites } from "./github.ts";
+import { readCloudSessions } from "./cloud.ts";
+import { ghJson, lookUp, gitHubWrites } from "./github.ts";
+import { getToken } from "./grader.ts";
 import { readSession } from "./session.ts";
+import type { Session } from "./session.ts";
 import { parseCommands } from "./shell.ts";
 
 type ProviderConfig = {
@@ -12,6 +15,8 @@ type ProviderConfig = {
   repository?: string;
   /** Remote to look up branches and the repository on; defaults to `origin` */
   remote?: string;
+  /** Copilot API to read cloud agent sessions from */
+  copilotApiUrl?: string;
 };
 
 type ProviderOptions = {
@@ -21,6 +26,7 @@ type ProviderOptions = {
 
 type CallApiContext = {
   vars: Record<string, unknown>;
+  test?: { metadata?: Record<string, unknown> };
 };
 
 type Metadata = {
@@ -28,13 +34,15 @@ type Metadata = {
   branch: string;
   baseCommit: string;
   endCommit: string;
+  pullRequest?: number;
+  /** Why the session log could not be read; only the diff is audited */
+  missingLog?: string;
 };
 
-/** Sessions already replayed, keyed by the `copilotSession` var */
-const runs = new Map<
-  string,
-  Promise<{ output: AgentRun; metadata: Metadata }>
->();
+type Replay = { output: AgentRun; metadata: Metadata };
+
+/** Sessions already replayed, keyed by the `copilotSession` or `pullRequest` var */
+const runs = new Map<string, Promise<Replay>>();
 
 /**
  * Returns the `owner/repo` part of a GitHub remote URL, e.g.
@@ -86,10 +94,128 @@ async function resolveBranch(
   return "";
 }
 
+async function collectRun(
+  repository: string,
+  session: Pick<
+    Session,
+    "root" | "cwd" | "shellInputs" | "toolCalls" | "requests"
+  >,
+  workdir: string,
+  baseCommit: string
+): Promise<AgentRun> {
+  // Paths in commands are relative to the session's checkout
+  const commands = parseCommands(
+    session.root,
+    session.cwd,
+    session.shellInputs
+  );
+  const toolCalls = session.toolCalls.map(({ name, arguments: args }) => ({
+    name,
+    arguments: args,
+  }));
+  const { modified, unknownWrites } = gitHubWrites(
+    repository,
+    session.toolCalls,
+    commands
+  );
+  const github = {
+    modified,
+    unknownWrites,
+    ...(await lookUp(repository, modified)),
+  };
+  const { files, diff } = await collectChanges(workdir, baseCommit);
+  const requests = session.requests;
+  return {
+    commands,
+    toolCalls,
+    files,
+    diff,
+    finalMessage: requests[requests.length - 1]?.reply ?? "",
+    requests,
+    workdir,
+    github,
+  };
+}
+
+/**
+ * Replays the Copilot cloud agent sessions of a pull request, and compares
+ * its head with where it branched off its base branch. If the sessions cannot
+ * be read, e.g. if the pull request was co-authored in a local session or the
+ * token has no access, only the changes are returned.
+ */
+async function replayPullRequest(
+  number: number,
+  config: ProviderConfig
+): Promise<Replay> {
+  const root = (
+    await git(process.cwd(), ["rev-parse", "--show-toplevel"])
+  ).trim();
+  const remote = config.remote ?? "origin";
+  const repository = await resolveRepository(root, config);
+  const pr = await ghJson<{
+    baseRefName: string;
+    headRefName: string;
+    fullDatabaseId: string;
+  }>([
+    "pr",
+    "view",
+    String(number),
+    "--repo",
+    repository,
+    "--json",
+    "baseRefName,headRefName,fullDatabaseId",
+  ]);
+  if (!pr) {
+    throw new Error(`Pull request #${number} was not found in ${repository}`);
+  }
+
+  await git(root, ["fetch", "--no-tags", remote, pr.baseRefName]);
+  const baseTip = (await git(root, ["rev-parse", "FETCH_HEAD"])).trim();
+  await git(root, ["fetch", "--no-tags", remote, `refs/pull/${number}/head`]);
+  const endCommit = (await git(root, ["rev-parse", "FETCH_HEAD"])).trim();
+  const baseCommit = (
+    await git(root, ["merge-base", baseTip, endCommit])
+  ).trim();
+
+  let session: Session;
+  let missingLog: string | undefined;
+  try {
+    session = await readCloudSessions(
+      repository,
+      pr.fullDatabaseId,
+      getToken(),
+      config.copilotApiUrl
+    );
+  } catch (e) {
+    missingLog = Error.isError(e) ? e.message : String(e);
+    session = {
+      id: "",
+      root,
+      cwd: root,
+      shellInputs: [],
+      toolCalls: [],
+      requests: [],
+    };
+  }
+
+  const workdir = await addWorktree(root, endCommit);
+  return {
+    output: await collectRun(repository, session, workdir, baseCommit),
+    metadata: {
+      copilotSession: session.id,
+      branch: pr.headRefName,
+      baseCommit,
+      endCommit,
+      pullRequest: number,
+      ...(missingLog ? { missingLog } : {}),
+    },
+  };
+}
+
 async function replay(
   id: string | undefined,
   config: ProviderConfig
-): Promise<{ output: AgentRun; metadata: Metadata }> {
+): Promise<Replay> {
   const cwdRoot = (
     await git(process.cwd(), ["rev-parse", "--show-toplevel"])
   ).trim();
@@ -131,36 +257,8 @@ async function replay(
     workdir = await addWorktree(root, endCommit);
   }
 
-  // Paths in commands are relative to the session's checkout
-  const commands = parseCommands(root, session.cwd, session.shellInputs);
-  const toolCalls = session.toolCalls.map(({ name, arguments: args }) => ({
-    name,
-    arguments: args,
-  }));
-  const { modified, unknownWrites } = gitHubWrites(
-    repository,
-    session.toolCalls,
-    commands
-  );
-  const github = {
-    modified,
-    unknownWrites,
-    ...(await lookUp(repository, modified)),
-  };
-  const { files, diff } = await collectChanges(workdir, baseCommit);
-  const requests = session.requests;
-
   return {
-    output: {
-      commands,
-      toolCalls,
-      files,
-      diff,
-      finalMessage: requests[requests.length - 1]?.reply ?? "",
-      requests,
-      workdir,
-      github,
-    },
+    output: await collectRun(repository, session, workdir, baseCommit),
     metadata: { copilotSession: session.id, branch, baseCommit, endCommit },
   };
 }
@@ -188,17 +286,27 @@ export default class CopilotSessionProvider {
   async callApi(
     _prompt: string,
     context?: CallApiContext
-  ): Promise<{ output: AgentRun; metadata: Metadata } | { error: string }> {
-    const { copilotSession } = (context?.vars ?? {}) as EvalVars;
-    const key = copilotSession ?? "";
+  ): Promise<Replay | { error: string }> {
+    const { copilotSession, pullRequest } = (context?.vars ?? {}) as EvalVars;
+    const number = Number(pullRequest);
+    const key = number ? `#${number}` : (copilotSession ?? "");
     let pending = runs.get(key);
     if (!pending) {
-      pending = replay(copilotSession || undefined, this.config);
+      pending = number
+        ? replayPullRequest(number, this.config)
+        : replay(copilotSession || undefined, this.config);
       runs.set(key, pending);
     }
 
     try {
-      return await pending;
+      const run = await pending;
+      const { missingLog } = run.metadata;
+      if (missingLog && context?.test?.metadata?.["requires"] === "session") {
+        return {
+          error: `Skipped: requires the session log, which could not be read: ${missingLog}`,
+        };
+      }
+      return run;
     } catch (e) {
       return { error: Error.isError(e) ? e.message : String(e) };
     }
