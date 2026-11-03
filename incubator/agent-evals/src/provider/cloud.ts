@@ -16,8 +16,25 @@ type EventsResponse = {
   total: number;
 };
 
-/** Requests that fail with these statuses are retried */
-const TRANSIENT_STATUS = /^(400|429|5\d\d)$/;
+function isTransient(status: number, body: string): boolean {
+  // Requests intermittently fail with "400 unknown Copilot-Integration-Id"
+  return (
+    status === 429 ||
+    status >= 500 ||
+    (status === 400 && body.includes("unknown Copilot-Integration-Id"))
+  );
+}
+
+function isUnauthorized(status: number, body: string): boolean {
+  // Tokens issued by other GitHub Apps, e.g. `GITHUB_TOKEN` in workflows, are
+  // rejected with "400 the Copilot-Integration-Id header does not match the
+  // GitHub App that issued this installation access token"
+  return (
+    status === 401 ||
+    status === 403 ||
+    (status === 400 && body.includes("does not match the GitHub App"))
+  );
+}
 
 async function getJSON<T>(url: string, token: string): Promise<T> {
   for (let attempt = 1; ; ++attempt) {
@@ -31,14 +48,20 @@ async function getJSON<T>(url: string, token: string): Promise<T> {
       return (await response.json()) as T;
     }
 
-    // Requests intermittently fail with "400 unknown Copilot-Integration-Id"
-    if (attempt < 3 && TRANSIENT_STATUS.test(String(response.status))) {
+    const { status } = response;
+    const body = (await response.text()).trim();
+    if (attempt < 3 && isTransient(status, body)) {
       await new Promise((resolve) => setTimeout(resolve, attempt * 500));
       continue;
     }
 
-    const body = (await response.text()).trim();
-    throw new Error(`${url}: ${response.status}${body ? ` ${body}` : ""}`);
+    if (isUnauthorized(status, body)) {
+      throw new Error(
+        "the token cannot read Copilot cloud agent sessions; a user token with Copilot access is required"
+      );
+    }
+
+    throw new Error(`${url}: ${status}${body ? ` ${body}` : ""}`);
   }
 }
 

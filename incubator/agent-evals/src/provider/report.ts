@@ -7,6 +7,7 @@ const FAILURE_REASON_ERROR = 2;
 type ComponentResult = {
   pass: boolean;
   reason?: string;
+  metadata?: Record<string, unknown>;
 };
 
 /**
@@ -53,6 +54,20 @@ function failureReasons(result: EvalResult): string[] {
 }
 
 /**
+ * Returns whether all failed assertions failed because the grader could not
+ * be reached, e.g. without Copilot access, rather than on their merits.
+ */
+function isGraderError(result: EvalResult): boolean {
+  const failed = (result.gradingResult?.componentResults ?? []).filter(
+    (component) => !component.pass
+  );
+  return (
+    failed.length > 0 &&
+    failed.every((component) => component.metadata?.["graderError"] === true)
+  );
+}
+
+/**
  * Formats eval results as one line per test, in the order of the tests,
  * each followed by the reasons of its failed assertions or its error.
  */
@@ -77,7 +92,10 @@ export function formatReport(results: EvalResult[]): string {
       result.error?.startsWith("Skipped:")
     ) {
       lines.push(`${styleText("gray", "-")} ${title}`);
-    } else if (result.failureReason === FAILURE_REASON_ERROR) {
+    } else if (
+      result.failureReason === FAILURE_REASON_ERROR ||
+      isGraderError(result)
+    ) {
       lines.push(`${styleText("yellow", "!")} ${title}`);
     } else {
       lines.push(`${styleText("red", "✗")} ${title}`);

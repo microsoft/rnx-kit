@@ -41,28 +41,6 @@ jobs:
           if grep -qiE "${pattern}" "${RUNNER_TEMP}/identities.txt"; then
             echo 'assisted=true' >> "${GITHUB_OUTPUT}"
           fi
-      # TEMP: check whether `GITHUB_TOKEN` can read Copilot cloud agent sessions
-      - name: Probe Copilot API access
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PROBE_PR: 4425
-        run: |
-          id=$(gh pr view "${PROBE_PR}" --repo "${GITHUB_REPOSITORY}" --json fullDatabaseId --jq .fullDatabaseId)
-          capi() {
-            curl --silent --show-error --output "${RUNNER_TEMP}/capi.json" --write-out '%{http_code}' \
-              --header "Authorization: Bearer ${GH_TOKEN}" \
-              --header 'Copilot-Integration-Id: copilot-4-cli' \
-              "https://api.githubcopilot.com$1"
-          }
-          status=$(capi "/agents/resource/pull/${id}")
-          echo "GET /agents/resource/pull/${id} -> ${status}"
-          head -c 300 "${RUNNER_TEMP}/capi.json"; echo
-          session=$(jq -r '.sessions[0].id // empty' "${RUNNER_TEMP}/capi.json" 2>/dev/null || true)
-          if [[ -n "${session}" ]]; then
-            status=$(capi "/agents/sessions/${session}/events")
-            echo "GET /agents/sessions/${session}/events -> ${status}"
-            jq -c '{total, events: (.events | length)}' "${RUNNER_TEMP}/capi.json" 2>/dev/null || head -c 300 "${RUNNER_TEMP}/capi.json"
-          fi
       - name: Checkout
         if: ${{ steps.detect.outputs.assisted == 'true' }}
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -106,9 +84,9 @@ jobs:
             else
               echo "The audit did not produce a report; see the [workflow run](${run_url})."
             fi
-            if [[ ! -s "${REPORT}" ]] || grep -qE '^[-!] |^ +Execution failed: ' "${REPORT}"; then
+            if [[ ! -s "${REPORT}" ]] || grep -qE '^[-!] ' "${REPORT}"; then
               echo
-              echo 'Rules marked `-` need the session log, and rules marked `!` or that failed with `Execution failed` could not be checked, e.g. because the grader needs Copilot access. Neither is available to this workflow. To audit them, run the following in `evals/` on the base branch:'
+              echo 'Rules marked `-` need the session log, and rules marked `!` could not be checked, e.g. because the grader needs Copilot access. Neither is available to this workflow. To audit them, run the following in `evals/` on the base branch:'
               echo
               echo "- Copilot cloud agent: \`yarn eval --var pullRequest=${PR_NUMBER}\`"
               echo '- Copilot CLI: `yarn eval --var copilotSession=<id>`, on the machine that ran the session'
