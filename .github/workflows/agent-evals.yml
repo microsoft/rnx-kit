@@ -4,6 +4,9 @@ on:
   # number. Code from the pull request is never run; it is only read.
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
+  # TEMP: test the workflow before it lands on the default branch
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
 env:
   NODE_OPTIONS: "--disable-proto=delete"
 concurrency:
@@ -37,6 +40,28 @@ jobs:
           } > "${RUNNER_TEMP}/identities.txt"
           if grep -qiE "${pattern}" "${RUNNER_TEMP}/identities.txt"; then
             echo 'assisted=true' >> "${GITHUB_OUTPUT}"
+          fi
+      # TEMP: check whether `GITHUB_TOKEN` can read Copilot cloud agent sessions
+      - name: Probe Copilot API access
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PROBE_PR: 4425
+        run: |
+          id=$(gh pr view "${PROBE_PR}" --repo "${GITHUB_REPOSITORY}" --json fullDatabaseId --jq .fullDatabaseId)
+          capi() {
+            curl --silent --show-error --output "${RUNNER_TEMP}/capi.json" --write-out '%{http_code}' \
+              --header "Authorization: Bearer ${GH_TOKEN}" \
+              --header 'Copilot-Integration-Id: copilot-4-cli' \
+              "https://api.githubcopilot.com$1"
+          }
+          status=$(capi "/agents/resource/pull/${id}")
+          echo "GET /agents/resource/pull/${id} -> ${status}"
+          head -c 300 "${RUNNER_TEMP}/capi.json"; echo
+          session=$(jq -r '.sessions[0].id // empty' "${RUNNER_TEMP}/capi.json" 2>/dev/null || true)
+          if [[ -n "${session}" ]]; then
+            status=$(capi "/agents/sessions/${session}/events")
+            echo "GET /agents/sessions/${session}/events -> ${status}"
+            jq -c '{total, events: (.events | length)}' "${RUNNER_TEMP}/capi.json" 2>/dev/null || head -c 300 "${RUNNER_TEMP}/capi.json"
           fi
       - name: Checkout
         if: ${{ steps.detect.outputs.assisted == 'true' }}
