@@ -185,9 +185,17 @@ export type GradingResult = {
  */
 export type EvalVars = {
   /**
-   * ID of the Copilot session to audit; defaults to the most recently updated
-   * session in this repository that is not in use. Not named `session`
-   * because promptfoo redacts fields with that name.
+   * ID of the Copilot session to audit; defaults to the session running the
+   * evals, or if there is none, the most recently updated session in this
+   * repository that is not in use. `previous` always selects the latter. Not
+   * named `session` because promptfoo redacts fields with that name.
    */
   copilotSession?: string;
+  /**
+   * Number of the pull request to audit instead of a local session. Its
+   * Copilot cloud agent sessions are read from GitHub; if they cannot be read,
+   * only its changes are audited and tests with `requires: session` metadata
+   * are skipped.
+   */
+  pullRequest?: string;
 };

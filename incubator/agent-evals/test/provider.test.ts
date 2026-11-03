@@ -1,7 +1,7 @@
 import { equal, rejects } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
-import {
+import CopilotSessionProvider, {
   parseRepository,
   resolveRepository,
 } from "../src/provider/provider.ts";
@@ -53,5 +53,17 @@ describe("resolveRepository()", () => {
       message:
         "Could not determine the GitHub repository from remote 'does-not-exist'; set 'repository' in the provider config",
     });
+  });
+});
+
+describe("CopilotSessionProvider.callApi()", () => {
+  it("rejects invalid pull request numbers", async () => {
+    const provider = new CopilotSessionProvider();
+    for (const pullRequest of ["0", "012", "-1", "1e3", "1; rm -rf /"]) {
+      await rejects(
+        provider.callApi("", { vars: { pullRequest } }),
+        new Error(`Invalid pull request number: ${pullRequest}`)
+      );
+    }
   });
 });

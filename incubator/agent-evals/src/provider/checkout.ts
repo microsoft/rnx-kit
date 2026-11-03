@@ -1,3 +1,4 @@
+import { readTextFileSync } from "@rnx-kit/tools-filesystem";
 import { execFile, spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
@@ -117,7 +118,7 @@ export async function collectChanges(
       const change: AgentChangedFile = { path: file, status };
       if (status !== "deleted") {
         try {
-          change.content = fs.readFileSync(path.join(workdir, file), "utf-8");
+          change.content = readTextFileSync(path.join(workdir, file));
         } catch (_) {
           // Not a regular file, e.g. a submodule
         }
