@@ -1,0 +1,4 @@
+{"type":"session.start","data":{"context":{"cwd":"/repo/packages/a","gitRoot":"/repo","branch":"feature","headCommit":"0123456789abcdef"}}}
+{"type":"user.message","data":{"content":"Run the tests"}}
+{"type":"tool.execution_start","data":{"toolName":"bash","arguments":{"command":"yarn test"}}}
+{"type":"assistant.message","data":{"content":"Done"}}

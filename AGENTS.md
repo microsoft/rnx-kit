@@ -142,8 +142,8 @@ One change file per feature/fix. No need for multiple entries when addressing PR
 feedback. Releases are automated via CI — on merge to `main`, the changesets
 action creates a release PR or publishes to npm.
 
-Ignored packages (no changesets needed): `@rnx-kit/ignore`, `@rnx-kit/template`,
-test apps.
+Don't add change files for private packages (`"private": true`), e.g.
+`@rnx-kit/template` and test apps.
 
 ## Key Packages
 
@@ -210,9 +210,10 @@ constraints, align-deps, and readme issues.
 ## Code Style
 
 - Run `yarn format` and `yarn lint` before committing (CI enforces both)
-- Don't format or lint by hand or call the underlying tools directly — the
-  `rnx-kit-scripts format` and `lint` commands (`scripts/src/commands/`) decide
-  which tools and configs are used
+- Don't format, lint or build by hand or call the underlying tools (e.g.
+  `oxfmt`, `oxlint`, `tsc`) directly — the `rnx-kit-scripts format`, `lint` and
+  `build` commands (`scripts/src/commands/`) decide which tools and configs are
+  used
 - The formatter also sorts imports and `package.json` fields
 - Prefer consuming existing helpers over redesigning shared internals. Ask
   before adding new shared abstractions; optimize for total complexity, not

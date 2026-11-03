@@ -1,0 +1,77 @@
+{
+  "name": "@rnx-kit/agent-evals",
+  "version": "0.0.1",
+  "private": true,
+  "description": "EXPERIMENTAL - USE WITH CAUTION - Audit coding agent sessions against repository conventions with promptfoo",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/agent-evals#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/agent-evals"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "src"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./grader": {
+      "types": "./lib/provider/grader.d.ts",
+      "typescript": "./src/provider/grader.ts",
+      "default": "./lib/provider/grader.js"
+    },
+    "./provider": {
+      "types": "./lib/provider/provider.d.ts",
+      "typescript": "./src/provider/provider.ts",
+      "default": "./lib/provider/provider.js"
+    },
+    "./report": {
+      "types": "./lib/provider/report.d.ts",
+      "typescript": "./src/provider/report.ts",
+      "default": "./lib/provider/report.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@changesets/parse": "^1.0.0",
+    "@rnx-kit/tools-filesystem": "workspace:*",
+    "@rnx-kit/tools-shell": "workspace:*",
+    "parse-diff": "catalog:",
+    "shell-quote": "^1.8.4"
+  },
+  "devDependencies": {
+    "@github/copilot-sdk": "catalog:",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
+    "@types/node": "^24.0.0"
+  },
+  "peerDependencies": {
+    "@github/copilot-sdk": "^1.0.16"
+  },
+  "peerDependenciesMeta": {
+    "@github/copilot-sdk": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=24.11"
+  },
+  "experimental": true
+}

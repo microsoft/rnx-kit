@@ -39,6 +39,18 @@ export default {
       ignoreBinaries: ["scripts/rnx-align-deps.js"],
       ignoreDependencies: ["eslint"],
     },
+    evals: {
+      entry: [
+        "src/grader.ts",
+        "src/index.ts",
+        "src/provider.ts",
+        "src/report.ts",
+        allFixtures,
+        allTests,
+      ],
+      // Loaded as a jsPlugin by `oxlint/types-only.json`
+      ignoreDependencies: ["@rnx-kit/eslint-plugin"],
+    },
     "incubator/@react-native-webapis/battery-status": {
       entry: ["react-native.config.js"],
       ignoreDependencies: reactNativeDependencies,
@@ -46,6 +58,9 @@ export default {
     "incubator/@react-native-webapis/web-storage": {
       entry: ["react-native.config.js", allTests],
       ignoreDependencies: reactNativeDependencies,
+    },
+    "incubator/agent-evals": {
+      entry: [allFixtures, allTests],
     },
     "incubator/fork-sync": {
       entry: ["harness/**/*.ts"],

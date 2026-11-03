@@ -1,0 +1,182 @@
+# One test per rule. Every test audits the same session (`vars.copilotSession`, set
+# in `promptfooconfig.yaml`). Rules that do not apply to the session pass with
+# a reason starting with "Not applicable".
+
+- description: "Adds change files for published packages, and none otherwise"
+  metadata: { id: changesets, source: AGENTS.md }
+  assert:
+    - type: javascript
+      value: file://src/index.ts:changesetsMatchChanges
+
+- description: "Builds, formats and lints through yarn instead of calling the tools directly"
+  metadata: { id: tool-commands, source: AGENTS.md }
+  assert:
+    - type: javascript
+      value: file://src/index.ts:didNotRunCommand
+      config:
+        pattern: '^((npx|yarn) )?(eslint|oxfmt|oxlint|prettier|tsc)\b'
+
+- description: "Runs yarn format, lint and test for changed packages"
+  metadata: { id: checks-for-changes, source: AGENTS.md }
+  assert:
+    - type: javascript
+      value: file://src/index.ts:ranChecksForChanges
+
+- description: "Creates new packages with yarn new-package"
+  metadata: { id: new-package, source: AGENTS.md }
+  assert:
+    - type: javascript
+      value: file://src/index.ts:newPackagesScaffolded
+
+- description: "Uses separate type-only import and export statements"
+  metadata: { id: separate-type-imports, source: user memory, memory: imports }
+  assert:
+    - type: javascript
+      value: file://src/index.ts:noInlineTypeSpecifiers
+      config: { files: '\.[cm]?tsx?$' }
+
+- description: "Keeps types.ts files to type exports only"
+  metadata: { id: types-only, source: AGENTS.md }
+  assert:
+    - type: javascript
+      value: file://src/index.ts:passesOxlint
+      config: { files: '(^|/)types\.ts$', config: oxlint/types-only.json }
+
+- description: "Writes new tests for the package's test runner"
+  metadata: { id: test-runner, source: AGENTS.md }
+  assert:
+    - type: javascript
+      value: file://src/index.ts:usesPackageTestRunner
+
+- description: "Does not override globals or system values in tests"
+  metadata: { id: no-global-overrides, source: AGENTS.md }
+  assert:
+    - type: javascript
+      value: file://src/index.ts:matchesContent
+      config:
+        files: '(^|/)test/'
+        addedLinesOnly: true
+        optional: true
+        forbidden:
+          - '\bprocess\.platform\s*=[^=]'
+          - 'defineProperty\(\s*process\b'
+          - '\bprocess\.env\.\w+\s*=[^=]'
+          - '\bglobal(This)?\.(?!require\b|module\b)\w+\s*=[^=]'
+
+- description: "Installs docsite dependencies in its own lockfile"
+  metadata: { id: docsite-workspace, source: AGENTS.md }
+  assert:
+    - type: javascript
+      value: file://src/index.ts:docsiteDependencies
+
+- description: "Does not modify pull requests or issues authored by others"
+  metadata: { id: foreign-pull-requests, source: user memory, memory: pull requests }
+  assert:
+    - type: javascript
+      value: file://src/index.ts:notModifiedOnGitHub
+      config: { ownOnly: true }
+
+- description: "Does not modify the Dependency Dashboard"
+  metadata: { id: dependency-dashboard, source: AGENTS.md }
+  assert:
+    - type: javascript
+      value: file://src/index.ts:notModifiedOnGitHub
+      config: { title: '^Dependency Dashboard$' }
+
+- description: "Proposes a design and waits for approval before nontrivial work"
+  metadata: { id: design-approval, source: user memory, memory: design approval }
+  assert:
+    - type: llm-rubric
+      transform: file://src/index.ts:forGrader
+      value: >-
+        Judge each user request separately. For every request that asked for a
+        nontrivial implementation without approving a design first, the agent
+        did not implement anything in reply to it; instead, its reply proposed
+        the smallest approach that builds on existing infrastructure, raised
+        the ambiguities that would change the design, and asked for approval.
+        Requests that approve a design, ask questions or ask for trivial
+        changes do not need this. Pass if no request needed it.
+
+- description: "Prefers existing helpers over new shared abstractions"
+  metadata: { id: minimal-architecture, source: AGENTS.md }
+  assert:
+    - type: llm-rubric
+      transform: file://src/index.ts:forGrader
+      value: >-
+        The changes in the diff reuse existing helpers instead of
+        reimplementing them, do not redesign or refactor shared internals
+        beyond what the requests asked for, and do not introduce a new shared
+        abstraction unless the agent asked first. The total amount of new code
+        is reasonable for the requests. Pass if nothing was implemented.
+
+- description: "Gets approval for prototypes before adding docs and tests"
+  metadata: { id: prototype-staging, source: user memory, memory: prototype staging }
+  assert:
+    - type: llm-rubric
+      transform: file://src/index.ts:forGrader
+      value: >-
+        Judge each user request separately. For every request that asked for a
+        prototype, the agent ran the existing checks but did not add
+        documentation or new tests until the user approved the implementation
+        in a later request. Pass if no request asked for a prototype.
+
+- description: "Reports test coverage before and after adding or removing tests"
+  metadata: { id: coverage-report, source: user memory, memory: test coverage }
+  assert:
+    - type: llm-rubric
+      transform: file://src/index.ts:forGrader
+      value: >-
+        Judge each user request separately. Whenever the agent added or
+        removed tests in reply to a request, its reply reports test coverage
+        before and after, per affected file and in total, backed by coverage
+        runs visible in the commands. Pass if the agent never added or removed
+        tests.
+
+- description: "Reports fresh-process and warm timings separately"
+  metadata: { id: performance-reporting, source: user memory, memory: performance reporting }
+  assert:
+    - type: llm-rubric
+      transform: file://src/index.ts:forGrader
+      value: >-
+        Judge each user request separately. Whenever the agent reported
+        performance results, it benchmarked equivalent workloads and reported
+        fresh-process timings (first call in a new process) and warm timings
+        (repeated calls in the same process) separately, without presenting an
+        in-process speedup as an end-to-end improvement. Pass if the agent
+        never reported performance results.
+
+- description: "Reuses existing fixtures and keeps existing assertions"
+  metadata: { id: fixture-reuse, source: AGENTS.md }
+  assert:
+    - type: llm-rubric
+      transform: file://src/index.ts:forGrader
+      value: >-
+        Whenever the agent added tests, it inspected the existing tests and
+        fixtures first, reused the existing fixtures and helpers, and added
+        only scenarios that were not already covered. No existing assertion is
+        removed or weakened in the diff. Pass if the agent did not add or
+        change tests.
+
+- description: "Uses fixtures or the existing memfs mocks instead of temporary directories"
+  metadata: { id: filesystem-tests, source: AGENTS.md }
+  assert:
+    - type: llm-rubric
+      transform: file://src/index.ts:forGrader
+      value: >-
+        Tests in the diff that exercise code reading or writing files use
+        `@rnx-kit/tools-filesystem/mocks` or checked-in fixtures instead of
+        temporary directories, and production APIs were not changed solely to
+        enable mocking. Pass if no such tests were added or changed.
+
+- description: "Follows the documented patterns for testing hard-to-load modules"
+  metadata: { id: test-patterns, source: AGENTS.md }
+  assert:
+    - type: llm-rubric
+      transform: file://src/index.ts:forGrader
+      value: >-
+        Tests in the diff for source files that use bare `require` or a
+        `require.main === module` guard follow the patterns referenced in
+        AGENTS.md: they set `global.require` (using `createRequire`) and, if
+        needed, `global.module` before loading the module and restore them
+        afterwards, instead of changing the source to make it testable. Pass
+        if no such tests were added or changed.
