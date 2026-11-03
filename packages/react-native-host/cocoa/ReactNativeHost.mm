@@ -109,6 +109,9 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
 - (RCTBridge *)bridge
 {
+#ifdef RCT_REMOVE_LEGACY_ARCH
+    return nil;
+#else   // RCT_REMOVE_LEGACY_ARCH
     if (self.isBridgelessEnabled) {
         return nil;
     }
@@ -129,6 +132,7 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
     } @finally {
         [_isShuttingDown unlock];
     }
+#endif  // RCT_REMOVE_LEGACY_ARCH
 }
 
 - (RCTHost *)reactHost
@@ -253,22 +257,26 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
 - (BOOL)isBridgelessEnabled
 {
-#if USE_BRIDGELESS
+#ifdef RCT_REMOVE_LEGACY_ARCH
+    return YES;
+#elif USE_BRIDGELESS
     // Bridgeless mode is enabled if it was turned on with a build flag, unless
     // `isBridgelessEnabled` is explicitly implemented and returns false.
     return ![_config respondsToSelector:@selector(isBridgelessEnabled)] ||
            [_config isBridgelessEnabled];
 #else
     return NO;
-#endif  // USE_BRIDGELESS
+#endif  // RCT_REMOVE_LEGACY_ARCH
 }
 
 - (void)enableTurboModule
 {
 #if USE_FABRIC
     _turboModuleAdapter = [[RNXTurboModuleAdapter alloc] init];
+#ifndef RCT_REMOVE_LEGACY_ARCH
     RCTEnableTurboModule(true);
-#endif
+#endif  // !RCT_REMOVE_LEGACY_ARCH
+#endif  // USE_FABRIC
 }
 
 - (void)initializeReactHost
