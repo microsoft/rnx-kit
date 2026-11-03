@@ -4,8 +4,9 @@
  *
  * Usage: yarn eval:report [--unless-reported] [<number>] [<promptfoo args>]
  *
- * - Without a number, audits the latest local Copilot session and posts on the
- *   pull request of the current branch.
+ * - Without a number, audits the Copilot session running this script, or the
+ *   one given with `--var copilotSession=<id>`, and posts on the pull request
+ *   of the current branch.
  * - With a number, audits that pull request; see `vars.pullRequest` in
  *   `promptfooconfig.yaml`.
  * - With `--unless-reported`, does nothing if the comment already has a report
@@ -77,6 +78,15 @@ function formatComment(
   return lines.join("\n");
 }
 
+function evalVars(number: string | undefined, args: string[]): string[] {
+  if (number) {
+    return ["--var", `pullRequest=${number}`];
+  }
+  return args.some((arg) => arg.includes("copilotSession="))
+    ? []
+    : ["--var", "copilotSession=current"];
+}
+
 function main(argv: string[]): void {
   const args = argv.filter((arg) => arg !== "--unless-reported");
   const unlessReported = args.length < argv.length;
@@ -110,15 +120,11 @@ function main(argv: string[]): void {
   try {
     const reportFile = path.join(dir, "report.txt");
     // Failed rules make promptfoo exit with an error; they are in the report
-    spawnSync(
-      "yarn",
-      ["eval", ...(number ? ["--var", `pullRequest=${number}`] : []), ...args],
-      {
-        cwd: fileURLToPath(new URL("..", import.meta.url)),
-        env: { ...process.env, AGENT_EVALS_REPORT: reportFile },
-        stdio: "inherit",
-      }
-    );
+    spawnSync("yarn", ["eval", ...evalVars(number, args), ...args], {
+      cwd: fileURLToPath(new URL("..", import.meta.url)),
+      env: { ...process.env, AGENT_EVALS_REPORT: reportFile },
+      stdio: "inherit",
+    });
 
     const report = fs.existsSync(reportFile)
       ? fs.readFileSync(reportFile, "utf-8").trim()

@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -106,13 +107,46 @@ function isRunning(pid: number): boolean {
 }
 
 /**
- * Returns whether a Copilot process currently has the session open.
+ * Returns the IDs of the running Copilot processes that have the session open.
  */
-function isInUse(dir: string): boolean {
-  return fs.readdirSync(dir).some((name) => {
-    const match = name.match(/^inuse\.(\d+)\.lock$/);
-    return match ? isRunning(Number(match[1])) : false;
+function openedBy(dir: string): number[] {
+  return fs
+    .readdirSync(dir)
+    .map((name) => name.match(/^inuse\.(\d+)\.lock$/))
+    .filter((match) => match !== null)
+    .map((match) => Number(match[1]))
+    .filter(isRunning);
+}
+
+/**
+ * Returns the IDs of the ancestors of this process. Empty on Windows, where
+ * `ps` is not available.
+ */
+function ancestors(): Set<number> {
+  const result = new Set<number>();
+  if (process.platform === "win32") {
+    return result;
+  }
+
+  const { stdout, status } = spawnSync("ps", ["-A", "-o", "pid=,ppid="], {
+    encoding: "utf-8",
   });
+  if (status !== 0) {
+    return result;
+  }
+
+  const parents = new Map<number, number>();
+  for (const line of stdout.split("\n")) {
+    const [pid, ppid] = line.trim().split(/\s+/).map(Number);
+    if (pid) {
+      parents.set(pid, ppid);
+    }
+  }
+  for (let pid = process.ppid; pid > 1 && !result.has(pid);) {
+    result.add(pid);
+    pid = parents.get(pid) ?? 0;
+  }
+  return result;
 }
 
 function sameDir(a: string | undefined, b: string): boolean {
@@ -129,15 +163,28 @@ function sameDir(a: string | undefined, b: string): boolean {
 
 /**
  * Returns the ID of the most recently updated session that worked in `root`
- * and is not in use, e.g. by the session running the audit.
+ * and is not in use, e.g. by the session running the audit. With `current`,
+ * returns the session that is running the audit instead.
  */
-function findLatestSession(root: string): string {
+function findLatestSession(root: string, current = false): string {
   const base = stateDir();
+  const ownPids = current ? ancestors() : new Set<number>();
   const candidates: { id: string; time: number }[] = [];
   for (const id of fs.existsSync(base) ? fs.readdirSync(base) : []) {
     const dir = path.join(base, id);
     const events = path.join(dir, "events.jsonl");
-    if (!fs.existsSync(events) || isInUse(dir)) {
+    if (!fs.existsSync(events)) {
+      continue;
+    }
+
+    const pids = openedBy(dir);
+    if (current) {
+      if (pids.some((pid) => ownPids.has(pid))) {
+        return id;
+      }
+      continue;
+    }
+    if (pids.length > 0) {
       continue;
     }
 
@@ -147,6 +194,12 @@ function findLatestSession(root: string): string {
     if (sameDir(context?.gitRoot ?? context?.cwd, root)) {
       candidates.push({ id, time: fs.statSync(events).mtimeMs });
     }
+  }
+
+  if (current) {
+    throw new Error(
+      `Not running in a Copilot session, or it was not found in ${base}`
+    );
   }
 
   const latest = candidates.sort((a, b) => b.time - a.time)[0];
@@ -160,14 +213,16 @@ function findLatestSession(root: string): string {
 
 /**
  * Reads a Copilot session from its event log without modifying it. If `id` is
- * omitted, reads the most recently updated session that worked in `root`.
+ * omitted, reads the most recently updated session that worked in `root`; if
+ * it is `current`, reads the session that is running this process.
  */
 export function readSession(root: string, id?: string): Session {
   if (id !== undefined && !/^[\w-]+$/.test(id)) {
     throw new Error(`Invalid session ID: ${id}`);
   }
 
-  const sessionId = id || findLatestSession(root);
+  const sessionId =
+    !id || id === "current" ? findLatestSession(root, Boolean(id)) : id;
   const file = path.join(stateDir(), sessionId, "events.jsonl");
   if (!fs.existsSync(file)) {
     throw new Error(

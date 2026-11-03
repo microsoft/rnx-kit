@@ -16,8 +16,8 @@ defaultTest:
   vars:
     # ID of the session to audit, e.g. `--var copilotSession=<id>`. If empty,
     # audits the most recently updated session in this repository that is not
-    # in use. Not named `session` because promptfoo redacts fields with that
-    # name.
+    # in use; if `current`, audits the session running the evals. Not named
+    # `session` because promptfoo redacts fields with that name.
     copilotSession: ""
     # Number of a pull request to audit instead, e.g. `--var pullRequest=123`.
     # Reads its Copilot cloud agent sessions from GitHub; if they cannot be
