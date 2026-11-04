@@ -111,15 +111,17 @@ function formatComment(
       "- Copilot CLI: `yarn eval:report` on the branch, on the machine that ran the session"
     );
   }
+  const subject = audited ?? "uncommitted changes";
   if (results && audited !== head) {
     lines.push(
       "",
-      `> [!WARNING]\n> The audited changes (${audited ?? "uncommitted changes"}) are not the head of the pull request (${head}). Push the changes, or audit the session that made them, and run \`yarn eval:report\` again.`
+      "> [!WARNING]",
+      `> This audited ${subject}, not the head of the pull request (${head}). Push the changes, or audit the session that made them, and run \`yarn eval:report\` again.`
     );
   }
   lines.push(
     "",
-    `<sub>Audited ${audited ?? head}. This check only reports.</sub>`
+    `<sub>Audited ${results ? subject : head}. This check only reports.</sub>`
   );
   return lines.join("\n");
 }
