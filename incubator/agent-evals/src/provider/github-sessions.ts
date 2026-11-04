@@ -8,6 +8,7 @@ import type { Session, SessionEvent } from "./session.ts";
 const DEFAULT_API_URL = "https://api.githubcopilot.com";
 
 type ResourceResponse = {
+  session_count?: number;
   sessions?: { id: string; last_updated_at: number }[];
 };
 
@@ -78,21 +79,28 @@ export async function readGitHubSessions(
   apiUrl = DEFAULT_API_URL
 ): Promise<Session> {
   const url = `${apiUrl}/agents/resource/pull/${pullRequestId}`;
-  const { sessions = [] } = await getJSON<ResourceResponse>(url, token).catch(
-    (e: unknown) => {
-      // The API also responds with 404 if the token cannot read the sessions
-      throw Error.isError(e) && /: 404\b/.test(e.message)
-        ? new Error(
-            "no Copilot cloud agent sessions were found, or the token cannot read them"
-          )
-        : e;
-    }
-  );
+  const { session_count, sessions = [] } = await getJSON<ResourceResponse>(
+    url,
+    token
+  ).catch((e: unknown) => {
+    // The API also responds with 404 if the token cannot read the sessions
+    throw Error.isError(e) && /: 404\b/.test(e.message)
+      ? new Error(
+          "no Copilot cloud agent sessions were found, or the token cannot read them"
+        )
+      : e;
+  });
   if (sessions.length === 0) {
     throw new Error("no Copilot cloud agent sessions were found");
   }
+  if (session_count && sessions.length < session_count) {
+    throw new Error(
+      `Pull request returned ${sessions.length} of ${session_count} sessions`
+    );
+  }
 
-  // The cloud agent works in the default checkout of GitHub-hosted runners
+  // The cloud agent works in the default checkout of GitHub-hosted runners;
+  // used if the first session does not say where it worked
   const name = repository.split("/")[1];
   const root = `/home/runner/work/${name}/${name}`;
   const ordered = sessions.toSorted(
@@ -117,8 +125,13 @@ export async function readGitHubSessions(
       );
     }
 
+    // Shares the shell inputs and tool calls of `session`
     const part: Session = { ...session, requests: [] };
     applyEvents(part, events);
+    if (i === 0) {
+      session.root = part.root;
+      session.cwd = part.cwd;
+    }
     if (part.requests[0]) {
       session.requests.push(part.requests[0]);
     }

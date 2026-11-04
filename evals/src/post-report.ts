@@ -139,6 +139,9 @@ function main(argv: string[]): void {
   const args = argv.filter((arg) => arg !== "--unless-reported");
   const unlessReported = args.length < argv.length;
   const number = /^\d+$/.test(args[0] ?? "") ? args.shift() : undefined;
+  if (number && !/^[1-9]\d*$/.test(number)) {
+    throw new Error(`Invalid pull request number: ${number}`);
+  }
 
   const repository = gh(
     "repo",
@@ -153,13 +156,11 @@ function main(argv: string[]): void {
   ) as { number: number; headRefOid: string };
   const prNumber = String(pr.number);
 
-  const existing = findComment(repository, prNumber);
-  const [, reportedHead, reportedLog] = existing?.body.match(MARKER) ?? [];
-  if (
-    unlessReported &&
-    reportedHead === pr.headRefOid &&
-    reportedLog === "yes"
-  ) {
+  const hasFullReport = (comment: Comment | undefined) => {
+    const [, head, log] = comment?.body.match(MARKER) ?? [];
+    return head === pr.headRefOid && log === "yes";
+  };
+  if (unlessReported && hasFullReport(findComment(repository, prNumber))) {
     console.log(`#${prNumber} already has a report for ${pr.headRefOid}`);
     return;
   }
@@ -187,12 +188,15 @@ function main(argv: string[]): void {
       ? (JSON.parse(fs.readFileSync(output, "utf-8")) as EvalOutput).results
           .results
       : undefined;
+    // Read again; the agent may have posted a report during the audit
+    const existing = findComment(repository, prNumber);
+    let hasLog = false;
     let body: string;
     if (results) {
       const audited = auditedCommit(results);
       // Without the session, every rule is skipped or unchecked
       const statuses = results.map(statusOf);
-      const hasLog =
+      hasLog =
         audited === pr.headRefOid &&
         !statuses.includes("skipped") &&
         (statuses.includes("passed") || statuses.includes("failed"));
@@ -204,6 +208,13 @@ function main(argv: string[]): void {
       body = existing
         ? markFailed(existing.body, pr.headRefOid)
         : formatComment(undefined, pr.headRefOid, undefined, false, prNumber);
+    }
+
+    if (!hasLog && hasFullReport(existing)) {
+      console.log(
+        `#${prNumber} already has a report with the session log for ${pr.headRefOid}; keeping it`
+      );
+      return;
     }
 
     const summary = process.env["GITHUB_STEP_SUMMARY"];
