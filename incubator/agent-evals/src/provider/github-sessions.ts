@@ -71,7 +71,7 @@ async function getJSON<T>(url: string, token: string): Promise<T> {
  * request; later user messages in a session, e.g. to write the pull request
  * description, come from the agent itself and are dropped.
  */
-export async function readCloudSessions(
+export async function readGitHubSessions(
   repository: string,
   pullRequestId: string,
   token: string,

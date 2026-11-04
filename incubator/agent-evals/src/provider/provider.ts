@@ -1,6 +1,6 @@
 import type { AgentRun, EvalVars } from "../types.ts";
 import { addWorktree, collectChanges, git } from "./checkout.ts";
-import { readCloudSessions } from "./github-sessions.ts";
+import { readGitHubSessions } from "./github-sessions.ts";
 import { ghJson, lookUp, gitHubWrites } from "./github.ts";
 import { getToken } from "./grader.ts";
 import { newSession, readSession } from "./session.ts";
@@ -180,7 +180,7 @@ async function replayPullRequest(
   let session: Session;
   let missingLog: string | undefined;
   try {
-    session = await readCloudSessions(
+    session = await readGitHubSessions(
       repository,
       pr.fullDatabaseId,
       getToken(),
