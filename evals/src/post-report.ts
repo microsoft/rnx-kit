@@ -32,16 +32,17 @@ type Result = EvalResult & {
 /** Subset of the file that `promptfoo eval --output <file>.json` writes */
 type EvalOutput = { results: { results: Result[] } };
 
-const commands = { gh: makeCommandSync("gh"), git: makeCommandSync("git") };
-
-function run(command: keyof typeof commands, ...args: string[]): string {
-  const result = commands[command](...args);
-  return ensure(result, `${command} ${args.join(" ")}: ${result.stderr}`);
+/** Returns a command that throws if it fails, and otherwise returns stdout */
+function makeCheckedCommand(name: string): (...args: string[]) => string {
+  const command = makeCommandSync(name);
+  return (...args) => {
+    const result = command(...args);
+    return ensure(result, `${name} ${args.join(" ")}: ${result.stderr}`);
+  };
 }
 
-function gh(...args: string[]): string {
-  return run("gh", ...args);
-}
+const gh = makeCheckedCommand("gh");
+const git = makeCheckedCommand("git");
 
 /**
  * Returns the commit whose changes were audited, or `undefined` if it is
@@ -56,10 +57,10 @@ function auditedCommit(results: Result[]): string | undefined {
   }
 
   // The session's branch is checked out, and its working tree was audited
-  if (run("git", "status", "--porcelain", "--untracked-files=no")) {
+  if (git("status", "--porcelain", "--untracked-files=no")) {
     return undefined;
   }
-  return run("git", "rev-parse", "HEAD").trim();
+  return git("rev-parse", "HEAD").trim();
 }
 
 function findComment(repository: string, number: string): Comment | undefined {
