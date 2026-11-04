@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.3.11
+
+### Patch Changes
+
+- f417abe: Create cache in temp dir to avoid issues with certain build tools
+
 ## 2.3.10
 
 ### Patch Changes
