@@ -202,7 +202,7 @@ cd evals
 yarn eval:report
 ```
 
-This audits the current session and posts the report as a comment. Do not
+The report must be posted again after every push, because a new commit makes the workflow replace it. This audits the current session and posts the report as a comment. Do not
 edit the report. The `Agent evals` workflow only audits the diff if there is no
 report for the latest commit.
 
