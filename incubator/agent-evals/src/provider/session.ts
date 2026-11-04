@@ -10,6 +10,8 @@ const SHELL_TOOLS = ["bash", "powershell"];
 /** Tools that are not recorded because they have no effect */
 const IGNORED_TOOLS = ["report_intent"];
 
+const ps = makeCommandSync("ps");
+
 /**
  * Subset of the events that the Copilot runtime writes to `events.jsonl`.
  *
@@ -142,7 +144,7 @@ function ancestors(): Set<number> {
     return result;
   }
 
-  const { stdout, status } = makeCommandSync("ps")("-A", "-o", "pid=,ppid=");
+  const { stdout, status } = ps("-A", "-o", "pid=,ppid=");
   if (status !== 0) {
     return result;
   }
