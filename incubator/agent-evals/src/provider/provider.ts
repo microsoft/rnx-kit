@@ -288,6 +288,10 @@ export default class CopilotSessionProvider {
     context?: CallApiContext
   ): Promise<Replay | { error: string }> {
     const { copilotSession, pullRequest } = (context?.vars ?? {}) as EvalVars;
+    if (pullRequest && !/^[1-9]\d*$/.test(String(pullRequest))) {
+      throw new Error(`Invalid pull request number: ${pullRequest}`);
+    }
+
     const number = Number(pullRequest);
     const key = number ? `#${number}` : (copilotSession ?? "");
     let pending = runs.get(key);

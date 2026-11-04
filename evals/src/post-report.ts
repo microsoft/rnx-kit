@@ -24,17 +24,46 @@ const MARKER = /<!-- agent-evals head=(\w+) log=(yes|no) -->/;
 
 type Comment = { id: number; body: string };
 
-/** Subset of the file that `promptfoo eval --output <file>.json` writes */
-type EvalOutput = { results: { results: EvalResult[] } };
+type Result = EvalResult & {
+  response?: { metadata?: { endCommit?: string } };
+};
 
-function gh(...args: string[]): string {
-  const { error, status, stderr, stdout } = spawnSync("gh", args, {
+/** Subset of the file that `promptfoo eval --output <file>.json` writes */
+type EvalOutput = { results: { results: Result[] } };
+
+function run(command: string, args: string[]): string {
+  const { error, status, stderr, stdout } = spawnSync(command, args, {
     encoding: "utf-8",
   });
   if (error || status !== 0) {
-    throw new Error(`gh ${args.join(" ")}: ${error?.message ?? stderr}`);
+    throw new Error(
+      `${command} ${args.join(" ")}: ${error?.message ?? stderr}`
+    );
   }
   return stdout;
+}
+
+function gh(...args: string[]): string {
+  return run("gh", args);
+}
+
+/**
+ * Returns the commit whose changes were audited, or `undefined` if it is
+ * unknown or there were uncommitted changes.
+ */
+function auditedCommit(results: Result[]): string | undefined {
+  const endCommit = results.find(
+    (result) => result.response?.metadata?.endCommit
+  )?.response?.metadata?.endCommit;
+  if (endCommit !== "WORKING_TREE") {
+    return endCommit;
+  }
+
+  // The session's branch is checked out, and its working tree was audited
+  if (run("git", ["status", "--porcelain", "--untracked-files=no"])) {
+    return undefined;
+  }
+  return run("git", ["rev-parse", "HEAD"]).trim();
 }
 
 function findComment(repository: string, number: string): Comment | undefined {
@@ -58,6 +87,7 @@ function findComment(repository: string, number: string): Comment | undefined {
 function formatComment(
   results: EvalResult[] | undefined,
   head: string,
+  audited: string | undefined,
   hasLog: boolean,
   number: string
 ): string {
@@ -81,7 +111,16 @@ function formatComment(
       "- Copilot CLI: `yarn eval:report` on the branch, on the machine that ran the session"
     );
   }
-  lines.push("", `<sub>Audited ${head}. This check only reports.</sub>`);
+  if (results && audited !== head) {
+    lines.push(
+      "",
+      `> [!WARNING]\n> The audited changes (${audited ?? "uncommitted changes"}) are not the head of the pull request (${head}). Push the changes, or audit the session that made them, and run \`yarn eval:report\` again.`
+    );
+  }
+  lines.push(
+    "",
+    `<sub>Audited ${audited ?? head}. This check only reports.</sub>`
+  );
   return lines.join("\n");
 }
 
@@ -137,12 +176,20 @@ function main(argv: string[]): void {
       ? (JSON.parse(fs.readFileSync(output, "utf-8")) as EvalOutput).results
           .results
       : undefined;
+    const audited = results ? auditedCommit(results) : undefined;
     // Without the session, every rule is skipped or unchecked
     const statuses = results?.map(statusOf) ?? [];
     const hasLog =
+      audited === pr.headRefOid &&
       !statuses.includes("skipped") &&
       (statuses.includes("passed") || statuses.includes("failed"));
-    const body = formatComment(results, pr.headRefOid, hasLog, prNumber);
+    const body = formatComment(
+      results,
+      pr.headRefOid,
+      audited,
+      hasLog,
+      prNumber
+    );
 
     const summary = process.env["GITHUB_STEP_SUMMARY"];
     if (summary) {

@@ -161,18 +161,23 @@ const SECTIONS: {
   },
 ];
 
-function escapeHTML(text: string): string {
+/**
+ * Escapes HTML, and breaks up `@mentions` and `#refs` with a zero-width space
+ * so that they do not notify anyone or link to issues.
+ */
+function escapeText(text: string): string {
   return text
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
+    .replaceAll(">", "&gt;")
+    .replace(/([@#])(?=\w)/g, "$1&#8203;");
 }
 
 function quote(text: string): string {
   return text
     .trim()
     .split("\n")
-    .map((line) => `  > ${escapeHTML(line)}`)
+    .map((line) => `  > ${escapeText(line)}`)
     .join("\n");
 }
 
@@ -205,7 +210,7 @@ export function formatMarkdown(results: EvalResult[]): string {
     );
     for (const result of group) {
       const { description, id } = titleOf(result);
-      const title = escapeHTML(description);
+      const title = escapeText(description);
       lines.push(id ? `- ${title} \`${id}\`` : `- ${title}`);
       if (status === "failed" || status === "unchecked") {
         for (const reason of failureReasons(result)) {
