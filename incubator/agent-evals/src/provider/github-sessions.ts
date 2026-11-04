@@ -1,3 +1,4 @@
+import { withRetry } from "@rnx-kit/tools-shell";
 import { applyEvents, newSession } from "./session.ts";
 import type { Session, SessionEvent } from "./session.ts";
 
@@ -38,32 +39,32 @@ function isUnauthorized(status: number, body: string): boolean {
 }
 
 async function getJSON<T>(url: string, token: string): Promise<T> {
-  for (let attempt = 1; ; ++attempt) {
+  const { ok, status, body } = await withRetry(async () => {
     const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Copilot-Integration-Id": "copilot-4-cli",
       },
     });
-    if (response.ok) {
-      return (await response.json()) as T;
-    }
-
-    const { status } = response;
+    const { ok, status } = response;
     const body = (await response.text()).trim();
-    if (attempt < 3 && isTransient(status, body)) {
-      await new Promise((resolve) => setTimeout(resolve, attempt * 500));
-      continue;
+    // `withRetry` retries errors that are thrown
+    if (!ok && isTransient(status, body)) {
+      throw new Error(`${url}: ${status} ${body}`);
     }
-
-    if (isUnauthorized(status, body)) {
-      throw new Error(
-        "the token cannot read Copilot cloud agent sessions; a user token with Copilot access is required"
-      );
-    }
-
-    throw new Error(`${url}: ${status}${body ? ` ${body}` : ""}`);
+    return { ok, status, body };
+  }, 3);
+  if (ok) {
+    return JSON.parse(body) as T;
   }
+
+  if (isUnauthorized(status, body)) {
+    throw new Error(
+      "the token cannot read Copilot cloud agent sessions; a user token with Copilot access is required"
+    );
+  }
+
+  throw new Error(`${url}: ${status}${body ? ` ${body}` : ""}`);
 }
 
 /**
