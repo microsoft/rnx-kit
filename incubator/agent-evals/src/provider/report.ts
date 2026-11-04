@@ -204,7 +204,7 @@ export function formatMarkdown(results: EvalResult[]): string {
       "",
       collapsed
         ? `<details><summary>${emoji} ${heading} (${group.length})</summary>\n`
-        : `#### ${emoji} ${heading}\n`
+        : `#### ${emoji} ${heading} (${group.length})\n`
     );
     for (const result of group) {
       const { description, id } = titleOf(result);
