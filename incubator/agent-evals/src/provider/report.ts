@@ -206,7 +206,7 @@ export function formatMarkdown(results: EvalResult[]): string {
     for (const result of group) {
       const { description, id } = titleOf(result);
       const title = escapeHTML(description);
-      lines.push(id ? `- **${title}** \`${id}\`` : `- **${title}**`);
+      lines.push(id ? `- ${title} \`${id}\`` : `- ${title}`);
       if (status === "failed" || status === "unchecked") {
         for (const reason of failureReasons(result)) {
           lines.push(quote(reason));
