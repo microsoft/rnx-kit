@@ -188,14 +188,12 @@ function quote(text: string): string {
  */
 export function formatMarkdown(results: EvalResult[]): string {
   const groups = Object.groupBy(sortByTest(results), statusOf);
-  const summary = SECTIONS.filter(({ status }) => groups[status])
-    .map(
-      ({ status, emoji, label }) =>
-        `${emoji} ${groups[status]?.length} ${label}`
-    )
-    .join(" · ");
+  const summary = SECTIONS.filter(({ status }) => groups[status]).map(
+    ({ status, emoji, label }) => `${emoji} ${groups[status]?.length} ${label}`
+  );
 
-  const lines = [summary];
+  // The summary is redundant with a single section
+  const lines = summary.length > 1 ? [summary.join(" · ")] : [];
   for (const { status, emoji, heading, collapsed } of SECTIONS) {
     const group = groups[status];
     if (!group) {
@@ -227,7 +225,7 @@ export function formatMarkdown(results: EvalResult[]): string {
       lines.push("", "</details>");
     }
   }
-  return lines.join("\n");
+  return lines.join("\n").trimStart();
 }
 
 /**
