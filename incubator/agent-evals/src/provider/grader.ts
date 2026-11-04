@@ -6,6 +6,8 @@ import * as path from "node:path";
 /** Maximum duration of a single grading call */
 const GRADING_TIMEOUT_MS = 5 * 60 * 1000;
 
+const gh = makeCommandSync("gh");
+
 type ProviderOptions = {
   id?: string;
   config?: {
@@ -88,7 +90,7 @@ export function getToken(): string {
     return token;
   }
 
-  const { stdout, status } = makeCommandSync("gh")("auth", "token");
+  const { stdout, status } = gh("auth", "token");
   if (status !== 0 || !stdout) {
     throw new Error(
       "A GitHub token with Copilot access is required; set COPILOT_GITHUB_TOKEN or log in with 'gh auth login'"
