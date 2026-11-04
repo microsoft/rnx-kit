@@ -1,5 +1,12 @@
 # @rnx-kit/react-native-host
 
+## 0.5.23
+
+### Patch Changes
+
+- d3ff642: `[RCTBridge initWithDelegate:launchOptions:]` and `RCTEnableTurboModule()` were
+  removed in 0.89.
+
 ## 0.5.22
 
 ### Patch Changes
