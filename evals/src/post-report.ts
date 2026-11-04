@@ -126,6 +126,19 @@ function formatComment(
   return lines.join("\n");
 }
 
+const FAILED_NOTE = /\n> \[!CAUTION\]\n> The audit of \w+ failed[^\n]*\n/;
+
+/**
+ * Adds a note to a report that the audit of `head` failed, replacing an
+ * earlier one. The marker is kept, so the workflow audits `head` again.
+ */
+function markFailed(body: string, head: string): string {
+  const note = `\n> [!CAUTION]\n> The audit of ${head} failed; the report below is from an earlier run.\n`;
+  return body
+    .replace(FAILED_NOTE, "")
+    .replace(/^### Agent evals\n/m, (heading) => heading + note);
+}
+
 function main(argv: string[]): void {
   const args = argv.filter((arg) => arg !== "--unless-reported");
   const unlessReported = args.length < argv.length;
@@ -178,20 +191,24 @@ function main(argv: string[]): void {
       ? (JSON.parse(fs.readFileSync(output, "utf-8")) as EvalOutput).results
           .results
       : undefined;
-    const audited = results ? auditedCommit(results) : undefined;
-    // Without the session, every rule is skipped or unchecked
-    const statuses = results?.map(statusOf) ?? [];
-    const hasLog =
-      audited === pr.headRefOid &&
-      !statuses.includes("skipped") &&
-      (statuses.includes("passed") || statuses.includes("failed"));
-    const body = formatComment(
-      results,
-      pr.headRefOid,
-      audited,
-      hasLog,
-      prNumber
-    );
+    let body: string;
+    if (results) {
+      const audited = auditedCommit(results);
+      // Without the session, every rule is skipped or unchecked
+      const statuses = results.map(statusOf);
+      const hasLog =
+        audited === pr.headRefOid &&
+        !statuses.includes("skipped") &&
+        (statuses.includes("passed") || statuses.includes("failed"));
+      body = formatComment(results, pr.headRefOid, audited, hasLog, prNumber);
+    } else {
+      // Keep the last report instead of replacing it with nothing
+      console.error("The audit did not produce a report");
+      process.exitCode = 1;
+      body = existing
+        ? markFailed(existing.body, pr.headRefOid)
+        : formatComment(undefined, pr.headRefOid, undefined, false, prNumber);
+    }
 
     const summary = process.env["GITHUB_STEP_SUMMARY"];
     if (summary) {

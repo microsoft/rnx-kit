@@ -36,7 +36,7 @@ jobs:
               .[]
               | "login \(.author.login // "")",
                 "email \(.commit.author.email)",
-                (.commit.message | split("\n")[] | select(test("^co-authored-by:"; "i")) | "email \(.)")'
+                (.commit.message | split("\n")[] | sub("\\s+$"; "") | select(test("^co-authored-by:"; "i")) | "email \(.)")'
           } > "${RUNNER_TEMP}/identities.txt"
           if grep -qiE "${pattern}" "${RUNNER_TEMP}/identities.txt"; then
             echo 'assisted=true' >> "${GITHUB_OUTPUT}"
