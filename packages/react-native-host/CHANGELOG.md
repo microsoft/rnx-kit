@@ -1,5 +1,12 @@
 # @rnx-kit/react-native-host
 
+## 0.5.22
+
+### Patch Changes
+
+- e04e4a5: Moved public headers to `cocoa/include/ReactNativeHost/` and infer New
+  Architecture from the React Native version in preparation for SwiftPM support.
+
 ## 0.5.21
 
 ### Patch Changes
