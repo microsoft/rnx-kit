@@ -29,6 +29,7 @@
     "@rnx-kit/agent-evals": "workspace:*",
     "@rnx-kit/eslint-plugin": "workspace:*",
     "@rnx-kit/tools-filesystem": "workspace:*",
+    "@rnx-kit/tools-shell": "workspace:*",
     "oxc-parser": "catalog:",
     "oxlint": "catalog:",
     "parse-diff": "catalog:"

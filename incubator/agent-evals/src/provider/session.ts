@@ -1,4 +1,4 @@
-import { spawnSync } from "node:child_process";
+import { makeCommandSync } from "@rnx-kit/tools-shell";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -66,6 +66,20 @@ export type Session = {
   requests: AgentRequest[];
 };
 
+/**
+ * Returns a session without any events that worked in `root`.
+ */
+export function newSession(id: string, root: string): Session {
+  return {
+    id,
+    root,
+    cwd: root,
+    shellInputs: [],
+    toolCalls: [],
+    requests: [],
+  };
+}
+
 function stateDir(): string {
   const home =
     process.env["COPILOT_HOME"] || path.join(os.homedir(), ".copilot");
@@ -128,9 +142,7 @@ function ancestors(): Set<number> {
     return result;
   }
 
-  const { stdout, status } = spawnSync("ps", ["-A", "-o", "pid=,ppid="], {
-    encoding: "utf-8",
-  });
+  const { stdout, status } = makeCommandSync("ps")("-A", "-o", "pid=,ppid=");
   if (status !== 0) {
     return result;
   }
@@ -232,14 +244,7 @@ export function readSession(root: string, id?: string): Session {
     );
   }
 
-  const session: Session = {
-    id: sessionId,
-    root,
-    cwd: root,
-    shellInputs: [],
-    toolCalls: [],
-    requests: [],
-  };
+  const session = newSession(sessionId, root);
   const lines = fs.readFileSync(file, "utf-8").split("\n");
   applyEvents(
     session,

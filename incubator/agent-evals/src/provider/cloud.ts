@@ -1,4 +1,4 @@
-import { applyEvents } from "./session.ts";
+import { applyEvents, newSession } from "./session.ts";
 import type { Session, SessionEvent } from "./session.ts";
 
 /**
@@ -109,14 +109,7 @@ export async function readCloudSessions(
     );
   }
 
-  const session: Session = {
-    id: ordered.map(({ id }) => id).join(","),
-    root,
-    cwd: root,
-    shellInputs: [],
-    toolCalls: [],
-    requests: [],
-  };
+  const session = newSession(ordered.map(({ id }) => id).join(","), root);
   for (const [i, { events, total }] of logs.entries()) {
     if (events.length < total) {
       throw new Error(

@@ -14,6 +14,7 @@
  */
 import { formatMarkdown, statusOf } from "@rnx-kit/agent-evals/report";
 import type { EvalResult } from "@rnx-kit/agent-evals/report";
+import { ensure, makeCommandSync } from "@rnx-kit/tools-shell";
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
@@ -31,20 +32,15 @@ type Result = EvalResult & {
 /** Subset of the file that `promptfoo eval --output <file>.json` writes */
 type EvalOutput = { results: { results: Result[] } };
 
-function run(command: string, args: string[]): string {
-  const { error, status, stderr, stdout } = spawnSync(command, args, {
-    encoding: "utf-8",
-  });
-  if (error || status !== 0) {
-    throw new Error(
-      `${command} ${args.join(" ")}: ${error?.message ?? stderr}`
-    );
-  }
-  return stdout;
+const commands = { gh: makeCommandSync("gh"), git: makeCommandSync("git") };
+
+function run(command: keyof typeof commands, ...args: string[]): string {
+  const result = commands[command](...args);
+  return ensure(result, `${command} ${args.join(" ")}: ${result.stderr}`);
 }
 
 function gh(...args: string[]): string {
-  return run("gh", args);
+  return run("gh", ...args);
 }
 
 /**
@@ -60,10 +56,10 @@ function auditedCommit(results: Result[]): string | undefined {
   }
 
   // The session's branch is checked out, and its working tree was audited
-  if (run("git", ["status", "--porcelain", "--untracked-files=no"])) {
+  if (run("git", "status", "--porcelain", "--untracked-files=no")) {
     return undefined;
   }
-  return run("git", ["rev-parse", "HEAD"]).trim();
+  return run("git", "rev-parse", "HEAD").trim();
 }
 
 function findComment(repository: string, number: string): Comment | undefined {

@@ -3,7 +3,7 @@ import { addWorktree, collectChanges, git } from "./checkout.ts";
 import { readCloudSessions } from "./cloud.ts";
 import { ghJson, lookUp, gitHubWrites } from "./github.ts";
 import { getToken } from "./grader.ts";
-import { readSession } from "./session.ts";
+import { newSession, readSession } from "./session.ts";
 import type { Session } from "./session.ts";
 import { parseCommands } from "./shell.ts";
 
@@ -188,14 +188,7 @@ async function replayPullRequest(
     );
   } catch (e) {
     missingLog = Error.isError(e) ? e.message : String(e);
-    session = {
-      id: "",
-      root,
-      cwd: root,
-      shellInputs: [],
-      toolCalls: [],
-      requests: [],
-    };
+    session = newSession("", root);
   }
 
   const workdir = await addWorktree(root, endCommit);
