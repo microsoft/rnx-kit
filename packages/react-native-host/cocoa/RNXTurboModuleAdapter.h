@@ -3,6 +3,8 @@
 #import <Foundation/Foundation.h>
 #include <cxxreact/JSExecutor.h>
 
+#import "RNXFeatureMacros.h"
+
 #if USE_FABRIC
 #import <ReactCommon/RCTTurboModuleManager.h>
 #endif  // USE_FABRIC

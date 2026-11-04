@@ -1,7 +1,7 @@
 require 'json'
 
-source_files = 'cocoa/*.{h,m,mm}'
-public_header_files = 'cocoa/{ReactNativeHost,RNXHostConfig}.h'
+source_files = 'cocoa/**/*.{h,m,mm}'
+public_header_files = 'cocoa/include/ReactNativeHost/*.h'
 
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 version = package['version']
