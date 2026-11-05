@@ -2,15 +2,13 @@
  * Runs the evals and posts the report on a pull request, in a comment shared
  * with the agent evals workflow.
  *
- * Usage: yarn eval:report [--unless-reported] [<number>] [<promptfoo args>]
+ * Usage: yarn eval:report [<number>] [<promptfoo args>]
  *
  * - Without a number, audits a local Copilot session (see `vars.copilotSession`
  *   in `promptfooconfig.yaml`) and posts on the pull request of the current
  *   branch.
  * - With a number, audits that pull request; see `vars.pullRequest` in
  *   `promptfooconfig.yaml`.
- * - With `--unless-reported`, does nothing if the comment already has a report
- *   with the session log for the head of the pull request.
  */
 import { formatMarkdown, statusOf } from "@rnx-kit/agent-evals/report";
 import type { EvalResult } from "@rnx-kit/agent-evals/report";
@@ -143,9 +141,7 @@ function markFailed(body: string, head: string): string {
     .replace(/^### Agent evals\n/m, (heading) => heading + note);
 }
 
-function main(argv: string[]): void {
-  const args = argv.filter((arg) => arg !== "--unless-reported");
-  const unlessReported = args.length < argv.length;
+function main(args: string[]): void {
   const number = /^\d+$/.test(args[0] ?? "") ? args.shift() : undefined;
   if (number && !/^[1-9]\d*$/.test(number)) {
     throw new Error(`Invalid pull request number: ${number}`);
@@ -154,15 +150,6 @@ function main(argv: string[]): void {
   const pr = JSON.parse(
     gh("pr", "view", ...(number ? [number] : []), "--json", "number,headRefOid")
   ) as { number: number; headRefOid: string };
-
-  const hasFullReport = (comment: Comment | undefined) => {
-    const [, head, log] = comment?.body.match(MARKER) ?? [];
-    return head === pr.headRefOid && log === "yes";
-  };
-  if (unlessReported && hasFullReport(findComment(pr.number))) {
-    console.log(`#${pr.number} already has a report for ${pr.headRefOid}`);
-    return;
-  }
 
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-"));
   try {
@@ -208,7 +195,8 @@ function main(argv: string[]): void {
         : formatComment(undefined, pr.headRefOid, undefined, false, pr.number);
     }
 
-    if (!hasLog && hasFullReport(existing)) {
+    const [, reportedHead, reportedLog] = existing?.body.match(MARKER) ?? [];
+    if (!hasLog && reportedHead === pr.headRefOid && reportedLog === "yes") {
       console.log(
         `#${pr.number} already has a report with the session log for ${pr.headRefOid}; keeping it`
       );
