@@ -225,25 +225,20 @@ function main(argv: string[]): void {
 
     const bodyFile = path.join(dir, "comment.md");
     writeTextFileSync(bodyFile, body);
-    const url = existing
-      ? gh(
-          "api",
-          "--method",
-          "PATCH",
-          `repos/${repository}/issues/comments/${existing.id}`,
-          "-F",
-          `body=@${bodyFile}`,
-          "--jq",
-          ".html_url"
-        )
-      : gh(
-          "api",
-          `repos/${repository}/issues/${prNumber}/comments`,
-          "-F",
-          `body=@${bodyFile}`,
-          "--jq",
-          ".html_url"
-        );
+    const url = gh(
+      "api",
+      ...(existing
+        ? [
+            "--method",
+            "PATCH",
+            `repos/${repository}/issues/comments/${existing.id}`,
+          ]
+        : [`repos/${repository}/issues/${prNumber}/comments`]),
+      "-F",
+      `body=@${bodyFile}`,
+      "--jq",
+      ".html_url"
+    );
     console.log(`Posted the report: ${url.trim()}`);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
