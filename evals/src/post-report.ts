@@ -14,6 +14,7 @@
  */
 import { formatMarkdown, statusOf } from "@rnx-kit/agent-evals/report";
 import type { EvalResult } from "@rnx-kit/agent-evals/report";
+import { readJSONFileSync } from "@rnx-kit/tools-filesystem";
 import { ensure, makeCommandSync } from "@rnx-kit/tools-shell";
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
@@ -186,8 +187,7 @@ function main(argv: string[]): void {
     );
 
     const results = fs.existsSync(output)
-      ? (JSON.parse(fs.readFileSync(output, "utf-8")) as EvalOutput).results
-          .results
+      ? readJSONFileSync<EvalOutput>(output).results.results
       : undefined;
     // Read again; the agent may have posted a report during the audit
     const existing = findComment(repository, prNumber);
