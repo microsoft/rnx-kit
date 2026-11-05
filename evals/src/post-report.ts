@@ -14,7 +14,7 @@
  */
 import { formatMarkdown, statusOf } from "@rnx-kit/agent-evals/report";
 import type { EvalResult } from "@rnx-kit/agent-evals/report";
-import { readJSONFileSync } from "@rnx-kit/tools-filesystem";
+import { readJSONFileSync, writeTextFileSync } from "@rnx-kit/tools-filesystem";
 import { ensure, makeCommandSync } from "@rnx-kit/tools-shell";
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
@@ -224,7 +224,7 @@ function main(argv: string[]): void {
     }
 
     const bodyFile = path.join(dir, "comment.md");
-    fs.writeFileSync(bodyFile, body);
+    writeTextFileSync(bodyFile, body);
     const url = existing
       ? gh(
           "api",

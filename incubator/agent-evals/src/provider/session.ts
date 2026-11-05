@@ -1,3 +1,4 @@
+import { readTextFileSync } from "@rnx-kit/tools-filesystem";
 import { makeCommandSync } from "@rnx-kit/tools-shell";
 import * as fs from "node:fs";
 import * as os from "node:os";
@@ -247,7 +248,7 @@ export function readSession(root: string, id?: string): Session {
   }
 
   const session = newSession(sessionId, root);
-  const lines = fs.readFileSync(file, "utf-8").split("\n");
+  const lines = readTextFileSync(file).split("\n");
   applyEvents(
     session,
     lines.map((line) => (line ? parseEvent(line) : undefined))
