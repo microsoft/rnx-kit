@@ -46,6 +46,13 @@ const gh = makeCheckedCommand("gh");
 const git = makeCheckedCommand("git");
 
 /**
+ * Calls the REST API of the current repository, which `gh` fills in.
+ */
+function ghApi(endpoint: string, ...args: string[]): string {
+  return gh("api", `repos/{owner}/{repo}/${endpoint}`, ...args);
+}
+
+/**
  * Returns the commit whose changes were audited, or `undefined` if it is
  * unknown or there were uncommitted changes.
  */
@@ -64,12 +71,11 @@ function auditedCommit(results: Result[]): string | undefined {
   return git("rev-parse", "HEAD").trim();
 }
 
-function findComment(repository: string, number: string): Comment | undefined {
+function findComment(number: number | string): Comment | undefined {
   // `--paginate` with `--jq` prints one JSON object per line
-  const comments = gh(
-    "api",
+  const comments = ghApi(
+    `issues/${number}/comments`,
     "--paginate",
-    `repos/${repository}/issues/${number}/comments`,
     "--jq",
     ".[] | {id, body}"
   );
@@ -87,7 +93,7 @@ function formatComment(
   head: string,
   audited: string | undefined,
   hasLog: boolean,
-  number: string
+  number: number | string
 ): string {
   const lines = [
     `<!-- agent-evals head=${head} log=${hasLog ? "yes" : "no"} -->`,
@@ -145,25 +151,16 @@ function main(argv: string[]): void {
     throw new Error(`Invalid pull request number: ${number}`);
   }
 
-  const repository = gh(
-    "repo",
-    "view",
-    "--json",
-    "nameWithOwner",
-    "--jq",
-    ".nameWithOwner"
-  ).trim();
   const pr = JSON.parse(
     gh("pr", "view", ...(number ? [number] : []), "--json", "number,headRefOid")
   ) as { number: number; headRefOid: string };
-  const prNumber = String(pr.number);
 
   const hasFullReport = (comment: Comment | undefined) => {
     const [, head, log] = comment?.body.match(MARKER) ?? [];
     return head === pr.headRefOid && log === "yes";
   };
-  if (unlessReported && hasFullReport(findComment(repository, prNumber))) {
-    console.log(`#${prNumber} already has a report for ${pr.headRefOid}`);
+  if (unlessReported && hasFullReport(findComment(pr.number))) {
+    console.log(`#${pr.number} already has a report for ${pr.headRefOid}`);
     return;
   }
 
@@ -190,7 +187,7 @@ function main(argv: string[]): void {
       ? readJSONFileSync<EvalOutput>(output).results.results
       : undefined;
     // Read again; the agent may have posted a report during the audit
-    const existing = findComment(repository, prNumber);
+    const existing = findComment(pr.number);
     let hasLog = false;
     let body: string;
     if (results) {
@@ -201,19 +198,19 @@ function main(argv: string[]): void {
         audited === pr.headRefOid &&
         !statuses.includes("skipped") &&
         (statuses.includes("passed") || statuses.includes("failed"));
-      body = formatComment(results, pr.headRefOid, audited, hasLog, prNumber);
+      body = formatComment(results, pr.headRefOid, audited, hasLog, pr.number);
     } else {
       // Keep the last report instead of replacing it with nothing
       console.error("The audit did not produce a report");
       process.exitCode = 1;
       body = existing
         ? markFailed(existing.body, pr.headRefOid)
-        : formatComment(undefined, pr.headRefOid, undefined, false, prNumber);
+        : formatComment(undefined, pr.headRefOid, undefined, false, pr.number);
     }
 
     if (!hasLog && hasFullReport(existing)) {
       console.log(
-        `#${prNumber} already has a report with the session log for ${pr.headRefOid}; keeping it`
+        `#${pr.number} already has a report with the session log for ${pr.headRefOid}; keeping it`
       );
       return;
     }
@@ -225,20 +222,10 @@ function main(argv: string[]): void {
 
     const bodyFile = path.join(dir, "comment.md");
     writeTextFileSync(bodyFile, body);
-    const url = gh(
-      "api",
-      ...(existing
-        ? [
-            "--method",
-            "PATCH",
-            `repos/${repository}/issues/comments/${existing.id}`,
-          ]
-        : [`repos/${repository}/issues/${prNumber}/comments`]),
-      "-F",
-      `body=@${bodyFile}`,
-      "--jq",
-      ".html_url"
-    );
+    const post = ["-F", `body=@${bodyFile}`, "--jq", ".html_url"];
+    const url = existing
+      ? ghApi(`issues/comments/${existing.id}`, "--method", "PATCH", ...post)
+      : ghApi(`issues/${pr.number}/comments`, ...post);
     console.log(`Posted the report: ${url.trim()}`);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
