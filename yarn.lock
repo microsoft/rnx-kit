@@ -5470,6 +5470,7 @@ __metadata:
     "@rnx-kit/eslint-plugin": "workspace:*"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tools-filesystem": "workspace:*"
+    "@rnx-kit/tools-shell": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.0"
     oxc-parser: "catalog:"

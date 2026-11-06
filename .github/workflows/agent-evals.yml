@@ -1,0 +1,78 @@
+name: Agent evals
+on:
+  # Runs the evals from the base branch with access to the pull request
+  # number. Code from the pull request is never run; it is only read.
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+  # TEMP: test the workflow before it lands on the default branch
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+env:
+  NODE_OPTIONS: "--disable-proto=delete"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  audit:
+    name: "Audit agent-assisted changes"
+    permissions:
+      contents: read
+      pull-requests: write # comment on PRs
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Determine whether to audit the pull request
+        id: detect
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # Copilot, Claude and Cursor, as authors of the pull request or its
+          # commits, or as co-authors of its commits
+          pattern='^login (Copilot|claude\[bot\]|cursor\[bot\])$|^email .*(\+Copilot@users\.noreply\.github\.com|noreply@anthropic\.com|cursoragent@cursor\.com)>?$'
+          {
+            echo "login ${PR_AUTHOR}"
+            gh api --paginate "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/commits" --jq '
+              .[]
+              | "login \(.author.login // "")",
+                "email \(.commit.author.email)",
+                (.commit.message | split("\n")[] | sub("\\s+$"; "") | select(test("^co-authored-by:"; "i")) | "email \(.)")'
+          } > "${RUNNER_TEMP}/identities.txt"
+          # Skips the audit if the agent already posted a report with its
+          # session log for this commit. Not `grep -q`; it may exit before `gh`
+          # is done, failing the pipe.
+          if ! grep -qiE "${pattern}" "${RUNNER_TEMP}/identities.txt"; then
+            echo "#${PR_NUMBER} was not assisted by an agent"
+          elif gh api --paginate "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --jq '.[].body | split("\n")[0]' \
+              | grep -xF "<!-- agent-evals head=${HEAD_SHA} log=yes -->" > /dev/null; then
+            echo "#${PR_NUMBER} already has a report with the session log for ${HEAD_SHA}"
+          else
+            echo 'audit=true' >> "${GITHUB_OUTPUT}"
+          fi
+      - name: Checkout
+        if: ${{ steps.detect.outputs.audit == 'true' }}
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          filter: blob:none
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup the toolchain
+        if: ${{ steps.detect.outputs.audit == 'true' }}
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@6046bdd4914c7ceb35ec83b92ae3211a03ddccef # 5.4.14
+        with:
+          node-version: 24
+      - name: Install npm dependencies
+        if: ${{ steps.detect.outputs.audit == 'true' }}
+        run: |
+          yarn
+      - name: Audit the pull request
+        if: ${{ steps.detect.outputs.audit == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        # Only reports; failed rules do not fail the check
+        run: |
+          yarn workspace @rnx-kit/evals eval:report "${PR_NUMBER}"
+    timeout-minutes: 30
