@@ -161,4 +161,64 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
       `import(/* webpackChunkName: "example" */"@rnx-kit/example/__mocks__/lib/index");`
     );
   });
+
+  it("throws if sourceExportCondition is not a string or array of strings", () => {
+    throws(
+      () => transform("", { test: isRNXKit, sourceExportCondition: 0 }),
+      "Expected option `sourceExportCondition` to be a string or an array of strings"
+    );
+  });
+
+  it("leaves source conditions alone unless sourceExportCondition is set", () => {
+    process.chdir("test/__fixtures__/with-exports-source");
+    const code = `import { A } from "@rnx-kit/example";`;
+    equal(transform(code), code);
+  });
+
+  it("remaps packages declaring a `source` condition on the root export", () => {
+    process.chdir("test/__fixtures__/with-exports-source");
+    equal(
+      transform(`import { A } from "@rnx-kit/example";`, {
+        test: isRNXKit,
+        sourceExportCondition: "source",
+      }),
+      `import { A } from "@rnx-kit/example/src/index.ts";`
+    );
+  });
+
+  it("remaps packages declaring a custom source condition", () => {
+    process.chdir("test/__fixtures__/with-exports-scoped");
+    equal(
+      transform(`import { A } from "@rnx-kit/example";`, {
+        test: isRNXKit,
+        sourceExportCondition: "@rnx-kit/source",
+      }),
+      `import { A } from "@rnx-kit/example/src/index.ts";`
+    );
+    equal(
+      transform(`import { A } from "@rnx-kit/example";`, {
+        test: isRNXKit,
+        sourceExportCondition: ["source", "@rnx-kit/source"],
+      }),
+      `import { A } from "@rnx-kit/example/src/index.ts";`
+    );
+  });
+
+  it("leaves packages with `exports` but no source condition", () => {
+    process.chdir("test/__fixtures__/with-exports");
+    const code = `import { A } from "@rnx-kit/example";`;
+    equal(transform(code), code);
+  });
+
+  it("uses custom remap function for packages with `exports`", () => {
+    process.chdir("test/__fixtures__/with-exports");
+    equal(
+      transform(`import { A } from "@rnx-kit/example";`, {
+        test: isRNXKit,
+        remap: (moduleName: string, path: string) =>
+          `${moduleName}/__mocks__/${path}`,
+      }),
+      `import { A } from "@rnx-kit/example/__mocks__/lib/index.js";`
+    );
+  });
 });
