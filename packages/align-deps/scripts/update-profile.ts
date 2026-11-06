@@ -438,6 +438,32 @@ export const profile: Profile = {
 }
 
 /**
+ * Returns the dependencies that `@react-native-community/cli-platform-*` are
+ * declared in. Older templates list them directly; newer templates rely on
+ * `@react-native-community/cli` to pull them in.
+ */
+async function getCliDependencies(
+  devDependencies: Record<string, string>
+): Promise<Record<string, string> | undefined> {
+  const android = "@react-native-community/cli-platform-android";
+  if (Object.hasOwn(devDependencies, android)) {
+    return devDependencies;
+  }
+
+  const cliPackage = "@react-native-community/cli";
+  const cliVersion = devDependencies[cliPackage];
+  if (!cliVersion) {
+    throw new Error(`Failed to get '${cliPackage}' version`);
+  }
+
+  const manifest = await packageJson(cliPackage, {
+    version: cliVersion,
+    fullMetadata: true,
+  });
+  return manifest.dependencies;
+}
+
+/**
  * Returns the current Metro version by resolving react-native's dependencies.
  */
 async function getCurrentMetroVersion(
@@ -537,6 +563,7 @@ async function makeProfile(
     );
   }
 
+  const cliDependencies = await getCliDependencies(devDependencies);
   return generateFromTemplate({
     preset,
     targetVersion,
@@ -547,11 +574,11 @@ async function makeProfile(
     ),
     cliAndroidVersion: getPackageVersion(
       "@react-native-community/cli-platform-android",
-      devDependencies
+      cliDependencies
     ),
     cliIOSVersion: getPackageVersion(
       "@react-native-community/cli-platform-ios",
-      devDependencies
+      cliDependencies
     ),
     metroVersion: await getCurrentMetroVersion(dependencies),
   });
