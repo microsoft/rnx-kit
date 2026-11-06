@@ -8,6 +8,12 @@ import type { Session, SessionEvent } from "./session.ts";
  */
 const DEFAULT_API_URL = "https://api.githubcopilot.com";
 
+/**
+ * About 1 in 6 requests fails transiently; 5 attempts keep the chance of
+ * losing the log of a pull request with ~40 sessions below 1%
+ */
+const MAX_ATTEMPTS = 5;
+
 type ResourceResponse = {
   session_count?: number;
   sessions?: { id: string; last_updated_at: number }[];
@@ -53,7 +59,7 @@ async function getJSON<T>(url: string, token: string): Promise<T> {
       throw new Error(`${url}: ${status} ${body}`);
     }
     return { ok, status, body };
-  }, 3);
+  }, MAX_ATTEMPTS);
   if (ok) {
     return JSON.parse(body) as T;
   }
