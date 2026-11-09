@@ -32,6 +32,7 @@
     "change:check": "changeset status",
     "clean": "git clean -dfqx --exclude=.yarn/cache",
     "clear-cache": "nx clear-cache",
+    "fix-vulnerabilities": "node .github/actions/fix-vulnerabilities/fix-vulnerabilities.mts . docsite",
     "format": "node scripts/src/index.js format",
     "lint": "nx run-many --target lint",
     "new-package": "node scripts/new-package.ts",

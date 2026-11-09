@@ -1,7 +1,10 @@
 version: 2
 updates:
   - package-ecosystem: "github-actions"
-    directory: "/"
+    # `/` only covers workflows; composite actions must be listed explicitly
+    directories:
+      - "/"
+      - "/.github/actions/*"
     groups:
       github-actions:
         patterns: ["*"]

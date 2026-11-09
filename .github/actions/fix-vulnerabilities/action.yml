@@ -1,0 +1,110 @@
+name: Fix vulnerabilities
+description: Attempts to fix security vulnerabilities in Yarn projects by bumping dependencies, then creates or updates a pull request
+inputs:
+  projects:
+    description: Semicolon-separated paths to Yarn projects to fix
+    default: "."
+  node-version:
+    description: Node.js version to use
+    default: "24"
+  branch:
+    description: Branch to push the fixes to
+    default: fix-vulnerabilities/main
+  title:
+    description: Title of the pull request and commit message
+    default: "chore(security): address security vulnerabilities"
+  dry-run:
+    description: Print the pull request title, body and diff instead of creating it
+    default: "false"
+  github-token:
+    description: Token used by Copilot CLI, and for creating the pull request if no GitHub App is provided; requires the `contents`, `pull-requests` and `copilot-requests` permissions
+    default: ${{ github.token }}
+  app-client-id:
+    description: Client ID of the GitHub App used to create the pull request; if not provided, `github-token` is used, but the pull request will not trigger workflows
+    default: ""
+  app-private-key:
+    description: Private key of the GitHub App used to create the pull request
+    default: ""
+outputs:
+  changed:
+    description: Whether any changes were made
+    value: ${{ steps.fix.outputs.changed }}
+  pull-request-url:
+    description: URL of the created or updated pull request
+    value: ${{ steps.pull-request.outputs.pull-request-url }}
+runs:
+  using: composite
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: yarn
+    - name: Fix vulnerabilities
+      id: fix
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        NODE_OPTIONS: "--disable-proto=delete"
+        PROJECTS: ${{ inputs.projects }}
+      run: |
+        output="${RUNNER_TEMP}/fix-vulnerabilities"
+        mkdir -p "${output}"
+        node "${GITHUB_ACTION_PATH}/fix-vulnerabilities.mts" --report "${output}/report.md" "${PROJECTS}"
+        cat "${output}/report.md" >> "${GITHUB_STEP_SUMMARY}"
+        echo "report=${output}/report.md" >> "${GITHUB_OUTPUT}"
+        git add --all
+        if ! git diff --cached --quiet; then
+          echo 'changed=true' >> "${GITHUB_OUTPUT}"
+        fi
+      shell: bash
+    - name: Print pull request
+      if: ${{ inputs.dry-run == 'true' && steps.fix.outputs.changed == 'true' }}
+      env:
+        REPORT: ${{ steps.fix.outputs.report }}
+        TITLE: ${{ inputs.title }}
+      run: |
+        echo "::group::Title"
+        echo "${TITLE}"
+        echo "::endgroup::"
+        echo "::group::Body"
+        cat "${REPORT}"
+        echo "::endgroup::"
+        echo "::group::Diff"
+        git diff --cached
+        echo "::endgroup::"
+        {
+          echo
+          echo "# Dry run"
+          echo
+          echo "**Title:** ${TITLE}"
+          echo
+          echo "<details><summary>Diff</summary>"
+          echo
+          echo '```diff'
+          # The step summary is limited to 1 MiB
+          git diff --cached | head -c 512000
+          echo '```'
+          echo
+          echo "</details>"
+        } >> "${GITHUB_STEP_SUMMARY}"
+      shell: bash
+    - name: Generate token for submitting pull requests
+      id: app-token
+      if: ${{ inputs.dry-run != 'true' && steps.fix.outputs.changed == 'true' && inputs.app-client-id != '' }}
+      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+      with:
+        client-id: ${{ inputs.app-client-id }}
+        private-key: ${{ inputs.app-private-key }}
+        permission-contents: write
+        permission-pull-requests: write
+    - name: Create or update pull request
+      id: pull-request
+      if: ${{ inputs.dry-run != 'true' && steps.fix.outputs.changed == 'true' }}
+      uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      with:
+        token: ${{ steps.app-token.outputs.token || inputs.github-token }}
+        commit-message: ${{ inputs.title }}
+        branch: ${{ inputs.branch }}
+        sign-commits: true
+        title: ${{ inputs.title }}
+        body-path: ${{ steps.fix.outputs.report }}

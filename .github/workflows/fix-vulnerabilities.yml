@@ -1,0 +1,39 @@
+name: Fix vulnerabilities
+on:
+  schedule:
+    # Run at 4:00 every Monday
+    - cron: 0 4 * * 1
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Print the pull request instead of creating it
+        type: boolean
+        default: true
+concurrency:
+  # Prevent concurrent runs from pushing to the same branch
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+jobs:
+  fix:
+    name: "Fix vulnerabilities"
+    if: ${{ github.repository == 'microsoft/rnx-kit' }}
+    permissions:
+      contents: write
+      copilot-requests: write
+      pull-requests: write
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          filter: blob:none
+          persist-credentials: false
+      - name: Fix vulnerabilities
+        uses: ./.github/actions/fix-vulnerabilities
+        with:
+          projects: ".;docsite"
+          # Scheduled runs have no inputs
+          dry-run: ${{ inputs.dry-run == true }}
+          app-client-id: ${{ vars.APP_ID }}
+          app-private-key: ${{ secrets.PRIVATE_KEY }}
+    timeout-minutes: 30
