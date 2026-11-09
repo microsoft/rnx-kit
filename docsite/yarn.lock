@@ -203,8 +203,8 @@ __metadata:
   linkType: hard
 
 "@astrojs/starlight@npm:^0.42.5":
-  version: 0.42.7
-  resolution: "@astrojs/starlight@npm:0.42.7"
+  version: 0.42.8
+  resolution: "@astrojs/starlight@npm:0.42.8"
   dependencies:
     "@astrojs/markdown-satteri": "npm:^0.4.0"
     "@astrojs/mdx": "npm:^8.0.0"
@@ -240,7 +240,7 @@ __metadata:
   peerDependenciesMeta:
     "@astrojs/markdown-remark":
       optional: true
-  checksum: 10c0/ab3f2a6eb73abecf0236b8311af82a7da9c1ed9a6a7e8a1644542f16fb829d988bb495573b65ccfb610141b69ef4d39d50be5028f7f8ea9b1b61bde683138dd1
+  checksum: 10c0/1a3926fd309d254e4b07d2414212ae8d237cf5d6b21a7e759a138e3b858795dc579432e60c0cd748d3ffe53e97ef7d5f5e0cb6eb7dd6bb24ccc63ae719c1e11b
   languageName: node
   linkType: hard
 
