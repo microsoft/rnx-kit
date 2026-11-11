@@ -82,19 +82,35 @@ const SPAWN_MAX_BUFFER = 64 * 1024 * 1024;
 const STDIO_INHERIT: IOType[] = ["ignore", "inherit", "inherit"];
 const STDIO_PIPE: IOType[] = ["pipe", "pipe", "inherit"];
 
+/**
+ * Quotes arguments for `cmd.exe`. Arguments must not contain `"` or `%`.
+ */
+function quote(arg: string): string {
+  return /[\s&()<>^|]/.test(arg) ? `"${arg}"` : arg;
+}
+
 function spawn(
   command: string,
   args: string[],
   input?: string,
   stdio = STDIO_PIPE
 ) {
-  return spawnSync(command, args, {
+  const options = {
     encoding: "utf-8",
     input,
     maxBuffer: SPAWN_MAX_BUFFER,
-    shell: process.platform === "win32",
     stdio,
-  });
+  } as const;
+
+  // On Windows, `npx` and `yarn` are batch files, which can only be run in a
+  // shell. Node concatenates arguments without quoting them when `shell` is
+  // set, so we need to build the command line ourselves.
+  if (process.platform === "win32") {
+    const commandLine = [command, ...args].map(quote).join(" ");
+    return spawnSync(commandLine, { ...options, shell: true });
+  }
+
+  return spawnSync(command, args, options);
 }
 
 function run(command: string, ...args: string[]): string {
@@ -422,6 +438,8 @@ function fixWithAgent(
     [
       "--yes",
       COPILOT_CLI,
+      // Copilot CLI otherwise runs the latest version it has downloaded
+      "--no-auto-update",
       "--silent",
       "--no-ask-user",
       "--disable-builtin-mcps",
@@ -512,7 +530,9 @@ function fixProject(project: string, agent: boolean): string[] {
   fixWithLockfile(state);
 
   if (agent && state.current.length > 0) {
-    const ageGate = Number(run("yarn", "config", "get", "npmMinimalAgeGate"));
+    const ageGate = Number(
+      run("yarn", "config", "get", "npmMinimalAgeGate", "--json")
+    );
     fixWithAgent(state, ageGate, false);
     if (state.current.length > 0 && ageGate > 0) {
       process.env[YARN_NPM_MINIMAL_AGE_GATE] = "0";
