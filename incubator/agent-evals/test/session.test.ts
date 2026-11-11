@@ -72,14 +72,18 @@ describe("applyEvents()", () => {
       type: "tool.execution_start",
       data: { toolCallId: "2", toolName: "view", arguments: { path: "a" } },
     } as const;
+
     applyEvents(session, [bash, bash, view, undefined, view]);
+
     deepEqual(session.shellInputs, ["ls"]);
     deepEqual(session.toolCalls, [{ name: "view", arguments: { path: "a" } }]);
   });
 
   it("keeps the root if the session did not record where it started", () => {
     const session = newSession("id", "/repo");
+
     applyEvents(session, [{ type: "session.start", data: {} }]);
+
     equal(session.root, "/repo");
     equal(session.cwd, "/repo");
   });

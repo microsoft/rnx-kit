@@ -69,6 +69,7 @@ function auditedCommit(results: Result[]): string | undefined {
   if (git("status", "--porcelain", "--untracked-files=no")) {
     return undefined;
   }
+
   return git("rev-parse", "HEAD").trim();
 }
 
@@ -89,6 +90,7 @@ function findComment(
       comments.push(JSON.parse(line));
     }
   }
+
   return findReport(comments, author);
 }
 
@@ -186,6 +188,7 @@ function main(args: string[]): void {
         if (!Error.isError(e) || !e.message.includes("(HTTP 403)")) {
           throw e;
         }
+
         console.log(
           `Cannot edit the report by ${existing.login}; posting a new one`
         );

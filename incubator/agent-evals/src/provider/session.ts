@@ -157,10 +157,12 @@ function ancestors(): Set<number> {
       parents.set(pid, ppid);
     }
   }
+
   for (let pid = process.ppid; pid > 1 && !result.has(pid);) {
     result.add(pid);
     pid = parents.get(pid) ?? 0;
   }
+
   return result;
 }
 
@@ -191,6 +193,7 @@ function findOwnSession(): string | undefined {
       return id;
     }
   }
+
   return undefined;
 }
 
@@ -302,6 +305,7 @@ export function applyEvents(
           if (toolCallIds.has(toolCallId)) {
             break;
           }
+
           toolCallIds.add(toolCallId);
         }
         if (SHELL_TOOLS.includes(toolName)) {

@@ -77,9 +77,11 @@ export function statusOf(result: EvalResult): Status {
   if (result.success) {
     return "passed";
   }
+
   if (result.failureReason === FAILURE_REASON_ERROR) {
     return result.error?.startsWith("Skipped:") ? "skipped" : "unchecked";
   }
+
   return isGraderError(result) ? "unchecked" : "failed";
 }
 
@@ -121,6 +123,7 @@ export function formatReport(results: EvalResult[]): string {
       }
     }
   }
+
   return lines.join("\n");
 }
 
@@ -216,6 +219,7 @@ export function formatMarkdown(results: EvalResult[]): string {
         }
       }
     }
+
     // The reason for skipping is the same for all tests
     const skipReason = status === "skipped" ? group[0].error : undefined;
     if (skipReason) {
@@ -225,6 +229,7 @@ export function formatMarkdown(results: EvalResult[]): string {
       lines.push("", "</details>");
     }
   }
+
   return lines.join("\n").trimStart();
 }
 

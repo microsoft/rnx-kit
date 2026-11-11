@@ -32,13 +32,16 @@ export function findReport(
     if (!MARKER.test(comment.body)) {
       continue;
     }
+
     if (comment.login === author) {
       return comment;
     }
+
     if (comment.login === WORKFLOW) {
       fallback ??= comment;
     }
   }
+
   return fallback;
 }
 

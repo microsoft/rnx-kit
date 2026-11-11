@@ -59,6 +59,7 @@ describe("resolveRepository()", () => {
 describe("CopilotSessionProvider.callApi()", () => {
   it("rejects invalid pull request numbers", async () => {
     const provider = new CopilotSessionProvider();
+
     for (const pullRequest of ["0", "012", "-1", "1e3", "1; rm -rf /"]) {
       await rejects(
         provider.callApi("", { vars: { pullRequest } }),

@@ -107,6 +107,7 @@ describe("readGitHubSessions()", () => {
     };
 
     const session = await read();
+
     equal(session.id, "a,b");
     equal(session.root, "/work");
     equal(session.cwd, "/work/packages/a");
@@ -129,6 +130,7 @@ describe("readGitHubSessions()", () => {
     };
 
     const session = await read();
+
     equal(session.root, "/home/runner/work/rnx-kit/rnx-kit");
     equal(session.cwd, "/home/runner/work/rnx-kit/rnx-kit");
   });
@@ -144,6 +146,7 @@ describe("readGitHubSessions()", () => {
     };
 
     const session = await read();
+
     deepEqual(session.requests, [{ prompt: "Fix", reply: "Done: Fix" }]);
     equal(requests.length, 3);
   });
@@ -155,6 +158,7 @@ describe("readGitHubSessions()", () => {
         body: "the Copilot-Integration-Id header does not match the GitHub App that issued this installation access token",
       },
     };
+
     await rejects(read(), {
       message:
         "the token cannot read Copilot cloud agent sessions; a user token with Copilot access is required",
@@ -180,6 +184,7 @@ describe("readGitHubSessions()", () => {
         sessions: [{ id: "a", last_updated_at: 1 }],
       }),
     };
+
     await rejects(read(), {
       message: "Pull request returned 1 of 2 sessions",
     });
@@ -188,6 +193,7 @@ describe("readGitHubSessions()", () => {
       [`/agents/resource/pull/${PR_ID}`]: sessions(["a", 1]),
       "/agents/sessions/a/events": ok({ events: [], total: 3 }),
     };
+
     await rejects(read(), { message: "Session a returned 0 of 3 events" });
   });
 
@@ -196,6 +202,7 @@ describe("readGitHubSessions()", () => {
       [`/agents/resource/pull/${PR_ID}`]: sessions(["a", 1]),
       "/agents/sessions/a/events": { status: 422, body: "Unprocessable" },
     };
+
     await rejects(read(), {
       message: `${apiUrl}/agents/sessions/a/events: 422 Unprocessable`,
     });

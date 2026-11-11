@@ -58,6 +58,7 @@ async function getJSON<T>(url: string, token: string): Promise<T> {
     if (!ok && isTransient(status, body)) {
       throw new Error(`${url}: ${status} ${body}`);
     }
+
     return { ok, status, body };
   }, MAX_ATTEMPTS);
   if (ok) {
@@ -100,6 +101,7 @@ export async function readGitHubSessions(
   if (sessions.length === 0) {
     throw new Error("no Copilot cloud agent sessions were found");
   }
+
   if (session_count && sessions.length < session_count) {
     throw new Error(
       `Pull request returned ${sessions.length} of ${session_count} sessions`
@@ -143,5 +145,6 @@ export async function readGitHubSessions(
       session.requests.push(part.requests[0]);
     }
   }
+
   return session;
 }

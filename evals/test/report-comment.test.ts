@@ -42,11 +42,13 @@ describe("findReport()", () => {
       comment("a", report, 4),
       comment("a", report, 5),
     ];
+
     equal(findReport(comments, "a")?.id, 4);
   });
 
   it("falls back to the report by the workflow", () => {
     const comments = [comment("x", report, 1), comment(WORKFLOW, report, 2)];
+
     equal(findReport(comments, "a")?.id, 2);
   });
 
@@ -56,7 +58,9 @@ describe("findReport()", () => {
 
   it("accepts the marker only on a line of its own at the start", () => {
     const crlf = report.replaceAll("\n", "\r\n");
+
     equal(findReport([comment("a", crlf)], "a")?.body, crlf);
+
     for (const body of [
       `See \`${report}\``,
       `Hi\n${report}`,
@@ -71,27 +75,32 @@ describe("findReport()", () => {
 describe("formatComment()", () => {
   it("starts with the marker", () => {
     const body = formatComment([passed], HEAD, HEAD, true, 1);
+
     equal(body.match(MARKER)?.slice(1).join(), `${HEAD},yes`);
     match(body, /<sub>Audited abc123\. This check only reports\.<\/sub>$/);
   });
 
   it("explains how to audit skipped rules", () => {
     const body = formatComment([passed, skipped], HEAD, HEAD, false, 42);
+
     equal(body.match(MARKER)?.[2], "no");
     match(body, /`yarn eval:report 42`/);
   });
 
   it("warns if it did not audit the head of the pull request", () => {
     const old = formatComment([passed], HEAD, "def456", false, 1);
+
     match(old, /This audited def456, not the head of the pull request/);
 
     const dirty = formatComment([passed], HEAD, undefined, false, 1);
+
     match(dirty, /This audited uncommitted changes, not the head/);
     match(dirty, /<sub>Audited uncommitted changes\./);
   });
 
   it("says so if the audit did not produce a report", () => {
     const body = formatComment(undefined, HEAD, undefined, false, 1);
+
     match(body, /The audit did not produce a report\./);
     match(body, /`yarn eval:report 1`/);
     match(body, /<sub>Audited abc123\./);
@@ -102,6 +111,7 @@ describe("markFailed()", () => {
   it("adds a note below the heading, keeping the marker", () => {
     const body = formatComment([passed], "old", "old", true, 1);
     const failed = markFailed(body, HEAD);
+
     equal(failed.match(MARKER)?.[1], "old");
     match(
       failed,
@@ -112,6 +122,7 @@ describe("markFailed()", () => {
   it("replaces an earlier note", () => {
     const body = formatComment([passed], "old", "old", true, 1);
     const failed = markFailed(markFailed(body, "def456"), HEAD);
+
     equal(failed.match(/\[!CAUTION\]/g)?.length, 1);
     match(failed, /The audit of abc123 failed/);
     equal(markFailed(failed, HEAD), failed);

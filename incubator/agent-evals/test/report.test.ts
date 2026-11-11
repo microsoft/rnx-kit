@@ -145,6 +145,7 @@ describe("statusOf()", () => {
 
   it("returns `unchecked` for errors other than skips", () => {
     const error = { ...skipped(0), error: "No Copilot session found" };
+
     equal(statusOf(error), "unchecked");
   });
 
@@ -158,6 +159,7 @@ describe("statusOf()", () => {
         ],
       },
     };
+
     equal(statusOf(result), "failed");
   });
 });
