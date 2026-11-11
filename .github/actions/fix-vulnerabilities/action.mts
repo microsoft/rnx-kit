@@ -6,7 +6,7 @@
  * if they fail verification. Accepted changes are staged, so the working tree
  * must be clean before running.
  *
- * Usage: node fix-vulnerabilities.mts [--no-agent] [--report <file>] [<project>...]
+ * Usage: node action.mts [--no-agent] [--report <file>] [<project>...]
  *
  * Projects can also be separated by `;`, e.g. `".;docsite"`.
  */
@@ -392,7 +392,7 @@ added (check with \`yarn npm info <package> --fields time --json\`).`
     `  - Installed vulnerable versions: ${x.versions.join(", ")}`,
   ]);
 
-  const template = path.join(import.meta.dirname, "fix-vulnerabilities.md");
+  const template = path.join(import.meta.dirname, "prompt.template.md");
   return (
     fs
       .readFileSync(template, { encoding: "utf-8" })
@@ -546,8 +546,9 @@ function main(): number {
     return 0;
   }
 
-  if (!succeeds("git", "diff", "--exit-code")) {
-    console.log();
+  // Untracked files must also be absent since rejected changes are cleaned up
+  // with `git clean`
+  if (run("git", "status", "--porcelain").trim()) {
     console.error("Commit or stash your changes before running this script");
     return 1;
   }

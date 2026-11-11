@@ -49,7 +49,7 @@ runs:
       run: |
         output="${RUNNER_TEMP}/fix-vulnerabilities"
         mkdir -p "${output}"
-        node "${GITHUB_ACTION_PATH}/fix-vulnerabilities.mts" --report "${output}/report.md" "${PROJECTS}"
+        node "${GITHUB_ACTION_PATH}/action.mts" --report "${output}/report.md" "${PROJECTS}"
         cat "${output}/report.md" >> "${GITHUB_STEP_SUMMARY}"
         echo "report=${output}/report.md" >> "${GITHUB_OUTPUT}"
         git add --all
