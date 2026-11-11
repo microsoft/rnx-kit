@@ -51,7 +51,34 @@ module.exports = makeBabelConfig([
 
 ### Options
 
-| Option | Type                                           | Description                                                                                                                |
-| :----- | :--------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------- |
-| test   | `(source: string) => boolean`                  | **[Required]** A function returning whether the passed source should be redirected to another module.                      |
-| remap  | `(moduleName: string, path: string) => string` | **[Optional]** A function returning the module that should be used instead, e.g. `contoso/index.js` -> `contoso/index.ts`. |
+| Option                | Type                                           | Description                                                                                                                        |
+| :-------------------- | :--------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| test                  | `(source: string) => boolean`                  | **[Required]** A function returning whether the passed source should be redirected to another module.                              |
+| remap                 | `(moduleName: string, path: string) => string` | **[Optional]** A function returning the module that should be used instead, e.g. `contoso/index.js` -> `contoso/index.ts`.         |
+| sourceExportCondition | `string \| string[]`                           | **[Optional]** Condition name(s) under which a package declares its source entry on the root export (see below). Unset by default. |
+
+### Packages with `exports`
+
+A package that declares entry points via `exports` is never guessed at.
+It is remapped only when it explicitly names its source entry under a
+condition on the root export, and `sourceExportCondition` names that
+condition, e.g. with `sourceExportCondition: "source"`:
+
+```json
+{
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  }
+}
+```
+
+The condition name may also be custom or package-scoped, such as
+`my-library-source`. When `sourceExportCondition` is not set, or the
+package declares no matching condition, packages with `exports` are
+left alone, unless a `remap` function is provided, in which case it
+decides.
