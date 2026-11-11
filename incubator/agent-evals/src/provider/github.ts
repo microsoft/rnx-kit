@@ -345,7 +345,7 @@ const gh = makeCommand("gh", {
   timeout: 30 * 1000,
 });
 
-async function ghJson<T>(args: string[]): Promise<T | undefined> {
+export async function ghJson<T>(args: string[]): Promise<T | undefined> {
   try {
     const { stdout, status } = await gh(...args);
     return status === 0 ? (JSON.parse(stdout) as T) : undefined;

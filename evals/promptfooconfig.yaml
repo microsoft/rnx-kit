@@ -15,16 +15,25 @@ providers:
 defaultTest:
   vars:
     # ID of the session to audit, e.g. `--var copilotSession=<id>`. If empty,
-    # audits the most recently updated session in this repository that is not
-    # in use. Not named `session` because promptfoo redacts fields with that
-    # name.
+    # audits the session running the evals, or if there is none, the most
+    # recently updated session in this repository that is not in use;
+    # `previous` always audits the latter. Not named `session` because
+    # promptfoo redacts fields with that name.
     copilotSession: ""
+    # Number of a pull request to audit instead, e.g. `--var pullRequest=123`.
+    # Reads its Copilot cloud agent sessions from GitHub; if they cannot be
+    # read, audits only its changes and skips rules with `requires: session`.
+    pullRequest: ""
   options:
     # Grades `llm-rubric` assertions with Copilot; requires a GitHub token
     # with Copilot access in `COPILOT_GITHUB_TOKEN`, `GH_TOKEN` or
     # `GITHUB_TOKEN`, or a `gh auth login` session. Pass `--grader` to use
     # another provider instead.
-    provider: file://src/grader.ts
+    provider:
+      id: file://src/grader.ts
+      # Without a model, the Copilot runtime picks its default, which may not
+      # be available to every account
+      config: { model: claude-sonnet-5.5 }
 tests: file://tests/*.yaml
 extensions:
   # Prints each test with the reasons it failed, instead of promptfoo's table.

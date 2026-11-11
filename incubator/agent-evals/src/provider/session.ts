@@ -1,3 +1,5 @@
+import { readTextFileSync } from "@rnx-kit/tools-filesystem";
+import { makeCommandSync } from "@rnx-kit/tools-shell";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -9,13 +11,15 @@ const SHELL_TOOLS = ["bash", "powershell"];
 /** Tools that are not recorded because they have no effect */
 const IGNORED_TOOLS = ["report_intent"];
 
+const ps = makeCommandSync("ps");
+
 /**
  * Subset of the events that the Copilot runtime writes to `events.jsonl`.
  *
  * Note: The file format is not documented; these match `SessionEvent` in
  * `@github/copilot-sdk`.
  */
-type SessionEvent =
+export type SessionEvent =
   | {
       type: "session.start" | "session.resume";
       data: {
@@ -32,6 +36,7 @@ type SessionEvent =
   | {
       type: "tool.execution_start";
       data: {
+        toolCallId?: string;
         toolName: string;
         arguments?: Record<string, unknown>;
         mcpServerName?: string;
@@ -63,6 +68,20 @@ export type Session = {
   toolCalls: SessionToolCall[];
   requests: AgentRequest[];
 };
+
+/**
+ * Returns a session without any events that worked in `root`.
+ */
+export function newSession(id: string, root: string): Session {
+  return {
+    id,
+    root,
+    cwd: root,
+    shellInputs: [],
+    toolCalls: [],
+    requests: [],
+  };
+}
 
 function stateDir(): string {
   const home =
@@ -105,13 +124,46 @@ function isRunning(pid: number): boolean {
 }
 
 /**
- * Returns whether a Copilot process currently has the session open.
+ * Returns the IDs of the running Copilot processes that have the session open.
  */
-function isInUse(dir: string): boolean {
-  return fs.readdirSync(dir).some((name) => {
-    const match = name.match(/^inuse\.(\d+)\.lock$/);
-    return match ? isRunning(Number(match[1])) : false;
-  });
+function openedBy(dir: string): number[] {
+  return fs
+    .readdirSync(dir)
+    .map((name) => name.match(/^inuse\.(\d+)\.lock$/))
+    .filter((match) => match !== null)
+    .map((match) => Number(match[1]))
+    .filter(isRunning);
+}
+
+/**
+ * Returns the IDs of the ancestors of this process. Empty on Windows, where
+ * `ps` is not available.
+ */
+function ancestors(): Set<number> {
+  const result = new Set<number>();
+  if (process.platform === "win32") {
+    return result;
+  }
+
+  const { stdout, status } = ps("-A", "-o", "pid=,ppid=");
+  if (status !== 0) {
+    return result;
+  }
+
+  const parents = new Map<number, number>();
+  for (const line of stdout.split("\n")) {
+    const [pid, ppid] = line.trim().split(/\s+/).map(Number);
+    if (pid) {
+      parents.set(pid, ppid);
+    }
+  }
+
+  for (let pid = process.ppid; pid > 1 && !result.has(pid);) {
+    result.add(pid);
+    pid = parents.get(pid) ?? 0;
+  }
+
+  return result;
 }
 
 function sameDir(a: string | undefined, b: string): boolean {
@@ -127,8 +179,27 @@ function sameDir(a: string | undefined, b: string): boolean {
 }
 
 /**
+ * Returns the ID of the session that is running this process, if any.
+ */
+function findOwnSession(): string | undefined {
+  const base = stateDir();
+  const ownPids = ancestors();
+  for (const id of fs.existsSync(base) ? fs.readdirSync(base) : []) {
+    const dir = path.join(base, id);
+    if (
+      fs.existsSync(path.join(dir, "events.jsonl")) &&
+      openedBy(dir).some((pid) => ownPids.has(pid))
+    ) {
+      return id;
+    }
+  }
+
+  return undefined;
+}
+
+/**
  * Returns the ID of the most recently updated session that worked in `root`
- * and is not in use, e.g. by the session running the audit.
+ * and is not in use.
  */
 function findLatestSession(root: string): string {
   const base = stateDir();
@@ -136,7 +207,7 @@ function findLatestSession(root: string): string {
   for (const id of fs.existsSync(base) ? fs.readdirSync(base) : []) {
     const dir = path.join(base, id);
     const events = path.join(dir, "events.jsonl");
-    if (!fs.existsSync(events) || isInUse(dir)) {
+    if (!fs.existsSync(events) || openedBy(dir).length > 0) {
       continue;
     }
 
@@ -159,14 +230,19 @@ function findLatestSession(root: string): string {
 
 /**
  * Reads a Copilot session from its event log without modifying it. If `id` is
- * omitted, reads the most recently updated session that worked in `root`.
+ * omitted, reads the session that is running this process, or if there is
+ * none, the most recently updated session that worked in `root` and is not in
+ * use. If `id` is `previous`, always reads the latter.
  */
 export function readSession(root: string, id?: string): Session {
   if (id !== undefined && !/^[\w-]+$/.test(id)) {
     throw new Error(`Invalid session ID: ${id}`);
   }
 
-  const sessionId = id || findLatestSession(root);
+  const sessionId =
+    id === "previous"
+      ? findLatestSession(root)
+      : id || findOwnSession() || findLatestSession(root);
   const file = path.join(stateDir(), sessionId, "events.jsonl");
   if (!fs.existsSync(file)) {
     throw new Error(
@@ -174,22 +250,31 @@ export function readSession(root: string, id?: string): Session {
     );
   }
 
-  const session: Session = {
-    id: sessionId,
-    root,
-    cwd: root,
-    shellInputs: [],
-    toolCalls: [],
-    requests: [],
-  };
-  for (const line of fs.readFileSync(file, "utf-8").split("\n")) {
-    const event = line ? parseEvent(line) : undefined;
+  const session = newSession(sessionId, root);
+  const lines = readTextFileSync(file).split("\n");
+  applyEvents(
+    session,
+    lines.map((line) => (line ? parseEvent(line) : undefined))
+  );
+  return session;
+}
+
+/**
+ * Records `events` in `session`. Tool calls with the same `toolCallId` are
+ * recorded once; Copilot cloud agent sessions report each twice.
+ */
+export function applyEvents(
+  session: Session,
+  events: (SessionEvent | undefined)[]
+): void {
+  const toolCallIds = new Set<string>();
+  for (const event of events) {
     switch (event?.type) {
       case "session.start":
       case "session.resume": {
         const { context } = event.data;
         if (event.type === "session.start") {
-          session.root = context?.gitRoot ?? context?.cwd ?? root;
+          session.root = context?.gitRoot ?? context?.cwd ?? session.root;
           session.cwd = context?.cwd ?? session.root;
           session.baseCommit = context?.headCommit;
         }
@@ -210,7 +295,19 @@ export function readSession(root: string, id?: string): Session {
       }
 
       case "tool.execution_start": {
-        const { toolName, arguments: args = {}, mcpServerName } = event.data;
+        const {
+          toolCallId,
+          toolName,
+          arguments: args = {},
+          mcpServerName,
+        } = event.data;
+        if (toolCallId) {
+          if (toolCallIds.has(toolCallId)) {
+            break;
+          }
+
+          toolCallIds.add(toolCallId);
+        }
         if (SHELL_TOOLS.includes(toolName)) {
           if (typeof args["command"] === "string") {
             session.shellInputs.push(args["command"]);
@@ -228,5 +325,4 @@ export function readSession(root: string, id?: string): Session {
       }
     }
   }
-  return session;
 }

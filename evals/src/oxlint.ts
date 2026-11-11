@@ -72,7 +72,8 @@ export function passesOxlint(
       "--no-ignore",
       "--format",
       "json",
-      ...matching,
+      // Paths starting with `-` would otherwise be parsed as options
+      ...matching.map((file) => `./${file}`),
     ],
     { cwd: run.workdir, encoding: "utf-8", timeout: OXLINT_TIMEOUT_MS }
   );
