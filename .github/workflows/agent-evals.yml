@@ -43,11 +43,10 @@ jobs:
           } > "${RUNNER_TEMP}/identities.txt"
           # Skips the audit if the agent already posted a report with its
           # session log for this commit. Only reports by the author of the pull
-          # request, this workflow and collaborators count; anyone else could
-          # post a fake one. Not `grep -q`; it may exit before `gh` is done,
-          # failing the pipe.
+          # request and this workflow count; anyone else could post a fake one.
+          # Not `grep -q`; it may exit before `gh` is done, failing the pipe.
           reports='.[]
-            | select(.user.login == env.PR_AUTHOR or .user.login == "github-actions[bot]" or (.author_association | IN("OWNER", "MEMBER", "COLLABORATOR")))
+            | select(.user.login == env.PR_AUTHOR or .user.login == "github-actions[bot]")
             | .body | split("\n")[0] | rtrimstr("\r")'
           if ! grep -qiE "${pattern}" "${RUNNER_TEMP}/identities.txt"; then
             echo "#${PR_NUMBER} was not assisted by an agent"

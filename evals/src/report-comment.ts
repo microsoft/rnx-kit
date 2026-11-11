@@ -8,30 +8,38 @@ import type { EvalResult } from "@rnx-kit/agent-evals/report";
 export const MARKER =
   /^<!-- agent-evals head=(\w+) log=(yes|no) -->(?:\r?\n|$)/;
 
-/**
- * Besides the author of the pull request and the workflow, only these may post
- * reports; anyone else could suppress the audit with a fake one.
- */
-const TRUSTED_ASSOCIATIONS = ["OWNER", "MEMBER", "COLLABORATOR"];
+/** Login of the agent evals workflow, which posts with `GITHUB_TOKEN` */
+const WORKFLOW = "github-actions[bot]";
 
 export type Comment = {
   id: number;
   body: string;
   login: string;
-  association: string;
 };
 
 /**
- * Returns whether `comment` is a report posted by `author`, the author of the
- * pull request, by the workflow, or by a collaborator.
+ * Returns the report to update: the one by `author`, the author of the pull
+ * request, or else the one by the workflow. There are both if the author could
+ * not edit the workflow's report, e.g. on a pull request from a fork. Reports
+ * by anyone else are ignored; they could suppress the audit with a fake one.
  */
-export function isReport(comment: Comment, author: string): boolean {
-  return (
-    MARKER.test(comment.body) &&
-    (comment.login === author ||
-      comment.login === "github-actions[bot]" ||
-      TRUSTED_ASSOCIATIONS.includes(comment.association))
-  );
+export function findReport(
+  comments: Comment[],
+  author: string
+): Comment | undefined {
+  let fallback: Comment | undefined;
+  for (const comment of comments) {
+    if (!MARKER.test(comment.body)) {
+      continue;
+    }
+    if (comment.login === author) {
+      return comment;
+    }
+    if (comment.login === WORKFLOW) {
+      fallback ??= comment;
+    }
+  }
+  return fallback;
 }
 
 export function formatComment(

@@ -20,8 +20,8 @@ import * as os from "node:os";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  findReport,
   formatComment,
-  isReport,
   markFailed,
   MARKER,
 } from "./report-comment.ts";
@@ -77,19 +77,19 @@ function findComment(
   author: string
 ): Comment | undefined {
   // `--paginate` with `--jq` prints one JSON object per line
-  const comments = ghApi(
+  const output = ghApi(
     `issues/${number}/comments`,
     "--paginate",
     "--jq",
-    ".[] | {id, body, login: .user.login, association: .author_association}"
+    ".[] | {id, body, login: .user.login}"
   );
-  for (const line of comments.split("\n")) {
-    const comment = line ? (JSON.parse(line) as Comment) : undefined;
-    if (comment && isReport(comment, author)) {
-      return comment;
+  const comments: Comment[] = [];
+  for (const line of output.split("\n")) {
+    if (line) {
+      comments.push(JSON.parse(line));
     }
   }
-  return undefined;
+  return findReport(comments, author);
 }
 
 function main(args: string[]): void {
@@ -171,9 +171,27 @@ function main(args: string[]): void {
     const bodyFile = path.join(dir, "comment.md");
     writeTextFileSync(bodyFile, body);
     const post = ["-F", `body=@${bodyFile}`, "--jq", ".html_url"];
-    const url = existing
-      ? ghApi(`issues/comments/${existing.id}`, "--method", "PATCH", ...post)
-      : ghApi(`issues/${pr.number}/comments`, ...post);
+    let url: string | undefined;
+    if (existing) {
+      try {
+        url = ghApi(
+          `issues/comments/${existing.id}`,
+          "--method",
+          "PATCH",
+          ...post
+        );
+      } catch (e) {
+        // Only users with write access may edit comments by others, e.g. the
+        // workflow's report on a pull request from a fork
+        if (!Error.isError(e) || !e.message.includes("(HTTP 403)")) {
+          throw e;
+        }
+        console.log(
+          `Cannot edit the report by ${existing.login}; posting a new one`
+        );
+      }
+    }
+    url ??= ghApi(`issues/${pr.number}/comments`, ...post);
     console.log(`Posted the report: ${url.trim()}`);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });

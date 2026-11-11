@@ -2,8 +2,8 @@ import type { EvalResult } from "@rnx-kit/agent-evals/report";
 import { equal, match } from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  findReport,
   formatComment,
-  isReport,
   markFailed,
   MARKER,
 } from "../src/report-comment.ts";
@@ -25,37 +25,45 @@ const skipped: EvalResult = {
   testCase: { description: "Needs the log" },
 };
 
-function comment(login: string, association: string, body: string): Comment {
-  return { id: 1, login, association, body };
+const WORKFLOW = "github-actions[bot]";
+
+const report = `<!-- agent-evals head=${HEAD} log=yes -->\n### Agent evals`;
+
+function comment(login: string, body: string, id = 1): Comment {
+  return { id, login, body };
 }
 
-describe("isReport()", () => {
-  const report = `<!-- agent-evals head=${HEAD} log=yes -->\n### Agent evals`;
-
-  it("accepts reports by the author, the workflow and collaborators", () => {
-    equal(isReport(comment("Copilot", "NONE", report), "Copilot"), true);
-    equal(isReport(comment("github-actions[bot]", "NONE", report), "a"), true);
-    for (const association of ["OWNER", "MEMBER", "COLLABORATOR"]) {
-      equal(isReport(comment("x", association, report), "a"), true);
-    }
+describe("findReport()", () => {
+  it("prefers the report by the author", () => {
+    const comments = [
+      comment(WORKFLOW, report, 1),
+      comment("x", report, 2),
+      comment("a", "Hi", 3),
+      comment("a", report, 4),
+      comment("a", report, 5),
+    ];
+    equal(findReport(comments, "a")?.id, 4);
   });
 
-  it("rejects reports by anyone else", () => {
-    for (const association of ["CONTRIBUTOR", "FIRST_TIMER", "NONE"]) {
-      equal(isReport(comment("x", association, report), "a"), false);
-    }
+  it("falls back to the report by the workflow", () => {
+    const comments = [comment("x", report, 1), comment(WORKFLOW, report, 2)];
+    equal(findReport(comments, "a")?.id, 2);
+  });
+
+  it("ignores reports by anyone else", () => {
+    equal(findReport([comment("x", report)], "a"), undefined);
   });
 
   it("accepts the marker only on a line of its own at the start", () => {
     const crlf = report.replaceAll("\n", "\r\n");
-    equal(isReport(comment("a", "NONE", crlf), "a"), true);
+    equal(findReport([comment("a", crlf)], "a")?.body, crlf);
     for (const body of [
       `See \`${report}\``,
       `Hi\n${report}`,
       report.replace("-->", "--> x"),
       report.replace("log=yes", "log=maybe"),
     ]) {
-      equal(isReport(comment("a", "NONE", body), "a"), false);
+      equal(findReport([comment("a", body)], "a"), undefined);
     }
   });
 });
