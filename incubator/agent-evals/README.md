@@ -1,6 +1,7 @@
 # @rnx-kit/agent-evals
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/agent-evals)](https://www.npmjs.com/package/@rnx-kit/agent-evals)
 
 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
@@ -13,10 +14,28 @@ conventions with [promptfoo](https://promptfoo.dev). It provides a promptfoo
 provider that replays a Copilot session, a Copilot grader for `llm-rubric`
 assertions, and checks that assertions can reference.
 
-This package is not published yet. See [`evals`](../../evals) for how it is
-used in this repository.
+See [`evals`](https://github.com/microsoft/rnx-kit/tree/main/evals) for how it
+is used in this repository.
 
-## Setup
+## Installation
+
+```sh
+yarn add @rnx-kit/agent-evals --dev
+```
+
+or if you're using npm
+
+```sh
+npm add --save-dev @rnx-kit/agent-evals
+```
+
+The [grader](#grader) also requires `@github/copilot-sdk`:
+
+```sh
+yarn add @github/copilot-sdk --dev
+```
+
+## Usage
 
 promptfoo loads providers and assertions from files, so re-export them from
 your eval project, e.g. in `src/provider.ts`, `src/grader.ts` and `src/index.ts`:
@@ -55,6 +74,20 @@ defaultTest:
 tests: file://tests/*.yaml
 extensions:
   - file://src/index.ts:afterAll
+```
+
+Finally, run the evals with promptfoo:
+
+```sh
+npx promptfoo eval
+```
+
+To audit a specific session or pull request, set the corresponding
+[var](#provider):
+
+```sh
+npx promptfoo eval --var copilotSession=<session id>
+npx promptfoo eval --var pullRequest=<number>
 ```
 
 ## Provider
