@@ -64,12 +64,12 @@ const YARN_NPM_MINIMAL_AGE_GATE = "YARN_NPM_MINIMAL_AGE_GATE";
 const COPILOT_CLI = "@github/copilot@1.0.105";
 
 // Commands that Copilot is allowed to run; avoid `yarn:*` as it would allow
-// arbitrary commands via e.g. `yarn exec` or `yarn dlx`
+// arbitrary commands via e.g. `yarn exec` or `yarn dlx`. Copilot only matches
+// the first-level subcommand, so allowing e.g. `yarn npm audit` requires
+// `yarn npm`, which would also allow `yarn npm publish`.
 const COPILOT_SHELL_COMMANDS = [
   "yarn dedupe",
   "yarn install",
-  "yarn npm audit",
-  "yarn npm info",
   "yarn up",
   "yarn why",
 ];
@@ -396,10 +396,8 @@ function makePrompt(
   const days = Math.floor(ageGateMinutes / 60 / 24);
   const ageGate = disabled
     ? `The minimum package age requirement (\`npmMinimalAgeGate\`) of
-${days} days has been disabled for this session. Only use package versions
-published less than ${days} days ago if there is no other way to fix an
-advisory. At the end of your response, list all such package versions that you
-added (check with \`yarn npm info <package> --fields time --json\`).`
+${days} days has been disabled for this session. At the end of your response,
+list all package versions that you added.`
     : "Do not try to bypass the minimum package age requirement (`npmMinimalAgeGate`).";
 
   const advisories = state.current.flatMap((x) => [
@@ -408,12 +406,15 @@ added (check with \`yarn npm info <package> --fields time --json\`).`
     `  - Installed vulnerable versions: ${x.versions.join(", ")}`,
   ]);
 
+  const commands = COPILOT_SHELL_COMMANDS.map((cmd) => `\`${cmd}\``);
+
   const template = path.join(import.meta.dirname, "prompt.template.md");
   return (
     fs
       .readFileSync(template, { encoding: "utf-8" })
       // Use functions so that `$` patterns (e.g. `$&`) in advisories are not
       // interpreted as special replacement patterns
+      .replaceAll("{{commands}}", () => commands.join(", "))
       .replaceAll("{{age-gate}}", () => ageGate)
       .replaceAll("{{advisories}}", () => advisories.join("\n"))
   );

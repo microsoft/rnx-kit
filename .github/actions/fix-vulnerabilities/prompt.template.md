@@ -15,12 +15,15 @@ For each advisory, try the following, in order, until it is fixed:
    `yarn install --mode update-lockfile`. Dependencies that use the `catalog:`
    protocol cannot be bumped this way.
 
-After each change, verify with
-`yarn npm audit --all --recursive --no-deprecations`, and revert changes that
-do not help or that introduce new advisories.
+After each change, use `yarn why <package>` to verify that the vulnerable
+versions are no longer installed, and revert changes that do not help.
 
 Rules:
 
+- You can only run the following commands, with any arguments:
+  {{commands}}. Run each command on its own. Commands that use pipes,
+  redirects, command chaining (e.g. `&&` or `;`) or any other commands will be
+  denied.
 - Stay within the current release line: never change the major version, or the
   minor version if the major version is 0.
 - Only change ranges of existing entries in `dependencies`, `devDependencies` or
