@@ -1,7 +1,6 @@
 {
   "name": "@rnx-kit/agent-evals",
   "version": "0.0.1",
-  "private": true,
   "description": "EXPERIMENTAL - USE WITH CAUTION - Audit coding agent sessions against repository conventions with promptfoo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/agent-evals#readme",
   "license": "MIT",
@@ -51,8 +50,8 @@
   },
   "dependencies": {
     "@changesets/parse": "^1.0.0",
-    "@rnx-kit/tools-filesystem": "workspace:*",
-    "@rnx-kit/tools-shell": "workspace:*",
+    "@rnx-kit/tools-filesystem": "workspace:^",
+    "@rnx-kit/tools-shell": "workspace:^",
     "parse-diff": "catalog:",
     "shell-quote": "^1.8.4"
   },
