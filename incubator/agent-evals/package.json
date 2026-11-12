@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/agent-evals",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - Audit coding agent sessions against repository conventions with promptfoo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/agent-evals#readme",
   "license": "MIT",
