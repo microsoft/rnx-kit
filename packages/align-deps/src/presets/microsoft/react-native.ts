@@ -27,6 +27,7 @@ import { profile as profile_0_85 } from "./react-native/profile-0.85.ts";
 import { profile as profile_0_86 } from "./react-native/profile-0.86.ts";
 import { profile as profile_0_87 } from "./react-native/profile-0.87.ts";
 import { profile as profile_0_88 } from "./react-native/profile-0.88.ts";
+import { profile as profile_0_89 } from "./react-native/profile-0.89.ts";
 
 // Also export this by name for scripts to work around a bug where this module
 // is wrapped twice, i.e. `{ default: { default: preset } }`, when imported as
@@ -60,4 +61,5 @@ export const preset: Readonly<Preset> = {
   "0.86": profile_0_86,
   "0.87": profile_0_87,
   "0.88": profile_0_88,
+  "0.89": profile_0_89,
 };
