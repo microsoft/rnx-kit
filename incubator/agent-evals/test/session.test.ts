@@ -79,6 +79,28 @@ describe("applyEvents()", () => {
     deepEqual(session.toolCalls, [{ name: "view", arguments: { path: "a" } }]);
   });
 
+  it("records when the session started and last recorded an event", () => {
+    const session = newSession("id", "/repo");
+
+    applyEvents(session, [
+      {
+        type: "session.start",
+        data: {},
+        timestamp: "2026-11-13T10:00:00.000Z",
+      },
+      { type: "user.message", data: { content: "Hi" } },
+      {
+        type: "assistant.message",
+        data: { content: "Hello" },
+        timestamp: "2026-11-13T10:05:00.000Z",
+      },
+      { type: "user.message", data: { content: "Bye" } },
+    ]);
+
+    equal(session.startTime, Date.parse("2026-11-13T10:00:00.000Z"));
+    equal(session.endTime, Date.parse("2026-11-13T10:05:00.000Z"));
+  });
+
   it("keeps the root if the session did not record where it started", () => {
     const session = newSession("id", "/repo");
 

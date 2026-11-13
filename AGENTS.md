@@ -145,6 +145,25 @@ action creates a release PR or publishes to npm.
 Don't add change files for private packages (`"private": true`), e.g.
 `@rnx-kit/template` and test apps.
 
+### Pull Request Descriptions
+
+Follow `.github/pull_request_template.md`. Write the description for reviewers
+and users: give an overview of the change and explain the reasoning behind it,
+such as the motivation, alternatives considered and why they were rejected,
+breaking changes, and user-facing impact. Skip implementation details that can
+be inferred from the diff, such as file-by-file summaries or how the code was
+changed.
+
+### Reviewing Pull Requests
+
+Verify each finding before reporting it. Reproduce it with a test, a command or
+the relevant source (including dependencies in `node_modules`), and cite the
+evidence. Don't report a finding based only on how the code might behave, for
+example assuming what a token can access, what shape a dependency's output has,
+or that a third-party service or API is still available. If a finding can't be
+verified, say so and explain what would confirm it, or leave it out. Order
+findings by impact, and separate confirmed bugs from suggestions.
+
 ## Key Packages
 
 - **`@rnx-kit/cli`** - Main CLI (`rnx-cli`) integrating all tools
