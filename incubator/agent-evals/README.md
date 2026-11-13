@@ -100,7 +100,9 @@ it changed, and its requests and replies. What it audits depends on the vars:
   (default: `~/.copilot`). If empty, the session running the evals, or if there
   is none, the most recently updated session in the repository that is not in
   use; `previous` always picks the latter. The changes are those on the
-  session's branch since it started.
+  session's branch since it started. The session's branch is the one it last
+  switched to, according to the reflog of `HEAD`, or else the one it started
+  on, under the name it was last renamed to.
 - `pullRequest`: number of a pull request. Its Copilot cloud agent sessions are
   read from GitHub, and the changes are those since it branched off its base
   branch. If the sessions cannot be read, e.g. if the pull request was made in

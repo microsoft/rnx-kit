@@ -35,8 +35,9 @@ requests that Copilot, Claude or Cursor created or co-authored. It runs
 `yarn eval:report <number>` with `GITHUB_TOKEN`, which cannot read the session
 logs, so it can only audit the changes. If the comment already has a report with
 the session log for the latest commit, the workflow skips the audit. Only
-reports by the author of the pull request and the workflow count. The workflow
-only reports; failed rules do not fail the check.
+reports by the workflow and by the account running `yarn eval:report` (in the
+workflow, the author of the pull request) count. The workflow only reports;
+failed rules do not fail the check.
 
 ## Adding rules
 

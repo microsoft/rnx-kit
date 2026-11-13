@@ -94,6 +94,70 @@ async function resolveBranch(
   return "";
 }
 
+/**
+ * Returns the branch the session ended on, given the branch it started on,
+ * when it ran (`startTime` to `endTime`, in milliseconds since the epoch), and
+ * the output of `git reflog show --date=unix --format=%gd%x09%gs`, which lists
+ * the newest entry first. That is the branch the session last switched to, if
+ * any, under the name it was last renamed to, even after the session.
+ */
+export function endBranch(
+  reflog: string,
+  startBranch: string | undefined,
+  startTime: number,
+  endTime: number
+): string | undefined {
+  const start = Math.floor(startTime / 1000);
+  const end = Math.ceil(endTime / 1000);
+  let branch = startBranch;
+  for (const line of reflog.split("\n").reverse()) {
+    // Refs cannot contain spaces; matching `\S+` keeps this linear
+    const match = line.match(
+      /^[^@]*@\{(\d+)\}\t(?:checkout: moving from \S+ to (\S+)|Branch: renamed refs\/heads\/(\S+) to refs\/heads\/(\S+))$/
+    );
+    const time = Number(match?.[1]);
+    if (!match || time < start) {
+      continue;
+    }
+
+    if (match[2] !== undefined) {
+      if (time <= end) {
+        branch = match[2];
+      }
+    } else if (match[3] === branch) {
+      branch = match[4];
+    }
+  }
+  return branch;
+}
+
+/**
+ * Returns the branch the session ended on, according to the reflog of `HEAD`
+ * in `root`, or else the branch it started on. Branch switches by others while
+ * the session ran are attributed to the session.
+ */
+async function sessionBranch(
+  root: string,
+  { branch, startTime, endTime }: Session
+): Promise<string | undefined> {
+  if (startTime === undefined || endTime === undefined) {
+    return branch;
+  }
+
+  try {
+    const reflog = await git(root, [
+      "reflog",
+      "show",
+      "--date=unix",
+      "--format=%gd%x09%gs",
+      "HEAD",
+    ]);
+    return endBranch(reflog, branch, startTime, endTime);
+  } catch (_) {
+    return branch;
+  }
+}
+
 async function collectRun(
   repository: string,
   session: Pick<
@@ -224,7 +288,9 @@ async function replay(
     throw new Error(`Session ${session.id} did not record its start commit`);
   }
 
-  const { branch } = session;
+  // The session may have started on another branch, e.g. `main`, and
+  // switched to the branch of its pull request later
+  const branch = await sessionBranch(root, session);
   if (!branch) {
     throw new Error(`Session ${session.id} did not record its branch`);
   }
@@ -243,7 +309,6 @@ async function replay(
   // (local, or else on the remote) in a temporary worktree.
   const remote = config.remote ?? "origin";
   const repository = await resolveRepository(root, config);
-  let workdir = root;
   let endCommit = "WORKING_TREE";
   const current = (await git(root, ["branch", "--show-current"])).trim();
   if (current !== branch) {
@@ -253,9 +318,19 @@ async function replay(
         `Branch '${branch}' of session ${session.id} was not found locally or on '${remote}'`
       );
     }
-    workdir = await addWorktree(root, endCommit);
   }
 
+  const workingTree = endCommit === "WORKING_TREE";
+  try {
+    const head = workingTree ? "HEAD" : endCommit;
+    await git(root, ["merge-base", "--is-ancestor", baseCommit, head]);
+  } catch (_) {
+    throw new Error(
+      `Branch '${branch}' does not contain start commit ${baseCommit} of session ${session.id}`
+    );
+  }
+
+  const workdir = workingTree ? root : await addWorktree(root, endCommit);
   return {
     output: await collectRun(repository, session, workdir, baseCommit),
     metadata: { copilotSession: session.id, branch, baseCommit, endCommit },

@@ -45,8 +45,25 @@ export function findReport(
   return fallback;
 }
 
+type AuditResult = EvalResult & { response?: { output?: unknown } };
+
+/**
+ * Returns whether the audit found no changed files. The provider's output is
+ * an `AgentRun`, which promptfoo may have serialized.
+ */
+export function auditedNoChanges(results: AuditResult[]): boolean {
+  const result = results.find((result) => result.response?.output);
+  if (!result) {
+    return false;
+  }
+
+  const output = result.response?.output;
+  const run = typeof output === "string" ? JSON.parse(output) : output;
+  return Array.isArray(run?.files) && run.files.length === 0;
+}
+
 export function formatComment(
-  results: EvalResult[] | undefined,
+  results: AuditResult[] | undefined,
   head: string,
   audited: string | undefined,
   hasLog: boolean,
@@ -70,6 +87,13 @@ export function formatComment(
       "",
       `- Copilot cloud agent: \`yarn eval:report ${number}\``,
       "- Copilot CLI: `yarn eval:report` on the branch, on the machine that ran the session"
+    );
+  }
+  if (results && auditedNoChanges(results)) {
+    lines.push(
+      "",
+      "> [!WARNING]",
+      "> This audited no changes, so the rules had nothing to check. If the session made changes, check out its branch and run `yarn eval:report` again."
     );
   }
   const subject = audited ?? "uncommitted changes";
