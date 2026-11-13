@@ -145,6 +145,15 @@ action creates a release PR or publishes to npm.
 Don't add change files for private packages (`"private": true`), e.g.
 `@rnx-kit/template` and test apps.
 
+### Pull Request Descriptions
+
+Follow `.github/pull_request_template.md`. Write the description for reviewers
+and users: give an overview of the change and explain the reasoning behind it,
+such as the motivation, alternatives considered and why they were rejected,
+breaking changes, and user-facing impact. Skip implementation details that can
+be inferred from the diff, such as file-by-file summaries or how the code was
+changed.
+
 ## Key Packages
 
 - **`@rnx-kit/cli`** - Main CLI (`rnx-cli`) integrating all tools
