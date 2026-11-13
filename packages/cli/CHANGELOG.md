@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 2.0.8
+
+### Patch Changes
+
+- b5af3f1: Bumped `commander` to 12.x
+
 ## 2.0.7
 
 ### Patch Changes
