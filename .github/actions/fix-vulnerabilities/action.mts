@@ -2,9 +2,9 @@
  * Attempts to fix security vulnerabilities in Yarn projects by bumping
  * dependencies. Vulnerable packages are first re-resolved in the lockfile;
  * remaining advisories are handed to Copilot CLI, first with the age gate
- * (`npmMinimalAgeGate`) enabled, then disabled. Copilot's changes are reverted
- * if they fail verification. Accepted changes are staged, so the working tree
- * must be clean before running.
+ * (`npmMinimalAgeGate`) enabled, then disabled in the same session. Copilot's
+ * changes are reverted if they fail verification. Accepted changes are staged,
+ * so the working tree must be clean before running.
  *
  * Usage: node action.mts [--no-agent] [--report <file>] [<project>...]
  *
@@ -388,6 +388,27 @@ function fixWithLockfile(state: State): void {
   }
 }
 
+function render(name: string, values: Record<string, string>): string {
+  const template = path.join(import.meta.dirname, name);
+  let content = fs.readFileSync(template, { encoding: "utf-8" });
+  for (const [key, value] of Object.entries(values)) {
+    // Use functions so that `$` patterns (e.g. `$&`) in advisories are not
+    // interpreted as special replacement patterns
+    content = content.replaceAll(`{{${key}}}`, () => value);
+  }
+  return content;
+}
+
+function formatAdvisories({ current }: State): string {
+  return current
+    .flatMap((x) => [
+      `- ${x.name} (${x.id}, ${x.severity}): ${x.title}`,
+      `  - Vulnerable versions: ${x.range}`,
+      `  - Installed vulnerable versions: ${x.versions.join(", ")}`,
+    ])
+    .join("\n");
+}
+
 function makePrompt(
   state: State,
   ageGateMinutes: number,
@@ -400,40 +421,48 @@ ${days} days has been disabled for this session. At the end of your response,
 list all package versions that you added.`
     : "Do not try to bypass the minimum package age requirement (`npmMinimalAgeGate`).";
 
-  const advisories = state.current.flatMap((x) => [
-    `- ${x.name} (${x.id}, ${x.severity}): ${x.title}`,
-    `  - Vulnerable versions: ${x.range}`,
-    `  - Installed vulnerable versions: ${x.versions.join(", ")}`,
-  ]);
-
   const commands = COPILOT_SHELL_COMMANDS.map((cmd) => `\`${cmd}\``);
 
-  const template = path.join(import.meta.dirname, "prompt.template.md");
-  return (
-    fs
-      .readFileSync(template, { encoding: "utf-8" })
-      // Use functions so that `$` patterns (e.g. `$&`) in advisories are not
-      // interpreted as special replacement patterns
-      .replaceAll("{{commands}}", () => commands.join(", "))
-      .replaceAll("{{age-gate}}", () => ageGate)
-      .replaceAll("{{advisories}}", () => advisories.join("\n"))
-  );
+  return render("prompt.template.md", {
+    commands: commands.join(", "),
+    "age-gate": ageGate,
+    advisories: formatAdvisories(state),
+  });
 }
 
-function fixWithAgent(
+/**
+ * Returns the prompt for resuming the session with the age gate disabled.
+ */
+function makeResumePrompt(
   state: State,
   ageGateMinutes: number,
-  disabled: boolean
-): void {
-  const withAgeGate = disabled ? " (age gate disabled)" : "";
+  feedback: string
+): string {
+  return render("resume.template.md", {
+    days: String(Math.floor(ageGateMinutes / 60 / 24)),
+    feedback,
+    advisories: formatAdvisories(state),
+  });
+}
 
+/**
+ * Asks Copilot to fix the remaining advisories, and verifies its changes.
+ * Returns feedback on the outcome for resuming the session, or `undefined` if
+ * Copilot failed.
+ */
+function fixWithAgent(
+  state: State,
+  prompt: string,
+  label: string,
+  sessionArgs: string[]
+): string | undefined {
   const { output } = state;
-  output.push(`### Copilot${withAgeGate}`, "");
+  output.push(`### Copilot${label}`, "");
 
   const root = gitRoot();
   const manifests = getManifests(root);
 
-  console.log(`Asking Copilot to fix remaining advisories${withAgeGate}`);
+  console.log(`Asking Copilot to fix remaining advisories${label}`);
   const copilot = spawn(
     "npx",
     [
@@ -444,23 +473,25 @@ function fixWithAgent(
       "--silent",
       "--no-ask-user",
       "--disable-builtin-mcps",
+      ...sessionArgs,
       "--add-dir",
       root,
       ...COPILOT_SHELL_COMMANDS.map((cmd) => `--allow-tool=shell(${cmd})`),
       "--allow-tool=write(package.json)",
       "--allow-tool=write(.changeset/*.md)",
     ],
-    makePrompt(state, ageGateMinutes, disabled)
+    prompt
   );
+  const succeeded = copilot.status === 0;
   output.push(
-    copilot.status === 0
+    succeeded
       ? copilot.stdout.trimEnd()
       : `Copilot failed with exit code ${copilot.status}.`,
     ""
   );
 
   if (!hasChanges()) {
-    return;
+    return succeeded ? "You did not make any changes." : undefined;
   }
 
   console.log("Verifying Copilot's changes");
@@ -477,24 +508,31 @@ function fixWithAgent(
   if (isImprovement(state, next)) {
     state.current = next as Advisory[];
     run("git", "add", "--all", ":/");
-    return;
+    return succeeded ? "Your changes were verified and kept." : undefined;
   }
 
   console.log("Reverting Copilot's changes");
   run("git", "restore", ":/");
   run("git", "clean", "-fdq", ":/");
+  const reasons =
+    violations.length > 0
+      ? violations.map((violation) => `- ${violation}`)
+      : [
+          "- the lockfile could not be updated, the number of vulnerable packages was not reduced, or new advisories were introduced",
+        ];
   output.push(
     "Copilot's changes were reverted because they failed verification:",
+    "",
+    ...reasons,
     ""
   );
-  if (violations.length > 0) {
-    output.push(...violations.map((violation) => `- ${violation}`));
-  } else {
-    output.push(
-      "- the lockfile could not be updated, the number of vulnerable packages was not reduced, or new advisories were introduced"
-    );
-  }
-  output.push("");
+  return succeeded
+    ? [
+        "Your changes were reverted because they failed verification:",
+        "",
+        ...reasons,
+      ].join("\n")
+    : undefined;
 }
 
 function summarize({ initial, current, commands }: State): string[] {
@@ -534,11 +572,29 @@ function fixProject(project: string, agent: boolean): string[] {
     const ageGate = Number(
       run("yarn", "config", "get", "npmMinimalAgeGate", "--json")
     );
-    fixWithAgent(state, ageGate, false);
+    const sessionId = crypto.randomUUID();
+    const feedback = fixWithAgent(
+      state,
+      makePrompt(state, ageGate, false),
+      "",
+      [`--session-id=${sessionId}`]
+    );
     if (state.current.length > 0 && ageGate > 0) {
       process.env[YARN_NPM_MINIMAL_AGE_GATE] = "0";
       try {
-        fixWithAgent(state, ageGate, true);
+        // Resuming the session saves Copilot from having to rediscover the
+        // dependency tree; start over if the session failed
+        const label = " (age gate disabled)";
+        if (feedback === undefined) {
+          fixWithAgent(state, makePrompt(state, ageGate, true), label, []);
+        } else {
+          fixWithAgent(
+            state,
+            makeResumePrompt(state, ageGate, feedback),
+            label,
+            [`--resume=${sessionId}`]
+          );
+        }
       } finally {
         delete process.env[YARN_NPM_MINIMAL_AGE_GATE];
       }
