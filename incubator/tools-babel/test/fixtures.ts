@@ -8,8 +8,10 @@ import {
 } from "@rnx-kit/test-fixtures";
 import fs from "node:fs";
 import path from "node:path";
+import { parseSync as oxcParseSync } from "oxc-parser";
+import { toBabelAST } from "../src/estree.ts";
 import { makeTransformerArgs } from "../src/options.ts";
-import { oxcParseToAst } from "../src/parse.ts";
+import { isFlowError } from "../src/parse.ts";
 import type {
   BabelTransformerArgs,
   BabelTransformerOptions,
@@ -116,6 +118,34 @@ export function createFixtureWrapper(name: FixtureSetName) {
   };
 }
 
+/**
+ * Like `oxcParseToAst()`, but returns the AST even if `oxc-parser` reports
+ * recoverable errors. Some fixtures contain invalid syntax that Babel accepts.
+ */
+function oxcParseIgnoringErrors({
+  src,
+  filename,
+  context,
+  config,
+}: TransformerArgs): Node | null {
+  if (context.disableOxcParser ?? context.mayContainFlow) {
+    return null;
+  }
+
+  const isTypeScript =
+    context.srcSyntax === "ts" || context.srcSyntax === "tsx";
+  const { program, comments, errors } = oxcParseSync(filename, src, {
+    sourceType: config.sourceType ?? "unambiguous",
+    lang: context.srcSyntax,
+    astType: isTypeScript ? "ts" : "js",
+  });
+  if (isFlowError(errors)) {
+    return null;
+  }
+
+  return toBabelAST(program, src, isTypeScript, comments);
+}
+
 export class FileData {
   babelArgs: BabelTransformerArgs;
   error?: Error;
@@ -147,7 +177,7 @@ export class FileData {
 
   get oxcAst(): Node | null {
     if (this._oxcAst === undefined) {
-      this._oxcAst = this.args ? oxcParseToAst(this.args) : null;
+      this._oxcAst = this.args ? oxcParseIgnoringErrors(this.args) : null;
     }
     return this._oxcAst;
   }

@@ -59,7 +59,7 @@
     "@rnx-kit/types-bundle-config": "workspace:^",
     "@rnx-kit/types-kit-config": "workspace:^",
     "@rnx-kit/types-node": "workspace:^",
-    "commander": "^11.1.0",
+    "commander": "^12.1.0",
     "ora": "^5.4.1",
     "qrcode": "catalog:"
   },

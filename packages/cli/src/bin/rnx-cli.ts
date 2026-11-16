@@ -1,7 +1,7 @@
 import type { Config } from "@react-native-community/cli-types";
 import { Command } from "commander";
 import * as path from "node:path";
-import { loadContextForCommand } from "./context.ts";
+import { loadContextForCommand, uniquify } from "./context.ts";
 import { findExternalCommands } from "./externalCommands.ts";
 
 type CommandOption = Required<Config["commands"][number]>["options"][number];
@@ -19,7 +19,10 @@ export async function main() {
   const [, , userCommand] = process.argv;
 
   const context = await loadContextForCommand(userCommand);
-  const allCommands = context.commands.concat(findExternalCommands(context));
+  // Commander throws if a command name is registered more than once
+  const allCommands = uniquify(
+    context.commands.concat(findExternalCommands(context))
+  );
   const program = new Command(path.basename(__filename, ".js"));
 
   for (const info of allCommands) {
