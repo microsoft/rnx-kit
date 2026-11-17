@@ -1,11 +1,7 @@
 export { changedPackages, ranChecksForChanges } from "./audit.ts";
 export type { ChangedPackage } from "./audit.ts";
 export { changesets } from "./changesets.ts";
-export {
-  didNotRunCommand,
-  notModifiedOnGitHub,
-  ranCommand,
-} from "./commands.ts";
+export { didNotRunCommand, notModified, ranCommand } from "./commands.ts";
 export {
   addedLines,
   existingFiles,
@@ -28,8 +24,9 @@ export type {
   CommandMatcher,
   ContentMatcher,
   EvalVars,
-  GitHubItem,
-  GitHubMatcher,
   GradingResult,
+  HostItem,
+  HostMatcher,
+  HostName,
 } from "./types.ts";
 export { owningPackageDir, workspacePackages } from "./workspace.ts";

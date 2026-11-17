@@ -11,10 +11,13 @@ import type {
   AgentRun,
   AssertionContext,
   CommandMatcher,
-  GitHubMatcher,
   GradingResult,
+  HostMatcher,
 } from "./types.ts";
 import { lazyWorkspacePackages } from "./workspace.ts";
+
+/** Item references, e.g. `#123`, or `!123` for pull requests on Azure DevOps */
+const ITEM_REF = /^[#!][1-9]\d*$/;
 
 type ResolvedCommand = { command: string; cwd: string };
 
@@ -105,46 +108,47 @@ export function didNotRunCommand(
 /**
  * Passes if the agent did not modify the configured issues or pull requests:
  * those with a title matching `title`, and, if `ownOnly` is set, those not
- * authored by `github.actor`. Fails if modified items could not be looked
- * up, or, with `ownOnly`, if `github.actor` is unknown.
+ * authored by `host.actor`. Fails if modified items could not be looked
+ * up, or, with `ownOnly`, if `host.actor` is unknown.
  */
-export function notModifiedOnGitHub(
+export function notModified(
   output: AgentRun | string,
-  context: AssertionContext<GitHubMatcher>
+  context: AssertionContext<HostMatcher>
 ): GradingResult {
   const run = toAgentRun(output);
   const { title, ownOnly } = requireConfig(context);
   if (
-    !run.github ||
-    !Array.isArray(run.github.modified) ||
-    !run.github.modified.every(Number.isInteger)
+    !run.host ||
+    !Array.isArray(run.host.modified) ||
+    !run.host.modified.every(
+      (ref) => typeof ref === "string" && ITEM_REF.test(ref)
+    )
   ) {
-    throw new Error("Invalid agent run; check: github.modified");
+    throw new Error("Invalid agent run; check: host.modified");
   }
 
-  const { modified, unknownWrites, actor, items } = run.github;
+  const { modified, unknownWrites, actor, items } = run.host;
   if (
     !Array.isArray(unknownWrites) ||
     !unknownWrites.every((write) => typeof write === "string")
   ) {
-    throw new Error("Invalid agent run; check: github.unknownWrites");
+    throw new Error("Invalid agent run; check: host.unknownWrites");
   }
 
   const failures = unknownWrites.map(
-    (write) =>
-      `Wrote to an issue or pull request that could not be determined: ${write}`
+    (write) => `Wrote to an item that could not be determined: ${write}`
   );
-  const found = new Map((items ?? []).map((item) => [item.number, item]));
+  const found = new Map((items ?? []).map((item) => [item.ref, item]));
   const titlePattern = title ? new RegExp(title) : undefined;
-  for (const number of modified) {
-    const item = found.get(number);
+  for (const ref of modified) {
+    const item = found.get(ref);
     if (!item) {
-      failures.push(`Modified #${number}, which could not be looked up`);
+      failures.push(`Modified ${ref}, which could not be looked up`);
     } else if (titlePattern?.test(item.title)) {
-      failures.push(`Modified #${number} (${item.title})`);
+      failures.push(`Modified ${ref} (${item.title})`);
     } else if (ownOnly && (!actor || item.author !== actor)) {
       failures.push(
-        `Modified #${number} by ${item.author}, not by ${actor ?? "(unknown user)"}`
+        `Modified ${ref} by ${item.author}, not by ${actor ?? "(unknown user)"}`
       );
     }
   }

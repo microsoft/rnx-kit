@@ -1,16 +1,15 @@
 import type { AgentRun, EvalVars } from "../types.ts";
 import { addWorktree, collectChanges, git } from "./checkout.ts";
-import { readGitHubSessions } from "./github-sessions.ts";
-import { ghJson, lookUp, gitHubWrites } from "./github.ts";
-import { getToken } from "./grader.ts";
+import { github } from "./github.ts";
+import type { Host } from "./host.ts";
 import { newSession, readSession } from "./session.ts";
 import type { Session } from "./session.ts";
 import { parseCommands } from "./shell.ts";
 
 type ProviderConfig = {
   /**
-   * GitHub repository the session worked on, as `owner/repo`; defaults to
-   * the repository that `remote` points to
+   * Repository the session worked on, e.g. `owner/repo` on GitHub; defaults
+   * to the repository that `remote` points to
    */
   repository?: string;
   /** Remote to look up branches and the repository on; defaults to `origin` */
@@ -44,16 +43,9 @@ type Replay = { output: AgentRun; metadata: Metadata };
 /** Sessions already replayed, keyed by the `copilotSession` or `pullRequest` var */
 const runs = new Map<string, Promise<Replay>>();
 
-/**
- * Returns the `owner/repo` part of a GitHub remote URL, e.g.
- * `https://github.com/owner/repo.git` or `git@github.com:owner/repo.git`.
- */
-export function parseRepository(url: string): string | undefined {
-  return url.trim().match(/[/:]([^/:]+\/[^/]+?)(?:\.git)?\/?$/)?.[1];
-}
-
 export async function resolveRepository(
   root: string,
+  host: Host,
   { repository, remote = "origin" }: ProviderConfig
 ): Promise<string> {
   if (repository) {
@@ -62,7 +54,7 @@ export async function resolveRepository(
 
   try {
     const url = await git(root, ["remote", "get-url", remote]);
-    const parsed = parseRepository(url);
+    const parsed = host.parseRepository(url);
     if (parsed) {
       return parsed;
     }
@@ -70,7 +62,7 @@ export async function resolveRepository(
     // Fall through to the error below
   }
   throw new Error(
-    `Could not determine the GitHub repository from remote '${remote}'; set 'repository' in the provider config`
+    `Could not determine the repository from remote '${remote}'; set 'repository' in the provider config`
   );
 }
 
@@ -159,6 +151,7 @@ async function sessionBranch(
 }
 
 async function collectRun(
+  host: Host,
   repository: string,
   session: Pick<
     Session,
@@ -177,15 +170,16 @@ async function collectRun(
     name,
     arguments: args,
   }));
-  const { modified, unknownWrites } = gitHubWrites(
+  const { modified, unknownWrites } = host.findWrites(
     repository,
     session.toolCalls,
     commands
   );
-  const github = {
+  const hostWrites = {
+    name: host.name,
     modified,
     unknownWrites,
-    ...(await lookUp(repository, modified)),
+    ...(await host.lookUp(repository, modified)),
   };
   const { files, diff } = await collectChanges(workdir, baseCommit);
   const requests = session.requests;
@@ -197,17 +191,19 @@ async function collectRun(
     finalMessage: requests[requests.length - 1]?.reply ?? "",
     requests,
     workdir,
-    github,
+    host: hostWrites,
   };
 }
 
 /**
  * Replays the Copilot cloud agent sessions of a pull request, and compares
  * its head with where it branched off its base branch. If the sessions cannot
- * be read, e.g. if the pull request was co-authored in a local session or the
- * token has no access, only the changes are returned.
+ * be read, e.g. if the pull request was co-authored in a local session, the
+ * token has no access, or the host has no cloud agent sessions, only the
+ * changes are returned.
  */
 async function replayPullRequest(
+  host: Host,
   number: number,
   config: ProviderConfig
 ): Promise<Replay> {
@@ -215,33 +211,15 @@ async function replayPullRequest(
     await git(process.cwd(), ["rev-parse", "--show-toplevel"])
   ).trim();
   const remote = config.remote ?? "origin";
-  const repository = await resolveRepository(root, config);
-  const pr = await ghJson<{
-    baseRefName: string;
-    headRefName: string;
-    fullDatabaseId: string;
-  }>([
-    "pr",
-    "view",
-    String(number),
-    "--repo",
-    repository,
-    "--json",
-    "baseRefName,headRefName,fullDatabaseId",
-  ]);
+  const repository = await resolveRepository(root, host, config);
+  const pr = await host.getPullRequest(repository, number);
   if (!pr) {
     throw new Error(`Pull request #${number} was not found in ${repository}`);
   }
 
-  await git(root, ["fetch", "--no-tags", "--", remote, pr.baseRefName]);
+  await git(root, ["fetch", "--no-tags", "--", remote, pr.base]);
   const baseTip = (await git(root, ["rev-parse", "FETCH_HEAD"])).trim();
-  await git(root, [
-    "fetch",
-    "--no-tags",
-    "--",
-    remote,
-    `refs/pull/${number}/head`,
-  ]);
+  await git(root, ["fetch", "--no-tags", "--", remote, pr.head]);
   const endCommit = (await git(root, ["rev-parse", "FETCH_HEAD"])).trim();
   const baseCommit = (
     await git(root, ["merge-base", baseTip, endCommit])
@@ -250,12 +228,10 @@ async function replayPullRequest(
   let session: Session;
   let missingLog: string | undefined;
   try {
-    session = await readGitHubSessions(
-      repository,
-      pr.fullDatabaseId,
-      getToken(),
-      config.copilotApiUrl
-    );
+    if (!host.readSessions) {
+      throw new Error(`${host.name} has no cloud agent sessions`);
+    }
+    session = await host.readSessions(repository, pr, config);
   } catch (e) {
     missingLog = Error.isError(e) ? e.message : String(e);
     session = newSession("", root);
@@ -263,10 +239,10 @@ async function replayPullRequest(
 
   const workdir = await addWorktree(root, endCommit);
   return {
-    output: await collectRun(repository, session, workdir, baseCommit),
+    output: await collectRun(host, repository, session, workdir, baseCommit),
     metadata: {
       copilotSession: session.id,
-      branch: pr.headRefName,
+      branch: pr.branch,
       baseCommit,
       endCommit,
       pullRequest: number,
@@ -276,6 +252,7 @@ async function replayPullRequest(
 }
 
 async function replay(
+  host: Host,
   id: string | undefined,
   config: ProviderConfig
 ): Promise<Replay> {
@@ -308,7 +285,7 @@ async function replay(
   // uncommitted changes, if the branch is checked out, otherwise its tip
   // (local, or else on the remote) in a temporary worktree.
   const remote = config.remote ?? "origin";
-  const repository = await resolveRepository(root, config);
+  const repository = await resolveRepository(root, host, config);
   let endCommit = "WORKING_TREE";
   const current = (await git(root, ["branch", "--show-current"])).trim();
   if (current !== branch) {
@@ -332,7 +309,7 @@ async function replay(
 
   const workdir = workingTree ? root : await addWorktree(root, endCommit);
   return {
-    output: await collectRun(repository, session, workdir, baseCommit),
+    output: await collectRun(host, repository, session, workdir, baseCommit),
     metadata: { copilotSession: session.id, branch, baseCommit, endCommit },
   };
 }
@@ -371,8 +348,8 @@ export default class CopilotSessionProvider {
     let pending = runs.get(key);
     if (!pending) {
       pending = number
-        ? replayPullRequest(number, this.config)
-        : replay(copilotSession || undefined, this.config);
+        ? replayPullRequest(github, number, this.config)
+        : replay(github, copilotSession || undefined, this.config);
       runs.set(key, pending);
     }
 

@@ -1,9 +1,9 @@
 import { equal, rejects } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
+import { github, parseRepository } from "../src/provider/github.ts";
 import CopilotSessionProvider, {
   endBranch,
-  parseRepository,
   resolveRepository,
 } from "../src/provider/provider.ts";
 
@@ -41,7 +41,7 @@ describe("resolveRepository()", () => {
 
   it("returns the configured repository", async () => {
     equal(
-      await resolveRepository(root, {
+      await resolveRepository(root, github, {
         repository: "owner/repo",
         remote: "does-not-exist",
       }),
@@ -50,10 +50,13 @@ describe("resolveRepository()", () => {
   });
 
   it("throws if the remote does not exist", async () => {
-    await rejects(resolveRepository(root, { remote: "does-not-exist" }), {
-      message:
-        "Could not determine the GitHub repository from remote 'does-not-exist'; set 'repository' in the provider config",
-    });
+    await rejects(
+      resolveRepository(root, github, { remote: "does-not-exist" }),
+      {
+        message:
+          "Could not determine the repository from remote 'does-not-exist'; set 'repository' in the provider config",
+      }
+    );
   });
 });
 

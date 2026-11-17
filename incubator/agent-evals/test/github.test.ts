@@ -3,8 +3,8 @@ import { spawnSync } from "node:child_process";
 import * as path from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
-import { notModifiedOnGitHub } from "../src/commands.ts";
-import { gitHubWrites } from "../src/provider/github.ts";
+import { notModified } from "../src/commands.ts";
+import { github, gitHubWrites } from "../src/provider/github.ts";
 import type { SessionToolCall } from "../src/provider/session.ts";
 import { parseShellInput } from "../src/provider/shell.ts";
 import { makeRun } from "./helpers.ts";
@@ -284,12 +284,16 @@ describe("gitHubWrites()", () => {
   });
 
   it("catches writes to a foreign pull request checked out on the session's branch", () => {
-    const github = {
-      ...writes("gh pr checkout 5\ngh pr comment -b 'Fixed'"),
+    const commands = parseShellInput(
+      "gh pr checkout 5\ngh pr comment -b 'Fixed'"
+    ).map((argv) => ({ argv, cwd: "." }));
+    const host = {
+      name: github.name,
+      ...github.findWrites("microsoft/rnx-kit", [], commands),
       actor: "tido64",
-      items: [{ number: 5, title: "Fix bug", author: "contributor" }],
+      items: [{ ref: "#5", title: "Fix bug", author: "contributor" }],
     };
-    const result = notModifiedOnGitHub(makeRun({ github }), {
+    const result = notModified(makeRun({ host }), {
       config: { ownOnly: true },
     });
     equal(result.pass, false);
@@ -301,12 +305,12 @@ describe("lookUp()", { skip: process.platform === "win32" }, () => {
   it("takes the actor from the authenticated user", () => {
     // `gh` is replaced by a fixture; it is resolved when the module is loaded
     const bin = fileURLToPath(new URL("__fixtures__/gh", import.meta.url));
-    const github = fileURLToPath(
+    const module = fileURLToPath(
       new URL("../src/provider/github.ts", import.meta.url)
     );
     const script = [
-      `import { lookUp } from ${JSON.stringify(github)};`,
-      `console.log(JSON.stringify(await lookUp("microsoft/rnx-kit", [1, 2, 3])));`,
+      `import { lookUp } from ${JSON.stringify(module)};`,
+      `console.log(JSON.stringify(await lookUp("microsoft/rnx-kit", ["#1", "#2", "#3"])));`,
     ].join("\n");
     const { stdout, stderr, status } = spawnSync(
       process.execPath,
@@ -323,8 +327,8 @@ describe("lookUp()", { skip: process.platform === "win32" }, () => {
     deepEqual(JSON.parse(stdout), {
       actor: "tido64",
       items: [
-        { number: 1, title: "Fix bug", author: "contributor" },
-        { number: 2, title: "Spam", author: "ghost" },
+        { ref: "#1", title: "Fix bug", author: "contributor" },
+        { ref: "#2", title: "Spam", author: "ghost" },
       ],
     });
   });

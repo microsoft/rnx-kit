@@ -114,7 +114,7 @@ The provider accepts the following `config`:
 | Option          | Description                                                                        |
 | :-------------- | :--------------------------------------------------------------------------------- |
 | `remote`        | Remote to look up branches and the repository on; defaults to `origin`             |
-| `repository`    | GitHub repository, as `owner/repo`; defaults to the repository of `remote`         |
+| `repository`    | Repository, e.g. `owner/repo` on GitHub; defaults to the repository of `remote`    |
 | `copilotApiUrl` | Copilot API to read cloud agent sessions from; defaults to `api.githubcopilot.com` |
 
 Reading cloud agent sessions requires a user token with Copilot access, e.g.
@@ -157,14 +157,14 @@ Checks are `javascript` assertions, configured with `config`:
       config: { pattern: '^(npx )?tsc\b' }
 ```
 
-| Check                 | Passes if                                                                                                            |
-| :-------------------- | :------------------------------------------------------------------------------------------------------------------- |
-| `changesets`          | The agent added `count` change files (at least `count` with `atLeast`), releasing `packages` and none of `forbidden` |
-| `didNotRunCommand`    | No command matches `pattern` (and `cwd`)                                                                             |
-| `matchesContent`      | No changed file matching `files` contains any of `forbidden`; set `addedLinesOnly` to only check added lines         |
-| `notModifiedOnGitHub` | No issue or pull request with a title matching `title` was modified, nor, with `ownOnly`, any by others              |
-| `ranChecksForChanges` | Each changed package ran each of `scripts` (default: `format`, `lint` and `test`) that it defines                    |
-| `ranCommand`          | A command matches `pattern` (and `cwd`)                                                                              |
+| Check                 | Passes if                                                                                                                          |
+| :-------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| `changesets`          | The agent added `count` change files (at least `count` with `atLeast`), releasing `packages` and none of `forbidden`               |
+| `didNotRunCommand`    | No command matches `pattern` (and `cwd`)                                                                                           |
+| `matchesContent`      | No changed file matching `files` contains any of `forbidden`; set `addedLinesOnly` to only check added lines                       |
+| `notModified`         | No item, e.g. an issue or pull request, with a title matching `title` was modified on the host, nor, with `ownOnly`, any by others |
+| `ranChecksForChanges` | Each changed package ran each of `scripts` (default: `format`, `lint` and `test`) that it defines                                  |
+| `ranCommand`          | A command matches `pattern` (and `cwd`)                                                                                            |
 
 To write your own, see the helpers and types exported from
 [`src/index.ts`](src/index.ts).
