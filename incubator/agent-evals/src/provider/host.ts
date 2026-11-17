@@ -43,8 +43,9 @@ export type Host = {
     commands: AgentCommand[]
   ): { modified: string[]; unknownWrites: string[] };
   /**
-   * Looks up the user the session acted as, and the specified items. Values
-   * that cannot be looked up are omitted.
+   * Looks up the user the session acted as, and the specified items. `refs`
+   * must be references as returned by `findWrites`. Values that cannot be
+   * looked up are omitted.
    */
   lookUp(
     repository: string,
