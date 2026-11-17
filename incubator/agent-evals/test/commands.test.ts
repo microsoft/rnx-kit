@@ -319,6 +319,8 @@ describe("notModified()", () => {
       {},
       { name: "github", modified: "#1" },
       { name: "github", modified: [1] },
+      { name: "github", modified: [1.5] },
+      { name: "github", modified: ["1"] },
     ]) {
       throws(
         // @ts-expect-error testing invalid input

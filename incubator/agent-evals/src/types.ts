@@ -91,7 +91,8 @@ export type AgentRun = {
     name: HostName;
     /**
      * References to the items that the agent edited, labelled, commented on,
-     * reviewed, closed or merged, e.g. `#123` on GitHub. GitHub numbers issues
+     * reviewed, closed or merged, e.g. `#123` on GitHub, or `!123` for pull
+     * requests on Azure DevOps. GitHub numbers issues
      * and pull requests from the same sequence, so references are unambiguous.
      */
     modified: string[];

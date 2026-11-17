@@ -16,6 +16,9 @@ import type {
 } from "./types.ts";
 import { lazyWorkspacePackages } from "./workspace.ts";
 
+/** Item references, e.g. `#123`, or `!123` for pull requests on Azure DevOps */
+const ITEM_REF = /^[#!][1-9]\d*$/;
+
 type ResolvedCommand = { command: string; cwd: string };
 
 /**
@@ -117,7 +120,9 @@ export function notModified(
   if (
     !run.host ||
     !Array.isArray(run.host.modified) ||
-    !run.host.modified.every((ref) => typeof ref === "string")
+    !run.host.modified.every(
+      (ref) => typeof ref === "string" && ITEM_REF.test(ref)
+    )
   ) {
     throw new Error("Invalid agent run; check: host.modified");
   }
