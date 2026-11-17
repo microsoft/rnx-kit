@@ -348,7 +348,7 @@ const gh = makeCommand("gh", {
   timeout: 30 * 1000,
 });
 
-async function ghJson<T>(args: string[]): Promise<T | undefined> {
+async function ghJSON<T>(args: string[]): Promise<T | undefined> {
   try {
     const { stdout, status } = await gh(...args);
     return status === 0 ? (JSON.parse(stdout) as T) : undefined;
@@ -369,7 +369,7 @@ async function getPullRequest(
   repository: string,
   number: number
 ): Promise<PullRequest | undefined> {
-  const pr = await ghJson<{
+  const pr = await ghJSON<{
     baseRefName: string;
     headRefName: string;
     fullDatabaseId: string;
@@ -403,10 +403,10 @@ export async function lookUp(
   repository: string,
   refs: string[]
 ): Promise<{ actor?: string; items: HostItem[] }> {
-  const user = await ghJson<{ login: string }>(["api", "user"]);
+  const user = await ghJSON<{ login: string }>(["api", "user"]);
   const items = await Promise.all(
     refs.map(async (ref) => {
-      const issue = await ghJson<{
+      const issue = await ghJSON<{
         title: string;
         user: { login: string } | null;
       }>(["api", `repos/${repository}/issues/${ref.substring(1)}`]);
