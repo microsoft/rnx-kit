@@ -1,5 +1,11 @@
 # @rnx-kit/metro-transformer-oxc
 
+## 0.1.2
+
+### Patch Changes
+
+- ac0f442: Bump `hermes-parser` to 0.35 and `oxc-parser` to 0.155
+
 ## 0.1.1
 
 ### Patch Changes
