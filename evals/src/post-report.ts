@@ -20,6 +20,7 @@ import * as os from "node:os";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  auditedNoChanges,
   findReport,
   formatComment,
   markFailed,
@@ -28,7 +29,7 @@ import {
 import type { Comment } from "./report-comment.ts";
 
 type Result = EvalResult & {
-  response?: { metadata?: { endCommit?: string } };
+  response?: { output?: unknown; metadata?: { endCommit?: string } };
 };
 
 /** Subset of the file that `promptfoo eval --output <file>.json` writes */
@@ -73,6 +74,21 @@ function auditedCommit(results: Result[]): string | undefined {
   return git("rev-parse", "HEAD").trim();
 }
 
+/**
+ * Returns the login that comments will be posted as, which may differ from the
+ * author of the pull request, e.g. when an agent opened it on behalf of a user.
+ */
+function commenter(number: number): string {
+  try {
+    return gh("api", "user", "--jq", ".login").trim();
+  } catch (_) {
+    // GitHub App installation tokens cannot read `/user`; the agent posts as
+    // the author of its pull request. Unlike `gh pr view`, this matches the
+    // logins of comments, e.g. `Copilot`
+    return ghApi(`pulls/${number}`, "--jq", ".user.login").trim();
+  }
+}
+
 function findComment(
   number: number | string,
   author: string
@@ -103,8 +119,7 @@ function main(args: string[]): void {
   const pr = JSON.parse(
     gh("pr", "view", ...(number ? [number] : []), "--json", "number,headRefOid")
   ) as { number: number; headRefOid: string };
-  // Unlike `gh pr view`, matches the logins of comments, e.g. `Copilot`
-  const author = ghApi(`pulls/${pr.number}`, "--jq", ".user.login").trim();
+  const author = commenter(pr.number);
 
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-"));
   try {
@@ -143,8 +158,11 @@ function main(args: string[]): void {
       const audited = auditedCommit(results);
       // Without the session, every rule is skipped or unchecked
       const statuses = results.map(statusOf);
+      // Without changes, the workflow should replace the report with an audit
+      // of the diff
       hasLog =
         audited === pr.headRefOid &&
+        !auditedNoChanges(results) &&
         !statuses.includes("skipped") &&
         (statuses.includes("passed") || statuses.includes("failed"));
       body = formatComment(results, pr.headRefOid, audited, hasLog, pr.number);

@@ -2,6 +2,7 @@ import type { EvalResult } from "@rnx-kit/agent-evals/report";
 import { equal, match } from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  auditedNoChanges,
   findReport,
   formatComment,
   markFailed,
@@ -72,6 +73,20 @@ describe("findReport()", () => {
   });
 });
 
+describe("auditedNoChanges()", () => {
+  it("returns whether the provider's output has no changed files", () => {
+    const withOutput = (output: unknown) => [
+      { ...passed, response: { output } },
+    ];
+
+    equal(auditedNoChanges(withOutput({ files: [] })), true);
+    equal(auditedNoChanges(withOutput(JSON.stringify({ files: [] }))), true);
+    equal(auditedNoChanges(withOutput({ files: [{ path: "a" }] })), false);
+    // Without output, e.g. if the provider failed, nothing is known
+    equal(auditedNoChanges([passed]), false);
+  });
+});
+
 describe("formatComment()", () => {
   it("starts with the marker", () => {
     const body = formatComment([passed], HEAD, HEAD, true, 1);
@@ -96,6 +111,20 @@ describe("formatComment()", () => {
 
     match(dirty, /This audited uncommitted changes, not the head/);
     match(dirty, /<sub>Audited uncommitted changes\./);
+  });
+
+  it("warns if the audit found no changes", () => {
+    const output = (files: string[]) => ({
+      ...passed,
+      response: { output: { files } },
+    });
+    const empty = formatComment([output([])], HEAD, HEAD, false, 1);
+
+    match(empty, /This audited no changes/);
+
+    const changed = formatComment([output(["a.ts"])], HEAD, HEAD, true, 1);
+
+    equal(changed.includes("This audited no changes"), false);
   });
 
   it("says so if the audit did not produce a report", () => {

@@ -19,7 +19,7 @@ const ps = makeCommandSync("ps");
  * Note: The file format is not documented; these match `SessionEvent` in
  * `@github/copilot-sdk`.
  */
-export type SessionEvent =
+export type SessionEvent = { timestamp?: string } & (
   | {
       type: "session.start" | "session.resume";
       data: {
@@ -43,7 +43,8 @@ export type SessionEvent =
         mcpToolName?: string;
       };
     }
-  | { type: "other"; data: unknown };
+  | { type: "other"; data: unknown }
+);
 
 export type SessionToolCall = AgentToolCall & {
   /** Name of the MCP server providing the tool, if any */
@@ -62,6 +63,10 @@ export type Session = {
   branch?: string;
   /** Commit checked out when the session started */
   baseCommit?: string;
+  /** When the session started, in milliseconds since the epoch */
+  startTime?: number;
+  /** When the session last recorded an event, in milliseconds since the epoch */
+  endTime?: number;
   /** Inputs to shell tools, in order */
   shellInputs: string[];
   /** Calls to other tools, in order */
@@ -269,6 +274,11 @@ export function applyEvents(
 ): void {
   const toolCallIds = new Set<string>();
   for (const event of events) {
+    const time = event?.timestamp ? Date.parse(event.timestamp) : NaN;
+    if (!Number.isNaN(time)) {
+      session.endTime = time;
+    }
+
     switch (event?.type) {
       case "session.start":
       case "session.resume": {
@@ -277,6 +287,7 @@ export function applyEvents(
           session.root = context?.gitRoot ?? context?.cwd ?? session.root;
           session.cwd = context?.cwd ?? session.root;
           session.baseCommit = context?.headCommit;
+          session.startTime = Number.isNaN(time) ? undefined : time;
         }
         session.branch = context?.branch ?? session.branch;
         break;

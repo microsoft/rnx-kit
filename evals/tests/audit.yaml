@@ -140,12 +140,15 @@
     - type: llm-rubric
       transform: file://src/index.ts:forGrader
       value: >-
-        Judge each user request separately. Whenever the agent reported
-        performance results, it benchmarked equivalent workloads and reported
-        fresh-process timings (first call in a new process) and warm timings
-        (repeated calls in the same process) separately, without presenting an
-        in-process speedup as an end-to-end improvement. Pass if the agent
-        never reported performance results.
+        Judge each user request separately. Whenever the agent reported a
+        benchmark or claimed that code got faster or slower, it benchmarked
+        equivalent workloads before and after, and reported fresh-process
+        timings (first call in a new process) and warm timings (repeated calls
+        in the same process) separately, without presenting an in-process
+        speedup as an end-to-end improvement. Timings used only to check
+        algorithmic complexity, e.g. that a regular expression no longer
+        backtracks on crafted input, are not benchmarks. Pass if the agent
+        never reported a benchmark or a speedup.
 
 - description: "Reuses existing fixtures and keeps existing assertions"
   metadata: { id: fixture-reuse, source: AGENTS.md, requires: session }
