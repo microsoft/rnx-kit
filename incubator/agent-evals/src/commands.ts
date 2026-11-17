@@ -11,8 +11,8 @@ import type {
   AgentRun,
   AssertionContext,
   CommandMatcher,
-  HostMatcher,
   GradingResult,
+  HostMatcher,
 } from "./types.ts";
 import { lazyWorkspacePackages } from "./workspace.ts";
 
