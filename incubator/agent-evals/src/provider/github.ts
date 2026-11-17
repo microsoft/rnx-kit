@@ -1,6 +1,9 @@
 import { makeCommand } from "@rnx-kit/tools-shell";
 import { withoutExecutablePath } from "../common.ts";
-import type { AgentCommand, GitHubItem } from "../types.ts";
+import type { AgentCommand, HostItem } from "../types.ts";
+import { readGitHubSessions } from "./github-sessions.ts";
+import { getToken } from "./grader.ts";
+import type { Host, PullRequest } from "./host.ts";
 import type { SessionToolCall } from "./session.ts";
 
 const MCP_SERVER = "github-mcp-server";
@@ -345,7 +348,7 @@ const gh = makeCommand("gh", {
   timeout: 30 * 1000,
 });
 
-export async function ghJson<T>(args: string[]): Promise<T | undefined> {
+async function ghJson<T>(args: string[]): Promise<T | undefined> {
   try {
     const { stdout, status } = await gh(...args);
     return status === 0 ? (JSON.parse(stdout) as T) : undefined;
@@ -355,23 +358,60 @@ export async function ghJson<T>(args: string[]): Promise<T | undefined> {
 }
 
 /**
+ * Returns the `owner/repo` part of a GitHub remote URL, e.g.
+ * `https://github.com/owner/repo.git` or `git@github.com:owner/repo.git`.
+ */
+export function parseRepository(url: string): string | undefined {
+  return url.trim().match(/[/:]([^/:]+\/[^/]+?)(?:\.git)?\/?$/)?.[1];
+}
+
+async function getPullRequest(
+  repository: string,
+  number: number
+): Promise<PullRequest | undefined> {
+  const pr = await ghJson<{
+    baseRefName: string;
+    headRefName: string;
+    fullDatabaseId: string;
+  }>([
+    "pr",
+    "view",
+    String(number),
+    "--repo",
+    repository,
+    "--json",
+    "baseRefName,headRefName,fullDatabaseId",
+  ]);
+  if (!pr) {
+    return undefined;
+  }
+
+  return {
+    id: pr.fullDatabaseId,
+    base: pr.baseRefName,
+    head: `refs/pull/${number}/head`,
+    branch: pr.headRefName,
+  };
+}
+
+/**
  * Looks up the authenticated `gh` user, i.e. the user the session acted as,
- * and the specified issues and pull requests in `repository`. Only reads from
- * GitHub. Values that cannot be looked up are omitted.
+ * and the specified issues and pull requests (`#123`) in `repository`. Only
+ * reads from GitHub. Values that cannot be looked up are omitted.
  */
 export async function lookUp(
   repository: string,
-  numbers: number[]
-): Promise<{ actor?: string; items: GitHubItem[] }> {
+  refs: string[]
+): Promise<{ actor?: string; items: HostItem[] }> {
   const user = await ghJson<{ login: string }>(["api", "user"]);
   const items = await Promise.all(
-    numbers.map(async (number) => {
+    refs.map(async (ref) => {
       const issue = await ghJson<{
         title: string;
         user: { login: string } | null;
-      }>(["api", `repos/${repository}/issues/${number}`]);
+      }>(["api", `repos/${repository}/issues/${ref.substring(1)}`]);
       return issue
-        ? { number, title: issue.title, author: issue.user?.login ?? "ghost" }
+        ? { ref, title: issue.title, author: issue.user?.login ?? "ghost" }
         : undefined;
     })
   );
@@ -380,3 +420,20 @@ export async function lookUp(
     items: items.filter((item) => item !== undefined),
   };
 }
+
+export const github: Host = {
+  name: "github",
+  parseRepository,
+  getPullRequest,
+  readSessions: (repository, { id }, { copilotApiUrl }) =>
+    readGitHubSessions(repository, id, getToken(), copilotApiUrl),
+  findWrites: (repository, toolCalls, commands) => {
+    const { modified, unknownWrites } = gitHubWrites(
+      repository,
+      toolCalls,
+      commands
+    );
+    return { modified: modified.map((number) => `#${number}`), unknownWrites };
+  },
+  lookUp,
+};

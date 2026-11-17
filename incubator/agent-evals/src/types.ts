@@ -44,10 +44,17 @@ export type AgentRequest = {
 };
 
 /**
- * An issue or pull request that the agent modified, as looked up on GitHub.
+ * Where the repository is hosted.
  */
-export type GitHubItem = {
-  number: number;
+export type HostName = "github" | "azure-devops";
+
+/**
+ * An item, e.g. an issue or a pull request, that the agent modified, as looked
+ * up on the repository's host.
+ */
+export type HostItem = {
+  /** Reference to the item, e.g. `#123` on GitHub */
+  ref: string;
   title: string;
   /** Login of the author */
   author: string;
@@ -76,28 +83,30 @@ export type AgentRun = {
   /** Absolute path to the checkout the session worked in */
   workdir: string;
   /**
-   * GitHub writes made by the agent through the GitHub MCP tools or the `gh`
-   * CLI. The write calls themselves are in `toolCalls` and `commands`.
+   * Writes made by the agent to the repository's host, e.g. on GitHub through
+   * the GitHub MCP tools or the `gh` CLI. The write calls themselves are in
+   * `toolCalls` and `commands`.
    */
-  github?: {
+  host?: {
+    name: HostName;
     /**
-     * Numbers of issues and pull requests that the agent edited, labelled,
-     * commented on, reviewed, closed or merged. GitHub numbers issues and pull
-     * requests from the same sequence, so numbers are unambiguous.
+     * References to the items that the agent edited, labelled, commented on,
+     * reviewed, closed or merged, e.g. `#123` on GitHub. GitHub numbers issues
+     * and pull requests from the same sequence, so references are unambiguous.
      */
-    modified: number[];
+    modified: string[];
     /**
-     * Writes whose issue or pull request could not be determined, e.g. GraphQL
-     * calls other than inline queries, writes to comments by ID, and
+     * Writes whose item could not be determined, e.g. on GitHub, GraphQL calls
+     * other than inline queries, writes to comments by ID, and
      * `gh pr comment` after `gh pr checkout <branch>`. Each is the command line
      * or the tool call. Writes that create items, or that do not name the item, e.g.
      * `gh pr comment` before any `gh pr checkout`, are in neither list.
      */
     unknownWrites: string[];
-    /** Login of the authenticated `gh` user, i.e. the user the session acted as */
+    /** Login of the authenticated user, i.e. the user the session acted as */
     actor?: string;
     /** The items in `modified`, if they could be looked up */
-    items?: GitHubItem[];
+    items?: HostItem[];
   };
 };
 
@@ -144,12 +153,12 @@ export type ChangesetMatcher = {
 };
 
 /**
- * Configuration for `notModifiedOnGitHub`.
+ * Configuration for `notModified`.
  */
-export type GitHubMatcher = {
+export type HostMatcher = {
   /** Regular expression; items with a matching title must not be modified */
   title?: string;
-  /** Only items authored by `github.actor` may be modified */
+  /** Only items authored by `host.actor` may be modified */
   ownOnly?: boolean;
 };
 

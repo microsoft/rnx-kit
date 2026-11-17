@@ -1,10 +1,6 @@
 import { equal, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
-import {
-  didNotRunCommand,
-  notModifiedOnGitHub,
-  ranCommand,
-} from "../src/commands.ts";
+import { didNotRunCommand, notModified, ranCommand } from "../src/commands.ts";
 import type { AgentCommand, CommandMatcher } from "../src/types.ts";
 import { makeRun } from "./helpers.ts";
 
@@ -170,17 +166,19 @@ describe("didNotRunCommand()", () => {
   });
 });
 
-describe("notModifiedOnGitHub()", () => {
+describe("notModified()", () => {
   const config = { title: "^Dependency Dashboard$" };
   const items = [
-    { number: 1, title: "Dependency Dashboard", author: "renovate" },
-    { number: 2, title: "Dependency Dashboard", author: "renovate" },
-    { number: 3, title: "Fix bug", author: "renovate" },
+    { ref: "#1", title: "Dependency Dashboard", author: "renovate" },
+    { ref: "#2", title: "Dependency Dashboard", author: "renovate" },
+    { ref: "#3", title: "Fix bug", author: "renovate" },
   ];
 
   it("passes if no matching item was modified", () => {
-    const result = notModifiedOnGitHub(
-      makeRun({ github: { modified: [3], unknownWrites: [], items } }),
+    const result = notModified(
+      makeRun({
+        host: { name: "github", modified: ["#3"], unknownWrites: [], items },
+      }),
       { config }
     );
     equal(result.pass, true);
@@ -191,8 +189,15 @@ describe("notModifiedOnGitHub()", () => {
   });
 
   it("fails for each modified item", () => {
-    const result = notModifiedOnGitHub(
-      makeRun({ github: { modified: [1, 2, 3], unknownWrites: [], items } }),
+    const result = notModified(
+      makeRun({
+        host: {
+          name: "github",
+          modified: ["#1", "#2", "#3"],
+          unknownWrites: [],
+          items,
+        },
+      }),
       { config }
     );
     equal(result.pass, false);
@@ -203,8 +208,15 @@ describe("notModifiedOnGitHub()", () => {
   });
 
   it("fails for modified items that could not be looked up", () => {
-    const result = notModifiedOnGitHub(
-      makeRun({ github: { modified: [3, 4], unknownWrites: [], items } }),
+    const result = notModified(
+      makeRun({
+        host: {
+          name: "github",
+          modified: ["#3", "#4"],
+          unknownWrites: [],
+          items,
+        },
+      }),
       { config }
     );
     equal(result.pass, false);
@@ -213,13 +225,14 @@ describe("notModifiedOnGitHub()", () => {
 
   describe("with `ownOnly`", () => {
     const ownOnly = { ownOnly: true };
-    const mine = { number: 5, title: "Add feature", author: "tido64" };
+    const mine = { ref: "#5", title: "Add feature", author: "tido64" };
 
     it("passes if only items by the actor were modified", () => {
-      const result = notModifiedOnGitHub(
+      const result = notModified(
         makeRun({
-          github: {
-            modified: [5],
+          host: {
+            name: "github",
+            modified: ["#5"],
             unknownWrites: [],
             actor: "tido64",
             items: [...items, mine],
@@ -232,10 +245,11 @@ describe("notModifiedOnGitHub()", () => {
     });
 
     it("fails for modified items by others", () => {
-      const result = notModifiedOnGitHub(
+      const result = notModified(
         makeRun({
-          github: {
-            modified: [3, 5],
+          host: {
+            name: "github",
+            modified: ["#3", "#5"],
             unknownWrites: [],
             actor: "tido64",
             items: [...items, mine],
@@ -248,9 +262,14 @@ describe("notModifiedOnGitHub()", () => {
     });
 
     it("fails if the actor is unknown", () => {
-      const result = notModifiedOnGitHub(
+      const result = notModified(
         makeRun({
-          github: { modified: [5], unknownWrites: [], items: [mine] },
+          host: {
+            name: "github",
+            modified: ["#5"],
+            unknownWrites: [],
+            items: [mine],
+          },
         }),
         { config: ownOnly }
       );
@@ -261,45 +280,51 @@ describe("notModifiedOnGitHub()", () => {
 
   it("fails for writes to items that could not be determined", () => {
     const write = "gh api graphql -f query=mutation { closeIssue }";
-    const result = notModifiedOnGitHub(
-      makeRun({ github: { modified: [3], unknownWrites: [write], items } }),
+    const result = notModified(
+      makeRun({
+        host: {
+          name: "github",
+          modified: ["#3"],
+          unknownWrites: [write],
+          items,
+        },
+      }),
       { config }
     );
     equal(result.pass, false);
     equal(
       result.reason,
-      `Wrote to an issue or pull request that could not be determined: ${write}`
+      `Wrote to an item that could not be determined: ${write}`
     );
   });
 
-  it("throws if `github.unknownWrites` is missing or invalid", () => {
-    for (const github of [
-      { modified: [] },
-      { modified: [], unknownWrites: "gh" },
-      { modified: [], unknownWrites: [1] },
+  it("throws if `host.unknownWrites` is missing or invalid", () => {
+    for (const host of [
+      { name: "github", modified: [] },
+      { name: "github", modified: [], unknownWrites: "gh" },
+      { name: "github", modified: [], unknownWrites: [1] },
     ]) {
       throws(
         // @ts-expect-error testing invalid input
-        () => notModifiedOnGitHub(makeRun({ github }), { config }),
-        /check: github\.unknownWrites/,
-        JSON.stringify(github)
+        () => notModified(makeRun({ host }), { config }),
+        /check: host\.unknownWrites/,
+        JSON.stringify(host)
       );
     }
   });
 
-  it("throws if `github.modified` is missing or invalid", () => {
-    for (const github of [
+  it("throws if `host.modified` is missing or invalid", () => {
+    for (const host of [
       undefined,
       {},
-      { modified: "1" },
-      { modified: ["1"] },
-      { modified: [1.5] },
+      { name: "github", modified: "#1" },
+      { name: "github", modified: [1] },
     ]) {
       throws(
         // @ts-expect-error testing invalid input
-        () => notModifiedOnGitHub(makeRun({ github }), { config }),
-        /check: github\.modified/,
-        JSON.stringify(github)
+        () => notModified(makeRun({ host }), { config }),
+        /check: host\.modified/,
+        JSON.stringify(host)
       );
     }
   });

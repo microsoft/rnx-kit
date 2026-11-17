@@ -2,7 +2,7 @@ export {
   didNotRunCommand,
   forGrader,
   matchesContent,
-  notModifiedOnGitHub,
+  notModified,
   ranChecksForChanges,
 } from "@rnx-kit/agent-evals";
 export {
