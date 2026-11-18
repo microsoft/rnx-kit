@@ -1,5 +1,5 @@
 ---
-"@rnx-kit/tools-git": minor
+"@rnx-kit/tools-git": patch
 ---
 
 `getDefaultBranch()` and `getBaseCommit()` now take options for the repository

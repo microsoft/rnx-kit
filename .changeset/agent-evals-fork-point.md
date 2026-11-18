@@ -1,5 +1,5 @@
 ---
-"@rnx-kit/agent-evals": minor
+"@rnx-kit/agent-evals": patch
 ---
 
 Local sessions no longer audit commits that landed on the base branch during
