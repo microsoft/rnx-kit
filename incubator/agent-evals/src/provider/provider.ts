@@ -14,6 +14,11 @@ type ProviderConfig = {
   repository?: string;
   /** Remote to look up branches and the repository on; defaults to `origin` */
   remote?: string;
+  /**
+   * Branch that pull requests merge into; defaults to the default branch of
+   * `remote`. Changes already on it are not audited.
+   */
+  baseBranch?: string;
   /** Copilot API to read cloud agent sessions from */
   copilotApiUrl?: string;
 };
@@ -84,6 +89,76 @@ async function resolveBranch(
     }
   }
   return "";
+}
+
+/**
+ * Returns the default branch of `remote`: the one `refs/remotes/<remote>/HEAD`
+ * points to, or else the one the remote reports.
+ */
+async function defaultBranch(
+  root: string,
+  remote: string
+): Promise<string | undefined> {
+  try {
+    const ref = await git(root, [
+      "symbolic-ref",
+      "--quiet",
+      `refs/remotes/${remote}/HEAD`,
+    ]);
+    return ref.trim().substring(`refs/remotes/${remote}/`.length);
+  } catch (_) {
+    // Ask the remote instead
+  }
+
+  try {
+    const output = await git(root, [
+      "ls-remote",
+      "--symref",
+      "--",
+      remote,
+      "HEAD",
+    ]);
+    return output.match(/^ref: refs\/heads\/(\S+)\tHEAD$/m)?.[1];
+  } catch (_) {
+    return undefined;
+  }
+}
+
+/**
+ * Returns the commit to compare a session's changes with. That is where
+ * `head`, on the session's `branch`, forked off the base branch, if the
+ * session's start commit (`baseCommit`) precedes it, e.g. if the branch was
+ * rebased onto, or recreated from, the base branch during the session.
+ * Otherwise, or if the session worked on the base branch, it is `baseCommit`.
+ * Commits that already landed on the base branch are thus not audited.
+ */
+export async function forkPoint(
+  root: string,
+  { remote = "origin", baseBranch }: ProviderConfig,
+  branch: string,
+  baseCommit: string,
+  head: string
+): Promise<string> {
+  const base = baseBranch ?? (await defaultBranch(root, remote));
+  if (!base || base === branch) {
+    return baseCommit;
+  }
+
+  try {
+    const tip = (
+      await git(root, [
+        "rev-parse",
+        "--verify",
+        "--quiet",
+        `refs/remotes/${remote}/${base}^{commit}`,
+      ])
+    ).trim();
+    const mergeBase = (await git(root, ["merge-base", tip, head])).trim();
+    await git(root, ["merge-base", "--is-ancestor", baseCommit, mergeBase]);
+    return mergeBase;
+  } catch (_) {
+    return baseCommit;
+  }
 }
 
 /**
@@ -299,18 +374,29 @@ async function replay(
 
   const workingTree = endCommit === "WORKING_TREE";
   try {
-    const head = workingTree ? "HEAD" : endCommit;
-    await git(root, ["merge-base", "--is-ancestor", baseCommit, head]);
+    await git(root, [
+      "merge-base",
+      "--is-ancestor",
+      baseCommit,
+      workingTree ? "HEAD" : endCommit,
+    ]);
   } catch (_) {
     throw new Error(
       `Branch '${branch}' does not contain start commit ${baseCommit} of session ${session.id}`
     );
   }
 
+  const head = workingTree ? "HEAD" : endCommit;
+  const forkCommit = await forkPoint(root, config, branch, baseCommit, head);
   const workdir = workingTree ? root : await addWorktree(root, endCommit);
   return {
-    output: await collectRun(host, repository, session, workdir, baseCommit),
-    metadata: { copilotSession: session.id, branch, baseCommit, endCommit },
+    output: await collectRun(host, repository, session, workdir, forkCommit),
+    metadata: {
+      copilotSession: session.id,
+      branch,
+      baseCommit: forkCommit,
+      endCommit,
+    },
   };
 }
 
