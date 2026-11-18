@@ -18,14 +18,14 @@ function sanitize(args: string[]): string[] {
  * @returns The output of the execution
  */
 export function git(...args: string[]): string {
-  return gitIn(undefined, args);
+  return gitIn(undefined, ...args);
 }
 
 /**
  * Executes `git` with specified arguments in `cwd`.
  * @returns The output of the execution
  */
-export function gitIn(cwd: string | undefined, args: string[]): string {
+export function gitIn(cwd: string | undefined, ...args: string[]): string {
   const { stderr, stdout } = spawnSync("git", sanitize(args), { cwd });
   const message = stderr.toString().trim();
   if (message) {

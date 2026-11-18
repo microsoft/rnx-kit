@@ -27,12 +27,13 @@ export function getDefaultBranch(
   /** @internal */ isCI = process.env["CI"]
 ): string {
   const { cwd, remote = "origin" } = options;
-  const ref = gitIn(cwd, [
+  const ref = gitIn(
+    cwd,
     "symbolic-ref",
     "--quiet",
     "--short",
-    `refs/remotes/${remote}/HEAD`,
-  ]);
+    `refs/remotes/${remote}/HEAD`
+  );
   if (ref) {
     return ref;
   }
@@ -45,7 +46,7 @@ export function getDefaultBranch(
     return fallback ?? `${remote}/main`;
   }
 
-  const output = gitIn(cwd, ["ls-remote", "--symref", "--", remote, "HEAD"]);
+  const output = gitIn(cwd, "ls-remote", "--symref", "--", remote, "HEAD");
   const match = output.match(/^ref: refs\/heads\/(\S+)\tHEAD$/m);
   if (!match) {
     throw new Error("Failed to determine default branch");
@@ -71,5 +72,5 @@ export function getBaseCommit(
     targetBranch && verifyRef(targetBranch)
       ? targetBranch
       : getDefaultBranch(fallback, options);
-  return gitIn(cwd, ["merge-base", targetBranch, head]) || undefined;
+  return gitIn(cwd, "merge-base", targetBranch, head) || undefined;
 }
