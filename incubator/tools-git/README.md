@@ -39,12 +39,12 @@ if (baseCommit) {
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/api start -->
 
-| Category | Function                                | Description                                                 |
-| -------- | --------------------------------------- | ----------------------------------------------------------- |
-| branch   | `getBaseCommit(targetBranch, fallback)` | Returns the commit that the current branch forked off.      |
-| branch   | `getDefaultBranch(fallback)`            | Returns the default branch for the current repository.      |
-| diff     | `getChangedFiles(since)`                | Returns all files that changed since a given branch/commit. |
-| git      | `git(...args)`                          | Executes `git` with specified arguments.                    |
-| ref      | `verifyRef(ref)`                        | Returns whether the specified reference name is valid.      |
+| Category | Function                                         | Description                                                                                                                                                  |
+| -------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| branch   | `getBaseCommit(targetBranch, fallback, options)` | Returns the commit that the current branch forked off.                                                                                                       |
+| branch   | `getDefaultBranch(fallback, options)`            | Returns the default branch for the current repository, e.g. `origin/main`. That is the branch `<remote>/HEAD` points to, or else the one the remote reports. |
+| diff     | `getChangedFiles(since)`                         | Returns all files that changed since a given branch/commit.                                                                                                  |
+| git      | `git(...args)`                                   | Executes `git` with specified arguments.                                                                                                                     |
+| ref      | `verifyRef(ref)`                                 | Returns whether the specified reference name is valid.                                                                                                       |
 
 <!-- @rnx-kit/api end -->

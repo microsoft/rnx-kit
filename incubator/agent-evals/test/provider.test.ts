@@ -1,9 +1,14 @@
 import { equal, rejects } from "node:assert/strict";
-import { describe, it } from "node:test";
+import * as fs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
+import { after, before, describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
+import { git } from "../src/provider/checkout.ts";
 import { github, parseRepository } from "../src/provider/github.ts";
 import CopilotSessionProvider, {
   endBranch,
+  forkPoint,
   resolveRepository,
 } from "../src/provider/provider.ts";
 
@@ -88,6 +93,89 @@ describe("endBranch()", () => {
     equal(endBranch(reflog, "main", 310_000, 450_000), "main");
     equal(endBranch(reflog, "main", 0, 50_000), "main");
     equal(endBranch("", undefined, 0, 500_000), undefined);
+  });
+});
+
+describe("forkPoint()", () => {
+  // `forkPoint()` runs the real `git`, so it needs a real repository
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "agent-evals-test-"));
+  const commits: Record<string, string> = {};
+
+  async function commit(name: string): Promise<void> {
+    await git(root, [
+      "-c",
+      "user.name=test",
+      "-c",
+      "user.email=test@example.com",
+      "commit",
+      "--quiet",
+      "--allow-empty",
+      "--no-verify",
+      "--no-gpg-sign",
+      "-m",
+      name,
+    ]);
+    commits[name] = (await git(root, ["rev-parse", "HEAD"])).trim();
+  }
+
+  // main:    A - B
+  //           \   \
+  // old:       C   \
+  // feature:        D
+  before(async () => {
+    await git(root, ["init", "--quiet", "--initial-branch=main"]);
+    await commit("A");
+    await git(root, ["switch", "--quiet", "-c", "old"]);
+    await commit("C");
+    await git(root, ["switch", "--quiet", "main"]);
+    await commit("B");
+    await git(root, ["switch", "--quiet", "-c", "feature"]);
+    await commit("D");
+    await git(root, ["switch", "--quiet", "main"]);
+    await git(root, ["update-ref", "refs/remotes/origin/main", commits["B"]]);
+  });
+
+  after(() => {
+    fs.rmSync(root, { recursive: true, force: true, maxRetries: 3 });
+  });
+
+  it("skips commits that landed on the base branch during the session", async () => {
+    const config = { baseBranch: "main" };
+    const { A, B, D } = commits;
+    equal(await forkPoint(root, config, "feature", A, D), B);
+  });
+
+  it("returns the start commit if it follows the fork point", async () => {
+    const config = { baseBranch: "main" };
+    const { A, C, D } = commits;
+    equal(await forkPoint(root, config, "old", C, C), C);
+    equal(await forkPoint(root, config, "feature", D, D), D);
+    equal(await forkPoint(root, config, "old", A, C), A);
+  });
+
+  it("returns the start commit on the base branch", async () => {
+    const { A, B } = commits;
+    equal(await forkPoint(root, { baseBranch: "main" }, "main", A, B), A);
+  });
+
+  it("returns the start commit if the base branch is not found", async () => {
+    const { A, D } = commits;
+    equal(await forkPoint(root, { baseBranch: "trunk" }, "feature", A, D), A);
+    equal(await forkPoint(root, { remote: "none" }, "feature", A, D), A);
+  });
+
+  it("defaults to the default branch of the remote", async () => {
+    const { A, B, D } = commits;
+    await git(root, ["remote", "add", "upstream", root]);
+    await git(root, ["update-ref", "refs/remotes/upstream/main", B]);
+    equal(await forkPoint(root, { remote: "upstream" }, "feature", A, D), B);
+
+    await git(root, [
+      "symbolic-ref",
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main",
+    ]);
+    equal(await forkPoint(root, {}, "feature", A, D), B);
   });
 });
 

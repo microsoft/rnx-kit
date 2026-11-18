@@ -51,6 +51,7 @@
   "dependencies": {
     "@changesets/parse": "^1.0.0",
     "@rnx-kit/tools-filesystem": "workspace:^",
+    "@rnx-kit/tools-git": "workspace:^",
     "@rnx-kit/tools-shell": "workspace:^",
     "parse-diff": "catalog:",
     "shell-quote": "^1.8.4"

@@ -1,8 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { styleText } from "node:util";
 
-export const DEFAULT_BRANCH = "origin/main";
-
 // See https://github.com/microsoft/rnx-kit/security/code-scanning/35
 export const REJECTED_ARGS = ["--upload-pack", "-u"];
 

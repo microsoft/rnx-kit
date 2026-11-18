@@ -1,3 +1,4 @@
+import { getBaseCommit, getDefaultBranch } from "@rnx-kit/tools-git";
 import type { AgentRun, EvalVars } from "../types.ts";
 import { addWorktree, collectChanges, git } from "./checkout.ts";
 import { github } from "./github.ts";
@@ -14,6 +15,11 @@ type ProviderConfig = {
   repository?: string;
   /** Remote to look up branches and the repository on; defaults to `origin` */
   remote?: string;
+  /**
+   * Branch that pull requests merge into; defaults to the default branch of
+   * `remote`. Changes already on it are not audited.
+   */
+  baseBranch?: string;
   /** Copilot API to read cloud agent sessions from */
   copilotApiUrl?: string;
 };
@@ -84,6 +90,42 @@ async function resolveBranch(
     }
   }
   return "";
+}
+
+/**
+ * Returns the commit to compare a session's changes with. That is where
+ * `head`, on the session's `branch`, forked off the base branch, if the
+ * session's start commit (`baseCommit`) precedes it, e.g. if the branch was
+ * rebased onto, or recreated from, the base branch during the session.
+ * Otherwise, or if the session worked on the base branch, it is `baseCommit`.
+ * Commits that already landed on the base branch are thus not audited.
+ */
+export async function forkPoint(
+  root: string,
+  { remote = "origin", baseBranch }: ProviderConfig,
+  branch: string,
+  baseCommit: string,
+  head: string
+): Promise<string> {
+  try {
+    const options = { cwd: root, remote, head };
+    const base = baseBranch
+      ? `${remote}/${baseBranch}`
+      : getDefaultBranch(undefined, options);
+    if (base === `${remote}/${branch}`) {
+      return baseCommit;
+    }
+
+    const mergeBase = getBaseCommit(base, undefined, options);
+    if (!mergeBase) {
+      return baseCommit;
+    }
+
+    await git(root, ["merge-base", "--is-ancestor", baseCommit, mergeBase]);
+    return mergeBase;
+  } catch (_) {
+    return baseCommit;
+  }
 }
 
 /**
@@ -298,8 +340,8 @@ async function replay(
   }
 
   const workingTree = endCommit === "WORKING_TREE";
+  const head = workingTree ? "HEAD" : endCommit;
   try {
-    const head = workingTree ? "HEAD" : endCommit;
     await git(root, ["merge-base", "--is-ancestor", baseCommit, head]);
   } catch (_) {
     throw new Error(
@@ -307,10 +349,16 @@ async function replay(
     );
   }
 
+  const forkCommit = await forkPoint(root, config, branch, baseCommit, head);
   const workdir = workingTree ? root : await addWorktree(root, endCommit);
   return {
-    output: await collectRun(host, repository, session, workdir, baseCommit),
-    metadata: { copilotSession: session.id, branch, baseCommit, endCommit },
+    output: await collectRun(host, repository, session, workdir, forkCommit),
+    metadata: {
+      copilotSession: session.id,
+      branch,
+      baseCommit: forkCommit,
+      endCommit,
+    },
   };
 }
 

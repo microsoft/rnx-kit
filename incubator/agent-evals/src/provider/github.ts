@@ -20,6 +20,15 @@ const GH_READS: Record<string, string[]> = {
   pr: ["checkout", "checks", "co", "diff", "list", "ls", "status", "view"],
 };
 
+const UNKNOWN = "unknown";
+
+/**
+ * A write to GitHub: the number of the issue or pull request written to,
+ * `UNKNOWN` if it could not be determined, or `undefined` if not a write to an
+ * existing item in the repository.
+ */
+type Write = number | typeof UNKNOWN | undefined;
+
 /**
  * Returns the number in `123`, `#123` or an issue or pull request URL.
  */
@@ -40,15 +49,6 @@ function isRepository(repository: string, repo: unknown): boolean {
     repo.toLowerCase() === `github.com/${expected}`
   );
 }
-
-const UNKNOWN = "unknown";
-
-/**
- * A write to GitHub: the number of the issue or pull request written to,
- * `UNKNOWN` if it could not be determined, or `undefined` if not a write to an
- * existing item in the repository.
- */
-type Write = number | typeof UNKNOWN | undefined;
 
 /** GitHub MCP tools that write to a comment identified only by its ID */
 const MCP_COMMENT_TOOLS = [
