@@ -13,10 +13,6 @@ export type BaseCommitOptions = BranchOptions & {
   head?: string;
 };
 
-function inRepo(cwd: string | undefined): string[] {
-  return cwd ? ["-C", cwd] : [];
-}
-
 /**
  * Returns the default branch for the current repository, e.g. `origin/main`.
  * That is the branch `<remote>/HEAD` points to, or else the one the remote
@@ -30,10 +26,10 @@ export function getDefaultBranch(
   options: BranchOptions = {},
   /** @internal */ isCI = process.env["CI"]
 ): string {
-  const { cwd, remote = "origin" } = options;
-  const repo = inRepo(cwd);
+  const { cwd = ".", remote = "origin" } = options;
   const ref = git(
-    ...repo,
+    "-C",
+    cwd,
     "symbolic-ref",
     "--quiet",
     "--short",
@@ -51,7 +47,7 @@ export function getDefaultBranch(
     return fallback ?? `${remote}/main`;
   }
 
-  const output = git(...repo, "ls-remote", "--symref", "--", remote, "HEAD");
+  const output = git("-C", cwd, "ls-remote", "--symref", "--", remote, "HEAD");
   const match = output.match(/^ref: refs\/heads\/(\S+)\tHEAD$/m);
   if (!match) {
     throw new Error("Failed to determine default branch");
@@ -72,10 +68,10 @@ export function getBaseCommit(
   fallback?: string,
   options: BaseCommitOptions = {}
 ): string | undefined {
-  const { cwd, head = "HEAD" } = options;
+  const { cwd = ".", head = "HEAD" } = options;
   targetBranch =
     targetBranch && verifyRef(targetBranch)
       ? targetBranch
       : getDefaultBranch(fallback, options);
-  return git(...inRepo(cwd), "merge-base", targetBranch, head) || undefined;
+  return git("-C", cwd, "merge-base", targetBranch, head) || undefined;
 }
