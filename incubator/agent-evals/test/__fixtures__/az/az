@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+// Replaces `az` in tests. `az account get-access-token` prints a token.
+const args = process.argv.slice(2);
+if (args[0] === "account" && args[1] === "get-access-token") {
+  console.log("az-token");
+} else {
+  console.error("ERROR: unexpected command");
+  process.exitCode = 1;
+}
