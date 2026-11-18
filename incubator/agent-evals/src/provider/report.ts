@@ -28,6 +28,13 @@ export type EvalResult = {
   } | null;
 };
 
+/**
+ * Outcome of a test: `unchecked` if it could not be evaluated, e.g. because
+ * the grader is unavailable, and `skipped` if it needs the session log, which
+ * could not be read.
+ */
+export type Status = "passed" | "failed" | "unchecked" | "skipped";
+
 function indent(text: string): string {
   return text
     .trim()
@@ -65,13 +72,6 @@ function isGraderError(result: EvalResult): boolean {
     failed.every((component) => component.metadata?.["graderError"] === true)
   );
 }
-
-/**
- * Outcome of a test: `unchecked` if it could not be evaluated, e.g. because
- * the grader is unavailable, and `skipped` if it needs the session log, which
- * could not be read.
- */
-export type Status = "passed" | "failed" | "unchecked" | "skipped";
 
 export function statusOf(result: EvalResult): Status {
   if (result.success) {

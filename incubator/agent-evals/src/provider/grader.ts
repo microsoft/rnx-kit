@@ -47,6 +47,11 @@ const RUNTIME_ENV = [
   "SSL_CERT_FILE",
 ];
 
+type ChatMessage = {
+  role: string;
+  content: string;
+};
+
 /**
  * Returns the environment for the Copilot runtime. The home directory is
  * replaced with `home`, so that user config and memories are not used.
@@ -100,11 +105,6 @@ export function getToken(): string {
   cachedToken = stdout.trim();
   return cachedToken;
 }
-
-type ChatMessage = {
-  role: string;
-  content: string;
-};
 
 function isChat(value: unknown): value is ChatMessage[] {
   return (

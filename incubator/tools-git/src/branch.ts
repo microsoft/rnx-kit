@@ -1,10 +1,6 @@
 import { git } from "./git.ts";
 import { verifyRef } from "./ref.ts";
 
-function inRepo(cwd: string | undefined): string[] {
-  return cwd ? ["-C", cwd] : [];
-}
-
 export type BranchOptions = {
   /** Directory of the repository; defaults to the current working directory */
   cwd?: string;
@@ -16,6 +12,10 @@ export type BaseCommitOptions = BranchOptions & {
   /** Commit to find the fork point of; defaults to `HEAD` */
   head?: string;
 };
+
+function inRepo(cwd: string | undefined): string[] {
+  return cwd ? ["-C", cwd] : [];
+}
 
 /**
  * Returns the default branch for the current repository, e.g. `origin/main`.
