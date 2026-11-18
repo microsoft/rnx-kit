@@ -5027,6 +5027,7 @@ __metadata:
     "@github/copilot-sdk": "catalog:"
     "@rnx-kit/scripts": "workspace:*"
     "@rnx-kit/tools-filesystem": "workspace:^"
+    "@rnx-kit/tools-git": "workspace:^"
     "@rnx-kit/tools-shell": "workspace:^"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.0"
@@ -6000,7 +6001,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-git@workspace:incubator/tools-git":
+"@rnx-kit/tools-git@workspace:^, @rnx-kit/tools-git@workspace:incubator/tools-git":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-git@workspace:incubator/tools-git"
   dependencies:

@@ -1,8 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { styleText } from "node:util";
 
-export const DEFAULT_BRANCH = "origin/main";
-
 // See https://github.com/microsoft/rnx-kit/security/code-scanning/35
 export const REJECTED_ARGS = ["--upload-pack", "-u"];
 
@@ -20,7 +18,15 @@ function sanitize(args: string[]): string[] {
  * @returns The output of the execution
  */
 export function git(...args: string[]): string {
-  const { stderr, stdout } = spawnSync("git", sanitize(args));
+  return gitIn(undefined, args);
+}
+
+/**
+ * Executes `git` with specified arguments in `cwd`.
+ * @returns The output of the execution
+ */
+export function gitIn(cwd: string | undefined, args: string[]): string {
+  const { stderr, stdout } = spawnSync("git", sanitize(args), { cwd });
   const message = stderr.toString().trim();
   if (message) {
     console.error(styleText(["red", "bold"], "error"), message);

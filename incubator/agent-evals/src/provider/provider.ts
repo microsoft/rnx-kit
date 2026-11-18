@@ -1,3 +1,4 @@
+import { getBaseCommit, getDefaultBranch } from "@rnx-kit/tools-git";
 import type { AgentRun, EvalVars } from "../types.ts";
 import { addWorktree, collectChanges, git } from "./checkout.ts";
 import { github } from "./github.ts";
@@ -92,39 +93,6 @@ async function resolveBranch(
 }
 
 /**
- * Returns the default branch of `remote`: the one `refs/remotes/<remote>/HEAD`
- * points to, or else the one the remote reports.
- */
-async function defaultBranch(
-  root: string,
-  remote: string
-): Promise<string | undefined> {
-  try {
-    const ref = await git(root, [
-      "symbolic-ref",
-      "--quiet",
-      `refs/remotes/${remote}/HEAD`,
-    ]);
-    return ref.trim().substring(`refs/remotes/${remote}/`.length);
-  } catch (_) {
-    // Ask the remote instead
-  }
-
-  try {
-    const output = await git(root, [
-      "ls-remote",
-      "--symref",
-      "--",
-      remote,
-      "HEAD",
-    ]);
-    return output.match(/^ref: refs\/heads\/(\S+)\tHEAD$/m)?.[1];
-  } catch (_) {
-    return undefined;
-  }
-}
-
-/**
  * Returns the commit to compare a session's changes with. That is where
  * `head`, on the session's `branch`, forked off the base branch, if the
  * session's start commit (`baseCommit`) precedes it, e.g. if the branch was
@@ -139,21 +107,20 @@ export async function forkPoint(
   baseCommit: string,
   head: string
 ): Promise<string> {
-  const base = baseBranch ?? (await defaultBranch(root, remote));
-  if (!base || base === branch) {
-    return baseCommit;
-  }
-
   try {
-    const tip = (
-      await git(root, [
-        "rev-parse",
-        "--verify",
-        "--quiet",
-        `refs/remotes/${remote}/${base}^{commit}`,
-      ])
-    ).trim();
-    const mergeBase = (await git(root, ["merge-base", tip, head])).trim();
+    const options = { cwd: root, remote, head };
+    const base = baseBranch
+      ? `${remote}/${baseBranch}`
+      : getDefaultBranch(undefined, options);
+    if (base === `${remote}/${branch}`) {
+      return baseCommit;
+    }
+
+    const mergeBase = getBaseCommit(base, undefined, options);
+    if (!mergeBase) {
+      return baseCommit;
+    }
+
     await git(root, ["merge-base", "--is-ancestor", baseCommit, mergeBase]);
     return mergeBase;
   } catch (_) {
