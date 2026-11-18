@@ -56,7 +56,7 @@ export type HostItem = {
   /** Reference to the item, e.g. `#123` on GitHub */
   ref: string;
   title: string;
-  /** Login of the author */
+  /** Login of the author on GitHub, or their user ID on Azure DevOps */
   author: string;
 };
 
@@ -104,7 +104,10 @@ export type AgentRun = {
      * `gh pr comment` before any `gh pr checkout`, are in neither list.
      */
     unknownWrites: string[];
-    /** Login of the authenticated user, i.e. the user the session acted as */
+    /**
+     * Login of the authenticated user, i.e. the user the session acted as, on
+     * GitHub, or their user ID on Azure DevOps
+     */
     actor?: string;
     /** The items in `modified`, if they could be looked up */
     items?: HostItem[];

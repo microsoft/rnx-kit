@@ -1,5 +1,6 @@
 import { getBaseCommit, getDefaultBranch } from "@rnx-kit/tools-git";
-import type { AgentRun, EvalVars } from "../types.ts";
+import type { AgentRun, EvalVars, HostName } from "../types.ts";
+import { azureDevOps } from "./azure-devops.ts";
 import { addWorktree, collectChanges, git } from "./checkout.ts";
 import { github } from "./github.ts";
 import type { Host } from "./host.ts";
@@ -9,8 +10,14 @@ import { parseCommands } from "./shell.ts";
 
 type ProviderConfig = {
   /**
-   * Repository the session worked on, e.g. `owner/repo` on GitHub; defaults
-   * to the repository that `remote` points to
+   * Where the repository is hosted; defaults to `azure-devops` if `remote`
+   * points to Azure DevOps, otherwise `github`
+   */
+  host?: HostName;
+  /**
+   * Repository the session worked on, e.g. `owner/repo` on GitHub, or
+   * `organization/project/repository` on Azure DevOps; defaults to the
+   * repository that `remote` points to
    */
   repository?: string;
   /** Remote to look up branches and the repository on; defaults to `origin` */
@@ -46,8 +53,36 @@ type Metadata = {
 
 type Replay = { output: AgentRun; metadata: Metadata };
 
+const HOSTS: Record<HostName, Host> = {
+  github,
+  "azure-devops": azureDevOps,
+};
+
 /** Sessions already replayed, keyed by the `copilotSession` or `pullRequest` var */
 const runs = new Map<string, Promise<Replay>>();
+
+export async function resolveHost(
+  root: string,
+  { host, remote = "origin" }: ProviderConfig
+): Promise<Host> {
+  if (host) {
+    if (!Object.hasOwn(HOSTS, host)) {
+      const names = Object.keys(HOSTS).join("', '");
+      throw new Error(`Invalid host '${host}'; expected one of '${names}'`);
+    }
+    return HOSTS[host];
+  }
+
+  try {
+    const url = await git(root, ["remote", "get-url", remote]);
+    if (azureDevOps.parseRepository(url)) {
+      return azureDevOps;
+    }
+  } catch (_) {
+    // Default to GitHub
+  }
+  return github;
+}
 
 export async function resolveRepository(
   root: string,
@@ -245,7 +280,6 @@ async function collectRun(
  * changes are returned.
  */
 async function replayPullRequest(
-  host: Host,
   number: number,
   config: ProviderConfig
 ): Promise<Replay> {
@@ -253,10 +287,11 @@ async function replayPullRequest(
     await git(process.cwd(), ["rev-parse", "--show-toplevel"])
   ).trim();
   const remote = config.remote ?? "origin";
+  const host = await resolveHost(root, config);
   const repository = await resolveRepository(root, host, config);
   const pr = await host.getPullRequest(repository, number);
   if (!pr) {
-    throw new Error(`Pull request #${number} was not found in ${repository}`);
+    throw new Error(`Pull request ${number} was not found in ${repository}`);
   }
 
   await git(root, ["fetch", "--no-tags", "--", remote, pr.base]);
@@ -294,7 +329,6 @@ async function replayPullRequest(
 }
 
 async function replay(
-  host: Host,
   id: string | undefined,
   config: ProviderConfig
 ): Promise<Replay> {
@@ -327,6 +361,7 @@ async function replay(
   // uncommitted changes, if the branch is checked out, otherwise its tip
   // (local, or else on the remote) in a temporary worktree.
   const remote = config.remote ?? "origin";
+  const host = await resolveHost(root, config);
   const repository = await resolveRepository(root, host, config);
   let endCommit = "WORKING_TREE";
   const current = (await git(root, ["branch", "--show-current"])).trim();
@@ -396,8 +431,8 @@ export default class CopilotSessionProvider {
     let pending = runs.get(key);
     if (!pending) {
       pending = number
-        ? replayPullRequest(github, number, this.config)
-        : replay(github, copilotSession || undefined, this.config);
+        ? replayPullRequest(number, this.config)
+        : replay(copilotSession || undefined, this.config);
       runs.set(key, pending);
     }
 

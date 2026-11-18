@@ -107,20 +107,32 @@ it changed, and its requests and replies. What it audits depends on the vars:
 - `pullRequest`: number of a pull request. Its Copilot cloud agent sessions are
   read from GitHub, and the changes are those since it branched off its base
   branch. If the sessions cannot be read, e.g. if the pull request was made in
-  a local session, or the token cannot read them, only the changes are audited.
-  Tests with `metadata.requires: session` are then skipped.
+  a local session, the token cannot read them, or the repository is on Azure
+  DevOps, only the changes are audited. Tests with `metadata.requires: session`
+  are then skipped.
 
 The provider accepts the following `config`:
 
-| Option          | Description                                                                        |
-| :-------------- | :--------------------------------------------------------------------------------- |
-| `remote`        | Remote to look up branches and the repository on; defaults to `origin`             |
-| `baseBranch`    | Branch that pull requests merge into; defaults to the default branch of `remote`   |
-| `repository`    | Repository, e.g. `owner/repo` on GitHub; defaults to the repository of `remote`    |
-| `copilotApiUrl` | Copilot API to read cloud agent sessions from; defaults to `api.githubcopilot.com` |
+| Option          | Description                                                                                                                           |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `host`          | Where the repository is hosted, `github` or `azure-devops`; defaults to `azure-devops` if `remote` points to Azure DevOps             |
+| `remote`        | Remote to look up branches and the repository on; defaults to `origin`                                                                |
+| `baseBranch`    | Branch that pull requests merge into; defaults to the default branch of `remote`                                                      |
+| `repository`    | Repository, e.g. `owner/repo` on GitHub, or `organization/project/repository` on Azure DevOps; defaults to the repository of `remote` |
+| `copilotApiUrl` | Copilot API to read cloud agent sessions from; defaults to `api.githubcopilot.com`                                                    |
 
 Reading cloud agent sessions requires a user token with Copilot access, e.g.
 from `gh auth login`. The `GITHUB_TOKEN` of a workflow cannot read them.
+
+### Azure DevOps
+
+On Azure DevOps, the provider calls the REST API with a personal access token
+in `AZURE_DEVOPS_EXT_PAT`, or else with a token from the Azure CLI
+(`az login`). Without either, only public projects can be read. Writes are
+found in the Azure DevOps MCP tools, and in `az repos pr`,
+`az boards work-item` and `az devops invoke` commands. Pull requests are
+referred to as `!123` and work items as `#123`. Items are looked up in the
+repository's project, and their authors, like the actor, are user IDs.
 
 ## Grader
 

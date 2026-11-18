@@ -4,11 +4,13 @@ import * as os from "node:os";
 import * as path from "node:path";
 import { after, before, describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
+import { azureDevOps } from "../src/provider/azure-devops.ts";
 import { git } from "../src/provider/checkout.ts";
 import { github, parseRepository } from "../src/provider/github.ts";
 import CopilotSessionProvider, {
   endBranch,
   forkPoint,
+  resolveHost,
   resolveRepository,
 } from "../src/provider/provider.ts";
 
@@ -38,6 +40,28 @@ describe("parseRepository()", () => {
   it("returns `undefined` for URLs without owner and repository", () => {
     equal(parseRepository(""), undefined);
     equal(parseRepository("repo"), undefined);
+  });
+});
+
+describe("resolveHost()", () => {
+  const root = fileURLToPath(new URL("..", import.meta.url));
+
+  it("returns the configured host", async () => {
+    equal(await resolveHost(root, { host: "azure-devops" }), azureDevOps);
+    equal(await resolveHost(root, { host: "github" }), github);
+  });
+
+  it("throws on invalid hosts", async () => {
+    // @ts-expect-error Testing invalid input
+    await rejects(resolveHost(root, { host: "gitlab" }), {
+      message:
+        "Invalid host 'gitlab'; expected one of 'github', 'azure-devops'",
+    });
+  });
+
+  it("defaults to GitHub", async () => {
+    equal(await resolveHost(root, {}), github);
+    equal(await resolveHost(root, { remote: "does-not-exist" }), github);
   });
 });
 
