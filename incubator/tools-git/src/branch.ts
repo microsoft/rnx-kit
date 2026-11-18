@@ -31,8 +31,9 @@ export function getDefaultBranch(
   /** @internal */ isCI = process.env["CI"]
 ): string {
   const { cwd, remote = "origin" } = options;
+  const repo = inRepo(cwd);
   const ref = git(
-    ...inRepo(cwd),
+    ...repo,
     "symbolic-ref",
     "--quiet",
     "--short",
@@ -50,14 +51,7 @@ export function getDefaultBranch(
     return fallback ?? `${remote}/main`;
   }
 
-  const output = git(
-    ...inRepo(cwd),
-    "ls-remote",
-    "--symref",
-    "--",
-    remote,
-    "HEAD"
-  );
+  const output = git(...repo, "ls-remote", "--symref", "--", remote, "HEAD");
   const match = output.match(/^ref: refs\/heads\/(\S+)\tHEAD$/m);
   if (!match) {
     throw new Error("Failed to determine default branch");
