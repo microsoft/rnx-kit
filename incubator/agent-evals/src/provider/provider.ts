@@ -340,20 +340,15 @@ async function replay(
   }
 
   const workingTree = endCommit === "WORKING_TREE";
+  const head = workingTree ? "HEAD" : endCommit;
   try {
-    await git(root, [
-      "merge-base",
-      "--is-ancestor",
-      baseCommit,
-      workingTree ? "HEAD" : endCommit,
-    ]);
+    await git(root, ["merge-base", "--is-ancestor", baseCommit, head]);
   } catch (_) {
     throw new Error(
       `Branch '${branch}' does not contain start commit ${baseCommit} of session ${session.id}`
     );
   }
 
-  const head = workingTree ? "HEAD" : endCommit;
   const forkCommit = await forkPoint(root, config, branch, baseCommit, head);
   const workdir = workingTree ? root : await addWorktree(root, endCommit);
   return {
