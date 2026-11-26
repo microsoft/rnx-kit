@@ -480,4 +480,81 @@ describe("session", () => {
       assert.strictEqual(session.session.operations[opName].calls, 1);
     });
   });
+
+  describe("performance marks", () => {
+    it("should record performance measure for session lifecycle and clean up marks", () => {
+      performance.clearMarks();
+      performance.clearMeasures();
+
+      const session = createSession(
+        { name: "perf-session" },
+        undefined,
+        mockCreateReporter
+      );
+      const startMarks = performance
+        .getEntriesByType("mark")
+        .filter((e) => e.name.startsWith("rnx-reporter:perf-session:"));
+      assert.strictEqual(startMarks.length, 1);
+
+      session.finish({ value: "done" });
+
+      const remainingMarks = performance
+        .getEntriesByType("mark")
+        .filter((e) => e.name.startsWith("rnx-reporter:perf-session:"));
+      assert.strictEqual(remainingMarks.length, 0);
+
+      const measures = performance.getEntriesByName("perf-session", "measure");
+      assert.strictEqual(measures.length, 1);
+      assert.ok(measures[0].duration >= 0);
+
+      performance.clearMeasures();
+    });
+
+    it("should record performance measure for session.measure and overlapping calls", async () => {
+      performance.clearMarks();
+      performance.clearMeasures();
+
+      const session = createSession(
+        { name: "perf-measure-session" },
+        undefined,
+        mockCreateReporter
+      );
+
+      await Promise.all([
+        session.measure("concurrent-op", async () => {
+          await new Promise((resolve) => setTimeout(resolve, 15));
+          return 1;
+        }),
+        session.measure("concurrent-op", async () => {
+          await new Promise((resolve) => setTimeout(resolve, 5));
+          return 2;
+        }),
+      ]);
+
+      session.finish({ value: undefined });
+
+      const remainingMarks = performance
+        .getEntriesByType("mark")
+        .filter((e) => e.name.startsWith("rnx-reporter:"));
+      assert.strictEqual(remainingMarks.length, 0);
+
+      const measures = performance.getEntriesByName("concurrent-op", "measure");
+      assert.strictEqual(measures.length, 2);
+      assert.ok(measures.some((m) => m.duration >= 10));
+
+      performance.clearMeasures();
+    });
+
+    it("should not throw if marks are cleared externally before finish", () => {
+      const session = createSession(
+        { name: "cleared-marks-session" },
+        undefined,
+        mockCreateReporter
+      );
+      performance.clearMarks();
+
+      const result = session.finish({ value: "ok" });
+      assert.strictEqual(result, "ok");
+    });
+  });
 });

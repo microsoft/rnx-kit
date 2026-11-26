@@ -90,7 +90,8 @@ const result = await reporter.measure("file-processing", async () => {
 **Features:**
 
 - **Hierarchical Tasks**: Nested task execution with automatic timing
-- **Performance Measurement**: Track operation durations and call counts
+- **Performance Measurement**: Track operation durations and call counts,
+  with automatic Node.js `performance.mark` and `performance.measure` entries
 - **Error Tracking**: Automatic error collection and reporting
 - **Event Publishing**: Start/finish/error events via Node.js diagnostics
   channels
