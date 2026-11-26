@@ -31,7 +31,7 @@ export function createSession(
   report?: LogFunction
 ): Session {
   const { name, role = "reporter", packageName, data = {} } = options;
-  const startTime = startTimer(name, report);
+  const startTimerToken = startTimer(name, report);
   const session: SessionData = {
     name,
     role,
@@ -59,7 +59,7 @@ export function createSession(
   const finish = <T>(result?: FinishResult<T>) => {
     if (!session.result) {
       session.result = result;
-      session.elapsed = finishTimer(name, startTime, report);
+      session.elapsed = finishTimer(name, startTimerToken, report);
       // if this is an error, call the onError handler
       if (isErrorResult(result)) {
         onError([result.error]);
@@ -106,17 +106,35 @@ export function createSession(
   };
 }
 
-function startTimer(label: string, report?: LogFunction): number {
+type TimerToken = {
+  start: number;
+  mark: string;
+};
+
+let markSequence = 0;
+
+function startTimer(label: string, report?: LogFunction): TimerToken {
   report?.(`⌚ Starting: ${label}`);
-  return performance.now();
+  const mark = `rnx-reporter:${label}:mark:${markSequence++}`;
+  performance.mark(mark);
+  return { start: performance.now(), mark };
 }
 
 function finishTimer(
   label: string,
-  start: number,
+  timer: TimerToken,
   report?: LogFunction
 ): number {
-  const elapsed = performance.now() - start;
+  const endMark = `${timer.mark}:end`;
+  performance.mark(endMark);
+  try {
+    performance.measure(label, timer.mark, endMark);
+  } catch {
+    // ignore if marks were cleared externally
+  }
+  performance.clearMarks(timer.mark);
+  performance.clearMarks(endMark);
+  const elapsed = performance.now() - timer.start;
   report?.(`⌚ Finished: ${label} in ${elapsed.toFixed()}ms`);
   return elapsed;
 }
